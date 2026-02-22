@@ -8,5 +8,4 @@
 
 | Topic | Title | Year | Authors | Paper | Code | Summary |
 | :--- | :--- | :---: | :--- | :---: | :---: | :--- |
-| Topic #1 | Paper Title | Publishing Year | Author #1 et al. | [arXiv/DOI]() | [GitHub]() | Short summary to be inserted in the Related Work section |
-|  | TODO | TODO | TODO | TODO | TODO | TODO |
+| Edge of Stability(экспериментальное получение эффекта) | Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability | 2021 | Cohen et al. | [arXiv](https://openreview.net/pdf?id=jh-rTtvkGeM) | [GitHub](https://github.com/locuslab/edge-of-stability) | Эмпирически показывают, что при обучении нейросетей полносвязным градиентным спуском динамика обычно выходит в режим Edge of Stability, где максимальное собственное значение гессиана держится чуть выше порога \(2/\eta\), loss ведёт себя немонотонно на коротких масштабах, но убывает на длинных; это противоречит классической теории сходимости и указывает на необходимость новой теории оптимизации для нейросетей. |
