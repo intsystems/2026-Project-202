@@ -1,4 +1,4 @@
-# Title
+# Detecting Optimization Regimes via Convergent Cross Mapping
 
 <!-- Change `kisnikser/m1p-template` to `intsystems/your-repository`-->
 [![License](https://badgen.net/github/license/kisnikser/m1p-template?color=green)](https://github.com/kisnikser/m1p-template/blob/main/LICENSE)
