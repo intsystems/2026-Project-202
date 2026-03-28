@@ -2,6 +2,7 @@ import torch
 import math
 import random
 from abc import ABC, abstractmethod
+from scipy import stats
 
 class BasePoisoner(ABC):
     def __init__(self, apply_prob: float = 1.0):
@@ -150,6 +151,77 @@ class LogisticMapPoisoner(BasePoisoner):
             self.current_step += 1
             
         current_fraction = self.scale_factor * self.x
+        
+        indices_to_poison = self._get_poison_indices(batch_size, current_fraction)
+        if len(indices_to_poison) == 0:
+            return images, labels, 0.0
+
+        poisoned_labels = labels.clone()
+        random_labels = torch.randint(0, self.num_classes, (len(indices_to_poison),), device=labels.device)
+        poisoned_labels[indices_to_poison] = random_labels
+        
+        return images, poisoned_labels, len(indices_to_poison) / batch_size
+
+
+class ConstantGhostPoisoner(BasePoisoner):
+
+    def __init__(self, constant_value: float = 0.1, apply_prob: float = 1.0):
+        super().__init__(apply_prob)
+        self.constant_value = constant_value
+
+    def _apply_poison(self, images, labels, step):
+        return images, labels, self.constant_value
+
+
+class DistributionGhostPoisoner(BasePoisoner):
+
+    def __init__(self, dist, apply_prob: float = 1.0):
+        super().__init__(apply_prob)
+        self.dist = dist
+
+    def _apply_poison(self, images, labels, step):
+        fake_fraction = float(self.dist.rvs(1)[0])
+        fake_fraction = max(0.0, min(1.0, fake_fraction))
+        
+        return images, labels, fake_fraction
+
+
+import random
+
+class StochasticDiscretePoisoner(BasePoisoner):
+    def __init__(self, num_classes: int = 10, poison_fraction: float = 0.1, 
+                 mu: float = 10.0, sigma: float = 1.0, apply_prob: float = 1.0):
+
+        super().__init__(apply_prob)
+        self.num_classes = num_classes
+        self.poison_fraction = poison_fraction
+        self.mu = mu
+        self.sigma = sigma
+        
+        self.is_active = False
+        self.steps_remaining = 0
+        self.last_step = -1
+
+    def _sample_phase_length(self):
+        length = int(round(random.gauss(self.mu, self.sigma)))
+        return max(1, length)
+
+    def _apply_poison(self, images, labels, step):
+        batch_size = images.size(0)
+        
+        if step == 0 or step <= self.last_step:
+            self.is_active = False
+            self.steps_remaining = self._sample_phase_length()
+            
+        self.last_step = step
+        
+        self.steps_remaining -= 1
+        
+        if self.steps_remaining <= 0:
+            self.is_active = not self.is_active
+            self.steps_remaining = self._sample_phase_length()
+            
+        current_fraction = self.poison_fraction if self.is_active else 0.0
         
         indices_to_poison = self._get_poison_indices(batch_size, current_fraction)
         if len(indices_to_poison) == 0:

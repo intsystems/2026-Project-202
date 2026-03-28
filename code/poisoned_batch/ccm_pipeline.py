@@ -215,3 +215,48 @@ def run_all_ccm(
         title=get_title('Loss', 'Accuracy', tx, ty),
         **viz_kwargs
     )
+
+
+
+def plot_raw_series_pairs(ts_data, exp_name, out_dir, zoom_steps=800):
+    pairs =[
+        ('poison_fraction', 'val_loss', 'Poison', 'Loss', 'tab:green', 'tab:blue'),
+        ('poison_fraction', 'val_accuracy', 'Poison', 'Accuracy', 'tab:green', 'tab:orange'),
+        ('val_loss', 'val_accuracy', 'Loss', 'Accuracy', 'tab:blue', 'tab:orange')
+    ]
+    
+    for var1, var2, label1, label2, col1, col2 in pairs:
+        fig, ax1 = plt.subplots(figsize=(12, 5))
+        
+        N = len(ts_data[var1])
+        limit = min(N, zoom_steps) if zoom_steps else N
+        
+        y1 = ts_data[var1][:limit]
+        y2 = ts_data[var2][:limit]
+        x = range(limit)
+        
+        ax1.set_xlabel('Optimization Steps', fontsize=12)
+        ax1.set_ylabel(label1, color=col1, fontsize=12, fontweight='bold')
+        line1 = ax1.plot(x, y1, color=col1, alpha=0.8, linewidth=2, label=label1)
+        ax1.tick_params(axis='y', labelcolor=col1)
+        
+        ax2 = ax1.twinx()
+        ax2.set_ylabel(label2, color=col2, fontsize=12, fontweight='bold')
+        line2 = ax2.plot(x, y2, color=col2, alpha=0.8, linewidth=2, label=label2)
+        ax2.tick_params(axis='y', labelcolor=col2)
+        
+        title = f"Raw Series: {label1} vs {label2} [{exp_name}]"
+        if zoom_steps:
+            title += f"\n(Zoomed: First {limit} steps to show causality)"
+        plt.title(title, fontsize=14)
+        
+        lines = line1 + line2
+        labels = [l.get_label() for l in lines]
+        ax1.legend(lines, labels, loc='upper right', framealpha=0.9)
+        
+        plt.grid(True, alpha=0.3)
+        plt.tight_layout()
+        
+        save_path = os.path.join(out_dir, f"{exp_name}_raw_{label1}_vs_{label2}.pdf")
+        plt.savefig(save_path, format='pdf', dpi=300)
+        plt.close()
