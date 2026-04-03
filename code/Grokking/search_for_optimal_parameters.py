@@ -152,6 +152,8 @@ def cao_method(series, tau, max_E=15):
 def mle_intrinsic_dimension(series, tau, max_E=15, k_neighbors=5):
     series = np.asarray(series)
     
+    series = series + np.random.normal(0, 1e-9, size=len(series))
+    
     try:
         embedded_data = delay_embedding(series, max_E, tau)
     except ValueError:
@@ -160,19 +162,20 @@ def mle_intrinsic_dimension(series, tau, max_E=15, k_neighbors=5):
     if len(embedded_data) < k_neighbors + 2:
         return np.nan
         
+    from sklearn.neighbors import KDTree
     tree = KDTree(embedded_data)
     
     distances, _ = tree.query(embedded_data, k=k_neighbors + 1)
     distances = distances[:, 1:] 
     
-    distances = np.maximum(distances, 1e-12)
+    distances = np.maximum(distances, 1e-8)
     
     R_k = distances[:, -1:]
     
     log_ratios = np.log(R_k / distances[:, :-1])
     sum_log_ratios = np.sum(log_ratios, axis=1)
     
-    sum_log_ratios = np.maximum(sum_log_ratios, 1e-12)
+    sum_log_ratios = np.maximum(sum_log_ratios, 1e-5)
     
     local_id = (k_neighbors - 1) / sum_log_ratios
     local_id = local_id[np.isfinite(local_id)]
@@ -180,4 +183,9 @@ def mle_intrinsic_dimension(series, tau, max_E=15, k_neighbors=5):
     if len(local_id) == 0:
         return np.nan
         
-    return np.mean(local_id)
+    global_id = np.mean(local_id)
+    
+    if global_id > max_E * 2: 
+        return float(max_E)
+        
+    return global_id

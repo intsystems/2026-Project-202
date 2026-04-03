@@ -50,7 +50,8 @@ def analyze_grokking_dimensionality(
     method_name="Method",
     window_size=1000, 
     step_size=200,
-    target_metric='train_loss'
+    target_metric='train_loss',
+    add_name=''
 ):
     print(f"\n--- Running Grokking Analysis: {method_name} ---")
     
@@ -110,8 +111,12 @@ def analyze_grokking_dimensionality(
     plt.title(f'Collapse of Dimensionality during Grokking\nMethod: {method_name} (Window={window_size})', fontsize=14)
     ax1.grid(True, linestyle='--', alpha=0.5)
     plt.tight_layout()
-    
-    save_path = f'grokking_dim_collapse_{method_name.replace(" ", "_")}.pdf'
+
+    if add_name:
+        save_path = f'grokking_dim_collapse_{method_name.replace(" ", "_")}_{add_name}.pdf'
+    else:
+        save_path = f'grokking_dim_collapse_{method_name.replace(" ", "_")}.pdf'
+        
     plt.savefig(save_path, format='pdf', dpi=300)
     plt.show()
     
