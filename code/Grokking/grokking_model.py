@@ -5,33 +5,42 @@ import numpy as np
 import einops
 
 class Embed(nn.Module):
-    def __init__(self, d_vocab, d_model):
+    def __init__(self, d_vocab, d_model, high_variance_init=False):
         super().__init__()
-        self.W_E = nn.Parameter(torch.randn(d_model, d_vocab) / np.sqrt(d_model))
+        std = 2.0 if high_variance_init else 1.0 / np.sqrt(d_model)
+        self.W_E = nn.Parameter(torch.randn(d_model, d_vocab) * std)
+        
     def forward(self, x):
         return torch.einsum('dbp -> bpd', self.W_E[:, x])
 
 class Unembed(nn.Module):
-    def __init__(self, d_vocab, d_model):
+    def __init__(self, d_vocab, d_model, high_variance_init=False):
         super().__init__()
-        self.W_U = nn.Parameter(torch.randn(d_model, d_vocab) / np.sqrt(d_vocab))
+        std = 2.0 if high_variance_init else 1.0 / np.sqrt(d_vocab)
+        self.W_U = nn.Parameter(torch.randn(d_model, d_vocab) * std)
+        
     def forward(self, x):
         return x @ self.W_U
 
 class PosEmbed(nn.Module):
-    def __init__(self, max_ctx, d_model):
+    def __init__(self, max_ctx, d_model, high_variance_init=False):
         super().__init__()
-        self.W_pos = nn.Parameter(torch.randn(max_ctx, d_model) / np.sqrt(d_model))
+        std = 2.0 if high_variance_init else 1.0 / np.sqrt(d_model)
+        self.W_pos = nn.Parameter(torch.randn(max_ctx, d_model) * std)
+        
     def forward(self, x):
         return x + self.W_pos[:x.shape[-2]]
 
 class Attention(nn.Module):
-    def __init__(self, d_model, num_heads, d_head, n_ctx):
+    def __init__(self, d_model, num_heads, d_head, n_ctx, high_variance_init=False):
         super().__init__()
-        self.W_K = nn.Parameter(torch.randn(num_heads, d_head, d_model) / np.sqrt(d_model))
-        self.W_Q = nn.Parameter(torch.randn(num_heads, d_head, d_model) / np.sqrt(d_model))
-        self.W_V = nn.Parameter(torch.randn(num_heads, d_head, d_model) / np.sqrt(d_model))
-        self.W_O = nn.Parameter(torch.randn(d_model, d_head * num_heads) / np.sqrt(d_model))
+        std = 2.0 if high_variance_init else 1.0 / np.sqrt(d_model)
+        
+        self.W_K = nn.Parameter(torch.randn(num_heads, d_head, d_model) * std)
+        self.W_Q = nn.Parameter(torch.randn(num_heads, d_head, d_model) * std)
+        self.W_V = nn.Parameter(torch.randn(num_heads, d_head, d_model) * std)
+        self.W_O = nn.Parameter(torch.randn(d_model, d_head * num_heads) * std)
+        
         self.register_buffer('mask', torch.tril(torch.ones((n_ctx, n_ctx))))
         self.d_head = d_head
 
@@ -50,11 +59,13 @@ class Attention(nn.Module):
         return out
 
 class MLP(nn.Module):
-    def __init__(self, d_model, d_mlp):
+    def __init__(self, d_model, d_mlp, high_variance_init=False):
         super().__init__()
-        self.W_in = nn.Parameter(torch.randn(d_mlp, d_model) / np.sqrt(d_model))
+        std = 2.0 if high_variance_init else 1.0 / np.sqrt(d_model)
+        
+        self.W_in = nn.Parameter(torch.randn(d_mlp, d_model) * std)
         self.b_in = nn.Parameter(torch.zeros(d_mlp))
-        self.W_out = nn.Parameter(torch.randn(d_model, d_mlp) / np.sqrt(d_model))
+        self.W_out = nn.Parameter(torch.randn(d_model, d_mlp) * std)
         self.b_out = nn.Parameter(torch.zeros(d_model))
         
     def forward(self, x):
@@ -64,10 +75,10 @@ class MLP(nn.Module):
         return x
 
 class TransformerBlock(nn.Module):
-    def __init__(self, d_model, d_mlp, d_head, num_heads, n_ctx):
+    def __init__(self, d_model, d_mlp, d_head, num_heads, n_ctx, high_variance_init=False):
         super().__init__()
-        self.attn = Attention(d_model, num_heads, d_head, n_ctx)
-        self.mlp = MLP(d_model, d_mlp)
+        self.attn = Attention(d_model, num_heads, d_head, n_ctx, high_variance_init)
+        self.mlp = MLP(d_model, d_mlp, high_variance_init)
     
     def forward(self, x):
         x = x + self.attn(x)
@@ -75,12 +86,12 @@ class TransformerBlock(nn.Module):
         return x
 
 class GrokkingTransformer(nn.Module):
-    def __init__(self, d_vocab, d_model=128, d_mlp=512, d_head=32, num_heads=4, n_ctx=3):
+    def __init__(self, d_vocab, d_model=128, d_mlp=512, d_head=32, num_heads=4, n_ctx=3, high_variance_init=False):
         super().__init__()
-        self.embed = Embed(d_vocab, d_model)
-        self.pos_embed = PosEmbed(n_ctx, d_model)
-        self.block = TransformerBlock(d_model, d_mlp, d_head, num_heads, n_ctx)
-        self.unembed = Unembed(d_vocab, d_model)
+        self.embed = Embed(d_vocab, d_model, high_variance_init)
+        self.pos_embed = PosEmbed(n_ctx, d_model, high_variance_init)
+        self.block = TransformerBlock(d_model, d_mlp, d_head, num_heads, n_ctx, high_variance_init)
+        self.unembed = Unembed(d_vocab, d_model, high_variance_init)
     
     def forward(self, x):
         x = self.embed(x)
