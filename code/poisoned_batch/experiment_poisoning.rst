@@ -18,17 +18,20 @@
 Эксперименты разбиты на логические пары "Генератор логов" и "Анализатор".
 
 **1. Основной эксперимент (Base Scenarios)**
-* ``Time_series_generation.ipynb`` — Обучение ResNet-18 с базовыми сценариями отравления и сохранение логов.
-* ``Time_series_analysis.ipynb`` — Применение CCM пайплайна к полученным логам. Вычисление параметров вложения.
+
+* ``Time_series_generation.ipynb`` — Обучение ResNet-18 с базовыми сценариями отравления(Discrete, Random, Sinusoidal, Progressive Noise and Logistic map) и сохранение логов.
+* ``Time_series_analysis.ipynb`` — Применение CCM пайплайна к полученным логам. Вычисление параметров вложения. Как результат: получение границ применимости метода работающего в простых случаях и не работающего при наложении шумов
 
 **2. Анализ границ применимости (Limit / Without Convergence)**
-* ``Time_series_generation_without_convergence.ipynb`` — Тестирование хаотических воздействий (Logistic Map) и Ghost Drivers.
-* ``Time_series_analysis_without_convergence.ipynb`` — Анализ провалов CCM при сильном хаосе, подтверждающий теоретический предел чувствительности метода.
+
+* ``Time_series_generation_without_convergence.ipynb`` — Тестирование Ghost Drivers(const = 0.0, const = 0.1, Normal and Uniform).
+* ``Time_series_analysis_without_convergence.ipynb`` — Доказательство того что CCM не выдаёт ложно положительных результатов.
 
 **3. Визуальный эксперимент**
-* ``Time_series_generation_visual_experiment.ipynb`` / ``Time_series_analysis_visual_experiment.ipynb`` — Ноутбуки, сфокусированные на отрисовке сырых временных рядов с двойными осями Y для визуального доказательства каузальности.
+
+* ``Time_series_generation_visual_experiment.ipynb`` / ``Time_series_analysis_visual_experiment.ipynb`` — Ноутбуки деманстрируют наглядный эксперимент, где с увелечением rate для Discrete Randomness метод начинает работать лучше и уверенее находит связи
 
 Директории с результатами
 -------------------------
-* ``folder_for_raw_series/``, ``ghost_raw_series_logs/``, ``ghost_series_logs/``, ``visual_experiment_raw_series/`` — Сгенерированные CSV файлы логов.
-* ``ccm_results/``, ``ccm_ghost_results/`` — Финальные графики конвергенции. Папки с суффиксом ``_with_tau_one`` содержат результаты абляционного теста, где параметр $\tau$ жестко зафиксирован равным 1 (специфика SGD-шума).
+* ``folder_for_raw_series/``, ``ghost_raw_series_logs/``, ``visual_experiment_raw_series/`` — Сгенерированные CSV файлы логов.
+* ``ccm_results/``, ``ccm_ghost_results/``, ``ccm_visual_experiment_results`` — Финальные графики конвергенции. Папки с суффиксом ``_with_tau_one`` содержат результаты эксперимента, где параметр $\tau$ жестко зафиксирован равным 1.
