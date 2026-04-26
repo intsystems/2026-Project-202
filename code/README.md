@@ -1,23 +1,18 @@
-# Code
+# Detecting Optimization Regimes via Convergent Cross Mapping
 
-This repository contains source code for our paper. The code includes data processing, model building, and visualization of results.
+Данная директория содержит исходный код для вычислительных экспериментов, представленных в статье. Проект демонстрирует применимость методов эмпирического динамического моделирования (EDM) и фазовой реконструкции к анализу логов глубокого обучения.
 
-> [!IMPORTANT]
-> We use jupyter notebooks for visualization purposes only. Please, keep your code in Python scripts.
+Исследование разделено на два независимых модуля:
 
-## Installation
+1.[**Poisoned Batch (Causal Discovery)**](poisoned_batch/experiment_poisoning.rst)  
+   Эксперимент по выявлению скрытых причинно-следственных связей в условиях стохастического шума оптимизатора SGD с использованием метода Convergent Cross Mapping (CCM).
 
-Clone the repo:
+2. [**Grokking (Dimensionality Collapse)**](grokking/experiment_grokking.rst)  
+   Исследование феномена отложенной генерализации (гроккинга). Содержит код для обучения Трансформеров на алгоритмических задачах (модульная арифметика и группа $S_5$) и скрипты для отслеживания коллапса внутренней размерности аттрактора (через MLE Intrinsic Dimension и другие методы).
+
+## Зависимости
+
+Для запуска экспериментов требуются следующие библиотеки:
 ```bash
-git clone https://github.com/kisnisker/m1p-template.git
-cd m1p-template/code
-```
-
-Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-## Usage
-
-TODO
+pip install torch torchvision pandas numpy matplotlib tqdm scikit-learn
+pip install causal-ccm einops
