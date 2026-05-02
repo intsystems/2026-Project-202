@@ -4,11 +4,11 @@
 
 Исследование разделено на два независимых модуля:
 
-1.[**Poisoned Batch (Causal Discovery)**](poisoned_batch/experiment_poisoning.rst)  
+1.[**Poisoned Batch (Causal Discovery)**](poisoned_batch/README.md)  
    Эксперимент по выявлению скрытых причинно-следственных связей в условиях стохастического шума оптимизатора SGD с использованием метода Convergent Cross Mapping (CCM).
 
 
-2.[**Grokking (Dimensionality Collapse)**](Grokking/experiment_grokking.rst)  
+2.[**Grokking (Dimensionality Collapse)**](Grokking/README.md)  
    Исследование феномена отложенной генерализации (гроккинга). Содержит код для обучения Трансформеров на алгоритмических задачах (модульная арифметика и группа $S_5$) и скрипты для отслеживания коллапса внутренней размерности аттрактора (через MLE Intrinsic Dimension и другие методы).
 
 ## Зависимости
