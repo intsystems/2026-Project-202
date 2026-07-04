@@ -3,8 +3,7 @@
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[english,russian]{babel}
-\usepackage{tempora}
+\usepackage[english]{babel}
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{booktabs}
@@ -20,7 +19,6 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{amsthm}
 \usepackage{mathrsfs}
-\usepackage{xcolor}
 \usepackage{textcomp}
 \usepackage{manyfoot}
 \usepackage{algorithm}
@@ -180,7 +178,7 @@ To formalize the algorithms, we introduce the $\text{DelayEmbedding}$ constructi
 \end{equation}
 where each vector $\vx_t \in \R^E$ is constructed according to Eq. (3). The result of this operator is the reconstructed phase manifold $M \subset \R^E$, consisting of $|M| = N - (E-1)\tau$ points.
 
-A fundamental mathematical requirement of embedding theorems is the \textit{genericity} of the observation function $\phi(\cdot)$. From the perspective of differential topology, this means that the metric function must not possess degenerate symmetries that glue distinct points of the phase space together during projection. For example, considering the extended state $\vs_t = (\vw_t, \vh_t)$, the aggregated weight norm $||\vw_t||_2$ possesses spherical symmetry, measuring only the radial distance of the parameters from the origin while entirely ignoring the optimizer's history $\vh_t$. In certain regimes, it can act as a "degenerate observer," losing information about the algebraic structure (angular coordinates) of the system. Conversely, nonlinear metrics directly dependent on the logit distribution (such as the loss function $\Ls$) act as generic observers that preserve the high-dimensional topology of the extended system.
+A fundamental mathematical requirement of embedding theorems is the \textit{genericity} of the observation function $\phi(\cdot)$. From the perspective of differential topology, this means that the metric function must not possess degenerate symmetries that glue distinct points of the phase space together during projection. For example, considering the extended state $\vs_t = (\vw_t, \vh_t)$, the aggregated weight norm $||\vw_t||_2$ possesses spherical symmetry, measuring only the radial distance of the parameters from the origin while entirely ignoring the optimizer's history $\vh_t$. In certain regimes, it can act as a "degenerate observable," losing information about the algebraic structure (angular coordinates) of the system. Conversely, nonlinear metrics directly dependent on the logit distribution (such as the loss function $\Ls$) act as generic observables that preserve the high-dimensional topology of the extended system.
 
 However, gradient descent in deep learning is not an autonomous system. The influence of random mini-batch selection, combined with hyperparameter schedules (learning rate schedulers), formally violates the classical Takens conditions. To mathematically justify our approach in this non-autonomous setting, we rely on Stark's embedding theorems for forced dynamical systems with mixed forcing \citep{stark1999delay, stark2003delay}.
 
@@ -190,15 +188,15 @@ In modern optimization theory, the extended learning process $\vs_{t+1} = \Phi(\
 
 To detect phase transitions, we need to dynamically estimate the attractor dimension of the system. In our framework, we reviewed both classical and modern methods, ranking them by their robustness to the specifics of neural network optimization (mini-batch noise):
 
-\textbf{1. False Nearest Neighbors (FNN) \citep{kennel1992determining} and Cao's Method \citep{cao1997practical}:}
+\paragraph{False Nearest Neighbors (FNN) \citep{kennel1992determining} and Cao's Method \citep{cao1997practical}.}
 These are geometric "bottom-up" approaches. The essence of FNN lies in the sequential "unfolding" of the attractor. Given an insufficient embedding dimension, distant segments of the high-dimensional trajectory are projected close to each other, forming "false" neighbors. The method measures the distance between a point and its nearest spatial neighbor, and checks how much they diverge when transitioning to dimension $d+1$. Cao's method is a rigorous mathematical development of this approach that analyzes the averaged ratio of distances, eliminating the need for manual threshold selection.
 
 However, a fundamental limitation of both geometric methods is the strict requirement of \textit{global recurrence} of the trajectory. To identify the complex shape of the attractor, the system must regularly return to the vicinity of its past states. During neural network optimization, we frequently deal with transient processes—for example, when the loss function drops monotonically. In the absence of recurrence, the nearest spatial neighbor of a point $\vx_t$ becomes its own temporal neighbor $\vx_{t-1}$. Because such points do not "scatter" in any dimensionality, geometric methods degenerate, erroneously perceiving the high-dimensional descent trajectory as a simple 1D line, yielding a trivial estimate of $\hat{d}=1$.
 
-\textbf{2. Simplex Projection Maximization \citep{sugihara1990nonlinear}:}
+\paragraph{Simplex Projection Maximization \citep{sugihara1990nonlinear}.}
 The optimal $E$ is sought as the argument that maximizes the autoregressive correlation $\rho$ when predicting the future state $y_{t+1}$ based on its neighbors in $\R^E$. This topologically guarantees the best unfolding of the attractor without overfitting to noise; however, its discrete (integer-valued) resolution coarsens the detection of smooth phase transitions.
 
-\textbf{3. Maximum Likelihood Estimation (MLE Intrinsic Dimension) \citep{levina2004maximum}:}
+\paragraph{Maximum Likelihood Estimation (MLE Intrinsic Dimension) \citep{levina2004maximum}.}
 Selected as the primary analytical tool in our framework. In contrast to geometric "bottom-up" methods, the Levina-Bickel method projects the time series directly into a redundant high-dimensional space (e.g., $E=15$) and estimates the local intrinsic dimension $\hat{d}_{x_t}$ statistically, based on the Poisson distribution of distances to the $k$ nearest neighbors. The process is formalized in Algorithm \ref{alg:mle_id}.
 
 \begin{algorithm}[htbp]
@@ -218,7 +216,7 @@ Selected as the primary analytical tool in our framework. In contrast to geometr
 
 This method returns a \textit{continuous} value that is computed locally, does not require global recurrence of the trajectory, and demonstrates phenomenal robustness to microscopic mini-batch noise.
 
-\subsection{The Physics of Grokking as a Topological Collapse}\label{sec:theory_grokking}
+\subsection{Grokking as a Topological Collapse}\label{sec:theory_grokking}
 
 Applying the described mathematical apparatus, we formalize grokking as a structural phase transition in the loss landscape.
 \begin{itemize}
@@ -237,21 +235,21 @@ Finding a generalizing solution strictly restricts the degrees of freedom of the
 
 
 
-\section{Computational Experiment}\label{sec:exp}
+\section{Experiments}\label{sec:exp}
 
 To test the hypothesis that grokking is a structural phase transition accompanied by a reduction in attractor dimensionality, and to validate our statistical framework as an early predictor of grokking, we conducted a series of computational experiments.
 
-The primary experiments presented in this section utilize the 1-layer Omnigrok Transformer architecture \citep{liu2022omnigrok}, which was specifically designed to facilitate a smoother and more distinct grokking effect. Training for these cases was performed using the AdamW optimizer with mini-batch stochasticity. As a standard practice in deep learning, this stochastic noise increases the variance of the scalar metric series, allowing phase reconstruction algorithms to more accurately estimate the true dimensionality of the phase space. In contrast, our initial baseline experiments, which were conducted using a standard Transformer architecture and full-batch gradient descent (Full-Batch GD), revealed the problem of a "degenerate observer" due to the loss dropping to zero and the resulting lack of variance; these results and their analysis are deferred to Appendix \ref{app:exp}.
+The primary experiments presented in this section utilize the 1-layer Omnigrok Transformer architecture \citep{liu2022omnigrok}, which was specifically designed to facilitate a smoother and more distinct grokking effect. Training for these cases was performed using the AdamW optimizer with mini-batch stochasticity. As a standard practice in deep learning, this stochastic noise increases the variance of the scalar metric series, allowing phase reconstruction algorithms to more accurately estimate the true dimensionality of the phase space. In contrast, our initial baseline experiments, which were conducted using a standard Transformer architecture and full-batch gradient descent (Full-Batch GD), revealed the problem of a "degenerate observable" due to the loss dropping to zero and the resulting lack of variance; these results and their analysis are deferred to Appendix \ref{app:exp}.
 
 In addition to the baseline metrics ($\Ls$, accuracy), the algorithm tracks the gradient norm $\|g\|_2$, the weight norm $\|\vw\|_2$, and the cosine similarity between gradients at consecutive iterations. For the phase space reconstruction, the time delay $\tau$ is typically set to a fixed constant (e.g., $\tau=1$ or $\tau=10$), while the effective embedding dimension $E$ is computed dynamically using the Maximum Likelihood Estimation (MLE) method.
 
-\subsection{Experiment 1: Modular Addition and the Non-Generic Observer}\label{sec:exp_mod}
+\subsection{Modular Addition}\label{sec:exp_mod}
 
 In the first experiment, we tackled the modular addition task (modulo $p=113$). The weight norm ($||\vw||_2$) was chosen as the target metric for the MLE method, as it preserves rich variance throughout the entire memorization phase and, equally importantly, remains completely independent of the validation set.
 
 Fig. \ref{fig:grokking_flat} presents the results of the experiment. In the top row (with $L_2$ regularization enabled, $WD=1.0$), a perfect topological collapse is observed: the effective dimensionality $\hat{d}(t)$ collapses synchronously with the weight norm long before the Accuracy metric registers generalization. In the bottom row (without regularization, $WD=0.0$), grokking does not occur, the network enters perpetual memorization, and the MLE method correctly shows a persistently high dimensionality of the phase space. This proves the method's robustness against false positives.
 
-In summary, our framework successfully predicts grokking by capturing the topological collapse of the attractor dimension. However, it is evident that the weight norm is a non-generic (symmetric) observer: while it clearly reflects the dimensionality drop without relying on the validation set, it fails to convey the true algebraic dimension of the attractor. Furthermore, our predictor on this specific task does not surpass the early-warning accuracy of a predictor based directly on the weight norm and $\Ls_{val}$, which is attributed to the simplicity of the modular addition task itself.
+In summary, our framework successfully predicts grokking by capturing the topological collapse of the attractor dimension. However, it is evident that the weight norm is a non-generic (symmetric) observable: while it clearly reflects the dimensionality drop without relying on the validation set, it fails to convey the true algebraic dimension of the attractor. Furthermore, our predictor on this specific task does not surpass the early-warning accuracy of a predictor based directly on the weight norm and $\Ls_{val}$, which is attributed to the simplicity of the modular addition task itself.
 
 \begin{figure}[H]
     \centering
@@ -291,7 +289,7 @@ In summary, our framework successfully predicts grokking by capturing the topolo
     \label{fig:grokking_flat}
 \end{figure}
 
-\subsection{Experiment 2: Non-Abelian Groups and Complex Algebraic Representations ($S_5$)}\label{sec:exp_s5}
+\subsection{Non-Abelian Groups and Complex Algebraic Representations ($S_5$)}\label{sec:exp_s5}
 
 To verify the universality of our method, we escalated the task complexity to the composition of permutations within the non-abelian $S_5$ symmetric group. From the perspective of mechanistic interpretability, neural networks generalize on finite group tasks by learning their linear irreducible representations \citep{chughtai2023toy}.
 
@@ -339,7 +337,7 @@ As seen in Fig. \ref{fig:grokking_s5}, the proposed method successfully tackles 
     \label{fig:grokking_s5}
 \end{figure}
 
-Of particular interest is the dimensionality estimation using the validation loss function (Fig. \ref{fig:grokking_val_loss_s5}). This proves that the observed topological collapse is independent of the chosen metric and is not a subjective artifact. By evaluating a generic observer ($\Ls_{val}$), we can correctly measure the number of active components in the model. For $S_5$, the dimensionality collapses to $E \approx 4$, which perfectly aligns with the minimal required representation dimension. Conversely, for $WD=0$, the dimensionality not only fails to drop but actively increases, physically reflecting the escalating chaos of eternal memorization.
+Of particular interest is the dimensionality estimation using the validation loss function (Fig. \ref{fig:grokking_val_loss_s5}). This proves that the observed topological collapse is independent of the chosen metric and is not a subjective artifact. By evaluating a generic observable ($\Ls_{val}$), we can correctly measure the number of active components in the model. For $S_5$, the dimensionality collapses to $E \approx 4$, which perfectly aligns with the minimal required representation dimension. Conversely, for $WD=0$, the dimensionality not only fails to drop but actively increases, physically reflecting the escalating chaos of eternal memorization.
 
 \begin{figure}[H]
     \centering
@@ -359,30 +357,27 @@ Of particular interest is the dimensionality estimation using the validation los
 
 \subsection{Theoretical Interpretation of Results}\label{sec:exp_theory}
 
-An analysis of the obtained plots allows us to draw the following theoretical conclusions:
+An analysis of the obtained plots allows us to draw the following theoretical conclusions.
 
-\begin{enumerate}
-    \item \textbf{The nature of grokking:} The captured dimensionality collapse strictly proves that grokking is not merely an error reduction, but a qualitative structural restructuring of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
-    \item \textbf{Optimizer metrics predictability:} The experiments demonstrated that delayed generalization can be diagnosed relying exclusively on internal network metrics (such as weight norm). This proves that the formation of generalizing properties has an objective topological nature and is not an artifact of a specific held-out validation set.
-    \item \textbf{The role of observer genericity:} Evaluating the $WD=0$ regime revealed the critical importance of choosing a generic observer. A symmetric observer (weight norm) remains low during overfitting, as the model simply finds a trivial solution and scales up the weights, keeping $E \approx 1$. However, a generic observer ($\Ls_{val}$) correctly captures the high dimensionality of chaotic overfitting and accurately projects the algebraic complexity of the learned algorithm (e.g., $E \ge 4$ for $S_5$).
-\end{enumerate}
-
+\paragraph{The nature of grokking.} The captured dimensionality collapse strictly proves that grokking is not merely an error reduction, but a qualitative structural restructuring of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
+\paragraph{Optimizer metrics predictability.} The experiments demonstrated that delayed generalization can be diagnosed relying exclusively on internal network metrics (such as weight norm). This proves that the formation of generalizing properties has an objective topological nature and is not an artifact of a specific held-out validation set.
+\paragraph{The role of genericity of the observable.} Evaluating the $WD=0$ regime revealed the critical importance of choosing a generic observable. Weight norm, a symmetric observable, remains low during overfitting, as the model simply finds a trivial solution and scales up the weights, keeping $E \approx 1$. However, a generic observable ($\Ls_{val}$) correctly captures the high dimensionality of chaotic overfitting and accurately projects the algebraic complexity of the learned algorithm (e.g., $E \ge 4$ for $S_5$).
 
 \section{Discussion}\label{sec:disc}
 
 The results of the conducted computational experiments confirm the fundamental hypothesis of this work: the optimization process of deep neural networks can be investigated from the perspective of nonlinear dynamical systems theory, and by tracking the attractor dimension, one can predict and qualitatively describe grokking. However, the transfer of phase reconstruction methods to machine learning has revealed a number of specific limitations and physical effects that require separate consideration.
 
-\textbf{1. The Problem of the Degenerate Observer and the Role of Stochasticity.}
-During the experiments with full-batch gradient descent (Full-Batch GD), we encountered difficulties in estimating the attractor dimension: all the 1D scalar metrics we used degenerated into a constant. From the perspective of nonlinear dynamics, ideal noise-free optimization collapses the trajectory into a rectilinear ray, depriving methods (such as MLE) of the variance necessary to estimate the landscape curvature. Thus, when analyzing dimensionality, one must ensure that the series does not degenerate. This can be mitigated by subsampling the series, though this may negatively impact the estimation accuracy. Therefore, our method performs best in systems where the observation series do not degenerate, i.e., in systems with inherent stochasticity. The high-frequency noise of SGD forces the optimizer to continuously explore the local geometry of the attractor. Furthermore, experiments have shown that the weight norm ($||\vw||_2$) is a much more informative and stable "observer" of the latent dynamics than the training loss, which is highly prone to degeneration.
+\paragraph{The Problem of the Degenerate Observable and the Role of Stochasticity.}
+During the experiments with full-batch gradient descent (Full-Batch GD), we encountered difficulties in estimating the attractor dimension: all the 1D scalar metrics we used degenerated into a constant. From the perspective of nonlinear dynamics, ideal noise-free optimization collapses the trajectory into a rectilinear ray, depriving methods (such as MLE) of the variance necessary to estimate the landscape curvature. Thus, when analyzing dimensionality, one must ensure that the series does not degenerate. This can be mitigated by subsampling the series, though this may negatively impact the estimation accuracy. Therefore, our method performs best in systems where the observation series do not degenerate, i.e., in systems with inherent stochasticity. The high-frequency noise of SGD forces the optimizer to continuously explore the local geometry of the attractor. Furthermore, experiments have shown that the weight norm ($||\vw||_2$) is a much more informative and stable "observable" for the latent dynamics than the training loss, which is highly prone to degeneration.
 
-\textbf{2. Topology Dependence on the Choice of Observer (Observability).}
+\paragraph{Topology Dependence on the Choice of Observable (Observability).}
 One of the most important empirical results of our work is demonstrating the dependence of the reconstructed dimensionality $E$ on the choice of the scalar metric (observation function). In dynamical systems theory, Takens' embedding theorem requires the observation function to be "generic" and free of degenerate symmetries.
 
-Our experiments have demonstrated that the weight norm ($||\vw||_2$), being a symmetric and thus non-generic observer, distorts the absolute value of the true dimensionality. The dynamics of the norm are primarily determined by the balance of two global forces: the error gradient (which increases the weights) and $L_2$ regularization (which shrinks them). Because of this, the effective dimensionality of the $||\vw||_2$ series always collapses to low values ($E \approx 2\dots 4$), regardless of the complexity of the solved task, as this metric is "blind" to the complex angular structure of the representations.
+Our experiments have demonstrated that the weight norm ($||\vw||_2$), being a symmetric and thus non-generic observable, distorts the absolute value of the true dimensionality. The dynamics of the norm are primarily determined by the balance of two global forces: the error gradient (which increases the weights) and $L_2$ regularization (which shrinks them). Because of this, the effective dimensionality of the $||\vw||_2$ series always collapses to low values ($E \approx 2\dots 4$), regardless of the complexity of the solved task, as this metric is "blind" to the complex angular structure of the representations.
 
 In contrast, the loss function ($\Ls_{val}$ or the noisy $\Ls_{train}$) depends directly on the logits and is sensitive to the internal algebraic structure of the network. Works on the direct spectral analysis of weights \citep{nanda2023progress} show that for modular addition, the network forms 2D circles (Fourier bases). MLE estimation on the loss series confirms this topologically: the trajectory collapse halts at $E \approx 2$. In turn, for the non-abelian group $S_5$, whose irreducible representations require spaces of higher dimensionality \citep{chughtai2023toy}, the dimensionality collapse, measured specifically on the loss series, predictably halts at a higher level of $E \approx 4\dots 6$. Thus, we have proven that for a "blind" estimation of the algebraic complexity of the learned algorithm, it is necessary to use metrics directly related to the distribution of the network outputs, or to aggregate parameter statistics more carefully. It is also worth noting that it is preferable to use specifically $\Ls_{val}$, since $\Ls_{train}$ degenerates rapidly.
 
-\textbf{3. Independence from the Validation Set and the Number of Active Components.}
+\paragraph{Independence from the Validation Set and the Number of Active Components.}
 From a practical standpoint, monitoring the validation loss ($\Ls_{val}$) remains a faster and cheaper predictor of the onset of grokking, at least in the simple experiments conducted. However, macroscopic metrics are merely symptoms of improved generalization ability. In turn, the collapse of the effective dimensionality $E$ provides rigorous mathematical evidence of a structural phase transition—a process in which the network truncates noisy degrees of freedom and compresses the trajectory into a compact submanifold. Furthermore, our dimensionality-based predictor fundamentally does not require a validation set. 
 % This observation paves the way for fundamentally new methods of network pruning and model compression (e.g., rank selection for LoRA), based on the true number of degrees of freedom of the trained network, computed dynamically.
 
@@ -392,7 +387,7 @@ From a practical standpoint, monitoring the validation loss ($\Ls_{val}$) remain
 
 In this work, we proposed and verified a novel statistical method for the early diagnosis of grokking, based on the topological reconstruction of the neural network’s phase space. By treating stochastic gradient descent as a forced dynamical system, we empirically demonstrated that the phenomenon of delayed generalization constitutes a structural phase transition to a low-dimensional state. Tracking this process using the Levina-Bickel estimation (MLE Intrinsic Dimension) allows for capturing the collapse of the effective dimensionality of the attractor long before the jump in validation accuracy, thus acting as a reliable early predictor of generalization.
 
-The proposed approach is characterized by high universality and practical applicability. It is shown that the topological collapse can be reliably detected from the internal scalar logs of the optimizer (e.g., the weight norm), which enables monitoring the generalization capability without the need for a validation set. Furthermore, experiments on the tasks of modular addition and composition in the non-abelian group $S_5$ confirmed that the residual attractor dimension strictly aligns with the theoretical algebraic complexity of the learned algorithm when using a generic observer ($E \approx 2$ and $E \approx 4 \dots 6$, respectively). Since the method operates on a "black-box" principle and relies exclusively on 1D logs, it can be easily transferred to arbitrary architectures and tasks without adaptation.
+The proposed approach is characterized by high universality and practical applicability. It is shown that the topological collapse can be reliably detected from the internal scalar logs of the optimizer (e.g., the weight norm), which enables monitoring the generalization capability without the need for a validation set. Furthermore, experiments on the tasks of modular addition and composition in the non-abelian group $S_5$ confirmed that the residual attractor dimension strictly aligns with the theoretical algebraic complexity of the learned algorithm when using a generic observable ($E \approx 2$ and $E \approx 4 \dots 6$, respectively). Since the method operates on a "black-box" principle and relies exclusively on 1D logs, it can be easily transferred to arbitrary architectures and tasks without adaptation.
 
 The primary conclusion of this study is that one-dimensional scalar series contain sufficient information for diagnosing hidden phase transitions during the training process. This paves the way for the development of computationally cheap methods for the monitoring and structural optimization of deep models without the need for resource-intensive analysis of hidden representations or Hessian matrices.
 
@@ -409,9 +404,9 @@ This appendix presents the results of initial experiments conducted on the modul
 
 As seen in Fig. \ref{fig:grokking_full_batch}, in this setting, we were able to capture the drop in the effective dimensionality (MLE ID) of the $\Ls_{train}$ series immediately preceding the jump in validation accuracy (from $E \approx 4-5$ to $E \approx 2.8$).
 
-However, this experiment revealed an important methodological problem. Under full-batch optimization, the correlation between the phase space dimension $E$ and the grokking effect became less evident. From a theoretical perspective, this is explained by the "degenerate observer" problem: in the absence of the stochastic noise of mini-batches, the optimizer's trajectory degenerates into a deterministic smooth curve, and the training loss drops almost to zero, depriving the MLE method of the variance necessary to estimate the true dimension of the space $d^*(t)$.
+However, this experiment revealed an important methodological problem. Under full-batch optimization, the correlation between the phase space dimension $E$ and the grokking effect became less evident. From a theoretical perspective, this is explained by the "degenerate observable" problem: in the absence of the stochastic noise of mini-batches, the optimizer's trajectory degenerates into a deterministic smooth curve, and the training loss drops almost to zero, depriving the MLE method of the variance necessary to estimate the true dimension of the space $d^*(t)$.
 
-This very observation motivated the transition to stochastic optimization (mini-batch) and the use of a non-generic observer (the weight norm), the results of which are presented in the main Section \ref{sec:exp}.
+This very observation motivated the transition to stochastic optimization (mini-batch) and the use of a non-generic observable (the weight norm), the results of which are presented in the main Section \ref{sec:exp}.
 
 \begin{figure}[H]
 \centering
@@ -420,7 +415,7 @@ This very observation motivated the transition to stochastic optimization (mini-
 \includegraphics[width=\textwidth]{images/grokking_accuracy.png}
 \caption{Dynamics of Train/Val Accuracy}
 \end{subfigure} \hfill
-\begin{subfigure}[b]{0.32\textheight}
+\begin{subfigure}[b]{0.42\textwidth}
 \centering
 \includegraphics[width=\textwidth]{images/grokking_dimension.png}
 \caption{Dimensionality Collapse (MLE ID)}
