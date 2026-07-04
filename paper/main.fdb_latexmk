@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex main"] 1783155753.01214 "main.aux" "main.bbl" "main" 1783155762.44219 0
-  "./references.bib" 1783082980 9370 55247e773a3adea1b1ba349c0d755b24 ""
+["bibtex main"] 1783170664.38419 "main.aux" "main.bbl" "main" 1783170844.9659 0
+  "./references.bib" 1783170652 10020 bb5dd0040cda04cc65699ec91cb19e93 ""
   "c:/texlive/2026/texmf-dist/bibtex/bst/natbib/unsrtnat.bst" 1777847568 24550 a41a6405f4de768c43e871d9fbce2bc8 ""
-  "main.aux" 1783155760 9611 536cdd05e2d350a8ef912f37493970c0 "pdflatex"
+  "main.aux" 1783170843 9814 e3a8765e46e13fb2c027d00031dc2d8f "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1783155753.55989 "c:/Users/karlo/notebooks/grokking_prediction_original/2026-Project-202/paper/main.tex" "main.pdf" "main" 1783155762.44287 0
-  "c:/Users/karlo/notebooks/grokking_prediction_original/2026-Project-202/paper/main.tex" 1783155743 68849 eef420a7dbf9d13c0ea603277b99b667 ""
+["pdflatex"] 1783170831.3466 "c:/Users/karlo/notebooks/grokking_prediction_original/2026-Project-202/paper/main.tex" "main.pdf" "main" 1783170844.96659 0
+  "c:/Users/karlo/notebooks/grokking_prediction_original/2026-Project-202/paper/main.tex" 1783170828 69147 abc58fa1f1bca8b07472184891116670 ""
   "c:/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t2a.enc" 1777844912 3141 82d5616418ed8d5de703b3951bedecb4 ""
   "c:/texlive/2026/texmf-dist/fonts/enc/dvips/tempora/t2a-tempora.enc" 1777849050 3023 c4581b906237349b927d8aa9ff8a2b60 ""
   "c:/texlive/2026/texmf-dist/fonts/enc/dvips/tempora/t2b-tempora.enc" 1777849050 2965 98e36e8bc27f87b55016763edfa071dd ""
@@ -202,10 +202,10 @@
   "images/s5_wd1_loss.png" 1779624520 221908 fd673fbef81cb8c46944272de8a8a076 ""
   "images/s5_wd1_norm.png" 1779624520 227371 5a161ba94b074c85d0a04e8bbb450231 ""
   "images/s5_wd1_val_loss.pdf" 1779640003 47315 e69b1076a11bed1ee6a357b60043e0c3 ""
-  "main.aux" 1783155760 9611 536cdd05e2d350a8ef912f37493970c0 "pdflatex"
-  "main.bbl" 1783155753 3419 4502a48877a75b7c26bd7f33b4a76701 "bibtex main"
-  "main.out" 1783155760 5156 812908b927cc68170dd5c154b29a041a "pdflatex"
-  "main.tex" 1783155743 68849 eef420a7dbf9d13c0ea603277b99b667 ""
+  "main.aux" 1783170843 9814 e3a8765e46e13fb2c027d00031dc2d8f "pdflatex"
+  "main.bbl" 1783170664 4069 4da61190382733ece5cf06421a2d2791 "bibtex main"
+  "main.out" 1783170843 5156 812908b927cc68170dd5c154b29a041a "pdflatex"
+  "main.tex" 1783170828 69147 abc58fa1f1bca8b07472184891116670 ""
   "math_commands.tex" 1783082980 12792 a71653715108dc62b66e3a0bde0307d8 ""
   "neurips_2025.sty" 1783082980 13444 2817c1b954c70ec3156371423da6545c ""
   (generated)

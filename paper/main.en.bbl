@@ -1,4 +1,4 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{12}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -14,6 +14,12 @@ Alethea Power, Yuri Burda, Harri Edwards, Igor Babuschkin, and Vedant Misra.
 Neel Nanda, Lawrence Chan, Tom Lieberum, Jess Smith, and Jacob Steinhardt.
 \newblock Progress measures for grokking via mechanistic interpretability.
 \newblock In \emph{International Conference on Learning Representations (ICLR)}, 2023.
+
+\bibitem[Chughtai et~al.(2023)Chughtai, Chan, and Nanda]{chughtai2023toy}
+Bilal Chughtai, Lawrence Chan, and Neel Nanda.
+\newblock A toy model of universality: Reverse engineering how networks learn group operations.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2023.
+\newblock URL \url{https://arxiv.org/abs/2302.03025}.
 
 \bibitem[Notsawo et~al.(2023)Notsawo, Zhou, Pezeshki, Rish, and Dumas]{notsawo2023predicting}
 Paul J~T Notsawo, Hattie Zhou, Mohammad Pezeshki, Irina Rish, and Guillaume Dumas.
@@ -43,6 +49,11 @@ Elizaveta Levina and Peter~J. Bickel.
 \newblock Maximum likelihood estimation of intrinsic dimension.
 \newblock In \emph{Advances in Neural Information Processing Systems (NeurIPS)}, volume~17, 2004.
 \newblock URL \url{https://proceedings.neurips.cc/paper/2004/file/74934548253bcab8490ebd74afecebb5-Paper.pdf}.
+
+\bibitem[Mandt et~al.(2017)Mandt, Hoffman, and Blei]{mandt2017stochastic}
+Stephan Mandt, Matthew~D Hoffman, and David~M Blei.
+\newblock Stochastic gradient descent as approximate bayesian inference.
+\newblock \emph{Journal of Machine Learning Research}, 18\penalty0 (1):\penalty0 4873--4907, 2017.
 
 \bibitem[Kennel et~al.(1992)Kennel, Brown, and Abarbanel]{kennel1992determining}
 Matthew~B Kennel, Reggie Brown, and Henry~DI Abarbanel.

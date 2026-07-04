@@ -162,75 +162,73 @@ Meeting the conditions of Definition \ref{def:criterion} in practice implies tha
 
 
 
-\section{Теоретическое обоснование и предлагаемый метод}\label{sec:method}
+\section{Theoretical Justification and Proposed Method}\label{sec:method}
 
-Для решения поставленной задачи предложен метод, опирающийся на теорию нелинейных динамических систем. В данном разделе обосновывается возможность извлечения геометрии многомерной системы из 1D-лога и приводится алгоритм оценки эффективной размерности $\hat{d}(t)$.
+To solve the stated problem, we propose a framework relying on the theory of nonlinear dynamical systems. This section justifies the theoretical possibility of extracting the geometry of a high-dimensional system from a 1D scalar log and presents the algorithm for estimating the effective dimensionality $\hat{d}(t)$.
 
-\subsection{Обучение как вынужденная динамическая система (Теоремы о вложении)}
+\subsection{Learning as a Forced Dynamical System (Embedding Theorems)}
 
-В теории нелинейной динамики под \textbf{аттрактором} $\mathcal{A} \subset \sW$ понимается компактное инвариантное подмножество фазового пространства, к которому асимптотически притягиваются траектории системы. В контексте машинного обучения процесс градиентной оптимизации стремится минимизировать функцию потерь. В связи с этим мы опираемся на допущение, что с течением времени траектория весов $\vw_t$ теряет избыточные степени свободы и сходится к некоторому локальному аттрактору (например, стационарному стохастическому облаку вокруг плоского минимума). Пусть истинная размерность этого аттрактора равна $m$, где $m \ll D$.
+In nonlinear dynamics theory, an \textbf{attractor} $\mathcal{A} \subset \sW$ is understood as a compact invariant subset of the phase space to which the system's trajectories asymptotically converge. In the context of machine learning, the gradient optimization process seeks to minimize the loss function. In this regard, we rely on the assumption that over time, the weight trajectory $\vw_t$ loses redundant degrees of freedom and converges to a certain local attractor (e.g., a stationary stochastic cloud around a flat minimum). Let the true dimensionality of this attractor be $m$, where $m \ll D$.
 
-Согласно классической теореме Такенса \cite{takens1981detecting}, для автономных систем топологию всего многомерного аттрактора $\mathcal{A}$ можно реконструировать по одному скалярному ряду наблюдений $X(t) \in \{m_i(t)\}$, используя векторы запаздывания (delay embeddings):
+According to Takens' embedding theorem \cite{takens1981detecting}, for autonomous systems, the topology of the entire high-dimensional attractor $\mathcal{A}$ can be reconstructed from a single scalar observation series $X(t) \in \{m_i(t)\}$ using delay embeddings:
 \begin{equation}
     \vx_t =[X(t), X(t-\tau), \dots, X(t-(E-1)\tau)]^\top \in \R^E,
 \end{equation}
-при условии, что размерность пространства вложения $E \ge 2m + 1$.
+provided that the dimensionality of the embedding space $E \ge 2m + 1$.
 
-Для формализации алгоритмов введем оператор построения вложения $\text{DelayEmbedding}$, который сопоставляет исходному одномерному временному ряду $\{X(t)\}_{t=1}^N$ множество векторов в реконструированном фазовом пространстве:
+To formalize the algorithms, we introduce the $\text{DelayEmbedding}$ construction operator, which maps the original one-dimensional time series $\{X(t)\}_{t=1}^N$ to a sequence of vectors in the reconstructed phase space:
 \begin{equation}
     \text{DelayEmbedding}(\{X(t)\}_{t=1}^N, E, \tau) = \{ \vx_t \}_{t=(E-1)\tau + 1}^{N},
 \end{equation}
-где каждый вектор $\vx_t \in \R^E$ сконструирован согласно формуле (3). Результатом работы данного оператора является восстановленное фазовое многообразие $M \subset \R^E$, состоящее из $|M| = N - (E-1)\tau$ точек.
+where each vector $\vx_t \in \R^E$ is constructed according to Eq. (3). The result of this operator is the reconstructed phase manifold $M \subset \R^E$, consisting of $|M| = N - (E-1)\tau$ points.
 
-Фундаментальным математическим требованием теорем о вложении является \textit{«типичность»} (genericity) функции наблюдения $\phi(\cdot)$. С точки зрения дифференциальной топологии это означает, что функция метрики не должна обладать вырожденными симметриями, которые склеивают различные точки фазового пространства при проекции. Например, агрегированная норма весов $||\vw_t||_2$ обладает сферической симметрией, измеряя лишь радиальное расстояние от начала координат. В определенных режимах она может выступать в роли «вырожденного наблюдателя» (degenerate observer), теряющего информацию об алгебраической структуре (угловых координатах) весов. В то же время, нелинейные метрики, напимер напрямую зависящие от распределения логитов (такие как функция потерь $\Ls$), выступают в роли типичных наблюдателей, сохраняющих многомерную топологию системы.
+A fundamental mathematical requirement of embedding theorems is the \textit{genericity} of the observation function $\phi(\cdot)$. From the perspective of differential topology, this means that the metric function must not possess degenerate symmetries that glue distinct points of the phase space together during projection. For example, considering the extended state $\vs_t = (\vw_t, \vh_t)$, the aggregated weight norm $||\vw_t||_2$ possesses spherical symmetry, measuring only the radial distance of the parameters from the origin while entirely ignoring the optimizer's history $\vh_t$. In certain regimes, it can act as a "degenerate observer," losing information about the algebraic structure (angular coordinates) of the system. Conversely, nonlinear metrics directly dependent on the logit distribution (such as the loss function $\Ls$) act as generic observers that preserve the high-dimensional topology of the extended system.
 
-Однако градиентный спуск в глубоком обучении не является автономной системой. Влияние случайного выбора мини-батчей, а также использование расписаний гиперпараметров (learning rate schedulers) формально нарушают классические условия Такенса. Для математического обоснования нашего подхода мы опираемся на теоремы Старка о вложениях для вынужденных систем со смешанным воздействием \cite{stark1999delay, stark2003delay}. 
+However, gradient descent in deep learning is not an autonomous system. The influence of random mini-batch selection, combined with hyperparameter schedules (learning rate schedulers), formally violates the classical Takens conditions. To mathematically justify our approach in this non-autonomous setting, we rely on Stark's embedding theorems for forced dynamical systems with mixed forcing \cite{stark1999delay, stark2003delay}.
 
-В современной теории оптимизации процесс обучения $\vw_{t+1} = F(\vw_t, \omega_t, \xi_t)$ рассматривается под воздействием двух типов форсинга. Детерминированный форсинг $\omega_t$ (расписание шага обучения) подчиняется теореме Старка для детерминированных систем \cite{stark1999delay}, гарантирующей сохранение топологии при гладком внешнем драйвере. В свою очередь, стохастический форсинг $\xi_t$ (градиентный шум мини-батчей) аппроксимируется многомерным Гауссовским процессом, а выбор батча из конечного набора описывается в терминах систем итерируемых функций (Iterated Function Systems) \cite{stark2003delay}. Для обоих случаев Старк с соавторами доказал, что отображение задержки сохраняет свойства диффеоморфизма. Это фундаментально обосновывает правомерность измерения размерности скрытого аттрактора в пространстве параметров $\sW$, оперируя исключительно скалярными логами в реконструированном фазовом пространстве $\R^E$, независимо от наличия детерминированных расписаний или стохастического шума.
+In modern optimization theory, the extended learning process $\vs_{t+1} = \Phi(\vs_t, \omega_t, \xi_t)$ almost always occurs under the influence of two types of forcing. The deterministic forcing $\omega_t$ (e.g., a learning rate schedule) obeys Stark's theorem for deterministic systems \cite{stark1999delay}, which guarantees the preservation of topology under a smooth external driver. In turn, the stochastic forcing $\xi_t$ (mini-batch gradient noise) is approximated by a multivariate Gaussian process \cite{mandt2017stochastic}, and the selection of a batch from a finite set is described in terms of Iterated Function Systems \cite{stark2003delay}. For both cases, Stark and co-authors proved that the delay map preserves diffeomorphism properties. This fundamentally justifies the validity of measuring the dimensionality of the hidden attractor in the extended state space $\sS$ by operating exclusively on scalar logs in the reconstructed phase space $\R^E$, regardless of the presence of internal optimizer memory, deterministic schedules, or stochastic noise.
 
-\subsection{Оценка эффективной размерности фазового пространства}\label{sec:theory_dim}
+\subsection{Effective Dimensionality Estimation of the Phase Space}\label{sec:theory_dim}
 
-Для детекции фазового перехода нам необходимо оценивать размерность аттрактора системы. В нашем методе мы рассмотрели как классические, так и современные методы, ранжировав их по устойчивости к специфике нейросетевой оптимизации (шуму мини-батчей):
+To detect phase transitions, we need to dynamically estimate the attractor dimension of the system. In our framework, we reviewed both classical and modern methods, ranking them by their robustness to the specifics of neural network optimization (mini-batch noise):
 
-\textbf{1. Метод ложных ближайших соседей (FNN) \cite{kennel1992determining} и Метод Цао \cite{cao1997practical}.} 
-Суть классического метода FNN заключается в последовательном «развертывании» аттрактора. При недостаточной размерности вложения удаленные участки многомерной траектории проецируются близко друг к другу, образуя так называемых «ложных» соседей. Метод измеряет расстояние между точкой и её ближайшим пространственным соседом в размерности $d$, а затем проверяет, насколько сильно они отдалятся друг от друга при переходе к размерности $d+1$. Если точки разлетаются (расстояние превышает эвристический порог $R_{tol}$), сосед признается ложным. Метод Цао является строгим математическим развитием этого подхода: он анализирует усредненное отношение расстояний при росте размерности, что позволяет отказаться от ручного подбора порогов.
+\textbf{1. False Nearest Neighbors (FNN) \cite{kennel1992determining} and Cao's Method \cite{cao1997practical}:}
+These are geometric "bottom-up" approaches. The essence of FNN lies in the sequential "unfolding" of the attractor. Given an insufficient embedding dimension, distant segments of the high-dimensional trajectory are projected close to each other, forming "false" neighbors. The method measures the distance between a point and its nearest spatial neighbor, and checks how much they diverge when transitioning to dimension $d+1$. Cao's method is a rigorous mathematical development of this approach that analyzes the averaged ratio of distances, eliminating the need for manual threshold selection.
 
-Однако фундаментальным ограничением обоих геометрических методов является жесткое требование \textit{глобальной возвратности (рекуррентности)} траектории. Чтобы алгоритм мог выявить сложную форму аттрактора, динамическая система должна регулярно возвращаться в окрестности своих прошлых состояний (пересекать саму себя в проекции). При обучении нейросети мы часто имеем дело с транзиентными (переходными) процессами — например, когда функция потерь монотонно падает. В отсутствие возвратности ближайшим пространственным соседом точки $\vx_t$ становится её же временной сосед с предыдущего шага $\vx_{t-1}$. Поскольку такие точки не «разлетаются» ни в какой размерности, геометрические методы вырождаются, ошибочно воспринимая многомерную траекторию спуска как простую 1D-линию, и выдают тривиальную оценку $\hat{d}=1$.
+However, a fundamental limitation of both geometric methods is the strict requirement of \textit{global recurrence} of the trajectory. To identify the complex shape of the attractor, the system must regularly return to the vicinity of its past states. During neural network optimization, we frequently deal with transient processes—for example, when the loss function drops monotonically. In the absence of recurrence, the nearest spatial neighbor of a point $\vx_t$ becomes its own temporal neighbor $\vx_{t-1}$. Because such points do not "scatter" in any dimensionality, geometric methods degenerate, erroneously perceiving the high-dimensional descent trajectory as a simple 1D line, yielding a trivial estimate of $\hat{d}=1$.
 
-\textbf{2. Метод максимизации симплексной проекции \cite{sugihara1990nonlinear}:}
-Оптимальное $E$ ищется как аргумент, максимизирующий авторегрессионную корреляцию $\rho$ при предсказании будущего состояния $y_{t+1}$ по его соседям в $\R^E$. Метод топологически гарантирует наилучшее развертывание аттрактора, однако его разрешение является целочисленным (дискретным), что загрубляет детекцию плавных фазовых переходов.
+\textbf{2. Simplex Projection Maximization \cite{sugihara1990nonlinear}:}
+The optimal $E$ is sought as the argument that maximizes the autoregressive correlation $\rho$ when predicting the future state $y_{t+1}$ based on its neighbors in $\R^E$. This topologically guarantees the best unfolding of the attractor without overfitting to noise; however, its discrete (integer-valued) resolution coarsens the detection of smooth phase transitions.
 
-\textbf{3. Метод максимального правдоподобия (MLE Intrinsic Dimension) \cite{levina2004maximum}:}
-Выбран в качестве основного аналитического инструмента в нашем методе. В отличие от геометрических методов, подход Левиной-Бикеля проецирует временной ряд сразу в избыточное высокоразмерное пространство (например, $E=15$) и оценивает локальную внутреннюю размерность $\hat{d}_{x}$ статистически, по Пуассоновскому распределению расстояний до $k$ ближайших соседей. Процесс формализован в Алгоритме \ref{alg:mle_id}.
+\textbf{3. Maximum Likelihood Estimation (MLE Intrinsic Dimension) \cite{levina2004maximum}:}
+Selected as the primary analytical tool in our framework. In contrast to geometric "bottom-up" methods, the Levina-Bickel method projects the time series directly into a redundant high-dimensional space (e.g., $E=15$) and estimates the local intrinsic dimension $\hat{d}_{x_t}$ statistically, based on the Poisson distribution of distances to the $k$ nearest neighbors. The process is formalized in Algorithm \ref{alg:mle_id}.
 
 \begin{algorithm}[htbp]
-\caption{Оценка динамической размерности MLE (Levina-Bickel)}\label{alg:mle_id}
+\caption{MLE Intrinsic Dimension Estimation (Levina-Bickel)}\label{alg:mle_id}
 \begin{algorithmic}[1]
-\Input Временной ряд наблюдений $\gD_{obs}$, задержка $\tau$, избыточная размерность $E_{max}$, окно $W$, соседи $k$
-\Output Эффективная размерность $\hat{d}(t)$
-\State $M \gets \text{DelayEmbedding}(\gD_{obs}, E_{max}, \tau)$ \Comment{Вложение в $\R^{E_{max}}$}
-\For{каждой точки $\vx_t \in M$ внутри скользящего окна $W$}
-    \State Найти $k$ ближайших соседей с расстояниями $r_1 \le r_2 \le \dots \le r_k$
-    \State $\hat{d}_{x_t} \gets \left[ \frac{1}{k-1} \sum_{j=1}^{k-1} \log \left( \frac{r_k}{r_j} \right) \right]^{-1}$ \Comment{Локальная оценка по радиусу $r_k$}
+\Input Observation time series $\gD_{obs}$, delay $\tau$, maximum embedding dimension $E_{max}$, window $W$, neighbors $k$
+\Output Effective dimensionality $\hat{d}(t)$
+\State $M \gets \text{DelayEmbedding}(\gD_{obs}, E_{max}, \tau)$ \Comment{Embedding into $\R^{E_{max}}$}
+\For{each point $\vx_t \in M$ within the sliding window $W$}
+    \State Find $k$ nearest neighbors with distances $r_1 \le r_2 \le \dots \le r_k$
+    \State $\hat{d}_{x_t} \gets \left[ \frac{1}{k-1} \sum_{j=1}^{k-1} \log \left( \frac{r_k}{r_j} \right) \right]^{-1}$ \Comment{Local estimation via radius $r_k$}
 \EndFor
-\State $\hat{d}(t) \gets \frac{1}{|W|} \sum_{\vx_t \in W} \hat{d}_{x_t}$ \Comment{Усреднение размерности на окне $W$}
+\State $\hat{d}(t) \gets \frac{1}{|W|} \sum_{\vx_t \in W} \hat{d}_{x_t}$ \Comment{Averaging dimensionality over the window $W$}
 \State \Return $\hat{d}(t)$
 \end{algorithmic}
 \end{algorithm}
 
-Данный метод возвращает \textit{непрерывную} величину, которая вычисляется локально, не требует глобальной возвратности траектории и демонстрирует устойчивость к шуму мини-батчей.
+This method returns a \textit{continuous} value that is computed locally, does not require global recurrence of the trajectory, and demonstrates phenomenal robustness to microscopic mini-batch noise.
 
-\subsection{Физика Гроккинга как топологического коллапса}\label{sec:theory_grokking}
+\subsection{The Physics of Grokking as a Topological Collapse}\label{sec:theory_grokking}
 
-Применяя описанный математический аппарат, мы формализуем гроккинг как структурный фазовый переход в ландшафте потерь. 
+Applying the described mathematical apparatus, we formalize grokking as a structural phase transition in the loss landscape.
 \begin{itemize}
-    \item \textbf{Фаза меморизации:} Сеть "заучивает" данные как несвязанный шум. Траектория оптимизатора $\vw_t$ блуждает по высокоразмерному многообразию. В этот период эффективная размерность $\hat{d}(t)$, вычисляемая алгоритмом MLE, будет максимальной.
-    \item \textbf{Фаза генерализации (Гроккинг):} Под воздействием $L_2$-регуляризации (weight decay) сеть отбрасывает шумовые признаки и «кристаллизует» оптимальный алгебраический алгоритм в структуре своих весов.
+    \item \textbf{Memorization phase:} The network "memorizes" the training data as uncorrelated noise. The optimizer trajectory $\vw_t$ wanders along a flat, high-dimensional manifold (high-entropy state). During this period, the effective dimensionality $\hat{d}(t)$ computed by the MLE algorithm will be maximal ($\hat{d} \gg 1$).
+    \item \textbf{Generalization phase (Grokking):} Under the influence of $L_2$ regularization (weight decay), the network discards noisy features and "crystallizes" the optimal algebraic algorithm within the structure of its weights.
 \end{itemize}
 
-Нахождение обобщающего решения строго ограничивает степени свободы системы. Геометрически это означает, что аттрактор динамической системы стягивается в низкоразмерное подмногообразие. Следовательно, отслеживание эффективной размерности $\hat{d}(t)$ на скользящем окне должно действовать как опережающий индикатор топологического упрощения системы.
-
-
+Finding a generalizing solution strictly restricts the degrees of freedom of the system. Geometrically, this means that the dynamical system's attractor contracts into a low-dimensional submanifold. Consequently, tracking the effective dimensionality $\hat{d}(t)$ over a sliding window should act as an early indicator of the system's topological simplification, without requiring the analysis of heavy Hessian matrices.
 
 
 
