@@ -257,16 +257,19 @@ In summary, our framework successfully predicts grokking by capturing the topolo
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd1_acc.png}
         \caption{WD=1: Dim \& Accuracy}
+        \label{fig:grokking_flat_a}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd1_loss.png}
         \caption{WD=1: Dim \& Loss}
+        \label{fig:grokking_flat_b}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd1_norm.png}
         \caption{WD=1: Dim \& Norm}
+        \label{fig:grokking_flat_c}
     \end{subfigure}
     
     \vspace{0.3cm}
@@ -274,16 +277,19 @@ In summary, our framework successfully predicts grokking by capturing the topolo
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd0_acc.png}
         \caption{WD=0: Dim \& Accuracy}
+        \label{fig:grokking_flat_d}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd0_loss.png}
         \caption{WD=0: Dim \& Loss}
+        \label{fig:grokking_flat_e}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd0_norm.png}
         \caption{WD=0: Dim \& Norm}
+        \label{fig:grokking_flat_f}
     \end{subfigure}
     \caption{Analysis of grokking on modular addition in the presence of stochastic noise. The plots compare the dynamics of dimensionality $E$ (derived from the weight norm series) against Accuracy, Loss, and Weight Norm in regimes with generalization (top row) and without it (bottom row).}
     \label{fig:grokking_flat}
@@ -305,16 +311,19 @@ As seen in Fig. \ref{fig:grokking_s5}, the proposed method successfully tackles 
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd1_acc.png}
         \caption{S5 WD=1: Dim \& Accuracy}
+        \label{fig:grokking_s5_a}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd1_loss.png}
         \caption{S5 WD=1: Dim \& Loss}
+        \label{fig:grokking_s5_b}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd1_norm.png}
         \caption{S5 WD=1: Dim \& Norm}
+        \label{fig:grokking_s5_c}
     \end{subfigure}
     
     \vspace{0.3cm}
@@ -322,16 +331,19 @@ As seen in Fig. \ref{fig:grokking_s5}, the proposed method successfully tackles 
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd0_acc.png}
         \caption{S5 WD=0: Dim \& Accuracy}
+        \label{fig:grokking_s5_d}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd0_loss.png}
         \caption{S5 WD=0: Dim \& Loss}
+        \label{fig:grokking_s5_e}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd0_norm.png}
         \caption{S5 WD=0: Dim \& Norm}
+        \label{fig:grokking_s5_f}
     \end{subfigure}
     \caption{Analysis of composition in the $S_5$ group. The dimensionality collapse reliably captures the structural reorganization of the network, even for the complex multidimensional topology of a non-abelian group.}
     \label{fig:grokking_s5}
@@ -344,11 +356,13 @@ Of particular interest is the dimensionality estimation using the validation los
     \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd1_val_loss.pdf}
         \caption{S5 WD=1: Dim from validation loss}
+        \label{fig:grokking_val_loss_s5_a}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd0_val_loss.pdf}
         \caption{S5 WD=0: Dim from validation loss}
+        \label{fig:grokking_val_loss_s5_b}
     \end{subfigure}
     \vspace{0.3cm}
     \caption{Analysis of the $S_5$ group. The dimensionality $E$ reconstructed from the validation loss successfully estimates the true algebraic complexity of the algorithm (plateauing at $\hat{d} \approx 4$).}
@@ -359,13 +373,15 @@ Of particular interest is the dimensionality estimation using the validation los
 
 An analysis of the obtained plots allows us to draw the following theoretical conclusions.
 
-\paragraph{The nature of grokking.} The captured dimensionality collapse strictly proves that grokking is not merely an error reduction, but a qualitative structural restructuring of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
-\paragraph{Optimizer metrics predictability.} The experiments demonstrated that delayed generalization can be diagnosed relying exclusively on internal network metrics (such as weight norm). This proves that the formation of generalizing properties has an objective topological nature and is not an artifact of a specific held-out validation set.
-\paragraph{The role of genericity of the observable.} Evaluating the $WD=0$ regime revealed the critical importance of choosing a generic observable. Weight norm, a symmetric observable, remains low during overfitting, as the model simply finds a trivial solution and scales up the weights, keeping $E \approx 1$. However, a generic observable ($\Ls_{val}$) correctly captures the high dimensionality of chaotic overfitting and accurately projects the algebraic complexity of the learned algorithm (e.g., $E \ge 4$ for $S_5$).
+\paragraph{The nature of grokking.} The observed dimensionality collapse \ref{fig:grokking_s5_a} \ref{fig:grokking_val_loss_s5_a}  demonstrates that grokking is not merely \textbf{quantitative loss minimization}, but a qualitative structural reconfiguration of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
+
+\paragraph{Optimizer metrics predictability.} The experiments demonstrated that delayed generalization can be diagnosed relying exclusively on internal network metrics (such as weight norm) \ref{fig:grokking_flat_a} \ref{fig:grokking_s5_a}. This suggests that the transition to generalization is an \textbf{intrinsic topological property} of the optimization trajectory and is not merely an artifact of a specific held-out validation set.
+
+\paragraph{The role of genericity of the observable.} Evaluating the $WD=0$ regime revealed the critical importance of choosing a generic observable. Weight norm, a symmetric observable, remains low during overfitting, as the model simply finds a trivial solution and scales up the weights, keeping $E \approx 1$ \ref{fig:grokking_flat_d} \ref{fig:grokking_s5_d}. However, a generic observable ($\Ls_{val}$) correctly captures the high dimensionality of chaotic overfitting and accurately projects the algebraic complexity of the learned algorithm (e.g., $E \ge 4$ for $S_5$) \ref{fig:grokking_val_loss_s5_a}.
 
 \section{Discussion}\label{sec:disc}
 
-The results of the conducted computational experiments confirm the fundamental hypothesis of this work: the optimization process of deep neural networks can be investigated from the perspective of nonlinear dynamical systems theory, and by tracking the attractor dimension, one can predict and qualitatively describe grokking. However, the transfer of phase reconstruction methods to machine learning has revealed a number of specific limitations and physical effects that require separate consideration.
+The results of our computational experiments confirm the fundamental hypothesis of this work: by framing deep neural network optimization as a nonlinear dynamical system, one can predict and qualitatively describe grokking through tracking the attractor dimension. However, transferring phase reconstruction methods to machine learning has revealed specific limitations and physical effects that require separate consideration.
 
 \paragraph{The Problem of the Degenerate Observable and the Role of Stochasticity.}
 During the experiments with full-batch gradient descent (Full-Batch GD), we encountered difficulties in estimating the attractor dimension: all the 1D scalar metrics we used degenerated into a constant. From the perspective of nonlinear dynamics, ideal noise-free optimization collapses the trajectory into a rectilinear ray, depriving methods (such as MLE) of the variance necessary to estimate the landscape curvature. Thus, when analyzing dimensionality, one must ensure that the series does not degenerate. This can be mitigated by subsampling the series, though this may negatively impact the estimation accuracy. Therefore, our method performs best in systems where the observation series do not degenerate, i.e., in systems with inherent stochasticity. The high-frequency noise of SGD forces the optimizer to continuously explore the local geometry of the attractor. Furthermore, experiments have shown that the weight norm ($||\vw||_2$) is a much more informative and stable "observable" for the latent dynamics than the training loss, which is highly prone to degeneration.
@@ -409,17 +425,19 @@ However, this experiment revealed an important methodological problem. Under ful
 This very observation motivated the transition to stochastic optimization (mini-batch) and the use of a non-generic observable (the weight norm), the results of which are presented in the main Section \ref{sec:exp}.
 
 \begin{figure}[H]
-\centering
-\begin{subfigure}[b]{0.42\textwidth}
-\centering
-\includegraphics[width=\textwidth]{images/grokking_accuracy.png}
-\caption{Dynamics of Train/Val Accuracy}
-\end{subfigure} \hfill
-\begin{subfigure}[b]{0.42\textwidth}
-\centering
-\includegraphics[width=\textwidth]{images/grokking_dimension.png}
-\caption{Dimensionality Collapse (MLE ID)}
-\end{subfigure}
+    \centering
+    \begin{subfigure}[b]{0.42\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/grokking_accuracy.png}
+    \caption{Dynamics of Train/Val Accuracy}
+    \label{fig:grokking_full_batch_a}
+    \end{subfigure} \hfill
+    \begin{subfigure}[b]{0.42\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/grokking_dimension.png}
+    \caption{Dimensionality Collapse (MLE ID)}
+    \label{fig:grokking_full_batch_b}
+    \end{subfigure}
 \caption{The grokking phenomenon in the baseline experiment (Full-Batch). The transition from memorization to generalization is accompanied by a decrease in the topological complexity of the $\Ls_{train}$ trajectory; however, the estimation suffers from a lack of variance due to the degeneration of the series.}
 \label{fig:grokking_full_batch}
 \end{figure}
