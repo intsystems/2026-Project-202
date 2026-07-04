@@ -1,0 +1,65 @@
+\begin{thebibliography}{10}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Power et~al.(2022)Power, Burda, Edwards, Babuschkin, and Misra]{power2022grokking}
+Alethea Power, Yuri Burda, Harri Edwards, Igor Babuschkin, and Vedant Misra.
+\newblock Grokking: Generalization beyond overfitting on small algorithmic datasets.
+\newblock \emph{arXiv preprint arXiv:2201.02177}, 2022.
+
+\bibitem[Nanda et~al.(2023)Nanda, Chan, Lieberum, Smith, and Steinhardt]{nanda2023progress}
+Neel Nanda, Lawrence Chan, Tom Lieberum, Jess Smith, and Jacob Steinhardt.
+\newblock Progress measures for grokking via mechanistic interpretability.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2023.
+
+\bibitem[Notsawo et~al.(2023)Notsawo, Zhou, Pezeshki, Rish, and Dumas]{notsawo2023predicting}
+Paul J~T Notsawo, Hattie Zhou, Mohammad Pezeshki, Irina Rish, and Guillaume Dumas.
+\newblock Predicting grokking long before it happens: A look into the loss landscape of models which grok.
+\newblock \emph{arXiv preprint arXiv:2306.13253}, 2023.
+
+\bibitem[Takens(1981)]{takens1981detecting}
+Floris Takens.
+\newblock Detecting strange attractors in turbulence.
+\newblock In \emph{Dynamical systems and turbulence, Warwick 1980}, pages 366--381. Springer, 1981.
+\newblock \doi{10.1007/BFb0091924}.
+
+\bibitem[Stark(1999)]{stark1999delay}
+Jaroslav Stark.
+\newblock Delay embeddings for forced systems. i. deterministic forcing.
+\newblock \emph{Journal of Nonlinear Science}, 9\penalty0 (3):\penalty0 255--332, 1999.
+\newblock \doi{10.1007/s003329900072}.
+
+\bibitem[Stark et~al.(2003)Stark, Broomhead, Davies, and Huke]{stark2003delay}
+Jaroslav Stark, David~S Broomhead, ME~Davies, and J~Huke.
+\newblock Delay embeddings for forced systems. ii. stochastic forcing.
+\newblock \emph{Journal of Nonlinear Science}, 13\penalty0 (6):\penalty0 519--577, 2003.
+\newblock \doi{10.1007/s00332-003-0534-4}.
+
+\bibitem[Levina and Bickel(2004)]{levina2004maximum}
+Elizaveta Levina and Peter~J. Bickel.
+\newblock Maximum likelihood estimation of intrinsic dimension.
+\newblock In \emph{Advances in Neural Information Processing Systems (NeurIPS)}, volume~17, 2004.
+\newblock URL \url{https://proceedings.neurips.cc/paper/2004/file/74934548253bcab8490ebd74afecebb5-Paper.pdf}.
+
+\bibitem[Kennel et~al.(1992)Kennel, Brown, and Abarbanel]{kennel1992determining}
+Matthew~B Kennel, Reggie Brown, and Henry~DI Abarbanel.
+\newblock Determining embedding dimension for phase-space reconstruction using a geometrical construction.
+\newblock \emph{Physical review A}, 45\penalty0 (6):\penalty0 3403, 1992.
+\newblock \doi{10.1103/PhysRevA.45.3403}.
+
+\bibitem[Cao(1997)]{cao1997practical}
+Liang Cao.
+\newblock Practical method for determining the minimum embedding dimension of a scalar time series.
+\newblock \emph{Physica D: Nonlinear Phenomena}, 110\penalty0 (1-2):\penalty0 43--50, 1997.
+\newblock \doi{10.1016/S0167-2789(97)00118-8}.
+
+\bibitem[Sugihara and May(1990)]{sugihara1990nonlinear}
+George Sugihara and Robert~M May.
+\newblock Nonlinear forecasting as a way of distinguishing chaos from measurement error in time series.
+\newblock \emph{Nature}, 344\penalty0 (6268):\penalty0 734--741, 1990.
+\newblock \doi{10.1038/344734a0}.
+
+\end{thebibliography}

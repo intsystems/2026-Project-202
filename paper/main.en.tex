@@ -41,6 +41,7 @@
 \newtheorem{remark}{Remark}
 
 \newtheorem{definition}{Definition}
+\newtheorem{criterion}{Criterion}
 \newtheorem{assumption}{Assumption}
 \algnewcommand\Input{\item[\textbf{Input:}]}
 \algnewcommand\Output{\item[\textbf{Output:}]}
@@ -114,46 +115,52 @@ To verify the proposed hypothesis and analyze the phenomenon of grokking, we con
 
 
 
-\section{Постановка задачи}\label{sec:problem}
+\section{Problem Statement}\label{sec:problem}
 
-В данной работе процесс обучения нейросетевой модели $\gM$ рассматривается как неавтономная стохастическая динамическая система. Пусть $\vw_t \in \sW \subset \R^D$ — вектор параметров (весов) модели на шаге оптимизации $t \in \{1, \dots, T\}$. Эволюция системы описывается рекуррентным правилом:
+Consider a neural network model $\gM$ optimized to minimize the expected risk $\E_{\xi \sim \gD}[\Ls(\vw, \xi)]$. We formulate the training process over $T$ iterations as a non-autonomous stochastic dynamical system. Because modern adaptive optimizers (e.g., SGD with momentum or AdamW) maintain internal state histories, the weight trajectory alone does not form a Markov process. Therefore, let $\vs_t = (\vw_t, \vh_t) \in \sS$ be the extended state of the system at step $t \in \{1, \dots, T\}$, where $\vw_t \in \R^D$ denotes the model parameters and $\vh_t$ represents the optimizer's internal variables. The evolution of this system is governed by the recurrence rule:
 \begin{equation}
-    \vw_{t+1} = F(\vw_t, \xi_t),
+    \vs_{t+1} = \Phi(\vs_t, \xi_t),
 \end{equation}
-где $F$ — оператор оптимизатора (например, SGD с импульсом или AdamW), а $\xi_t$ — внешнее воздействие (стохастический форсинг), обусловленное случайным выбором мини-батча и применением расписаний гиперпараметров.
+where $\Phi$ is the deterministic optimizer step and $\xi_t$ acts as the external stochastic forcing, induced by the random mini-batch selection and hyperparameter scheduling.
 
-На практике полное высокоразмерное состояние системы $\vw_t$ ($D \gg 1$) недоступно для вычислительно эффективного анализа. Вместо этого мы наблюдаем набор одномерных скалярных временных рядов $\vm_t =[m_1(t), \dots, m_K(t)]^\top$, таких как функция потерь, норма весов или норма градиентов. Каждая макроскопическая метрика выступает в роли функции наблюдения $m_i(t) = \phi_i(\vw_t, \xi_t) \in \R$. В связи с этим, \textbf{глобальная задача исследования} заключается в том, чтобы, опираясь исключительно на одномерные ряды наблюдений $m_i(t)$, реконструировать топологические свойства скрытого аттрактора $\vw_t$ и разработать ранний предиктор фазовых переходов оптимизатора.
+In practice, the full high-dimensional state $\vs_t$ is inaccessible for computationally efficient analysis. Instead, we observe a set of one-dimensional scalar time series $\vm_t =[m_1(t), \dots, m_K(t)]^\top$ generated during optimization. Each macroscopic metric (e.g., training loss, weight norm, or gradient norm) acts as an observation function $m_i(t) = \phi_i(\vs_t, \xi_t) \in \R$. In this regard, the \textbf{global research objective} is to reconstruct the topological properties of the hidden attractor of $\vs_t$ and to develop an early predictor of phase transitions during optimization, relying exclusively on the 1D observation series $m_i(t)$.
 
-В качестве основного целевого фазового перехода в нашей работе выступает феномен отложенной генерализации. Введем его формальное описание.
+The primary target phase transition in our work is the phenomenon of delayed generalization. Let us introduce its formal description.
 
-\begin{definition}[Гроккинг]\label{def:grokking}
-Пусть $\text{Acc}_{train}(\vw_t)$ и $\text{Acc}_{val}(\vw_t)$ — метрики точности модели на обучающей и валидационной выборках соответственно. Из-за наличия стохастического шума оптимизатора мгновенные значения метрик подвержены случайным отклонениям (например, ложным выбросам точности в начале обучения). Обозначим через $\overline{\text{Acc}}(t)$ сглаженное значение метрики (скользящее среднее по локальному временному окну). Для заданного малого порога ошибки $\epsilon > 0$, который в данной работе мы полагаем равным $0.05$, определим два критических момента времени оптимизации:
+\begin{definition}[Grokking]\label{def:grokking}
+Let $\text{Acc}_{train}(\vw_t)$ and $\text{Acc}_{val}(\vw_t)$ denote the model's accuracy on the training and validation sets, respectively. Due to stochastic optimizer noise, instantaneous metric values are prone to random fluctuations (e.g., spurious accuracy spikes early in training). Let $\overline{\text{Acc}}(t)$ denote the smoothed metric (a moving average over a local time window). For a given small error threshold $\epsilon > 0$ (set to $0.05$ in this work), we define two critical optimization moments:
 \begin{itemize}
-    \item \textbf{Момент меморизации ($t_{mem}$):} минимальный шаг $t$, начиная с которого сеть устойчиво интерполирует обучающую выборку: 
-    $$ t_{mem} = \min \left\{ t \mid \forall \tau \ge t, \; \overline{\text{Acc}}_{train}(\vw_\tau) \ge 1 - \epsilon \right\}. $$
-    Как правило, в этот момент валидационная точность всё ещё остается на уровне случайного угадывания ($\overline{\text{Acc}}_{val}(\vw_{t_{mem}}) \approx 0$).
+    \item \textbf{Memorization moment ($t_{mem}$):} the minimum step $t$ starting from which the network robustly interpolates the training data:
+    $$t_{mem} = \min \left\{ t \mid \forall \tau \ge t, \; \overline{\text{Acc}}_{train}(\vw_\tau) \ge 1 - \epsilon \right\}.$$
+    Typically, at this moment, the validation accuracy remains at the level of random guessing ($\overline{\text{Acc}}_{val}(\vw_{t_{mem}}) \approx 0$).
     
-    \item \textbf{Момент генерализации ($t_{gen}$):} минимальный шаг $t$, начиная с которого фиксируется устойчивый рост обобщающей способности:
-    $$ t_{gen} = \min \left\{ t \mid \forall \tau \ge t, \; \overline{\text{Acc}}_{val}(\vw_\tau) \ge 1 - \epsilon \right\}. $$
+    \item \textbf{Generalization moment ($t_{gen}$):} the minimum step $t$ starting from which a stable increase in generalization ability is recorded:
+    $$t_{gen} = \min \left\{ t \mid \forall \tau \ge t, \; \overline{\text{Acc}}_{val}(\vw_\tau) \ge 1 - \epsilon \right\}.$$
 \end{itemize}
-Процесс оптимизации классифицируется как гроккинг при условии аномальной задержки между этими событиями: $t_{gen} \gg t_{mem}$.
+The optimization process is classified as grokking if there is an anomalous delay between these events: $t_{gen} \gg t_{mem}$.
 \end{definition}
 
+As Definition \ref{def:grokking} implies, on the interval $t \in (t_{mem}, t_{gen})$, classical macroscopic accuracy metrics reside on a quasi-stationary plateau. During this period, the optimizer outwardly appears trapped in an overfitting regime; however, hidden structural reorganizations occur within the model weights. We hypothesize that the transition from memorization to generalization constitutes a topological collapse of the optimizer's degrees of freedom.
 
+To detect this collapse, we introduce $\hat{d}(t)$—an estimate of the effective (intrinsic) dimensionality of the reconstructed attractor at time $t$. Based on this, we formulate a formal criterion for successful early prediction.
 
-Как следует из Определения \ref{def:grokking}, на интервале $t \in (t_{mem}, t_{gen})$ классические макроскопические метрики точности находятся на квазистационарном плато. В этот период оптимизатор внешне выглядит застрявшим в режиме переобучения, однако внутри него происходят скрытые структурные перестройки. Наша гипотеза состоит в том, что переход от меморизации к генерализации представляет собой топологическое схлопывание степеней свободы оптимизатора.
-
-Для детекции этого схлопывания мы вводим метрику $\hat{d}(t)$ — оценку эффективной (внутренней) размерности реконструированного аттрактора в момент времени $t$. Исходя из этого, сформулируем формальный критерий успешного прогнозирования.
-
-\begin{definition}[Критерий предсказания гроккинга]\label{def:criterion}
-Успешным ранним предсказанием (early warning signal) гроккинга считается формирование устойчивого нисходящего тренда эффективной размерности аттрактора $\hat{d}(t)$, завершающегося её стабилизацией на новом низкоразмерном уровне строго до фактического роста валидационной точности:
+\begin{definition}[Grokking prediction criterion]\label{def:criterion}
+A successful early warning signal of grokking is characterized by the formation of a stable downward trend in the effective dimensionality $\hat{d}(t)$, culminating in its stabilization at a new, lower-dimensional level strictly before the actual increase in validation accuracy:
 \begin{equation}
-    \exists t_{drop} \in (t_{mem}, t_{gen}) \quad \text{такое, что} \quad \forall t \in [t_{drop}, t_{gen}]: \;\; \hat{d}(t) \ll \hat{d}(t_{mem}).
+    \exists t_{drop} \in (t_{mem}, t_{gen}) \quad \text{such that} \quad \forall t \in [t_{drop}, t_{gen}]: \; \; \hat{d}(t) \ll \hat{d}(t_{mem}).
 \end{equation}
-При этом на интервале $(t_{mem}, t_{drop})$ должно наблюдаться, в среднем, монотонное падение $\hat{d}(t)$ без значимых возвратных выбросов вверх.
+Furthermore, on the interval $(t_{mem}, t_{drop})$, a macroscopically monotonic decline of $\hat{d}(t)$ without significant upward rebounds must be observed.
 \end{definition}
 
-Выполнение условий Определения \ref{def:criterion} на практике будет означать, что топологический коллапс размерности действительно предшествует генерализации, а скалярные функции наблюдения $m_i(t)$ содержат достаточно информации для его заблаговременной регистрации.
+Meeting the conditions of Definition \ref{def:criterion} in practice implies that the topological dimensionality collapse indeed precedes generalization, and that the scalar observation functions $m_i(t)$ contain sufficient information for its early detection.
+
+
+
+
+
+
+
+
 
 \section{Теоретическое обоснование и предлагаемый метод}\label{sec:method}
 
