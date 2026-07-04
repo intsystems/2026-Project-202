@@ -125,11 +125,17 @@ To verify the proposed hypothesis and analyze the phenomenon of grokking, we con
 
 \section{Problem Statement}\label{sec:problem}
 
-Consider a neural network model $\gM$ optimized to minimize the expected risk $\E_{\xi \sim \gD}[\Ls(\vw, \xi)]$. We formulate the training process over $T$ iterations as a non-autonomous stochastic dynamical system. Because modern adaptive optimizers (e.g., SGD with momentum or AdamW) maintain internal state histories, the weight trajectory alone does not form a Markov process. Therefore, let $\vs_t = (\vw_t, \vh_t) \in \sS$ be the extended state of the system at step $t \in \{1, \dots, T\}$, where $\vw_t \in \R^D$ denotes the model parameters and $\vh_t$ represents the optimizer's internal variables. The evolution of this system is governed by the recurrence rule:
+Consider a neural network model $\gM$ parameterized by weights $\vw \in \R^D$. In the presence of $L_2$ regularization, the model is optimized to minimize the regularized expected risk:
+\begin{equation}
+    \gJ(\vw) = \E_{\xi \sim \gD}[\Ls(\vw, \xi)] + \frac{\lambda}{2} \|\vw\|_2^2,
+\end{equation}
+where $\Ls(\vw, \xi)$ is the primary loss function (e.g., cross-entropy), $\xi$ denotes the stochastic mini-batch selection, and $\lambda \ge 0$ is the weight decay (WD) coefficient. During optimization, the regularization term induces an explicit shrinkage force $-\eta \lambda \vw_t$ in the parameter update step (where $\eta$ is the learning rate). As we demonstrate in our experiments, this restoring force plays a critical role in grokking by restricting the unbounded growth of the parameters and inducing a topological collapse of the system's degrees of freedom.
+
+Because modern adaptive optimizers (e.g., SGD with momentum or AdamW) maintain internal state histories, the weight trajectory $\vw_t$ alone does not form a Markov process. Therefore, let $\vs_t = (\vw_t, \vh_t) \in \sS$ be the extended state of the system at step $t \in \{1, \dots, T\}$, where $\vh_t$ represents the optimizer's internal variables. The evolution of this system is governed by the recurrence rule:
 \begin{equation}
     \vs_{t+1} = \Phi(\vs_t, \xi_t),
 \end{equation}
-where $\Phi$ is the deterministic optimizer step and $\xi_t$ acts as the external stochastic forcing, induced by the random mini-batch selection and hyperparameter scheduling.
+where $\Phi$ is the deterministic optimizer step derived from the gradient $\nabla \gJ(\vw_t)$, and $\xi_t$ acts as the external stochastic forcing induced by the random mini-batch selection and hyperparameter scheduling.
 
 In practice, the full high-dimensional state $\vs_t$ is inaccessible for computationally efficient analysis. Instead, we observe a set of one-dimensional scalar time series $\vm_t =[m_1(t), \dots, m_K(t)]^\top$ generated during optimization. Each macroscopic metric (e.g., training loss, weight norm, or gradient norm) acts as an observation function $m_i(t) = \phi_i(\vs_t, \xi_t) \in \R$. In this regard, the \textbf{global research objective} is to reconstruct the topological properties of the hidden attractor of $\vs_t$ and to develop an early predictor of phase transitions during optimization, relying exclusively on the 1D observation series $m_i(t)$.
 
