@@ -34,49 +34,52 @@
 \newlabel{sec:theory_dim}{{3.2}{4}{Effective Dimensionality Estimation of the Phase Space}{subsection.3.2}{}}
 \citation{sugihara1990nonlinear}
 \citation{levina2004maximum}
+\citation{liu2022omnigrok}
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces MLE Intrinsic Dimension Estimation (Levina-Bickel)}}{5}{algorithm.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{alg:mle_id}{{1}{5}{MLE Intrinsic Dimension Estimation (Levina-Bickel)}{algorithm.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}The Physics of Grokking as a Topological Collapse}{5}{subsection.3.3}\protected@file@percent }
 \newlabel{sec:theory_grokking}{{3.3}{5}{The Physics of Grokking as a Topological Collapse}{subsection.3.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Вычислительный эксперимент}{5}{section.4}\protected@file@percent }
-\newlabel{sec:exp}{{4}{5}{Вычислительный эксперимент}{section.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Computational Experiment}{5}{section.4}\protected@file@percent }
+\newlabel{sec:exp}{{4}{5}{Computational Experiment}{section.4}{}}
 \citation{chughtai2023toy}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Эксперимент 1: Модульное сложение и нетипичный наблюдатель}{6}{subsection.4.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Анализ гроккинга на модульном сложении при наличии стохастического шума. Сравнение динамики размерности $E$, построенной по ряду weight\_norm, относительно Accuracy, Loss и weight\_norm в режимах с генерализацией (верхний ряд) и без нее (нижний ряд).}}{6}{figure.caption.2}\protected@file@percent }
-\newlabel{fig:grokking_flat}{{1}{6}{Анализ гроккинга на модульном сложении при наличии стохастического шума. Сравнение динамики размерности $E$, построенной по ряду weight\_norm, относительно Accuracy, Loss и weight\_norm в режимах с генерализацией (верхний ряд) и без нее (нижний ряд)}{figure.caption.2}{}}
-\citation{nanda2023progress}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Эксперимент 2: Неабелевы группы и сложные алгебраические представления ($S_5$)}{7}{subsection.4.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Анализ композиции в группе $S_5$. Коллапс размерности аттрактора, построенного по ряду weight\_norm, надежно фиксирует структурную перестройку сети даже при более сложной структуре скрытых представлений.}}{7}{figure.caption.3}\protected@file@percent }
-\newlabel{fig:grokking_s5}{{2}{7}{Анализ композиции в группе $S_5$. Коллапс размерности аттрактора, построенного по ряду weight\_norm, надежно фиксирует структурную перестройку сети даже при более сложной структуре скрытых представлений}{figure.caption.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Анализ композиции в группе $S_5$. Размерность $E$, восстановленная по validation loss, позволяет оценивать количество активных компонентов.}}{8}{figure.caption.4}\protected@file@percent }
-\newlabel{fig:grokking_val_loss_s5}{{3}{8}{Анализ композиции в группе $S_5$. Размерность $E$, восстановленная по validation loss, позволяет оценивать количество активных компонентов}{figure.caption.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Теоретическая интерпретация результатов}{8}{subsection.4.3}\protected@file@percent }
-\newlabel{sec:exp_theory}{{4.3}{8}{Теоретическая интерпретация результатов}{subsection.4.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Обсуждение результатов (Discussion)}{8}{section.5}\protected@file@percent }
-\newlabel{sec:disc}{{5}{8}{Обсуждение результатов (Discussion)}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Experiment 1: Modular Addition and the Non-Generic Observer}{6}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:exp_mod}{{4.1}{6}{Experiment 1: Modular Addition and the Non-Generic Observer}{subsection.4.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Analysis of grokking on modular addition in the presence of stochastic noise. The plots compare the dynamics of dimensionality $E$ (derived from the weight norm series) against Accuracy, Loss, and Weight Norm in regimes with generalization (top row) and without it (bottom row).}}{6}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:grokking_flat}{{1}{6}{Analysis of grokking on modular addition in the presence of stochastic noise. The plots compare the dynamics of dimensionality $E$ (derived from the weight norm series) against Accuracy, Loss, and Weight Norm in regimes with generalization (top row) and without it (bottom row)}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Experiment 2: Non-Abelian Groups and Complex Algebraic Representations ($S_5$)}{7}{subsection.4.2}\protected@file@percent }
+\newlabel{sec:exp_s5}{{4.2}{7}{Experiment 2: Non-Abelian Groups and Complex Algebraic Representations ($S_5$)}{subsection.4.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Analysis of composition in the $S_5$ group. The dimensionality collapse reliably captures the structural reorganization of the network, even for the complex multidimensional topology of a non-abelian group.}}{7}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:grokking_s5}{{2}{7}{Analysis of composition in the $S_5$ group. The dimensionality collapse reliably captures the structural reorganization of the network, even for the complex multidimensional topology of a non-abelian group}{figure.caption.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Analysis of the $S_5$ group. The dimensionality $E$ reconstructed from the validation loss successfully estimates the true algebraic complexity of the algorithm (plateauing at $\hat  {d} \approx 4$).}}{8}{figure.caption.4}\protected@file@percent }
+\newlabel{fig:grokking_val_loss_s5}{{3}{8}{Analysis of the $S_5$ group. The dimensionality $E$ reconstructed from the validation loss successfully estimates the true algebraic complexity of the algorithm (plateauing at $\hat {d} \approx 4$)}{figure.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Theoretical Interpretation of Results}{8}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:exp_theory}{{4.3}{8}{Theoretical Interpretation of Results}{subsection.4.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{8}{section.5}\protected@file@percent }
+\newlabel{sec:disc}{{5}{8}{Discussion}{section.5}{}}
 \citation{nanda2023progress}
 \citation{chughtai2023toy}
 \bibstyle{unsrtnat}
 \bibdata{references}
 \bibcite{power2022grokking}{{1}{2022}{{Power et~al.}}{{Power, Burda, Edwards, Babuschkin, and Misra}}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Заключение}{9}{section.6}\protected@file@percent }
-\newlabel{sec:concl}{{6}{9}{Заключение}{section.6}{}}
 \bibcite{nanda2023progress}{{2}{2023}{{Nanda et~al.}}{{Nanda, Chan, Lieberum, Smith, and Steinhardt}}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{9}{section.6}\protected@file@percent }
+\newlabel{sec:concl}{{6}{9}{Conclusion}{section.6}{}}
 \bibcite{chughtai2023toy}{{3}{2023}{{Chughtai et~al.}}{{Chughtai, Chan, and Nanda}}}
-\bibcite{notsawo2023predicting}{{4}{2023}{{Notsawo et~al.}}{{Notsawo, Zhou, Pezeshki, Rish, and Dumas}}}
-\bibcite{takens1981detecting}{{5}{1981}{{Takens}}{{}}}
-\bibcite{stark1999delay}{{6}{1999}{{Stark}}{{}}}
-\bibcite{stark2003delay}{{7}{2003}{{Stark et~al.}}{{Stark, Broomhead, Davies, and Huke}}}
-\bibcite{levina2004maximum}{{8}{2004}{{Levina and Bickel}}{{}}}
-\bibcite{mandt2017stochastic}{{9}{2017}{{Mandt et~al.}}{{Mandt, Hoffman, and Blei}}}
-\bibcite{kennel1992determining}{{10}{1992}{{Kennel et~al.}}{{Kennel, Brown, and Abarbanel}}}
-\bibcite{cao1997practical}{{11}{1997}{{Cao}}{{}}}
-\bibcite{sugihara1990nonlinear}{{12}{1990}{{Sugihara and May}}{{}}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Appendix / supplemental material}{10}{section.7}\protected@file@percent }
-\newlabel{app}{{7}{10}{Appendix / supplemental material}{section.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Базовый эксперимент с полнопакетным градиентным спуском (Full-Batch)}{10}{subsection.7.1}\protected@file@percent }
-\newlabel{app:exp}{{7.1}{10}{Базовый эксперимент с полнопакетным градиентным спуском (Full-Batch)}{subsection.7.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Феномен гроккинга на базовом эксперименте (Full-Batch). Переход от запоминания к обобщению сопровождается снижением топологической сложности траектории $\mathcal  {L}_{train}$, однако оценка страдает от недостатка дисперсии из-за вырождения ряда.}}{11}{figure.caption.6}\protected@file@percent }
-\newlabel{fig:grokking_full_batch}{{4}{11}{Феномен гроккинга на базовом эксперименте (Full-Batch). Переход от запоминания к обобщению сопровождается снижением топологической сложности траектории $\Ls _{train}$, однако оценка страдает от недостатка дисперсии из-за вырождения ряда}{figure.caption.6}{}}
+\bibcite{liu2022omnigrok}{{4}{2023}{{Liu et~al.}}{{Liu, Kitovich, and Tegmark}}}
+\bibcite{notsawo2023predicting}{{5}{2023}{{Notsawo et~al.}}{{Notsawo, Zhou, Pezeshki, Rish, and Dumas}}}
+\bibcite{takens1981detecting}{{6}{1981}{{Takens}}{{}}}
+\bibcite{stark1999delay}{{7}{1999}{{Stark}}{{}}}
+\bibcite{stark2003delay}{{8}{2003}{{Stark et~al.}}{{Stark, Broomhead, Davies, and Huke}}}
+\bibcite{levina2004maximum}{{9}{2004}{{Levina and Bickel}}{{}}}
+\bibcite{mandt2017stochastic}{{10}{2017}{{Mandt et~al.}}{{Mandt, Hoffman, and Blei}}}
+\bibcite{kennel1992determining}{{11}{1992}{{Kennel et~al.}}{{Kennel, Brown, and Abarbanel}}}
+\bibcite{cao1997practical}{{12}{1997}{{Cao}}{{}}}
+\bibcite{sugihara1990nonlinear}{{13}{1990}{{Sugihara and May}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Appendix / Supplemental Material}{10}{section.7}\protected@file@percent }
+\newlabel{app}{{7}{10}{Appendix / Supplemental Material}{section.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Baseline Experiment with Full-Batch Gradient Descent}{10}{subsection.7.1}\protected@file@percent }
+\newlabel{app:exp}{{7.1}{10}{Baseline Experiment with Full-Batch Gradient Descent}{subsection.7.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The grokking phenomenon in the baseline experiment (Full-Batch). The transition from memorization to generalization is accompanied by a decrease in the topological complexity of the $\mathcal  {L}_{train}$ trajectory; however, the estimation suffers from a lack of variance due to the degeneration of the series.}}{11}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:grokking_full_batch}{{4}{11}{The grokking phenomenon in the baseline experiment (Full-Batch). The transition from memorization to generalization is accompanied by a decrease in the topological complexity of the $\Ls _{train}$ trajectory; however, the estimation suffers from a lack of variance due to the degeneration of the series}{figure.caption.6}{}}
 \gdef \@abspage@last{11}

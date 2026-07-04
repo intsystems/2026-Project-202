@@ -239,164 +239,164 @@ Finding a generalizing solution strictly restricts the degrees of freedom of the
 
 
 
+\section{Computational Experiment}\label{sec:exp}
 
-\section{Вычислительный эксперимент}\label{sec:exp}
+To test the hypothesis that grokking is a structural phase transition accompanied by a reduction in attractor dimensionality, and to validate our statistical framework as an early predictor of grokking, we conducted a series of computational experiments.
 
-Для проверки гипотезы о гроккинге как о структурном переходе, сопровождающемся понижением размерности аттрактора, и валидации статистического метода как раннего предиктора гроккинга была проведена серия вычислительных экспериментов. 
+The primary experiments presented in this section utilize the 1-layer Omnigrok Transformer architecture \cite{liu2022omnigrok}, which was specifically designed to facilitate a smoother and more distinct grokking effect. Training for these cases was performed using the AdamW optimizer with mini-batch stochasticity. As a standard practice in deep learning, this stochastic noise increases the variance of the scalar metric series, allowing phase reconstruction algorithms to more accurately estimate the true dimensionality of the phase space. In contrast, our initial baseline experiments, which were conducted using a standard Transformer architecture and full-batch gradient descent (Full-Batch GD), revealed the problem of a "degenerate observer" due to the loss dropping to zero and the resulting lack of variance; these results and their analysis are deferred to Appendix \ref{app:exp}.
 
-Во всех экспериментах использовалась архитектура однослойного Трансформера Omnigrok, которая была специально разработана для демонстрации более плавного и отчетливого эффекта гроккинга. Обучение проводилось с помощью оптимизатора AdamW со стохастикой (mini-batch), поскольку это является стандартом в глубоком обучении, а стохастический шум увеличивает дисперсию рядов скалярных метрик, позволяя алгоритмам фазовой реконструкции более точно оценивать истинную размерность фазового пространства. Отметим, что базовые эксперименты с полнопакетным градиентным спуском (Full-Batch GD) выявили проблему «вырожденного наблюдателя» из-за падения лосса в ноль и отсутствия дисперсии; эти результаты и их анализ вынесены в Приложение \ref{app:exp}.
+In addition to the baseline metrics ($\Ls$, accuracy), the algorithm tracks the gradient norm $\|g\|_2$, the weight norm $\|\vw\|_2$, and the cosine similarity between gradients at consecutive iterations. For the phase space reconstruction, the time delay $\tau$ is typically set to a fixed constant (e.g., $\tau=1$ or $\tau=10$), while the effective embedding dimension $E$ is computed dynamically using the Maximum Likelihood Estimation (MLE) method.
 
-Помимо базовых метрик ($\Ls$, точность), алгоритм отслеживает норму градиента $\|g\|_2$, норму весов $\|\vw\|_2$, а также скалярное произведение между градиентами на соседних итерациях. Задержка $\tau$ подбирается эмпирически, а размерность вложения $E$ вычисляется динамически с помощью метода MLE.
+\subsection{Experiment 1: Modular Addition and the Non-Generic Observer}\label{sec:exp_mod}
 
-\subsection{Эксперимент 1: Модульное сложение и нетипичный наблюдатель}
+In the first experiment, we tackled the modular addition task (modulo $p=113$). The weight norm ($||\vw||_2$) was chosen as the target metric for the MLE method, as it preserves rich variance throughout the entire memorization phase and, equally importantly, remains completely independent of the validation set.
 
-В первом эксперименте использовался датасет модульного сложения по модулю $p=113$. В качестве целевой метрики для метода MLE была выбрана норма весов ($||\vw||_2$), так как она сохраняет дисперсию на протяжении всей фазы меморизации и, что не менее важно, никак не зависит от валидационной выборки.
+Fig. \ref{fig:grokking_flat} presents the results of the experiment. In the top row (with $L_2$ regularization enabled, $WD=1.0$), a perfect topological collapse is observed: the effective dimensionality $\hat{d}(t)$ collapses synchronously with the weight norm long before the Accuracy metric registers generalization. In the bottom row (without regularization, $WD=0.0$), grokking does not occur, the network enters perpetual memorization, and the MLE method correctly shows a persistently high dimensionality of the phase space. This proves the method's robustness against false positives.
 
-На Рис. \ref{fig:grokking_flat} представлены результаты эксперимента. В верхней строке (с включенной $L_2$-регуляризацией, $WD=1.0$) наблюдается топологический коллапс: эффективная размерность (а точнее её оценка $d^*(t)$, полученная MLE методом) заканчивает падение быстрее нормы весов задолго до того, как метрика Accuracy фиксирует генерализацию. В нижней строке (без регуляризации, $WD=0.0$) гроккинг не наступает, сеть уходит в вечную меморизацию, и метод MLE корректно показывает не спадающую размерность фазового пространства. Это доказывает отсутствие ложноположительных срабатываний.
-
-Как итог, наш метод успешно предсказывает гроккинг, фиксируя топологический коллапс размерности аттрактора. Однако, как мы видим, норма весов не является типичным наблюдателем: она имеет симметрии, из-за чего не передает истинную размерность аттрактора, но зато довольно чётко передает падение размерности и не зависит от валидационной выборки. Также наш предиктор на данной задаче не превосходит по точности предсказания предиктор, основанный напрямую на норме весов и $\Ls_{val}$, что связано c простотой самой задачи.
+In summary, our framework successfully predicts grokking by capturing the topological collapse of the attractor dimension. However, it is evident that the weight norm is a non-generic (symmetric) observer: while it clearly reflects the dimensionality drop without relying on the validation set, it fails to convey the true algebraic dimension of the attractor. Furthermore, our predictor on this specific task does not surpass the early-warning accuracy of a predictor based directly on the weight norm and $\Ls_{val}$, which is attributed to the simplicity of the modular addition task itself.
 
 \begin{figure}[H]
     \centering
-    % Верхний ряд: Гроккинг (WD=1.0)
+    % Top row: Grokking (WD=1.0)
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd1_acc.png}
-        \caption{WD=1: EDM \& Accuracy}
+        \caption{WD=1: Dim \& Accuracy}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd1_loss.png}
-        \caption{WD=1: EDM \& Loss}
+        \caption{WD=1: Dim \& Loss}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd1_norm.png}
-        \caption{WD=1: EDM \& Norm}
+        \caption{WD=1: Dim \& Norm}
     \end{subfigure}
     
     \vspace{0.3cm}
-    % Нижний ряд: Нет гроккинга (WD=0.0)
+    % Bottom row: No grokking (WD=0.0)
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd0_acc.png}
-        \caption{WD=0: EDM \& Accuracy}
+        \caption{WD=0: Dim \& Accuracy}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd0_loss.png}
-        \caption{WD=0: EDM \& Loss}
+        \caption{WD=0: Dim \& Loss}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/mod_wd0_norm.png}
-        \caption{WD=0: EDM \& Norm}
+        \caption{WD=0: Dim \& Norm}
     \end{subfigure}
-    \caption{Анализ гроккинга на модульном сложении при наличии стохастического шума. Сравнение динамики размерности $E$, построенной по ряду weight\_norm, относительно Accuracy, Loss и weight\_norm в режимах с генерализацией (верхний ряд) и без нее (нижний ряд).}
+    \caption{Analysis of grokking on modular addition in the presence of stochastic noise. The plots compare the dynamics of dimensionality $E$ (derived from the weight norm series) against Accuracy, Loss, and Weight Norm in regimes with generalization (top row) and without it (bottom row).}
     \label{fig:grokking_flat}
 \end{figure}
 
-\subsection{Эксперимент 2: Неабелевы группы и сложные алгебраические представления ($S_5$)}
+\subsection{Experiment 2: Non-Abelian Groups and Complex Algebraic Representations ($S_5$)}\label{sec:exp_s5}
 
-Для верификации универсальности метода задача была усложнена до композиции перестановок неабелевой (некоммутативной) группы $S_5$. С точки зрения механистической интерпретируемости \cite{chughtai2023toy}, нейронные сети обобщают задачи на конечных группах путем выучивания их линейных неприводимых представлений (отображения элементов группы в матрицы весов). 
+To verify the universality of our method, we escalated the task complexity to the composition of permutations within the non-abelian $S_5$ symmetric group. From the perspective of mechanistic interpretability, neural networks generalize on finite group tasks by learning their linear irreducible representations \cite{chughtai2023toy}.
 
-В то время как коммутативное модульное сложение проецируется сетью в 2D-окружности (вещественный Фурье-базис, размерность представления равна 2 \cite{nanda2023progress}), структура неабелевой группы $S_5$ значительно сложнее. Согласно алгебраической теории представлений, размерности неприводимых представлений группы $S_5$ составляют 1, 1, 4, 4, 5, 5 и 6. Поскольку одномерные представления теряют информацию о самих перестановках (являются неточными, unfaithful), для безошибочного вычисления композиции любых элементов сети математически необходимо задействовать подпространства весов размерности как минимум 4. 
+While commutative modular addition is projected by the network into 2D circles (where the minimal representation dimension is 2), the structure of the non-abelian group $S_5$ is significantly more complex. According to algebraic representation theory, the dimensions of the irreducible representations of $S_5$ are 1, 1, 4, 4, 5, 5, and 6. Since 1D representations lose information about the permutations themselves (i.e., they are unfaithful), the network must utilize weight subspaces of dimension at least 4 to flawlessly compute the composition of any elements. 
 
-В контексте нелинейной динамики это означает, что минимальное количество степеней свободы, которое оптимизатор обязан сохранить для удержания обобщающего правила $S_5$, равно 4. Следовательно, истинная размерность аттрактора лосса после гроккинга должна коллапсировать, но остановиться на уровне не ниже 4 компонент, что позволяет проверить способность нашего метода «вслепую» измерять алгебраическую сложность задачи.
+In the context of nonlinear dynamics, this means the true attractor dimension after grokking should collapse but plateau at a level no lower than 4 components. This provides a rigorous test for our method's ability to "blindly" measure the algebraic complexity of the task.
 
-Как видно на Рис. \ref{fig:grokking_s5}, предложенный метод успешно справился с этой задачей при анализе нормы весов. В фазе хаотичного поиска размерность $E$ держится на более высоком уровне. При формировании сетью обобщающего алгебраического правила, размерность предсказуемо коллапсирует. Эксперимент без Weight Decay (нижний ряд) вновь подтверждает, что размерность не падает в случае, когда нет гроккинга.
+As seen in Fig. \ref{fig:grokking_s5}, the proposed method successfully tackles this challenge. During the chaotic search phase, the dimensionality $E$ remains at a high level. Once the network forms a generalizing algebraic rule, the dimensionality predictably collapses. The control experiment without Weight Decay (bottom row) reaffirms that the dimensionality does not drop when grokking is absent.
 
 \begin{figure}[H]
     \centering
-    % Верхний ряд: Гроккинг S5 (WD=1.0)
+    % Top row: Grokking S5 (WD=1.0)
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd1_acc.png}
-        \caption{S5 WD=1: Размерность \& Accuracy}
+        \caption{S5 WD=1: Dim \& Accuracy}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd1_loss.png}
-        \caption{S5 WD=1: Размерность \& Loss}
+        \caption{S5 WD=1: Dim \& Loss}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd1_norm.png}
-        \caption{S5 WD=1: Размерность \& Norm}
+        \caption{S5 WD=1: Dim \& Norm}
     \end{subfigure}
     
     \vspace{0.3cm}
-    % Нижний ряд: Нет гроккинга S5 (WD=0.0)
+    % Bottom row: No grokking S5 (WD=0.0)
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd0_acc.png}
-        \caption{S5 WD=0: Размерность \& Accuracy}
+        \caption{S5 WD=0: Dim \& Accuracy}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd0_loss.png}
-        \caption{S5 WD=0: Размерность \& Loss}
+        \caption{S5 WD=0: Dim \& Loss}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.32\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd0_norm.png}
-        \caption{S5 WD=0: Размерность \& Norm}
+        \caption{S5 WD=0: Dim \& Norm}
     \end{subfigure}
-    \caption{Анализ композиции в группе $S_5$. Коллапс размерности аттрактора, построенного по ряду weight\_norm, надежно фиксирует структурную перестройку сети даже при более сложной структуре скрытых представлений.}
+    \caption{Analysis of composition in the $S_5$ group. The dimensionality collapse reliably captures the structural reorganization of the network, even for the complex multidimensional topology of a non-abelian group.}
     \label{fig:grokking_s5}
 \end{figure}
 
-Особый интерес представляет оценка размерности по валидационной функции потерь (Рис. \ref{fig:grokking_val_loss_s5}). Это доказывает, что данный эффект не зависит от выбранной метрики и не является субъективным. Взяв типичную метрику (validation loss), мы можем смотреть не только на коллапс её размерности, но и на её абсолютные значения, что полезно для понимания количества активных компонентов в модели. В случае $S_5$ мы видим, что размерность коллапсирует примерно до 4, что напрямую связано с тем, что для представления $S_5$ требуется как минимум 4 компонента. При этом в случае $WD=0$ размерность не падает, а даже растет, что показывает переобучение модели и уход в вечную меморизацию.
+Of particular interest is the dimensionality estimation using the validation loss function (Fig. \ref{fig:grokking_val_loss_s5}). This proves that the observed topological collapse is independent of the chosen metric and is not a subjective artifact. By evaluating a generic observer ($\Ls_{val}$), we can correctly measure the number of active components in the model. For $S_5$, the dimensionality collapses to $E \approx 4$, which perfectly aligns with the minimal required representation dimension. Conversely, for $WD=0$, the dimensionality not only fails to drop but actively increases, physically reflecting the escalating chaos of eternal memorization.
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd1_val_loss.pdf}
-        \caption{S5 WD=1: Размерность по validation loss}
+        \caption{S5 WD=1: Dim from validation loss}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd0_val_loss.pdf}
-        \caption{S5 WD=0: Размерность по validation loss}
+        \caption{S5 WD=0: Dim from validation loss}
     \end{subfigure}
-    
     \vspace{0.3cm}
-    \caption{Анализ композиции в группе $S_5$. Размерность $E$, восстановленная по validation loss, позволяет оценивать количество активных компонентов.}
+    \caption{Analysis of the $S_5$ group. The dimensionality $E$ reconstructed from the validation loss successfully estimates the true algebraic complexity of the algorithm (plateauing at $\hat{d} \approx 4$).}
     \label{fig:grokking_val_loss_s5}
 \end{figure}
 
-\subsection{Теоретическая интерпретация результатов}\label{sec:exp_theory}
+\subsection{Theoretical Interpretation of Results}\label{sec:exp_theory}
 
-Анализ полученных графиков позволяет сделать следующие теоретические выводы:
+An analysis of the obtained plots allows us to draw the following theoretical conclusions:
 
 \begin{enumerate}
-    \item \textbf{Природа гроккинга:} Зафиксированный коллапс размерности доказывает, что гроккинг — это не просто уменьшение ошибки, а качественная перестройка динамической системы: переход с высокоэнтропийного аттрактора "запоминания" на низкоразмерный аттрактор "алгебраического правила".
-    \item \textbf{Метрики оптимизатора:} Эксперименты показали, что мы можем диагностировать гроккинг, не используя валидационную выборку (через норму весов). Это доказывает, что данное явление не является субъективным артефактом конкретной отложенной выборки.
-    \item \textbf{Размерность при $WD=0$:} При типичном наблюдателе ($\Ls_{val}$) размерность при $WD=0$ не падает, а даже растет. Это подтверждает, что при переобучении модель заучивает выборку, используя большое количество активных компонент, и показывает важность выбора типичного наблюдателя для оценки алгебраической сложности алгоритма. В случае нетипичного наблюдателя (weight norm) размерность на протяжении всего обучения остается низкой, так как модель просто находит тривиальное решение и в силу устройства кросс-энтропии просто начинает наращивать масштаб весов, из-за чего эффективная размерность не растет.
+    \item \textbf{The nature of grokking:} The captured dimensionality collapse strictly proves that grokking is not merely an error reduction, but a qualitative structural restructuring of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
+    \item \textbf{Optimizer metrics predictability:} The experiments demonstrated that delayed generalization can be diagnosed relying exclusively on internal network metrics (such as weight norm). This proves that the formation of generalizing properties has an objective topological nature and is not an artifact of a specific held-out validation set.
+    \item \textbf{The role of observer genericity:} Evaluating the $WD=0$ regime revealed the critical importance of choosing a generic observer. A symmetric observer (weight norm) remains low during overfitting, as the model simply finds a trivial solution and scales up the weights, keeping $E \approx 1$. However, a generic observer ($\Ls_{val}$) correctly captures the high dimensionality of chaotic overfitting and accurately projects the algebraic complexity of the learned algorithm (e.g., $E \ge 4$ for $S_5$).
 \end{enumerate}
 
 
-\section{Обсуждение результатов (Discussion)}\label{sec:disc}
+\section{Discussion}\label{sec:disc}
 
-Результаты проведенных вычислительных экспериментов подтверждают фундаментальную гипотезу работы: процесс оптимизации глубоких нейронных сетей может быть исследован с точки зрения теории нелинейных динамических систем и отслеживая размерность аттрактора можно предсказывать и качественно описывать гроккинг. Однако перенос методов фазовой реконструкции в ML выявил ряд специфических ограничений и физических эффектов, требующих отдельного осмысления.
+The results of the conducted computational experiments confirm the fundamental hypothesis of this work: the optimization process of deep neural networks can be investigated from the perspective of nonlinear dynamical systems theory, and by tracking the attractor dimension, one can predict and qualitatively describe grokking. However, the transfer of phase reconstruction methods to machine learning has revealed a number of specific limitations and physical effects that require separate consideration.
 
-\textbf{1. Проблема вырожденного наблюдателя и роль стохастичности.} 
-В ходе экспериментов с полнопакетным градиентным спуском (Full-Batch GD) мы столкнулись с сложностью оценки размерности аттрактора: все используемые нами 1-D скалярные метрики вырождались в константу. С точки зрения нелинейной динамики, идеальная оптимизация без шума схлопывает траекторию в прямолинейный луч, лишая методы (такие как MLE) необходимой дисперсии для оценки кривизны ландшафта. Таким образом при анализе размерности стоит следить за тем, чтобы ряд не выраждался. Это можно делать за счёт прореживания ряда, но это может негативно сказаться на точности оценки. Таким образом этот метод работает лучше всего в системах где ряды не выраждаются, то есть в системах со стохастикой. Высокочастотный шум SGD заставляет оптимизатор исследовать локальную геометрию аттрактора. Кроме того, эксперименты показали, что норма весов ($||\vw||_2$) является гораздо более информативным и стабильным «наблюдателем» скрытой динамики, чем склонный к вырождению обучающий лосс.
+\textbf{1. The Problem of the Degenerate Observer and the Role of Stochasticity.}
+During the experiments with full-batch gradient descent (Full-Batch GD), we encountered difficulties in estimating the attractor dimension: all the 1D scalar metrics we used degenerated into a constant. From the perspective of nonlinear dynamics, ideal noise-free optimization collapses the trajectory into a rectilinear ray, depriving methods (such as MLE) of the variance necessary to estimate the landscape curvature. Thus, when analyzing dimensionality, one must ensure that the series does not degenerate. This can be mitigated by subsampling the series, though this may negatively impact the estimation accuracy. Therefore, our method performs best in systems where the observation series do not degenerate, i.e., in systems with inherent stochasticity. The high-frequency noise of SGD forces the optimizer to continuously explore the local geometry of the attractor. Furthermore, experiments have shown that the weight norm ($||\vw||_2$) is a much more informative and stable "observer" of the latent dynamics than the training loss, which is highly prone to degeneration.
 
-\textbf{3. Зависимость топологии от выбора наблюдателя (Observability).}
-Одним из важнейших эмпирических результатов нашей работы стало выявление зависимости реконструированной размерности $E$ от выбора скалярной метрики (функции наблюдения). В теории динамических систем теорема Такенса требует, чтобы функция наблюдения была «типичной» (generic) и не имела вырожденных симметрий.
+\textbf{2. Topology Dependence on the Choice of Observer (Observability).}
+One of the most important empirical results of our work is demonstrating the dependence of the reconstructed dimensionality $E$ on the choice of the scalar metric (observation function). In dynamical systems theory, Takens' embedding theorem requires the observation function to be "generic" and free of degenerate symmetries.
 
-Наши эксперименты показали, что норма весов ($||\vw||_2$) является симметричным наблюдателем. Динамика нормы определяется преимущественно балансом двух глобальных сил: градиентом ошибки (увеличивающим веса) и $L_2$-регуляризацией (сжимающей веса). Из-за этого эффективная размерность ряда $||\vw||_2$ всегда коллапсирует до низких значений ($E \approx 2\dots 4$), независимо от сложности решаемой задачи, так как эта метрика «слепа» к сложной угловой структуре представлений.
+Our experiments have demonstrated that the weight norm ($||\vw||_2$), being a symmetric and thus non-generic observer, distorts the absolute value of the true dimensionality. The dynamics of the norm are primarily determined by the balance of two global forces: the error gradient (which increases the weights) and $L_2$ regularization (which shrinks them). Because of this, the effective dimensionality of the $||\vw||_2$ series always collapses to low values ($E \approx 2\dots 4$), regardless of the complexity of the solved task, as this metric is "blind" to the complex angular structure of the representations.
 
-В противовес этому, функция потерь ($Ls_{val}$ или зашумленный $Ls_{train}$) напрямую зависит от логитов и чувствительна к внутренней алгебраической структуре сети. Работы по прямому спектральному анализу весов \cite{nanda2023progress} показывают, что для модульного сложения сеть формирует 2D-окружности (Фурье-базисы). Оценка MLE по ряду лосса подтверждает это топологически: коллапс траектории останавливается на $E \approx 2$. В свою очередь, для неабелевой группы $S_5$, неприводимые представления которой требуют пространств большей размерности \cite{chughtai2023toy}, коллапс размерности, измеряемый именно по ряду лосса, предсказуемо останавливается на более высоком уровне $E \approx 4\dots 6$. Таким образом, мы доказали, что для «слепой» оценки алгебраической сложности выученного алгоритма необходимо использовать метрики, напрямую связанные с распределением выходов сети, или более аккуратно агрегировать статистики параметров. Также стоит отметить, что лучше использовать именно $Ls_{val}$, так как $Ls_{train}$ быстро выраждается.
+In contrast, the loss function ($\Ls_{val}$ or the noisy $\Ls_{train}$) depends directly on the logits and is sensitive to the internal algebraic structure of the network. Works on the direct spectral analysis of weights \cite{nanda2023progress} show that for modular addition, the network forms 2D circles (Fourier bases). MLE estimation on the loss series confirms this topologically: the trajectory collapse halts at $E \approx 2$. In turn, for the non-abelian group $S_5$, whose irreducible representations require spaces of higher dimensionality \cite{chughtai2023toy}, the dimensionality collapse, measured specifically on the loss series, predictably halts at a higher level of $E \approx 4\dots 6$. Thus, we have proven that for a "blind" estimation of the algebraic complexity of the learned algorithm, it is necessary to use metrics directly related to the distribution of the network outputs, or to aggregate parameter statistics more carefully. It is also worth noting that it is preferable to use specifically $\Ls_{val}$, since $\Ls_{train}$ degenerates rapidly.
 
-\textbf{4. Независимость от валидационной выборки и количество активных компонент.}
-С практической точки зрения, мониторинг валидационной функции потерь ($Ls_{val}$) остается более быстрым и дешевым предиктором наступления гроккинга, по крайней мере в простых проведённых экспериментах. Однако метрики являются лишь симптомами улучшения обобщающей способности. В свою очередь, обвал эффективной размерности $E$ предоставляет строгое математическое доказательство структурного фазового перехода — процесса, при котором сеть отсекает шумовые степени свободы и сжимает траекторию в компактное подмногообразие. Также для нашего метода в принципе не нужна валидационная выборка.
-%  Это наблюдение открывает путь к принципиально новым методам прунинга (network pruning) и сжатия моделей (например, выбора ранга для LoRA), основанным на истинном количестве степеней свободы обученной сети, вычисленном динамически.
+\textbf{3. Independence from the Validation Set and the Number of Active Components.}
+From a practical standpoint, monitoring the validation loss ($\Ls_{val}$) remains a faster and cheaper predictor of the onset of grokking, at least in the simple experiments conducted. However, macroscopic metrics are merely symptoms of improved generalization ability. In turn, the collapse of the effective dimensionality $E$ provides rigorous mathematical evidence of a structural phase transition—a process in which the network truncates noisy degrees of freedom and compresses the trajectory into a compact submanifold. Furthermore, our dimensionality-based predictor fundamentally does not require a validation set. 
+% This observation paves the way for fundamentally new methods of network pruning and model compression (e.g., rank selection for LoRA), based on the true number of degrees of freedom of the trained network, computed dynamically.
 
-\section{Заключение}\label{sec:concl}
 
-В данной работе предложен и верифицирован новый статистический метод ранней диагностики гроккинга, основанный на топологической реконструкции фазового пространства нейронной сети. Рассматривая стохастический градиентный спуск как вынужденную динамическую систему, мы эмпирически доказали, что феномен отложенной генерализации представляет собой структурный фазовый переход к низкоразмерному состоянию. Отслеживание этого процесса с помощью оценки Левиной-Бикеля (MLE Intrinsic Dimension) позволяет зафиксировать коллапс эффективной размерности аттрактора задолго до скачка валидационной точности, выступая надежным опережающим предиктором генерализации.
 
-Предложенный подход отличается высокой универсальностью и практической применимостью. Показано, что топологический коллапс уверенно детектируется по внутренним скалярным логам оптимизатора (например, норме весов), что позволяет мониторить обобщающую способность без выделения валидационной выборки. Кроме того, эксперименты на задачах модульного сложения и композиции в неабелевой группе $S_5$ подтвердили, что остаточная размерность аттрактора строго согласуется с теоретической алгебраической сложностью выученного алгоритма при использование типичного наблюдателя ($E \approx 2$ и $E \approx 4\dots 6$ соответственно). Поскольку метод работает по принципу «черного ящика» и оперирует исключительно 1D-логами, он легко переносится на любые архитектуры и задачи без адаптации.
+\section{Conclusion}\label{sec:concl}
 
-Главный итог исследования заключается в том, что одномерные скалярные ряды содержат исчерпывающую информацию для диагностики скрытых фазовых переходов в процессе обучения. Это открывает путь к созданию вычислительно дешевых методов мониторинга и структурной оптимизации глубоких моделей без необходимости ресурсоемкого анализа скрытых представлений или матриц Гессиана.
+In this work, we proposed and verified a novel statistical method for the early diagnosis of grokking, based on the topological reconstruction of the neural network’s phase space. By treating stochastic gradient descent as a forced dynamical system, we empirically demonstrated that the phenomenon of delayed generalization constitutes a structural phase transition to a low-dimensional state. Tracking this process using the Levina-Bickel estimation (MLE Intrinsic Dimension) allows for capturing the collapse of the effective dimensionality of the attractor long before the jump in validation accuracy, thus acting as a reliable early predictor of generalization.
+
+The proposed approach is characterized by high universality and practical applicability. It is shown that the topological collapse can be reliably detected from the internal scalar logs of the optimizer (e.g., the weight norm), which enables monitoring the generalization capability without the need for a validation set. Furthermore, experiments on the tasks of modular addition and composition in the non-abelian group $S_5$ confirmed that the residual attractor dimension strictly aligns with the theoretical algebraic complexity of the learned algorithm when using a generic observer ($E \approx 2$ and $E \approx 4 \dots 6$, respectively). Since the method operates on a "black-box" principle and relies exclusively on 1D logs, it can be easily transferred to arbitrary architectures and tasks without adaptation.
+
+The primary conclusion of this study is that one-dimensional scalar series contain sufficient information for diagnosing hidden phase transitions during the training process. This paves the way for the development of computationally cheap methods for the monitoring and structural optimization of deep models without the need for resource-intensive analysis of hidden representations or Hessian matrices.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -406,32 +406,32 @@ Finding a generalizing solution strictly restricts the degrees of freedom of the
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Appendix / supplemental material}\label{app}
+\section{Appendix / Supplemental Material}\label{app}
 
-\subsection{Базовый эксперимент с полнопакетным градиентным спуском (Full-Batch)}\label{app:exp}
+\subsection{Baseline Experiment with Full-Batch Gradient Descent}\label{app:exp}
 
-В данном приложении приведены результаты первоначальных экспериментов, которые проводились на задаче модульного сложения с использованием полнопакетного градиентного спуска (Full-Batch GD). Этот эксперимент выступал в качестве базового (baseline) для подтверждения изначальной гипотезы.
+This appendix presents the results of initial experiments conducted on the modular addition task using full-batch gradient descent (Full-Batch GD). This experiment served as a baseline to confirm the initial hypothesis.
 
-Как видно на Рис. \ref{fig:grokking_full_batch}, в этом сеттинге нам удалось зафиксировать падение эффективной размерности (MLE ID) ряда $\Ls_{train}$ непосредственно перед скачком валидационной точности (с $E \approx 4-5$ до $E \approx 2.8$). 
+As seen in Fig. \ref{fig:grokking_full_batch}, in this setting, we were able to capture the drop in the effective dimensionality (MLE ID) of the $\Ls_{train}$ series immediately preceding the jump in validation accuracy (from $E \approx 4-5$ to $E \approx 2.8$).
 
-Однако этот эксперимент выявил важную методологическую проблему. При полнопакетной оптимизации корреляция между размером фазового пространства $E$ и эффектом гроккинга становилась менее очевидной. С теоретической точки зрения это объясняется проблемой «вырожденного наблюдателя»: в отсутствие стохастического шума мини-батчей траектория оптимизатора вырождается в детерминированную гладкую кривую, а обучающий лосс падает практически до нуля, лишая метод MLE необходимой дисперсии для оценки истинной размерности пространства $d^*(t)$.
+However, this experiment revealed an important methodological problem. Under full-batch optimization, the correlation between the phase space dimension $E$ and the grokking effect became less evident. From a theoretical perspective, this is explained by the "degenerate observer" problem: in the absence of the stochastic noise of mini-batches, the optimizer's trajectory degenerates into a deterministic smooth curve, and the training loss drops almost to zero, depriving the MLE method of the variance necessary to estimate the true dimension of the space $d^*(t)$.
 
-Именно это наблюдение послужило мотивацией для перехода к стохастической оптимизации (mini-batch) и использованию нетипичного наблюдателя (нормы весов), результаты которых представлены в основном разделе \ref{sec:exp}.
+This very observation motivated the transition to stochastic optimization (mini-batch) and the use of a non-generic observer (the weight norm), the results of which are presented in the main Section \ref{sec:exp}.
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.42\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/grokking_accuracy.png}
-         \caption{Динамика Train/Val Accuracy}
-     \end{subfigure} \hfill
-     \begin{subfigure}[b]{0.32\textheight}
-         \centering
-         \includegraphics[width=\textwidth]{images/grokking_dimension.png}
-         \caption{Коллапс размерности (MLE ID)}
-     \end{subfigure}
-     \caption{Феномен гроккинга на базовом эксперименте (Full-Batch). Переход от запоминания к обобщению сопровождается снижением топологической сложности траектории $\Ls_{train}$, однако оценка страдает от недостатка дисперсии из-за вырождения ряда.}
-        \label{fig:grokking_full_batch}
+\centering
+\begin{subfigure}[b]{0.42\textwidth}
+\centering
+\includegraphics[width=\textwidth]{images/grokking_accuracy.png}
+\caption{Dynamics of Train/Val Accuracy}
+\end{subfigure} \hfill
+\begin{subfigure}[b]{0.32\textheight}
+\centering
+\includegraphics[width=\textwidth]{images/grokking_dimension.png}
+\caption{Dimensionality Collapse (MLE ID)}
+\end{subfigure}
+\caption{The grokking phenomenon in the baseline experiment (Full-Batch). The transition from memorization to generalization is accompanied by a decrease in the topological complexity of the $\Ls_{train}$ trajectory; however, the estimation suffers from a lack of variance due to the degeneration of the series.}
+\label{fig:grokking_full_batch}
 \end{figure}
 
 \end{document}

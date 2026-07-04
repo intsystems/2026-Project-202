@@ -1,4 +1,4 @@
-\begin{thebibliography}{12}
+\begin{thebibliography}{13}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -20,6 +20,12 @@ Bilal Chughtai, Lawrence Chan, and Neel Nanda.
 \newblock A toy model of universality: Reverse engineering how networks learn group operations.
 \newblock In \emph{International Conference on Machine Learning (ICML)}, 2023.
 \newblock URL \url{https://arxiv.org/abs/2302.03025}.
+
+\bibitem[Liu et~al.(2023)Liu, Kitovich, and Tegmark]{liu2022omnigrok}
+Ziming Liu, Ouail Kitovich, and Max Tegmark.
+\newblock Omnigrok: Grokking beyond algorithmic data.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2023.
+\newblock URL \url{https://openreview.net/forum?id=zDiHoIWa0nq}.
 
 \bibitem[Notsawo et~al.(2023)Notsawo, Zhou, Pezeshki, Rish, and Dumas]{notsawo2023predicting}
 Paul J~T Notsawo, Hattie Zhou, Mohammad Pezeshki, Irina Rish, and Guillaume Dumas.
