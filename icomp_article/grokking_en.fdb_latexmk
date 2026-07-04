@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex grokking_en"] 1783190727.46504 "grokking_en.aux" "grokking_en.bbl" "grokking_en" 1783191334.95858 0
+["bibtex grokking_en"] 1783193696.32413 "grokking_en.aux" "grokking_en.bbl" "grokking_en" 1783193938.29911 0
   "./icomp2026_conference.bst" 1783188672 28414 b1fa9868993c83455e3347c51621e256 ""
   "./references.bib" 1783188672 10693 b62df58c98a6774d3dd6d63183ee10ac ""
-  "grokking_en.aux" 1783191332 12167 95c316d141b3fbc0173b69631fca68f0 "pdflatex"
+  "grokking_en.aux" 1783193937 15988 5420b1d768d2a4f8922cd5fcc44162af "pdflatex"
   (generated)
   "grokking_en.bbl"
   "grokking_en.blg"
   (rewritten before read)
-["pdflatex"] 1783191324.6869 "c:/Users/karlo/notebooks/grokking_prediction_original/2026-Project-202/icomp_article/grokking_en.tex" "grokking_en.pdf" "grokking_en" 1783191334.95964 0
-  "c:/Users/karlo/notebooks/grokking_prediction_original/2026-Project-202/icomp_article/grokking_en.tex" 1783191323 44106 666f78f65aa7e1e846559b6b5855e564 ""
+["pdflatex"] 1783193932.76699 "c:/Users/karlo/notebooks/grokking_prediction_original/2026-Project-202/icomp_article/grokking_en.tex" "grokking_en.pdf" "grokking_en" 1783193938.29961 0
+  "c:/Users/karlo/notebooks/grokking_prediction_original/2026-Project-202/icomp_article/grokking_en.tex" 1783193932 44467 abf9665ff1edfe22f8e482a4e54e9a28 ""
   "c:/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc" 1777845443 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1777845915 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2026/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1777845119 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -107,6 +107,7 @@
   "c:/texlive/2026/texmf-dist/tex/latex/caption/caption.sty" 1777844709 56128 c2ccf1a29d78c33bc553880402e4fb9a ""
   "c:/texlive/2026/texmf-dist/tex/latex/caption/caption3.sty" 1777844709 72619 ee90b6612147680fd73c3b1406a74245 ""
   "c:/texlive/2026/texmf-dist/tex/latex/caption/subcaption.sty" 1777844709 12494 0c0cdb824278a4d51cefeb2e79901315 ""
+  "c:/texlive/2026/texmf-dist/tex/latex/cleveref/cleveref.sty" 1777844881 329481 7fc6b003158402a4c694bc0a1b729308 ""
   "c:/texlive/2026/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty" 1777845600 13886 d1306dcf79a944f6988e688c1785f9ce ""
   "c:/texlive/2026/texmf-dist/tex/latex/eso-pic/eso-pic.sty" 1777845630 11838 c56b1b2e06d66f65afcf19adbfba71b5 ""
   "c:/texlive/2026/texmf-dist/tex/latex/etoolbox/etoolbox.sty" 1777845652 46885 8953c67ffba03252c6090aa19568b8ba ""
@@ -160,10 +161,10 @@
   "c:/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1777850031 3648393 65ae341ca9edcaa1017930b6044fa5aa ""
   "c:/texlive/2026/texmf.cnf" 1777849968 713 e69b156964470283e0530f5060668171 ""
   "fancyhdr.sty" 1783188672 21006 e5d13d98d57bd53d4fed3aa61bd29c86 ""
-  "grokking_en.aux" 1783191332 12167 95c316d141b3fbc0173b69631fca68f0 "pdflatex"
-  "grokking_en.bbl" 1783190728 4837 0547f4e2f0f0597413be2dee1a191fd0 "bibtex grokking_en"
-  "grokking_en.out" 1783191332 2855 586dff938c07742a7c42b1e1c73d9f4d "pdflatex"
-  "grokking_en.tex" 1783191323 44106 666f78f65aa7e1e846559b6b5855e564 ""
+  "grokking_en.aux" 1783193937 15988 5420b1d768d2a4f8922cd5fcc44162af "pdflatex"
+  "grokking_en.bbl" 1783193696 4837 0547f4e2f0f0597413be2dee1a191fd0 "bibtex grokking_en"
+  "grokking_en.out" 1783193937 2855 586dff938c07742a7c42b1e1c73d9f4d "pdflatex"
+  "grokking_en.tex" 1783193932 44467 abf9665ff1edfe22f8e482a4e54e9a28 ""
   "icomp2026_conference.sty" 1783188672 9426 1ef73fa0f4a021d75fda9f06f666bb3f ""
   "images/grokking_accuracy.png" 1783188672 75320 432c20be3f92e58d35dfead36dea86b2 ""
   "images/grokking_dimension.png" 1783188672 89616 52984bf6a68acecb66076836ed26dcdb ""

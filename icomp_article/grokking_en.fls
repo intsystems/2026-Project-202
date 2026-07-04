@@ -178,6 +178,8 @@ INPUT c:/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty
 INPUT c:/texlive/2026/texmf-dist/tex/latex/listings/listings.cfg
 INPUT c:/texlive/2026/texmf-dist/tex/latex/listings/listings.cfg
 INPUT c:/texlive/2026/texmf-dist/tex/latex/listings/listings.cfg
+INPUT c:/texlive/2026/texmf-dist/tex/latex/cleveref/cleveref.sty
+INPUT c:/texlive/2026/texmf-dist/tex/latex/cleveref/cleveref.sty
 INPUT ./math_commands.tex
 INPUT ./math_commands.tex
 INPUT math_commands.tex

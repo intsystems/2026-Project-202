@@ -42,6 +42,18 @@
 \algnewcommand\Input{\item[\textbf{Input:}]}
 \algnewcommand\Output{\item[\textbf{Output:}]}
 
+
+\usepackage[capitalize, russian, english]{cleveref}
+
+\crefname{definition}{definition}{definitions}
+\Crefname{definition}{Definition}{Definitions}
+\crefname{algorithm}{algorithm}{algorithms}
+\Crefname{algorithm}{Algorithm}{Algorithms}
+\crefname{section}{section}{sections}
+\Crefname{section}{Section}{Sections}
+\crefname{appendix}{appendix}{appendix}
+\Crefname{appendix}{Appendix}{Appendix}
+
 %%%
 
 \input{math_commands.tex}
@@ -136,7 +148,7 @@ Let $\text{Acc}_{train}(\vw_t)$ and $\text{Acc}_{val}(\vw_t)$ denote the model's
 The optimization process is classified as grokking if there is an anomalous delay between these events: $t_{gen} \gg t_{mem}$.
 \end{definition}
 
-As Definition \ref{def:grokking} implies, on the interval $t \in (t_{mem}, t_{gen})$, classical macroscopic accuracy metrics reside on a quasi-stationary plateau. During this period, the optimizer outwardly appears trapped in an overfitting regime; however, hidden structural reorganizations occur within the model weights. We hypothesize that the transition from memorization to generalization constitutes a topological collapse of the optimizer's degrees of freedom.
+As \cref{def:grokking} implies, on the interval $t \in (t_{mem}, t_{gen})$, classical macroscopic accuracy metrics reside on a quasi-stationary plateau. During this period, the optimizer outwardly appears trapped in an overfitting regime; however, hidden structural reorganizations occur within the model weights. We hypothesize that the transition from memorization to generalization constitutes a topological collapse of the optimizer's degrees of freedom.
 
 To detect this collapse, we introduce $\hat{d}(t)$—an estimate of the effective (intrinsic) dimensionality of the reconstructed attractor at time $t$. Based on this, we formulate a formal criterion for successful early prediction.
 
@@ -148,7 +160,7 @@ A successful early warning signal of grokking is characterized by the formation 
 Furthermore, on the interval $(t_{mem}, t_{drop})$, a macroscopically monotonic decline of $\hat{d}(t)$ without significant upward rebounds must be observed.
 \end{definition}
 
-Meeting the conditions of Definition \ref{def:criterion} in practice implies that the topological dimensionality collapse indeed precedes generalization, and that the scalar observation functions $m_i(t)$ contain sufficient information for its early detection.
+Meeting the conditions of \cref{def:criterion} in practice implies that the topological dimensionality collapse indeed precedes generalization, and that the scalar observation functions $m_i(t)$ contain sufficient information for its early detection.
 
 
 
@@ -197,7 +209,7 @@ However, a fundamental limitation of both geometric methods is the strict requir
 The optimal $E$ is sought as the argument that maximizes the autoregressive correlation $\rho$ when predicting the future state $y_{t+1}$ based on its neighbors in $\R^E$. This topologically guarantees the best unfolding of the attractor without overfitting to noise; however, its discrete (integer-valued) resolution coarsens the detection of smooth phase transitions.
 
 \paragraph{Maximum Likelihood Estimation (MLE Intrinsic Dimension) \citep{levina2004maximum}.}
-Selected as the primary analytical tool in our framework. In contrast to geometric "bottom-up" methods, the Levina-Bickel method projects the time series directly into a redundant high-dimensional space (e.g., $E=15$) and estimates the local intrinsic dimension $\hat{d}_{x_t}$ statistically, based on the Poisson distribution of distances to the $k$ nearest neighbors. The process is formalized in Algorithm \ref{alg:mle_id}.
+Selected as the primary analytical tool in our framework. In contrast to geometric "bottom-up" methods, the Levina-Bickel method projects the time series directly into a redundant high-dimensional space (e.g., $E=15$) and estimates the local intrinsic dimension $\hat{d}_{x_t}$ statistically, based on the Poisson distribution of distances to the $k$ nearest neighbors. The process is formalized in \cref{alg:mle_id}.
 
 \begin{algorithm}[htbp]
 \caption{MLE Intrinsic Dimension Estimation (Levina-Bickel)}\label{alg:mle_id}
@@ -239,7 +251,7 @@ Finding a generalizing solution strictly restricts the degrees of freedom of the
 
 To test the hypothesis that grokking is a structural phase transition accompanied by a reduction in attractor dimensionality, and to validate our statistical framework as an early predictor of grokking, we conducted a series of computational experiments.
 
-The primary experiments presented in this section utilize the 1-layer Omnigrok Transformer architecture \citep{liu2022omnigrok}, which was specifically designed to facilitate a smoother and more distinct grokking effect. Training for these cases was performed using the AdamW optimizer with mini-batch stochasticity. As a standard practice in deep learning, this stochastic noise increases the variance of the scalar metric series, allowing phase reconstruction algorithms to more accurately estimate the true dimensionality of the phase space. In contrast, our initial baseline experiments, which were conducted using a standard Transformer architecture and full-batch gradient descent (Full-Batch GD), revealed the problem of a "degenerate observable" due to the loss dropping to zero and the resulting lack of variance; these results and their analysis are deferred to Appendix \ref{app:exp}.
+The primary experiments presented in this section utilize the 1-layer Omnigrok Transformer architecture \citep{liu2022omnigrok}, which was specifically designed to facilitate a smoother and more distinct grokking effect. Training for these cases was performed using the AdamW optimizer with mini-batch stochasticity. As a standard practice in deep learning, this stochastic noise increases the variance of the scalar metric series, allowing phase reconstruction algorithms to more accurately estimate the true dimensionality of the phase space. In contrast, our initial baseline experiments, which were conducted using a standard Transformer architecture and full-batch gradient descent (Full-Batch GD), revealed the problem of a "degenerate observable" due to the loss dropping to zero and the resulting lack of variance; these results and their analysis are deferred to \cref{app:exp}.
 
 In addition to the baseline metrics ($\Ls$, accuracy), the algorithm tracks the gradient norm $\|g\|_2$, the weight norm $\|\vw\|_2$, and the cosine similarity between gradients at consecutive iterations. For the phase space reconstruction, the time delay $\tau$ is typically set to a fixed constant (e.g., $\tau=1$ or $\tau=10$), while the effective embedding dimension $E$ is computed dynamically using the Maximum Likelihood Estimation (MLE) method.
 
@@ -422,7 +434,7 @@ As seen in Fig. \ref{fig:grokking_full_batch}, in this setting, we were able to 
 
 However, this experiment revealed an important methodological problem. Under full-batch optimization, the correlation between the phase space dimension $E$ and the grokking effect became less evident. From a theoretical perspective, this is explained by the "degenerate observable" problem: in the absence of the stochastic noise of mini-batches, the optimizer's trajectory degenerates into a deterministic smooth curve, and the training loss drops almost to zero, depriving the MLE method of the variance necessary to estimate the true dimension of the space $d^*(t)$.
 
-This very observation motivated the transition to stochastic optimization (mini-batch) and the use of a non-generic observable (the weight norm), the results of which are presented in the main Section \ref{sec:exp}.
+This very observation motivated the transition to stochastic optimization (mini-batch) and the use of a non-generic observable (the weight norm), the results of which are presented in the main \cref{sec:exp}.
 
 \begin{figure}[H]
     \centering
