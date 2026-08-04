@@ -61,7 +61,7 @@
 \input{math_commands.tex}
 
 
-\title{Grokking prediction via estimation of neural network attractor dimensionality}
+\title{Predicting Grokking from 1D Training Logs via Intrinsic Attractor Dimension Estimation}
 
 
 % The \author macro works with any number of authors. There are two commands
@@ -217,22 +217,7 @@ However, a fundamental limitation of both geometric methods is the strict requir
 The optimal $E$ is sought as the argument that maximizes the autoregressive correlation $\rho$ when predicting the future state $y_{t+1}$ based on its neighbors in $\R^E$. This topologically guarantees the best unfolding of the attractor without overfitting to noise; however, its discrete (integer-valued) resolution coarsens the detection of smooth phase transitions.
 
 \paragraph{Maximum Likelihood Estimation (MLE Intrinsic Dimension) \citep{levina2004maximum}.}
-Selected as the primary analytical tool in our framework. In contrast to geometric "bottom-up" methods, the Levina-Bickel method projects the time series directly into a redundant high-dimensional space (e.g., $E=15$) and estimates the local intrinsic dimension $\hat{d}_{x_t}$ statistically, based on the Poisson distribution of distances to the $k$ nearest neighbors. The process is formalized in \cref{alg:mle_id}.
-
-\begin{algorithm}[htbp]
-\caption{MLE Intrinsic Dimension Estimation (Levina-Bickel)}\label{alg:mle_id}
-\begin{algorithmic}[1]
-\Input Observation time series $\gD_{obs}$, delay $\tau$, maximum embedding dimension $E_{max}$, window $W$, neighbors $k$
-\Output Effective dimensionality $\hat{d}(t)$
-\State $M \gets \text{DelayEmbedding}(\gD_{obs}, E_{max}, \tau)$ \Comment{Embedding into $\R^{E_{max}}$}
-\For{each point $\vx_t \in M$ within the sliding window $W$}
-    \State Find $k$ nearest neighbors with distances $r_1 \le r_2 \le \dots \le r_k$
-    \State $\hat{d}_{x_t} \gets \left[ \frac{1}{k-1} \sum_{j=1}^{k-1} \log \left( \frac{r_k}{r_j} \right) \right]^{-1}$ \Comment{Local estimation via radius $r_k$}
-\EndFor
-\State $\hat{d}(t) \gets \frac{1}{|W|} \sum_{\vx_t \in W} \hat{d}_{x_t}$ \Comment{Averaging dimensionality over the window $W$}
-\State \Return $\hat{d}(t)$
-\end{algorithmic}
-\end{algorithm}
+Selected as the primary analytical tool in our framework. In contrast to geometric "bottom-up" methods, the Levina-Bickel method projects the time series directly into a redundant high-dimensional space (e.g., $E=15$) and estimates the local intrinsic dimension $\hat{d}_{x_t}$ statistically, based on the Poisson distribution of distances to the $k$ nearest neighbors. Due to space constraints, the full pseudocode is deferred to \cref{app:alg}. Briefly, for each embedded point within a sliding window $W$, the algorithm computes a local dimensionality estimate using the log-ratio of distances to its $k$ nearest neighbors, and averages these local estimates to output the effective dimensionality $\hat{d}(t)$.
 
 This method returns a \textit{continuous} value that is computed locally, does not require global recurrence of the trajectory, and demonstrates phenomenal robustness to microscopic mini-batch noise.
 
@@ -267,11 +252,15 @@ In addition to the baseline metrics ($\Ls$, accuracy), the algorithm tracks the 
 
 In the first experiment, we tackled the modular addition task (modulo $p=113$). The weight norm ($||\vw||_2$) was chosen as the target metric for the MLE method, as it preserves rich variance throughout the entire memorization phase and, equally importantly, remains completely independent of the validation set.
 
+<<<<<<< HEAD
 Fig. \cref{fig:grokking_flat} presents the results of the experiment. In the top row (with $L_2$ regularization enabled, $WD=1.0$), a perfect topological collapse is observed: the effective dimensionality $\hat{d}(t)$ collapses synchronously with the weight norm long before the Accuracy metric registers generalization. In the bottom row (without regularization, $WD=0.0$), grokking does not occur, the network enters perpetual memorization, and the MLE method correctly shows a persistently high dimensionality of the phase space. This proves the method's robustness against false positives.
+=======
+\cref{fig:grokking_flat} presents the results of the experiment. In the top row (with $L_2$ regularization enabled, $WD=1.0$), a perfect topological collapse is observed: the effective dimensionality $\hat{d}(t)$ collapses synchronously with the weight norm long before the Accuracy metric registers generalization. In the bottom row (without regularization, $WD=0.0$), grokking does not occur, the network enters perpetual memorization, and the MLE method correctly shows a persistently high dimensionality of the phase space. This proves the method's robustness against false positives.
+>>>>>>> 63e59253161caf45355e06fa745c182563e55d0d
 
 In summary, our framework successfully predicts grokking by capturing the topological collapse of the attractor dimension. However, it is evident that the weight norm is a non-generic (symmetric) observable: while it clearly reflects the dimensionality drop without relying on the validation set, it fails to convey the true algebraic dimension of the attractor. Furthermore, our predictor on this specific task does not surpass the early-warning accuracy of a predictor based directly on the weight norm and $\Ls_{val}$, which is attributed to the simplicity of the modular addition task itself.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     % Top row: Grokking (WD=1.0)
     \begin{subfigure}[b]{0.32\textwidth}
@@ -325,7 +314,7 @@ In the context of nonlinear dynamics, this means the true attractor dimension af
 
 As seen in \cref{fig:grokking_s5}, the proposed method successfully tackles this challenge. During the chaotic search phase, the dimensionality $E$ remains at a high level. Once the network forms a generalizing algebraic rule, the dimensionality predictably collapses. The control experiment without Weight Decay (bottom row) reaffirms that the dimensionality does not drop when grokking is absent.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     % Top row: Grokking S5 (WD=1.0)
     \begin{subfigure}[b]{0.32\textwidth}
@@ -369,9 +358,9 @@ As seen in \cref{fig:grokking_s5}, the proposed method successfully tackles this
     \label{fig:grokking_s5}
 \end{figure}
 
-Of particular interest is the dimensionality estimation using the validation loss function (Fig. \ref{fig:grokking_val_loss_s5}). This proves that the observed topological collapse is independent of the chosen metric and is not a subjective artifact. By evaluating a generic observable ($\Ls_{val}$), we can correctly measure the number of active components in the model. For $S_5$, the dimensionality collapses to $E \approx 4$, which perfectly aligns with the minimal required representation dimension. Conversely, for $WD=0$, the dimensionality not only fails to drop but actively increases, physically reflecting the escalating chaos of eternal memorization.
+Of particular interest is the dimensionality estimation using the validation loss function (\cref{fig:grokking_val_loss_s5}). This proves that the observed topological collapse is independent of the chosen metric and is not a subjective artifact. By evaluating a generic observable ($\Ls_{val}$), we can correctly measure the number of active components in the model. For $S_5$, the dimensionality collapses to $E \approx 4$, which perfectly aligns with the minimal required representation dimension. Conversely, for $WD=0$, the dimensionality not only fails to drop but actively increases, physically reflecting the escalating chaos of eternal memorization.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
         \includegraphics[width=\textwidth]{images/s5_wd1_val_loss.pdf}
@@ -393,11 +382,15 @@ Of particular interest is the dimensionality estimation using the validation los
 
 An analysis of the obtained plots allows us to draw the following theoretical conclusions.
 
+<<<<<<< HEAD
 \paragraph{The nature of grokking.} The observed dimensionality collapse \cref{fig:grokking_s5_a} \cref{fig:grokking_val_loss_s5_a}  demonstrates that grokking is not merely \textbf{quantitative loss minimization}, but a qualitative structural reconfiguration of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
+=======
+\paragraph{The nature of grokking.} The observed dimensionality collapse (\cref{fig:grokking_s5_a,fig:grokking_val_loss_s5_a})  demonstrates that grokking is not merely \textbf{quantitative loss minimization}, but a qualitative structural reconfiguration of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
+>>>>>>> 63e59253161caf45355e06fa745c182563e55d0d
 
-\paragraph{Optimizer metrics predictability.} The experiments demonstrated that delayed generalization can be diagnosed relying exclusively on internal network metrics (such as weight norm) \ref{fig:grokking_flat_a} \ref{fig:grokking_s5_a}. This suggests that the transition to generalization is an \textbf{intrinsic topological property} of the optimization trajectory and is not merely an artifact of a specific held-out validation set.
+\paragraph{Optimizer metrics predictability.} The experiments demonstrated that delayed generalization can be diagnosed relying exclusively on internal network metrics (such as weight norm) \cref{fig:grokking_flat_a,fig:grokking_s5_a}. This suggests that the transition to generalization is an \textbf{intrinsic topological property} of the optimization trajectory and is not merely an artifact of a specific held-out validation set.
 
-\paragraph{The role of genericity of the observable.} Evaluating the $WD=0$ regime revealed the critical importance of choosing a generic observable. Weight norm, a symmetric observable, remains low during overfitting, as the model simply finds a trivial solution and scales up the weights, keeping $E \approx 1$ \ref{fig:grokking_flat_d} \ref{fig:grokking_s5_d}. However, a generic observable ($\Ls_{val}$) correctly captures the high dimensionality of chaotic overfitting and accurately projects the algebraic complexity of the learned algorithm (e.g., $E \ge 4$ for $S_5$) \ref{fig:grokking_val_loss_s5_a}.
+\paragraph{The role of genericity of the observable.} Evaluating the $WD=0$ regime revealed the critical importance of choosing a generic observable. Weight norm, a symmetric observable, remains low during overfitting, as the model simply finds a trivial solution and scales up the weights, keeping $E \approx 1$ \cref{fig:grokking_flat_d,fig:grokking_s5_d}. However, a generic observable ($\Ls_{val}$) correctly captures the high dimensionality of chaotic overfitting and accurately projects the algebraic complexity of the learned algorithm (e.g., $E \ge 4$ for $S_5$) (\cref{fig:grokking_val_loss_s5_a}).
 
 \section{Discussion}\label{sec:disc}
 
@@ -434,6 +427,24 @@ The primary conclusion of this study is that one-dimensional scalar series conta
 \bibliography{references}
 
 \appendix
+\section{MLE Intrinsic Dimension Estimation Algorithm}\label{app:alg}
+
+The full pseudocode for the Levina-Bickel maximum likelihood estimation (MLE) of intrinsic dimension, as utilized in \cref{sec:theory_dim}, is provided in \cref{alg:mle_id}.
+
+\begin{algorithm}[htbp]
+\caption{MLE Intrinsic Dimension Estimation (Levina-Bickel)}\label{alg:mle_id}
+\begin{algorithmic}[1]
+\Input Observation time series $\gD_{obs}$, delay $\tau$, maximum embedding dimension $E_{max}$, window $W$, neighbors $k$
+\Output Effective dimensionality $\hat{d}(t)$
+\State $M \gets \text{DelayEmbedding}(\gD_{obs}, E_{max}, \tau)$ \Comment{Embedding into $\R^{E_{max}}$}
+\For{each point $\vx_t \in M$ within the sliding window $W$}
+    \State Find $k$ nearest neighbors with distances $r_1 \le r_2 \le \dots \le r_k$
+    \State $\hat{d}_{x_t} \gets \left[ \frac{1}{k-1} \sum_{j=1}^{k-1} \log \left( \frac{r_k}{r_j} \right) \right]^{-1}$ \Comment{Local estimation via radius $r_k$}
+\EndFor
+\State $\hat{d}(t) \gets \frac{1}{|W|} \sum_{\vx_t \in W} \hat{d}_{x_t}$ \Comment{Averaging dimensionality over the window $W$}
+\State \Return $\hat{d}(t)$
+\end{algorithmic}
+\end{algorithm}
 \section{Baseline Experiment with Full-Batch Gradient Descent}\label{app:exp}
 
 This appendix presents the results of initial experiments conducted on the modular addition task using full-batch gradient descent (Full-Batch GD). This experiment served as a baseline to confirm the initial hypothesis.
