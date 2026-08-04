@@ -1,0 +1,23 @@
+{
+  "rows": 4001,
+  "first_step": 1,
+  "last_step": 200000,
+  "logging_stride_steps": 50,
+  "weight_decay": 0.0,
+  "stable_memorization_flag_step": 2250,
+  "grok_flag_step": null,
+  "train_acc_095_stable5_onset": 1800,
+  "train_acc_099_stable5_onset": 2050,
+  "val_acc_050_stable5_onset": null,
+  "val_acc_090_stable5_onset": null,
+  "val_acc_095_stable5_onset": null,
+  "val_acc_099_stable5_onset": null,
+  "final_train_acc": 1.0,
+  "final_val_acc": 0.0361328125,
+  "final_train_loss": 0.0,
+  "final_val_loss": 226.257568359375,
+  "elapsed_seconds": 5507.482428789139,
+  "flag_gap_steps": null,
+  "threshold_gap_steps": null,
+  "outcome": "not_grokked"
+}

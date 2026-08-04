@@ -1,0 +1,38 @@
+{
+  "run_id": "Muon_lr0.06_5db64adc",
+  "script": "train_gpt.py",
+  "optimizer": "Muon",
+  "family": "lmo",
+  "lr": 0.06,
+  "momentum": 0.95,
+  "weight_decay": 0.0,
+  "lr_scaling": "unit-gain",
+  "adam_lr": 0.008,
+  "num_iterations": 2290,
+  "iteration_extension": 40,
+  "train_steps": 2330,
+  "val_loss_every": 250,
+  "world_size": 8,
+  "grad_accum_steps": 1,
+  "train_batch_size": 262144,
+  "tokens_per_step": 262144,
+  "torch": "2.10.0+cu128",
+  "runmeta_line": 2023,
+  "run_end": {
+    "run_id": "Muon_lr0.06_5db64adc",
+    "optimizer": "Muon",
+    "lr": 0.06,
+    "diverged": false,
+    "last_step": 2330,
+    "train_time_ms": 143818.4,
+    "peak_memory_mib": 29098
+  },
+  "source_file": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\icomp_article\\message (2).txt",
+  "parsed_train_points": 2330,
+  "parsed_validation_points": 11,
+  "train_loss_normalization": {
+    "reduction": "rank-local token sum followed by a mean across ranks",
+    "local_tokens": 32768.0,
+    "formula": "train_loss_per_token = train_loss_sum / (tokens_per_step / world_size)"
+  }
+}

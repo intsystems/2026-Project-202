@@ -53,6 +53,8 @@
 \Crefname{section}{Section}{Sections}
 \crefname{appendix}{appendix}{appendix}
 \Crefname{appendix}{Appendix}{Appendix}
+\crefname{fig}{fig}{fig}
+\Crefname{fig}{Fig}{Fig}
 
 %%%
 
@@ -265,7 +267,7 @@ In addition to the baseline metrics ($\Ls$, accuracy), the algorithm tracks the 
 
 In the first experiment, we tackled the modular addition task (modulo $p=113$). The weight norm ($||\vw||_2$) was chosen as the target metric for the MLE method, as it preserves rich variance throughout the entire memorization phase and, equally importantly, remains completely independent of the validation set.
 
-Fig. \ref{fig:grokking_flat} presents the results of the experiment. In the top row (with $L_2$ regularization enabled, $WD=1.0$), a perfect topological collapse is observed: the effective dimensionality $\hat{d}(t)$ collapses synchronously with the weight norm long before the Accuracy metric registers generalization. In the bottom row (without regularization, $WD=0.0$), grokking does not occur, the network enters perpetual memorization, and the MLE method correctly shows a persistently high dimensionality of the phase space. This proves the method's robustness against false positives.
+Fig. \cref{fig:grokking_flat} presents the results of the experiment. In the top row (with $L_2$ regularization enabled, $WD=1.0$), a perfect topological collapse is observed: the effective dimensionality $\hat{d}(t)$ collapses synchronously with the weight norm long before the Accuracy metric registers generalization. In the bottom row (without regularization, $WD=0.0$), grokking does not occur, the network enters perpetual memorization, and the MLE method correctly shows a persistently high dimensionality of the phase space. This proves the method's robustness against false positives.
 
 In summary, our framework successfully predicts grokking by capturing the topological collapse of the attractor dimension. However, it is evident that the weight norm is a non-generic (symmetric) observable: while it clearly reflects the dimensionality drop without relying on the validation set, it fails to convey the true algebraic dimension of the attractor. Furthermore, our predictor on this specific task does not surpass the early-warning accuracy of a predictor based directly on the weight norm and $\Ls_{val}$, which is attributed to the simplicity of the modular addition task itself.
 
@@ -321,7 +323,7 @@ While commutative modular addition is projected by the network into 2D circles (
 
 In the context of nonlinear dynamics, this means the true attractor dimension after grokking should collapse but plateau at a level no lower than 4 components. This provides a rigorous test for our method's ability to "blindly" measure the algebraic complexity of the task.
 
-As seen in Fig. \ref{fig:grokking_s5}, the proposed method successfully tackles this challenge. During the chaotic search phase, the dimensionality $E$ remains at a high level. Once the network forms a generalizing algebraic rule, the dimensionality predictably collapses. The control experiment without Weight Decay (bottom row) reaffirms that the dimensionality does not drop when grokking is absent.
+As seen in \cref{fig:grokking_s5}, the proposed method successfully tackles this challenge. During the chaotic search phase, the dimensionality $E$ remains at a high level. Once the network forms a generalizing algebraic rule, the dimensionality predictably collapses. The control experiment without Weight Decay (bottom row) reaffirms that the dimensionality does not drop when grokking is absent.
 
 \begin{figure}[H]
     \centering
@@ -391,7 +393,7 @@ Of particular interest is the dimensionality estimation using the validation los
 
 An analysis of the obtained plots allows us to draw the following theoretical conclusions.
 
-\paragraph{The nature of grokking.} The observed dimensionality collapse \ref{fig:grokking_s5_a} \ref{fig:grokking_val_loss_s5_a}  demonstrates that grokking is not merely \textbf{quantitative loss minimization}, but a qualitative structural reconfiguration of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
+\paragraph{The nature of grokking.} The observed dimensionality collapse \cref{fig:grokking_s5_a} \cref{fig:grokking_val_loss_s5_a}  demonstrates that grokking is not merely \textbf{quantitative loss minimization}, but a qualitative structural reconfiguration of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
 
 \paragraph{Optimizer metrics predictability.} The experiments demonstrated that delayed generalization can be diagnosed relying exclusively on internal network metrics (such as weight norm) \ref{fig:grokking_flat_a} \ref{fig:grokking_s5_a}. This suggests that the transition to generalization is an \textbf{intrinsic topological property} of the optimization trajectory and is not merely an artifact of a specific held-out validation set.
 
@@ -436,7 +438,7 @@ The primary conclusion of this study is that one-dimensional scalar series conta
 
 This appendix presents the results of initial experiments conducted on the modular addition task using full-batch gradient descent (Full-Batch GD). This experiment served as a baseline to confirm the initial hypothesis.
 
-As seen in Fig. \ref{fig:grokking_full_batch}, in this setting, we were able to capture the drop in the effective dimensionality (MLE ID) of the $\Ls_{train}$ series immediately preceding the jump in validation accuracy (from $E \approx 4-5$ to $E \approx 2.8$).
+As seen in \cref{fig:grokking_full_batch}, in this setting, we were able to capture the drop in the effective dimensionality (MLE ID) of the $\Ls_{train}$ series immediately preceding the jump in validation accuracy (from $E \approx 4-5$ to $E \approx 2.8$).
 
 However, this experiment revealed an important methodological problem. Under full-batch optimization, the correlation between the phase space dimension $E$ and the grokking effect became less evident. From a theoretical perspective, this is explained by the "degenerate observable" problem: in the absence of the stochastic noise of mini-batches, the optimizer's trajectory degenerates into a deterministic smooth curve, and the training loss drops almost to zero, depriving the MLE method of the variance necessary to estimate the true dimension of the space $d^*(t)$.
 

@@ -1,0 +1,56 @@
+{
+  "tau": 1,
+  "window_size": 400,
+  "stride": 40,
+  "max_E": 15,
+  "early_late_changes": {
+    "FNN": {
+      "raw": {
+        "early_mean": 4.166666666666667,
+        "late_mean": 3.8333333333333335,
+        "late_minus_early": -0.3333333333333335
+      },
+      "detrended": {
+        "early_mean": 4.5,
+        "late_mean": 3.6666666666666665,
+        "late_minus_early": -0.8333333333333335
+      }
+    },
+    "Cao": {
+      "raw": {
+        "early_mean": 2.0,
+        "late_mean": 3.0833333333333335,
+        "late_minus_early": 1.0833333333333335
+      },
+      "detrended": {
+        "early_mean": 5.583333333333333,
+        "late_mean": 6.083333333333333,
+        "late_minus_early": 0.5
+      }
+    },
+    "Simplex": {
+      "raw": {
+        "early_mean": 9.75,
+        "late_mean": 13.166666666666666,
+        "late_minus_early": 3.416666666666666
+      },
+      "detrended": {
+        "early_mean": 9.5,
+        "late_mean": 11.5,
+        "late_minus_early": 2.0
+      }
+    },
+    "MLE": {
+      "raw": {
+        "early_mean": 13.827690645014428,
+        "late_mean": 14.641687732401174,
+        "late_minus_early": 0.8139970873867455
+      },
+      "detrended": {
+        "early_mean": 14.343638557263786,
+        "late_mean": 15.089233710762288,
+        "late_minus_early": 0.7455951534985026
+      }
+    }
+  }
+}

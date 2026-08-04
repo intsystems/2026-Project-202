@@ -1,0 +1,10 @@
+__pycache__/
+.texmf-var/
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+missfont.log
+report_preview_*.png
+results/preview_*.png

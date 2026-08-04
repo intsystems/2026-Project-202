@@ -1,0 +1,10 @@
+{
+  "logging_step": 20,
+  "train_acc_095_stable5": 44160,
+  "val_acc_050_stable5": 43420,
+  "val_acc_090_stable5": 44040,
+  "val_acc_095_stable5": 44300,
+  "last_step": 44400,
+  "val090_minus_train095_steps": -120,
+  "points_after_val095": 6
+}

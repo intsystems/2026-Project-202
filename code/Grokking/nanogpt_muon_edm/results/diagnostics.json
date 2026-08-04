@@ -1,0 +1,46 @@
+{
+  "raw_id_change_early_to_late": 1.4362664673013068,
+  "detrended_id_change_early_to_late": 0.3972302802772667,
+  "raw_id_early_mean": 8.686885095654388,
+  "raw_id_late_mean": 10.123151562955695,
+  "detrended_id_early_mean": 10.127227425580271,
+  "detrended_id_late_mean": 10.524457705857538,
+  "legacy_id_early_mean": 12.881330463762836,
+  "legacy_id_late_mean": 14.769284078215648,
+  "tau_range": [
+    2,
+    6
+  ],
+  "robustness_id_ranges": {
+    "early": {
+      "mle_id_raw": [
+        7.442058937481483,
+        9.125141987195166
+      ],
+      "mle_id_detrended": [
+        7.719570167870107,
+        10.26171848295743
+      ]
+    },
+    "late": {
+      "mle_id_raw": [
+        9.404574856636472,
+        10.720212128218572
+      ],
+      "mle_id_detrended": [
+        9.512322435742218,
+        11.308276441077082
+      ]
+    },
+    "middle": {
+      "mle_id_raw": [
+        9.324162311346925,
+        10.458083080874761
+      ],
+      "mle_id_detrended": [
+        9.98546165409583,
+        11.14255298741711
+      ]
+    }
+  }
+}

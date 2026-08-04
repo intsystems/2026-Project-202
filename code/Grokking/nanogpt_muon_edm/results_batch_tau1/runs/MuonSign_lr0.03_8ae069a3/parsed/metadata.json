@@ -1,0 +1,38 @@
+{
+  "run_id": "MuonSign_lr0.03_8ae069a3",
+  "script": "train_gpt.py",
+  "optimizer": "MuonSign",
+  "family": "sign",
+  "lr": 0.03,
+  "momentum": 0.95,
+  "weight_decay": 0.0,
+  "lr_scaling": "unit-gain",
+  "adam_lr": 0.008,
+  "num_iterations": 2290,
+  "iteration_extension": 40,
+  "train_steps": 2330,
+  "val_loss_every": 250,
+  "world_size": 8,
+  "grad_accum_steps": 1,
+  "train_batch_size": 262144,
+  "tokens_per_step": 262144,
+  "torch": "2.10.0+cu128",
+  "runmeta_line": 2023,
+  "run_end": {
+    "run_id": "MuonSign_lr0.03_8ae069a3",
+    "optimizer": "MuonSign",
+    "lr": 0.03,
+    "diverged": false,
+    "last_step": 2330,
+    "train_time_ms": 143082.9,
+    "peak_memory_mib": 30160
+  },
+  "source_file": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\code\\Grokking\\nanogpt_muon_edm\\MuonSign_lr0.03_8ae069a3.txt",
+  "parsed_train_points": 2330,
+  "parsed_validation_points": 11,
+  "train_loss_normalization": {
+    "reduction": "rank-local token sum followed by a mean across ranks",
+    "local_tokens": 32768.0,
+    "formula": "train_loss_per_token = train_loss_sum / (tokens_per_step / world_size)"
+  }
+}
