@@ -4,6 +4,7 @@
     python reproduce_figures.py s5_wd1 mod_wd1  # a subset
     python reproduce_figures.py --list          # what is available
     python reproduce_figures.py --outdir out    # write elsewhere
+    python reproduce_figures.py --compare mle_mg  # overlay the MacKay-Ghahramani curve
 
 Nothing here trains a network: the logs in ``grokking_logs/`` are the input.
 """
@@ -17,6 +18,7 @@ import numpy as np
 
 import experiments
 from edm import (
+    ESTIMATORS,
     grokking_step,
     load_logs,
     plot_dimension_vs_accuracy,
@@ -26,74 +28,78 @@ from edm import (
 )
 
 
-def _run_panels(fig, df, outdir, seed, progress):
-    trace = sliding_dimension(
-        df,
-        target_metric=fig.metric,
-        method=fig.method,
-        tau_selector=fig.tau_selector,
-        window_size=fig.window_size,
-        step_size=fig.step_size,
-        include_last_window=fig.include_last_window,
-        seed=seed,
-        progress=progress,
-    )
-    written = plot_presentation_panels(trace, df, outdir, prefix=fig.key)
-    return trace, list(written.values())
+def _traces(fig, df, methods, seed, progress):
+    return [
+        sliding_dimension(
+            df,
+            target_metric=fig.metric,
+            method=method,
+            tau_selector=fig.tau_selector,
+            window_size=fig.window_size,
+            step_size=fig.step_size,
+            include_last_window=fig.include_last_window,
+            seed=seed,
+            progress=progress,
+        )
+        for method in methods
+    ]
 
 
-def _run_diagnostic(fig, df, outdir, seed, progress):
-    trace = sliding_dimension(
-        df,
-        target_metric=fig.metric,
-        method=fig.method,
-        tau_selector=fig.tau_selector,
-        window_size=fig.window_size,
-        step_size=fig.step_size,
-        include_last_window=fig.include_last_window,
-        seed=seed,
-        progress=progress,
-    )
+def _run_panels(fig, df, outdir, methods, seed, progress, annotate_source=True):
+    traces = _traces(fig, df, methods, seed, progress)
+    written = plot_presentation_panels(traces, df, outdir, prefix=fig.key,
+                                       annotate_source=annotate_source)
+    return traces, list(written.values())
+
+
+def _run_diagnostic(fig, df, outdir, methods, seed, progress, annotate_source=True):
+    traces = _traces(fig, df, methods, seed, progress)
     suffix = ".pdf" if fig.article_files and fig.article_files[0].endswith(".pdf") else ".png"
-    path = plot_dimension_vs_accuracy(trace, df, outdir / f"{fig.key}{suffix}")
-    return trace, [path]
+    path = plot_dimension_vs_accuracy(traces, df, outdir / f"{fig.key}{suffix}",
+                                      annotate_source=annotate_source)
+    return traces, [path]
 
 
-def _run_overview(fig, df, outdir, seed, progress):
+def _run_overview(fig, df, outdir, methods, seed, progress, annotate_source=True):
     path = plot_smoothed_accuracy(df, outdir / f"{fig.key}.png", window=fig.smooth_window)
-    return None, [path]
+    return [], [path]
 
 
 RUNNERS = {"panels": _run_panels, "diagnostic": _run_diagnostic, "overview": _run_overview}
 
 
-def run_figure(key, outdir=None, seed=0, progress=True):
-    """Produce one registered figure; returns ``(trace, [written paths])``."""
+def run_figure(key, outdir=None, compare=(), seed=0, progress=True, annotate_source=True):
+    """Produce one registered figure; returns ``(traces, [written paths])``.
+
+    ``compare`` names extra estimators to overlay on the same axes (e.g.
+    ``("mle_mg",)`` for the MacKay-Ghahramani correction).
+    """
     fig = experiments.get(key)
     outdir = experiments.FIGURE_DIR if outdir is None else Path(outdir)
+    methods = [fig.method, *compare]
 
     if not fig.csv_path.exists():
         raise FileNotFoundError(f"missing log file {fig.csv_path}")
 
     df = load_logs(fig.csv_path, required=fig.required_columns)
     started = time.perf_counter()
-    trace, paths = RUNNERS[fig.kind](fig, df, outdir, seed, progress)
+    traces, paths = RUNNERS[fig.kind](fig, df, outdir, methods, seed, progress, annotate_source)
     elapsed = time.perf_counter() - started
 
     grok = grokking_step(df)
     print(f"[{key}] {fig.description}")
     print(f"    log      : {fig.csv} ({len(df)} rows, steps {df['step'].min():.0f}..{df['step'].max():.0f})")
     print(f"    grokking : {'not reached' if grok is None else f'step {grok:.0f}'}")
-    if trace is not None:
+    for trace in traces:
         valid = trace.dimension[~np.isnan(trace.dimension)]
         print(
-            f"    E({fig.metric}) : {len(valid)} windows, "
+            f"    E({fig.metric}, {trace.label}) : {len(valid)} windows, "
             f"min={valid.min():.2f} max={valid.max():.2f} last={valid[-1]:.2f}"
         )
     for path in paths:
         print(f"    wrote    : {path}")
     print(f"    took     : {elapsed:.1f}s")
-    return trace, paths
+    return traces, paths
 
 
 def main(argv=None):
@@ -101,6 +107,15 @@ def main(argv=None):
     parser.add_argument("figures", nargs="*", help="figure keys to build (default: all)")
     parser.add_argument("--list", action="store_true", help="list the registered figures and exit")
     parser.add_argument("--outdir", default=None, help="output directory (default: ./figures)")
+    parser.add_argument(
+        "--compare", nargs="+", default=(), metavar="METHOD", choices=sorted(ESTIMATORS),
+        help="overlay extra estimators on the same axes (e.g. --compare mle_mg); "
+             "output defaults to ./figures/comparison so the article-faithful set is kept",
+    )
+    parser.add_argument(
+        "--article-exact", action="store_true",
+        help="omit the 'estimated from ...' annotation, reproducing the published "
+             "figures byte for byte")
     parser.add_argument("--seed", type=int, default=0, help="seed for the estimators' tie-breaking dither")
     parser.add_argument("--quiet", action="store_true", help="suppress per-window progress bars")
     args = parser.parse_args(argv)
@@ -117,9 +132,19 @@ def main(argv=None):
     if unknown:
         parser.error(f"unknown figure(s): {', '.join(unknown)}. Try --list.")
 
-    outdir = experiments.FIGURE_DIR if args.outdir is None else args.outdir
+    if args.outdir is not None:
+        outdir = Path(args.outdir)
+    elif args.compare:
+        outdir = experiments.FIGURE_DIR / "comparison"
+    else:
+        outdir = experiments.FIGURE_DIR
+
     for key in keys:
-        run_figure(key, outdir=outdir, seed=args.seed, progress=not args.quiet)
+        if args.compare and experiments.get(key).kind == "overview":
+            print(f"[{key}] no dimensionality curve to compare -- skipped")
+            continue
+        run_figure(key, outdir=outdir, compare=args.compare, seed=args.seed,
+                   progress=not args.quiet, annotate_source=not args.article_exact)
     return 0
 
 

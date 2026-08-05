@@ -15,7 +15,6 @@ from pathlib import Path
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 PAPER_STYLE = {
     "font.size": 14,
@@ -30,6 +29,49 @@ COLOR_TRAIN = "tab:blue"
 COLOR_VAL = "tab:red"
 COLOR_NORM = "tab:green"
 
+SOURCE_LABELS = {
+    "weight_norm": r"$\|w\|_2$",
+    "val_loss": r"$\mathcal{L}_{val}$",
+    "train_loss": r"$\mathcal{L}_{train}$",
+    "grad_norm": r"$\|g\|_2$",
+    "embed_grad_norm": r"$\|g_{embed}\|_2$",
+    "grad_cosine": r"$\cos(g_t, g_{t-1})$",
+    "val_acc": "val accuracy",
+    "train_acc": "train accuracy",
+}
+
+
+def source_label(metric):
+    """Human-readable name of the 1D series a dimension estimate was built from."""
+    return SOURCE_LABELS.get(metric, metric.replace("_", " "))
+
+
+def add_accuracy_axis(ax, df, alpha_train=0.35, alpha_val=0.55, linewidth=2):
+    """Twin axis carrying both accuracies -- val alone hides where memorization ended."""
+    twin = ax.twinx()
+    train, = twin.plot(df["step"], df["train_acc"], color=COLOR_TRAIN,
+                       alpha=alpha_train, linewidth=linewidth, label="Train Acc")
+    val, = twin.plot(df["step"], df["val_acc"], color=COLOR_VAL,
+                     alpha=alpha_val, linewidth=linewidth, label="Val Acc")
+    twin.set_ylabel("Accuracy", fontsize=12)
+    twin.set_ylim(-0.05, 1.05)
+    twin.grid(False)
+
+    # Accuracy is context, the dimension curve is the subject: keep the host axis
+    # (and its legend) on top of the twin instead of behind it.
+    ax.set_zorder(twin.get_zorder() + 1)
+    ax.patch.set_visible(False)
+    return twin, [train, val]
+
+
+E_SERIES_STYLES = (
+    {"color": COLOR_E, "linestyle": "-"},        # Levina-Bickel (the paper's estimator)
+    {"color": "#3b0f70", "linestyle": "-."},     # MacKay-Ghahramani pooling
+    {"color": "#00838f", "linestyle": ":"},      # + Theiler window (different assumption)
+    {"color": "#8c564b", "linestyle": (0, (5, 1, 1, 1, 1, 1))},
+)
+E_SERIES_MARKERS = ("o", "^", "s", "D")
+
 
 def _save(fig, path, dpi=300):
     path = Path(path)
@@ -39,17 +81,32 @@ def _save(fig, path, dpi=300):
     return path
 
 
-def _dimension_axis(ax, trace):
-    """Draw d_hat(t) on ``ax`` and scale the axis to the valid estimates."""
-    line, = ax.plot(
-        trace.steps, trace.dimension,
-        color=COLOR_E, linewidth=3, marker="o", markersize=4, label="$E$ (MLE)",
-    )
+def _as_traces(traces):
+    """Accept a single ``DimensionTrace`` or a sequence of them."""
+    return [traces] if hasattr(traces, "dimension") else list(traces)
+
+
+def _dimension_axis(ax, traces, linewidth=3, markersize=4, solo_label="$E$ (MLE)"):
+    """Draw every d_hat(t) on ``ax`` and scale the axis to span all of them.
+
+    A single trace keeps the paper's plain ``$E$ (MLE)`` label; several traces are
+    labelled by estimator so the corrections can be told apart.
+    """
+    traces = _as_traces(traces)
+    lines = []
+    for trace, style, marker in zip(traces, E_SERIES_STYLES, E_SERIES_MARKERS):
+        label = solo_label if len(traces) == 1 else f"$E$ ({trace.label})"
+        line, = ax.plot(
+            trace.steps, trace.dimension,
+            linewidth=linewidth, marker=marker, markersize=markersize, label=label, **style,
+        )
+        lines.append(line)
+
     ax.tick_params(axis="y", labelcolor=COLOR_E)
-    valid = trace.dimension[~np.isnan(trace.dimension)]
+    valid = np.concatenate([t.dimension[~np.isnan(t.dimension)] for t in traces])
     if len(valid):
         ax.set_ylim(valid.min() - 0.05, valid.max() + 0.05)
-    return line
+    return lines
 
 
 def _mark_grokking(ax, grok_step, y, text_x, label="Grokking", fontsize=12):
@@ -61,24 +118,24 @@ def _mark_grokking(ax, grok_step, y, text_x, label="Grokking", fontsize=12):
     )
 
 
-def plot_dimension_vs_accuracy(trace, df, save_path, title=None, grok_threshold=0.95):
+def plot_dimension_vs_accuracy(traces, df, save_path, title=None, grok_threshold=0.95,
+                               annotate_source=True):
     """Effective dimensionality against Train/Val accuracy (twin axes)."""
+    traces = _as_traces(traces)
     steps = df["step"].to_numpy(dtype=np.float64)
+    solo = traces[0] if len(traces) == 1 else None
+    legend_loc = "center left" if solo else "best"
 
     fig, ax1 = plt.subplots(figsize=(12, 6))
     ax1.set_xlabel("Optimization Steps", fontsize=12)
-    ax1.set_ylabel(
-        f"Effective Dimensionality $E$ ({trace.method})",
-        color=COLOR_E, fontsize=12, fontweight="bold",
+    ylabel = (f"Effective Dimensionality $E$ ({solo.method})" if solo
+              else "Effective Dimensionality $E$")
+    if annotate_source:
+        ylabel += "\nestimated from " + source_label(traces[0].metric)
+    ax1.set_ylabel(ylabel, color=COLOR_E, fontsize=12, fontweight="bold")
+    lines_E = _dimension_axis(
+        ax1, traces, linewidth=2.5, markersize=5, solo_label="Dimensionality $E$"
     )
-    line_E, = ax1.plot(
-        trace.steps, trace.dimension,
-        color=COLOR_E, linewidth=2.5, marker="o", markersize=5, label="Dimensionality $E$",
-    )
-    ax1.tick_params(axis="y", labelcolor=COLOR_E)
-    valid = trace.dimension[~np.isnan(trace.dimension)]
-    if len(valid):
-        ax1.set_ylim(valid.min() - 0.05, valid.max() + 0.05)
 
     ax2 = ax1.twinx()
     ax2.set_ylabel("Accuracy", color="black", fontsize=12)
@@ -98,14 +155,15 @@ def plot_dimension_vs_accuracy(trace, df, save_path, title=None, grok_threshold=
             label="Grokking Point", fontsize=11,
         )
 
-    lines = [line_E, line_tr, line_val]
-    ax1.legend(lines, [l.get_label() for l in lines], loc="center left", framealpha=0.9)
+    lines = [*lines_E, line_tr, line_val]
+    ax1.legend(lines, [l.get_label() for l in lines], loc=legend_loc, framealpha=0.9)
 
     if title is None:
+        methods = solo.method if solo else " vs. ".join(t.label for t in traces)
         title = (
             "Collapse of Dimensionality during Grokking\n"
-            f"Method: {trace.method} (Metric: {trace.metric}, "
-            f"W={trace.meta.get('window_size')})"
+            f"Method: {methods} (Metric: {traces[0].metric}, "
+            f"W={traces[0].meta.get('window_size')})"
         )
     ax1.set_title(title, fontsize=14)
     ax1.grid(True, linestyle="--", alpha=0.5)
@@ -113,26 +171,32 @@ def plot_dimension_vs_accuracy(trace, df, save_path, title=None, grok_threshold=
     return _save(fig, save_path)
 
 
-def plot_presentation_panels(trace, df, outdir, prefix, grok_threshold=0.95):
+def plot_presentation_panels(traces, df, outdir, prefix, grok_threshold=0.95,
+                             annotate_source=True):
     """Write ``<prefix>_acc.png``, ``<prefix>_loss.png`` and ``<prefix>_norm.png``.
 
-    Each panel shows the same d_hat(t) curve against a different macroscopic
+    Each panel shows the same d_hat(t) curve(s) against a different macroscopic
     observable, so the collapse can be read off against accuracy, loss and the
-    weight norm independently.
+    weight norm independently. Passing several traces overlays them on one axis.
     """
+    traces = _as_traces(traces)
     outdir = Path(outdir)
     steps = df["step"].to_numpy(dtype=np.float64)
     grok = df[df["val_acc"] >= grok_threshold]
     grok_step = None if grok.empty else float(grok["step"].iloc[0])
     text_x = None if grok_step is None else min(grok_step + 300, steps.max() - 2000)
+    legend_loc = "center left" if len(traces) == 1 else "best"
+    e_label = "Dimensionality $E$"
+    if annotate_source:
+        e_label += "\nestimated from " + source_label(traces[0].metric)
     written = {}
 
     with matplotlib.rc_context(PAPER_STYLE):
         # --- Dimensionality vs. loss ---
         fig, ax = plt.subplots(figsize=(9, 5))
         ax.set_xlabel("Optimization Steps", fontsize=14, fontweight="bold")
-        ax.set_ylabel("Dimensionality $E$", color=COLOR_E, fontsize=14, fontweight="bold")
-        line_E = _dimension_axis(ax, trace)
+        ax.set_ylabel(e_label, color=COLOR_E, fontsize=14, fontweight="bold")
+        lines_E = _dimension_axis(ax, traces)
 
         ax_loss = ax.twinx()
         ax_loss.set_ylabel("Loss", color="black", fontsize=14, fontweight="bold")
@@ -141,16 +205,16 @@ def plot_presentation_panels(trace, df, outdir, prefix, grok_threshold=0.95):
         ax.set_xlim(steps.min(), steps.max())
         if grok_step is not None:
             _mark_grokking(ax_loss, grok_step, df["val_loss"].max() * 0.5, text_x)
-        lines = [line_E, line_tr, line_val]
-        ax.legend(lines, [l.get_label() for l in lines], loc="center left", framealpha=0.9, fontsize=11)
+        lines = [*lines_E, line_tr, line_val]
+        ax.legend(lines, [l.get_label() for l in lines], loc=legend_loc, framealpha=0.9, fontsize=11)
         fig.tight_layout()
         written["loss"] = _save(fig, outdir / f"{prefix}_loss.png")
 
         # --- Dimensionality vs. weight norm ---
         fig, ax = plt.subplots(figsize=(9, 5))
         ax.set_xlabel("Optimization Steps", fontsize=14, fontweight="bold")
-        ax.set_ylabel("Dimensionality $E$", color=COLOR_E, fontsize=14, fontweight="bold")
-        line_E = _dimension_axis(ax, trace)
+        ax.set_ylabel(e_label, color=COLOR_E, fontsize=14, fontweight="bold")
+        lines_E = _dimension_axis(ax, traces)
 
         ax_norm = ax.twinx()
         ax_norm.set_ylabel("Weight Norm", color=COLOR_NORM, fontsize=14, fontweight="bold")
@@ -163,16 +227,16 @@ def plot_presentation_panels(trace, df, outdir, prefix, grok_threshold=0.95):
         ax.set_xlim(steps.min(), steps.max())
         if grok_step is not None:
             _mark_grokking(ax_norm, grok_step, (norm_max + norm_min) / 2, text_x)
-        lines = [line_E, line_norm]
-        ax.legend(lines, [l.get_label() for l in lines], loc="center left", framealpha=0.9, fontsize=11)
+        lines = [*lines_E, line_norm]
+        ax.legend(lines, [l.get_label() for l in lines], loc=legend_loc, framealpha=0.9, fontsize=11)
         fig.tight_layout()
         written["norm"] = _save(fig, outdir / f"{prefix}_norm.png")
 
         # --- Dimensionality vs. accuracy ---
         fig, ax = plt.subplots(figsize=(9, 5))
         ax.set_xlabel("Optimization Steps", fontsize=14, fontweight="bold")
-        ax.set_ylabel("Dimensionality $E$", color=COLOR_E, fontsize=14, fontweight="bold")
-        line_E = _dimension_axis(ax, trace)
+        ax.set_ylabel(e_label, color=COLOR_E, fontsize=14, fontweight="bold")
+        lines_E = _dimension_axis(ax, traces)
 
         ax_acc = ax.twinx()
         ax_acc.set_ylabel("Accuracy", color="black", fontsize=14, fontweight="bold")
@@ -182,8 +246,8 @@ def plot_presentation_panels(trace, df, outdir, prefix, grok_threshold=0.95):
         ax.set_xlim(steps.min(), steps.max())
         if grok_step is not None:
             _mark_grokking(ax_acc, grok_step, 0.2, text_x)
-        lines = [line_E, line_tr, line_val]
-        ax.legend(lines, [l.get_label() for l in lines], loc="center left", framealpha=0.9, fontsize=11)
+        lines = [*lines_E, line_tr, line_val]
+        ax.legend(lines, [l.get_label() for l in lines], loc=legend_loc, framealpha=0.9, fontsize=11)
         fig.tight_layout()
         written["acc"] = _save(fig, outdir / f"{prefix}_acc.png")
 

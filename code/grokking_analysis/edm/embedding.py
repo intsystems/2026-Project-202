@@ -67,6 +67,28 @@ def select_tau_fixed(series, value=1):
     return value
 
 
+def autocorrelation_time(series, threshold=1.0 / np.e, max_lag=None):
+    """First lag at which the autocorrelation drops below ``threshold``.
+
+    Used to size a Theiler window: samples closer together than this are
+    correlated by the continuity of the trajectory rather than by the geometry
+    of the attractor. Returns ``len(series)`` when the ACF never decays, which
+    is the honest answer for a monotone (fully oversampled) series.
+    """
+    x = np.asarray(series, dtype=np.float64)
+    n = len(x)
+    if n < 3 or np.std(x) < 1e-12:
+        return 0
+
+    max_lag = n - 1 if max_lag is None else min(max_lag, n - 1)
+    x = x - x.mean()
+    denom = np.dot(x, x)
+    for lag in range(1, max_lag + 1):
+        if np.dot(x[:-lag], x[lag:]) / denom < threshold:
+            return lag
+    return n
+
+
 TAU_SELECTORS = {
     "fixed": select_tau_fixed,
     "dmi": select_tau_dmi,
