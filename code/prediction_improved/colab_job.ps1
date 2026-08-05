@@ -72,7 +72,8 @@ if ($Sync) {
     New-Item -ItemType Directory -Force -Path "$stage\grokking_train\grok", "$stage\prediction_improved" | Out-Null
     Copy-Item "$repo\grokking_train\grok\*.py" "$stage\grokking_train\grok\"
     Copy-Item "$repo\grokking_train\runs.py" "$stage\grokking_train\"
-    Copy-Item "$here\probe.py", "$here\run_probe.py", "$here\verify_noninvasive.py" "$stage\prediction_improved\"
+    # All top-level modules: probe, run_probe, controls, verify_noninvasive, ...
+    Copy-Item "$here\*.py" "$stage\prediction_improved\"
 
     $zip = Join-Path $temp "edm_bundle.zip"
     if (Test-Path $zip) { Remove-Item $zip -Force }

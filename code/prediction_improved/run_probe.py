@@ -34,6 +34,11 @@ def main(argv=None):
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("run", help="a key from grokking_train/runs.py, e.g. mod_wd1")
     parser.add_argument("--outdir", default="probe_logs")
+    parser.add_argument("--tag", default=None,
+                        help="name the outputs '<tag>_train.csv' / '<tag>_probe.csv' "
+                             "instead of the run's own names. Required when several "
+                             "variants of one run key are trained (different seed, "
+                             "fraction, ...), since they otherwise overwrite each other.")
     parser.add_argument("--n-probe", type=int, default=256,
                         help="probe examples per source (default: 256)")
     parser.add_argument("--projections", type=int, default=16)
@@ -55,6 +60,12 @@ def main(argv=None):
     if args.device:
         overrides["device"] = args.device
 
+    name = args.tag or args.run
+    if args.tag:
+        # Keep the training log and the probe log named together, so the analysis can
+        # pair them by stem without consulting the registry.
+        overrides.setdefault("csv", f"{args.tag}_train.csv")
+
     config = runs.get(args.run)
     if overrides:
         config = config.with_overrides(overrides)
@@ -70,7 +81,7 @@ def main(argv=None):
         progress_every=args.progress_every,
     )
 
-    print(f"[{args.run}] {config.summary()}", flush=True)
+    print(f"[{name}] {config.summary()}", flush=True)
     print(f"    probe: {args.n_probe} inputs x {args.projections} projections "
           f"from {', '.join(probe.sources)}; snapshot every {args.snapshot_every} rows",
           flush=True)
@@ -79,8 +90,8 @@ def main(argv=None):
     df, path = train(config, outdir=outdir, progress=False, overwrite=args.force,
                      observer=probe)
 
-    probe_csv = outdir / f"{args.run}_probe.csv"
-    probe.save(probe_csv, npz_path=outdir / f"{args.run}_probe_snapshots.npz")
+    probe_csv = outdir / f"{name}_probe.csv"
+    probe.save(probe_csv, npz_path=outdir / f"{name}_probe_snapshots.npz")
     rows = len(probe.to_frame())
 
     grokked = df[df["val_acc"] >= 0.95]["step"]

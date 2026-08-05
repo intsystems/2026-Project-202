@@ -1,8 +1,10 @@
 # Early warning of grokking from function-space trajectories
 
-**TL;DR:** A sustained, causally-labelled rise in the non-straightness of normalized
-probe-logit trajectories, after memorization, is proposed as an early warning of
-grokking that — unlike weight-norm signals — cannot be explained by weight decay alone.
+**TL;DR — tested and falsified.** The proposed function-space signal separates
+weight-decay runs from WD=0 runs by three orders of magnitude, but the decisive control
+— weight decay held *fixed* while the model is denied enough data to generalize — shows
+**higher** sustained movement than the grokking run. The signal tracks regularization
+pressure, not impending generalization. Details in §7.
 
 **Abstract.** Grokking — generalization emerging long after training accuracy
 saturates — appears unpredictable from standard training metrics. Prior work, including
@@ -19,9 +21,15 @@ values on a straight trajectory and therefore needs no per-run calibration. The
 detector is a single causal rule: warn when the statistic rises above its floor,
 sustained, after memorization. Specificity is established against two null models
 (logit velocity; weight-norm roughness) and new controls, chiefly weight decay without
-grokking. Every experimental outcome, including full failure, has a defined reading
-about where grokking's hidden reorganization lives — in weight space or in function
-space.
+grokking. **Running that programme falsifies the method.** The proposed statistic does
+not discriminate at all — it saturates at its ceiling — while the null model, plain
+logit velocity, separates the runs by a factor of 360. That separation then fails its
+own control: with weight decay fixed at 1.0 and only the training data cut, runs that
+never generalize show *higher* sustained velocity than the run that grokks. Among
+weight-decay runs the statistic is, if anything, anti-correlated with generalization.
+We report this as a negative result, together with an incidental finding that the
+canonical 12 000-step grokking delay is seed-specific: two replicate seeds generalize
+after ~1 700 steps.
 
 ## 1. Problem
 
@@ -161,13 +169,53 @@ scale-invariant observable was built to expose. The grokking run stays **two to 
 orders of magnitude above it** and keeps materially reorganizing for 13 000 steps while
 validation accuracy sits near zero, then settles once generalization completes.
 
-**This is not yet a generalization predictor.** Both effects track weight decay, the
-confound of §2, and `mod_wd0` cannot separate the two hypotheses. The WD>0-that-never-
-generalizes run of §6 remains the decisive experiment; if it also shows sustained
-velocity, this detects regularization pressure and the negative result stands.
-
-Note also that N0 — the intended *null model* — is the statistic that works, exactly the
+Note that N0 — the intended *null model* — is the statistic that works, exactly the
 pattern the audit found for the weight norm. The geometry layer has not earned its place.
+
+### The decisive control: the signal tracks weight decay
+
+`controls.py` runs the suite of §6. `lowdata15` / `lowdata20` hold weight decay at 1.0
+and cut only the training fraction (0.30 → 0.15 / 0.20), so they memorize and never
+generalize. Median velocity over the second half of training:
+
+| run | WD | generalizes | vel(late) |
+| --- | --- | --- | --- |
+| `lowdata20` | 1.0 | **no** | 7.26e-02 |
+| `lowdata15` | 1.0 | **no** | 5.30e-02 |
+| `nogap` | 1.0 | yes, at step 780 | 2.34e-02 |
+| `grok_seed2` | 1.0 | yes, at 3140 | 1.94e-02 |
+| `grok` | 1.0 | yes, at 13700 | 1.84e-02 |
+| `grok_seed1` | 1.0 | yes, at 2990 | 1.38e-02 |
+| `wd0` | 0.0 | no | 1.53e-04 |
+
+**The runs that never generalize sit at the top.** The split is by weight decay — every
+WD=1.0 run is within a factor of 5 of every other, and the only run three orders of
+magnitude below is the one with WD=0. So the 360× of the first experiment was a
+weight-decay effect throughout: H2, not H1.
+
+The time course rules out rescuing it with a trend rule. `grok` *decays* 1.72e-01 →
+1.38e-02 (12×) as it generalizes, while `lowdata15` stays nearly flat
+(7.63e-02 → 5.20e-02, 1.5×). Any detector thresholding on sustained movement fires
+*harder* on the runs that never generalize.
+
+**Conclusion.** Normalized probe-logit velocity is a measure of how much weight decay is
+reorganizing the function, not an early warning of generalization. This is the outcome
+§6 anticipated and assigned a reading, and it now applies: a correction to the
+weight-norm story rather than a replacement for it.
+
+### Incidental: the 12 000-step delay is seed-specific
+
+Same configuration, different seeds: `grok` (seed 42) memorizes at 1700 and generalizes
+at 13700, a gap of 12 000 steps; `grok_seed1` and `grok_seed2` both generalize after a
+gap of **1 740**. The dramatic delay the article is built on is one draw, not a property
+of the configuration. Since the seed sets both the train/val split and the
+initialisation, the split is the likelier cause at this fraction — worth isolating.
+
+### Reproducibility
+
+`grok` and the earlier `mod_wd1` are the same config and seed run on different VMs on
+different days. Their probe series agree to `max|diff| = 0.000e+00`, projections and
+velocity alike.
 
 ## 8. Risks
 
@@ -201,14 +249,19 @@ rather than the draft's mismatched 0.99 / 0.95.
 
 ## 10. Open questions
 
-1. **Does the WD>0/no-grokking control fire?** The decisive one — it decides whether §7's
-   separation is about generalization or about weight decay.
-2. Answered in part by §7: the projections show sustained-then-decaying movement, not the
-   weight norm's rise-then-collapse. Open: is the *decay through grokking* sharp enough
-   at finer logging to time the transition, rather than only to flag "still moving"?
-3. Does any geometry statistic add power over plain velocity once the sampling noise is
-   handled (longer windows, or logging every step)? So far it does not.
-4. How few probe inputs and projections suffice before the signal degrades?
+Answered: the WD>0/no-grokking control fires *harder* than the grokking run (§7), so the
+function-space signal is about weight decay. What remains open is mostly elsewhere:
+
+1. **Is the seed-specific delay the split or the initialisation?** Re-run with the split
+   fixed and only the init varied. This bears directly on the article, whose headline
+   run is a single unusually-delayed seed.
+2. Is there *any* training-side observable that separates WD>0-that-groks from
+   WD>0-that-never-groks? Nothing tried here does — weight norm, roughness, dimension,
+   or logit velocity. That question, not the estimator, is the real one.
+3. Does normalized-logit velocity predict something else worth predicting — the *end* of
+   reorganization, say, or how much capacity weight decay is still reclaiming?
+4. How few probe inputs and projections suffice before the signal degrades? Now only
+   relevant if (2) finds something.
 
 ## 11. Reuse
 
