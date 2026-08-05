@@ -5,9 +5,10 @@ Everything is plain `.py`: one importable package (`edm/`), one figure registry
 (`experiments.py`) and one CLI (`reproduce_figures.py`) that regenerates the figures of
 [`icomp_article/grokking_en.tex`](../../icomp_article/grokking_en.tex) from the raw training logs.
 
-Nothing here trains a network — the CSV logs in `grokking_logs/` are the input. Training
-code still lives in `../Grokking/` (`grokking_model.py`, `grokking_utils.py` and the
-`generator_logs_*.ipynb` notebooks).
+Nothing here trains a network — the CSV logs in `grokking_logs/` are the input. They are
+produced by [`../grokking_train/`](../grokking_train/), whose run registry uses the same keys
+as `experiments.py` (`python train.py --article --outdir ../grokking_analysis/grokking_logs`).
+The original notebook versions of both halves are kept in `../Grokking/`.
 
 ## Quick start
 
