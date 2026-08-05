@@ -69,11 +69,14 @@ New-Item -ItemType Directory -Force -Path $temp | Out-Null
 if ($Sync) {
     Write-Host "==> bundling code" -ForegroundColor Cyan
     $stage = Join-Path $temp "bundle"
-    New-Item -ItemType Directory -Force -Path "$stage\grokking_train\grok", "$stage\prediction_improved" | Out-Null
+    New-Item -ItemType Directory -Force -Path "$stage\grokking_train\grok", "$stage\prediction_improved", "$stage\edm_validation" | Out-Null
     Copy-Item "$repo\grokking_train\grok\*.py" "$stage\grokking_train\grok\"
     Copy-Item "$repo\grokking_train\runs.py" "$stage\grokking_train\"
     # All top-level modules: probe, run_probe, controls, verify_noninvasive, ...
     Copy-Item "$here\*.py" "$stage\prediction_improved\"
+    if (Test-Path "$repo\edm_validation") {
+        Copy-Item "$repo\edm_validation\*.py" "$stage\edm_validation\"
+    }
 
     $zip = Join-Path $temp "edm_bundle.zip"
     if (Test-Path $zip) { Remove-Item $zip -Force }

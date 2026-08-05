@@ -65,7 +65,8 @@ def _batches(task, config):
             yield batch
 
 
-def train(config, outdir=None, progress=True, overwrite=False, observer=None):
+def train(config, outdir=None, progress=True, overwrite=False, observer=None,
+          batch_hook=None):
     """Run ``config`` and return ``(DataFrame, written_path_or_None)``.
 
     ``outdir`` is where the CSV lands (``config.csv_name``); pass ``None`` to keep
@@ -80,6 +81,12 @@ def train(config, outdir=None, progress=True, overwrite=False, observer=None):
     train/val split, the weight initialisation and the mini-batch order all share
     that one stream (see ``tasks``' module docstring), so an extra draw silently
     changes the run.  ``observer=None`` leaves this function's behaviour untouched.
+
+    ``batch_hook(step, batch_x, batch_y) -> (batch_x, batch_y)`` may transform each
+    training batch before the optimizer sees it.  Unlike ``observer`` this is *meant* to
+    change the run -- it exists to inject a known external driver, so that a method which
+    claims to recover drivers from 1-D logs can be tested against ground truth (see
+    ``../edm_validation/inject.py``).  ``None`` leaves the loop untouched.
     """
     path = None
     if outdir is not None:
@@ -117,6 +124,8 @@ def train(config, outdir=None, progress=True, overwrite=False, observer=None):
 
         for step in range(config.max_steps):
             batch_x, batch_y = next(stream)
+            if batch_hook is not None:
+                batch_x, batch_y = batch_hook(step, batch_x, batch_y)
 
             model.train()
             optimizer.zero_grad()

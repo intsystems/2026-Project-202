@@ -214,3 +214,46 @@ strongly periodic driver.
 that applies (Stark, forced systems — true by construction in these runs), ground truth,
 negative controls, and a surrogate-calibrated null. It is the "does something good and is
 theory-motivated" result the campaign was after, and it is *not* about grokking.
+
+### 06:30 — Phase 4: specificity check on our own runs
+
+`phase4_grokking_logs.py`. Cross mapping *between metrics of the same run* (no injected
+driver anywhere). **11 of 16 directed pairs fire**, including 4/4 on `mod_wd0` and 4/4 on
+`lowdata15`, with rho up to 1.000.
+
+This is not a contradiction of Phase 3 and not a bug: `train_loss`, `val_loss` and
+`weight_norm` are three observations of one system, so under Takens each should predict
+the others. But it does mean **CCM between a run's own metrics is not discriminative** —
+it fires nearly everywhere, so no conclusion about grokking can rest on it. Recorded so
+nobody later mistakes a rho of 0.99 between two of our own columns for a discovery.
+
+The shift null earns its place here: on `mod_wd1`, `weight_norm xmap train_loss` gives
+p=0.025 under IAAFT but **p=0.850** under a circular shift. IAAFT alone would have
+over-reported. Requiring both is the right default.
+
+### 07:00 — Phase 5 (running): does Phase 3 transfer to our own architecture?
+
+Phase 3 used ResNet-18 / CIFAR-10 logs from someone else's script. `inject.py` +
+`phase5_inject_run.py` repeat the design here: a 1-layer transformer on modular addition,
+with `logistic` / `sinusoid` / `iid` drivers that corrupt a driven fraction of each
+batch's labels, and a `ghost` that is logged identically but returns the labels untouched.
+`grok.loop.train` gained an optional `batch_hook` for this (default `None`, so every
+existing run is unaffected).
+
+Smoke test confirms the control is a true no-op: over 400 steps the ghost run ends at
+`||w||_2 = 43.98`, exactly the unpoisoned baseline, while the logistic run is pulled to
+38.71 — same seed, same everything else.
+
+Analysis is `phase5_inject_ccm.py`, pending the runs.
+
+### 07:10 — split 42 is not special (sweep, resumed on GPU)
+
+The article's own split, run against fresh initialisations: gap **3420** (init 0) and
+**2050** (init 1), both squarely inside the 1530–4630 band from splits 0–3. So the
+canonical 12 000-step delay is not a property of that split; it needs the particular
+split *and* the particular initialisation, and it sits far outside the distribution of
+everything else measured. The remaining cells are running.
+
+**Operational note, again.** The CPU session running the earlier split-42 attempt was
+reclaimed and its results were lost, because that job predated the incremental-download
+watcher. Everything since writes `summary.csv` back to the repo every four minutes.
