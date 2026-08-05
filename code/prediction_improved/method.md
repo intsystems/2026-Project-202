@@ -82,7 +82,8 @@ straight series → floor → silence.
 
 > **Polarity corrected by measurement (§7).** The observed signal is not a rise. Logit
 > velocity is *high and sustained* through the plateau and *decays* through
-> generalization, monotonically — so the rule is "the function is still moving long
+> generalization — steadily, though not strictly monotonically — so the rule is
+> "the function is still moving long
 > after memorization", not "something spikes just before grokking". The argument above
 > survives in one respect that matters: a frozen or merely rescaling model still gives
 > silence, which is exactly what the control does.
@@ -153,11 +154,12 @@ per-example movement of the normalized logits:
 | 13k–14k (grokking) | 5.0e-02 | 1.7e-04 |
 | 15k–20k | 1.4e-02 | 1.2e-04 |
 
-Two readings. The control's function **freezes within ~2000 steps** — three orders of
-magnitude — and only rescales thereafter, which is precisely what the scale-invariant
-observable was built to expose. The grokking run keeps **materially reorganizing for
-13 000 steps** while validation accuracy sits near zero, then settles once generalization
-completes.
+Two readings. The control's function **decays steadily towards frozen** once it has
+memorized — 7× below its initial velocity by step 2000, two orders of magnitude by 5000,
+three by the end of the run — approaching a map that only rescales, which is what the
+scale-invariant observable was built to expose. The grokking run stays **two to three
+orders of magnitude above it** and keeps materially reorganizing for 13 000 steps while
+validation accuracy sits near zero, then settles once generalization completes.
 
 **This is not yet a generalization predictor.** Both effects track weight decay, the
 confound of §2, and `mod_wd0` cannot separate the two hypotheses. The WD>0-that-never-
