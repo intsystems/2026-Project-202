@@ -93,6 +93,11 @@ def train(config, outdir=None, progress=True, overwrite=False, observer=None):
 
     with default_dtype(config.dtype):
         task = tasks.from_config(config, device)
+        if config.init_seed is not None:
+            # Restart the stream between the split and the initialisation, so the two
+            # can be varied independently.  A no-op unless the field is set; see
+            # RunConfig.init_seed.
+            torch.manual_seed(config.init_seed)
         model = models.build(config, task.vocab_size, n_ctx=task.n_ctx).to(device)
         optimizer = build_optimizer(config, model)
         criterion = nn.CrossEntropyLoss()

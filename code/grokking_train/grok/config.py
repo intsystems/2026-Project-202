@@ -75,6 +75,22 @@ class RunConfig:
 
     # --- reproducibility ----------------------------------------------------
     seed: Optional[int] = 42            # None -> do not touch the global torch RNG
+    init_seed: Optional[int] = None
+    """Reseed the global torch RNG *after* the task is built, before the model is.
+
+    ``seed`` alone cannot separate the two things it controls: ``tasks`` seeds the
+    stream and draws the train/val split from it, and the model initialisation then
+    continues that same stream, so changing ``seed`` changes *which examples are in
+    the training set* and *what the initial weights are* together.
+
+    Setting ``init_seed`` restarts the stream between those two steps, making the
+    initialisation (and the mini-batch order that follows it) depend only on
+    ``init_seed`` and the split only on ``seed``. That is what lets a run be varied
+    along one axis at a time -- see ``../prediction_improved/sweep.py``.
+
+    ``None`` (the default) leaves the stream alone, so every existing run is
+    unaffected, bit for bit.
+    """
     dtype: str = "float64"              # "float32" | "float64"
     device: str = "auto"                # "auto" | "cpu" | "cuda:0" | ...
 
@@ -174,6 +190,7 @@ _CASTS = {
     "batch_size": _optional(int),
     "val_batch_size": _optional(int),
     "seed": _optional(int),
+    "init_seed": _optional(int),
     "betas": _tuple_of(float),
     "columns": _tuple_of(lambda s: str(s).strip()),
     "double_step": _to_bool,
