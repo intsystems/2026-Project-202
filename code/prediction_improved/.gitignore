@@ -1,0 +1,10 @@
+# Probe snapshots: ~21 MB per run of full normalized-logit matrices. They are
+# regenerable (`colab_job.ps1 -Sync -Run <key>`) and only needed for offline
+# statistics the per-step CSV cannot express, so they stay out of the repo.
+*.npz
+
+# Fetched archive, unpacked in place by colab_job.ps1 -Fetch
+results/outputs.tar.gz
+
+__pycache__/
+*.pyc

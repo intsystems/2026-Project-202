@@ -65,12 +65,21 @@ def _batches(task, config):
             yield batch
 
 
-def train(config, outdir=None, progress=True, overwrite=False):
+def train(config, outdir=None, progress=True, overwrite=False, observer=None):
     """Run ``config`` and return ``(DataFrame, written_path_or_None)``.
 
     ``outdir`` is where the CSV lands (``config.csv_name``); pass ``None`` to keep
     the log in memory.  An existing file is left alone unless ``overwrite=True`` --
     these runs take minutes to hours, so silently clobbering one is expensive.
+
+    ``observer`` is an optional side-channel recorder for observables that do not
+    belong in the CSV (see ``../prediction_improved/probe.py``).  It is offered
+    three hooks, all optional: ``on_start(task, model, config, device)`` once before
+    the loop, ``on_log(step, model)`` at every logged step, and ``on_finish()`` at
+    the end.  It must not mutate the model or draw from the global torch RNG: the
+    train/val split, the weight initialisation and the mini-batch order all share
+    that one stream (see ``tasks``' module docstring), so an extra draw silently
+    changes the run.  ``observer=None`` leaves this function's behaviour untouched.
     """
     path = None
     if outdir is not None:
@@ -93,6 +102,9 @@ def train(config, outdir=None, progress=True, overwrite=False):
         val_y = task.Y_val if config.val_batch_size is None else task.Y_val[:config.val_batch_size]
         if len(val_x) == 0:
             raise ValueError("empty validation split -- lower `fraction`")
+
+        if observer is not None and hasattr(observer, "on_start"):
+            observer.on_start(task=task, model=model, config=config, device=device)
 
         stream = _batches(task, config)
         bar = tqdm(total=config.max_steps, desc=config.key, disable=not progress)
@@ -118,6 +130,8 @@ def train(config, outdir=None, progress=True, overwrite=False):
                                val_x, val_y, probe)
                 for name in columns:
                     logs[name].append(row[name])
+                if observer is not None and hasattr(observer, "on_log"):
+                    observer.on_log(step, model)      # model is already in eval mode
                 if progress and step % (config.log_every * 50) == 0:
                     bar.set_postfix(
                         loss=f"{row.get('train_loss', float('nan')):.3f}",
@@ -127,6 +141,9 @@ def train(config, outdir=None, progress=True, overwrite=False):
             bar.update(1)
 
         bar.close()
+
+        if observer is not None and hasattr(observer, "on_finish"):
+            observer.on_finish()
 
     df = pd.DataFrame(logs, columns=columns)
     elapsed = time.perf_counter() - started
