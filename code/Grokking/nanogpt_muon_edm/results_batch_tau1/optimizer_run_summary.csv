@@ -1,0 +1,9 @@
+run_id,optimizer,family,lr,diverged,final_val_loss,best_val_loss,train_time_ms,peak_memory_mib
+Muon_lr0.06_5db64adc,Muon,lmo,0.06,False,3.2785,3.2785,143818.4,29098
+MuonUSign_lr0.06_d9721bde,MuonUSign,lmo,0.06,False,3.2959,3.2959,143633.0,28882
+EF21-MuonUSign_lr0.06_2717df49,EF21-MuonUSign,lmo,0.06,False,3.3203,3.3203,144538.4,28882
+EF21-MuonSign_lr0.06_e6770317,EF21-MuonSign,lmo,0.06,False,5.5198,4.1967,144599.3,28992
+EF21-SignMuon_lr0.06_bb803ec4,EF21-SignMuon,lmo,0.06,False,3.286,3.286,144468.8,28882
+SignMuon_lr0.03_19f64fe1,SignMuon,sign,0.03,False,3.2881,3.2881,144339.6,29314
+MuonSign_lr0.03_8ae069a3,MuonSign,sign,0.03,False,3.3249,3.3249,143082.9,30160
+SignSGD_lr0.03_1f0db2d4,SignSGD,sign,0.03,False,3.4049,3.4049,143246.3,28882

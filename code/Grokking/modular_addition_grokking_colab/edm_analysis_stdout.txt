@@ -1,0 +1,39 @@
+{
+  "rows": 1024,
+  "first_step": 1,
+  "last_step": 51150,
+  "logging_stride_steps": 50,
+  "weight_decay": 0.5,
+  "stable_memorization_flag_step": 13650,
+  "grok_flag_step": 46150,
+  "train_acc_095_stable5_onset": 7750,
+  "train_acc_099_stable5_onset": 13450,
+  "val_acc_050_stable5_onset": 44700,
+  "val_acc_090_stable5_onset": 45700,
+  "val_acc_095_stable5_onset": 45950,
+  "val_acc_099_stable5_onset": 46650,
+  "final_train_acc": 1.0,
+  "final_val_acc": 1.0,
+  "final_train_loss": 0.0001951052399817,
+  "final_val_loss": 0.0004744167090393,
+  "elapsed_seconds": 725.14586186409,
+  "flag_gap_steps": 32500,
+  "threshold_gap_steps": 38200
+}
+       metric            phase    series  windows      FNN      Cao   Simplex        LB        MG
+   train_loss          fitting detrended        8 3.750000 5.500000  1.875000  8.664642  5.974994
+   train_loss memorization_gap detrended       45 4.022222 5.644444 11.533333 13.123008 10.139732
+   train_loss       transition detrended       10 4.000000 7.300000  8.700000 14.328804  9.974478
+   train_loss        post_grok detrended        0      NaN      NaN       NaN       NaN       NaN
+     val_loss          fitting detrended        8 4.250000 5.750000  1.625000  8.973942  6.124515
+     val_loss memorization_gap detrended       45 3.977778 5.377778  3.155556  9.000237  6.599604
+     val_loss       transition detrended       10 3.500000 5.100000  1.600000  3.961725  2.769678
+     val_loss        post_grok detrended        0      NaN      NaN       NaN       NaN       NaN
+  weight_norm          fitting detrended        8 3.375000 5.250000  1.000000  3.733919  2.707326
+  weight_norm memorization_gap detrended       45 4.288889 5.800000  3.822222 10.121129  7.195932
+  weight_norm       transition detrended       10 4.000000 5.500000  1.400000  4.766472  3.273659
+  weight_norm        post_grok detrended        0      NaN      NaN       NaN       NaN       NaN
+gradient_norm          fitting detrended        8 9.125000 6.125000  8.875000  6.316165  4.412276
+gradient_norm memorization_gap detrended       45 5.644444 5.444444 11.355556  6.787199  4.882234
+gradient_norm       transition detrended       10 4.200000 7.600000 13.300000  8.337033  5.979598
+gradient_norm        post_grok detrended        0      NaN      NaN       NaN       NaN       NaN

@@ -1,0 +1,128 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T2A,T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\geometry{margin=20mm}
+\graphicspath{{results_tau1/}{results/}}
+\setlength{\parindent}{1.1em}
+\setlength{\parskip}{0.2em}
+\newcommand{\code}[1]{{\fontencoding{T1}\selectfont\ttfamily #1}}
+
+\title{EDM-анализ Muon/nanoGPT: фиксированная задержка $\tau=1$ и четыре метода}
+\author{Технический отчёт по \code{message (2).txt}}
+\date{30 июля 2026 г.}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Для плотного ряда training loss одного запуска Muon/nanoGPT проведён
+скользящий анализ с фиксированной задержкой $\tau=1$. Использованы все четыре
+метода размерностного анализа из существующего проекта: False Nearest
+Neighbors, Cao, simplex projection и Levina--Bickel MLE. Методы не дают
+согласованного свидетельства позднего dimensionality collapse: FNN слабо
+снижается, в то время как Cao, simplex и MLE в среднем растут или остаются
+высокими. Результат является negative/control case, а не свидетельством
+grokking-перехода.
+\end{abstract}
+
+\section{Данные и режим расчёта}
+
+Из \code{icomp\_article/message (2).txt} извлечён один завершённый запуск
+\code{Muon\_lr0.06\_5db64adc}: 2330 последовательных значений training loss и
+11 validation-loss точек. Training loss в исходном логе является усреднённой
+между GPU суммой loss локального батча; для анализа он нормализован к token-level
+cross-entropy делением на 32768. Validation loss используется лишь как внешний
+индикатор: 11 точек недостаточно для корректной фазовой реконструкции.
+
+Во всех окнах длиной 400 шагов со сдвигом 40 использована фиксированная
+задержка $\tau=1$ и максимальная размерность embedding $E_{max}=15$. Методы
+вызываются непосредственно из \code{code/Grokking/search\_for\_optimal\_parameters.py}
+с настройками существующего pipeline: FNN выбирает первое $E$ с долей false
+neighbours ниже 1\%, Cao использует первое $|\Delta E_1|<0.05$, simplex выбирает
+минимальный one-step out-of-sample RMSE, а MLE использует $k=5$ соседей.
+
+Пунктирная вертикаль на рисунках --- начало learning-rate cooldown (шаг около
+1260), точечная --- начало 40-шагового extension (2290).
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{01_training_overview.pdf}
+\caption{Training и validation loss исходного запуска вместе с learning-rate schedule.}
+\end{figure}
+
+\section{Четыре метода при $\tau=1$}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{tau1_all_methods_raw.pdf}
+\caption{Скользящие оценки четырьмя legacy-методами на исходном train loss.}
+\end{figure}
+
+FNN даёт значения около 3--7 и слабое позднее снижение. Cao имеет постоянное
+$E=2$ до cooldown, затем преимущественно принимает значения 6--8 и возвращается
+к 2 в последних окнах. Simplex имеет очень неустойчивый аргумент минимума RMSE
+и часто выбирает верхнюю границу $E=15$. MLE непрерывно растёт с ранних значений
+около 11--13 к поздним 14--16.
+
+\begin{table}[ht]
+\centering
+\caption{Средние первых и последних 12 скользящих окон. Изменение равно late минус early.}
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+& \multicolumn{3}{c}{Raw loss} & \multicolumn{3}{c}{Detrended loss} \\
+Метод & Early & Late & $\Delta$ & Early & Late & $\Delta$ \\
+\midrule
+FNN & 4.42 & 4.17 & -0.25 & 4.17 & 3.67 & -0.50 \\
+Cao & 2.00 & 4.25 & +2.25 & 5.58 & 6.33 & +0.75 \\
+Simplex & 10.08 & 13.17 & +3.08 & 10.00 & 12.00 & +2.00 \\
+MLE ID & 12.88 & 14.77 & +1.89 & 14.39 & 15.30 & +0.91 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{tau1_raw_vs_detrended.pdf}
+\caption{Сравнение исходного и локально detrended loss. Удаление тренда не
+создаёт согласованного падения оценок.}
+\end{figure}
+
+\section{Критерии выбора размерности}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{tau1_method_criteria.pdf}
+\caption{Критериальные кривые FNN, Cao и simplex в representative early, middle
+и late окнах. MLE не выбирает дискретное $E$: он оценивает локальную ID в
+пространстве размерности 15.}
+\end{figure}
+
+FNN --- пороговая дискретная эвристика, поэтому снижение на 0.25--0.50 не
+является сильным структурным эффектом. В поздних окнах процент false neighbours
+не достигает устойчивого нуля при малых $E$. Cao чувствителен к своему
+plateau-правилу, что видно по скачку от 2 к 6--8 в cooldown. У simplex минимум
+RMSE часто лежит на границе допустимого диапазона, следовательно, его значения
+нельзя читать как устойчивую оценку истинной размерности. MLE не демонстрирует
+падения ни для raw, ни для detrended ряда.
+
+\section{Вывод}
+
+Четыре метода отвечают на разные операциональные вопросы, поэтому их
+абсолютные значения сравнивать напрямую нельзя. Однако для гипотезы о
+dimensionality collapse важно согласованное направление, а его здесь нет: один
+пороговый метод слегка снижается, три других не подтверждают этот сигнал.
+
+Следовательно, этот одиночный Muon/nanoGPT run следует использовать как
+negative/control case: непрерывное успешное обучение LLM не обязано порождать
+универсальный поздний коллапс оценок размерности, построенных только по
+одномерному training loss. Для сильного сравнительного вывода необходимы
+повторы по seed и логи остальных оптимизаторов того же benchmark.
+
+\end{document}
