@@ -307,6 +307,55 @@ in 1290–5600, against the canonical run's 12 000.** Thirty independent (split,
 combinations of the article's own configuration, and not one reproduces its headline
 delay — including five that use its own split.
 
+### 09:40 — Phases 6-7: a third configuration-tracker, caught in 40 minutes
+
+**The idea.** Everything that failed in this project failed as a statistic on a *single*
+transient series. Cross mapping asks a two-series question — do these observables share a
+manifold? — which is well-posed on a transient and is what Takens actually licenses. So:
+do `train_loss` and `weight_norm`, **both training-side, no validation data**, share a
+manifold, and does it change at grokking? That is the article's ambition with a validated
+tool and the property the article claimed but never had.
+
+**Phase 6 looked like a hit.** Median coupling z over 7 runs, no overlap between families:
+
+| delayed transition | z | no delayed transition | z |
+| --- | --- | --- | --- |
+| grok | 1.15 | nogap | 2.87 |
+| grok_seed1 | 1.05 | lowdata20 | 3.00 |
+| grok_seed2 | 1.00 | lowdata15 | 3.40 |
+| | | wd0 | 5.61 |
+
+Two reasons not to believe it, both fatal:
+
+* **No within-run signal.** If it tracked the transition it should move at `t_gen`. In
+  `grok` the series runs `+2.7 +3.4 +1.5 -1.4 … +1.3 | +2.3 +1.8 +1.8` — the post-`t_gen`
+  values are unremarkable against early windows reaching +3.4 — and `grok_seed1` shows
+  nothing. The "before 0.31 -> after 1.56" summary I first wrote was **averaging across
+  runs with different `t_gen`**, which manufactures a step present in no individual run.
+* **The between-run split coincides with configuration**: low = {fraction 0.3, wd 1},
+  high = {fraction != 0.3} ∪ {wd 0}. Precisely the confound that killed the weight-norm
+  and the velocity signals.
+
+**Phase 7 settles it.** Eight runs of *one* configuration (`mod_wd1`), varying only the
+split and init seeds, which the sweep showed give gaps of 1290-5600. Configuration is
+fixed by construction, so a coupling-vs-gap correlation could not be explained by data
+quantity or regularization. The reading was pre-registered in the docstring before running.
+
+```
+corr(gap, z_median)  : pearson -0.090  spearman +0.214   (n=8)
+corr(gap, z_plateau) : pearson +0.431  spearman +0.643   (n=7)
+```
+
+> **Negative.** The prediction was a strong *negative* correlation. What came out is
+> nothing, and — for the plateau windows — a weak *positive* trend, the wrong sign, and
+> not significant at n=7 (Spearman 0.64, p~0.12). Within one configuration the coupling
+> spans only 0.80-2.55 against the 1.0-5.6 spread across configurations. **The Phase 6
+> separation was configuration, not transition.** Third instance of the same confound.
+
+What is worth keeping is the *procedure*: hold the configuration fixed, vary only seeds,
+pre-register the sign. That test costs about forty minutes and would have killed both
+earlier signals before they were written up. It should gate every future candidate.
+
 ## Where this leaves the project
 
 * **A defensible EDM result exists**, and it is about *externally driven* training rather
