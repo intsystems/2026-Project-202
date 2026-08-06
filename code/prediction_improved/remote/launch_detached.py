@@ -22,18 +22,30 @@ CMD_FILE = Path("/content/job_cmd.txt")
 LOG = Path("/content/job.log")
 PIDFILE = Path("/content/job.pid")
 
-if PIDFILE.exists():
-    pid = PIDFILE.read_text().strip()
-    if pid.isdigit() and Path(f"/proc/{pid}").exists():
-        print(f"job already running with pid {pid}")
-        raise SystemExit(0)
-
 if not CMD_FILE.exists():
     raise SystemExit(f"{CMD_FILE} not found -- upload the argument vector first")
 
 argv = [line for line in CMD_FILE.read_text().splitlines() if line.strip()]
 if not argv:
     raise SystemExit(f"{CMD_FILE} is empty")
+
+if PIDFILE.exists():
+    pid = PIDFILE.read_text().strip()
+    # The existence of /proc/<pid> is not enough: Linux reuses pids, and a stale file
+    # pointing at a recycled pid made this report "already running" after the previous
+    # job had died, so a relaunch silently did nothing. Confirm it is our command.
+    alive = False
+    if pid.isdigit():
+        try:
+            cmdline = Path(f"/proc/{pid}/cmdline").read_bytes().decode(errors="replace")
+            alive = argv[0] in cmdline
+        except OSError:
+            alive = False
+    if alive:
+        print(f"job already running with pid {pid}")
+        raise SystemExit(0)
+    print(f"ignoring stale pid file ({pid or 'empty'})")
+    PIDFILE.unlink()
 
 handle = open(LOG, "ab", buffering=0)
 process = subprocess.Popen(

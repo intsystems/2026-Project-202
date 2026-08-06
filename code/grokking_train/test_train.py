@@ -393,6 +393,49 @@ def test_training_is_reproducible_on_cpu():
     np.testing.assert_allclose(first.to_numpy(), second.to_numpy())
 
 
+def test_logging_rate_does_not_perturb_training():
+    """Logging is read-only: neither its rate nor skipping validation may move training.
+
+    ``val_every`` lets the cheap reconstruction series be logged every step while the
+    validation split is evaluated at the old rate.  That is only sound if the validation
+    pass has no side effect on the optimisation, so this asserts three things at once:
+    ``log_every`` does not change the trajectory, ``val_every`` does not either, and the
+    default remains exactly the historical behaviour.
+    """
+    _require_torch()
+    from grok import train
+
+    base = {"n": "3", "max_steps": "40", "batch_size": "16", "val_batch_size": "16",
+            "d_model": "16", "d_mlp": "32", "d_head": "4", "num_heads": "2",
+            "device": "cpu", "seed": "123"}
+
+    def run(**extra):
+        return train(runs.get("sn").with_overrides({**base, **extra}), progress=False)[0]
+
+    sparse = run(log_every="10")                       # historical setting
+    dense_full = run(log_every="1", val_every="1")     # every step, validate every step
+    dense_cheap = run(log_every="1", val_every="10")   # every step, validate every tenth
+    explicit = run(log_every="10", val_every="10")     # default spelled out
+
+    # The training-side series must agree wherever both were recorded.
+    for column in ("train_loss", "weight_norm"):
+        common = sparse["step"].to_numpy()
+        a = sparse.set_index("step")[column].to_numpy()
+        b = dense_full.set_index("step").loc[common, column].to_numpy()
+        c = dense_cheap.set_index("step").loc[common, column].to_numpy()
+        np.testing.assert_array_equal(a, b)
+        np.testing.assert_array_equal(a, c)
+
+    # val_every=log_every must reproduce the default exactly, including the val columns.
+    np.testing.assert_array_equal(sparse.to_numpy(), explicit.to_numpy())
+
+    # Skipping an evaluation writes NaN rather than a stale or interpolated value.
+    skipped = dense_cheap[dense_cheap["step"] % 10 != 0]["val_acc"].to_numpy()
+    assert len(skipped) and np.isnan(skipped).all()
+    kept = dense_cheap[dense_cheap["step"] % 10 == 0]["val_acc"].to_numpy()
+    assert np.isfinite(kept).all()
+
+
 if __name__ == "__main__":
     failures = 0
     for name, fn in sorted(globals().items()):

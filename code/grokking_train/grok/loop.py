@@ -118,6 +118,7 @@ def train(config, outdir=None, progress=True, overwrite=False, observer=None,
         if observer is not None and hasattr(observer, "on_start"):
             observer.on_start(task=task, model=model, config=config, device=device)
 
+        val_every = config.val_every or config.log_every
         stream = _batches(task, config)
         bar = tqdm(total=config.max_steps, desc=config.key, disable=not progress)
         started = time.perf_counter()
@@ -141,7 +142,8 @@ def train(config, outdir=None, progress=True, overwrite=False, observer=None,
 
             if step % config.log_every == 0:
                 row = _observe(model, criterion, columns, step, loss, logits, batch_y,
-                               val_x, val_y, probe)
+                               val_x, val_y, probe,
+                               evaluate_val=(step % val_every == 0))
                 for name in columns:
                     logs[name].append(row[name])
                 if observer is not None and hasattr(observer, "on_log"):
@@ -171,8 +173,14 @@ def train(config, outdir=None, progress=True, overwrite=False, observer=None,
 
 
 @torch.no_grad()
-def _observe(model, criterion, columns, step, loss, logits, targets, val_x, val_y, probe):
-    """Collect one log row.  Only the requested columns are computed."""
+def _observe(model, criterion, columns, step, loss, logits, targets, val_x, val_y, probe,
+             evaluate_val=True):
+    """Collect one log row.  Only the requested columns are computed.
+
+    ``evaluate_val=False`` skips the validation forward pass and writes NaN into the
+    validation columns.  The pass runs under ``model.eval()`` and consumes no RNG, so
+    skipping it cannot perturb training; ``verify_noninvasive.py`` checks this.
+    """
     model.eval()
     row = {"step": step}
 
@@ -181,10 +189,15 @@ def _observe(model, criterion, columns, step, loss, logits, targets, val_x, val_
     if "train_acc" in columns:
         row["train_acc"] = metrics.accuracy(logits, targets)
 
-    val_logits = model(val_x)                       # val_acc is a mandatory column
-    row["val_acc"] = metrics.accuracy(val_logits, val_y)
-    if "val_loss" in columns:
-        row["val_loss"] = criterion(val_logits, val_y).item()
+    if evaluate_val:
+        val_logits = model(val_x)                   # val_acc is a mandatory column
+        row["val_acc"] = metrics.accuracy(val_logits, val_y)
+        if "val_loss" in columns:
+            row["val_loss"] = criterion(val_logits, val_y).item()
+    else:
+        row["val_acc"] = float("nan")
+        if "val_loss" in columns:
+            row["val_loss"] = float("nan")
 
     if "weight_norm" in columns:
         row["weight_norm"] = metrics.weight_norm(model)

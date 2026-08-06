@@ -71,7 +71,10 @@ if ($Sync) {
     $stage = Join-Path $temp "bundle"
     New-Item -ItemType Directory -Force -Path "$stage\grokking_train\grok", "$stage\prediction_improved", "$stage\edm_validation" | Out-Null
     Copy-Item "$repo\grokking_train\grok\*.py" "$stage\grokking_train\grok\"
-    Copy-Item "$repo\grokking_train\runs.py" "$stage\grokking_train\"
+    # All top-level modules, not only runs.py: train.py is the plain trainer that
+    # edm_validation/phase13_dense_logging.py invokes, and test_train.py carries the
+    # checks that can only run where torch is installed.
+    Copy-Item "$repo\grokking_train\*.py" "$stage\grokking_train\"
     # All top-level modules: probe, run_probe, controls, verify_noninvasive, ...
     Copy-Item "$here\*.py" "$stage\prediction_improved\"
     if (Test-Path "$repo\edm_validation") {

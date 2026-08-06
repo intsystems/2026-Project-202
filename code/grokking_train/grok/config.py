@@ -70,6 +70,16 @@ class RunConfig:
 
     # --- logging ------------------------------------------------------------
     log_every: int = 10
+    val_every: Optional[int] = None
+    """How often to evaluate the validation split, in optimisation steps.
+
+    ``None`` means "every logged step", which is the historical behaviour and keeps every
+    existing run bit-identical.  Reconstructing the dynamics of ``train_loss`` and
+    ``weight_norm`` calls for ``log_every = 1``, but those two are nearly free while a
+    validation pass is not, so this decouples them: ``log_every=1, val_every=10`` logs the
+    cheap series every step and evaluates the split at the old rate.  Rows without a fresh
+    evaluation carry NaN in the validation columns.  Must be a multiple of ``log_every``.
+    """
     columns: Tuple[str, ...] = BASE_COLUMNS
     csv: str = "{key}_logs.csv"         # ``str.format``-ed with the config fields
 
@@ -119,6 +129,14 @@ class RunConfig:
                 )
         if self.log_every < 1:
             raise ValueError(f"log_every must be >= 1, got {self.log_every}")
+        if self.val_every is not None:
+            if self.val_every < 1:
+                raise ValueError(f"val_every must be >= 1, got {self.val_every}")
+            if self.val_every % self.log_every:
+                raise ValueError(
+                    f"val_every ({self.val_every}) must be a multiple of "
+                    f"log_every ({self.log_every}), else validation never lands on a "
+                    f"logged row")
         if self.max_steps < 1:
             raise ValueError(f"max_steps must be >= 1, got {self.max_steps}")
         if not 0.0 < self.fraction < 1.0:
@@ -191,6 +209,7 @@ _CASTS = {
     "val_batch_size": _optional(int),
     "seed": _optional(int),
     "init_seed": _optional(int),
+    "val_every": _optional(int),
     "betas": _tuple_of(float),
     "columns": _tuple_of(lambda s: str(s).strip()),
     "double_step": _to_bool,
