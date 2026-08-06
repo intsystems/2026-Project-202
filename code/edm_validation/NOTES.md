@@ -615,3 +615,35 @@ are now reported.
 **Harness bugs fixed:** -Sync copied only runs.py from grokking_train, so train.py was
 absent and all three dense runs died instantly; launch_detached treated /proc/<pid> existing
 as proof of life, which a recycled pid made false, so a relaunch silently did nothing.
+
+### Correction to the phase 14 numbers above
+
+Two bugs in my own analysis, both caught by inspecting output rather than trusting it.
+
+**The stationarity criterion was not scale free.** It thresholded the raw drift ratio at 1.
+For a stationary series that ratio falls like 1/sqrt(L), so the threshold silently grew
+more permissive at longer windows. Measured on white noise the raw ratio runs 0.29 at
+L=25 down to 0.04 at L=3000, an eightfold drift in the criterion itself. Now normalised by
+the white-noise value at each length, so an index near 1 means indistinguishable from
+stationary.
+
+**This overturns the claim I made above that lowdata15 train_loss is stationary to 3000
+steps with 120 independent samples.** Its normalised index is 3.2 at L=25 and never falls
+below 4.1 at any longer window. It offers no usable window at all. I had also floated
+lowdata15 to Alex as "the one licensed case"; it is not, and the retraction is entirely due
+to the criterion, not to new data.
+
+Corrected picture: **no observable in any run is stationary beyond ~25 steps** (index 2.8
+to 3.2 for train_loss at L=25, 57 to 1087 for weight_norm at every length). Since the
+correlation time is 38 steps mid-run and 163 inside the transition, the stationary window
+is *shorter than one correlation time*. There is no scale that is both stationary and
+observed more than once independently. That is a cleaner statement of the obstruction than
+the sample count, and it does not depend on where the stationarity threshold is put: the
+gap is a factor of 1.5 to 6.5.
+
+**The recurrence comparison was misaligned.** Exclusions of 8 and 16 steps collapse to 1
+and 4 samples at the decimated rate and were then removed by set deduplication, so the
+decimated rows printed five values under a six-column header and dense was compared against
+different physical exclusions than decimated. Every exclusion is now a multiple of ten.
+With that fixed the conclusion survives and is now actually measured: dense 0.90/0.80/0.69/
+0.64/0.68 against decimated 0.93/0.86/0.71/0.64/0.71.
