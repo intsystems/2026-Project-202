@@ -367,3 +367,41 @@ earlier signals before they were written up. It should gate every future candida
   cross-map rho tracks driver amplitude, i.e. a sensitivity curve — `ProgressiveNoise` at
   rho 0.38 versus `Random` at 0.95 suggests it does, and that would turn a binary detector
   into a measurement; (3) S_5 / other tasks, to check the two settings were not both easy.
+
+## Phase 9: the falsification does not depend on the Theiler window
+
+Alex raised the sharpest available objection to section 3.1: the Theiler exclusion is
+doing the work, and the original analysis, which used no exclusion, "worked rather well."
+The objection deserved to be answered under the paper's own settings rather than argued
+about, so `phase9_paper_settings.py` repeats everything at W=0, k=5, max_E=15, window 300.
+
+**The level argument was already sufficient but incomplete.** Proposition 1 at W=0 returns
+1.330 and the WD=0 controls sit there permanently, so turning the exclusion off does not
+restore information. But a control whose norm never leaves a straight line is flat by
+construction, and a flat control cannot refute a claim about a *shape*. That gap was real
+and I had not noticed it. The control that closes it is `lowdata15`/`lowdata20`: weight
+decay identical at 1.0, training fraction reduced, never generalises.
+
+**The signal fails an internal check before any control is applied.** Three seeds of the
+identical grokking configuration, weight norms ending at 29.89 / 29.12 / 30.39 (agreeing to
+4%), give dimension trends of -0.54, **+0.94, +0.90**. Two of the three *rise*. The
+published descent is not reproducible across seeds of the condition it was reported in.
+Late-training levels are 1.51 / 9.21 / 11.64, a factor of 7.7 within one configuration.
+
+The matched controls then give trends +0.75 and +0.22, inside the generalising range. And
+the estimate correlates with `std(diff(x))/std(x)` at Spearman +0.887 pooled over 1026
+windows (+0.32 to +0.996 within runs) — a one-line ratio with no embedding, no neighbour
+search, no likelihood. The mapping is not run-invariant, so smoothness is a strong
+correlate, not a complete description; do not overstate this one.
+
+Note the sign is immaterial to the mechanism, which is a point in its favour: the grokking
+norm falls 42 -> 30 and the lowdata norm rises 42 -> 61, and both collapse the estimate,
+because a monotone rise is as locally straight as a monotone fall.
+
+**Two of my own metrics were wrong on the first pass and are worth remembering.** I first
+reported "collapse ratio" = peak/tail, which for a monotonically *rising* trace measures
+noise around the trend and silently reported 1.16-1.18 for the two runs that most sharply
+contradict the claim. Replaced with a Spearman trend against step plus early/late medians.
+Second, `wd0` shows trend -1.00, which looks decisive and means nothing: the series runs
+from 1.34 to 1.33, a rank-monotone drift of 0.7%. Rank statistics need a magnitude beside
+them.

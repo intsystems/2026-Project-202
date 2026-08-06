@@ -18,9 +18,9 @@ pdflatex report && bibtex report && pdflatex report && pdflatex report
 
 | file | role |
 | --- | --- |
-| `report.tex`, `report.pdf` | the report (8 pages) |
+| `report.tex`, `report.pdf` | the report (10 pages) |
 | `make_figures.py` | regenerates every figure from the analysis outputs |
-| `figures/` | five figures, PDF for LaTeX and PNG for preview |
+| `figures/` | eight figures, PDF for LaTeX and PNG for preview |
 | `references.bib` | bibliography, extending the earlier paper's with the surrogate and cross-mapping literature |
 
 ## The argument in one paragraph
@@ -45,11 +45,20 @@ correct, is [`../code/edm_validation/NOTES.md`](../code/edm_validation/NOTES.md)
 
 | figure | source |
 | --- | --- |
-| 1 preconditions | `edm_validation/forecast.py::recurrence_profile` |
-| 2 confound-free test | `edm_validation/results/phase6_*.csv`, `phase7_*.csv` |
-| 3 driver recovery | `edm_validation/results/phase3_ccm.csv`, `phase5_inject_ccm.csv` |
-| 4 convergence | `edm_validation/ccm.py::ccm_convergence` |
-| 5 delay distribution | `prediction_improved/results/sweep/summary.csv` |
+| preconditions | `edm_validation/forecast.py::recurrence_profile` |
+| dimension artifact | `edm_validation/phase8_dimension_evidence.py` |
+| dimension at the published settings | `edm_validation/phase9_paper_settings.py` |
+| function-space velocity | `prediction_improved/results/*_probe.csv` |
+| confound-free test | `edm_validation/results/phase6_*.csv`, `phase7_*.csv` |
+| driver recovery | `edm_validation/results/phase3_ccm.csv`, `phase5_inject_ccm.csv` |
+| convergence | `edm_validation/ccm.py::ccm_convergence` |
+| delay distribution | `prediction_improved/results/sweep/summary.csv` |
+
+`phase9_paper_settings.py` exists because the Theiler exclusion used in the dimension
+analysis is itself a fair target for objection: the original work did not apply one. That
+script repeats the falsification at `W=0`, `k=5`, `max_E=15` and a 300-sample window, which
+is the published configuration, and finds that the reported descent is not reproducible
+across seeds of the grokking condition itself.
 
 Figures use the Okabe-Ito qualitative palette, which is designed and tested for
 colour-vision deficiency; hues are assigned to entities in a fixed order so that a series

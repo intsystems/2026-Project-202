@@ -390,9 +390,72 @@ def figure_velocity():
     save(fig, "fig_velocity")
 
 
+def figure_paper_settings():
+    """The dimension signal at W=0, which is the configuration the estimate was published in."""
+    res = CODE / "edm_validation" / "results"
+    summary = pd.read_csv(res / "phase9_paper_settings_summary.csv")
+    families = {
+        "grok (WD=1, generalises)": (BLUE, ["grok", "grok_s1", "grok_s2"]),
+        "lowdata (WD=1, never generalises)": (VERMILLION, ["lowdata15", "lowdata20"]),
+        "no weight decay (never generalises)": (GREY, ["wd0"]),
+    }
+    styles = ["-", "--", ":"]
+
+    fig, axes = plt.subplots(1, 3, figsize=(7.3, 2.5),
+                             gridspec_kw={"width_ratios": [1.3, 0.8, 1.0], "wspace": 0.45})
+
+    ax = axes[0]
+    ax.set_axisbelow(True)
+    ax.grid()
+    pooled = []
+    for label, (colour, runs) in families.items():
+        for i, run in enumerate(runs):
+            frame = pd.read_csv(res / f"phase9_trace_{run}.csv")
+            ax.plot(frame.step, frame.dim_W0, styles[i % len(styles)], color=colour,
+                    lw=1.3, alpha=0.9, label=label if i == 0 else None)
+            outcome = "generalises" if run.startswith("grok") else "never generalises"
+            pooled.append(frame.assign(outcome=outcome, colour=colour))
+    ax.set_xlabel("optimization step")
+    ax.set_ylabel("estimated dimension, $W=0$")
+    ax.set_title("(a) no Theiler window", fontsize=8.2, color=INK, pad=6)
+    ax.legend(loc="upper left", fontsize=6.4)
+
+    # (b) The published claim is a fall. A slope graph shows the direction each run
+    # actually takes, which is the quantity the claim is about.
+    ax = axes[1]
+    ax.set_axisbelow(True)
+    ax.grid(axis="y")
+    colour_of = {r: c for label, (c, runs) in families.items() for r in runs for c in [c]}
+    for _, row in summary.iterrows():
+        colour = colour_of.get(row.run, GREY)
+        ax.plot([0, 1], [row.dim_early, row.dim_late], "-o", color=colour, lw=1.3,
+                ms=4.0, alpha=0.9, markeredgecolor="white", markeredgewidth=0.7)
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(["early", "late"], fontsize=7.2)
+    ax.set_xlim(-0.25, 1.25)
+    ax.set_ylabel("estimated dimension, $W=0$")
+    ax.set_title("(b) direction varies by seed", fontsize=8.2, color=INK, pad=6)
+
+    # (c) what the estimate tracks: a one-line roughness ratio, no embedding involved.
+    ax = axes[2]
+    ax.set_axisbelow(True)
+    ax.grid()
+    table = pd.concat(pooled)
+    for outcome, colour in (("generalises", BLUE), ("never generalises", VERMILLION)):
+        sub = table[table.outcome == outcome]
+        ax.plot(sub.roughness, sub.dim_W0, ".", ms=2.2, color=colour, alpha=0.45,
+                label=outcome)
+    ax.set_xlabel(r"roughness  std$(\Delta x)/$std$(x)$")
+    ax.set_ylabel("estimated dimension, $W=0$")
+    ax.set_title("(c) tracks smoothness", fontsize=8.2, color=INK, pad=6)
+    ax.legend(loc="lower right", fontsize=6.6, markerscale=3)
+    save(fig, "fig_paper_settings")
+
+
 if __name__ == "__main__":
     print("generating figures ...")
     figure_dimension_artifact()
+    figure_paper_settings()
     figure_velocity()
     figure_preconditions()
     figure_driver_recovery()

@@ -199,6 +199,56 @@ $3.73$ and $4.36$, which is indistinguishable from the factor of $4.40$ obtained
 noise. On this diagnostic the published observable behaves like noise rather than like an
 attractor, so no dimension is identifiable from it.
 
+A natural objection is that both observations above depend on the Theiler exclusion, which
+the original analysis did not apply, and that under its own settings the signal was
+convincing. The objection is worth answering on its own terms, because the exclusion is
+not what removes the result. \Cref{prop:line} evaluated at $W = 0$ returns $1.330$, so
+switching the exclusion off does not restore information; it pins the estimate to the
+tangent constant, which is precisely why the published curves looked stable. The $WD = 0$
+controls sit at that constant for their entire duration without ever generalising.
+
+That argument disposes of the reported \emph{level} but not of the reported \emph{shape}.
+A control whose weight norm never departs from a straight line is flat by construction and
+cannot refute a claim about a rise followed by a fall. The control that can do so holds
+weight decay fixed at $1.0$ and reduces the training fraction, so the same regulariser
+drives a non-stationary norm in a model that never generalises. \Cref{fig:papersettings}
+reports that comparison at $W = 0$, $k = 5$, $E_{max} = 15$ and a window of $300$ samples,
+which is the published configuration in full.
+
+The signal fails an internal consistency check before it reaches any control. Across three
+seeds of the identical grokking configuration, whose weight norms terminate at $29.89$,
+$29.12$ and $30.39$ and so agree to within $4\%$, the estimate falls in one run
+(Spearman trend $-0.54$) and rises in the other two ($+0.94$ and $+0.90$). The published
+descent is therefore not reproducible across seeds of the condition it was reported in.
+The late-training level of those three runs is $1.51$, $9.21$ and $11.64$, a spread of a
+factor of $7.7$ within one configuration, which no dimension of a shared attractor can
+exhibit. Against the matched controls the direction is likewise uninformative: the
+never-generalising runs at the same weight decay give trends of $+0.75$ and $+0.22$, which
+lie inside the range spanned by the runs that do generalise.
+
+What the estimate does track is the local smoothness of the series. Pooled over $1026$
+windows and all six runs, it attains a Spearman correlation of $+0.887$ with the ratio
+$\mathrm{std}(\Delta x) / \mathrm{std}(x)$, a statistic computed without any embedding,
+neighbour search or likelihood (\cref{fig:papersettings}c). Within individual runs the
+correlation ranges from $+0.32$ to $+0.996$, and the mapping is not identical across runs,
+so smoothness is a strong correlate rather than a complete description. The direction of
+the norm's drift is immaterial to it, as expected: the grokking norm falls from $42$ to
+$30$ and the lowdata norm rises from $42$ to $61$, and a monotone rise is as locally
+straight as a monotone fall.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.99\textwidth]{figures/fig_paper_settings.pdf}
+\caption{The dimension signal evaluated in the published configuration, with no Theiler
+exclusion. (a) Sliding-window estimates. Line style distinguishes seeds within a family.
+(b) Median estimate over the first and last third of training. Two of the three
+generalising runs rise, one falls, and the never-generalising runs at identical weight
+decay lie between them; the no-weight-decay run is flat at the tangent constant, its
+apparent monotone decline spanning only $1.34$ to $1.33$. (c) The estimate against a
+roughness ratio that involves no embedding.}
+\label{fig:papersettings}
+\end{figure}
+
 The third observation is procedural. The windows were labelled by their centres, so each
 estimate incorporated data recorded after the step it was assigned to. Under causal
 labelling, in which an estimate is assigned to the last step it observed, the reported
