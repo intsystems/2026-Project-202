@@ -526,3 +526,34 @@ C:/Program Files/Git/content/... and the upload 500s. Use PowerShell or MSYS_NO_
 Velocity replicates as of now: lowdata15 at two seeds (5.30e-2, 5.49e-2, agreeing to 3%),
 lowdata20 at one, three grokking seeds (1.94/1.84/1.38e-2). No overlap, factor >= 2.7.
 That is enough for the claim; the remaining two seeds are a nicety, not a dependency.
+
+### Velocity replicates: final state, and the harness fix paying for itself
+
+Fourth VM reclamation, but this time it cost nothing that mattered. The detached launcher
+plus guarded poller had already pulled `lowdata15_s2` down before the session went away;
+under the old foreground design it would have died with the VM like the three before it.
+
+Final comparison, median normalised-logit velocity over the second half of training:
+
+    lowdata20      7.256e-02      never generalises, WD=1
+    lowdata15_s1   5.486e-02      never generalises, WD=1
+    lowdata15_s2   5.416e-02      never generalises, WD=1
+    lowdata15      5.304e-02      never generalises, WD=1
+    grok_seed2     1.940e-02      generalises
+    grok           1.840e-02      generalises
+    grok_seed1     1.381e-02      generalises
+    wd0            1.531e-04      never generalises, WD=0
+
+Four never-generalising runs at WD=1 against three grokking runs, no overlap, closest
+members separated by 2.73x. The reduced-data condition is replicated across three seeds
+which agree to 3.4%. `lowdata20_s1/s2` were not recovered and are not needed: the claim is
+that a statistic proposed as a generalisation precursor sits *higher* in runs that never
+generalise, and four independent never-generalising runs establish it.
+
+Stopping here rather than spending a fifth VM. The remaining two seeds would thicken an
+already non-overlapping comparison, not change it.
+
+**Poller bug worth remembering.** The first guarded-less poller hung for over an hour on a
+single `colab exec` that never returned, while the session itself answered a manual exec
+immediately. Every CLI call in a long-running poller needs a hard timeout (Start-Job +
+Wait-Job -Timeout), not just the CLI's own --timeout flag.

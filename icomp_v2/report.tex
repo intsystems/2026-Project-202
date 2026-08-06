@@ -290,8 +290,8 @@ The separation does not survive its control. We trained runs in which weight dec
 at $1.0$ and only the quantity of training data is reduced, so that the model memorises
 and never generalises. \Cref{fig:velocity} shows the outcome. The runs that never
 generalise sustain a \emph{higher} velocity than the runs that grok. The comparison
-carries three seeds of the grokking condition against three never-generalising runs, two
-training fractions with the smaller replicated at a second seed, and the two families do
+carries three seeds of the grokking condition against four never-generalising runs, at two
+training fractions with the smaller replicated across three seeds, and the two families do
 not overlap. The only run far
 below the others is the one without weight decay, in which the function freezes within a
 few thousand steps and thereafter only rescales.
@@ -307,12 +307,12 @@ orange families, which differ only in the quantity of training data.}
 \label{fig:velocity}
 \end{figure}
 
-Quantitatively, the runs that never generalise reach $7.26\times10^{-2}$,
-$5.49\times10^{-2}$ and $5.30\times10^{-2}$ over the second half of training against
-$1.94\times10^{-2}$, $1.84\times10^{-2}$ and $1.38\times10^{-2}$ for the three grokking
-runs, a separation of at least a factor of $2.7$ with no overlap. The two seeds of the
-same reduced-data condition agree to within $3\%$, so the ordering does not rest on a
-single draw. The run without weight decay falls to $1.53\times10^{-4}$. Every run with weight decay lies within a factor of five of every
+Quantitatively, the runs that never generalise span $5.30\times10^{-2}$ to
+$7.26\times10^{-2}$ over the second half of training against $1.38\times10^{-2}$ to
+$1.94\times10^{-2}$ for the grokking runs, a separation of a factor of $2.73$ between the
+closest members of the two families. The three seeds of the reduced-data condition agree to
+within $3.4\%$, so the ordering does not rest on a single draw. The run without weight
+decay falls to $1.53\times10^{-4}$. Every run with weight decay lies within a factor of five of every
 other, and the factor of $360$ quoted above is entirely accounted for by the presence or
 absence of regularisation. The statistic therefore measures the reorganisation that weight
 decay imposes on the function, and among regularised runs it is, if anything, inversely
