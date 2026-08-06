@@ -557,3 +557,61 @@ already non-overlapping comparison, not change it.
 single `colab exec` that never returned, while the session itself answered a manual exec
 immediately. Every CLI call in a long-running poller needs a hard timeout (Start-Job +
 Wait-Job -Timeout), not just the CLI's own --timeout flag.
+
+## Phases 13-15: dense logging, and why it does not rescue the local analysis
+
+Alex pushed back on the recurrence argument: "I'm not sure that recurrence is such a
+problem - we may work locally stationary. For that you'll need to calculate loss every step
+rather than every 10th." Correct on both counts, and the objection was worth the experiment.
+
+**First, the framing was wrong and section 3 overstated it.** Global recurrence and local
+stationarity are different requirements, and we measured only the first. At log_every=10 the
+second could not even be posed: a 300-sample dimension window spans 3000 optimisation steps,
+which is 104% of the median gap. **The sliding window straddled the whole transition; it was
+never a local measurement of anything.**
+
+Added `RunConfig.val_every` so per-step logging is affordable (train_loss is free,
+weight_norm is cheap, a validation pass is not), with a test asserting the logging rate
+cannot move training. Ran grok / lowdata15 / wd0 at log_every=1 for 6000 steps.
+
+**What dense logging showed:**
+
+1. **train_loss DOES recur locally.** Inside an 800-step segment its recurrence profile
+   plateaus at 0.64-0.69 against Lorenz at 0.68, while a monotone ramp decays to 0.00. The
+   blanket claim "training logs do not revisit their past states" is false at local scale.
+2. **weight_norm never does, and is never locally stationary** at any scale from 25 to 3000
+   steps (drift/fluctuation 3.3 to 320). The observable the dimension claim was built on is
+   not rescued by working locally. Section 3's specific conclusion survives on better
+   grounds than the one it was resting on.
+3. **Sampling rate is not what made recurrence fail.** Dense and decimated profiles agree
+   throughout, so this was never an undersampling artefact.
+4. **The ACF shape settles the fast component.** Dense train_loss drops to 0.76 at lag 1
+   then plateaus at ~0.72: i.i.d. minibatch noise on a slow trend. Lorenz at dt=0.1 decays
+   smoothly (0.87, 0.61, 0.38, 0.23). No deterministic structure was hiding below the old
+   resolution.
+5. **No training observable beats its IAAFT surrogates** (grok train_loss 0.739 against a
+   surrogate mean of 0.722, p=0.52).
+
+**The binding constraint, and it is not the logging rate.** Independent samples = window /
+correlation time, and neither term depends on how often we write a row. Inside the
+transition the correlation time of train_loss is 163 steps and the gap is 1615 steps:
+
+    log_every=10  ->  161 rows in the transition, 10 independent
+    log_every=1   -> 1615 rows in the transition, 10 independent
+
+Ten. Phase 10 established the dimension estimate needs n >= 6000 to resolve even a Lorenz
+attractor, so the shortfall is a factor of about 600. Denser logging multiplies rows by ten
+and independent samples by one. This is the theory-grounded reason the intrinsic transient
+cannot support attractor reconstruction, and it is much stronger than the recurrence
+argument it replaces.
+
+**A calibration failure of our own, caught by the phase 10 rule.** The simplex-plus-IAAFT
+test reported p=0.400 on Lorenz at dt=0.01, a system that is certainly deterministic: at
+that density consecutive points are nearly identical and the surrogate is as predictable as
+the original. Sampling at dt=0.1 restores it (p=0.010, decay +1.23). Any "fails the null"
+verdict is meaningless unless a reference at comparable density passes, so both references
+are now reported.
+
+**Harness bugs fixed:** -Sync copied only runs.py from grokking_train, so train.py was
+absent and all three dense runs died instantly; launch_detached treated /proc/<pid> existing
+as proof of life, which a recycled pid made false, so a relaunch silently did nothing.

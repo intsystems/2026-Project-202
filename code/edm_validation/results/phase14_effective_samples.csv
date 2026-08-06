@@ -1,0 +1,7 @@
+run,observable,tau,stationary_steps,independent
+grok_dense,train_loss,38,25,0.6578947368421053
+grok_dense,weight_norm,182,0,0.0
+lowdata15_dense,train_loss,25,3000,120.0
+lowdata15_dense,weight_norm,110,0,0.0
+wd0_dense,train_loss,108,25,0.23148148148148148
+wd0_dense,weight_norm,178,0,0.0
