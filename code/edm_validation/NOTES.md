@@ -257,3 +257,64 @@ everything else measured. The remaining cells are running.
 **Operational note, again.** The CPU session running the earlier split-42 attempt was
 reclaimed and its results were lost, because that job predated the incremental-download
 watcher. Everything since writes `summary.csv` back to the repo every four minutes.
+
+### 08:30 — Phase 5 result: transfers to our architecture, with a real limitation
+
+`results/phase5_inject_ccm.csv`. Same design, 1-layer transformer on modular addition:
+
+| driver | applied? | rho | p (IAAFT) | p (shift) | verdict |
+| --- | --- | --- | --- | --- | --- |
+| logistic | 0.293 | **0.934** | 0.025 | 0.025 | detect ✓ |
+| iid | 0.252 | **0.919** | 0.025 | 0.025 | detect ✓ |
+| ghost | **0.000** | -0.024 | 0.750 | 0.825 | silent ✓ |
+| sinusoid | 0.250 | 0.882 | 0.775 | 0.775 | **missed** |
+
+Across both settings: **7 of 8 coupled runs detected, 0 of 5 ghosts fired.**
+
+**The sinusoid miss is a genuine limitation, and it is worth stating precisely.** Its rho
+is high (0.882) — but so is the surrogates' (IAAFT 0.87–0.90, shift 0.87–0.94, measured
+directly). The reason is structural: the loss reveals *where in the cycle* the run is, and
+any same-period series — an IAAFT surrogate, or the driver rotated in time — is a
+deterministic function of phase, hence equally predictable from that information.
+
+> **Spectrum-preserving nulls have no power against a strictly periodic driver.**
+
+This is not a bug and not fixable by a better statistic. It also explains why the
+poisoned_batch `Sinusoidal` run *did* reject at p=0.050: that driver is quantized to 95
+distinct values, so its surrogates depart from it much more than a smooth sinusoid's do
+(1044 distinct values here). A periodic driver needs a different null — comparing against
+a driver of a *different period* would be the natural one, and is untried.
+
+### Final state of the split x init sweep (30/30 cells)
+
+```
+gap: min 1290  median 2875  max 5600  sd 1130
+variance explained by split 19.8%,  by init 23.8%,  residual/interaction ~56%
+mean gap by split: {0: 3840, 1: 2430, 2: 2540, 3: 3396, 4: 3276, 42: 2888}
+mean gap by init : {0: 2953, 1: 2323, 2: 3397, 3: 3895, 4: 2740}
+```
+
+**The partial result was misleading and the full one overturns it.** At 15 cells the split
+looked dominant (43% vs 17%, F just under significance). With all 30, the two axes are
+comparable and *init is marginally the larger* — neither dominates, and more than half the
+variance is interaction. So the delay is **not** predictable from the split alone, and the
+pre-training-predictor idea in `../prediction_improved/method.md` §10 loses its motivation
+unless someone can model the interaction. Noted as a caution about reading partial sweeps:
+I had already written the split-dominant reading into the log before the run finished.
+
+What does survive, and is now much stronger: **all 30 cells generalize, and every gap lies
+in 1290–5600, against the canonical run's 12 000.** Thirty independent (split, init)
+combinations of the article's own configuration, and not one reproduces its headline
+delay — including five that use its own split.
+
+## Where this leaves the project
+
+* **A defensible EDM result exists**, and it is about *externally driven* training rather
+  than grokking: cross mapping recovers a known driver from a 1-D loss log, validated in
+  two independent settings, with ghost controls, two nulls, and a stated limitation.
+* **The grokking claims do not survive** — not the dimension collapse (audit), not the
+  function-space velocity (weight-decay confound), and the delay itself is a rare draw.
+* **Next, in order of value:** (1) a null with power against periodic drivers; (2) whether
+  cross-map rho tracks driver amplitude, i.e. a sensitivity curve — `ProgressiveNoise` at
+  rho 0.38 versus `Random` at 0.95 suggests it does, and that would turn a binary detector
+  into a measurement; (3) S_5 / other tasks, to check the two settings were not both easy.
