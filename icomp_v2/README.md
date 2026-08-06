@@ -20,7 +20,7 @@ pdflatex report && bibtex report && pdflatex report && pdflatex report
 | --- | --- |
 | `report.tex`, `report.pdf` | the report (10 pages) |
 | `make_figures.py` | regenerates every figure from the analysis outputs |
-| `figures/` | eight figures, PDF for LaTeX and PNG for preview |
+| `figures/` | nine figures, PDF for LaTeX and PNG for preview |
 | `references.bib` | bibliography, extending the earlier paper's with the surrogate and cross-mapping literature |
 
 ## The argument in one paragraph
@@ -33,7 +33,8 @@ detect the grokking transition are shown to separate run configurations instead,
 falsified by a control that differs from the positive runs in one respect only. In the
 driven regime, convergent cross mapping recovers an injected driver from a single scalar
 loss log in seven of eight coupled runs across two architectures, with no false positives
-among five runs whose driver was logged but never applied.
+among the runs whose driver was logged but never applied, and the recovered coupling is
+directional: the reverse cross map is weaker in every coupled run.
 
 ## Where the numbers come from
 
@@ -52,7 +53,13 @@ correct, is [`../code/edm_validation/NOTES.md`](../code/edm_validation/NOTES.md)
 | confound-free test | `edm_validation/results/phase6_*.csv`, `phase7_*.csv` |
 | driver recovery | `edm_validation/results/phase3_ccm.csv`, `phase5_inject_ccm.csv` |
 | convergence | `edm_validation/ccm.py::ccm_convergence` |
+| direction of coupling | `edm_validation/phase12_directionality.py` |
 | delay distribution | `prediction_improved/results/sweep/summary.csv` |
+
+`phase12_directionality.py` exists because detection is not causation. Cross mapping earns
+the causal reading only if it distinguishes "driver forces loss" from the converse, and
+these logs make that testable: the driver schedule is evaluated from a fixed seed before
+training, so the ground truth is unidirectional by construction.
 
 `phase9_paper_settings.py` exists because the Theiler exclusion used in the dimension
 analysis is itself a fair target for objection: the original work did not apply one. That

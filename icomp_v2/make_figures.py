@@ -100,7 +100,7 @@ def figure_preconditions():
     ax.set_ylim(-0.05, 1.15)
     ax.set_xlim(-0.25, 5.9)
     ax.legend(loc="lower left", ncol=1)
-    save(fig, "fig1_preconditions")
+    save(fig, "fig_preconditions")
 
 
 # --- Figure 2: driver recovery ---------------------------------------------
@@ -147,7 +147,7 @@ def figure_driver_recovery():
     fig.legend(handles, ["driver applied to training", "driver logged, never applied"],
                loc="lower center", ncol=2, bbox_to_anchor=(0.5, -0.12))
     fig.subplots_adjust(left=0.16, right=0.99)
-    save(fig, "fig2_driver_recovery")
+    save(fig, "fig_driver_recovery")
 
 
 # --- Figure 3: convergence --------------------------------------------------
@@ -184,7 +184,7 @@ def figure_convergence():
     ax.set_ylim(-0.12, 1.04)
     ax.axhline(0, color="#BBBBBB", lw=0.7)
     ax.legend(loc="center left")
-    save(fig, "fig3_convergence")
+    save(fig, "fig_convergence")
 
 
 # --- Figure 4: the confound-free test --------------------------------------
@@ -233,7 +233,7 @@ def figure_confound_free():
                 fontsize=7.4, color=INK, va="top")
     ax.legend(loc="lower right", fontsize=7)
     fig.tight_layout()
-    save(fig, "fig4_confound_free")
+    save(fig, "fig_confound_free")
 
 
 # --- Figure 5: the delay is not typical ------------------------------------
@@ -263,7 +263,7 @@ def figure_delay_distribution():
     ax.legend(loc="upper center", bbox_to_anchor=(0.42, 1.02))
     for side in ("left",):
         ax.spines[side].set_visible(False)
-    save(fig, "fig5_delay_distribution")
+    save(fig, "fig_delay_distribution")
 
 
 # --- Figure: the dimension estimate is a constant of a straight line -------
@@ -456,6 +456,54 @@ def figure_paper_settings():
     save(fig, "fig_paper_settings")
 
 
+def figure_directionality():
+    """Forward against reverse cross mapping. Ground truth is unidirectional by design."""
+    res = CODE / "edm_validation" / "results"
+    table = pd.read_csv(res / "phase12_directionality.csv")
+    curves = pd.read_csv(res / "phase12_direction_curves.csv")
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.9),
+                             gridspec_kw={"width_ratios": [1.25, 1], "wspace": 0.34})
+
+    ax = axes[0]
+    ax.set_axisbelow(True)
+    ax.grid()
+    colours = {"LogisticMap": BLUE, "Random": SKY, "Ghost_Normal": VERMILLION}
+    for run, colour in colours.items():
+        sub = curves[curves.run == run].sort_values("library")
+        ax.plot(sub.library, sub.forward, "-o", color=colour, lw=1.5, ms=3.4)
+        ax.plot(sub.library, sub.reverse, "--v", color=colour, lw=1.3, ms=3.4, alpha=0.75)
+    ax.set_xscale("log")
+    ax.axhline(0, color="#BBBBBB", lw=0.8)
+    ax.set_xlabel("library size $L$")
+    ax.set_ylabel(r"cross-map skill $\rho$")
+    ax.set_title("(a) convergence, both directions", fontsize=8.2, color=INK, pad=6)
+    handles = [plt.Line2D([], [], color=INK, lw=1.5, marker="o", ms=3.4),
+               plt.Line2D([], [], color=INK, lw=1.3, ls="--", marker="v", ms=3.4)]
+    handles += [plt.Line2D([], [], color=c, lw=4) for c in colours.values()]
+    ax.legend(handles, ["loss xmap driver", "driver xmap loss"] + list(colours),
+              loc="center right", fontsize=6.3)
+
+    ax = axes[1]
+    ax.set_axisbelow(True)
+    ax.grid()
+    limit = [-0.15, 1.05]
+    ax.plot(limit, limit, "-", color="#CCCCCC", lw=1.0, zorder=1)
+    for coupled, colour, label in ((True, BLUE, "driver applied"),
+                                   (False, VERMILLION, "driver never applied")):
+        sub = table[table.coupled == coupled]
+        ax.scatter(sub.rho_rev, sub.rho_fwd, s=44, color=colour, zorder=3,
+                   edgecolor="white", linewidth=0.8, label=label)
+    ax.set_xlim(*limit)
+    ax.set_ylim(*limit)
+    ax.set_xlabel(r"reverse $\rho$  (driver xmap loss)")
+    ax.set_ylabel(r"forward $\rho$  (loss xmap driver)")
+    ax.set_title("(b) forward exceeds reverse throughout",
+                 fontsize=8.2, color=INK, pad=6)
+    ax.legend(loc="lower right", fontsize=6.8)
+    save(fig, "fig_directionality")
+
+
 if __name__ == "__main__":
     print("generating figures ...")
     figure_dimension_artifact()
@@ -464,6 +512,7 @@ if __name__ == "__main__":
     figure_preconditions()
     figure_driver_recovery()
     figure_convergence()
+    figure_directionality()
     figure_confound_free()
     figure_delay_distribution()
     print("done")

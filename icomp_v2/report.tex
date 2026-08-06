@@ -62,7 +62,7 @@ than generalisation, and a shared-manifold coupling that tracks configuration ra
 the transition. Against these we set a positive result obtained in the regime where
 Stark's theorem does apply. Convergent cross mapping recovers an externally injected
 driver from a single one-dimensional loss log in seven of eight coupled runs across two
-architectures, with no false positives in five control runs whose driver is logged but
+architectures, with no false positives among the control runs whose driver is logged but
 never applied, and with a limitation for strictly periodic drivers that we characterise
 quantitatively. Finally, a factorial study of thirty runs shows that the delay reported in
 earlier work lies far outside the distribution produced by its own configuration. We
@@ -125,7 +125,7 @@ training logs.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.72\textwidth]{figures/fig1_preconditions.pdf}
+\includegraphics[width=0.72\textwidth]{figures/fig_preconditions.pdf}
 \caption{Recurrence rate as a function of the temporal exclusion window, normalised by the
 rate at zero exclusion. The Lorenz attractor holds a plateau, while all three training
 observables decay towards the monotone-ramp reference. The training trajectories do not
@@ -326,7 +326,7 @@ $1.15$, while the four runs without lie between $2.87$ and $5.61$.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.92\textwidth]{figures/fig4_confound_free.pdf}
+\includegraphics[width=0.92\textwidth]{figures/fig_confound_free.pdf}
 \caption{(a) Median coupling between the training loss and the parameter norm separates
 runs with a delayed transition from runs without. (b) The same statistic across eight runs
 of a single configuration, in which only the split and initialisation seeds vary. The gap
@@ -419,7 +419,7 @@ preserves every value and changes only the alignment. No result is reported with
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth]{figures/fig2_driver_recovery.pdf}
+\includegraphics[width=0.95\textwidth]{figures/fig_driver_recovery.pdf}
 \caption{Cross-map skill for every run in both settings. Drivers that were applied to
 training are recovered from the loss log alone; drivers that were logged but never applied
 are not. The single missed detection is the smooth periodic driver discussed in
@@ -432,7 +432,11 @@ drivers are detected, with skills between $0.379$ and $0.949$ and $p \le 0.05$ u
 nulls, and all ghost runs remain silent at skills of $-0.011$ and $-0.007$. In the
 transformer setting the chaotic and independent drivers are detected at $0.934$ and
 $0.919$ and the ghost remains silent at $-0.024$. Across both settings, seven of eight
-coupled runs are detected and none of the five ghost runs produces a false positive.
+coupled runs are detected and no ghost run produces a false positive. Three of the five
+ghosts carry a varying driver and cross map at $-0.011$, $-0.007$ and $-0.024$; the
+remaining two carry a constant driver, which has no variation to recover and therefore
+cannot be cross mapped at all. We count them as controls but they are not evidence, and
+they are omitted from \cref{fig:recovery} for that reason.
 
 The ghost runs carry the argument. They share the training trend with the coupled runs, so
 their near-zero skill excludes the explanation that defeated the signals of
@@ -452,7 +456,7 @@ The counts reported here are therefore not an artefact of the multiplicity.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.72\textwidth]{figures/fig3_convergence.pdf}
+\includegraphics[width=0.72\textwidth]{figures/fig_convergence.pdf}
 \caption{Cross-map skill against library size. Coupled runs improve as the manifold is
 sampled more densely, which is the convergence signature that distinguishes causation from
 coincidental correlation. Ghost runs remain at zero for every library size.}
@@ -505,7 +509,7 @@ study of six splits by five initialisations, with weight decay fixed throughout.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.72\textwidth]{figures/fig5_delay_distribution.pdf}
+\includegraphics[width=0.72\textwidth]{figures/fig_delay_distribution.pdf}
 \caption{Memorisation-to-generalisation gap for thirty runs of one configuration, varying
 only the split and initialisation seeds. Every run generalises and every gap lies between
 $1290$ and $5600$ steps. The delay reported in earlier work lies far outside this
@@ -571,7 +575,7 @@ Delay-embedding methods are applicable to neural network training logs in a narr
 regime than the earlier proposal assumed, and within that regime they work well. When an
 external driver possessing its own attractor forces training, convergent cross mapping
 recovers it from a single scalar loss log, in seven of eight coupled runs across two
-architectures and with no false positives among five runs whose driver was logged but
+architectures and with no false positives among the runs whose driver was logged but
 never applied. The recovered quantity is causal rather than correlational, it requires no
 validation data, and it is obtained from a log that costs nothing to store.
 
