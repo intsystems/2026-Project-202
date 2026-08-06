@@ -514,10 +514,71 @@ def figure_directionality():
     save(fig, "fig_directionality")
 
 
+def figure_local_stationarity():
+    """Why a locally stationary analysis is unavailable, at any logging rate."""
+    res = CODE / "edm_validation" / "results"
+    drift = pd.read_csv(res / "phase14_drift_ratio.csv")
+    rec = pd.read_csv(res / "phase14_local_recurrence.csv")
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.9), gridspec_kw={"wspace": 0.30})
+
+    ax = axes[0]
+    ax.set_axisbelow(True)
+    ax.grid()
+    styles = {("grok_dense", "train_loss"): (BLUE, "-", r"grokking: $\mathcal{L}_{train}$"),
+              ("grok_dense", "weight_norm"): (VERMILLION, "-", r"grokking: $\|w\|_2$"),
+              ("wd0_dense", "train_loss"): (SKY, "--", r"no WD: $\mathcal{L}_{train}$"),
+              ("wd0_dense", "weight_norm"): (ORANGE, "--", r"no WD: $\|w\|_2$")}
+    for (run, observable), (colour, style, label) in styles.items():
+        sub = drift[(drift.run == run) & (drift.observable == observable)].sort_values(
+            "window_steps")
+        ax.plot(sub.window_steps, sub.stationarity_index, style, color=colour, lw=1.4,
+                marker="o", ms=3.2, label=label)
+    ax.axhline(1.0, color=GREY, lw=1.0, ls=":")
+    ax.annotate("stationary", (27, 1.15), fontsize=6.8, color=GREY)
+    # A usable window must be stationary and hold at least one correlation time.
+    ax.axvspan(25, 163, color=GREY, alpha=0.12, lw=0)
+    ax.annotate("25 to 163 steps", (64, 1.9), ha="center", fontsize=6.4, color=INK)
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_xlabel("window length (optimization steps)")
+    ax.set_ylabel("stationarity index")
+    ax.set_title("(a) no window is both local and long", fontsize=8.2, color=INK, pad=6)
+    ax.legend(loc="lower right", fontsize=6.3)
+
+    ax = axes[1]
+    ax.set_axisbelow(True)
+    ax.grid()
+    excl = [0, 10, 20, 40, 80, 160]
+    columns = [f"excl_{e}" for e in excl]
+    wanted = [("Lorenz-63 (attractor)", "reference", BLUE, "-"),
+              ("monotone ramp (transient)", "reference", GREY, ":"),
+              ("grok_dense train_loss", "every step", VERMILLION, "-"),
+              ("grok_dense train_loss", "every 10th", VERMILLION, "--"),
+              ("grok_dense weight_norm", "every step", ORANGE, "-")]
+    for series, sampling, colour, style in wanted:
+        row = rec[(rec.series == series) & (rec.sampling == sampling)]
+        if not len(row):
+            continue
+        label = series.replace("grok_dense ", "").replace("_", " ")
+        if sampling != "reference":
+            label += f", {sampling}"
+        ax.plot(excl, row[columns].to_numpy()[0], style, color=colour, lw=1.4,
+                marker="o", ms=3.2, label=label)
+    ax.set_xlabel("temporal exclusion (optimization steps)")
+    ax.set_ylabel("recurrence rate (relative to none)")
+    ax.set_ylim(-0.04, 1.10)
+    ax.set_title("(b) the loss recurs locally, the norm does not",
+                 fontsize=8.2, color=INK, pad=6)
+    ax.legend(loc="upper right", fontsize=6.2)
+    save(fig, "fig_local_stationarity")
+
+
 if __name__ == "__main__":
     print("generating figures ...")
     figure_dimension_artifact()
     figure_paper_settings()
+    figure_local_stationarity()
     figure_velocity()
     figure_preconditions()
     figure_driver_recovery()

@@ -2,8 +2,8 @@
 
 A self-contained report on when delay-embedding methods apply to neural network training
 logs. It fixes the validation requirements it holds itself to, measures whether the
-preconditions of the embedding theorems are met, reports three candidate grokking signals
-that fail controlled comparison, gives a positive result in the driven regime with its
+preconditions of the embedding theorems are met and what the sample budget of a training
+run permits, reports three candidate grokking signals that fail controlled comparison, gives a positive result in the driven regime with its
 direction tested, and measures how variable the delayed transition itself is.
 
 It does not depend on any earlier draft: every claim is supported by code and result files
@@ -22,9 +22,9 @@ pdflatex report && bibtex report && pdflatex report && pdflatex report
 
 | file | role |
 | --- | --- |
-| `report.tex`, `report.pdf` | the report (14 pages) |
+| `report.tex`, `report.pdf` | the report (15 pages) |
 | `make_figures.py` | regenerates every figure from the analysis outputs |
-| `figures/` | nine figures, PDF for LaTeX and PNG for preview |
+| `figures/` | ten figures, PDF for LaTeX and PNG for preview |
 | `references.bib` | bibliography, covering the embedding, surrogate and cross-mapping literature |
 
 ## The argument in one paragraph
@@ -60,7 +60,15 @@ correct, is [`../code/edm_validation/NOTES.md`](../code/edm_validation/NOTES.md)
 | driver recovery | `edm_validation/results/phase3_ccm.csv`, `phase5_inject_ccm.csv` |
 | convergence | `edm_validation/ccm.py::ccm_convergence` |
 | direction of coupling | `edm_validation/phase12_directionality.py` |
+| local stationarity | `edm_validation/phase14_local_stationarity.py` |
 | delay distribution | `prediction_improved/results/sweep/summary.csv` |
+
+`phase13_dense_logging.py` and `phase14_local_stationarity.py` exist because measuring
+recurrence over a whole run does not settle whether short windows can be analysed as
+stationary systems. They log every optimisation step and test the local hypothesis
+directly. The training loss does recur locally; the weight norm does not and is never
+locally stationary; and the binding constraint turns out to be the number of independent
+samples, which no logging rate changes.
 
 `phase12_directionality.py` exists because detection is not causation. Cross mapping earns
 the causal reading only if it distinguishes "driver forces loss" from the converse, and

@@ -51,9 +51,13 @@ Empirical dynamic modelling promises to recover the structure of a high-dimensio
 system from scalar observations, which makes it attractive for monitoring neural network
 training from logs that consume negligible memory. This report establishes when that
 promise is redeemable. The embedding theorems of Takens and Stark reconstruct a compact
-invariant set that the trajectory revisits; we measure recurrence directly and find that
-raw training logs do not satisfy this precondition, with recurrence rates falling to zero
-under temporal exclusion while a reference chaotic attractor retains $0.93$. We then
+invariant set that the trajectory revisits. We measure recurrence directly and find it
+absent over a whole run, then test the weaker hypothesis that short windows are locally
+stationary, logging every optimisation step to make that testable. The training loss does
+recur locally, but the binding constraint is the number of independent observations, which
+no logging rate changes: the correlation time is $163$ steps against a transition of
+$1615$, so the entire transition affords ten independent samples whether rows are written
+every step or every tenth. We then
 report three candidate signals for the delayed generalisation phenomenon known as
 grokking, each of which separates training runs convincingly and none of which survives a
 controlled comparison: an intrinsic-dimension estimate that reproduces closed-form
@@ -118,10 +122,13 @@ dimensions does not apply, whatever number an estimator returns. \Cref{sec:preco
 does this and finds the precondition unmet on raw training logs.
 
 \item \textbf{Calibrate every estimator on a system with a known answer, against a
-reference matched in length to the data.} Length matching is not a detail. A Lorenz
-attractor of $12\,000$ samples grows by a factor of $1.66$ across the embedding range while
-one of $2000$ samples grows by $8.86$, so a reference of the wrong length manufactures a
-separation by itself (\cref{fig:dimension}b).
+reference matched to the data in length and in sampling density.} Neither is a detail. A
+Lorenz attractor of $12\,000$ samples grows by a factor of $1.66$ across the embedding
+range while one of $2000$ samples grows by $8.86$, so a reference of the wrong length
+manufactures a separation by itself (\cref{fig:dimension}b). Density matters just as much:
+sampled at $dt = 0.01$ the same attractor fails a surrogate test of determinism at
+$p = 0.400$, and only at $dt = 0.1$ does it pass at $p = 0.010$. A negative result is
+uninterpretable unless a reference at comparable density is positive.
 
 \item \textbf{Justify preprocessing per series rather than adopting it globally.}
 Subtracting a moving average manufactures structure in a sparse series, and differencing is
@@ -184,23 +191,120 @@ training logs.
 \includegraphics[width=0.72\textwidth]{figures/fig_preconditions.pdf}
 \caption{Recurrence rate as a function of the temporal exclusion window, normalised by the
 rate at zero exclusion. The Lorenz attractor holds a plateau, while all three training
-observables decay towards the monotone-ramp reference. The training trajectories do not
-revisit their past states, so no invariant set is available for the embedding theorems to
-reconstruct.}
+observables decay towards the monotone-ramp reference. Over a whole run the trajectories
+do not revisit their past states, so no single invariant set is available for the embedding
+theorems to reconstruct. \Cref{sec:sampling} examines whether shorter windows escape this,
+and finds that the training loss does recur locally while the weight norm does not.}
 \label{fig:preconditions}
 \end{figure}
 
 All three training observables behave like the transient reference rather than like the
-attractor. The validation loss of the $S_5$ runs reaches a ratio of $0.000$ and the
-weight norm falls between $0.00$ and $0.07$. This is a structural fact about optimisation
-rather than a defect of any particular estimator, and it explains why dimension estimates
-computed on these logs are not measurements of an attractor.
+attractor. The validation loss of the $S_5$ runs reaches a ratio of $0.000$ and the weight
+norm falls between $0.00$ and $0.07$.
 
-One caveat constrains the use of this diagnostic. Independent noise also produces close
+That measurement is about the run as a whole, and by itself it settles less than it
+appears to. Failing to return to its past states over twenty thousand steps does not
+prevent a trajectory from being usefully stationary over a few hundred, and delay
+embedding applied inside such a window would be legitimate. The global measurement rules
+out treating a run as one invariant set; it does not rule out a local analysis. We
+therefore test the local hypothesis directly.
+
+\subsection{The sampling interval, and what it can and cannot fix}\label{sec:sampling}
+
+A local analysis has two requirements that pull against each other. The window must be
+short enough that the dynamics do not drift appreciably across it, and it must contain
+enough independent observations to estimate anything. At one row per ten optimisation
+steps these cannot both be met, and the failure is severe: a $300$-sample window, the
+length at which the dimension estimate of \cref{sec:dimension} is computed, spans $3000$
+optimisation steps against a median memorisation-to-generalisation gap of $2875$. The
+window is longer than the transition it is meant to resolve.
+
+We therefore re-ran three conditions logging every optimisation step. Only the inexpensive
+series need this rate, since the training loss is already computed by the update and the
+parameter norm is a reduction over the weights, whereas a validation pass is a forward
+pass over the held-out split; the two are logged on separate schedules, and a test asserts
+that neither the logging rate nor a skipped evaluation perturbs training.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig_local_stationarity.pdf}
+\caption{(a) Stationarity index against window length, in units of the value white noise
+of the same length produces, so that unity means indistinguishable from stationary. The
+normalisation is necessary: the unnormalised ratio falls as $1/\sqrt{L}$ for a stationary
+series, so a fixed threshold would report long windows as more stationary than short ones
+by arithmetic alone. The shaded band runs from the longest stationary window, $25$ steps,
+to one correlation time of the training loss, $163$ steps; a usable window would have to
+be wider than the band, and none is. (b) Recurrence inside an $800$-step segment against
+temporal exclusion in optimisation steps. The training loss plateaus near the Lorenz
+reference while the weight norm decays to the monotone-ramp reference, and logging ten
+times more densely leaves both curves unchanged.}
+\label{fig:localstat}
+\end{figure}
+
+Three results follow, and the first corrects the impression left by
+\cref{fig:preconditions}. \emph{Locally, the training loss does recur.} Inside an
+$800$-step segment its recurrence profile plateaus between $0.64$ and $0.69$ against a
+Lorenz reference of $0.68$, while the monotone ramp decays to $0.00$
+(\cref{fig:localstat}b). The statement that training logs never revisit their past states
+holds globally and does not hold at local scale.
+
+\emph{The weight norm does neither.} It decays to $0.00$ like the ramp, and its
+stationarity index never falls below $57$ at any window length from $25$ to $3000$ steps,
+reaching $1087$ for the run without weight decay. The observable on which the dimension
+estimate of \cref{sec:dimension} is computed is therefore not rescued by working locally,
+which is a stronger statement than the global recurrence measurement supports.
+
+\emph{Denser logging is not what was missing.} The dense and decimated recurrence profiles
+agree throughout \cref{fig:localstat}(b), so the earlier result was never an artefact of
+undersampling.
+
+What does bind is the number of independent observations, and it is invariant to the
+logging rate. The count of independent samples in a window is the window length divided by
+the correlation time, and neither quantity depends on how often a row is written. Inside
+the transition the training loss has a correlation time of $163$ steps against a gap of
+$1615$:
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{logging interval} & \textbf{rows in the transition} & \textbf{independent samples} \\
+\midrule
+every ten steps & $161$ & $10$ \\
+every step & $1615$ & $10$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Ten. Logging ten times more densely multiplies the rows by ten and the independent samples
+by one. Against this, \cref{fig:dimension}(b) puts the length needed to resolve even a
+Lorenz attractor at $n \gtrsim 6000$, a shortfall of roughly six hundred times. The two
+constraints close on each other from both sides: the longest window that is
+indistinguishable from stationary is $25$ steps, which is shorter than a single
+correlation time, so there is no scale at which the series is simultaneously stationary
+and observed more than once independently.
+
+The autocorrelation agrees with that reading. The dense training loss falls to $0.76$ at
+lag one and is then flat near $0.72$, which is the signature of an independent
+minibatch-sampling term of about a quarter of the variance riding on a slowly varying
+component, rather than dynamics that were hidden below the previous resolution. A Lorenz
+trajectory sampled at a comparable density instead decays smoothly through $0.87$, $0.61$,
+$0.38$ and $0.23$. Consistent with this, no training observable exceeds an IAAFT surrogate
+ensemble under simplex projection: the grokking training loss scores $0.739$ against a
+surrogate mean of $0.722$ at $p = 0.52$.
+
+That last comparison requires a reference at comparable sampling density before it means
+anything, which is the requirement of \cref{sec:protocol}. A Lorenz trajectory sampled at
+$dt = 0.01$ is oversampled in the same way and also fails to beat its surrogates, at
+$p = 0.400$, despite being deterministic by construction; sampled at $dt = 0.1$ it passes
+at $p = 0.010$ with skill falling from $1.00$ to $-0.23$ across the forecast horizon. We
+report both, and read the failure of the training logs only against the reference that
+passes.
+
+One caveat constrains recurrence as a diagnostic. Independent noise also produces close
 pairs at arbitrary temporal separations and therefore also scores near unity. Recurrence
 separates smooth transients from everything else; it does not separate an attractor from
-noise, and a determinism test must follow it. We return to this point in
-\cref{sec:negative}.
+noise, which is why the determinism test above is required alongside it.
 
 \section{Signals that do not survive controlled comparison}\label{sec:negative}
 
@@ -208,8 +312,10 @@ noise, and a determinism test must follow it. We return to this point in
 
 The Levina--Bickel maximum likelihood estimator \citep{levina2004maximum} applied to a
 sliding window of the weight-norm series produces a curve that rises during memorisation
-and falls before generalisation. Three observations remove its interpretation as a
-dimension. The first is analytic.
+and falls before generalisation. Four observations remove its interpretation as a
+dimension. The first is analytic; the last, established in \cref{sec:sampling}, is that the
+weight norm is never locally stationary at any window length tested, with a stationarity
+index between $57$ and $1087$, so no window of it can be read as a stationary system.
 
 \begin{proposition}[The estimate is a constant of a straight line]\label{prop:line}
 Let the delay vectors be sampled at uniform intervals from a curve that is locally
@@ -680,9 +786,12 @@ neither, though these data do not establish unidirectionality, for the reason se
 \cref{sec:direction}. The quantity requires no validation data and is obtained from a log
 that costs nothing to store.
 
-The intrinsic optimisation transient does not admit the same treatment. It does not
-revisit its past states, and the three statistics we examined that appeared to detect the
-grokking transition were found instead to separate run configurations. The phenomenon
+The intrinsic optimisation transient does not admit the same treatment, and the reason is
+quantitative rather than a matter of taste. Its correlation time is a tenth of the
+transition it would have to resolve, so the transition affords about ten independent
+observations at any logging rate, against the thousands an attractor reconstruction
+requires. The three statistics we examined that appeared to detect the grokking transition
+were found instead to separate run configurations. The phenomenon
 itself is also more variable than a single run can reveal: thirty runs of one
 configuration produce delays between $1290$ and $5600$ steps, while a run of that same
 configuration with the split and initialisation drawn from one stream reaches

@@ -13,8 +13,11 @@ separate, and this script measures whether they actually do.
 Three measurements, all on the dense logs from phase 13:
 
 1. **How long is a window locally stationary?** For a window of L steps, compare the shift
-   of the mean across the window against the size of the fluctuations inside it. The
-   dynamics are locally stationary on scales where the shift is the smaller of the two.
+   of the mean across the window against the fluctuations inside it, and express that in
+   units of what white noise of the same length gives. The normalisation matters: for a
+   stationary series the raw ratio falls like 1/sqrt(L), so a fixed threshold grows more
+   permissive with length and would report long windows as *more* stationary than short
+   ones by arithmetic alone.
 
 2. **How many points does such a window hold?** This is the quantity dense logging changes,
    and it is the whole argument for doing it.
@@ -59,13 +62,7 @@ LENGTHS = (25, 50, 100, 200, 400, 800, 1600, 3000)
 
 
 def drift_ratio(series, length, stride=None):
-    """Median |shift of the mean across a window| / |fluctuation inside it|.
-
-    Below 1 the window is dominated by fluctuation rather than by drift, which is the
-    working definition of locally stationary used here. The fluctuation scale is measured
-    after removing a straight line, so a pure ramp scores a large ratio rather than a
-    small one.
-    """
+    """Median |shift of the mean across a window| / |fluctuation inside it|."""
     stride = stride or max(length // 2, 1)
     ratios = []
     for start in range(0, len(series) - length + 1, stride):
@@ -77,6 +74,22 @@ def drift_ratio(series, length, stride=None):
         if scale > 0:
             ratios.append(shift / scale)
     return float(np.median(ratios)) if ratios else float("nan")
+
+
+def stationarity_index(series, length, reference, stride=None):
+    """Drift ratio in units of what a stationary series of the same length would give.
+
+    The raw ratio is not scale free. For a stationary series the shift of the mean across
+    a window is a sampling fluctuation of order ``2 / sqrt(length)`` relative to the
+    within-window spread, so the raw ratio *falls* as the window grows and a fixed
+    threshold such as "below 1" silently becomes more permissive at longer windows. That
+    would have made long windows look more stationary than short ones purely by
+    arithmetic. Dividing by the value measured on white noise of the same length removes
+    the length dependence: an index near 1 means indistinguishable from stationary, and a
+    large index means drift dominates.
+    """
+    raw = drift_ratio(series, length, stride)
+    return raw / reference if reference else float("nan")
 
 
 def recurrence_at(series, exclusion_steps, interval, E=5, tau_steps=5):
@@ -96,41 +109,63 @@ def recurrence_at(series, exclusion_steps, interval, E=5, tau_steps=5):
 
 
 def main():
-    print("=== 1. Over what window length are the dynamics locally stationary? ===")
-    print("    (median drift / fluctuation; < 1 means fluctuation dominates)\n")
+    # Calibrate the drift ratio on a series that is stationary by construction, so the
+    # criterion is not a bare threshold on a length-dependent quantity.
+    rng = np.random.default_rng(0)
+    noise = rng.normal(size=6000)
+    reference = {L: drift_ratio(noise, L) for L in LENGTHS}
+
+    print("=== 0. Calibration of the stationarity criterion ===")
+    print("    white noise, stationary by construction, sets the scale at each length\n")
+    print(f"    {'series':<28} " + " ".join(f"{L:>6}" for L in LENGTHS))
+    print(f"    {'white noise (raw ratio)':<28} "
+          + " ".join(f"{reference[L]:6.2f}" for L in LENGTHS))
+    ramp = np.linspace(0.0, 1.0, 6000) ** 2
+    print(f"    {'monotone ramp (index)':<28} "
+          + " ".join(f"{stationarity_index(ramp, L, reference[L]):6.1f}" for L in LENGTHS))
+
+    print("\n=== 1. Over what window length are the dynamics locally stationary? ===")
+    print("    stationarity index: 1 means indistinguishable from stationary,")
+    print("    large means drift dominates\n")
     rows = []
     print(f"    {'run':<16} {'observable':<12} " + " ".join(f"{L:>6}" for L in LENGTHS))
     for run in RUNS:
         frame = pd.read_csv(DENSE / f"{run}.csv")
         for observable in OBSERVABLES:
             series = frame[observable].to_numpy()
-            ratios = [drift_ratio(series, L) for L in LENGTHS]
-            for L, r in zip(LENGTHS, ratios):
-                rows.append({"run": run, "observable": observable,
-                             "window_steps": L, "drift_ratio": r})
+            index = [stationarity_index(series, L, reference[L]) for L in LENGTHS]
+            for L, value in zip(LENGTHS, index):
+                rows.append({"run": run, "observable": observable, "window_steps": L,
+                             "drift_ratio": drift_ratio(series, L),
+                             "stationarity_index": value})
             print(f"    {run:<16} {observable:<12} "
-                  + " ".join(f"{r:6.2f}" for r in ratios))
+                  + " ".join(f"{v:6.1f}" for v in index))
     table = pd.DataFrame(rows)
     table.to_csv(OUT / "phase14_drift_ratio.csv", index=False)
 
     print("\n=== 2. How many points does a locally stationary window hold? ===")
+    print("    (taking an index below 3 as locally stationary)\n")
     for run in RUNS:
         for observable in OBSERVABLES:
             sub = table[(table.run == run) & (table.observable == observable)]
-            ok = sub[sub.drift_ratio < 1.0]
+            ok = sub[sub.stationarity_index < 3.0]
             if len(ok):
                 longest = int(ok.window_steps.max())
                 print(f"    {run:<16} {observable:<12} stationary up to {longest:>5} steps"
-                      f"  ->{longest:>5} points dense, {longest // 10:>4} points at the old rate")
+                      f"  ->{longest:>5} points dense, {longest // 10:>4} at the old rate")
             else:
-                print(f"    {run:<16} {observable:<12} never below 1 at any tested length")
+                print(f"    {run:<16} {observable:<12} never stationary at any tested length")
 
     print("\n=== 3. Does a locally stationary window recur? ===")
     print("    Recurrence against exclusion inside one 800-step segment, normalised by")
     print("    the rate at zero exclusion. A plateau means genuine returns; a decay to")
     print("    zero means every close pair was merely adjacent in time.\n")
 
-    seg_len, excl = 800, (0, 8, 16, 40, 80, 160)
+    # Every exclusion is a multiple of 10 so the decimated series can represent it
+    # exactly. With 8 and 16 in the list they collapsed to 1 and 4 samples, the row
+    # lost two columns to deduplication, and dense and decimated were compared
+    # against different physical exclusions.
+    seg_len, excl = 800, (0, 10, 20, 40, 80, 160)
 
     def profile_of(series, interval=1):
         tau = max(5 // interval, 1)
