@@ -249,10 +249,10 @@ def figure_delay_distribution():
     ax.scatter(gaps, 1 + rng.uniform(-0.13, 0.13, len(gaps)), s=26, color=BLUE,
                alpha=0.85, edgecolor="white", linewidth=0.6, zorder=3,
                label=f"30 (split, init) combinations of the same configuration")
-    ax.scatter([12000], [1], s=90, marker="*", color=VERMILLION, zorder=4,
+    ax.scatter([11790], [1], s=90, marker="*", color=VERMILLION, zorder=4,
                edgecolor="white", linewidth=0.8,
-               label="the published run")
-    ax.annotate("published run\n12 000 steps", (12000, 1), textcoords="offset points",
+               label="split and initialisation from one stream")
+    ax.annotate("single stream\n11 790 steps", (11790, 1), textcoords="offset points",
                 xytext=(0, 24), ha="center", fontsize=7.4, color=VERMILLION)
     ax.annotate(f"30 runs span {gaps.min():.0f} to {gaps.max():.0f}",
                 (np.median(gaps), 0.78), ha="center", fontsize=7.4, color=INK)
@@ -286,7 +286,7 @@ def figure_dimension_artifact():
                edgecolor="white", linewidth=0.8, label="estimator on a synthetic line")
     ax.scatter(controls.closed_form, controls.measured_median, s=48, marker="s",
                color=VERMILLION, zorder=3, edgecolor="white", linewidth=0.8,
-               label="published $WD=0$ control runs")
+               label="$WD=0$ control runs")
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_xlim(*limit)
@@ -301,7 +301,7 @@ def figure_dimension_artifact():
     ax.legend(loc="upper left")
 
     # (b) The identifiability diagnostic is length-dependent, so it can only be read
-    # against a reference of the same length. Our earlier version compared a 12000-sample
+    # against a reference of the same length. An unmatched comparison, a 12000-sample
     # Lorenz against 2000-sample logs and the difference was carried by that alone.
     ax = axes[1]
     ax.set_axisbelow(True)
@@ -395,7 +395,7 @@ def figure_velocity():
 
 
 def figure_paper_settings():
-    """The dimension signal at W=0, which is the configuration the estimate was published in."""
+    """The dimension signal at W=0, that is, with no temporal exclusion."""
     res = CODE / "edm_validation" / "results"
     summary = pd.read_csv(res / "phase9_paper_settings_summary.csv")
     families = {
@@ -424,7 +424,7 @@ def figure_paper_settings():
     ax.set_title("(a) no Theiler window", fontsize=8.2, color=INK, pad=6)
     ax.legend(loc="upper left", fontsize=6.4)
 
-    # (b) The published claim is a fall. A slope graph shows the direction each run
+    # (b) The claim under test is a fall. A slope graph shows the direction each run
     # actually takes, which is the quantity the claim is about.
     ax = axes[1]
     ax.set_axisbelow(True)

@@ -1,9 +1,13 @@
 # icomp_v2
 
-Successor report to [`../icomp_article/`](../icomp_article/). Where the earlier paper
-proposed an intrinsic-dimension collapse as a predictor of grokking, this one establishes
-the conditions under which delay-embedding methods apply to training logs at all, reports
-what does and does not survive those conditions, and states a control protocol.
+A self-contained report on when delay-embedding methods apply to neural network training
+logs. It fixes the validation requirements it holds itself to, measures whether the
+preconditions of the embedding theorems are met, reports three candidate grokking signals
+that fail controlled comparison, gives a positive result in the driven regime with its
+direction tested, and measures how variable the delayed transition itself is.
+
+It does not depend on any earlier draft: every claim is supported by code and result files
+in this repository.
 
 ## Build
 
@@ -18,10 +22,10 @@ pdflatex report && bibtex report && pdflatex report && pdflatex report
 
 | file | role |
 | --- | --- |
-| `report.tex`, `report.pdf` | the report (10 pages) |
+| `report.tex`, `report.pdf` | the report (14 pages) |
 | `make_figures.py` | regenerates every figure from the analysis outputs |
 | `figures/` | nine figures, PDF for LaTeX and PNG for preview |
-| `references.bib` | bibliography, extending the earlier paper's with the surrogate and cross-mapping literature |
+| `references.bib` | bibliography, covering the embedding, surrogate and cross-mapping literature |
 
 ## The argument in one paragraph
 
@@ -33,8 +37,10 @@ detect the grokking transition are shown to separate run configurations instead,
 falsified by a control that differs from the positive runs in one respect only. In the
 driven regime, convergent cross mapping recovers an injected driver from a single scalar
 loss log in seven of eight coupled runs across two architectures, with no false positives
-among the runs whose driver was logged but never applied, and the recovered coupling is
-directional: the reverse cross map is weaker in every coupled run.
+among the runs whose driver was logged but never applied. Its direction is tested rather
+than assumed: the forward map converges more strongly than the reverse in seven of eight
+coupled runs while the controls converge in neither, though unidirectionality is not
+demonstrable when the driver acts on the loss without delay.
 
 ## Where the numbers come from
 
@@ -48,7 +54,7 @@ correct, is [`../code/edm_validation/NOTES.md`](../code/edm_validation/NOTES.md)
 | --- | --- |
 | preconditions | `edm_validation/forecast.py::recurrence_profile` |
 | dimension artifact | `edm_validation/phase8_dimension_evidence.py` |
-| dimension at the published settings | `edm_validation/phase9_paper_settings.py` |
+| dimension with no temporal exclusion | `edm_validation/phase9_paper_settings.py` |
 | function-space velocity | `prediction_improved/results/*_probe.csv` |
 | confound-free test | `edm_validation/results/phase6_*.csv`, `phase7_*.csv` |
 | driver recovery | `edm_validation/results/phase3_ccm.csv`, `phase5_inject_ccm.csv` |
@@ -61,11 +67,10 @@ the causal reading only if it distinguishes "driver forces loss" from the conver
 these logs make that testable: the driver schedule is evaluated from a fixed seed before
 training, so the ground truth is unidirectional by construction.
 
-`phase9_paper_settings.py` exists because the Theiler exclusion used in the dimension
-analysis is itself a fair target for objection: the original work did not apply one. That
-script repeats the falsification at `W=0`, `k=5`, `max_E=15` and a 300-sample window, which
-is the published configuration, and finds that the reported descent is not reproducible
-across seeds of the grokking condition itself.
+`phase9_paper_settings.py` exists because the Theiler exclusion is itself a fair target for
+objection: the estimate is often computed without one. That script repeats the comparison at
+`W=0`, `k=5`, `max_E=15` and a 300-sample window, that is with no temporal exclusion at all,
+and finds the descent is not reproducible across seeds of the grokking condition itself.
 
 Figures use the Okabe-Ito qualitative palette, which is designed and tested for
 colour-vision deficiency; hues are assigned to entities in a fixed order so that a series

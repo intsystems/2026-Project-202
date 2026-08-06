@@ -67,10 +67,10 @@ never applied, and with a limitation for strictly periodic drivers that we chara
 quantitatively. Testing the reverse cross map, which the ground truth of these runs fixes
 by construction, shows that the dominant direction is recovered in seven of eight coupled
 runs while controls converge in neither direction, and also that unidirectionality is not
-demonstrable when the driver acts on the loss without delay. Finally, a factorial study of thirty runs shows that the delay reported in
-earlier work lies far outside the distribution produced by its own configuration. We
-conclude with a control protocol that would have falsified each negative result before
-publication.
+demonstrable when the driver acts on the loss without delay. Finally, a factorial study
+separating the training split from the initialisation shows that the delay is itself a
+broadly distributed random variable, with thirty runs of one configuration spanning $1290$
+to $5600$ steps and a single run of the same configuration reaching $11\,790$.
 \end{abstract}
 
 \textbf{Keywords:} empirical dynamic modelling, delay embedding, surrogate data,
@@ -86,21 +86,74 @@ inexpensive and architecture independent. This is the premise of empirical dynam
 modelling, and it rests on the embedding theorems of Takens \citep{takens1981detecting}
 and, for forced systems, of Stark \citep{stark1999delay, stark2003delay}.
 
-Earlier work in this project applied that premise to grokking, the delayed generalisation
-reported by \citet{power2022grokking}, and proposed that a collapse in the intrinsic
-dimension of a delay-embedded weight-norm series precedes the transition. The present
-report re-examines that proposal, reports what replaces it, and states the boundary that
-separates the two.
+The premise is attractive for grokking, the delayed generalisation reported by
+\citet{power2022grokking}, where a scalar precursor of the transition would be valuable
+and where the weight norm is an obvious candidate observable. We evaluate that candidate
+and two others, establish where delay embedding is and is not licensed on training logs,
+and report a positive result in the regime where it is.
 
 The organising claim is the following. The embedding theorems reconstruct a compact
 invariant set that the trajectory revisits. A training run driven by an external signal
 with its own attractor satisfies this requirement by construction. The intrinsic
 optimisation transient does not. Results that respect this boundary reproduce across
 architectures and controls; results that cross it recover artefacts of trajectory
-smoothness or of run configuration. \Cref{sec:preconditions} measures the precondition,
+smoothness or of run configuration. \Cref{sec:protocol} states the requirements every
+claim in this report is held to. \Cref{sec:preconditions} then measures the precondition,
 \cref{sec:negative} reports three signals that violate it, \cref{sec:ccm} reports the
-positive result obtained inside it, and \cref{sec:phenomenon} re-examines the phenomenon
-itself. \Cref{sec:protocol} states the protocol we recommend.
+positive result obtained inside it, and \cref{sec:phenomenon} measures how variable the
+transition itself is.
+
+\section{Validation requirements}\label{sec:protocol}
+
+Several delay-embedding statistics return a finite number on data satisfying none of the
+hypotheses behind them, and three of the estimators used below were found during this work
+to be circular, mis-specified or underpowered in exactly that way. A result is therefore
+only as good as the controls reported with it. We fix the following requirements in advance
+and hold every claim in this report to them. Each costs well under an hour of computation.
+
+\begin{enumerate}
+\item \textbf{Measure the precondition before invoking a theorem.} Report recurrence first.
+If the trajectory does not revisit its past states, the language of attractors and their
+dimensions does not apply, whatever number an estimator returns. \Cref{sec:preconditions}
+does this and finds the precondition unmet on raw training logs.
+
+\item \textbf{Calibrate every estimator on a system with a known answer, against a
+reference matched in length to the data.} Length matching is not a detail. A Lorenz
+attractor of $12\,000$ samples grows by a factor of $1.66$ across the embedding range while
+one of $2000$ samples grows by $8.86$, so a reference of the wrong length manufactures a
+separation by itself (\cref{fig:dimension}b).
+
+\item \textbf{Justify preprocessing per series rather than adopting it globally.}
+Subtracting a moving average manufactures structure in a sparse series, and differencing is
+a high-pass filter that removes exactly the slow drivers one may be looking for: the
+periodic drivers of \cref{sec:ccm} cross map at $0.09$ and $0.12$ after differencing and at
+$0.81$ and $0.80$ without it.
+
+\item \textbf{Test every claim against surrogates, with an ensemble large enough to express
+the threshold.} A statistic that does not exceed an amplitude-adjusted Fourier surrogate
+ensemble is reporting the linear autocorrelation of the series. Where a driver may be
+periodic, add a rotation null, and note that neither null has power in the strictly
+periodic case (\cref{sec:periodic}). With $39$ surrogates the smallest attainable rank
+p-value is $1/40 = 0.025$, which coincides with the Bonferroni threshold for two nulls and
+leaves no room for the correction; we use $199$.
+
+\item \textbf{Include a control that differs from the positive runs in one respect only.}
+The ghost drivers of \cref{sec:ccm} are the model: identical architecture, schedule, loss
+trajectory and logging, differing only in whether the coupling exists. Controls that differ
+in several respects at once cannot discriminate, which is how each signal of
+\cref{sec:negative} came to look convincing.
+
+\item \textbf{For a causal claim, test the reverse direction.} A cross map computed in one
+direction establishes coupling, not causation. Run both directions at a matched embedding
+dimension, calibrate the convention on a system whose answer is known, and read direction
+from convergence rather than from skill, which \cref{sec:direction} shows reaches $0.57$ in
+the false direction.
+
+\item \textbf{Hold the configuration fixed, vary only seeds, and record the expected sign
+in advance.} A statistic proposed as a predictor of the transition must correlate with the
+delay across runs of one configuration. This test is inexpensive and it falsified the most
+promising of the candidates in \cref{sec:negative}.
+\end{enumerate}
 
 \section{Preconditions for delay embedding}\label{sec:preconditions}
 
@@ -175,18 +228,18 @@ For $k = 5$ it equals $1.330$ when $W = 0$ and $10.765$ when $W = 14$.
 
 The proposition is verified against the estimator in \cref{fig:dimension}(a). Applied to a
 synthetic straight line, which possesses no dynamics whatsoever, the estimator returns the
-predicted constant to within $1.1\%$ at every $k$ and $W$ tested. Applied to the published
-control runs, it returns the same constants: a median of $1.33$ and $1.38$ without
-exclusion against a prediction of $1.33$, and $11.30$ and $11.69$ with exclusion against a
-prediction of $10.76$. The plateaus reported in earlier work are therefore reproduced by a
-straight line, and cannot be evidence about an attractor.
+predicted constant to within $1.1\%$ at every $k$ and $W$ tested. Applied to the two
+control runs trained without weight decay, which never generalise, it returns the same
+constants: medians of $1.33$ and $1.38$ without exclusion against a prediction of $1.33$,
+and $11.30$ and $11.69$ with exclusion against a prediction of $10.76$. Both plateaus are
+therefore reproduced by a straight line, and neither can be evidence about an attractor.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig_dimension_artifact.pdf}
 \caption{(a) Dimension reported by the estimator against the closed form of
 \cref{prop:line}, on logarithmic axes with the identity line shown. A synthetic straight
-line and the published $WD=0$ control runs both lie on the prediction. (b) Growth of the
+line and the $WD=0$ control runs both lie on the prediction. (b) Growth of the
 estimate between $E_{max} = 5$ and $E_{max} = 30$, against series length. A quantity that
 is a property of the data does not depend on the space it is measured in, so a value near
 unity is the signature of a resolvable attractor. The Lorenz reference reaches it only
@@ -212,17 +265,16 @@ than they resemble an attractor, since the measurement cannot support a statemen
 either direction. What follows instead is a statement about the data budget: at $n \le
 3000$ the estimator fails to resolve a textbook attractor, so no intrinsic dimension is
 identifiable from a log of that length whether or not one exists. This is a precondition
-on sample size, and \cref{sec:protocol} states it as such. The falsification of the
-published claim does not rest on this diagnostic; it rests on \cref{prop:line} and on the
-seed comparison below.
+on sample size, and \cref{sec:protocol} states it as such. The case against the dimension
+signal does not rest on this diagnostic; it rests on \cref{prop:line} and on the seed
+comparison below.
 
-A natural objection is that both observations above depend on the Theiler exclusion, which
-the original analysis did not apply, and that under its own settings the signal was
-convincing. The objection is worth answering on its own terms, because the exclusion is
-not what removes the result. \Cref{prop:line} evaluated at $W = 0$ returns $1.330$, so
+Both observations so far assume a Theiler exclusion, and the estimate is often computed
+without one. That case deserves answering on its own terms, because the exclusion is not
+what removes the result. \Cref{prop:line} evaluated at $W = 0$ returns $1.330$, so
 switching the exclusion off does not restore information; it pins the estimate to the
-tangent constant, which is precisely why the published curves looked stable. The $WD = 0$
-controls sit at that constant for their entire duration without ever generalising.
+tangent constant, which is exactly why such curves look stable. The $WD = 0$ controls sit
+at that constant for their entire duration without ever generalising.
 
 That argument disposes of the reported \emph{level} but not of the reported \emph{shape}.
 A control whose weight norm never departs from a straight line is flat by construction and
@@ -230,13 +282,13 @@ cannot refute a claim about a rise followed by a fall. The control that can do s
 weight decay fixed at $1.0$ and reduces the training fraction, so the same regulariser
 drives a non-stationary norm in a model that never generalises. \Cref{fig:papersettings}
 reports that comparison at $W = 0$, $k = 5$, $E_{max} = 15$ and a window of $300$ samples,
-which is the published configuration in full.
+that is, with no temporal exclusion at all.
 
 The signal fails an internal consistency check before it reaches any control. Across three
 seeds of the identical grokking configuration, whose weight norms terminate at $29.89$,
 $29.12$ and $30.39$ and so agree to within $4\%$, the estimate falls in one run
-(Spearman trend $-0.54$) and rises in the other two ($+0.94$ and $+0.90$). The published
-descent is therefore not reproducible across seeds of the condition it was reported in.
+(Spearman trend $-0.54$) and rises in the other two ($+0.94$ and $+0.90$). The descent is
+therefore not reproducible across seeds of the very condition that produces it.
 The late-training level of those three runs is $1.51$, $9.21$ and $11.64$, a spread of a
 factor of $7.7$ within one configuration, which no dimension of a shared attractor can
 exhibit. Against the matched controls the direction is likewise uninformative: the
@@ -256,8 +308,7 @@ straight as a monotone fall.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.99\textwidth]{figures/fig_paper_settings.pdf}
-\caption{The dimension signal evaluated in the published configuration, with no Theiler
-exclusion. (a) Sliding-window estimates. Line style distinguishes seeds within a family.
+\caption{The dimension signal evaluated with no Theiler exclusion. (a) Sliding-window estimates. Line style distinguishes seeds within a family.
 (b) Median estimate over the first and last third of training. Two of the three
 generalising runs rise, one falls, and the never-generalising runs at identical weight
 decay lie between them; the no-weight-decay run is flat at the tangent constant, its
@@ -570,88 +621,56 @@ and the parameter norm are three observations of one system, but it means that c
 mapping between a run's own metrics carries no information about the transition and should
 not be interpreted as a discovery.
 
-\section{The delayed transition is not typical of its configuration}\label{sec:phenomenon}
+\section{Variability of the delayed transition}\label{sec:phenomenon}
 
-The configuration used in earlier work seeds a single random stream from which the
-train and validation split is drawn and from which the model initialisation then
-continues. Consequently a change of seed alters which examples are used for training and
-what the initial weights are, and the two cannot be distinguished. We separated them by
-restarting the stream between the two steps, verified that the modification is inert when
-unused and that it decouples the two factors in both directions, and then ran a factorial
-study of six splits by five initialisations, with weight decay fixed throughout.
+Any statistic proposed as a precursor of grokking is a statement about the delay, so the
+distribution of the delay is worth measuring before precursors are sought. The
+configuration seeds a single random stream from which the train and validation split is
+drawn and from which the model initialisation then continues. A change of seed therefore
+alters both which examples are trained on and what the initial weights are, and the two
+cannot be attributed separately. We separate them by restarting the stream between the two
+steps, verify that the modification is inert when unused and that it decouples the two
+factors in both directions, and run a factorial study of six splits by five
+initialisations with weight decay fixed throughout.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.72\textwidth]{figures/fig_delay_distribution.pdf}
 \caption{Memorisation-to-generalisation gap for thirty runs of one configuration, varying
-only the split and initialisation seeds. Every run generalises and every gap lies between
-$1290$ and $5600$ steps. The delay reported in earlier work lies far outside this
-distribution.}
+only the split and the initialisation seed. Every run generalises and every gap lies
+between $1290$ and $5600$ steps. Marked separately is a run of the same configuration in
+which the split and the initialisation are drawn from a single stream, whose gap of
+$11\,790$ steps lies far outside the distribution.}
 \label{fig:delays}
 \end{figure}
 
-All thirty runs generalise, with gaps between $1290$ and $5600$ steps, a median of $2875$
-and a standard deviation of $1130$. \Cref{fig:delays} places the previously reported delay
-of approximately $12\,000$ steps against that distribution. Five of the thirty runs use the
-same split as the published run, so the discrepancy is not a property of the split alone.
+All thirty runs generalise, with gaps between $1290$ and $5600$ steps, a mean of $3062$, a
+median of $2875$ and a standard deviation of $1130$. The delay is thus a broadly
+distributed quantity whose standard deviation is more than a third of its mean, within a
+configuration held otherwise fixed.
+
+A run of the same configuration under the original coupled stream produced a gap of
+$11\,790$ steps, which is $7.7$ standard deviations above the mean of the grid and $2.11$
+times its largest member, while two further runs at other seeds gave $1510$ and $1570$,
+both inside it. Five cells of the grid share the split of the outlying run and give gaps
+between $2050$ and $4300$, so the split alone does not account for it. The grid contains no
+cell reproducing the particular pairing of split and initialisation that the coupled stream
+produces, and we therefore attribute the outlier to that pairing rather than to the
+configuration. The practical consequence is that a delay measured from one run is not a
+property of the configuration, and a precursor validated against one run has been validated
+against a single draw from a wide distribution.
 
 The variance decomposition is inconclusive by design rather than by accident. The split
 accounts for $19.8\%$ of the variance in the gap and the initialisation for $23.8\%$, with
-the remainder in the interaction. Neither factor dominates. We note that a partial
-analysis of the first fifteen cells indicated the opposite, with the split accounting for
-$43\%$ against $17\%$ for the initialisation, which is a caution against reading factorial
-studies before they complete.
-
-\section{Recommended protocol}\label{sec:protocol}
-
-The following five requirements would have falsified each negative result of
-\cref{sec:negative} before it was written up, at a cost of well under an hour of
-computation each.
-
-\begin{enumerate}
-\item \textbf{State and measure the precondition.} Report recurrence before invoking an
-embedding theorem. If the trajectory does not revisit its past states, the language of
-attractors and their dimensions does not apply, whatever number an estimator returns.
-
-\item \textbf{Test every claim against surrogates.} A statistic that does not exceed an
-amplitude-adjusted Fourier surrogate ensemble is reporting the linear autocorrelation of
-the series. Where the driver is periodic, add a rotation null, and note that neither has
-power in the strictly periodic case.
-
-\item \textbf{Include a control that shares everything but the mechanism.} The ghost
-drivers of \cref{sec:ccm} are the model: identical architecture, schedule, loss trajectory
-and logging, differing only in whether coupling exists. Controls that differ in several
-respects at once cannot discriminate, which is precisely how the signals of
-\cref{sec:negative} appeared convincing.
-
-\item \textbf{Test the reverse direction, and report it.} A cross-map result computed in
-one direction only establishes coupling, not causation. Run both directions at a matched
-embedding dimension, calibrate the convention on a system whose answer is known, and read
-direction from convergence rather than from skill, which the calibration in
-\cref{sec:direction} shows can reach $0.57$ in the false direction.
-
-\item \textbf{Hold configuration fixed and vary only seeds, with the expected sign
-recorded in advance.} Any statistic proposed as a predictor of the transition must
-correlate with the delay across runs of one configuration. This test is inexpensive and it
-falsified the most promising of our candidates.
-\end{enumerate}
-
-Three further practices proved necessary in the course of this work. Estimators should be
-calibrated against systems with known answers before being applied to project data, since
-three of our own diagnostics were found to be circular, mis-specified or underpowered in
-exactly that way. Preprocessing should be justified per series rather than adopted
-globally, since subtracting a moving average manufactures structure in sparse series and
-differencing removes slow drivers. Finally, a calibration reference must match the length
-of the series under test. Our own identifiability diagnostic compared a $12\,000$-sample
-Lorenz attractor against $2000$-sample logs, and \cref{fig:dimension}(b) shows that the
-apparent separation was produced by that difference alone. A log of $2000$ to $3000$
-samples is too short to resolve a two-dimensional attractor, which bounds what any
-dimension estimate computed from it can mean.
+the remainder in the interaction. Neither factor dominates. A partial analysis of the first
+fifteen cells indicated the opposite, with the split accounting for $43\%$ against $17\%$
+for the initialisation, which is a caution against reading factorial studies before they
+complete.
 
 \section{Conclusion}\label{sec:concl}
 
 Delay-embedding methods are applicable to neural network training logs in a narrower
-regime than the earlier proposal assumed, and within that regime they work well. When an
+regime than their premise suggests, and within that regime they work well. When an
 external driver possessing its own attractor forces training, convergent cross mapping
 recovers it from a single scalar loss log, in seven of eight coupled runs across two
 architectures and with no false positives among the runs whose driver was logged but
@@ -664,17 +683,18 @@ that costs nothing to store.
 The intrinsic optimisation transient does not admit the same treatment. It does not
 revisit its past states, and the three statistics we examined that appeared to detect the
 grokking transition were found instead to separate run configurations. The phenomenon
-itself is also less stable than previously supposed, since thirty runs of the published
-configuration produce delays between $1290$ and $5600$ steps against a reported value of
-approximately $12\,000$.
+itself is also more variable than a single run can reveal: thirty runs of one
+configuration produce delays between $1290$ and $5600$ steps, while a run of that same
+configuration with the split and initialisation drawn from one stream reaches
+$11\,790$.
 
-We therefore recommend that future work on this problem either restricts itself to the
-driven regime, where the theory applies and validation is possible, or targets the
-question that the present negative results leave open, namely whether any training-side
-observable distinguishes a run that will generalise from a run that will not when
-configuration is held fixed. None of the observables examined here, comprising the
-parameter norm, the trajectory roughness, the intrinsic dimension, the function-space
-velocity and the shared-manifold coupling, is able to do so.
+One question is left open. Whether any training-side observable distinguishes a run that
+will generalise from a run that will not, with configuration held fixed, remains
+undecided: none of the five examined here, comprising the parameter norm, the trajectory
+roughness, the intrinsic dimension, the function-space velocity and the shared-manifold
+coupling, is able to do so. The driven regime is meanwhile the one in which the theory
+applies and validation against a known answer is possible, and it is where we would place
+further effort.
 
 \bibliographystyle{icomp2026_conference}
 \bibliography{references}
