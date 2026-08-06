@@ -300,26 +300,30 @@ def figure_dimension_artifact():
     ax.set_title("(a) what the estimator reports", fontsize=8.2, color=INK, pad=6)
     ax.legend(loc="upper left")
 
+    # (b) The identifiability diagnostic is length-dependent, so it can only be read
+    # against a reference of the same length. Our earlier version compared a 12000-sample
+    # Lorenz against 2000-sample logs and the difference was carried by that alone.
     ax = axes[1]
     ax.set_axisbelow(True)
     ax.grid()
-    styles = {
-        "Lorenz-63 (11000 samples)": (BLUE, "-", "o"),
-        "mod_wd1 weight norm": (VERMILLION, "-", "s"),
-        "s5_wd1 weight norm": (ORANGE, "-", "^"),
-        "white noise": (GREY, ":", "v"),
-    }
-    max_es = [int(c.split("=")[1]) for c in scan.columns if c.startswith("E_max")]
-    for name, (colour, style, marker) in styles.items():
-        if name not in scan.index:
-            continue
-        values = scan.loc[name, [f"E_max={m}" for m in max_es]].to_numpy(dtype=float)
-        ax.plot(max_es, values, style, color=colour, lw=1.5, marker=marker, ms=3.6,
-                label=name.replace(" (11000 samples)", ""))
-    ax.set_xlabel(r"embedding dimension $E_{max}$")
-    ax.set_ylabel(r"reported dimension $\hat{d}$")
-    ax.set_title("(b) is the number a property of the data?", fontsize=8.2, color=INK, pad=6)
-    ax.legend(loc="upper left")
+    length = pd.read_csv(CODE / "edm_validation" / "results" / "phase10_length_dependence.csv")
+    logs = pd.read_csv(CODE / "edm_validation" / "results" / "phase10_log_ratios.csv")
+
+    ax.axvspan(logs.n.min() * 0.82, logs.n.max() * 1.22, color=VERMILLION, alpha=0.10, lw=0)
+    ax.annotate("length of\ntraining logs", (float(np.sqrt(logs.n.min() * logs.n.max())), 11.6),
+                ha="center", va="top", fontsize=6.8, color=VERMILLION)
+    ax.plot(length.n, length.lorenz, "-o", color=BLUE, lw=1.5, ms=3.6,
+            label="Lorenz-63 (an attractor)")
+    ax.plot(length.n, length.white_noise, ":v", color=GREY, lw=1.5, ms=3.6,
+            label="white noise (no attractor)")
+    ax.plot(logs.n, logs.ratio, "s", color=VERMILLION, ms=5.5, markeredgecolor="white",
+            markeredgewidth=0.8, label="weight-norm logs")
+    ax.axhline(1.0, color="#BBBBBB", lw=0.8, ls="--")
+    ax.set_xscale("log")
+    ax.set_xlabel("series length $n$")
+    ax.set_ylabel(r"growth of $\hat{d}$ with $E_{max}$")
+    ax.set_title("(b) the diagnostic needs $n \\gtrsim 6000$", fontsize=8.2, color=INK, pad=6)
+    ax.legend(loc="upper right", fontsize=6.8)
     save(fig, "fig_dimension_artifact")
 
 

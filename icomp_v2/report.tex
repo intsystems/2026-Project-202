@@ -183,21 +183,35 @@ straight line, and cannot be evidence about an attractor.
 \includegraphics[width=0.95\textwidth]{figures/fig_dimension_artifact.pdf}
 \caption{(a) Dimension reported by the estimator against the closed form of
 \cref{prop:line}, on logarithmic axes with the identity line shown. A synthetic straight
-line and the published $WD=0$ control runs both lie on the prediction. (b) Reported
-dimension against the dimension of the embedding space. A quantity that is a property of
-the data does not depend on the space it is measured in. The Lorenz attractor rises by a
-factor of $1.66$ across the range, whereas the weight-norm series rise by $3.73$ and
-$4.36$, which is the behaviour of the white-noise reference at $4.40$.}
+line and the published $WD=0$ control runs both lie on the prediction. (b) Growth of the
+estimate between $E_{max} = 5$ and $E_{max} = 30$, against series length. A quantity that
+is a property of the data does not depend on the space it is measured in, so a value near
+unity is the signature of a resolvable attractor. The Lorenz reference reaches it only
+beyond $n \approx 6000$; inside the shaded band, which is the length training logs
+provide, it scores worse than both white noise and the logs, so the diagnostic cannot
+discriminate there.}
 \label{fig:dimension}
 \end{figure}
 
 The second observation concerns identifiability. An intrinsic dimension exists only if the
-estimate is insensitive to the dimension of the space in which it is measured.
-\Cref{fig:dimension}(b) sweeps that dimension. The Lorenz reference grows by a factor of
-$1.66$ from $E_{max} = 5$ to $E_{max} = 30$, while the two weight-norm series grow by
-$3.73$ and $4.36$, which is indistinguishable from the factor of $4.40$ obtained for white
-noise. On this diagnostic the published observable behaves like noise rather than like an
-attractor, so no dimension is identifiable from it.
+estimate is insensitive to the dimension of the space in which it is measured, so the
+growth of $\hat{d}$ between $E_{max} = 5$ and $E_{max} = 30$ is a natural diagnostic. It
+must, however, be read against a reference of the same length, because it is strongly
+length-dependent. \Cref{fig:dimension}(b) measures that dependence. A Lorenz reference
+falls from a growth factor of $8.86$ at $n = 2000$ to $2.21$ at $n = 6000$ and $1.32$ at
+$n = 24\,000$, while white noise stays between $4.4$ and $4.8$ throughout.
+
+The consequence is that at the lengths training logs provide the diagnostic has no power.
+The two weight-norm series, of $2000$ and $3000$ samples, grow by factors of $3.73$ and
+$4.36$; a Lorenz attractor of the same length grows by $8.86$, which is worse than both,
+and worse than noise. We therefore do not conclude that these logs resemble noise more
+than they resemble an attractor, since the measurement cannot support a statement in
+either direction. What follows instead is a statement about the data budget: at $n \le
+3000$ the estimator fails to resolve a textbook attractor, so no intrinsic dimension is
+identifiable from a log of that length whether or not one exists. This is a precondition
+on sample size, and \cref{sec:protocol} states it as such. The falsification of the
+published claim does not rest on this diagnostic; it rests on \cref{prop:line} and on the
+seed comparison below.
 
 A natural objection is that both observations above depend on the Theiler exclusion, which
 the original analysis did not apply, and that under its own settings the signal was
@@ -357,7 +371,7 @@ respect only.}
 \midrule
 Intrinsic dimension of $\lVert w \rVert_2$
 & Rises then collapses before generalisation
-& A straight line reproduces both plateaus; the estimate tracks $E_{max}$ as white noise does
+& A straight line reproduces both plateaus; across seeds of one configuration the estimate rises twice and falls once
 & Local smoothness of the series \\
 \addlinespace
 Function-space velocity
@@ -424,6 +438,17 @@ The ghost runs carry the argument. They share the training trend with the couple
 their near-zero skill excludes the explanation that defeated the signals of
 \cref{sec:negative}, namely that a statistic separates runs because their loss curves have
 different shapes.
+
+The detection rule declares a driver recovered when either null rejects, which is a family
+of two tests and therefore admits a false-positive rate approaching $0.10$ rather than the
+nominal $0.05$. The ensemble of $39$ surrogates used above cannot express the correction,
+since its smallest attainable rank p-value, $1/40 = 0.025$, coincides exactly with the
+Bonferroni threshold for two tests. We therefore repeated both experiments with $199$
+surrogates, where the attainable floor is $0.005$. The verdicts are unchanged: seven true
+positives, one false negative and no false positives under either the original rule or the
+corrected one. The single case that had been marginal, the ResNet periodic driver at
+$p = 0.050$, resolves to $p = 0.015$ with the larger ensemble and survives the correction.
+The counts reported here are therefore not an artefact of the multiplicity.
 
 \begin{figure}[H]
 \centering
@@ -528,12 +553,17 @@ correlate with the delay across runs of one configuration. This test is inexpens
 falsified the most promising of our candidates.
 \end{enumerate}
 
-Two further practices proved necessary in the course of this work. Estimators should be
+Three further practices proved necessary in the course of this work. Estimators should be
 calibrated against systems with known answers before being applied to project data, since
-two of our own diagnostics were found to be circular or mis-specified in exactly that way.
-Preprocessing should be justified per series rather than adopted globally, since
-subtracting a moving average manufactures structure in sparse series and differencing
-removes slow drivers.
+three of our own diagnostics were found to be circular, mis-specified or underpowered in
+exactly that way. Preprocessing should be justified per series rather than adopted
+globally, since subtracting a moving average manufactures structure in sparse series and
+differencing removes slow drivers. Finally, a calibration reference must match the length
+of the series under test. Our own identifiability diagnostic compared a $12\,000$-sample
+Lorenz attractor against $2000$-sample logs, and \cref{fig:dimension}(b) shows that the
+apparent separation was produced by that difference alone. A log of $2000$ to $3000$
+samples is too short to resolve a two-dimensional attractor, which bounds what any
+dimension estimate computed from it can mean.
 
 \section{Conclusion}\label{sec:concl}
 

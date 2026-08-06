@@ -405,3 +405,66 @@ contradict the claim. Replaced with a Spearman trend against step plus early/lat
 Second, `wd0` shows trend -1.00, which looks decisive and means nothing: the series runs
 from 1.34 to 1.33, a rank-monotone drift of 0.7%. Rank statistics need a magnitude beside
 them.
+
+## Phase 10: our own identifiability diagnostic was confounded by series length
+
+Auditing phase 8 rather than trusting it. The report argued that the weight-norm estimate
+is non-identifiable because it grows with E_max (ratio 3.73 / 4.36) while a Lorenz
+reference stays flat (1.66). **That comparison was invalid.** The Lorenz series was 12000
+samples and the training logs are 2000-3000, and the diagnostic is strongly
+length-dependent:
+
+| n | Lorenz-63 | white noise |
+|---|---|---|
+| 1000 | 3.87 | 4.45 |
+| **2000** | **8.86** | 4.39 |
+| **3000** | **8.42** | 4.40 |
+| 6000 | 2.21 | 4.53 |
+| 12000 | 1.66 | 4.66 |
+| 24000 | 1.32 | 4.83 |
+
+At the length the logs actually have, a textbook attractor scores 8.86 — **worse than
+white noise (4.39) and worse than the logs themselves (3.73, 4.36)**. The diagnostic has
+no power below n ~ 6000, and the "behaves like noise" sentence in the report was produced
+entirely by the sample-size mismatch. This is precisely the error I flagged in the
+published work: an apparent separation carried by an uncontrolled difference.
+
+Retracted and replaced. The honest claim is about the **data budget**: at n <= 3000 the
+estimator cannot resolve a two-dimensional attractor, so no dimension is identifiable from
+a log of that length whether or not one exists. That is weaker but it is true, and it is
+now a numbered precondition in the protocol section (a calibration reference must match
+the length of the series under test).
+
+**Nothing load-bearing was lost.** The falsification of the dimension signal rests on
+Proposition 1 (closed form, verified to 1.1%) and on phase 9 (two of three seeds of the
+identical configuration rise rather than fall). Neither uses this diagnostic. Table 1's
+"tracks E_max as white noise does" cell was rewritten to cite the seed result instead.
+
+Lesson for the remaining claims: **every calibration reference must be length-matched to
+the series it calibrates.** Check the CCM convergence figure for the same defect.
+
+## Phase 11: multiplicity in the CCM detection rule (checked, conclusion holds)
+
+The load-bearing positive result deserved the same scrutiny as the negatives. Two defects
+in the detection rule, both real:
+
+1. `detected = iaaft.detected or shift.detected` is a family of two tests at 0.05 each,
+   combined by OR. Family-wise false-positive rate approaches 0.10, never stated.
+2. With n_surrogates=39 the rank p-value floor is (0+1)/(39+1) = **0.025**, which is
+   exactly the Bonferroni threshold for two tests. The corrected test could only ever
+   reject by the narrowest possible margin, and phase3 Sinusoidal sat at p_iaaft=0.050,
+   i.e. on the wrong side of it. So the published 7/8 was one knife-edge away from 6/8.
+
+Re-ran both experiments at 199 surrogates (floor 0.005), ~10 min total. **Conclusion is
+unchanged and now robust:** TP=7 FN=1 FP=0 TN=4 under both the original OR-at-0.05 rule
+and Bonferroni at 0.025. Sinusoidal moves 0.050 -> 0.0150 and survives the correction
+comfortably. Ghost p-values 0.645-0.850, nowhere near rejection.
+
+So this one came out the right way, unlike phase 10. Worth noting the asymmetry: the
+identifiability diagnostic collapsed under audit and the CCM result did not. That is the
+difference between a statistic validated on a system with a known answer and one applied
+straight to project data.
+
+Remaining: n_surrogates=39 is still the default in ccm.py and the phase3/phase5 scripts.
+The results are unchanged so nothing needs recomputing, but 199 should be the default for
+anything new, since 39 makes any multiple-comparison correction inexpressible.

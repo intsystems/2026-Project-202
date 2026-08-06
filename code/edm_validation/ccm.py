@@ -147,6 +147,13 @@ def ccm_test(embed_series, target_series, E=3, tau=1, n_surrogates=39, seed=0,
         # only diagnostic when the smallest library undersamples the manifold -- on these
         # logs rho can be saturated by L=20, which would make a gain criterion reject
         # genuine couplings. `gain` is still reported, as supporting evidence.
+        # NOTE (phase 11): callers combine this across the IAAFT and shift nulls with
+        # `or`, which is a family of two tests and inflates the false-positive rate
+        # towards 0.10. Correcting it requires an ensemble large enough to express the
+        # corrected threshold: at n_surrogates=39 the attainable floor is 1/40 = 0.025,
+        # which *is* the Bonferroni threshold, so the corrected test is a knife edge.
+        # Use n_surrogates=199 for anything new. Re-running phase 3 and phase 5 at 199
+        # leaves every verdict unchanged, so the committed results stand as they are.
         "detected": bool(result.p_value <= 0.05 and np.isfinite(curve[sizes[-1]])
                          and (finite[-1] if finite else 0) > 0.05),
         "saturated": bool(len(finite) >= 2 and finite[0] > 0.9 * finite[-1]),

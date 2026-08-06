@@ -66,9 +66,9 @@ def test_surrogates_preserve_what_they_should():
                  / np.linalg.norm(np.abs(np.fft.rfft(x))))
     ok_iaaft = same_values and spec_err2 < 0.05
 
-    return (_report("FT preserves spectrum", ok_ft, f"rel err {spec_err:.2e}")
-            and _report("IAAFT preserves values + spectrum", ok_iaaft,
-                        f"identical multiset={same_values}, spec err {spec_err2:.2e}"))
+    assert _report("FT preserves spectrum", ok_ft, f"rel err {spec_err:.2e}")
+    assert _report("IAAFT preserves values + spectrum", ok_iaaft,
+                   f"identical multiset={same_values}, spec err {spec_err2:.2e}")
 
 
 def test_surrogate_test_rejects_chaos_and_spares_linear_noise():
@@ -83,10 +83,10 @@ def test_surrogate_test_rejects_chaos_and_spares_linear_noise():
     ok_noise = noise.p_value > 0.05
     print(f"      logistic map : {chaos}")
     print(f"      AR(1)        : {noise}")
-    return (_report("rejects the null on deterministic chaos", ok_chaos,
-                    f"p={chaos.p_value:.3f}")
-            and _report("does NOT reject on linearly correlated noise", ok_noise,
-                        f"p={noise.p_value:.3f}"))
+    assert _report("rejects the null on deterministic chaos", ok_chaos,
+                   f"p={chaos.p_value:.3f}")
+    assert _report("does NOT reject on linearly correlated noise", ok_noise,
+                   f"p={noise.p_value:.3f}")
 
 
 # --- forecast machinery ----------------------------------------------------
@@ -101,7 +101,7 @@ def test_simplex_skill_ranks_systems_correctly():
     }
     print("      skills:", {k: round(v, 3) for k, v in values.items()})
     ok = values["logistic"] > 0.9 and values["sine"] > 0.9 and abs(values["white"]) < 0.3
-    return _report("simplex ranks chaos/periodic above white noise", ok, str(
+    assert _report("simplex ranks chaos/periodic above white noise", ok, str(
         {k: round(v, 3) for k, v in values.items()}))
 
 
@@ -121,7 +121,7 @@ def test_skill_decays_for_chaos_not_for_periodic():
     print("      chaos   :", {k: round(v, 3) for k, v in chaos.items()})
     print("      periodic:", {k: round(v, 3) for k, v in periodic.items()})
     ok = chaos[32] < chaos[1] - 0.2 and periodic[32] > 0.8
-    return _report("skill decays with horizon for chaos, not for a cycle", ok,
+    assert _report("skill decays with horizon for chaos, not for a cycle", ok,
                    f"chaos {chaos[1]:.2f}->{chaos[32]:.2f}, periodic {periodic[32]:.2f}")
 
 
@@ -132,14 +132,14 @@ def test_recurrence_separates_attractor_from_transient():
     print("      Lorenz   profile:", {k: round(v, 4) for k, v in attractor["profile"].items()})
     print("      monotone profile:", {k: round(v, 4) for k, v in ramp["profile"].items()})
     ok = attractor["ratio"] > 0.4 and ramp["ratio"] < 0.15
-    return _report("recurrence separates an attractor from a monotone transient", ok,
+    assert _report("recurrence separates an attractor from a monotone transient", ok,
                    f"Lorenz ratio {attractor['ratio']:.3f}, ramp {ramp['ratio']:.3f}")
 
 
 def test_delay_embed_shape():
     v, idx = delay_embed(np.arange(10.0), E=3, tau=2)
     ok = v.shape == (6, 3) and np.allclose(v[0], [4, 2, 0]) and idx[0] == 4
-    return _report("delay_embed indexes backwards in time", ok, f"shape {v.shape}")
+    assert _report("delay_embed indexes backwards in time", ok, f"shape {v.shape}")
 
 
 if __name__ == "__main__":
@@ -155,7 +155,11 @@ if __name__ == "__main__":
     for check in checks:
         print(f"\n--- {check.__name__} ---")
         try:
-            results.append(bool(check()))
+            check()
+            results.append(True)
+        except AssertionError:
+            # _report has already printed the FAIL line with the numbers.
+            results.append(False)
         except Exception as exc:                             # noqa: BLE001
             print(f"FAIL  {check.__name__} raised: {exc}")
             results.append(False)
