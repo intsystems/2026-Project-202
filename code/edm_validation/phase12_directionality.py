@@ -81,7 +81,58 @@ def best_reverse(driver, response, sizes):
     return best_E, out
 
 
+def matched_embedding_curves():
+    """Convergence in both directions at a matched embedding dimension.
+
+    The main table grants the reverse direction the best of five embedding dimensions so
+    that a failure cannot be blamed on a handicapped embedding. That is conservative, but
+    selecting the maximum over five candidates is itself a multiple comparison and
+    inflates the reverse. The symmetric comparison, both directions at E = 3, is reported
+    alongside it. Convergence, not skill, is the signature: see the coupled-logistic
+    calibration in test_edm_validation.py, where the false direction reaches rho = 0.57
+    and does not converge.
+    """
+    rows = []
+    for title, truth, loader, sizes in (
+            ("ResNet-18 / CIFAR-10", PHASE3, phase3_series, BIG),
+            ("transformer / modular addition", PHASE5, phase5_series, SMALL)):
+        for name, coupled in truth.items():
+            response, driver = loader(name)
+            if np.std(driver) == 0:
+                continue
+            fwd = ccm_convergence(response, driver, E=E_FORWARD, tau=TAU, library_sizes=sizes)
+            rev = ccm_convergence(driver, response, E=E_FORWARD, tau=TAU, library_sizes=sizes)
+            ordered = sorted(fwd)
+            for L in ordered:
+                rows.append({"experiment": title, "run": name, "coupled": coupled,
+                             "library": L, "forward": fwd[L], "reverse": rev[L]})
+            gf = fwd[ordered[-1]] - fwd[ordered[0]]
+            gr = rev[ordered[-1]] - rev[ordered[0]]
+            print(f"  {name:<18} matched E=3   forward {fwd[ordered[0]]:+.3f} -> "
+                  f"{fwd[ordered[-1]]:+.3f} (gain {gf:+.3f})   reverse "
+                  f"{rev[ordered[0]]:+.3f} -> {rev[ordered[-1]]:+.3f} (gain {gr:+.3f})",
+                  flush=True)
+    frame = pd.DataFrame(rows)
+    frame.to_csv(OUT / "phase12_matched_curves.csv", index=False)
+
+    wide = frame.groupby(["run", "coupled"]).apply(
+        lambda g: pd.Series({
+            "gain_fwd": g.sort_values("library").forward.iloc[-1]
+            - g.sort_values("library").forward.iloc[0],
+            "gain_rev": g.sort_values("library").reverse.iloc[-1]
+            - g.sort_values("library").reverse.iloc[0]}),
+        include_groups=False).reset_index()
+    wide.to_csv(OUT / "phase12_matched_gains.csv", index=False)
+    coupled = wide[wide.coupled]
+    print(f"\n  at matched E=3, forward converges more than reverse in "
+          f"{int((coupled.gain_fwd > coupled.gain_rev).sum())}/{len(coupled)} coupled runs")
+    return 0
+
+
 def main():
+    if "--curves-only" in sys.argv:
+        print("=== Matched-embedding convergence, both directions ===")
+        return matched_embedding_curves()
     rows = []
     for title, truth, loader, sizes in (
             ("ResNet-18 / CIFAR-10", PHASE3, phase3_series, BIG),

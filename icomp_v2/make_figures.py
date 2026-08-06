@@ -459,7 +459,10 @@ def figure_paper_settings():
 def figure_directionality():
     """Forward against reverse cross mapping. Ground truth is unidirectional by design."""
     res = CODE / "edm_validation" / "results"
-    table = pd.read_csv(res / "phase12_directionality.csv")
+    # Both panels use a matched embedding dimension for the two directions, so the
+    # comparison is symmetric. The main table additionally grants the reverse the best
+    # of five embeddings; that stress test is reported in the text, not here.
+    table = pd.read_csv(res / "phase12_matched_gains.csv")
     curves = pd.read_csv(res / "phase12_direction_curves.csv")
 
     fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.9),
@@ -487,20 +490,27 @@ def figure_directionality():
     ax = axes[1]
     ax.set_axisbelow(True)
     ax.grid()
-    limit = [-0.15, 1.05]
+    limit = [-0.06, 0.40]
     ax.plot(limit, limit, "-", color="#CCCCCC", lw=1.0, zorder=1)
     for coupled, colour, label in ((True, BLUE, "driver applied"),
                                    (False, VERMILLION, "driver never applied")):
         sub = table[table.coupled == coupled]
-        ax.scatter(sub.rho_rev, sub.rho_fwd, s=44, color=colour, zorder=3,
+        ax.scatter(sub.gain_rev, sub.gain_fwd, s=44, color=colour, zorder=3,
                    edgecolor="white", linewidth=0.8, label=label)
+    outlier = table[table.run == "sinusoid"]
+    if len(outlier):
+        ax.annotate("sinusoid\n(periodic)",
+                    (float(outlier.gain_rev.iloc[0]), float(outlier.gain_fwd.iloc[0])),
+                    textcoords="offset points", xytext=(-16, 20), ha="right",
+                    fontsize=6.6, color=MUTED,
+                    arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.6,
+                                    shrinkA=1, shrinkB=3))
     ax.set_xlim(*limit)
     ax.set_ylim(*limit)
-    ax.set_xlabel(r"reverse $\rho$  (driver xmap loss)")
-    ax.set_ylabel(r"forward $\rho$  (loss xmap driver)")
-    ax.set_title("(b) forward exceeds reverse throughout",
-                 fontsize=8.2, color=INK, pad=6)
-    ax.legend(loc="lower right", fontsize=6.8)
+    ax.set_xlabel("reverse convergence gain")
+    ax.set_ylabel("forward convergence gain")
+    ax.set_title("(b) convergence gain, matched $E$", fontsize=8.2, color=INK, pad=6)
+    ax.legend(loc="upper left", fontsize=6.8)
     save(fig, "fig_directionality")
 
 

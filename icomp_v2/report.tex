@@ -64,7 +64,10 @@ Stark's theorem does apply. Convergent cross mapping recovers an externally inje
 driver from a single one-dimensional loss log in seven of eight coupled runs across two
 architectures, with no false positives among the control runs whose driver is logged but
 never applied, and with a limitation for strictly periodic drivers that we characterise
-quantitatively. Finally, a factorial study of thirty runs shows that the delay reported in
+quantitatively. Testing the reverse cross map, which the ground truth of these runs fixes
+by construction, shows that the dominant direction is recovered in seven of eight coupled
+runs while controls converge in neither direction, and also that unidirectionality is not
+demonstrable when the driver acts on the loss without delay. Finally, a factorial study of thirty runs shows that the delay reported in
 earlier work lies far outside the distribution produced by its own configuration. We
 conclude with a control protocol that would have falsified each negative result before
 publication.
@@ -286,8 +289,10 @@ approximately $360$.
 The separation does not survive its control. We trained runs in which weight decay is held
 at $1.0$ and only the quantity of training data is reduced, so that the model memorises
 and never generalises. \Cref{fig:velocity} shows the outcome. The runs that never
-generalise sustain a \emph{higher} velocity than the runs that grok, and the ordering is
-consistent across replicate seeds rather than resting on a single draw. The only run far
+generalise sustain a \emph{higher} velocity than the runs that grok. The comparison
+carries three seeds of the grokking condition against three never-generalising runs, two
+training fractions with the smaller replicated at a second seed, and the two families do
+not overlap. The only run far
 below the others is the one without weight decay, in which the function freezes within a
 few thousand steps and thereafter only rescales.
 
@@ -302,10 +307,12 @@ orange families, which differ only in the quantity of training data.}
 \label{fig:velocity}
 \end{figure}
 
-Quantitatively, the runs that never generalise reach $7.26\times10^{-2}$ and
-$5.30\times10^{-2}$ over the second half of training against $1.38\times10^{-2}$ to
-$1.94\times10^{-2}$ for the three grokking runs, while the run without weight decay falls
-to $1.53\times10^{-4}$. Every run with weight decay lies within a factor of five of every
+Quantitatively, the runs that never generalise reach $7.26\times10^{-2}$,
+$5.49\times10^{-2}$ and $5.30\times10^{-2}$ over the second half of training against
+$1.94\times10^{-2}$, $1.84\times10^{-2}$ and $1.38\times10^{-2}$ for the three grokking
+runs, a separation of at least a factor of $2.7$ with no overlap. The two seeds of the
+same reduced-data condition agree to within $3\%$, so the ordering does not rest on a
+single draw. The run without weight decay falls to $1.53\times10^{-4}$. Every run with weight decay lies within a factor of five of every
 other, and the factor of $360$ quoted above is entirely accounted for by the presence or
 absence of regularisation. The statistic therefore measures the reorganisation that weight
 decay imposes on the function, and among regularised runs it is, if anything, inversely
@@ -488,6 +495,72 @@ The corresponding driver in the ResNet setting is detected only because it is qu
 ninety-five distinct values, so its surrogates depart from it considerably further. A
 different null, for example a driver of a different period, would be required.
 
+\subsection{Direction of the recovered coupling}\label{sec:direction}
+
+Detection is not direction. A statistic that recovers the driver from the loss establishes
+that the two series are coupled, and the causal reading requires in addition that the
+coupling be shown to run from the driver to the loss rather than the reverse. Cross mapping
+is asymmetric by construction and can be asked this question directly. Embedding $Y$ and
+predicting $X$, written $Y$ xmap $X$, is evidence that $X$ drives $Y$ \citep{sugihara2012detecting},
+so the forward map is loss xmap driver and the reverse is driver xmap loss.
+
+These logs are an unusually clean setting for the test, because the ground truth is known
+by construction rather than assumed. The driver schedule is evaluated from a fixed seed
+before any gradient is taken, so training cannot influence it and the coupling is
+unidirectional by design.
+
+The convention itself is calibrated on a system with a known answer, since inverting it
+would invert every causal statement that depends on it. On coupled logistic maps
+\citep{sugihara2012detecting} with $\beta_{xy} = 0$ and $\beta_{yx} = 0.32$, so that $X$
+drives $Y$ alone, the true direction rises from $0.331$ to $0.993$ with library size while
+the false direction runs from $0.585$ to $0.569$ and does not converge. The false direction
+therefore reaches a skill of $0.57$ while carrying no causal information at all, which
+establishes that convergence rather than skill is the discriminating quantity.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig_directionality.pdf}
+\caption{Forward against reverse cross mapping, both directions at a matched embedding
+dimension. (a) Skill against library size. The forward map converges for the coupled runs
+while the reverse remains flat, and both directions are flat for the ghost. (b) Convergence
+gain in the two directions. Coupled runs lie above the diagonal, ghost runs sit at the
+origin, and the exception is the smooth periodic driver of \cref{sec:periodic}.}
+\label{fig:direction}
+\end{figure}
+
+\Cref{fig:direction} reports the comparison. At a matched embedding dimension the forward
+map converges more strongly than the reverse in seven of the eight coupled runs, most
+clearly for the independent driver at gains of $0.357$ against $0.118$. The ghost runs
+converge in neither direction, with all gains within $0.039$ of zero, so the test does not
+manufacture a direction where no coupling exists. The single exception is the smooth
+periodic driver of the transformer setting, whose reverse gain of $0.170$ exceeds its
+forward gain of $0.040$; this is the same run whose forward detection fails its null at
+$p = 0.77$, and it is excluded by \cref{sec:periodic} on independent grounds.
+
+The result should not be overstated, and a stricter reading of the same data does not
+support unidirectionality. If the reverse direction is granted the best of five embedding
+dimensions rather than being held at the forward's $E = 3$, it converges and beats its own
+surrogate null in most runs. Under a criterion that requires the reverse map to be silent,
+none of the eight coupled runs is assigned a unidirectional driver-to-loss reading and five
+are called bidirectional. Selecting the maximum over five embeddings is itself a multiple
+comparison and inflates the reverse, but the effect is not solely an artefact of that
+selection.
+
+The explanation is structural rather than a defect of the estimator. The driver is applied
+to training at every step, so the loss depends on the driver contemporaneously, and a delay
+vector of the driver already contains the value that the loss is partly a function of. The
+reverse map can therefore succeed by direct functional dependence without reconstructing
+any manifold. Cross mapping does not separate causation from strong instantaneous coupling,
+and under strong forcing the response becomes a function of the driver, which is the
+generalised-synchrony regime \citep{rulkov1995generalized} known to compromise the method
+\citep{ye2015distinguishing}.
+
+We therefore claim what the data support. The coupling is detected, and its dominant
+direction is recovered correctly in seven of eight runs, with the exception falling in the
+periodic case already excluded. Unidirectionality is not established, and demonstrating it
+would require a design in which the driver acts on the loss with a delay, so that the
+contemporaneous term is absent.
+
 \subsection{The method is not discriminative between a run's own metrics}
 
 For completeness we applied the same procedure to pairs of observables within single
@@ -531,7 +604,7 @@ studies before they complete.
 
 \section{Recommended protocol}\label{sec:protocol}
 
-The following four requirements would have falsified each negative result of
+The following five requirements would have falsified each negative result of
 \cref{sec:negative} before it was written up, at a cost of well under an hour of
 computation each.
 
@@ -550,6 +623,12 @@ drivers of \cref{sec:ccm} are the model: identical architecture, schedule, loss 
 and logging, differing only in whether coupling exists. Controls that differ in several
 respects at once cannot discriminate, which is precisely how the signals of
 \cref{sec:negative} appeared convincing.
+
+\item \textbf{Test the reverse direction, and report it.} A cross-map result computed in
+one direction only establishes coupling, not causation. Run both directions at a matched
+embedding dimension, calibrate the convention on a system whose answer is known, and read
+direction from convergence rather than from skill, which the calibration in
+\cref{sec:direction} shows can reach $0.57$ in the false direction.
 
 \item \textbf{Hold configuration fixed and vary only seeds, with the expected sign
 recorded in advance.} Any statistic proposed as a predictor of the transition must
@@ -576,8 +655,11 @@ regime than the earlier proposal assumed, and within that regime they work well.
 external driver possessing its own attractor forces training, convergent cross mapping
 recovers it from a single scalar loss log, in seven of eight coupled runs across two
 architectures and with no false positives among the runs whose driver was logged but
-never applied. The recovered quantity is causal rather than correlational, it requires no
-validation data, and it is obtained from a log that costs nothing to store.
+never applied. The coupling is directional in the sense that the forward map converges
+more strongly than the reverse in seven of eight runs while the controls converge in
+neither, though these data do not establish unidirectionality, for the reason set out in
+\cref{sec:direction}. The quantity requires no validation data and is obtained from a log
+that costs nothing to store.
 
 The intrinsic optimisation transient does not admit the same treatment. It does not
 revisit its past states, and the three statistics we examined that appeared to detect the

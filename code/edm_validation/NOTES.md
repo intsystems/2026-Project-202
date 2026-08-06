@@ -468,3 +468,61 @@ straight to project data.
 Remaining: n_surrogates=39 is still the default in ccm.py and the phase3/phase5 scripts.
 The results are unchanged so nothing needs recomputing, but 199 should be the default for
 anything new, since 39 makes any multiple-comparison correction inexpressible.
+
+## Phase 12: direction of the coupling, which we had never tested
+
+Alex: "the recovered quantity is causal rather than correlational - you need to check that
+the algorithm shows A->B rather than B->A". Correct, and we had not. Sections 4 asserted a
+causal recovery while only ever computing one direction.
+
+**Convention first, calibrated on a known answer** (the phase 10 lesson). Coupled logistic
+maps, Sugihara 2012 eq. 1, b_xy=0 and b_yx=0.32 so X drives Y alone:
+
+    Y xmap X (true) : 0.331 -> 0.993   converges
+    X xmap Y (false): 0.585 -> 0.569   flat
+
+So ccm.py's convention is right as documented. And the false direction still reaches 0.57:
+**convergence is the discriminator, not skill.** Now a permanent test, suite is 7/7.
+
+**On the logs, at matched E=3:** forward converges more than reverse in 7/8 coupled runs.
+Ghosts converge in neither direction, |gain| <= 0.039 -- the test does not manufacture
+direction. The one exception is the transformer sinusoid: reverse gain 0.170 vs forward
+0.040, and its forward detection also fails at p=0.77. Same periodic case as phase 3.
+
+**But the strict test fails, and this must be said plainly.** Granting the reverse the best
+of five embedding dimensions, it converges and beats its own null in most runs: 0/8 coupled
+runs read unidirectional, 5/8 read bidirectional, 2/8 read reverse. The E-scan is a
+selection over five comparisons and inflates the reverse, but that is not the whole effect.
+
+The reason is structural, not an estimator defect: the driver is applied every step, so the
+loss depends on it contemporaneously, and a delay vector of the driver already contains the
+value the loss is a function of. The reverse map succeeds by direct functional dependence
+with no manifold involved. CCM does not separate causation from strong instantaneous
+coupling (generalised synchrony, Rulkov 1995; Ye 2015).
+
+**What the report may now claim:** coupling is detected; the dominant direction is right in
+7/8; unidirectionality is NOT established. Softened the abstract and conclusion accordingly
+and added a fifth protocol requirement (run both directions, matched E, calibrate the
+convention, read direction from convergence not skill). To establish unidirectionality one
+would need the driver to act with a delay so the contemporaneous term is absent.
+
+**Cost note.** First version ran a full 199-surrogate ensemble at every E of the scan:
+~15 min per run, ~2 h total. Killed it and measured instead of guessing. IAAFT generation
+on 7840 samples dominates, not the cross-mapping. Scanning E on convergence curves alone
+and running the ensemble only at the selected E cut it to ~20 min with no loss of rigour.
+
+## Colab: a harness bug that cost three runs
+
+colab_job.ps1 -Run executes training in the *foreground* of a colab exec, holding the
+session for the whole job, so every later exec queues behind it and results cannot be
+copied off while training runs. Free-tier VMs get reclaimed without warning; three velocity
+replicates died that way, twice with the training already finished. Fixed with
+remote/launch_detached.py (start_new_session, returns at once) plus remote/list_outputs.py
+(cheap poll: liveness, files, log tail). Verified: poll 1 returned while training was live.
+
+Also: Git Bash rewrites an absolute remote path such as /content/job_cmd.txt into
+C:/Program Files/Git/content/... and the upload 500s. Use PowerShell or MSYS_NO_PATHCONV=1.
+
+Velocity replicates as of now: lowdata15 at two seeds (5.30e-2, 5.49e-2, agreeing to 3%),
+lowdata20 at one, three grokking seeds (1.94/1.84/1.38e-2). No overlap, factor >= 2.7.
+That is enough for the claim; the remaining two seeds are a nicety, not a dependency.
