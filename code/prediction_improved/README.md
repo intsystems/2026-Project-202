@@ -63,6 +63,35 @@ Each Google account authenticates once; the token persists in
 .\colab.ps1 stop -s gpu
 ```
 
+### Long jobs: launch detached, download as results appear
+
+`-Run` holds the exec channel open until the job finishes. That is fine for a short run,
+but Colab's free tier reclaims VMs without warning, and a reclaimed VM takes with it every
+result that was never copied off. Polling does not help while a foreground `-Run` is
+active, because each poll queues behind it. Three runs of this campaign were lost this way.
+
+For anything longer than a few minutes, start the job detached and poll alongside it:
+
+```powershell
+.\colab_job.ps1 -Session vel -Gpu none -Sync
+
+# one argument per line: script path first, then its arguments
+"path/to/script.py`n--outdir`n/content/out/velocity" | Set-Content job_cmd.txt -Encoding utf8
+.\colab.ps1 upload -s vel .\job_cmd.txt /content/job_cmd.txt
+.\colab.ps1 exec -s vel -f .emote\launch_detached.py     # returns immediately
+
+# then poll: cheap, interleaves with training, safe to repeat
+.\colab.ps1 exec -s vel -f .emote\list_outputs.py
+.\colab.ps1 download -s vel /content/out/velocity/run_probe.csv .esultsun_probe.csv
+```
+
+`launch_detached.py` is idempotent, so a poller may call it defensively; it reports the
+existing pid instead of starting a second job.
+
+Note for Git Bash users: an absolute remote path such as `/content/job_cmd.txt` is
+rewritten to `C:/Program Files/Git/content/...` by MSYS path conversion, and the upload
+fails with a 500. Run these from PowerShell, or set `MSYS_NO_PATHCONV=1`.
+
 `-Run` takes any key from [`../grokking_train/runs.py`](../grokking_train/runs.py)
 (`mod_wd1`, `mod_wd0`, `s5_wd1`, `s5_wd0`, `full_batch`, ...). Config overrides pass
 through: `-ExtraArgs "--set","max_steps=5000"`.
@@ -92,7 +121,9 @@ FLOP-bound, so float64 costs the T4 little. Probe overhead on GPU is negligible.
 | [`colab.ps1`](colab.ps1) | raw CLI passthrough, with the Windows shim on `PYTHONPATH` |
 | [`colab_auth.py`](colab_auth.py) | two-step OAuth |
 | [`colab_shim/`](colab_shim/) | the Windows fixes (below) |
-| [`remote/`](remote/) | small scripts `colab_job.ps1` executes on the VM |
+| [`remote/`](remote/) | small scripts executed on the VM |
+| [`remote/launch_detached.py`](remote/launch_detached.py) | start a long job without holding the exec channel |
+| [`remote/list_outputs.py`](remote/list_outputs.py) | cheap poll: job liveness, finished files, log tail |
 
 ## What `colab_shim/` fixes
 
