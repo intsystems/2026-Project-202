@@ -109,57 +109,50 @@ transition itself is.
 
 \section{Validation requirements}\label{sec:protocol}
 
-Several delay-embedding statistics return a finite number on data satisfying none of the
-hypotheses behind them, and three of the estimators used below were found during this work
-to be circular, mis-specified or underpowered in exactly that way. A result is therefore
-only as good as the controls reported with it. We fix the following requirements in advance
-and hold every claim in this report to them. Each costs well under an hour of computation.
+Delay-embedding statistics return a finite number on data satisfying none of the hypotheses
+behind them, and three of the estimators used below proved circular, mis-specified or
+underpowered in exactly that way. We fix the following requirements in advance and hold
+every claim here to them. Each costs well under an hour of computation.
 
 \begin{enumerate}
-\item \textbf{Measure the precondition before invoking a theorem.} Report recurrence first.
-If the trajectory does not revisit its past states, the language of attractors and their
-dimensions does not apply, whatever number an estimator returns. \Cref{sec:preconditions}
-does this and finds the precondition unmet on raw training logs.
+\item \textbf{Measure the precondition before invoking a theorem.} If the trajectory does
+not revisit its past states, the language of attractors does not apply whatever an
+estimator returns. \Cref{sec:preconditions} finds the precondition unmet over a whole run,
+and \cref{sec:sampling} finds it met locally for one observable of the three.
 
-\item \textbf{Calibrate every estimator on a system with a known answer, against a
-reference matched to the data in length and in sampling density.} Neither is a detail. A
-Lorenz attractor of $12\,000$ samples grows by a factor of $1.66$ across the embedding
-range while one of $2000$ samples grows by $8.86$, so a reference of the wrong length
-manufactures a separation by itself (\cref{fig:dimension}b). Density matters just as much:
-sampled at $dt = 0.01$ the same attractor fails a surrogate test of determinism at
-$p = 0.400$, and only at $dt = 0.1$ does it pass at $p = 0.010$. A negative result is
-uninterpretable unless a reference at comparable density is positive.
+\item \textbf{Calibrate on a system with a known answer, against a reference matched in
+length and in sampling density.} A Lorenz attractor grows by $1.66$ across the embedding
+range at $n = 12\,000$ and by $8.86$ at $n = 2000$, so a reference of the wrong length
+manufactures a separation by itself (\cref{fig:dimension}b). At $dt = 0.01$ the same
+attractor fails a determinism test at $p = 0.400$ and only at $dt = 0.1$ passes at
+$p = 0.010$. A negative result means nothing unless a matched reference is positive.
 
-\item \textbf{Justify preprocessing per series rather than adopting it globally.}
-Subtracting a moving average manufactures structure in a sparse series, and differencing is
-a high-pass filter that removes exactly the slow drivers one may be looking for: the
-periodic drivers of \cref{sec:ccm} cross map at $0.09$ and $0.12$ after differencing and at
-$0.81$ and $0.80$ without it.
+\item \textbf{Justify preprocessing per series.} Subtracting a moving average manufactures
+structure in a sparse series, and differencing removes the slow drivers one may be looking
+for: the periodic drivers of \cref{sec:ccm} cross map at $0.09$ and $0.12$ differenced and
+at $0.81$ and $0.80$ raw.
 
-\item \textbf{Test every claim against surrogates, with an ensemble large enough to express
-the threshold.} A statistic that does not exceed an amplitude-adjusted Fourier surrogate
-ensemble is reporting the linear autocorrelation of the series. Where a driver may be
-periodic, add a rotation null, and note that neither null has power in the strictly
-periodic case (\cref{sec:periodic}). With $39$ surrogates the smallest attainable rank
-p-value is $1/40 = 0.025$, which coincides with the Bonferroni threshold for two nulls and
-leaves no room for the correction; we use $199$.
+\item \textbf{Test against surrogates, with an ensemble large enough to express the
+threshold.} A statistic that does not exceed an amplitude-adjusted Fourier ensemble reports
+the linear autocorrelation of the series. With $39$ surrogates the smallest attainable rank
+p-value, $1/40 = 0.025$, coincides with the Bonferroni threshold for two nulls and leaves
+no room for the correction; we use $199$. Neither null has power in the strictly periodic
+case (\cref{sec:periodic}).
 
-\item \textbf{Include a control that differs from the positive runs in one respect only.}
-The ghost drivers of \cref{sec:ccm} are the model: identical architecture, schedule, loss
-trajectory and logging, differing only in whether the coupling exists. Controls that differ
-in several respects at once cannot discriminate, which is how each signal of
-\cref{sec:negative} came to look convincing.
+\item \textbf{Include a control differing in one respect only.} The ghost drivers of
+\cref{sec:ccm} are the model: identical architecture, schedule, loss trajectory and
+logging, differing only in whether the coupling exists. Controls differing in several
+respects at once cannot discriminate, which is how each signal of \cref{sec:negative} came
+to look convincing.
 
-\item \textbf{For a causal claim, test the reverse direction.} A cross map computed in one
-direction establishes coupling, not causation. Run both directions at a matched embedding
-dimension, calibrate the convention on a system whose answer is known, and read direction
-from convergence rather than from skill, which \cref{sec:direction} shows reaches $0.57$ in
-the false direction.
+\item \textbf{For a causal claim, test the reverse direction.} A cross map in one direction
+establishes coupling, not causation. Run both at a matched embedding and read direction
+from convergence, not skill, which \cref{sec:direction} shows reaches $0.57$ in the false
+direction.
 
-\item \textbf{Hold the configuration fixed, vary only seeds, and record the expected sign
-in advance.} A statistic proposed as a predictor of the transition must correlate with the
-delay across runs of one configuration. This test is inexpensive and it falsified the most
-promising of the candidates in \cref{sec:negative}.
+\item \textbf{Hold configuration fixed, vary only seeds, and record the expected sign in
+advance.} A predictor of the transition must correlate with the delay across runs of one
+configuration. This test falsified the most promising candidate in \cref{sec:negative}.
 \end{enumerate}
 
 \section{Preconditions for delay embedding}\label{sec:preconditions}
@@ -211,100 +204,68 @@ therefore test the local hypothesis directly.
 
 \subsection{The sampling interval, and what it can and cannot fix}\label{sec:sampling}
 
-A local analysis has two requirements that pull against each other. The window must be
-short enough that the dynamics do not drift appreciably across it, and it must contain
-enough independent observations to estimate anything. At one row per ten optimisation
-steps these cannot both be met, and the failure is severe: a $300$-sample window, the
-length at which the dimension estimate of \cref{sec:dimension} is computed, spans $3000$
-optimisation steps against a median memorisation-to-generalisation gap of $2875$. The
-window is longer than the transition it is meant to resolve.
+A local analysis has two requirements that pull against each other: the window must be
+short enough that the dynamics do not drift across it, and long enough to contain
+independent observations. At one row per ten optimisation steps these cannot both be met.
+A $300$-sample window, the length at which the dimension estimate of \cref{sec:dimension}
+is computed, spans $3000$ optimisation steps against a median memorisation-to-generalisation
+gap of $2875$: the window is longer than the transition it is meant to resolve.
 
 We therefore re-ran three conditions logging every optimisation step. Only the inexpensive
-series need this rate, since the training loss is already computed by the update and the
-parameter norm is a reduction over the weights, whereas a validation pass is a forward
-pass over the held-out split; the two are logged on separate schedules, and a test asserts
-that neither the logging rate nor a skipped evaluation perturbs training.
+series need that rate, since the training loss is already computed by the update and the
+parameter norm is a reduction over the weights, whereas a validation pass is a forward pass
+over the held-out split; the two are logged on separate schedules, and a test asserts that
+neither the logging rate nor a skipped evaluation perturbs training.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig_local_stationarity.pdf}
-\caption{(a) Stationarity index against window length, in units of the value white noise
-of the same length produces, so that unity means indistinguishable from stationary. The
+\caption{(a) Stationarity index against window length, in units of the value white noise of
+the same length produces, so unity means indistinguishable from stationary. The
 normalisation is necessary: the unnormalised ratio falls as $1/\sqrt{L}$ for a stationary
-series, so a fixed threshold would report long windows as more stationary than short ones
-by arithmetic alone. The shaded band runs from the longest stationary window, $25$ steps,
-to one correlation time of the training loss, $163$ steps; a usable window would have to
-be wider than the band, and none is. (b) Recurrence inside an $800$-step segment against
-temporal exclusion in optimisation steps. The training loss plateaus near the Lorenz
-reference while the weight norm decays to the monotone-ramp reference, and logging ten
-times more densely leaves both curves unchanged.}
+series, so a fixed threshold would report long windows as more stationary by arithmetic
+alone. The shaded band runs from the longest stationary window, $25$ steps, to one
+correlation time of the training loss, $163$ steps. (b) Recurrence inside an $800$-step
+segment against temporal exclusion. The training loss plateaus near the Lorenz reference
+while the weight norm decays to the ramp, and logging ten times more densely leaves both
+unchanged.}
 \label{fig:localstat}
 \end{figure}
 
-Three results follow, and the first corrects the impression left by
-\cref{fig:preconditions}. \emph{Locally, the training loss does recur.} Inside an
-$800$-step segment its recurrence profile plateaus between $0.64$ and $0.69$ against a
-Lorenz reference of $0.68$, while the monotone ramp decays to $0.00$
-(\cref{fig:localstat}b). The statement that training logs never revisit their past states
-holds globally and does not hold at local scale.
+Three results follow. First, and correcting the impression left by
+\cref{fig:preconditions}, \emph{the training loss does recur locally}: inside an $800$-step
+segment its profile plateaus between $0.64$ and $0.69$ against a Lorenz reference of
+$0.68$, while the monotone ramp decays to $0.00$. The claim that training logs never
+revisit past states holds globally and fails locally. Second, \emph{the weight norm does
+neither}, decaying like the ramp and never falling below a stationarity index of $20$ at
+any window length, against $1$ for a stationary series. Third, \emph{density was not what was missing}: the dense and decimated
+profiles in \cref{fig:localstat}(b) agree throughout.
 
-\emph{The weight norm does neither.} It decays to $0.00$ like the ramp, and its
-stationarity index never falls below $57$ at any window length from $25$ to $3000$ steps,
-reaching $1087$ for the run without weight decay. The observable on which the dimension
-estimate of \cref{sec:dimension} is computed is therefore not rescued by working locally,
-which is a stronger statement than the global recurrence measurement supports.
+What binds is the number of independent observations, which is the window length divided by
+the correlation time and so depends on neither the logging rate nor our choices. Inside the
+transition the training loss has a correlation time of $163$ steps against a gap of
+$1615$, giving ten independent samples whether a row is written every step ($1615$ rows) or
+every tenth ($161$ rows). Against this, \cref{fig:dimension}(b) puts the length needed to
+resolve even a Lorenz attractor at $n \gtrsim 6000$. The two constraints close from both
+sides: the longest window indistinguishable from stationary is $25$ steps, shorter than a
+single correlation time, so no scale is both stationary and observed more than once
+independently.
 
-\emph{Denser logging is not what was missing.} The dense and decimated recurrence profiles
-agree throughout \cref{fig:localstat}(b), so the earlier result was never an artefact of
-undersampling.
-
-What does bind is the number of independent observations, and it is invariant to the
-logging rate. The count of independent samples in a window is the window length divided by
-the correlation time, and neither quantity depends on how often a row is written. Inside
-the transition the training loss has a correlation time of $163$ steps against a gap of
-$1615$:
-
-\begin{center}
-\small
-\begin{tabular}{@{}lrr@{}}
-\toprule
-\textbf{logging interval} & \textbf{rows in the transition} & \textbf{independent samples} \\
-\midrule
-every ten steps & $161$ & $10$ \\
-every step & $1615$ & $10$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-Ten. Logging ten times more densely multiplies the rows by ten and the independent samples
-by one. Against this, \cref{fig:dimension}(b) puts the length needed to resolve even a
-Lorenz attractor at $n \gtrsim 6000$, a shortfall of roughly six hundred times. The two
-constraints close on each other from both sides: the longest window that is
-indistinguishable from stationary is $25$ steps, which is shorter than a single
-correlation time, so there is no scale at which the series is simultaneously stationary
-and observed more than once independently.
-
-The autocorrelation agrees with that reading. The dense training loss falls to $0.76$ at
-lag one and is then flat near $0.72$, which is the signature of an independent
-minibatch-sampling term of about a quarter of the variance riding on a slowly varying
-component, rather than dynamics that were hidden below the previous resolution. A Lorenz
-trajectory sampled at a comparable density instead decays smoothly through $0.87$, $0.61$,
-$0.38$ and $0.23$. Consistent with this, no training observable exceeds an IAAFT surrogate
-ensemble under simplex projection: the grokking training loss scores $0.739$ against a
-surrogate mean of $0.722$ at $p = 0.52$.
-
-That last comparison requires a reference at comparable sampling density before it means
-anything, which is the requirement of \cref{sec:protocol}. A Lorenz trajectory sampled at
-$dt = 0.01$ is oversampled in the same way and also fails to beat its surrogates, at
-$p = 0.400$, despite being deterministic by construction; sampled at $dt = 0.1$ it passes
-at $p = 0.010$ with skill falling from $1.00$ to $-0.23$ across the forecast horizon. We
-report both, and read the failure of the training logs only against the reference that
-passes.
+The autocorrelation agrees. The dense training loss falls to $0.76$ at lag one and is then
+flat near $0.72$, an independent minibatch-sampling term of about a quarter of the variance
+on a slowly varying component, rather than dynamics hidden below the previous resolution;
+a Lorenz trajectory at comparable density instead decays smoothly through $0.87$, $0.61$,
+$0.38$, $0.23$. Consistent with this, no training observable exceeds an IAAFT surrogate
+ensemble under simplex projection, the grokking training loss scoring $0.739$ against a
+surrogate mean of $0.722$ at $p = 0.52$. That comparison is only interpretable against a
+reference at comparable density, as \cref{sec:protocol} requires: Lorenz at $dt = 0.01$ is
+oversampled in the same way and also fails, at $p = 0.400$, while at $dt = 0.1$ it passes
+at $p = 0.010$.
 
 One caveat constrains recurrence as a diagnostic. Independent noise also produces close
-pairs at arbitrary temporal separations and therefore also scores near unity. Recurrence
-separates smooth transients from everything else; it does not separate an attractor from
-noise, which is why the determinism test above is required alongside it.
+pairs at arbitrary separations and scores near unity, so recurrence separates smooth
+transients from everything else but not an attractor from noise, which is why the
+determinism test above accompanies it.
 
 \section{Signals that do not survive controlled comparison}\label{sec:negative}
 
@@ -313,9 +274,7 @@ noise, which is why the determinism test above is required alongside it.
 The Levina--Bickel maximum likelihood estimator \citep{levina2004maximum} applied to a
 sliding window of the weight-norm series produces a curve that rises during memorisation
 and falls before generalisation. Four observations remove its interpretation as a
-dimension. The first is analytic; the last, established in \cref{sec:sampling}, is that the
-weight norm is never locally stationary at any window length tested, with a stationarity
-index between $57$ and $1087$, so no window of it can be read as a stationary system.
+dimension. The first is analytic.
 
 \begin{proposition}[The estimate is a constant of a straight line]\label{prop:line}
 Let the delay vectors be sampled at uniform intervals from a curve that is locally
@@ -332,96 +291,76 @@ is therefore a function of $k$ and $W$ alone, and contains no information about 
 For $k = 5$ it equals $1.330$ when $W = 0$ and $10.765$ when $W = 14$.
 \end{proposition}
 
-The proposition is verified against the estimator in \cref{fig:dimension}(a). Applied to a
-synthetic straight line, which possesses no dynamics whatsoever, the estimator returns the
-predicted constant to within $1.1\%$ at every $k$ and $W$ tested. Applied to the two
+\Cref{fig:dimension}(a) verifies this. On a synthetic straight line the estimator returns
+the predicted constant to within $1.1\%$ at every $k$ and $W$ tested, and on the two
 control runs trained without weight decay, which never generalise, it returns the same
 constants: medians of $1.33$ and $1.38$ without exclusion against a prediction of $1.33$,
-and $11.30$ and $11.69$ with exclusion against a prediction of $10.76$. Both plateaus are
-therefore reproduced by a straight line, and neither can be evidence about an attractor.
+and $11.30$ and $11.69$ with exclusion against $10.76$. Both plateaus are reproduced by a
+straight line.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig_dimension_artifact.pdf}
 \caption{(a) Dimension reported by the estimator against the closed form of
-\cref{prop:line}, on logarithmic axes with the identity line shown. A synthetic straight
-line and the $WD=0$ control runs both lie on the prediction. (b) Growth of the
-estimate between $E_{max} = 5$ and $E_{max} = 30$, against series length. A quantity that
-is a property of the data does not depend on the space it is measured in, so a value near
-unity is the signature of a resolvable attractor. The Lorenz reference reaches it only
-beyond $n \approx 6000$; inside the shaded band, which is the length training logs
-provide, it scores worse than both white noise and the logs, so the diagnostic cannot
-discriminate there.}
+\cref{prop:line}, on logarithmic axes with the identity line shown. (b) Growth of the
+estimate between $E_{max} = 5$ and $E_{max} = 30$, against series length. A value near
+unity is the signature of a resolvable attractor; the Lorenz reference reaches it only
+beyond $n \approx 6000$, and inside the shaded band, the length training logs provide, it
+scores worse than both white noise and the logs.}
 \label{fig:dimension}
 \end{figure}
 
-The second observation concerns identifiability. An intrinsic dimension exists only if the
-estimate is insensitive to the dimension of the space in which it is measured, so the
-growth of $\hat{d}$ between $E_{max} = 5$ and $E_{max} = 30$ is a natural diagnostic. It
-must, however, be read against a reference of the same length, because it is strongly
-length-dependent. \Cref{fig:dimension}(b) measures that dependence. A Lorenz reference
-falls from a growth factor of $8.86$ at $n = 2000$ to $2.21$ at $n = 6000$ and $1.32$ at
-$n = 24\,000$, while white noise stays between $4.4$ and $4.8$ throughout.
+The second observation is that no dimension is identifiable at this sample size. An
+intrinsic dimension exists only if the estimate is insensitive to the space it is measured
+in, but that diagnostic is itself strongly length-dependent: a Lorenz reference grows by
+$8.86$ at $n = 2000$, $2.21$ at $n = 6000$ and $1.32$ at $n = 24\,000$, while white noise
+holds between $4.4$ and $4.8$ (\cref{fig:dimension}b). At the lengths available it
+therefore has no power, since a textbook attractor scores worse than the weight-norm series
+it should outperform, at $8.86$ against $3.73$ and $4.36$. We draw no conclusion about
+whether these logs resemble noise; what follows is a bound on the data budget, and
+\cref{sec:protocol} states it as such.
 
-The consequence is that at the lengths training logs provide the diagnostic has no power.
-The two weight-norm series, of $2000$ and $3000$ samples, grow by factors of $3.73$ and
-$4.36$; a Lorenz attractor of the same length grows by $8.86$, which is worse than both,
-and worse than noise. We therefore do not conclude that these logs resemble noise more
-than they resemble an attractor, since the measurement cannot support a statement in
-either direction. What follows instead is a statement about the data budget: at $n \le
-3000$ the estimator fails to resolve a textbook attractor, so no intrinsic dimension is
-identifiable from a log of that length whether or not one exists. This is a precondition
-on sample size, and \cref{sec:protocol} states it as such. The case against the dimension
-signal does not rest on this diagnostic; it rests on \cref{prop:line} and on the seed
-comparison below.
+The third observation is a controlled comparison, and it does not depend on a Theiler
+exclusion, which the estimate is often computed without. \Cref{prop:line} at $W = 0$
+returns $1.330$, so switching the exclusion off does not restore information; it pins the
+estimate to the tangent constant, which is why such curves look stable. That disposes of
+the reported \emph{level} but not of the \emph{shape}, since a control whose norm never
+leaves a straight line is flat by construction and cannot refute a claim about a rise and a
+fall. The control that can holds weight decay at $1.0$ and reduces the training fraction,
+so the same regulariser drives a non-stationary norm in a model that never generalises.
+\Cref{fig:papersettings} reports that comparison with no temporal exclusion at all.
 
-Both observations so far assume a Theiler exclusion, and the estimate is often computed
-without one. That case deserves answering on its own terms, because the exclusion is not
-what removes the result. \Cref{prop:line} evaluated at $W = 0$ returns $1.330$, so
-switching the exclusion off does not restore information; it pins the estimate to the
-tangent constant, which is exactly why such curves look stable. The $WD = 0$ controls sit
-at that constant for their entire duration without ever generalising.
+The shape fails an internal check before reaching any control. Across three seeds of the
+identical configuration, whose weight norms end at $29.89$, $29.12$ and $30.39$, the
+estimate falls in one run (Spearman trend $-0.54$) and rises in the other two ($+0.94$,
+$+0.90$), and their late-training levels are $1.51$, $9.21$ and $11.64$, a spread of $7.7$
+within one configuration. The matched controls give $+0.75$ and $+0.22$, inside the range
+spanned by the runs that generalise.
 
-That argument disposes of the reported \emph{level} but not of the reported \emph{shape}.
-A control whose weight norm never departs from a straight line is flat by construction and
-cannot refute a claim about a rise followed by a fall. The control that can do so holds
-weight decay fixed at $1.0$ and reduces the training fraction, so the same regulariser
-drives a non-stationary norm in a model that never generalises. \Cref{fig:papersettings}
-reports that comparison at $W = 0$, $k = 5$, $E_{max} = 15$ and a window of $300$ samples,
-that is, with no temporal exclusion at all.
-
-The signal fails an internal consistency check before it reaches any control. Across three
-seeds of the identical grokking configuration, whose weight norms terminate at $29.89$,
-$29.12$ and $30.39$ and so agree to within $4\%$, the estimate falls in one run
-(Spearman trend $-0.54$) and rises in the other two ($+0.94$ and $+0.90$). The descent is
-therefore not reproducible across seeds of the very condition that produces it.
-The late-training level of those three runs is $1.51$, $9.21$ and $11.64$, a spread of a
-factor of $7.7$ within one configuration, which no dimension of a shared attractor can
-exhibit. Against the matched controls the direction is likewise uninformative: the
-never-generalising runs at the same weight decay give trends of $+0.75$ and $+0.22$, which
-lie inside the range spanned by the runs that do generalise.
-
-What the estimate does track is the local smoothness of the series. Pooled over $1026$
-windows and all six runs, it attains a Spearman correlation of $+0.887$ with the ratio
-$\mathrm{std}(\Delta x) / \mathrm{std}(x)$, a statistic computed without any embedding,
-neighbour search or likelihood (\cref{fig:papersettings}c). Within individual runs the
-correlation ranges from $+0.32$ to $+0.996$, and the mapping is not identical across runs,
-so smoothness is a strong correlate rather than a complete description. The direction of
-the norm's drift is immaterial to it, as expected: the grokking norm falls from $42$ to
-$30$ and the lowdata norm rises from $42$ to $61$, and a monotone rise is as locally
-straight as a monotone fall.
+What the estimate tracks is local smoothness. Pooled over $1026$ windows it correlates at
+Spearman $+0.887$ with $\mathrm{std}(\Delta x) / \mathrm{std}(x)$, computed without any
+embedding, neighbour search or likelihood (\cref{fig:papersettings}c); within runs the
+correlation ranges from $+0.32$ to $+0.996$, so smoothness is a strong correlate rather
+than a complete description. The sign of the drift is immaterial, as expected of a
+smoothness statistic: the grokking norm falls from $42$ to $30$ and the lowdata norm rises
+from $42$ to $61$, and both collapse the estimate.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.99\textwidth]{figures/fig_paper_settings.pdf}
-\caption{The dimension signal evaluated with no Theiler exclusion. (a) Sliding-window estimates. Line style distinguishes seeds within a family.
-(b) Median estimate over the first and last third of training. Two of the three
-generalising runs rise, one falls, and the never-generalising runs at identical weight
-decay lie between them; the no-weight-decay run is flat at the tangent constant, its
-apparent monotone decline spanning only $1.34$ to $1.33$. (c) The estimate against a
-roughness ratio that involves no embedding.}
+\caption{The dimension signal with no Theiler exclusion. (a) Sliding-window estimates; line
+style distinguishes seeds. (b) Median estimate over the first and last third of training.
+Two of three generalising runs rise, one falls, and the never-generalising runs lie between
+them; the no-weight-decay run is flat at the tangent constant, its apparent decline
+spanning only $1.34$ to $1.33$. (c) The estimate against a roughness ratio that involves no
+embedding.}
 \label{fig:papersettings}
 \end{figure}
+
+The fourth observation, from \cref{sec:sampling}, is that the weight norm is never locally
+stationary at any window length from $25$ to $3000$ steps, with a stationarity index
+between $20$ and $1087$. No window of it can be read as a stationary system, so the
+estimate has no licensed interpretation even locally.
 
 The third observation is procedural. The windows were labelled by their centres, so each
 estimate incorporated data recorded after the step it was assigned to. Under causal
@@ -514,13 +453,10 @@ coupling spans $0.80$ to $2.55$, against $1.0$ to $5.6$ across configurations.
 
 \subsection{A common failure mode}
 
-The three signals fail in the same way, as \cref{tab:failures} summarises. Each separates
-\emph{configurations} rather than \emph{transitions}, and each is supported by a comparison
-in which the runs differ in more than the property of interest. The controls that falsify
-them share every feature with the positive runs except the mechanism under test: weight
-decay held fixed while data is varied, or configuration held fixed while seeds are varied.
-We regard this, rather than any individual negative result, as the principal
-methodological lesson.
+The three fail in the same way, as \cref{tab:failures} summarises. Each separates
+\emph{configurations} rather than \emph{transitions}, and each rests on a comparison in
+which the runs differ in more than the property of interest. We regard this, rather than
+any individual negative result, as the principal methodological lesson.
 
 \begin{table}[H]
 \centering
@@ -591,53 +527,33 @@ are not. The single missed detection is the smooth periodic driver discussed in
 \label{fig:recovery}
 \end{figure}
 
-\Cref{fig:recovery} summarises both settings. In the ResNet setting all five coupled
-drivers are detected, with skills between $0.379$ and $0.949$ and $p \le 0.05$ under both
-nulls, and all ghost runs remain silent at skills of $-0.011$ and $-0.007$. In the
-transformer setting the chaotic and independent drivers are detected at $0.934$ and
-$0.919$ and the ghost remains silent at $-0.024$. Across both settings, seven of eight
-coupled runs are detected and no ghost run produces a false positive. Three of the five
-ghosts carry a varying driver and cross map at $-0.011$, $-0.007$ and $-0.024$; the
-remaining two carry a constant driver, which has no variation to recover and therefore
-cannot be cross mapped at all. We count them as controls but they are not evidence, and
-they are omitted from \cref{fig:recovery} for that reason.
+\Cref{fig:recovery} summarises both settings. All five coupled drivers in the ResNet
+setting are detected, with skills between $0.379$ and $0.949$ and $p \le 0.05$ under both
+nulls; in the transformer setting the chaotic and independent drivers are detected at
+$0.934$ and $0.919$. Seven of eight coupled runs are detected and no ghost produces a false
+positive. Three of the five ghosts carry a varying driver and cross map at $-0.011$,
+$-0.007$ and $-0.024$; the other two carry a constant driver with no variation to recover,
+so they are controls but not evidence, and are omitted from \cref{fig:recovery}.
 
-The ghost runs carry the argument. They share the training trend with the coupled runs, so
-their near-zero skill excludes the explanation that defeated the signals of
-\cref{sec:negative}, namely that a statistic separates runs because their loss curves have
+The ghosts carry the argument. They share the training trend with the coupled runs, so
+their near-zero skill excludes the explanation that defeated every signal of
+\cref{sec:negative}, that a statistic separates runs because their loss curves have
 different shapes.
 
-The detection rule declares a driver recovered when either null rejects, which is a family
-of two tests and therefore admits a false-positive rate approaching $0.10$ rather than the
-nominal $0.05$. The ensemble of $39$ surrogates used above cannot express the correction,
-since its smallest attainable rank p-value, $1/40 = 0.025$, coincides exactly with the
-Bonferroni threshold for two tests. We therefore repeated both experiments with $199$
-surrogates, where the attainable floor is $0.005$. The verdicts are unchanged: seven true
-positives, one false negative and no false positives under either the original rule or the
-corrected one. The single case that had been marginal, the ResNet periodic driver at
-$p = 0.050$, resolves to $p = 0.015$ with the larger ensemble and survives the correction.
-The counts reported here are therefore not an artefact of the multiplicity.
+The rule declares a driver recovered when either null rejects, a family of two tests whose
+false-positive rate approaches $0.10$ rather than $0.05$, and the $39$-surrogate ensemble
+cannot express the correction because its p-value floor of $0.025$ is the Bonferroni
+threshold itself. Repeating both experiments with $199$ surrogates leaves every verdict
+unchanged: seven true positives, one false negative, no false positives under either rule.
+The one marginal case, the ResNet periodic driver at $p = 0.050$, resolves to $p = 0.015$.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.72\textwidth]{figures/fig_convergence.pdf}
-\caption{Cross-map skill against library size. Coupled runs improve as the manifold is
-sampled more densely, which is the convergence signature that distinguishes causation from
-coincidental correlation. Ghost runs remain at zero for every library size.}
-\label{fig:convergence}
-\end{figure}
-
-\Cref{fig:convergence} shows the convergence criterion that gives the method its name. The
-skill of the coupled runs rises with library size, most clearly for the independent driver,
-which climbs from $0.59$ to $0.95$. The ghost runs show no such rise, and no level.
-
-One preprocessing choice deserves emphasis because it initially inverted the conclusion.
-Differencing the response is the obvious way to remove the training trend, but it is a
-high-pass filter and therefore removes slow drivers. The periodic drivers have the
-strongest direct coupling of any run, with correlations of $0.69$ and $0.58$ against the
-loss, yet they cross map at $0.09$ and $0.12$ after differencing and at $0.81$ and $0.80$
-without it. The trend requires no manual removal, because both nulls and the ghost runs
-already control for it.
+Convergence with library size, the signature that gives the method its name and
+distinguishes causation from coincidental correlation, is shown for both directions in
+\cref{fig:direction}(a): skill rises for the coupled runs, most clearly for the independent
+driver at $0.59$ to $0.95$, while the ghosts show neither rise nor level. Differencing the
+response, the obvious way to remove the training trend, inverts this conclusion by removing
+the slow drivers with it (\cref{sec:protocol}); no manual removal is needed, since both
+nulls and the ghosts already control for the trend.
 
 \subsection{A limitation for periodic drivers}\label{sec:periodic}
 
@@ -654,69 +570,53 @@ different null, for example a driver of a different period, would be required.
 
 \subsection{Direction of the recovered coupling}\label{sec:direction}
 
-Detection is not direction. A statistic that recovers the driver from the loss establishes
-that the two series are coupled, and the causal reading requires in addition that the
-coupling be shown to run from the driver to the loss rather than the reverse. Cross mapping
-is asymmetric by construction and can be asked this question directly. Embedding $Y$ and
-predicting $X$, written $Y$ xmap $X$, is evidence that $X$ drives $Y$ \citep{sugihara2012detecting},
-so the forward map is loss xmap driver and the reverse is driver xmap loss.
+Detection is not direction: recovering the driver from the loss shows the two are coupled,
+not which forces which. Cross mapping is asymmetric and can be asked directly. Embedding
+$Y$ and predicting $X$, written $Y$ xmap $X$, is evidence that $X$ drives $Y$
+\citep{sugihara2012detecting}, so the forward map is loss xmap driver. Here the ground
+truth is known rather than assumed, since the driver schedule is evaluated from a fixed
+seed before any gradient is taken and cannot depend on training.
 
-These logs are an unusually clean setting for the test, because the ground truth is known
-by construction rather than assumed. The driver schedule is evaluated from a fixed seed
-before any gradient is taken, so training cannot influence it and the coupling is
-unidirectional by design.
-
-The convention itself is calibrated on a system with a known answer, since inverting it
-would invert every causal statement that depends on it. On coupled logistic maps
-\citep{sugihara2012detecting} with $\beta_{xy} = 0$ and $\beta_{yx} = 0.32$, so that $X$
-drives $Y$ alone, the true direction rises from $0.331$ to $0.993$ with library size while
-the false direction runs from $0.585$ to $0.569$ and does not converge. The false direction
-therefore reaches a skill of $0.57$ while carrying no causal information at all, which
-establishes that convergence rather than skill is the discriminating quantity.
+The convention is calibrated on a system with a known answer, as inverting it would invert
+every causal statement resting on it. On coupled logistic maps with $\beta_{xy} = 0$ and
+$\beta_{yx} = 0.32$, so $X$ drives $Y$ alone, the true direction rises from $0.331$ to
+$0.993$ with library size while the false direction runs $0.585$ to $0.569$ and does not
+converge. The false direction reaches a skill of $0.57$ while carrying no causal
+information, which establishes that convergence rather than skill is the discriminating
+quantity.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig_directionality.pdf}
-\caption{Forward against reverse cross mapping, both directions at a matched embedding
-dimension. (a) Skill against library size. The forward map converges for the coupled runs
-while the reverse remains flat, and both directions are flat for the ghost. (b) Convergence
-gain in the two directions. Coupled runs lie above the diagonal, ghost runs sit at the
-origin, and the exception is the smooth periodic driver of \cref{sec:periodic}.}
+\caption{Forward against reverse cross mapping, both at a matched embedding dimension.
+(a) Skill against library size: the forward map converges for coupled runs while the
+reverse stays flat, and both are flat for the ghost. (b) Convergence gain. Coupled runs lie
+above the diagonal and ghosts sit at the origin; the exception is the periodic driver of
+\cref{sec:periodic}.}
 \label{fig:direction}
 \end{figure}
 
-\Cref{fig:direction} reports the comparison. At a matched embedding dimension the forward
-map converges more strongly than the reverse in seven of the eight coupled runs, most
-clearly for the independent driver at gains of $0.357$ against $0.118$. The ghost runs
-converge in neither direction, with all gains within $0.039$ of zero, so the test does not
-manufacture a direction where no coupling exists. The single exception is the smooth
-periodic driver of the transformer setting, whose reverse gain of $0.170$ exceeds its
-forward gain of $0.040$; this is the same run whose forward detection fails its null at
-$p = 0.77$, and it is excluded by \cref{sec:periodic} on independent grounds.
+At a matched embedding the forward map converges more strongly than the reverse in seven of
+eight coupled runs, most clearly for the independent driver at gains of $0.357$ against
+$0.118$, while the ghosts converge in neither direction with all gains within $0.039$ of
+zero. The exception is the periodic driver, whose reverse gain of $0.170$ exceeds its
+forward $0.040$; that run also fails forward detection at $p = 0.77$ and is excluded by
+\cref{sec:periodic} on independent grounds.
 
-The result should not be overstated, and a stricter reading of the same data does not
-support unidirectionality. If the reverse direction is granted the best of five embedding
-dimensions rather than being held at the forward's $E = 3$, it converges and beats its own
-surrogate null in most runs. Under a criterion that requires the reverse map to be silent,
-none of the eight coupled runs is assigned a unidirectional driver-to-loss reading and five
-are called bidirectional. Selecting the maximum over five embeddings is itself a multiple
-comparison and inflates the reverse, but the effect is not solely an artefact of that
-selection.
+A stricter reading does not support unidirectionality. Granting the reverse the best of
+five embedding dimensions rather than holding it at the forward's $E = 3$, it converges and
+beats its own null in most runs: no coupled run is then read as unidirectional and five of
+eight are read as bidirectional. Selecting a maximum over five embeddings inflates the
+reverse, but not by itself. The explanation is structural: the driver acts at every step,
+so the loss depends on it contemporaneously and a delay vector of the driver already
+contains the value the loss is partly a function of, letting the reverse map succeed by
+direct functional dependence with no manifold involved. Cross mapping does not separate
+causation from strong instantaneous coupling, the generalised-synchrony regime
+\citep{rulkov1995generalized} known to compromise it \citep{ye2015distinguishing}.
 
-The explanation is structural rather than a defect of the estimator. The driver is applied
-to training at every step, so the loss depends on the driver contemporaneously, and a delay
-vector of the driver already contains the value that the loss is partly a function of. The
-reverse map can therefore succeed by direct functional dependence without reconstructing
-any manifold. Cross mapping does not separate causation from strong instantaneous coupling,
-and under strong forcing the response becomes a function of the driver, which is the
-generalised-synchrony regime \citep{rulkov1995generalized} known to compromise the method
-\citep{ye2015distinguishing}.
-
-We therefore claim what the data support. The coupling is detected, and its dominant
-direction is recovered correctly in seven of eight runs, with the exception falling in the
-periodic case already excluded. Unidirectionality is not established, and demonstrating it
-would require a design in which the driver acts on the loss with a delay, so that the
-contemporaneous term is absent.
+We therefore claim the dominant direction, recovered correctly in seven of eight runs, and
+not unidirectionality. Establishing the latter would require a driver acting with a delay,
+so that the contemporaneous term is absent.
 
 \subsection{The method is not discriminative between a run's own metrics}
 
@@ -750,21 +650,18 @@ $11\,790$ steps lies far outside the distribution.}
 \label{fig:delays}
 \end{figure}
 
-All thirty runs generalise, with gaps between $1290$ and $5600$ steps, a mean of $3062$, a
-median of $2875$ and a standard deviation of $1130$. The delay is thus a broadly
-distributed quantity whose standard deviation is more than a third of its mean, within a
-configuration held otherwise fixed.
+All thirty runs generalise, with gaps between $1290$ and $5600$ steps, a mean of $3062$ and
+a standard deviation of $1130$: within a configuration held otherwise fixed, the delay has
+a standard deviation exceeding a third of its mean.
 
-A run of the same configuration under the original coupled stream produced a gap of
-$11\,790$ steps, which is $7.7$ standard deviations above the mean of the grid and $2.11$
-times its largest member, while two further runs at other seeds gave $1510$ and $1570$,
-both inside it. Five cells of the grid share the split of the outlying run and give gaps
-between $2050$ and $4300$, so the split alone does not account for it. The grid contains no
-cell reproducing the particular pairing of split and initialisation that the coupled stream
-produces, and we therefore attribute the outlier to that pairing rather than to the
-configuration. The practical consequence is that a delay measured from one run is not a
-property of the configuration, and a precursor validated against one run has been validated
-against a single draw from a wide distribution.
+A run of the same configuration under the coupled stream produced a gap of $11\,790$ steps,
+$7.7$ standard deviations above the grid mean and $2.11$ times its largest member, while
+two further runs at other seeds gave $1510$ and $1570$, both inside it. Five grid cells
+share the outlying run's split and give $2050$ to $4300$, so the split alone does not
+account for it, and no cell reproduces the pairing of split and initialisation the coupled
+stream produces; we attribute the outlier to that pairing. A delay measured from one run is
+therefore not a property of the configuration, and a precursor validated against one run
+has been validated against a single draw from a wide distribution.
 
 The variance decomposition is inconclusive by design rather than by accident. The split
 accounts for $19.8\%$ of the variance in the gap and the initialisation for $23.8\%$, with
@@ -775,35 +672,30 @@ complete.
 
 \section{Conclusion}\label{sec:concl}
 
-Delay-embedding methods are applicable to neural network training logs in a narrower
-regime than their premise suggests, and within that regime they work well. When an
-external driver possessing its own attractor forces training, convergent cross mapping
-recovers it from a single scalar loss log, in seven of eight coupled runs across two
-architectures and with no false positives among the runs whose driver was logged but
-never applied. The coupling is directional in the sense that the forward map converges
-more strongly than the reverse in seven of eight runs while the controls converge in
-neither, though these data do not establish unidirectionality, for the reason set out in
-\cref{sec:direction}. The quantity requires no validation data and is obtained from a log
-that costs nothing to store.
+Delay-embedding methods apply to training logs in a narrower regime than their premise
+suggests, and within it they work. When an external driver with its own attractor forces
+training, convergent cross mapping recovers it from a single scalar loss log in seven of
+eight coupled runs across two architectures, with no false positives among the runs whose
+driver was logged but never applied, and the forward map converges more strongly than the
+reverse in seven of eight. These data do not establish unidirectionality
+(\cref{sec:direction}). The quantity needs no validation data and comes from a log that
+costs nothing to store.
 
-The intrinsic optimisation transient does not admit the same treatment, and the reason is
-quantitative rather than a matter of taste. Its correlation time is a tenth of the
-transition it would have to resolve, so the transition affords about ten independent
-observations at any logging rate, against the thousands an attractor reconstruction
-requires. The three statistics we examined that appeared to detect the grokking transition
-were found instead to separate run configurations. The phenomenon
-itself is also more variable than a single run can reveal: thirty runs of one
-configuration produce delays between $1290$ and $5600$ steps, while a run of that same
-configuration with the split and initialisation drawn from one stream reaches
-$11\,790$.
+The intrinsic optimisation transient does not admit the same treatment, for a quantitative
+reason rather than a matter of taste: its correlation time is a tenth of the transition it
+would have to resolve, so the transition affords about ten independent observations at any
+logging rate, against the thousands an attractor reconstruction needs. The three statistics
+that appeared to detect the grokking transition separate run configurations instead, and
+the phenomenon is more variable than one run can reveal, thirty runs of a single
+configuration spanning $1290$ to $5600$ steps against $11\,790$ for a run of the same
+configuration seeded from one stream.
 
-One question is left open. Whether any training-side observable distinguishes a run that
-will generalise from a run that will not, with configuration held fixed, remains
-undecided: none of the five examined here, comprising the parameter norm, the trajectory
-roughness, the intrinsic dimension, the function-space velocity and the shared-manifold
-coupling, is able to do so. The driven regime is meanwhile the one in which the theory
-applies and validation against a known answer is possible, and it is where we would place
-further effort.
+One question is left open: whether any training-side observable distinguishes a run that
+will generalise from one that will not, with configuration held fixed. None of the five
+examined here does, comprising the parameter norm, the trajectory roughness, the intrinsic
+dimension, the function-space velocity and the shared-manifold coupling. The driven regime
+is where the theory applies and validation against a known answer is possible, and it is
+where we would place further effort.
 
 \bibliographystyle{icomp2026_conference}
 \bibliography{references}

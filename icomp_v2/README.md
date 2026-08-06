@@ -22,9 +22,10 @@ pdflatex report && bibtex report && pdflatex report && pdflatex report
 
 | file | role |
 | --- | --- |
-| `report.tex`, `report.pdf` | the report (15 pages) |
+| `report.tex`, `report.pdf` | the report (13 pages) |
 | `make_figures.py` | regenerates every figure from the analysis outputs |
-| `figures/` | ten figures, PDF for LaTeX and PNG for preview |
+| `verify_numbers.py` | checks every number quoted in the report against its result file |
+| `figures/` | nine figures, PDF for LaTeX and PNG for preview |
 | `references.bib` | bibliography, covering the embedding, surrogate and cross-mapping literature |
 
 ## The argument in one paragraph
@@ -58,7 +59,6 @@ correct, is [`../code/edm_validation/NOTES.md`](../code/edm_validation/NOTES.md)
 | function-space velocity | `prediction_improved/results/*_probe.csv` |
 | confound-free test | `edm_validation/results/phase6_*.csv`, `phase7_*.csv` |
 | driver recovery | `edm_validation/results/phase3_ccm.csv`, `phase5_inject_ccm.csv` |
-| convergence | `edm_validation/ccm.py::ccm_convergence` |
 | direction of coupling | `edm_validation/phase12_directionality.py` |
 | local stationarity | `edm_validation/phase14_local_stationarity.py` |
 | delay distribution | `prediction_improved/results/sweep/summary.csv` |

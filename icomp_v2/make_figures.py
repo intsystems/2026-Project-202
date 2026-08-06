@@ -582,7 +582,6 @@ if __name__ == "__main__":
     figure_velocity()
     figure_preconditions()
     figure_driver_recovery()
-    figure_convergence()
     figure_directionality()
     figure_confound_free()
     figure_delay_distribution()
