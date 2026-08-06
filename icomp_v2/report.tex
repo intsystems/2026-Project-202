@@ -148,32 +148,64 @@ noise, and a determinism test must follow it. We return to this point in
 
 \section{Signals that do not survive controlled comparison}\label{sec:negative}
 
-\subsection{Intrinsic dimension of the weight-norm trajectory}
+\subsection{Intrinsic dimension of the weight-norm trajectory}\label{sec:dimension}
 
 The Levina--Bickel maximum likelihood estimator \citep{levina2004maximum} applied to a
 sliding window of the weight-norm series produces a curve that rises during memorisation
 and falls before generalisation. Three observations remove its interpretation as a
-dimension.
+dimension. The first is analytic.
 
-First, the reported values are closed-form constants of a straight line. For a locally
-straight and uniformly sampled trajectory the $k$ nearest neighbours lie at temporal
-offsets $1,\dots,k$, so the estimate depends only on $k$ and on the exclusion window and
-not on the data. At $k=5$ that constant is $1.33$ without exclusion and $10.76$ with an
-exclusion of fourteen samples. The published control runs report $1.33$ to $1.40$ and
-$8.84$ to $12.93$ respectively, and a synthetic straight line reproduces both plateaus to
-two decimal places.
+\begin{proposition}[The estimate is a constant of a straight line]\label{prop:line}
+Let the delay vectors be sampled at uniform intervals from a curve that is locally
+straight at the scale of the neighbourhood, and let a Theiler exclusion of $W$ samples be
+applied. The $k$ nearest neighbours of an interior delay vector are then its temporal
+neighbours at offsets $\pm(W{+}1), \pm(W{+}2), \dots$, so the ordered neighbour distances
+satisfy $r_j \propto s_j$, where $s$ is the non-decreasing sequence
+$W{+}1, W{+}1, W{+}2, W{+}2, \dots$ truncated to $k$ terms. The Levina--Bickel estimate
+\begin{equation}\label{eq:lb}
+  \hat{d} \;=\; \Bigl[\tfrac{1}{k-1}\textstyle\sum_{j=1}^{k-1} \log (r_k / r_j)\Bigr]^{-1}
+  \;=\; (k-1) \Bigl/ \textstyle\sum_{j=1}^{k-1} \log (s_k / s_j)
+\end{equation}
+is therefore a function of $k$ and $W$ alone, and contains no information about the data.
+For $k = 5$ it equals $1.330$ when $W = 0$ and $10.765$ when $W = 14$.
+\end{proposition}
 
-Second, the estimate is not identifiable. Doubling the embedding dimension approximately
-doubles the reported value on these logs, whereas a genuine low-dimensional attractor
-leaves it unchanged. Even a Lorenz trajectory is unresolvable at the window lengths used,
-which places the requirement on the data rather than on the estimator.
+The proposition is verified against the estimator in \cref{fig:dimension}(a). Applied to a
+synthetic straight line, which possesses no dynamics whatsoever, the estimator returns the
+predicted constant to within $1.1\%$ at every $k$ and $W$ tested. Applied to the published
+control runs, it returns the same constants: a median of $1.33$ and $1.38$ without
+exclusion against a prediction of $1.33$, and $11.30$ and $11.69$ with exclusion against a
+prediction of $10.76$. The plateaus reported in earlier work are therefore reproduced by a
+straight line, and cannot be evidence about an attractor.
 
-Third, the windows were labelled by their centres, so each estimate incorporated data from
-after the step it was assigned to. Under causal labelling the reported lead over the
-transition does not survive.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig_dimension_artifact.pdf}
+\caption{(a) Dimension reported by the estimator against the closed form of
+\cref{prop:line}, on logarithmic axes with the identity line shown. A synthetic straight
+line and the published $WD=0$ control runs both lie on the prediction. (b) Reported
+dimension against the dimension of the embedding space. A quantity that is a property of
+the data does not depend on the space it is measured in. The Lorenz attractor rises by a
+factor of $1.66$ across the range, whereas the weight-norm series rise by $3.73$ and
+$4.36$, which is the behaviour of the white-noise reference at $4.40$.}
+\label{fig:dimension}
+\end{figure}
+
+The second observation concerns identifiability. An intrinsic dimension exists only if the
+estimate is insensitive to the dimension of the space in which it is measured.
+\Cref{fig:dimension}(b) sweeps that dimension. The Lorenz reference grows by a factor of
+$1.66$ from $E_{max} = 5$ to $E_{max} = 30$, while the two weight-norm series grow by
+$3.73$ and $4.36$, which is indistinguishable from the factor of $4.40$ obtained for white
+noise. On this diagnostic the published observable behaves like noise rather than like an
+attractor, so no dimension is identifiable from it.
+
+The third observation is procedural. The windows were labelled by their centres, so each
+estimate incorporated data recorded after the step it was assigned to. Under causal
+labelling, in which an estimate is assigned to the last step it observed, the reported
+lead over the transition does not survive.
 
 Averaging the per-point estimates also inflates them relative to pooling the likelihood,
-as \citet{mackay2005comments} note; the correction changes the level but not the
+as \citet{mackay2005comments} note. The correction changes the level but not the
 conclusion, because the underlying quantity is not identifiable in the first place.
 
 \subsection{Function-space velocity}
@@ -187,15 +219,33 @@ rather than that its confidence scale has changed. The median per-example moveme
 normalised logits separates a grokking run from a run without weight decay by a factor of
 approximately $360$.
 
-The separation does not survive its control. We trained runs in which weight decay is
-held at $1.0$ and only the quantity of training data is reduced, so that the model
-memorises and never generalises. These runs exhibit \emph{higher} sustained velocity
-($7.26\times10^{-2}$ and $5.30\times10^{-2}$) than the run that groks
-($1.84\times10^{-2}$), while the only run far below all others is the one without weight
-decay ($1.53\times10^{-4}$). Every run with weight decay lies within a factor of five of
-every other. The statistic therefore measures the reorganisation that regularisation
-imposes on the function, and among regularised runs it is, if anything, inversely related
-to generalisation.
+The separation does not survive its control. We trained runs in which weight decay is held
+at $1.0$ and only the quantity of training data is reduced, so that the model memorises
+and never generalises. \Cref{fig:velocity} shows the outcome. The runs that never
+generalise sustain a \emph{higher} velocity than the runs that grok, and the ordering is
+consistent across replicate seeds rather than resting on a single draw. The only run far
+below the others is the one without weight decay, in which the function freezes within a
+few thousand steps and thereafter only rescales.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig_velocity.pdf}
+\caption{(a) Median velocity of the normalised probe logits against the optimization step,
+on a logarithmic scale. (b) The same statistic over the second half of training, one bar
+per run. If the velocity indicated impending generalisation, the runs that never
+generalise would sit low. They sit highest. Weight decay is identical in the blue and
+orange families, which differ only in the quantity of training data.}
+\label{fig:velocity}
+\end{figure}
+
+Quantitatively, the runs that never generalise reach $7.26\times10^{-2}$ and
+$5.30\times10^{-2}$ over the second half of training against $1.38\times10^{-2}$ to
+$1.94\times10^{-2}$ for the three grokking runs, while the run without weight decay falls
+to $1.53\times10^{-4}$. Every run with weight decay lies within a factor of five of every
+other, and the factor of $360$ quoted above is entirely accounted for by the presence or
+absence of regularisation. The statistic therefore measures the reorganisation that weight
+decay imposes on the function, and among regularised runs it is, if anything, inversely
+related to generalisation.
 
 \subsection{Shared-manifold coupling}
 
@@ -236,12 +286,42 @@ coupling spans $0.80$ to $2.55$, against $1.0$ to $5.6$ across configurations.
 
 \subsection{A common failure mode}
 
-The three signals fail in the same way. Each separates \emph{configurations} rather than
-\emph{transitions}, and each is confirmed by a comparison in which the runs differ in more
-than the property of interest. The controls that falsify them share every feature with the
-positive runs except the mechanism under test: weight decay held fixed while data is
-varied, or configuration held fixed while seeds are varied. We regard this, rather than
-any individual negative result, as the principal methodological lesson.
+The three signals fail in the same way, as \cref{tab:failures} summarises. Each separates
+\emph{configurations} rather than \emph{transitions}, and each is supported by a comparison
+in which the runs differ in more than the property of interest. The controls that falsify
+them share every feature with the positive runs except the mechanism under test: weight
+decay held fixed while data is varied, or configuration held fixed while seeds are varied.
+We regard this, rather than any individual negative result, as the principal
+methodological lesson.
+
+\begin{table}[H]
+\centering
+\caption{The three signals, the comparison that made each convincing, and the control that
+falsifies it. In every case the falsifying control differs from the positive runs in one
+respect only.}
+\label{tab:failures}
+\small
+\begin{tabular}{@{}p{0.20\textwidth}p{0.24\textwidth}p{0.24\textwidth}p{0.22\textwidth}@{}}
+\toprule
+\textbf{Signal} & \textbf{Apparent evidence} & \textbf{Falsifying control} & \textbf{What it measures} \\
+\midrule
+Intrinsic dimension of $\lVert w \rVert_2$
+& Rises then collapses before generalisation
+& A straight line reproduces both plateaus; the estimate tracks $E_{max}$ as white noise does
+& Local smoothness of the series \\
+\addlinespace
+Function-space velocity
+& Separates $WD=1$ from $WD=0$ by a factor of $360$
+& $WD=1$ with reduced data never generalises, yet sustains a higher velocity
+& Reorganisation imposed by weight decay \\
+\addlinespace
+Shared-manifold coupling
+& Separates runs with a delayed transition from runs without, with no overlap
+& Across eight runs of one configuration the coupling is unrelated to the delay, $r = -0.090$
+& Run configuration \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Driver recovery in the regime where the theorems apply}\label{sec:ccm}
 

@@ -266,8 +266,134 @@ def figure_delay_distribution():
     save(fig, "fig5_delay_distribution")
 
 
+# --- Figure: the dimension estimate is a constant of a straight line -------
+
+def figure_dimension_artifact():
+    lines = pd.read_csv(CODE / "edm_validation" / "results" / "phase8_line_constants.csv")
+    controls = pd.read_csv(CODE / "edm_validation" / "results" / "phase8_control_plateaus.csv")
+    scan = pd.read_csv(CODE / "edm_validation" / "results" / "phase8_identifiability.csv",
+                       index_col=0)
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.9),
+                             gridspec_kw={"wspace": 0.32})
+
+    ax = axes[0]
+    ax.set_axisbelow(True)
+    ax.grid()
+    limit = [0.8, 13]
+    ax.plot(limit, limit, "-", color="#CCCCCC", lw=1.0, zorder=1)
+    ax.scatter(lines.closed_form, lines.measured_on_line, s=42, color=BLUE, zorder=3,
+               edgecolor="white", linewidth=0.8, label="estimator on a synthetic line")
+    ax.scatter(controls.closed_form, controls.measured_median, s=48, marker="s",
+               color=VERMILLION, zorder=3, edgecolor="white", linewidth=0.8,
+               label="published $WD=0$ control runs")
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_xlim(*limit)
+    ax.set_ylim(*limit)
+    ax.set_xticks([1, 2, 5, 10])
+    ax.set_yticks([1, 2, 5, 10])
+    ax.set_xticklabels(["1", "2", "5", "10"])
+    ax.set_yticklabels(["1", "2", "5", "10"])
+    ax.set_xlabel("closed form for a straight line")
+    ax.set_ylabel(r"reported dimension $\hat{d}$")
+    ax.set_title("(a) what the estimator reports", fontsize=8.2, color=INK, pad=6)
+    ax.legend(loc="upper left")
+
+    ax = axes[1]
+    ax.set_axisbelow(True)
+    ax.grid()
+    styles = {
+        "Lorenz-63 (11000 samples)": (BLUE, "-", "o"),
+        "mod_wd1 weight norm": (VERMILLION, "-", "s"),
+        "s5_wd1 weight norm": (ORANGE, "-", "^"),
+        "white noise": (GREY, ":", "v"),
+    }
+    max_es = [int(c.split("=")[1]) for c in scan.columns if c.startswith("E_max")]
+    for name, (colour, style, marker) in styles.items():
+        if name not in scan.index:
+            continue
+        values = scan.loc[name, [f"E_max={m}" for m in max_es]].to_numpy(dtype=float)
+        ax.plot(max_es, values, style, color=colour, lw=1.5, marker=marker, ms=3.6,
+                label=name.replace(" (11000 samples)", ""))
+    ax.set_xlabel(r"embedding dimension $E_{max}$")
+    ax.set_ylabel(r"reported dimension $\hat{d}$")
+    ax.set_title("(b) is the number a property of the data?", fontsize=8.2, color=INK, pad=6)
+    ax.legend(loc="upper left")
+    save(fig, "fig_dimension_artifact")
+
+
+# --- Figure: function-space velocity fails its control ---------------------
+
+def figure_velocity():
+    results = CODE / "prediction_improved" / "results"
+    extra = CODE / "edm_validation" / "results" / "velocity"
+    families = {
+        "grok (WD=1, generalises)": (BLUE, ["grok", "grok_seed1", "grok_seed2"]),
+        "lowdata (WD=1, never generalises)": (VERMILLION,
+                                              ["lowdata15", "lowdata20",
+                                               "lowdata15_s1", "lowdata15_s2",
+                                               "lowdata20_s1", "lowdata20_s2"]),
+        "no weight decay (never generalises)": (GREY, ["wd0"]),
+    }
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.9),
+                             gridspec_kw={"width_ratios": [1.35, 1], "wspace": 0.34})
+
+    ax = axes[0]
+    ax.set_axisbelow(True)
+    ax.grid()
+    summary = []
+    for label, (colour, runs) in families.items():
+        first = True
+        for run in runs:
+            path = results / f"{run}_probe.csv"
+            if not path.exists():
+                path = extra / f"{run}_probe.csv"
+            if not path.exists():
+                continue
+            frame = pd.read_csv(path)
+            steps = frame["step"].to_numpy()
+            velocity = frame["val_velocity"].to_numpy()
+            edges = np.linspace(0, steps.max(), 21)
+            centres, medians = [], []
+            for lo, hi in zip(edges[:-1], edges[1:]):
+                mask = (steps >= lo) & (steps < hi)
+                if mask.any():
+                    centres.append((lo + hi) / 2)
+                    medians.append(np.nanmedian(velocity[mask]))
+            ax.plot(centres, medians, "-", color=colour, lw=1.4, alpha=0.85,
+                    label=label if first else None)
+            first = False
+            late = np.isfinite(velocity) & (steps > steps.max() / 2)
+            summary.append({"family": label, "run": run, "colour": colour,
+                            "late": float(np.median(velocity[late]))})
+
+    ax.set_yscale("log")
+    ax.set_xlabel("optimization step")
+    ax.set_ylabel("median normalized-logit velocity")
+    ax.set_title("(a) time course", fontsize=8.2, color=INK, pad=6)
+    ax.legend(loc="lower left", fontsize=6.9)
+
+    ax = axes[1]
+    table = pd.DataFrame(summary)
+    ax.set_axisbelow(True)
+    ax.grid(axis="x")
+    order = table.sort_values("late")
+    ax.barh(np.arange(len(order)), order.late, height=0.6, color=order.colour,
+            edgecolor="white", lw=0.8)
+    ax.set_yticks(np.arange(len(order)))
+    ax.set_yticklabels(order.run, fontsize=6.9)
+    ax.set_xscale("log")
+    ax.set_xlabel("velocity, second half of training")
+    ax.set_title("(b) the control sits highest", fontsize=8.2, color=INK, pad=6)
+    save(fig, "fig_velocity")
+
+
 if __name__ == "__main__":
     print("generating figures ...")
+    figure_dimension_artifact()
+    figure_velocity()
     figure_preconditions()
     figure_driver_recovery()
     figure_convergence()
