@@ -24,3 +24,10 @@ ma_to_flat_grokking_st,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\
 ma_st,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\grokking_logs\grokking_modular_addition_logs_with_stochastic.csv,15000,1,14457,14456.0,-1.0,114.36267930305912,32.10355251914614
 p_211_wd_0,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\modular_addition_grokking_colab\training_log_p_211_wd_0.csv,4001,49,1800,,,43.29525868374871,125.80529375563314
 p_211_wd_0_point_5,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\modular_addition_grokking_colab\training_log_p_211_wd_0_point_5.csv,1024,49,7650,45950.0,38300.0,43.2736116136656,37.36669180419845
+grokpos_s0,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results\extended\grokpos_s0_train.csv,12000,10,1450,5110.0,3660.0,42.1604263547633,31.28496179555304
+lowdata15_s0,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results\extended\lowdata15_s0_train.csv,12000,10,620,110940.0,110320.0,42.162835771607945,36.67225744746027
+lowdata15_s1,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results\extended\lowdata15_s1_train.csv,12000,10,630,,,42.117702109590525,39.64042247709183
+lowdata15_s2,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results\extended\lowdata15_s2_train.csv,12000,10,660,,,41.99379049741646,58.54937073997987
+lowdata20_s0,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results\extended\lowdata20_s0_train.csv,12000,10,800,39600.0,38800.0,42.16041755731048,31.931111723589996
+wd0_s0,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results\extended\wd0_s0_train.csv,12000,10,610,,,42.20262927614748,77.92447796139272
+wd0_s1,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results\extended\wd0_s1_train.csv,12000,10,630,,,42.159856193834656,79.4483621882529

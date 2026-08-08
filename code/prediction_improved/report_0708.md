@@ -799,11 +799,9 @@ The consequence for §10 below: V_t is not merely a poor score, it is a redundan
 The conjunct the criterion is missing has to separate `grok` from `lowdata15`. One
 statistic now does, and it is not a dimension: the weight norm's causal drawdown below its
 own running post-memorisation peak reaches 18.4–36.8 % before `t_gen` in all 11
-generalising runs and never exceeds 17.3 % in any control — 11/11 at 0/3 with two free
-parameters, against this conjunct's 8/11 at 0/3 with six. The margin is 1.1 percentage
-points and the minimum lead is 30 steps, so it is a rule to pre-register, not a result;
-and with median |ρ| = 0.80 between it and the MG estimate within runs, it is largely the
-same measurement without the embedding.
+generalising runs and never exceeds 17.3 % in any control. **Void after the 120 000-step reruns.** `lowdata15` and `lowdata20` generalise (`../dimension_recovery/exp8_extended.py`), so the 0/3 is not a false-alarm count — it is a count against runs that are not negatives. What survives is the comparison of parameter counts and the redundancy figure, neither of which depends on the labels. Median |ρ| = 0.80
+between the drawdown and the MG estimate within runs, so the embedding is largely
+re-encoding the norm — that figure stands, and it is the part worth keeping.
 
 ### 9.1. The unclosed experiment
 
@@ -1039,11 +1037,11 @@ finding.
    logged observables; the random projections of w still need a training run.)*
 6. **Dense-logged probe run** plus ‖z_i‖, probe labels and update cosines (§7). Closes
    the one open experiment of the function-space route.
-7. **Pre-register the weight-norm drawdown rule at 18 %** (§9.0) on the extension runs of
-   item 0 and on any new configuration, before looking at the outcome. On present data it
-   beats the dimension conjunct — 11/11 at 0/3 with two free parameters against 8/11 at
-   0/3 with six — but on a 1.1-point margin, which is precisely the kind of fit this
-   project has already had to retract once.
+7. **Re-derive the weight-norm drawdown rule from scratch** (§9.0). Its reported
+   advantage was scored against `lowdata15` and `lowdata20`, which generalise, so the
+   comparison is void. What remains true and worth acting on is that the drawdown and the
+   MG estimate are largely the same measurement (median |ρ| = 0.80), so the embedding is
+   not buying what it appears to.
 8. **Tier 6** — the ensemble sweep. This is what turns the dimension chapter from a
    retraction into a result, and it is the only route that does not depend on coverage.
 

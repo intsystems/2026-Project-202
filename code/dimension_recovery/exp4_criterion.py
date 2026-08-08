@@ -21,6 +21,13 @@ the memorising solution is favoured, so a sustained drawdown is the thing that o
 precede the transition.
 
     python exp4_criterion.py
+
+**Superseded 2026-08-08.** Every false-alarm figure below is scored against `lowdata15`,
+`lowdata20` and `wd0`. The first two generalise at a 120 000-step budget -- see
+`exp8_extended.py` -- so they are not negatives and their firings are not false alarms.
+Recall figures and label-independent quantities (parameter counts, the within-run
+correlation between the drawdown and the MG estimate) still stand. Nothing here measures
+specificity.
 """
 
 import glob

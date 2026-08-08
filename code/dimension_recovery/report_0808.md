@@ -418,15 +418,16 @@ a false-alarm rate expressed per 1 000 steps of control budget rather than per r
 
 ---
 
-## 6. Wider evidence: 25 runs, four tasks, five controls
+## 6. Wider evidence: 32 runs, four tasks, and no established control
 
 ### 6.1 The evaluation set was much smaller than it needed to be
 
-The repository contains 25 usable logs — modular addition mod 113 and mod 211, $S_5$,
-$S_6$, full-batch and minibatch, three weight decays — of which 20 generalise and 5 never
-do. Every criterion in this project has been scored against three controls from a single
-task. The three unused controls are `ma_S_5_without_weight_decay` (11 250 steps of
-post-memorisation budget), `p_211_wd_0` (**198 200 steps**) and the low-data pair.
+The repository now contains 32 usable logs — modular addition mod 113 and mod 211, $S_5$,
+$S_6$, full-batch and minibatch, three weight decays, plus the seven 120 000-step reruns —
+of which 23 generalise and 9 do not within their budget. Every criterion in this project
+had been scored against three controls from a single task. Two of those three generalise
+(§1.5); the ones that have never been rerun are `ma_S_5_without_weight_decay` (11 250 steps
+of post-memorisation budget) and `p_211_wd_0` (**198 200 steps**).
 
 ### 6.2 Item 6: at WD = 0 the estimate has *not* fallen — it never rose
 
@@ -492,35 +493,39 @@ the floor, not about grokking.
 
 ### 6.4 The rules on the full set, and how a false-alarm rate must be reported
 
-At the §2.3 defaults, over the 16 runs long enough to evaluate **[computed]**:
+At the §2.3 defaults, over the 23 runs long enough to evaluate, after the `t_gen` capping
+fix of §7 and with the extended reruns included **[computed]**:
 
 ```
-rule                  hits            false alarms          fires on
-revised (§2.3)        9 / 11          1 / 5 controls        p_211_wd_0, at 49 250 steps
-running maximum      10 / 11          3 / 5 controls        lowdata15, lowdata20, p_211_wd_0
+rule                  hits          fires on a control        which
+revised (§2.3)        9 / 14        1 / 9                     p_211_wd_0, at 49 250 steps
+running maximum      13 / 14        5 / 9                     lowdata15, lowdata20,
+                                                              lowdata15_s1, lowdata15_s2,
+                                                              p_211_wd_0
 ```
 
-The single control that defeats the revised rule is the one with ten times the budget of
-any other: `p_211_wd_0` is watched for 198 200 steps. That is §1.4 made concrete, and it
-is why the count per run is the wrong statistic. Normalising by the 267 290 steps of
-control budget actually observed:
+**The right-hand column is not a false-alarm count.** `lowdata15`, `lowdata20` and the
+`lowdata15` reruns are the same configuration, and that configuration generalises (§1.5);
+only `p_211_wd_0`, `ma_S_5_without_weight_decay` and the `wd0` family are even candidates
+for being negatives, and none of them has been run long enough to establish it.
+
+What the table does support, because it does not depend on the labels, is the *ratio*.
+Normalising by the 744 720 steps of control budget actually observed:
 
 ```
-rule                per 1000 steps    expected false alarms in a plateau of
-                                      1 500     3 000     5 000    12 000 steps
-revised                    0.0037     0.006     0.011     0.019     0.045
-running maximum            0.0112     0.017     0.034     0.056     0.135
+rule                firings per 1000 steps of control budget
+revised                    0.0013
+running maximum            0.0067
 ```
 
-**These rates are void, and §1.5 is why.** Two of the five runs in the denominator
-(`lowdata15`, `lowdata20`) generalise at a longer budget, so their firings were not false
-alarms; the other three have never been run long enough to be called negatives. What the
-arithmetic still establishes is the *form* the quantity must take — events per unit of
-control budget, not per run — and the ratio between the two rules, which does not depend
-on the labels: per unit time the running-maximum rule fires three times as often as the
-revised one. Read against the observed positive plateaus (3 460 – 110 320 steps), even
-that ratio is of limited use, because a 110 000-step plateau makes "fires before `t_gen`"
-nearly free.
+Per unit time the running-maximum rule fires five times as often as the revised one, at
+the cost of four extra detections (13/14 against 9/14). That trade is real and is the one
+usable output of this comparison. Everything else waits on a control that has been shown
+not to generalise.
+
+A further reason lead time cannot be quoted as it stands: a plateau can be 110 320 steps
+long (§1.5), so "fires before `t_gen`" is nearly free on such a run. Lead has to be
+reported as a fraction of the gap.
 
 ---
 
@@ -548,6 +553,9 @@ Ordered by consequence.
   0.121.
 * My first `exp7` normalisation of the Theil–Sen slope dropped a factor of the logging
   stride, so the revised rule fired nowhere. Fixed; the numbers in §6.4 are post-fix.
+* `exp7_broader.py` also failed to cap its post-memorisation window at `t_gen`, which is
+  the defect behind the retraction above. Fixed in the script, not only noted in the
+  prose, and every table in §6 has been recomputed.
 
 The common thread in the first two is that both were measured on the runs that motivated
 them and neither had a held-out set. The extension runs cost seven CPU-hours and refuted

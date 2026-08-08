@@ -42,7 +42,7 @@ relevant experiment was designed. They are reported first, as corrections, becau
 | | Does the drop conjunct discriminate? | **Recall yes** (10/11 at window 600). **Specificity is unmeasured**, and after the 120 000-step reruns it is worse than that: `lowdata15` and `lowdata20` both generalise at a longer budget, so the firings counted against them were not false alarms. No control here is a negative. §1.4. |
 | | Does the V_t floor fix that? | **No.** Over 180 parameter combinations it removes a false alarm in **1** and costs a detection in **6**. It is a no-op where it matters. |
 | | Is the lead time a prediction? | **No.** Correcting for survivorship, ρ(delay after t_mem, gap) falls from +0.88 to **+0.27**. |
-| | Is there anything better? | The weight norm's own causal drawdown: 11/11 at 0/3 with two free parameters against the drop conjunct's 8/11 at 0/3 with six — but on a **1.1-point margin**, so a hypothesis to pre-register, not a result. §12. |
+| | Is there anything better? | The weight norm's own causal drawdown looked better — but it was scored against controls that generalise, so the comparison is void (`../dimension_recovery/exp8_extended.py`). What survives is that the drawdown and the MG estimate are the same measurement within runs, median \|ρ\| = 0.80. §12. |
 
 ---
 
@@ -412,12 +412,11 @@ rather than between two families. And the sweep has 4 drops × 3 sustains × 3 w
 cells; if each control fired independently with probability one half, about 4 cells in 36
 would show 0/3 by chance. One did.
 
-The "FP" column above must be read with §1.4 in hand. Of the three controls, only
-`lowdata15` and `wd0` are scorable; `lowdata20` is censored. So the honest reading of the
-sweep is **1 confirmed false alarm out of 2 usable controls at drop 30 % / sustain 3, and
-0 out of 2 at sustain 5** — an interval on the false-alarm rate that a Jeffreys prior puts
-at [0, 0.67]. Nothing here measures specificity; it only establishes that a genuine
-counterexample exists and that at least one setting is silent on it.
+The "FP" column above is not a false-alarm count. **After the 120 000-step reruns, both
+runs it counts — `lowdata15` and `lowdata20` — are known to generalise**, at steps 110 940
+and 39 600 (`../dimension_recovery/exp8_extended.py`). The remaining control, `wd0`, has
+never been run long enough to be called a negative either. So this sweep measures recall
+and nothing else, and no interval on specificity can be quoted from it.
 
 ## 10. The velocity floor is a no-op [computed]
 
@@ -505,17 +504,12 @@ straightness.
 One statistic now does, and it is not a dimension. The weight norm's causal drawdown below
 its own running post-memorisation peak reaches 18.4–36.8 % before `t_gen` in all 11
 generalising runs, and never exceeds 17.3 % in any control **[computed,
-`../dimension_recovery/exp4_criterion.py`]**. At a threshold of 18 % that is 11/11 recall
-at 0/3 false alarms with two free parameters, against the drop conjunct's best cell of
-8/11 at 0/3 with six. It is also largely the same measurement: within-run Spearman between
-the sliding MG estimate and the drawdown has median |ρ| = 0.80 over 14 runs, so the
-embedding machinery is re-encoding the norm rather than adding to it.
+`../dimension_recovery/exp4_criterion.py`]**. **Void after the 120 000-step reruns.** `lowdata15` and `lowdata20` generalise (`../dimension_recovery/exp8_extended.py`), so the 0/3 is not a false-alarm count — it is a count against runs that are not negatives. What survives is the comparison of parameter counts and the redundancy figure, neither of which depends on the labels.
 
-Three reasons that is a pre-registrable hypothesis and not a result, and they must travel
-with it: the separating margin is **1.1 percentage points** (18.4 % against 17.3 %) on 11
-runs against 3, which is the same criticism §9 makes of the MG cell; the minimum lead is
-**30 steps**, so the warning can arrive too late to be a warning; and one of the three
-controls it scores 0/3 against is censored.
+One figure from that analysis does survive and is the useful part: within-run Spearman
+between the sliding MG estimate and the drawdown has median |ρ| = 0.80 over 14 runs, so
+**the embedding machinery is largely re-encoding the weight norm rather than adding to
+it.** That does not depend on any run's label.
 
 ---
 

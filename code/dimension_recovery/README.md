@@ -342,8 +342,14 @@ free parameters: **11/11 at 0/3 with two.** And the two are not independent meas
 within-run Spearman between the sliding MG estimate and the drawdown has median |ρ| = 0.80
 over 14 runs, so the embedding machinery is largely re-encoding the drawdown.
 
-**Three reasons this is a hypothesis and not a result**, and they should be stated
-wherever the rule is:
+**Superseded 2026-08-08.** The 0/3 column above is not a false-alarm count: `lowdata15`
+and `lowdata20` generalise at 120 000 steps (`exp8_extended.py`), so the rule was scored
+against runs that are not negatives. The recall column stands; the comparison with the
+dimension conjunct does not. What survives independently of the labels is the redundancy
+figure — median |ρ| = 0.80 between the drawdown and the MG estimate within runs.
+
+**Three reasons this was a hypothesis and not a result even before that**, and they should
+be stated wherever the rule is:
 
 1. **The margin is one percentage point.** The smallest drawdown any generalising run
    reaches before `t_gen` is 18.4 %; the largest any control ever reaches is 17.3 %. On

@@ -18,6 +18,10 @@ estimator window is therefore defined in ROWS, not steps, and the step equivalen
 printed beside every result: two runs at the same row-window are not at the same
 physical scale, and exp6 shows that scale moves the estimate.
 
+**Read `exp8_extended.py` before quoting any false-alarm number from section 3.** Two of
+the five controls used here generalise at a longer budget, so their firings are not false
+alarms and the counts below are not a specificity measurement.
+
     python exp7_broader.py
 """
 
@@ -174,9 +178,14 @@ def main():
         tm = x.t_mem
         if tm is None or pd.isna(tm):
             continue
+        # Cap at t_gen. Without this the "after" window of a generalising run includes
+        # post-generalisation data, where the weight norm flattens and the estimate
+        # degenerates towards max_E -- which is how an earlier version of this file
+        # produced readings of 12-18 and an apparent "rise" that exp8 then refuted.
+        stop = x.t_gen if (x.t_gen is not None and not pd.isna(x.t_gen)) else r.max()
         pre = d[r < tm]
         at = d[(r >= tm) & (r < tm + 20 * x.stride)]
-        post = d[r >= tm + 20 * x.stride]
+        post = d[(r >= tm + 20 * x.stride) & (r <= stop)]
         if not len(pre) or not len(post):
             continue
         v = (float(np.median(pre)), float(np.median(at)) if len(at) else np.nan,

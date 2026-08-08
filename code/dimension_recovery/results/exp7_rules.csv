@@ -15,3 +15,10 @@ ma_to_flat_grokking,True,6867.0,6867,,,miss
 ma_to_flat_grokking_st,True,12170.0,12170,2660.0,9670.0,hit
 p_211_wd_0,False,,198200,28100.0,49250.0,FALSE ALARM
 p_211_wd_0_point_5,True,38300.0,38300,13300.0,15350.0,hit
+grokpos_s0,True,3660.0,3660,1910.0,,miss
+lowdata15_s0,True,110320.0,110320,1660.0,,miss
+lowdata15_s1,False,,119360,1910.0,,silent
+lowdata15_s2,False,,119330,6050.0,,silent
+lowdata20_s0,True,38800.0,38800,4110.0,,miss
+wd0_s0,False,,119380,,,silent
+wd0_s1,False,,119360,,,silent
