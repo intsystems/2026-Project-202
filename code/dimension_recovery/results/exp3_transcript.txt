@@ -1,0 +1,94 @@
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\exp3_censoring.py:110: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  rho = spearmanr(s[half], v[half])
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\exp3_censoring.py:110: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  rho = spearmanr(s[half], v[half])
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\exp3_censoring.py:110: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  rho = spearmanr(s[half], v[half])
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\exp3_censoring.py:175: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  rho = spearmanr(s[half], v[half]).statistic
+
+===============================================================================
+A  Is validation accuracy above chance at the end of the budget?
+===============================================================================
+  Chance for modular addition mod 113 is 1/113 = 0.00885.
+  Pooled over the last 2000 optimisation steps, exact binomial test.
+
+  run          last-2k val_acc  x chance           p  n trials   reading
+  grok                 1.00000    113.00    0.00e+00    102912   generalised
+  grok_s1              1.00000    113.00    0.00e+00    102912   generalised
+  grok_s2              1.00000    113.00    0.00e+00    102912   generalised
+  lowdata15            0.00023      0.03    0.00e+00    102912   BELOW chance -- anti-generalising
+  lowdata20            0.01379      1.56    3.90e-55    102912   ABOVE chance -- has learned something
+  wd0                  0.03320      3.75    0.00e+00    102912   ABOVE chance -- has learned something
+
+===============================================================================
+B  Is the excess over chance still moving at the end?
+===============================================================================
+  Spearman of val_acc against step over the last half of training, and the
+  ratio of the final 2000 steps to the preceding 2000.
+
+  run          rho(last half)         p  last2k/prev2k  peak step  peak/end
+  grok                 +0.889   0.0e+00           1.00      14020      0.70
+  grok_s1                +nan       nan           1.00       3500      0.18
+  grok_s2                +nan       nan           1.00       3690      0.18
+  lowdata15            -0.072   2.2e-02           1.14         60      0.00
+  lowdata20            +0.295   1.6e-21           1.09      19230      0.96
+  wd0                    +nan       nan           1.00       1020      0.05
+
+  A run whose validation accuracy peaks in its final block and is still
+  rising has not finished; a run whose accuracy peaked early and decayed has.
+
+===============================================================================
+C  How far along the road to generalisation is each run?
+===============================================================================
+  The runs that generalised passed through partial accuracy first. Below,
+  the first step at which a 2000-step trailing mean exceeds each multiple of
+  chance. '--' means the run never reached that level.
+
+  run          t_gen       1x       2x       4x      10x      50x   furthest level reached
+  grok         13700     1210     2000     3060     9960    13710   50x chance
+  grok_s1       2990      950     1200     1430     1860     3070   50x chance
+  grok_s2       3140     1390     1840     2180     2520     3400   50x chance
+  lowdata15     None       --       --       --       --       --   0x chance
+  lowdata20     None     4240       --       --       --       --   1x chance
+  wd0           None      540     1080       --       --       --   2x chance
+
+===============================================================================
+D  Classification of the three controls
+===============================================================================
+  12070 steps is the longest post-memorisation interval actually observed to
+  end in generalisation, in this repo, in the canonical run. A control with
+  less budget than that has not been given the chance the positives had.
+
+  run          x chance     rho   budget   class
+  lowdata15        0.03   -0.07    19330   extended_non_grokking
+  lowdata20        1.56   +0.29    19160   late_grokking_candidate
+  wd0              3.75    +nan    19350   extended_non_grokking (frozen)
+
+===============================================================================
+E  What this does to the false-alarm counts already reported
+===============================================================================
+  report_0708_experiments.md section 9 reports the MG-drop conjunct firing on
+  2 of 3 controls at most settings, and 0 of 3 at one. Those counts assume
+  every control is a true negative.
+
+  usable negatives            2
+  censored, not usable        1
+
+  Which run fired matters more than how many. From composite_7_bestcell.csv:
+    lowdata15   sustain=1  fires    extended_non_grokking
+    lowdata15   sustain=3  fires    extended_non_grokking
+    lowdata15   sustain=5  silent   extended_non_grokking
+    lowdata20   sustain=1  fires    late_grokking_candidate
+    lowdata20   sustain=3  fires    late_grokking_candidate
+    lowdata20   sustain=5  silent   late_grokking_candidate
+    wd0         sustain=1  silent   extended_non_grokking (frozen)
+    wd0         sustain=3  silent   extended_non_grokking (frozen)
+    wd0         sustain=5  silent   extended_non_grokking (frozen)
+
+  The arithmetic that follows from this is in the README; the short form is
+  that a false-alarm rate estimated on censored runs is not a false-alarm
+  rate, and the composite criterion's specificity is currently unmeasured
+  rather than measured and poor.
+
+CSV output in C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results

@@ -1,0 +1,66 @@
+
+===============================================================================
+1  Estimate per regime, windows lying wholly inside one segment
+===============================================================================
+  schedule [1, 2, 3, 4, 3, 2], 8000 samples per regime, window 2000,
+  300 cycles per window, matched band, SNR 1e6, abrupt switches.
+
+   segment  true k      MG  sd over seeds  roughness  windows
+         0       1    1.22           0.00     0.8648       31
+         1       2    2.27           0.25     0.9345       31
+         2       3    3.46           0.21     0.8682       31
+         3       4    4.20           0.16     0.9129       31
+         4       3    3.46           0.21     0.8683       31
+         5       2    2.27           0.25     0.9345       31
+
+  rising leg  1->2->3->4 : 1.22 -> 2.27 -> 3.46 -> 4.20
+  falling leg 4->3->2     : 4.20 -> 3.46 -> 2.27
+  roughness across all six regimes: 0.8648 to 0.9345
+
+  the same k, reached from below and from above:
+    k=2: 2.27 and 2.27   (hysteresis 0.00)
+    k=3: 3.46 and 3.46   (hysteresis 0.00)
+
+===============================================================================
+2  Detection lag at each change
+===============================================================================
+  A change is called at the first window whose estimate crosses the midpoint
+  between the two regimes' own medians and stays across for two windows. Lag
+  is measured from the true switch. One window is the floor: a window
+  straddling the switch is a mixture, so nothing can beat 2000 samples.
+
+      change   seed 0   seed 1   seed 2   median  in windows
+        1->2     1399     1199     1199     1199         0.6
+        2->3      599      599      199      599         0.3
+        3->4      399      399      399      399         0.2
+        4->3     1799     1999     1799     1799         0.9
+        3->2     1599     1599     1999     1599         0.8
+
+  The asymmetry runs the opposite way to the one I expected when writing
+  this file, and the measurement is what counts. Rises are detected in 0.2 to
+  0.6 of a window, falls in 0.8 to 0.9. A new oscillator widens the local
+  neighbour structure as soon as it appears, so a rise shows up while the
+  window is still mostly old data. A fall cannot show up until the old,
+  higher-dimensional data has left the window, so it is floored near one
+  window length. A criterion built on a dimension DROP therefore pays the
+  worse half of this asymmetry -- roughly a full window of lag -- and the
+  published 3000-step window already exceeds most plateaus in this project.
+
+===============================================================================
+3  Abrupt switch against a ramp
+===============================================================================
+  With a ramp the true dimension is undefined inside it, because an
+  oscillator below the noise floor is not a degree of freedom the data has.
+  This is not a limitation of the estimator, and any experiment that reports
+  a detection lag against a ramped ground truth is measuring its own ramp.
+
+     ramp  seg 0 (k=1)  seg 3 (k=4)  seg 5 (k=2)  range over regimes
+        0         1.22         4.20         2.20                2.98
+      500         1.22         4.20         2.20                2.98
+     2000         1.22         4.25         2.21                3.02
+     6000         2.11         4.26         3.16                2.14
+
+  A ramp comparable to the segment length flattens the whole trace, because
+  no regime is ever stationary for a full window.
+
+CSV output in C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results
