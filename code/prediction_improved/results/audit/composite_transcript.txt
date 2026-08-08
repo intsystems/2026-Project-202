@@ -1,0 +1,298 @@
+
+===============================================================================
+1.  Is there a drop inside the plateau at all?
+===============================================================================
+  Direction of the MG estimate over the causal windows that lie wholly inside
+  (t_mem, t_gen). A criterion built on a fall cannot work where the trace rises.
+
+  -- window 3000 steps (300 samples)
+     run           gen    gap  n win   first    last   peak  min after peak  max drop
+     grok            Y  12070     91    2.08    1.54   2.76            1.52      45%
+     grok_s1         Y   1750      0      --      --     --              --        --
+     grok_s2         Y   1740      0      --      --     --              --        --
+     lowdata15       N   None    164    1.78    2.28   3.38            2.28      33%
+     lowdata20       N   None    162    1.79    2.21   3.44            2.21      36%
+     wd0             N   None    164    1.38    1.33   1.38            1.33       4%
+     conf_s0_i0      Y   3650      7    1.98    1.89   1.98            1.89       4%
+     conf_s0_i2      Y   4650     17    2.57    1.87   2.57            1.87      27%
+     conf_s1_i1      Y   1600      0      --      --     --              --        --
+     conf_s1_i3      Y   4500     15    2.00    1.68   2.00            1.66      17%
+     conf_s2_i0      Y   2330      0      --      --     --              --        --
+     conf_s3_i1      Y   1730      0      --      --     --              --        --
+     conf_s42_i0     Y   3460      5    2.02    2.00   2.02            1.98       2%
+     conf_s4_i3      Y   5700     27    2.31    1.71   2.32            1.62      30%
+
+  -- window 1000 steps (100 samples)
+     run           gen    gap  n win   first    last   peak  min after peak  max drop
+     grok            Y  12070    111    1.58    1.56   2.91            1.48      49%
+     grok_s1         Y   1750      8    1.57    1.62   1.66            1.62       3%
+     grok_s2         Y   1740      8    1.82    1.52   1.82            1.49      18%
+     lowdata15       N   None    184    1.54    2.03   3.05            1.64      46%
+     lowdata20       N   None    182    1.63    1.86   3.26            1.76      46%
+     wd0             N   None    184    1.39    1.32   1.39            1.32       5%
+     conf_s0_i0      Y   3650     27    1.66    1.56   2.79            1.53      45%
+     conf_s0_i2      Y   4650     37    2.11    1.56   3.15            1.53      51%
+     conf_s1_i1      Y   1600      6    1.88    1.51   1.88            1.51      20%
+     conf_s1_i3      Y   4500     35    1.88    1.62   2.77            1.52      45%
+     conf_s2_i0      Y   2330     14    2.37    1.65   2.37            1.53      35%
+     conf_s3_i1      Y   1730      7    1.64    1.53   1.64            1.49       9%
+     conf_s42_i0     Y   3460     25    1.67    1.61   2.61            1.55      41%
+     conf_s4_i3      Y   5700     47    1.80    1.91   3.26            1.55      52%
+
+  -- window 600 steps (60 samples)
+     run           gen    gap  n win   first    last   peak  min after peak  max drop
+     grok            Y  12070    115    1.47    1.55   3.09            1.44      53%
+     grok_s1         Y   1750     12    1.51    1.60   1.70            1.60       6%
+     grok_s2         Y   1740     12    2.14    1.51   2.15            1.42      34%
+     lowdata15       N   None    188    1.37    1.48   2.13            1.40      34%
+     lowdata20       N   None    186    1.44    1.65   2.35            1.51      35%
+     wd0             N   None    188    1.41    1.31   1.41            1.31       8%
+     conf_s0_i0      Y   3650     31    1.61    1.46   2.83            1.46      48%
+     conf_s0_i2      Y   4650     41    2.18    1.57   2.90            1.48      49%
+     conf_s1_i1      Y   1600     10    2.45    1.49   2.45            1.44      41%
+     conf_s1_i3      Y   4500     39    1.71    1.61   3.22            1.44      55%
+     conf_s2_i0      Y   2330     18    2.59    1.64   2.59            1.47      43%
+     conf_s3_i1      Y   1730     11    1.82    1.51   1.82            1.43      21%
+     conf_s42_i0     Y   3460     29    1.67    1.58   2.62            1.46      44%
+     conf_s4_i3      Y   5700     51    1.72    1.93   3.36            1.45      57%
+
+  'max drop' is the largest fall below the running peak available to ANY
+  threshold rule, so it is an upper bound on what the first conjunct can do.
+
+===============================================================================
+2.  The MG-drop conjunct alone, swept over its two free parameters
+===============================================================================
+  recall  = generalising runs where it fires inside the plateau
+  FP      = never-generalising runs where it fires in an equally long window
+  n/a     = runs where the window does not fit inside the plateau at all
+
+  -- window 3000 steps
+       drop  sustain            recall        FP   n/a   median lead        lead range
+        10%        1              4/11       2/3     5          1000          550-5910
+        10%        3              4/11       2/3     5           800          350-4710
+        10%        5              4/11       2/3     5           600          150-4510
+        20%        1              3/11       2/3     5           840          260-2110
+        20%        3              3/11       2/3     5           640           60-1910
+        20%        5              2/11       2/3     5          1075          440-1710
+        30%        1              2/11       0/3     5           925          240-1610
+        30%        3              1/11       0/3     5          1410         1410-1410
+        30%        5              1/11       0/3     5          1210         1210-1210
+        50%        1              0/11       0/3     5            --                --
+        50%        3              0/11       0/3     5            --                --
+        50%        5              0/11       0/3     5            --                --
+
+  -- window 1000 steps
+       drop  sustain            recall        FP   n/a   median lead        lead range
+        10%        1              9/11       2/3     0          1610          260-8910
+        10%        3              9/11       2/3     0          1210           60-8710
+        10%        5              8/11       2/3     0          1335           50-8510
+        20%        1              7/11       2/3     0          1960          860-8810
+        20%        3              7/11       2/3     0          1760          660-5910
+        20%        5              7/11       2/3     0          1560          460-5710
+        30%        1              7/11       2/3     0          1860          660-5910
+        30%        3              7/11       2/3     0          1660          460-5710
+        30%        5              7/11       2/3     0          1460          260-2410
+        50%        1              2/11       0/3     0          1450          560-2340
+        50%        3              2/11       0/3     0          1250          360-2140
+        50%        5              1/11       0/3     0          1940         1940-1940
+
+  -- window 600 steps
+       drop  sustain            recall        FP   n/a   median lead        lead range
+        10%        1             10/11       2/3     0          1735         660-10010
+        10%        3             10/11       2/3     0          1410          460-9310
+        10%        5             10/11       2/3     0          1210          260-9110
+        20%        1             10/11       2/3     0          1485          660-9410
+        20%        3              9/11       2/3     0          1510          460-9210
+        20%        5              9/11       2/3     0          1310          260-8210
+        30%        1              9/11       2/3     0          1710          650-9410
+        30%        3              9/11       2/3     0          1510          450-9210
+        30%        5              8/11       0/3     0          1585          260-5910
+        50%        1              3/11       0/3     0          2740         2050-2910
+        50%        3              3/11       0/3     0          2210         1850-2540
+        50%        5              3/11       0/3     0          2010         1650-2340
+
+
+===============================================================================
+3.  The V_t floor alone
+===============================================================================
+  Fraction of post-memorisation steps at which V_t stays above the given
+  fraction of its own running median. The floor is a filter, not a detector:
+  the question is only which runs it is capable of removing.
+
+  run           gen    floor 10%    floor 25%    floor 50%    V median  V last/med
+  grok            Y        100%         99%         84%    1.34e-01        0.65
+  grok_s1         Y         97%         97%         93%    8.34e-02        0.54
+  grok_s2         Y         97%         95%         73%    1.22e-01        0.36
+  lowdata15       N        100%        100%         99%    5.62e-02        0.69
+  lowdata20       N        100%        100%         99%    7.86e-02        0.93
+  wd0             N         98%         74%         18%    2.57e-04        0.42
+
+  A run-relative floor cannot remove a run whose velocity is high and steady.
+  It removes only runs that decelerate relative to their own history.
+
+===============================================================================
+4.  The composite: MG drop AND V_t above floor, on the seven probed runs
+===============================================================================
+  Both conjuncts must hold at the same step. Columns give the step each
+  conjunct first fires and whether the composite fires before t_gen.
+
+  -- window 3000 steps, drop 20% sustained 3, floor 25%
+     run           gen  t_mem  t_gen   drop@   V ok@   both@    lead   verdict
+     grok            Y   1630  13700   11790    1680   11790    1910   fires before t_gen
+     grok_s1         Y   1240   2990    None    1290    None    None   no window fits the plateau
+     grok_s2         Y   1400   3140    None    1450    None    None   no window fits the plateau
+     lowdata15       N    660   None   12490     710   12490    None   FALSE ALARM
+     lowdata20       N    830   None   12290     880   12290    None   FALSE ALARM
+     wd0             N    640   None    None     690    None    None   silent (correct)
+
+  -- window 1000 steps, drop 20% sustained 3, floor 25%
+     run           gen  t_mem  t_gen   drop@   V ok@   both@    lead   verdict
+     grok            Y   1630  13700    7790    1680    7790    5910   fires before t_gen
+     grok_s1         Y   1240   2990    None    1290    None    None   silent (miss)
+     grok_s2         Y   1400   3140    None    1450    None    None   silent (miss)
+     lowdata15       N    660   None    7590     710    7590    None   FALSE ALARM
+     lowdata20       N    830   None    6390     880    6390    None   FALSE ALARM
+     wd0             N    640   None    None     690    None    None   silent (correct)
+
+  -- window 600 steps, drop 20% sustained 3, floor 25%
+     run           gen  t_mem  t_gen   drop@   V ok@   both@    lead   verdict
+     grok            Y   1630  13700    4490    1680    4490    9210   fires before t_gen
+     grok_s1         Y   1240   2990    None    1290    None    None   silent (miss)
+     grok_s2         Y   1400   3140    2490    1450    2490     650   fires before t_gen
+     lowdata15       N    660   None    3890     710    3890    None   FALSE ALARM
+     lowdata20       N    830   None    4090     880    4090    None   FALSE ALARM
+     wd0             N    640   None    None     690    None    None   silent (correct)
+
+  The marginal value of the second conjunct is the number of FALSE ALARM rows
+  it converts to 'silent (correct)' without converting a hit into a miss.
+
+===============================================================================
+5.  How many runs would settle this?
+===============================================================================
+  The evaluation set is 3 generalising probed runs and 3 controls; the drop
+  conjunct alone reaches 11 and 3. Binomial arithmetic on what that supports.
+
+  11/11 detections -> recall 95% interval [0.80, 1.00]
+  10/11 detections -> recall 95% interval [0.65, 0.99]
+  3/3 detections -> recall 95% interval [0.46, 1.00]
+
+  0/3 false alarms -> FP rate 95% interval [0.00, 0.54]
+  0/10 false alarms -> FP rate 95% interval [0.00, 0.22]
+  0/40 false alarms -> FP rate 95% interval [0.00, 0.06]
+
+  Three clean controls bound the false-alarm rate only below about 0.6. A
+  precursor claim needs the interval below the base rate it is competing with,
+  which for 'does this run generalise' is roughly one half.
+
+===============================================================================
+6.  Marginal contribution of the velocity floor, over the whole grid
+===============================================================================
+  For every (window, drop, sustain, floor) the composite is compared with the
+  drop conjunct alone. A conjunct that never changes a decision is not a fix,
+  whatever it measures.
+
+   window  drop sustain  floor   drop alone   composite  FP removed  hits lost
+     3000   10%       3    25%   1 hit 2 fp  1 hit 2 fp           0          0
+     3000   10%       3    90%   1 hit 2 fp  1 hit 2 fp           0          0
+     3000   20%       3    25%   1 hit 2 fp  1 hit 2 fp           0          0
+     3000   20%       3    90%   1 hit 2 fp  1 hit 2 fp           0          0
+     3000   30%       3    25%   1 hit 0 fp  1 hit 0 fp           0          0
+     3000   30%       3    90%   1 hit 0 fp  1 hit 0 fp           0          0
+     3000   50%       3    25%   0 hit 0 fp  0 hit 0 fp           0          0
+     3000   50%       3    90%   0 hit 0 fp  0 hit 0 fp           0          0
+     1000   10%       3    25%   2 hit 2 fp  2 hit 2 fp           0          0
+     1000   10%       3    90%   2 hit 2 fp  1 hit 2 fp           0          1
+     1000   20%       3    25%   1 hit 2 fp  1 hit 2 fp           0          0
+     1000   20%       3    90%   1 hit 2 fp  1 hit 2 fp           0          0
+     1000   30%       3    25%   1 hit 2 fp  1 hit 2 fp           0          0
+     1000   30%       3    90%   1 hit 2 fp  1 hit 2 fp           0          0
+     1000   50%       3    25%   0 hit 0 fp  0 hit 0 fp           0          0
+     1000   50%       3    90%   0 hit 0 fp  0 hit 0 fp           0          0
+      600   10%       3    25%   2 hit 2 fp  2 hit 2 fp           0          0
+      600   10%       3    90%   2 hit 2 fp  2 hit 2 fp           0          0
+      600   20%       3    25%   2 hit 2 fp  2 hit 2 fp           0          0
+      600   20%       3    90%   2 hit 2 fp  2 hit 2 fp           0          0
+      600   30%       3    25%   2 hit 2 fp  2 hit 2 fp           0          0
+      600   30%       3    90%   2 hit 2 fp  2 hit 2 fp           0          0
+      600   50%       3    25%   1 hit 0 fp  1 hit 0 fp           0          0
+      600   50%       3    90%   1 hit 0 fp  1 hit 0 fp           0          0
+
+  180 parameter combinations evaluated.
+  combinations where the velocity floor removes a false alarm: 1
+  combinations where it costs a detection:                     6
+  floors at which it ever helps: [np.float64(0.9)]
+
+  The floor is a no-op wherever the drop conjunct is already silent, and the
+  only control it can reach -- wd0, whose velocity falls by ~500x -- is the one
+  control whose weight norm is a straight line, so the drop conjunct never
+  fires there either. The two conjuncts fail on the same run and neither
+  reaches lowdata15 or lowdata20, which are the controls that matter.
+
+===============================================================================
+7.  The best cell of the section-2 sweep, run by run
+===============================================================================
+  Section 2 contains one cell with 8/11 recall and 0/3 false alarms: window
+  600, drop 30%, sustain 5. Below it and its two neighbours, per run, so the
+  stability of that cell can be read directly rather than inferred.
+
+  run           gen    gap    d30/s1    d30/s3    d30/s5    d40/s5
+  grok            Y  12070     +9410     +9210     +5910     +5810
+  grok_s1         Y   1750         -         -         -         -
+  grok_s2         Y   1740      +650      +450         -         -
+  lowdata15       N   None      FIRE      FIRE         -         -
+  lowdata20       N   None      FIRE      FIRE         -         -
+  wd0             N   None         -         -         -         -
+  conf_s0_i0      Y   3650     +1710     +1510     +1310      +910
+  conf_s0_i2      Y   4650     +2260     +2060     +1860     +1560
+  conf_s1_i1      Y   1600      +660      +460      +260         -
+  conf_s1_i3      Y   4500     +2850     +2650     +2450     +1950
+  conf_s2_i0      Y   2330     +1110      +910      +710         -
+  conf_s3_i1      Y   1730         -         -         -         -
+  conf_s42_i0     Y   3460      +960      +760      +560         -
+  conf_s4_i3      Y   5700     +3040     +2840     +2640     +2440
+
+  '+N' is a detection N steps before t_gen; 'FIRE' on a control row is a
+  false alarm; '-' is silence; 'n/a' means no window fits inside the plateau.
+
+  Selection arithmetic. The sweep has 4 drops x 3 sustains x 3 windows = 36
+  cells. If each of the three controls fired independently with probability
+  one half, a cell with no false alarms would arise with probability 1/8, so
+  about 4 of the 36 cells would show 0/3 by chance alone. One such cell is
+  what the sweep found. Its neighbour at sustain 3 shows 2/3. That is a
+  threshold sitting exactly between two controls, not a separation.
+
+===============================================================================
+8.  Does the detector predict t_gen, or just count steps since t_mem?
+===============================================================================
+  A precursor is useful because it fires a knowable distance before the event.
+  If instead it fires a fixed distance AFTER memorisation, the 'lead' is just
+  the gap minus a constant -- and the gap is what nobody knows in advance.
+
+  Capping the detector at t_gen -- as sections 2, 4 and 7 do, to keep it from
+  reading past the event -- also throws away every run that would have fired
+  late. Correlating a lead time over the survivors is then circular. Below the
+  detector instead runs to the end of training, so every generalising run
+  contributes a firing step whether or not it beat t_gen.
+
+  -- drop 30%, sustain 1, window 600, uncapped, 11/11 runs fire (9 before t_gen)
+     delay after t_mem     940-11160  (spread 11.9x)   rho with gap +0.27
+     lead before t_gen   -9430-9410   (spread  1.0x)   rho with gap +0.92
+     gap itself           1600-12070  (spread  7.5x)
+
+  -- drop 30%, sustain 5, window 600, uncapped, 11/11 runs fire (8 before t_gen)
+     delay after t_mem    1340-11560  (spread  8.6x)   rho with gap +0.17
+     lead before t_gen   -9830-5910   (spread  0.6x)   rho with gap +0.92
+     gap itself           1600-12070  (spread  7.5x)
+
+  Baseline with no dimension estimate in it: declare at t_mem + delta.
+    delta   detections   false alarms   median lead
+     1000        11/11            3/3          2460
+     1500        11/11            3/3          1960
+     2000         7/11            3/3          2500
+     2500         6/11            3/3          2075
+     3000         6/11            3/3          1575
+
+  The baseline cannot reject a control, and that is the entire remaining case
+  for the dimension statistic: not when it fires, but whether it stays quiet.
+
+CSV output in C:\Users\Alex\Documents\GitHub\EDMGrokking\code\prediction_improved\results\audit

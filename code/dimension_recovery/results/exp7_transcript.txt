@@ -1,0 +1,130 @@
+
+===============================================================================
+1  Every run in the repository that logs a weight norm
+===============================================================================
+  run                                  stride   t_mem   t_gen     gap         ||w||   class
+  grok_seed1                               10    1240  2990.0  1750.0        42->29   generalises, gap
+  grok_seed2                               10    1400  3140.0  1740.0        42->30   generalises, gap
+  grok                                     10    1630 13700.0 12070.0        42->30   generalises, gap
+  lowdata15                                10     660     nan     nan        42->62   NEVER generalises
+  lowdata20                                10     830     nan     nan        42->61   NEVER generalises
+  nogap                                    10     770   780.0    10.0        42->37   generalises, no gap
+  wd0                                      10     640     nan     nan        42->73   NEVER generalises
+  s0_i0                                    10    1450  5100.0  3650.0        42->31   generalises, gap
+  s0_i2                                    10    1300  5950.0  4650.0        42->30   generalises, gap
+  s1_i1                                    10    1350  2950.0  1600.0        42->29   generalises, gap
+  s1_i3                                    10    1840  6340.0  4500.0        42->31   generalises, gap
+  s2_i0                                    10    1270  3600.0  2330.0        42->33   generalises, gap
+  s3_i1                                    10    1430  3160.0  1730.0        42->30   generalises, gap
+  s42_i0                                   10    1390  4850.0  3460.0        42->30   generalises, gap
+  s4_i3                                    10    1630  7330.0  5700.0        42->30   generalises, gap
+  grokking_S_6_logs_st                     10   56280 56690.0   410.0       49->254   generalises, gap
+  ma_S_5_st                                 5    1615  6820.0  5205.0        42->37   generalises, gap
+  ma_S_5_st_with_small_wight_decay         10    2310 53700.0 51390.0        42->60   generalises, gap
+  ma_S_5_st_without_wight_decay             5    3745     nan     nan       42->110   NEVER generalises
+  ma_gd                                     1   14904 14907.0     3.0       115->46   generalises, no gap
+  ma_to_flat_grokking                       1     130  6997.0  6867.0        42->30   generalises, gap
+  ma_to_flat_grokking_st                   10    1630 13800.0 12170.0        42->30   generalises, gap
+  ma_st                                     1   14457 14456.0    -1.0       114->32   generalises, no gap
+  p_211_wd_0                               49    1800     nan     nan       43->126   NEVER generalises
+  p_211_wd_0_point_5                       49    7650 45950.0 38300.0        43->37   generalises, gap
+  grokpos_s0                               10    1450  5110.0  3660.0        42->31   generalises, gap
+  lowdata15_s0                             10     620110940.0110320.0        42->37   generalises, gap
+  lowdata15_s1                             10     630     nan     nan        42->40   NEVER generalises
+  lowdata15_s2                             10     660     nan     nan        42->59   NEVER generalises
+  lowdata20_s0                             10     800 39600.0 38800.0        42->32   generalises, gap
+  wd0_s0                                   10     610     nan     nan        42->78   NEVER generalises
+  wd0_s1                                   10     630     nan     nan        42->79   NEVER generalises
+
+  32 runs: 23 generalise, 9 never do.
+  The three controls used until now were one WD=0 run and two low-data runs
+  of a single task. This set spans four tasks and two optimisers.
+
+===============================================================================
+2  Item 6: at WD = 0, has the estimate fallen by the time memorisation ends?
+===============================================================================
+  For every never-generalising run, and for the WD=0 runs in particular:
+  the estimate before t_mem, at t_mem, and later. If it only falls after
+  memorisation, WD=0 is not a control in which 'nothing happens'.
+
+  run                                    t_mem  d before  d at t_mem  d after  max after   falls?
+  + grok_seed1                            1240      1.37        1.57     1.54       1.73       no
+  + grok_seed2                            1400      1.35        1.44     1.53       2.19       no
+  + grok                                  1630      1.36        1.41     1.86       3.09       no
+  - lowdata15                              660      1.33        1.32     1.54       2.13       no
+  - lowdata20                              830      1.33        1.34     1.75       2.37       no
+  - wd0                                    640      1.33        1.34     1.31       1.41       no
+  + s0_i0                                 1450      1.36        1.41     1.61       2.86       no
+  + s0_i2                                 1300      1.36        1.55     1.84       3.15       no
+  + s1_i1                                 1350      1.38        1.67     1.58       3.13       no
+  + s1_i3                                 1840      1.36        1.49     1.59       3.57       no
+  + s2_i0                                 1270      1.37        1.58     1.67       3.18       no
+  + s3_i1                                 1430      1.36        1.48     1.53       2.42       no
+  + s42_i0                                1390      1.37        1.40     1.68       2.63       no
+  + s4_i3                                 1630      1.36        1.44     1.67       3.45       no
+  + grokking_S_6_logs_st                 56280      1.35        1.39     1.39       1.41       no
+  + ma_S_5_st                             1615      1.50        3.35     2.43       5.32       no
+  + ma_S_5_st_with_small_wight_decay      2310      1.35        1.34     1.72       4.65       no
+  - ma_S_5_st_without_wight_decay         3745      1.34        1.35     1.35       1.39       no
+  + ma_to_flat_grokking                    130      1.34        1.32     1.30       1.55       no
+  + ma_to_flat_grokking_st                1630      1.36        1.41     1.87       3.09       no
+  + p_211_wd_0_point_5                    7650      1.59        2.60     3.98       9.05       no
+  + grokpos_s0                            1450      1.36        1.41     1.61       2.86       no
+  + lowdata15_s0                           620      1.36        1.33     1.51       2.30       no
+  - lowdata15_s1                           630      1.36        1.33     1.48       2.41       no
+  - lowdata15_s2                           660      1.33        1.33     1.49       2.12       no
+  + lowdata20_s0                           800      1.34        1.34     1.58       2.56       no
+  - wd0_s0                                 610      1.33        1.33     1.30       1.69       no
+  - wd0_s1                                 630      1.33        1.33     1.30       1.59       no
+
+===============================================================================
+3  Both rules on every run, with the budget asymmetry made explicit
+===============================================================================
+  'delay' is steps from t_mem to the trigger. For a generalising run it must
+  be below the gap to be useful; for a control it is simply how long the run
+  survived. A control watched for 18 600 steps has many more chances to fire
+  than a positive whose plateau is 1 160 steps long.
+
+  run                                      gap   budget  maxrule delay  revised delay               verdict
+  grok_seed1                            1750.0       --(plateau too short)
+  grok_seed2                            1740.0       --(plateau too short)
+  grok                                 12070.0    12070           2660           6110                   hit
+  lowdata15                                nan    19330           2730           None                silent
+  lowdata20                                nan    19160           3130           None                silent
+  nogap                                   10.0       --(plateau too short)
+  wd0                                      nan    19350           None           None                silent
+  s0_i0                                 3650.0     3650           1910           None                  miss
+  s0_i2                                 4650.0     4650           1850           2830                   hit
+  s1_i1                                 1600.0       --(plateau too short)
+  s1_i3                                 4500.0     4500           1530           2580                   hit
+  s2_i0                                 2330.0       --(plateau too short)
+  s3_i1                                 1730.0       --(plateau too short)
+  s42_i0                                3460.0     3460           2450           2730                   hit
+  s4_i3                                 5700.0     5700           2590           3170                   hit
+  grokking_S_6_logs_st                   410.0       --(plateau too short)
+  ma_S_5_st                             5205.0     5205            360            640                   hit
+  ma_S_5_st_with_small_wight_decay     51390.0    51390          37490          37990                   hit
+  ma_S_5_st_without_wight_decay            nan    11250           None           None                silent
+  ma_gd                                    3.0       --(plateau too short)
+  ma_to_flat_grokking                   6867.0     6867           None           None                  miss
+  ma_to_flat_grokking_st               12170.0    12170           2660           9670                   hit
+  ma_st                                   -1.0       --(plateau too short)
+  p_211_wd_0                               nan   198200          28100          49250           FALSE ALARM
+  p_211_wd_0_point_5                   38300.0    38300          13300          15350                   hit
+  grokpos_s0                            3660.0     3660           1910           None                  miss
+  lowdata15_s0                        110320.0   110320           1660           None                  miss
+  lowdata15_s1                             nan   119360           1910           None                silent
+  lowdata15_s2                             nan   119330           6050           None                silent
+  lowdata20_s0                         38800.0    38800           4110           None                  miss
+  wd0_s0                                   nan   119380           None           None                silent
+  wd0_s1                                   nan   119360           None           None                silent
+
+  revised rule: recall 9/14   false alarms 1/9
+  max rule    : fires on 13/14 positives and 5/9 controls
+
+  delay to trigger, positives : 640 - 37990  (median 3170)
+  delay to trigger, controls  : 49250 - 49250
+  budget, positives : 3460 - 110320
+  budget, controls  : 11250 - 198200
+
+  False alarms per 1000 steps of control budget: 0.0013

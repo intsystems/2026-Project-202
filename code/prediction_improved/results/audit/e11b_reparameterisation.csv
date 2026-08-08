@@ -1,0 +1,73 @@
+run,observable,warp,band_median,n_windows
+grok,weight_norm,x,1.8549958556349515,20
+grok,weight_norm,x^2,1.8556465329381682,20
+grok,weight_norm,x^3,1.856322027753789,20
+grok,weight_norm,log x,1.8543676267454514,20
+grok,weight_norm,wiggle L,1.8701140549041402,20
+grok,weight_norm,wiggle L/3,1.8936619944066924,20
+grok,train_loss,x,5.978324171662434,20
+grok,train_loss,x^2,5.874564266261711,20
+grok,train_loss,x^3,6.375291391290174,20
+grok,train_loss,log x,5.917974242592641,20
+grok,train_loss,wiggle L,6.908482179174621,20
+grok,train_loss,wiggle L/3,6.235059831404458,20
+grok_s1,weight_norm,x,1.6192109021802745,8
+grok_s1,weight_norm,x^2,1.6197222858062772,8
+grok_s1,weight_norm,x^3,1.6204137683600197,8
+grok_s1,weight_norm,log x,1.6187970932602098,8
+grok_s1,weight_norm,wiggle L,1.6123897332001227,8
+grok_s1,weight_norm,wiggle L/3,1.6200197487490238,8
+grok_s1,train_loss,x,11.301957540924855,8
+grok_s1,train_loss,x^2,11.612100209990711,8
+grok_s1,train_loss,x^3,13.446150635443574,8
+grok_s1,train_loss,log x,11.430357872552563,8
+grok_s1,train_loss,wiggle L,11.301958416924965,8
+grok_s1,train_loss,wiggle L/3,11.301957184368105,8
+grok_s2,weight_norm,x,1.5855182342626906,7
+grok_s2,weight_norm,x^2,1.5849680832891728,7
+grok_s2,weight_norm,x^3,1.5838891549082394,7
+grok_s2,weight_norm,log x,1.5860019996206631,7
+grok_s2,weight_norm,wiggle L,1.5833036168857435,7
+grok_s2,weight_norm,wiggle L/3,1.5862234803961868,7
+grok_s2,train_loss,x,6.024604321871012,7
+grok_s2,train_loss,x^2,7.277364795610606,7
+grok_s2,train_loss,x^3,10.503672767272167,7
+grok_s2,train_loss,log x,5.518830409180224,7
+grok_s2,train_loss,wiggle L,6.024604060569825,7
+grok_s2,train_loss,wiggle L/3,6.0246040738966915,7
+lowdata15,weight_norm,x,1.8150129905095034,20
+lowdata15,weight_norm,x^2,1.8151973886664403,20
+lowdata15,weight_norm,x^3,1.8155700986857959,20
+lowdata15,weight_norm,log x,1.8142144247421084,20
+lowdata15,weight_norm,wiggle L,1.873046440785239,20
+lowdata15,weight_norm,wiggle L/3,1.915226926018135,20
+lowdata15,train_loss,x,7.3374278385810445,20
+lowdata15,train_loss,x^2,7.354097616782074,20
+lowdata15,train_loss,x^3,7.769323307462994,20
+lowdata15,train_loss,log x,7.611460227793424,20
+lowdata15,train_loss,wiggle L,7.505587229433326,20
+lowdata15,train_loss,wiggle L/3,7.886661282505198,20
+lowdata20,weight_norm,x,1.7893001703328646,20
+lowdata20,weight_norm,x^2,1.7893332749827326,20
+lowdata20,weight_norm,x^3,1.7902820390738343,20
+lowdata20,weight_norm,log x,1.7888652446593913,20
+lowdata20,weight_norm,wiggle L,1.8076633005584957,20
+lowdata20,weight_norm,wiggle L/3,1.82416247628448,20
+lowdata20,train_loss,x,6.407019587834945,20
+lowdata20,train_loss,x^2,6.310864828310223,20
+lowdata20,train_loss,x^3,6.842662223741421,20
+lowdata20,train_loss,log x,6.633036486864835,20
+lowdata20,train_loss,wiggle L,6.7202741073956265,20
+lowdata20,train_loss,wiggle L/3,6.707136922306449,20
+wd0,weight_norm,x,1.3703341347962614,20
+wd0,weight_norm,x^2,1.3695587783241174,20
+wd0,weight_norm,x^3,1.3687851866326086,20
+wd0,weight_norm,log x,1.3708392913390848,20
+wd0,weight_norm,wiggle L,1.3967578113503936,20
+wd0,weight_norm,wiggle L/3,1.3839047594618,20
+wd0,train_loss,x,15.0,20
+wd0,train_loss,x^2,15.0,20
+wd0,train_loss,x^3,15.0,20
+wd0,train_loss,log x,2.6024788206528253,20
+wd0,train_loss,wiggle L,15.0,20
+wd0,train_loss,wiggle L/3,15.0,20

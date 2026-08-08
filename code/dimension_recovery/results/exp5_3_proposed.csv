@@ -1,0 +1,15 @@
+run,generalises,group,n_windows,t0,decided,lead,status
+grok,True,headline,1148,7740.0,8040.0,5660.0,hit
+grok_s1,True,headline,116,,,,silent
+grok_s2,True,headline,115,2680.0,2980.0,160.0,hit
+lowdata15,False,control,1874,,,,silent
+lowdata20,False,control,1857,,,,silent
+wd0,False,control,1876,,,,silent
+s0_i0,True,conf,306,3910.0,4210.0,890.0,hit
+s0_i2,True,conf,406,3980.0,4280.0,1670.0,hit
+s1_i1,True,conf,101,2630.0,2930.0,20.0,hit
+s1_i3,True,conf,391,4100.0,4400.0,1940.0,hit
+s2_i0,True,conf,174,2790.0,3090.0,510.0,hit
+s3_i1,True,conf,114,,,,silent
+s42_i0,True,conf,287,4120.0,4420.0,430.0,hit
+s4_i3,True,conf,511,4750.0,5050.0,2280.0,hit
