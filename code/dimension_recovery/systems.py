@@ -34,7 +34,11 @@ sweep over ``amp`` in exp1 checks that the conclusion does not depend on it.
 
 import numpy as np
 
-PRIMES = (2, 3, 5, 7, 11, 13, 17, 19, 23, 29)
+# Enough rationally independent square-root frequencies for the controlled
+# dimension-recovery experiments up to k=20.  The earlier tuple stopped at ten,
+# which silently made an extension beyond k=10 impossible.
+PRIMES = (2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
+          31, 37, 41, 43, 47, 53, 59, 61, 67, 71)
 
 
 def frequencies(k, cycles_per_window, window, seed=0, band_mode="matched", band=0.3):
@@ -90,10 +94,32 @@ def resonance_margin(freqs, max_order=3):
     """
     freqs = np.asarray(freqs, dtype=float)
     k = len(freqs)
-    if k > 4:
-        max_order = 2                                  # keep the enumeration bounded
-    grid = np.indices([2 * max_order + 1] * k).reshape(k, -1).T - max_order
-    grid = grid[np.any(grid != 0, axis=1)]
+    # Full Cartesian enumeration grows as (2*order+1)^k and is impossible for
+    # k=20 (even order=2 would require 5^20 vectors).  For higher dimensions
+    # use a deterministic bounded Monte-Carlo search over integer relations,
+    # augmented with all one- and two-coordinate combinations.  This quantity
+    # is only a diagnostic finite-sample resonance margin; it is not used to
+    # define the ground-truth dimension, so a conservative approximation is
+    # preferable to exhausting memory.
+    if k <= 4:
+        grid = np.indices([2 * max_order + 1] * k).reshape(k, -1).T - max_order
+        grid = grid[np.any(grid != 0, axis=1)]
+    else:
+        rng = np.random.default_rng(9173 + 37 * k + int(np.sum(freqs * 1e9)) % 100000)
+        rows = []
+        # Unit vectors and pairwise relations are useful low-order checks.
+        for i in range(k):
+            for s in (-max_order, -1, 1, max_order):
+                v = np.zeros(k, dtype=np.int8); v[i] = s; rows.append(v)
+        for i in range(k):
+            for j in range(i + 1, k):
+                for a in (-2, -1, 1, 2):
+                    for b in (-2, -1, 1, 2):
+                        v = np.zeros(k, dtype=np.int8); v[i] = a; v[j] = b; rows.append(v)
+        n_random = min(200_000, max(20_000, 2_000 * k))
+        rows.append(rng.integers(-2, 3, size=(n_random, k), dtype=np.int8))
+        grid = np.concatenate([np.asarray(rows[:-1]), rows[-1]], axis=0)
+        grid = grid[np.any(grid != 0, axis=1)]
     val = grid @ freqs
     return float(np.min(np.abs(val - np.round(val))))  # distance to the nearest integer
 
