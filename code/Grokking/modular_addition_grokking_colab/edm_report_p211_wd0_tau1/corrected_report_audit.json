@@ -1,0 +1,39 @@
+{
+  "source_file": "training_log_p_211_wd_0.csv",
+  "source_sha256": "289b1df41696656e58842900f5ba740c477257c815320ac6b13be90cc54ae3cc",
+  "windows_sha256": "46500d04eb9c43e58876bf8e275a23cee4662b862734437f20452b346c200279",
+  "rows": 4001,
+  "first_step": 1,
+  "last_step": 200000,
+  "logging_stride_steps": 50,
+  "logging": {
+    "median_step_interval": 50,
+    "first_interval_steps": 49
+  },
+  "weight_decay": 0.0,
+  "stable_memorization_flag_step": 2250,
+  "train_acc_099_stable5_onset": 2050,
+  "grok_flag_step": null,
+  "final_train_acc": 1.0,
+  "final_val_acc": 0.0361328125,
+  "best_val_acc": 0.04248046875,
+  "final_train_loss": 0.0,
+  "final_val_loss": 226.257568359375,
+  "max_val_loss": 232.5333251953125,
+  "initial_weight_norm": 43.29525868374871,
+  "final_weight_norm": 125.80529375563314,
+  "outcome": "memorized_but_not_generalized",
+  "edm_protocol": {
+    "tau_log_rows": 1,
+    "tau_optimizer_steps": 50,
+    "embedding_dimension": 15,
+    "k_neighbors": 5,
+    "window_rows": 200,
+    "window_optimizer_steps_approx": 10000,
+    "stride_rows": 100,
+    "stride_optimizer_steps": 5000,
+    "overlap_fraction": 0.5,
+    "detrending": "independent least-squares linear trend per window",
+    "theiler_exclusion": false
+  }
+}
