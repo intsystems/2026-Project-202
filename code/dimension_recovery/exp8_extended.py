@@ -109,7 +109,7 @@ def section_2():
                      "rho_10k_20k": rho, "t_gen": tg})
     pd.DataFrame(rows).to_csv(OUT / "exp8_at_20k.csv", index=False)
     print("\n  `lowdata15_s0` sits at 0.55x chance with a falling trend at step 20 000")
-    print("  and groks at 109 860. That is exactly the profile `exp3_censoring.py`")
+    print("  and groks at 110 940. That is exactly the profile `exp3_censoring.py`")
     print("  used to classify a run as `extended_non_grokking`: below chance and not")
     print("  rising. **The diagnostic is refuted by direct counterexample.** Being far")
     print("  below chance at 20 000 steps carries no information about whether a run")

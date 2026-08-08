@@ -10,7 +10,7 @@ python exp3_censoring.py        # are the controls counterexamples? (REFUTED)  s
 python exp4_criterion.py        # the weight-norm drawdown rule, and its margin ~1 min
 python exp5_criterion_v2.py     # the drop criterion: defects, revision, calibration
 python exp6_absolute.py         # does any metric recover k NUMERICALLY?       ~11 min
-python exp7_broader.py          # all 25 runs in the repo, four tasks          ~8 min
+python exp7_broader.py          # all 32 runs in the repo, four tasks          ~8 min
 python exp8_extended.py         # what the 120 000-step reruns overturn        ~4 min
 python make_figures.py          # figures/fig1, figures/fig2
 sh launch_extended.sh           # the 120 000-step reruns themselves, CPU, ~90 min

@@ -35,7 +35,7 @@
   wd0_s1             0.07031      7.95         -0.251   never, in 120k
 
   `lowdata15_s0` sits at 0.55x chance with a falling trend at step 20 000
-  and groks at 109 860. That is exactly the profile `exp3_censoring.py`
+  and groks at 110 940. That is exactly the profile `exp3_censoring.py`
   used to classify a run as `extended_non_grokking`: below chance and not
   rising. **The diagnostic is refuted by direct counterexample.** Being far
   below chance at 20 000 steps carries no information about whether a run
@@ -89,12 +89,12 @@
 ===============================================================================
   Status of the five controls after the reruns:
 
-  control                         status                            usable as a negative?
-  lowdata15 (fraction 0.15)       config GROKS at 110 940 (1 of 3 seeds)NO
-  lowdata20 (fraction 0.20)       GROKS at 39 600                   NO
-  wd0 (weight decay 0)            no grok in 120k; 8-10x chance, risingunresolved
-  ma_S_5_without_weight_decay     never run beyond 15 000 steps     unresolved
-  p_211_wd_0                      never rerun; 198 200 steps at WD=0unresolved
+  control                       status                                  usable?
+  lowdata15 (fraction 0.15)     config GROKS at 110 940, 1 of 3 seeds   NO
+  lowdata20 (fraction 0.20)     GROKS at 39 600                         NO
+  wd0 (weight decay 0)          no grok in 120k; 8-10x chance, rising   unresolved
+  ma_S_5_without_weight_decay   never run beyond 15 000 steps           unresolved
+  p_211_wd_0                    never rerun (198 200 steps, WD=0)       unresolved
 
   Not one of the five is established as a negative. Every false-alarm count
   and every specificity figure in report_0708.md, report_0708_experiments.md

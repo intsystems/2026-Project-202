@@ -5,7 +5,8 @@ Answers to the six points raised, with the three claims kept apart throughout.
 ```
 python exp5_criterion_v2.py     # the drop criterion: defects, revision, calibration
 python exp6_absolute.py         # does any metric recover k numerically?
-python exp7_broader.py          # all 25 runs in the repo, four tasks, five controls
+python exp7_broader.py          # all 32 runs in the repo, four tasks
+python exp8_extended.py         # what the 120 000-step reruns overturn (§1.5, §6.3)
 python make_figures.py          # figures/fig1, figures/fig2
 sh launch_extended.sh           # 120 000-step reruns of the controls (CPU, ~90 min)
 ```
@@ -151,12 +152,12 @@ A single sample 0.8 above the level is enough to arm a 30 % rule for the rest of
 Nothing about the trace changed.
 
 **On the real traces this particular failure does not occur** — the largest and second
-largest values are within 0.02 of each other in every run, so no single point is carrying
-the trigger. That is a property of the weight norm being smooth, not of the rule being
-safe. What the real traces do show is threshold fragility: replacing the running maximum
-by the running 95th percentile — one order statistic more robust, same rule otherwise —
-changes the verdict for 3 of 14 runs, silencing `lowdata15` and `s3_i1` and delaying
-`s0_i2` by 510 steps.
+largest values are within 0.06 of each other in every run, at most 2.6 % of the peak, so
+no single point is carrying the trigger. That is a property of the weight norm being
+smooth, not of the rule being safe. What the real traces do show is threshold fragility:
+replacing the running maximum by the running 95th percentile — one order statistic more
+robust, same rule otherwise — changes the verdict for 3 of 14 runs, silencing `lowdata15`
+and `s3_i1` and delaying `s0_i2` by 510 steps.
 
 The structural defect is the one in §1.4: the rule compares the present against the
 best-ever, so its false-alarm probability grows with the length of the run.
@@ -230,7 +231,12 @@ disp_max        0.06     7/11           0/3          510   -
 disp_max        1.00     9/11           0/3          890   -
 ```
 
-**Only $\delta$ and $H$ affect the false-alarm column.** At the operating point,
+**The false-alarm column is void as a specificity measurement**, for the reason in §1.5:
+it is scored against `lowdata15`, `lowdata20` and `wd0`, and the first two generalise. What
+it still shows is which conditions change the rule's behaviour at all, which is the
+question here.
+
+**Only $\delta$ and $H$ affect that column.** At the operating point,
 $\beta_{\text{rel}}$, $\delta_{\text{hold}}$ and $\sigma_{\max}$ change nothing, and $Q$
 costs 300 steps of lead for nothing. $\delta_{\text{hold}}$ is inert for a structural
 reason worth stating: while $\delta_{\text{hold}}\le\delta$ the hold-depth test is weaker
@@ -256,12 +262,14 @@ calibration target   chosen setting                                 test result
 6/8   delta 0.15, beta 0.20, Q 600, hold 0.20, disp 0.08   recall 1/3, 0 false alarms
 ```
 
-**This is the central result of §2.** Under an honest protocol the criterion produces a
-false alarm on `lowdata15`. The setting that avoids it differs only in
-$\beta_{\text{rel}}$ and $\delta_{\text{hold}}$ — two parameters that §2.4 shows have *no
-effect on the positives*. So the calibration data cannot distinguish the safe setting
-from the unsafe one; which of the two you end up with is decided by an arbitrary
-tie-break. **The specificity of this family is not determined by the data available.**
+**This is the central result of §2.** Under an honest protocol the criterion fires on
+`lowdata15` at the 8/8 setting and is silent on it at the 7/8 one. That firing is not a
+false alarm — `lowdata15` generalises (§1.5) — and the row above is labelled as the script
+printed it; but the point here does not depend on the label. The two settings differ only
+in $\beta_{\text{rel}}$ and $\delta_{\text{hold}}$ — two parameters that §2.4 shows have
+*no effect on the positives*. So the calibration data cannot distinguish them; which of
+the two you end up with is decided by an arbitrary tie-break. **Where this family sits on
+the recall/specificity trade-off is not determined by the data available.**
 
 Test recall is 2/3 in every row because `grok_s1` fails the $2H+W$ budget test — not
 because the criterion missed it.
@@ -480,6 +488,7 @@ held out (the extended runs)
   lowdata15_s0             Y     11013     1.51   1.79   2.30
   lowdata15_s1             N     11917     1.48   1.72   2.41
   lowdata15_s2             N     11914     1.49   1.69   2.12
+  wd0_s0                   N     11919     1.30   1.41   1.69
   wd0_s1                   N     11917     1.30   1.39   1.59
 ```
 
@@ -487,9 +496,10 @@ held out (the extended runs)
 Same configuration, different seed, 11 000 windows each. The gap that looked complete on
 the runs the statistic was built from is 0.07 on runs it was not.
 
-What survives is only the observation in the first column: every run in the repository
-sits at the estimator's floor, 1.30–1.38, before memorisation. That is a statement about
-the floor, not about grokking.
+What survives is only the observation about the level before memorisation: 26 of the 28
+runs in §6.2's table sit at the estimator's floor, 1.33–1.38, with `ma_S_5_st` (1.50) and
+`p_211_wd_0_point_5` (1.59) the only exceptions. That is a statement about the floor, not
+about grokking.
 
 ### 6.4 The rules on the full set, and how a false-alarm rate must be reported
 
@@ -536,7 +546,7 @@ Ordered by consequence.
 * **I argued that `lowdata15` was a genuine counterexample, and it is not.** The argument
   was that its validation accuracy sat 34× *below* chance and never reached 1× chance in
   20 000 steps, so it could not be a run approaching a transition. The seed that
-  generalises at step 109 860 has exactly that profile at step 20 000 (§1.5). The
+  generalises at step 110 940 has exactly that profile at step 20 000 (§1.5). The
   reasoning was wrong, not just the conclusion: a truncated run below chance is still a
   censored observation, and I built a classification rule on the opposite assumption and
   put it in `exp3_censoring.py`. That rule now carries its own refutation.

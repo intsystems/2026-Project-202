@@ -163,7 +163,7 @@ def classify(run):
     **REFUTED, 2026-08-08. Do not use this to label a run.** `exp8_extended.py` reran
     `lowdata15` at 120 000 steps: seed 0 sits at 0.55x chance with a falling trend at
     step 20 000 -- the exact profile this function calls `extended_non_grokking` -- and
-    generalises at step 109 860. Being far below chance late in a short budget carries no
+    generalises at step 110 940. Being far below chance late in a short budget carries no
     information about whether a run will generalise later. The function is kept because
     §1 of the report quotes its output and the refutation has to stay auditable, but the
     only defensible label from a truncated run is `censored`.
