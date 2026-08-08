@@ -1,0 +1,17 @@
+run,generalises,gap,budget,delay_maxrule,delay_revised,verdict
+grok,True,12070.0,12070,2660.0,6110.0,hit
+lowdata15,False,,19330,2730.0,,silent
+lowdata20,False,,19160,3130.0,,silent
+wd0,False,,19350,,,silent
+s0_i0,True,3650.0,3650,1910.0,,miss
+s0_i2,True,4650.0,4650,1850.0,2830.0,hit
+s1_i3,True,4500.0,4500,1530.0,2580.0,hit
+s42_i0,True,3460.0,3460,2450.0,2730.0,hit
+s4_i3,True,5700.0,5700,2590.0,3170.0,hit
+ma_S_5_st,True,5205.0,5205,360.0,640.0,hit
+ma_S_5_st_with_small_wight_decay,True,51390.0,51390,37490.0,37990.0,hit
+ma_S_5_st_without_wight_decay,False,,11250,,,silent
+ma_to_flat_grokking,True,6867.0,6867,,,miss
+ma_to_flat_grokking_st,True,12170.0,12170,2660.0,9670.0,hit
+p_211_wd_0,False,,198200,28100.0,49250.0,FALSE ALARM
+p_211_wd_0_point_5,True,38300.0,38300,13300.0,15350.0,hit
