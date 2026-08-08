@@ -1,0 +1,14 @@
+observer,predicted,rho,sync_phased_MG,verdict,reason
+norm_fro,good,0.942857142857143,1.2211893077540994,validated_good,"monotone in k, stable, controls pass"
+norm_fro_sq,good,0.942857142857143,1.2211811061873943,validated_good,"monotone in k, stable, controls pass"
+trace,good,1.0,1.2211849964112085,validated_good,"monotone in k, stable, controls pass"
+logdet,good,1.0,1.2211815028316875,validated_good,"monotone in k, stable, controls pass"
+norm_l1,good,1.0,1.2211833359763897,validated_good,"monotone in k, stable, controls pass"
+proj_rand0,good,0.7142857142857143,1.2211809882986193,unknown,"rho +0.71, 2/5 steps rising, seed sd 0.26"
+proj_rand1,good,1.0,1.2211787107529717,validated_good,"monotone in k, stable, controls pass"
+proj_rand2,good,1.0,1.2211771688121345,unknown,"rho +1.00, 5/5 steps rising, seed sd 0.48"
+proj_rand3,good,0.7714285714285715,1.2211794837768397,unknown,"rho +0.77, 3/5 steps rising, seed sd 0.57"
+coord_active0,bad_by_construction,-0.2,1.2211809919557886,validated_lossy,"flat in k, at its constant image dimension"
+proj_half_active,bad_by_construction,0.7714285714285715,1.221173351900523,validated_lossy,"tracks its own image dimension, not k"
+coord_inactive,degenerate,1.0,13.195131620053708,validated_bad,reads ~max_E (13.2) at every k: noise
+proj_inactive_only,degenerate,-0.5428571428571429,12.260184249009596,validated_bad,reads ~max_E (12.1) at every k: noise

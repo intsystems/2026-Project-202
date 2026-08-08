@@ -1,0 +1,8 @@
+# Default output directory for `python train.py`.
+#
+# Produced logs are not tracked here: the canonical copies of the article's logs
+# live in ../../grokking_analysis/grokking_logs/, next to the code that reads
+# them. Train straight into that directory when you mean to refresh them:
+#
+#     python train.py --article --outdir ../grokking_analysis/grokking_logs
+*.csv

@@ -1,0 +1,103 @@
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\exp4_criterion.py:224: ConstantInputWarning: An input array is constant; the correlation coefficient is not defined.
+  rho = spearmanr(d[m], at[m]).statistic if m.sum() > 5 else np.nan
+
+===============================================================================
+1  The quantity the rule thresholds, run by run
+===============================================================================
+  'by t_gen' is the largest drawdown reached strictly before generalisation --
+  what the rule has to work with. 'ever' is the largest reached at any point
+  in the run, which for a control is what the rule has to stay under.
+
+  run          gen  t_mem  t_gen  by t_gen    ever   note
+  grok           Y   1630  13700    36.8%   55.2%   
+  grok_s1        Y   1240   2990    18.4%   44.7%   
+  grok_s2        Y   1400   3140    23.1%   47.8%   
+  lowdata15      N    660   None     nan%   17.3%   extended_non_grokking
+  lowdata20      N    830   None     nan%   14.5%   late_grokking_candidate
+  wd0            N    640   None     nan%    0.0%   extended_non_grokking (frozen)
+  s0_i0          Y   1450   5100    26.8%   48.6%   
+  s0_i2          Y   1300   5950    19.7%   47.2%   
+  s1_i1          Y   1350   2950    23.4%   45.2%   
+  s1_i3          Y   1840   6340    32.8%   52.7%   
+  s2_i0          Y   1270   3600    24.3%   41.4%   
+  s3_i1          Y   1430   3160    22.5%   46.0%   
+  s42_i0         Y   1390   4850    21.2%   49.2%   
+  s4_i3          Y   1630   7330    36.1%   53.3%   
+
+  smallest drawdown a generalising run reaches before t_gen : 18.4%
+  largest drawdown any control reaches, ever                 : 17.3%
+  ... restricted to the two uncensored controls              : 17.3%
+
+  separating margin: +1.1% of the norm.
+  That is the whole basis of the rule, and it is one percentage point wide on
+  11 runs against 3. It is a hypothesis to be pre-registered and tested on new
+  runs, not a result.
+
+===============================================================================
+2  Recall, false alarms and lead time against the threshold
+===============================================================================
+  Causal throughout: the running peak uses history only, and no run's own
+  future is consulted. Controls are judged over their whole post-memorisation
+  budget, which is longer than any positive's plateau.
+
+      x  sustain   recall  FP (all 3)  FP (uncens. 2)  median lead  min lead
+     5%        1    11/11         2/3             1/2         1270       760
+     5%        5    11/11         2/3             1/2         1230       720
+    10%        1    11/11         2/3             1/2          780       380
+    10%        5    11/11         2/3             1/2          740       340
+    15%        1    11/11         1/3             1/2          410       200
+    15%        5    11/11         1/3             1/2          370       160
+    18%        1    11/11         0/3             0/2          300        70
+    18%        5    11/11         0/3             0/2          260        30
+    20%        1     9/11         0/3             0/2          280       100
+    20%        5     9/11         0/3             0/2          240        60
+    25%        1     4/11         0/3             0/2          660        80
+    25%        5     4/11         0/3             0/2          620        40
+
+===============================================================================
+3  Side by side with the MG-drop conjunct it would replace
+===============================================================================
+  MG figures are from ../prediction_improved/results/audit/composite_2_sweep.csv
+  at its best cell (window 600, drop 30%, sustain 5) and its neighbour.
+
+  rule                                           recall     FP   free parameters
+  MG drop 30%, sustain 5, window 600               8/11    0/3window, E, k, W, drop, sustain
+  MG drop 30%, sustain 3, window 600               9/11    2/3window, E, k, W, drop, sustain
+  MG drop 10%, sustain 3, window 600              10/11    2/3window, E, k, W, drop, sustain
+  norm drawdown 5%, sustain 5                     11/11    2/3 drawdown, sustain
+  norm drawdown 10%, sustain 5                    11/11    2/3 drawdown, sustain
+  norm drawdown 15%, sustain 5                    11/11    1/3 drawdown, sustain
+  norm drawdown 18%, sustain 5                    11/11    0/3 drawdown, sustain
+  norm drawdown 20%, sustain 5                     9/11    0/3 drawdown, sustain
+  norm drawdown 25%, sustain 5                     4/11    0/3 drawdown, sustain
+
+  The drawdown rule has two free parameters against six, needs no embedding,
+  no neighbour search and no likelihood, and its best cell is not adjacent to
+  a cell that fails. Whether it generalises to other tasks is untested.
+
+===============================================================================
+4  Does the MG estimate add anything to the drawdown?
+===============================================================================
+  Within each run, Spearman between the sliding MG estimate on weight_norm and
+  the causal drawdown at the same right edge. A high correlation means the
+  embedding machinery is re-encoding the drawdown rather than adding to it.
+
+  run           n windows   rho(MG, drawdown)
+  grok                178               -0.25
+  grok_s1             182               +0.87
+  grok_s2             181               +0.81
+  lowdata15           188               -0.15
+  lowdata20           186               -0.11
+  wd0                 188                +nan
+  s0_i0               180               +0.86
+  s0_i2               182               +0.81
+  s1_i1               181               +0.80
+  s1_i3               176               +0.81
+  s2_i0               182               +0.17
+  s3_i1               180               +0.88
+  s42_i0              181               +0.75
+  s4_i3               178               +0.74
+
+  median |rho| = 0.80 over 14 runs
+
+CSV output in C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results

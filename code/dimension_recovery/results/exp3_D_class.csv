@@ -1,0 +1,4 @@
+run,x_chance,rho,budget,class
+lowdata15,0.026352611940298507,-0.0723220705246179,19330,extended_non_grokking
+lowdata20,1.5580981809701493,0.29497580993793815,19160,late_grokking_candidate
+wd0,3.751953125,,19350,extended_non_grokking (frozen)

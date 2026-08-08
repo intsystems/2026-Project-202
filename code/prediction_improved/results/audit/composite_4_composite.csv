@@ -1,0 +1,19 @@
+window,run,generalises,t_mem,t_gen,t_drop,t_both,lead,n_windows,verdict
+3000,grok,True,1630,13700.0,11790.0,11790.0,1910.0,91,fires before t_gen
+3000,grok_s1,True,1240,2990.0,,,,0,no window fits the plateau
+3000,grok_s2,True,1400,3140.0,,,,0,no window fits the plateau
+3000,lowdata15,False,660,,12490.0,12490.0,,91,FALSE ALARM
+3000,lowdata20,False,830,,12290.0,12290.0,,91,FALSE ALARM
+3000,wd0,False,640,,,,,91,silent (correct)
+1000,grok,True,1630,13700.0,7790.0,7790.0,5910.0,111,fires before t_gen
+1000,grok_s1,True,1240,2990.0,,,,8,silent (miss)
+1000,grok_s2,True,1400,3140.0,,,,8,silent (miss)
+1000,lowdata15,False,660,,7590.0,7590.0,,111,FALSE ALARM
+1000,lowdata20,False,830,,6390.0,6390.0,,111,FALSE ALARM
+1000,wd0,False,640,,,,,111,silent (correct)
+600,grok,True,1630,13700.0,4490.0,4490.0,9210.0,115,fires before t_gen
+600,grok_s1,True,1240,2990.0,,,,12,silent (miss)
+600,grok_s2,True,1400,3140.0,2490.0,2490.0,650.0,12,fires before t_gen
+600,lowdata15,False,660,,3890.0,3890.0,,115,FALSE ALARM
+600,lowdata20,False,830,,4090.0,4090.0,,115,FALSE ALARM
+600,wd0,False,640,,,,,115,silent (correct)

@@ -1,0 +1,11 @@
+grokking transition: T_mem=1305 -> T_gen=2920, gap=1615 steps
+train_loss correlation time inside the transition: 163 steps
+
+INDEPENDENT SAMPLES AVAILABLE IN THE ENTIRE TRANSITION: 10
+
+  at log_every=10  rows in the transition =   161, independent = 10
+  at log_every=1   rows in the transition =  1615, independent = 10
+
+Denser logging multiplies rows, not independent samples.
+phase 10 found the dimension estimate needs n >= 6000 to resolve even Lorenz.
+Shortfall: 606x

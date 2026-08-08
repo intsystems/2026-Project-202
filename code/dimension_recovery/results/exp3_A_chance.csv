@@ -1,0 +1,7 @@
+run,tail_acc,x_chance,p,n,reading
+grok,1.0,113.0,0.0,102912,generalised
+grok_s1,1.0,113.0,0.0,102912,generalised
+grok_s2,1.0,113.0,0.0,102912,generalised
+lowdata15,0.0002332089552238806,0.026352611940298507,0.0,102912,BELOW chance -- anti-generalising
+lowdata20,0.01378847947761194,1.5580981809701493,3.89645353172309e-55,102912,ABOVE chance -- has learned something
+wd0,0.033203125,3.751953125,0.0,102912,ABOVE chance -- has learned something

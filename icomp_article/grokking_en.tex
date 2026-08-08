@@ -53,8 +53,6 @@
 \Crefname{section}{Section}{Sections}
 \crefname{appendix}{appendix}{appendix}
 \Crefname{appendix}{Appendix}{Appendix}
-\crefname{fig}{fig}{fig}
-\Crefname{fig}{Fig}{Fig}
 
 %%%
 
@@ -85,6 +83,7 @@
   \texttt{kravatskii.a@miriai.org}\\
 }
 
+% \icomparxivcopy   % uncomment for a named preprint build (\icompfinalcopy = camera-ready)
 
 \begin{document}
 
@@ -252,11 +251,7 @@ In addition to the baseline metrics ($\Ls$, accuracy), the algorithm tracks the 
 
 In the first experiment, we tackled the modular addition task (modulo $p=113$). The weight norm ($||\vw||_2$) was chosen as the target metric for the MLE method, as it preserves rich variance throughout the entire memorization phase and, equally importantly, remains completely independent of the validation set.
 
-<<<<<<< HEAD
-Fig. \cref{fig:grokking_flat} presents the results of the experiment. In the top row (with $L_2$ regularization enabled, $WD=1.0$), a perfect topological collapse is observed: the effective dimensionality $\hat{d}(t)$ collapses synchronously with the weight norm long before the Accuracy metric registers generalization. In the bottom row (without regularization, $WD=0.0$), grokking does not occur, the network enters perpetual memorization, and the MLE method correctly shows a persistently high dimensionality of the phase space. This proves the method's robustness against false positives.
-=======
 \cref{fig:grokking_flat} presents the results of the experiment. In the top row (with $L_2$ regularization enabled, $WD=1.0$), a perfect topological collapse is observed: the effective dimensionality $\hat{d}(t)$ collapses synchronously with the weight norm long before the Accuracy metric registers generalization. In the bottom row (without regularization, $WD=0.0$), grokking does not occur, the network enters perpetual memorization, and the MLE method correctly shows a persistently high dimensionality of the phase space. This proves the method's robustness against false positives.
->>>>>>> 63e59253161caf45355e06fa745c182563e55d0d
 
 In summary, our framework successfully predicts grokking by capturing the topological collapse of the attractor dimension. However, it is evident that the weight norm is a non-generic (symmetric) observable: while it clearly reflects the dimensionality drop without relying on the validation set, it fails to convey the true algebraic dimension of the attractor. Furthermore, our predictor on this specific task does not surpass the early-warning accuracy of a predictor based directly on the weight norm and $\Ls_{val}$, which is attributed to the simplicity of the modular addition task itself.
 
@@ -382,11 +377,7 @@ Of particular interest is the dimensionality estimation using the validation los
 
 An analysis of the obtained plots allows us to draw the following theoretical conclusions.
 
-<<<<<<< HEAD
-\paragraph{The nature of grokking.} The observed dimensionality collapse \cref{fig:grokking_s5_a} \cref{fig:grokking_val_loss_s5_a}  demonstrates that grokking is not merely \textbf{quantitative loss minimization}, but a qualitative structural reconfiguration of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
-=======
 \paragraph{The nature of grokking.} The observed dimensionality collapse (\cref{fig:grokking_s5_a,fig:grokking_val_loss_s5_a})  demonstrates that grokking is not merely \textbf{quantitative loss minimization}, but a qualitative structural reconfiguration of the dynamical system: a transition from a high-entropy "memorization" attractor to a low-dimensional "algebraic rule" attractor.
->>>>>>> 63e59253161caf45355e06fa745c182563e55d0d
 
 \paragraph{Optimizer metrics predictability.} The experiments demonstrated that delayed generalization can be diagnosed relying exclusively on internal network metrics (such as weight norm) \cref{fig:grokking_flat_a,fig:grokking_s5_a}. This suggests that the transition to generalization is an \textbf{intrinsic topological property} of the optimization trajectory and is not merely an artifact of a specific held-out validation set.
 

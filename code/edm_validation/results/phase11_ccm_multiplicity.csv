@@ -1,0 +1,13 @@
+experiment,run,coupled,rho,p_iaaft,p_shift,detected_uncorrected,detected_corrected,periodic
+phase3 / ResNet-18,LogisticMap,True,0.8880115792056488,0.005,0.005,True,True,False
+phase3 / ResNet-18,Sinusoidal,True,0.8124195294276938,0.015,0.035,True,True,True
+phase3 / ResNet-18,Discrete,True,0.8017026555242998,0.02,0.025,True,True,False
+phase3 / ResNet-18,Random,True,0.9491409458646881,0.005,0.005,True,True,False
+phase3 / ResNet-18,ProgressiveNoise,True,0.37856078043918817,0.005,0.005,True,True,False
+phase3 / ResNet-18,Ghost_Const_0.1,False,,1.0,1.0,False,False,False
+phase3 / ResNet-18,Ghost_Normal,False,-0.010920774702026508,0.765,0.775,False,False,False
+phase3 / ResNet-18,Ghost_Uniform,False,-0.0069225410247458746,0.645,0.69,False,False,False
+phase5 / transformer,logistic,True,0.9329389819383188,0.005,0.005,True,True,False
+phase5 / transformer,sinusoid,True,0.880719556177528,0.79,0.775,False,False,True
+phase5 / transformer,iid,True,0.9178748548470965,0.005,0.005,True,True,False
+phase5 / transformer,ghost,False,-0.02446301992983195,0.8,0.85,False,False,False
