@@ -1,0 +1,16 @@
+[
+  ["gromov_arithmetic/run_rank.py", "a_add", "x_no_grok", "g_p1_p97", "g_p1x_p97",
+   "--outdir", "/content/out/rank_fb", "--steps", "30000"],
+
+  ["gromov_arithmetic/run_rank.py", "a_add", "x_no_grok", "g_p1_p97", "g_p1x_p97",
+   "--outdir", "/content/out/rank_mb", "--steps", "30000", "--set", "batch_size=512"],
+
+  ["gromov_arithmetic/run.py", "x_mix_quad", "a_sub", "a_sq_sum", "a_sum_sq",
+   "--outdir", "/content/out/arith", "--force"],
+
+  ["gromov_polynomials/run_poly.py", "nowd23",
+   "--outdir", "/content/out/poly"],
+
+  ["gromov_arithmetic/run.py", "c_add_lowalpha", "a_add_s1",
+   "--outdir", "/content/out/arith"]
+]

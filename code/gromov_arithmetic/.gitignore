@@ -1,0 +1,15 @@
+# Weight snapshots: 21 log-spaced float32 dumps of W1 and W2, ~12 MB per run. They are
+# regenerable (`colab_gromov.ps1 -Sync -Job ...`) and only needed for offline analysis
+# the per-step CSVs cannot express, so they stay out of the repo. The CSVs do not.
+*.npz
+
+# Fetched archive, unpacked in place by colab_gromov.ps1 -Fetch
+results/outputs.tar.gz
+
+# -Fetch pulls the whole VM output tree, so the polynomial runs land here too. Their
+# canonical home is ../gromov_polynomials/results/, and committing both copies would
+# make it ambiguous which one an analysis had been run against.
+results/poly/
+
+__pycache__/
+*.pyc

@@ -1,0 +1,38 @@
+[
+  {
+    "t_memorise": 5300,
+    "t_grok": 9220,
+    "final_train_acc": 1.0,
+    "final_val_acc": 1.0,
+    "final_train_loss": 2.3630080383352537e-05,
+    "final_val_loss": 0.004851388188049967,
+    "best_val_acc": 1.0,
+    "peak_val_loss": 0.04663319388210431,
+    "final_weight_norm": 3.2912170631809623,
+    "steps": 60000,
+    "key": "a_add",
+    "task": "add",
+    "p": 23,
+    "n_params": 13800,
+    "rows": 3001,
+    "seconds": 107.7
+  },
+  {
+    "t_memorise": 5860,
+    "t_grok": null,
+    "final_train_acc": 1.0,
+    "final_val_acc": 0.04716981132075472,
+    "final_train_loss": 1.7745193847956594e-05,
+    "final_val_loss": 0.09483497625887638,
+    "best_val_acc": 0.0660377358490566,
+    "peak_val_loss": 0.09483497625887638,
+    "final_weight_norm": 4.037749920636651,
+    "steps": 60000,
+    "key": "x_no_grok",
+    "task": "no_grok",
+    "p": 23,
+    "n_params": 13800,
+    "rows": 3001,
+    "seconds": 95.3
+  }
+]

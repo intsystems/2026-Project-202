@@ -1,0 +1,15 @@
+{
+  "lr": 1000000.0,
+  "diverged": false,
+  "seconds": 37.3,
+  "t_memorise": 540,
+  "t_grok": null,
+  "final_train_acc": 1.0,
+  "final_val_acc": 0.013947927736450585,
+  "final_train_loss": 0.00027633637554600837,
+  "final_val_loss": 0.03498154516523193,
+  "best_val_acc": 0.01487778958554729,
+  "peak_val_loss": 0.043597090407153496,
+  "final_weight_norm": 11.010802048892145,
+  "steps": 30000
+}

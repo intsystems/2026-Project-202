@@ -1,0 +1,38 @@
+[
+ {
+  "run": "a_add",
+  "n_rows": 3001,
+  "n_params": 145500,
+  "dim": 1024,
+  "t_mem": 9170,
+  "t_gen": 11950,
+  "final_val_acc": 1.0
+ },
+ {
+  "run": "g_p1_p97",
+  "n_rows": 3001,
+  "n_params": 145500,
+  "dim": 1024,
+  "t_mem": 7410,
+  "t_gen": 12560,
+  "final_val_acc": 1.0
+ },
+ {
+  "run": "g_p1x_p97",
+  "n_rows": 3001,
+  "n_params": 145500,
+  "dim": 1024,
+  "t_mem": 10050,
+  "t_gen": null,
+  "final_val_acc": 0.0095642933049946
+ },
+ {
+  "run": "x_no_grok",
+  "n_rows": 3001,
+  "n_params": 145500,
+  "dim": 1024,
+  "t_mem": 9760,
+  "t_gen": null,
+  "final_val_acc": 0.0099893730074388
+ }
+]

@@ -1,0 +1,27 @@
+[
+  ["gromov_arithmetic/run.py", "a_add", "x_no_grok",
+   "--outdir", "/content/out/arith"],
+
+  ["gromov_polynomials/run_poly.py", "pairs97",
+   "--outdir", "/content/out/poly"],
+
+  ["gromov_polynomials/run_poly.py", "faithful97",
+   "--outdir", "/content/out/poly"],
+
+  ["gromov_arithmetic/run.py", "a_mul", "x_mix_quad",
+   "--outdir", "/content/out/arith"],
+
+  ["gromov_arithmetic/lr_sweep.py",
+   "--task", "add", "--p", "23", "--width", "500", "--fraction", "0.8",
+   "--steps", "30000", "--lrs", "3e2", "1e3", "1.333e3", "3e3", "1e4",
+   "--outdir", "/content/out/sweeps"],
+
+  ["gromov_polynomials/run_poly.py", "nowd23", "faithful23",
+   "--outdir", "/content/out/poly"],
+
+  ["gromov_arithmetic/run.py", "a_sub", "a_sq_sum", "a_sum_sq",
+   "--outdir", "/content/out/arith"],
+
+  ["gromov_arithmetic/run.py", "c_add_lowalpha", "c_mix_quad_hi", "a_add_s1",
+   "--outdir", "/content/out/arith"]
+]

@@ -1,0 +1,13 @@
+[
+  ["gromov_arithmetic/lr_sweep.py",
+   "--task", "add", "--p", "97", "--width", "500", "--fraction", "0.5",
+   "--steps", "30000",
+   "--lrs", "1e4", "3e4", "1e5", "3e5", "1e6", "3e6", "1e7",
+   "--outdir", "/content/out/sweeps"],
+
+  ["gromov_arithmetic/lr_sweep.py",
+   "--task", "add", "--p", "97", "--width", "500", "--fraction", "0.2",
+   "--steps", "30000",
+   "--lrs", "1e5", "3e5", "1e6", "3e6",
+   "--outdir", "/content/out/sweeps"]
+]

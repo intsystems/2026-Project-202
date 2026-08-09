@@ -1,0 +1,13 @@
+[
+  ["gromov_arithmetic/run.py", "a_mul", "x_mix_quad",
+   "--outdir", "/content/out/arith"],
+
+  ["gromov_polynomials/run_poly.py", "nowd23",
+   "--outdir", "/content/out/poly"],
+
+  ["gromov_arithmetic/run.py", "a_sub", "a_sq_sum", "a_sum_sq",
+   "--outdir", "/content/out/arith"],
+
+  ["gromov_arithmetic/run.py", "c_add_lowalpha", "a_add_s1",
+   "--outdir", "/content/out/arith"]
+]

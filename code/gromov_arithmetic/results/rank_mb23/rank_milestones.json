@@ -1,0 +1,20 @@
+[
+ {
+  "run": "a_add",
+  "n_rows": 3001,
+  "n_params": 13800,
+  "dim": 512,
+  "t_mem": 5300,
+  "t_gen": 9220,
+  "final_val_acc": 1.0
+ },
+ {
+  "run": "x_no_grok",
+  "n_rows": 3001,
+  "n_params": 13800,
+  "dim": 512,
+  "t_mem": 5860,
+  "t_gen": null,
+  "final_val_acc": 0.0471698113207547
+ }
+]

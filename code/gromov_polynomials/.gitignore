@@ -1,0 +1,6 @@
+# See ../gromov_arithmetic/.gitignore -- same reasoning, same shape of output.
+*.npz
+results/outputs.tar.gz
+
+__pycache__/
+*.pyc
