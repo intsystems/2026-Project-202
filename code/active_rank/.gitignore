@@ -1,0 +1,4 @@
+# 63-95 MB each; regenerate with colab_rank.ps1 -Run <key> -Fetch .\results
+*_rank.npz
+rank_outputs.tar.gz
+__pycache__/

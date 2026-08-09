@@ -1,0 +1,56 @@
+[
+ {
+  "run": "mod_wd0",
+  "n_rows": 2000,
+  "n_params": 226816,
+  "dim": 1024,
+  "t_mem": 630,
+  "t_gen": null,
+  "final_val_acc": 0.033203125
+ },
+ {
+  "run": "mod_wd1",
+  "n_rows": 2000,
+  "n_params": 226816,
+  "dim": 1024,
+  "t_mem": 1470,
+  "t_gen": 13700,
+  "final_val_acc": 1.0
+ },
+ {
+  "run": "mod_wd1_s43",
+  "n_rows": 2000,
+  "n_params": 226816,
+  "dim": 1024,
+  "t_mem": 1580,
+  "t_gen": 6660,
+  "final_val_acc": 1.0
+ },
+ {
+  "run": "mod_wd1_s44",
+  "n_rows": 2000,
+  "n_params": 226816,
+  "dim": 1024,
+  "t_mem": 1410,
+  "t_gen": 3680,
+  "final_val_acc": 1.0
+ },
+ {
+  "run": "s5_wd0",
+  "n_rows": 3000,
+  "n_params": 228608,
+  "dim": 1024,
+  "t_mem": 1015,
+  "t_gen": null,
+  "final_val_acc": 0.015625
+ },
+ {
+  "run": "s5_wd1",
+  "n_rows": 3000,
+  "n_params": 228608,
+  "dim": 1024,
+  "t_mem": 1280,
+  "t_gen": 6735,
+  "final_val_acc": 1.0
+ }
+]
