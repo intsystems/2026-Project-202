@@ -1,0 +1,17 @@
+control,observer,delta_MG
+qp_scale2,w_fro,-1.6763289672045207
+qp_scale2,c_norm,-1.6763063658226098
+qp_scale2,g_fro,-3.9775334916236336
+qp_scale2,g_proj,-1.4132002886719341
+qp_scale2,c_proj1,1.8693873578938875
+qp_scale2,fn_fro,-4.95933728226954
+qp_scale2,fn_proj1,-0.3199441752944052
+qp_scale2,loss_full,0.0
+qp_rotate,w_fro,-1.6763289672045207
+qp_rotate,c_norm,-1.6763063658226098
+qp_rotate,g_fro,-3.9775334916236336
+qp_rotate,g_proj,-1.4132002886719341
+qp_rotate,c_proj1,1.2099200632860656
+qp_rotate,fn_fro,-4.95933728226954
+qp_rotate,fn_proj1,-0.3199441752944052
+qp_rotate,loss_full,0.0

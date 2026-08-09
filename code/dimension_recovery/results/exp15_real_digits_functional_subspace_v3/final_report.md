@@ -43,4 +43,4 @@ Best observer: **`gradient_projection`**.
 
 This experiment tests recovery of an explicitly verified active dynamical dimension on real inputs and in a nonlinear trained network. It does not claim that every scalar observer is generic or that available parameter count alone equals dynamic dimension.
 
-Runtime: 161.6 s.
+Runtime: 113.9 s.

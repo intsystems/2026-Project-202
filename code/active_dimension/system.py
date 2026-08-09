@@ -28,7 +28,13 @@ import numpy as np
 from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 
-PRIMES = np.array([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53])
+# Enough mutually incommensurate frequencies for the k=20 calibration arm.  The
+# original atlas stopped at 53 because it only swept r<=8; keeping the list here
+# avoids a silent IndexError when the controlled experiment is extended to r=20.
+PRIMES = np.array([
+    2, 3, 5, 7, 11, 13, 17, 19, 23, 29,
+    31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
+])
 
 
 def _softmax(z):
@@ -199,16 +205,30 @@ def resonance_margin(f, order=3):
 
     The window must be longer than 1/margin for the torus to look r-dimensional.
     """
+    # Enumerating ``range(-order, order + 1) ** r`` is exponential in r and
+    # made the k=20 validation effectively impossible.  Only vectors with
+    # L1 norm <= ``order`` are needed.  Generate those as sums of at most
+    # ``order`` signed unit vectors: O((2r)^order), exact for this definition.
     from itertools import product
     key = (tuple(np.round(f, 12)), order)
     if key in _RESCACHE:
         return _RESCACHE[key]
     best = np.inf
-    for n in product(range(-order, order + 1), repeat=len(f)):
-        s = sum(abs(v) for v in n)
-        if 0 < s <= order:
-            z = float(np.dot(n, f))
-            best = min(best, abs(z - round(z)))
+    r = len(f)
+    seen = set()
+    for degree in range(1, order + 1):
+        for inds in product(range(r), repeat=degree):
+            for signs in product((-1, 1), repeat=degree):
+                n = np.zeros(r, dtype=np.int8)
+                for i, sign in zip(inds, signs):
+                    n[i] += sign
+                key_n = tuple(int(v) for v in n)
+                if key_n in seen or not any(n):
+                    continue
+                seen.add(key_n)
+                if np.abs(n).sum() <= order:
+                    z = float(np.dot(n, f))
+                    best = min(best, abs(z - round(z)))
     _RESCACHE[key] = best
     return best
 
