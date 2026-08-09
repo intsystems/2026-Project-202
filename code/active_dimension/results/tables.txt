@@ -1,0 +1,516 @@
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:61: RuntimeWarning: Mean of empty slice
+  seed_sd=float(np.nanmean(m.sd)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:61: RuntimeWarning: Mean of empty slice
+  seed_sd=float(np.nanmean(m.sd)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:61: RuntimeWarning: Mean of empty slice
+  seed_sd=float(np.nanmean(m.sd)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:60: RuntimeWarning: All-NaN slice encountered
+  ident=float(np.nanmedian(m.ident)),
+====================================================================================================
+E0 -- identifiability atlas
+
+MG vs r  (rows: family x scale parameter)
+r                         1      2      3      4      5      6      8
+family  tau_c  N                                                     
+colored 50.0   5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000   3.35   3.37   3.33   3.38   3.37   3.42   3.35
+               60000   3.36   3.35   3.33   3.36   3.36   3.37   3.39
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+        200.0  5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000   3.20   2.94   2.99   3.09   2.97   3.17   3.18
+               60000   2.64   2.63   2.68   2.66   2.69   2.66   2.60
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+        1000.0 5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000   5.51   6.53   5.38   4.43   5.36   6.85   6.50
+               60000   3.46   2.96   3.69   3.13   3.39   3.36   3.34
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+        NaN    5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               60000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+ou      50.0   5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000  12.54  12.29  12.12  12.44  12.14  12.43  12.15
+               60000  13.40  13.45  13.37  13.24  13.27  13.18  13.05
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+        200.0  5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000  11.71  11.68  11.64  11.82  11.71  11.74  11.59
+               60000  12.70  12.69  12.61  12.67  12.64  12.70  12.65
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+        1000.0 5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000  10.97  11.30  11.23  11.47  11.12  11.17  11.31
+               60000  12.11  11.98  12.05  12.09  12.09  12.01  12.01
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+        NaN    5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               60000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+qp      50.0   5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               60000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+        200.0  5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               60000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+        1000.0 5000     NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               20000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               60000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               80000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+        NaN    5000    1.34   2.83   2.73   2.98   3.02   3.27   2.97
+               20000   1.38   2.53   2.67   2.82   2.87   3.03   2.85
+               60000    NaN    NaN    NaN    NaN    NaN    NaN    NaN
+               80000   1.25   2.65   2.67   2.93   3.00   3.11   3.05
+
+identifiability ratio MG(2E)/MG(E)  -- ~1 identifiable, >1.15 not
+r           1     2     3     4     5     6     8
+family                                           
+colored  1.34  1.24  1.40  1.20  1.26  1.32  1.29
+ou       1.45  1.45  1.43  1.46  1.44  1.44  1.43
+qp       1.00  1.06  1.12  1.18  1.16  1.20  1.17
+
+====================================================================================================
+E1 -- frozen estimator configuration
+ cfg_id  max_E  tau  k_neighbors   theiler  window   mae   rho    sd  score
+     47     20    4           20  autocorr    8000 0.324 0.908 0.501  0.757
+     45     20    4           20 embedding    8000 0.324 0.908 0.501  0.757
+     46     20    4           20  autocorr    4000 0.482 0.900 0.516  0.939
+     44     20    4           20 embedding    4000 0.482 0.900 0.516  0.939
+     21     10    4           20 embedding    8000 0.500 0.867 0.392  0.963
+     23     10    4           20  autocorr    8000 0.500 0.867 0.392  0.963
+     20     10    4           20 embedding    4000 0.609 0.908 0.367  0.976
+     22     10    4           20  autocorr    4000 0.609 0.908 0.367  0.976
+
+====================================================================================================
+E2 -- MG against the MEASURED active dimension, with every null beside it
+
+--- arm: batch ---
+  observer     family  rho_MG  rho_rough  rho_PRdelay  rho_specPR  slope  mae_raw  mae_specPR  ident  seed_sd  degen
+    fn_fro       norm   0.321      0.286        0.000       0.071  0.349    8.888     319.092    NaN    0.109    0.0
+    c_norm       norm   0.286      0.607        0.107       0.643  0.202    8.935     318.417    NaN    0.095    0.0
+   c_proj1 projection   0.286      0.786        0.286       0.286  0.579    8.880     316.986  1.544    0.121    0.0
+     w_fro       norm   0.286      0.607        0.107       0.643  0.106    8.917     318.921  1.548    0.088    0.0
+    margin   function   0.179      0.321        0.071       0.071  0.432    8.977     337.165    NaN    0.107    0.0
+    g_proj   gradient   0.143      0.321        0.107       0.393  1.234    8.887     321.752    NaN    0.081    0.0
+ acc_probe   function   0.071      0.286        0.179       0.357 -0.881    8.928     411.636    NaN    0.201    0.0
+  fn_proj1   function   0.071      0.393        0.357       0.536  0.978    8.857     316.057    NaN    0.085    0.0
+ loss_full       loss  -0.500      0.429       -0.464       0.643 -0.385    8.817     624.912    NaN    0.096    0.0
+loss_probe       loss  -0.750     -0.179        0.071       0.143 -1.451    8.909     405.659    NaN    0.214    0.0
+     g_fro   gradient  -0.857      0.000        0.000       0.607 -0.653    9.676     636.864  1.586    0.070    0.0
+ loss_step      loss*  -0.857      0.214        0.000      -0.321 -0.970   10.152    1993.026    NaN    0.047    0.0
+
+--- arm: batch_proj ---
+  observer     family  rho_MG  rho_rough  rho_PRdelay  rho_specPR  slope  mae_raw  mae_specPR  ident  seed_sd  degen
+ loss_step      loss*   0.893      0.107        0.500       0.071  0.549   10.246     622.900    NaN    0.276  0.000
+ loss_full       loss   0.893      0.107        0.500       0.107  0.549   10.246     623.059    NaN    0.276  0.000
+loss_probe       loss   0.607     -0.321       -0.286      -0.429  0.270   11.595     334.268    NaN    0.369  0.000
+ acc_probe   function   0.600      0.429       -0.314       0.200    NaN   10.319     685.667    NaN    2.883  0.408
+    margin   function   0.500     -0.107        0.036       0.643  0.064   11.842     326.702    NaN    0.184  0.000
+     g_fro   gradient   0.500     -0.821       -0.036      -0.607  0.114   12.232     657.487  1.601    0.165  0.000
+    c_norm       norm   0.321      0.393        0.214      -0.036  0.006   11.898     326.028    NaN    0.110  0.000
+     w_fro       norm   0.321      0.393        0.214      -0.036  0.006   11.898     326.009  1.545    0.110  0.000
+    fn_fro       norm   0.071      0.714        0.786       0.464  0.003   11.895     325.023    NaN    0.094  0.000
+   c_proj1 projection  -0.179     -0.643       -0.179       0.143 -0.004   11.893     317.721  1.532    0.122  0.000
+    g_proj   gradient  -0.214      0.214        0.464       0.286 -0.005   11.913     321.258    NaN    0.088  0.000
+  fn_proj1   function  -0.571     -0.107        0.000       0.214 -0.022   11.893     321.429    NaN    0.087  0.000
+C:\Users\Alex\Documents\GitHub\EDMGrokking\code\active_dimension\analyze.py:155: RuntimeWarning: Mean of empty slice
+  .apply(lambda s: float(np.nanmean(np.abs(s.level0 - s.truth0))),
+
+--- arm: gd ---
+  observer     family  rho_MG  rho_rough  rho_PRdelay  rho_specPR   slope  mae_raw  mae_specPR  ident  seed_sd  degen
+ loss_full       loss   0.571     -0.679        0.286       0.250   6.001   25.991       1.697    NaN    0.781    0.0
+ loss_step      loss*   0.571     -0.679        0.286       0.250   6.004   25.991       1.697    NaN    0.781    0.0
+    fn_fro       norm   0.286     -0.464       -0.036      -0.464  11.333   28.375       1.495    NaN    0.762    0.0
+   c_proj1 projection   0.250     -0.571       -0.429       0.214  17.090   28.057       1.503  1.025    0.949    0.0
+loss_probe       loss   0.143      0.107        0.071      -0.071  -0.106   27.525       1.583    NaN    1.078    0.0
+     g_fro   gradient   0.000     -0.571        0.786      -0.179  -2.203   27.942       1.543  1.000    0.317    0.0
+    c_norm       norm  -0.071     -0.786       -0.393      -0.893  -9.514   28.444       1.489    NaN    0.841    0.0
+     w_fro       norm  -0.071     -0.786       -0.393      -0.893  -6.683   28.438       1.490  0.999    0.849    0.0
+    margin   function  -0.214     -0.179       -0.071      -0.071  -6.373   27.222       1.527    NaN    1.093    0.0
+    g_proj   gradient  -0.536      0.143        0.286      -0.643 -13.495   27.930       1.526    NaN    0.943    0.0
+  fn_proj1   function  -0.821      0.571       -0.071       0.357 -25.568   28.444       1.492    NaN    0.648    0.0
+ acc_probe   function     NaN        NaN          NaN         NaN     NaN      NaN         NaN    NaN      NaN    1.0
+
+--- arm: mixed ---
+  observer     family  rho_MG  rho_rough  rho_PRdelay  rho_specPR  slope  mae_raw  mae_specPR  ident  seed_sd  degen
+ loss_full       loss   1.000     -0.964        0.964       1.000  0.545    9.983     266.764    NaN    0.487  0.000
+loss_probe       loss   1.000      0.214        1.000       0.964  0.512    8.984      17.789    NaN    0.593  0.000
+  fn_proj1   function   1.000      0.357        1.000       1.000  0.459    9.172      13.162    NaN    0.554  0.000
+    fn_fro       norm   0.964     -0.214        1.000       1.000  0.550    9.132      25.294    NaN    0.614  0.000
+ loss_step      loss*   0.964     -0.179        1.000       0.750  0.680    0.692       1.513    NaN    0.642  0.000
+     g_fro   gradient   0.964     -1.000        0.964       1.000  0.460   10.940     259.095  1.446    0.670  0.000
+   c_proj1 projection   0.964     -0.250        1.000       1.000  0.549    9.231      21.871  1.363    0.715  0.000
+    c_norm       norm   0.893      0.286        1.000       0.964  0.558    9.032      18.414    NaN    0.669  0.000
+     w_fro       norm   0.893      0.286        1.000       0.964  0.558    9.032      18.416  1.358    0.669  0.000
+    margin   function   0.857     -0.214        1.000       1.000  0.551    9.065      22.660    NaN    1.002  0.000
+    g_proj   gradient   0.821      0.500        0.964       1.000  0.490    9.205      19.331    NaN    0.726  0.000
+ acc_probe   function   0.486     -0.771       -0.029      -0.029    NaN    3.741     419.253    NaN    3.988  0.609
+
+--- arm: noise ---
+  observer     family  rho_MG  rho_rough  rho_PRdelay  rho_specPR  slope  mae_raw  mae_specPR  ident  seed_sd  degen
+ loss_step      loss*   1.000     -0.821       -0.750      -0.429  0.407    9.932     635.626    NaN    0.101  0.000
+ loss_full       loss   1.000     -0.929       -0.750      -0.429  0.407    9.932     635.754    NaN    0.101  0.000
+ acc_probe   function   0.821     -0.250       -0.321      -0.250  1.124    8.692     705.786    NaN    0.857  0.321
+    c_norm       norm   0.679      0.000       -0.107      -0.500  0.012   10.995     323.847    NaN    0.258  0.000
+     w_fro       norm   0.679     -0.036       -0.107      -0.500  0.012   10.995     323.837  1.563    0.258  0.000
+    margin   function   0.643     -0.964       -0.214      -0.250  0.024   10.951     322.973    NaN    0.278  0.000
+     g_fro   gradient   0.607     -1.000       -0.857      -0.929  0.087   11.538     664.967  1.594    0.093  0.000
+  fn_proj1   function   0.536      0.357       -0.143      -0.286  0.018   11.003     318.386    NaN    0.111  0.000
+loss_probe       loss  -0.036     -0.036       -0.393      -0.571 -0.003   10.933     322.521    NaN    0.118  0.000
+   c_proj1 projection  -0.036     -0.071       -0.607      -0.643 -0.004   10.973     321.895  1.550    0.078  0.000
+    g_proj   gradient  -0.214     -0.036       -0.321      -0.750 -0.002   11.011     324.667    NaN    0.101  0.000
+    fn_fro       norm  -0.286      0.250       -0.750      -0.321 -0.004   11.009     324.252    NaN    0.086  0.000
+
+--- arm: noise_nopre ---
+  observer     family  rho_MG  rho_rough  rho_PRdelay  rho_specPR  slope  mae_raw  mae_specPR  ident  seed_sd  degen
+ acc_probe   function   0.857     -0.607       -0.714      -0.714  1.031    7.921      22.596    NaN    1.011  0.265
+  fn_proj1   function   0.786      0.571        0.571       0.286  0.119    7.067       6.899    NaN    0.208  0.000
+ loss_full       loss   0.607     -0.714       -0.036      -0.143  0.083    7.404      22.323    NaN    0.136  0.000
+ loss_step      loss*   0.607     -0.714       -0.250      -0.143  0.083    7.404      22.319    NaN    0.136  0.000
+loss_probe       loss   0.464     -0.536       -0.536      -0.679  0.038    7.148      10.967    NaN    0.224  0.000
+    g_proj   gradient  -0.036     -0.143       -0.071      -0.250 -0.003    7.313      13.047    NaN    0.169  0.000
+     g_fro   gradient  -0.071     -0.357        0.071       0.143 -0.008    7.916      27.781  1.428    0.126  0.000
+    fn_fro       norm  -0.214     -0.679       -0.607      -0.429 -0.008    7.143      10.037    NaN    0.244  0.000
+    margin   function  -0.250     -0.214       -0.357      -0.500 -0.055    7.159      11.076    NaN    0.250  0.000
+   c_proj1 projection  -0.250      0.214        0.500       0.571 -0.026    7.042       7.314  1.477    0.241  0.000
+    c_norm       norm  -0.786     -0.643       -0.750      -0.679 -0.060    7.071       7.951    NaN    0.221  0.000
+     w_fro       norm  -0.786     -0.643       -0.750      -0.679 -0.059    7.071       7.951  1.529    0.221  0.000
+
+--- arm: qp ---
+  observer     family  rho_MG  rho_rough  rho_PRdelay  rho_specPR  slope  mae_raw  mae_specPR  ident  seed_sd  degen
+    c_norm       norm     1.0      0.714        1.000       0.929  0.910    0.541       0.889    NaN    0.666    0.0
+   c_proj1 projection     1.0     -0.250        0.964       0.929  0.990    0.473       1.080  1.046    0.666    0.0
+    fn_fro       norm     1.0     -0.214        1.000       0.929  0.955    0.516       1.501    NaN    0.706    0.0
+  fn_proj1   function     1.0      0.143        1.000       0.786  0.720    0.576       1.475    NaN    0.493    0.0
+     g_fro   gradient     1.0     -0.893        0.893       0.964  1.681    1.864       4.148  1.043    0.813    0.0
+    g_proj   gradient     1.0      0.643        1.000       0.786  0.930    0.507       1.406    NaN    0.606    0.0
+ loss_full       loss     1.0     -0.786        0.750       0.893  1.666    1.940       3.257    NaN    0.616    0.0
+loss_probe       loss     1.0      0.000        0.964       0.786  0.908    0.248       1.326    NaN    0.382    0.0
+ loss_step      loss*     1.0     -0.179        1.000       0.750  0.847    0.452       1.513    NaN    0.433    0.0
+    margin   function     1.0     -0.179        0.964       0.786  0.949    0.327       1.689    NaN    0.687    0.0
+     w_fro       norm     1.0      0.714        1.000       0.929  0.910    0.541       0.889  1.115    0.666    0.0
+ acc_probe   function     NaN        NaN          NaN         NaN    NaN      NaN         NaN    NaN      NaN    1.0
+
+--- arm: qp_nopre ---
+  observer     family  rho_MG  rho_rough  rho_PRdelay  rho_specPR  slope  mae_raw  mae_specPR  ident  seed_sd  degen
+    c_norm       norm   1.000     -0.464        0.964       0.893  1.065    0.360       2.097    NaN    0.593    0.0
+   c_proj1 projection   1.000      0.143        0.964       1.000  1.029    0.261       0.917  0.946    0.590    0.0
+    fn_fro       norm   1.000     -0.250        0.964       0.964  1.112    0.455       1.837    NaN    0.415    0.0
+  fn_proj1   function   1.000      0.321        1.000       0.750  1.117    0.850       1.050    NaN    0.383    0.0
+     g_fro   gradient   1.000     -0.357        0.893       0.429  1.454    1.029       3.693  0.991    0.542    0.0
+    g_proj   gradient   1.000     -0.143        1.000       0.893  1.062    0.224       0.544    NaN    0.678    0.0
+ loss_full       loss   1.000     -0.429        0.857       0.464  1.298    0.743       2.432    NaN    0.353    0.0
+ loss_step      loss*   1.000     -0.107        0.893       0.571  0.921    0.426       2.358    NaN    0.683    0.0
+     w_fro       norm   1.000     -0.464        0.964       0.893  1.065    0.360       2.097  0.983    0.593    0.0
+loss_probe       loss   0.964     -0.607        1.000       0.500  0.882    0.553       1.127    NaN    0.403    0.0
+    margin   function   0.964     -0.464        0.964       0.964  1.172    0.625       2.036    NaN    0.326    0.0
+
+--- arm: qp_slow ---
+  observer     family  rho_MG  rho_rough  rho_PRdelay  rho_specPR  slope  mae_raw  mae_specPR  ident  seed_sd  degen
+    fn_fro       norm   1.000     -0.179       -0.107       0.893  0.255    1.550       1.348    NaN    0.177    0.0
+    c_norm       norm   0.964      0.750        0.750       0.786  0.249    1.519       1.469    NaN    0.115    0.0
+   c_proj1 projection   0.964     -0.250       -0.214       0.964  0.272    1.518       1.241  1.220    0.228    0.0
+  fn_proj1   function   0.964      0.143        0.143       0.893  0.237    1.587       1.748    NaN    0.227    0.0
+     g_fro   gradient   0.964     -0.964       -0.214       1.000  0.395    1.173       7.543  1.282    0.120    0.0
+     w_fro       norm   0.964      0.750        0.750       0.786  0.249    1.519       1.469  1.315    0.115    0.0
+    g_proj   gradient   0.893      0.643        0.643       1.000  0.261    1.483       0.914    NaN    0.197    0.0
+ loss_full       loss   0.893     -0.750       -0.214       1.000  0.390    1.176       5.496    NaN    0.084    0.0
+ loss_step      loss*   0.893     -0.321       -0.536       1.000  0.246    1.523       1.295    NaN    0.187    0.0
+loss_probe       loss   0.786     -0.214       -0.071       0.714  0.247    1.494       1.681    NaN    0.182    0.0
+    margin   function   0.750     -0.179       -0.179       1.000  0.259    1.476       1.413    NaN    0.167    0.0
+ acc_probe   function     NaN        NaN          NaN         NaN    NaN      NaN         NaN    NaN      NaN    1.0
+
+--- arm summary (median over observers that are not flat) ---
+             rho_MG  rho_rough  rho_PRdelay  rho_specPR  slope  mae_raw  mae_specPR  ident
+arm                                                                                       
+batch         0.107      0.321        0.089       0.375  0.154    8.913     329.459  1.548
+batch_proj    0.411      0.107        0.125       0.125  0.006   11.893     326.365  1.545
+gd            0.000     -0.571       -0.036      -0.071 -2.203   27.942       1.526  1.000
+mixed         0.964     -0.196        1.000       1.000  0.549    9.098      20.601  1.363
+noise         0.625     -0.054       -0.357      -0.464  0.015   10.984     324.049  1.563
+noise_nopre  -0.054     -0.571       -0.304      -0.339 -0.005    7.153      11.022  1.477
+qp            1.000     -0.179        1.000       0.893  0.930    0.516       1.475  1.046
+qp_nopre      1.000     -0.357        0.964       0.893  1.065    0.455       2.036  0.983
+qp_slow       0.964     -0.179       -0.107       0.964  0.255    1.518       1.469  1.282
+
+--- absolute recovery on r in {1,3,5,8}, calibration fitted on seeds 90-92 and r in {2,4,6} ---
+                           bias     mae
+arm         calibration                
+batch       affine        7.673   7.673
+            identity      8.904   8.904
+            isotonic     -0.223   0.266
+batch_proj  affine       10.615  10.615
+            identity     11.847  11.847
+            isotonic      2.703   2.703
+gd          affine       25.662  25.662
+            identity     28.111  28.111
+            isotonic      4.951   4.951
+mixed       affine        7.974   7.974
+            identity      9.093   9.093
+            isotonic      1.753   2.748
+noise       affine        9.534   9.534
+            identity     10.810  10.810
+            isotonic      1.757   2.749
+noise_nopre affine        6.221   6.221
+            identity      7.075   7.075
+            isotonic      2.183   2.397
+qp          affine       -0.335   0.692
+            identity      0.045   0.694
+            isotonic     -0.274   1.075
+qp_nopre    affine       -0.141   0.566
+            identity      0.123   0.585
+            isotonic     -0.444   1.042
+qp_slow     affine       -1.662   1.730
+            identity     -1.536   1.606
+            isotonic     -1.587   2.087
+
+====================================================================================================
+E3 -- controlled simplification
+ mode   observer  true_drop  seen_drop  lvl_err0  lag_down  lag_up  n
+noise  acc_probe       3.98       3.83      9.11    2999.0  3999.0 12
+noise     c_norm       3.98       0.08      9.13    9999.0  1999.0 12
+noise    c_proj1       3.98       0.01      9.15    8999.0  1999.0 12
+noise     fn_fro       3.98       0.13      9.18   10999.0  1999.0 12
+noise   fn_proj1       3.98       0.08      9.20   10999.0  1999.0 12
+noise      g_fro       3.98       0.32      9.84     999.0  7999.0 12
+noise     g_proj       3.98      -0.08      9.12   15999.0  1999.0 12
+noise  loss_full       3.98       1.50      8.79     999.0  3999.0 12
+noise loss_probe       3.98       0.04      9.09    8999.0  1999.0 12
+noise  loss_step       3.98       1.50      8.79     999.0  3999.0 12
+noise     margin       3.98       0.07      9.12    9999.0  2999.0 12
+noise      w_fro       3.98       0.07      9.13    9999.0  1999.0 12
+   qp  acc_probe       3.99        NaN       NaN       NaN     NaN  9
+   qp     c_norm       4.00       3.66      1.03     999.0  1999.0 12
+   qp    c_proj1       4.00       3.79      1.04     999.0  1999.0 12
+   qp     fn_fro       4.00       4.20      1.02     999.0  1999.0 12
+   qp   fn_proj1       4.00       3.04      1.10     999.0  1999.0 12
+   qp      g_fro       4.00       7.04      2.85     999.0  1999.0 12
+   qp     g_proj       4.00       4.06      0.80     999.0  1999.0 12
+   qp  loss_full       4.00       6.61      2.90     999.0  1999.0 12
+   qp loss_probe       4.00       3.69      0.39     999.0  1999.0 12
+   qp  loss_step       4.00       3.83      0.74     999.0  1999.0 12
+   qp     margin       4.00       3.86      0.77     999.0  1999.0 12
+   qp      w_fro       4.00       3.66      1.03     999.0  1999.0 12
+
+====================================================================================================
+E4 -- false alarms when the number of active directions does NOT change
+
+false-alarm rate (fraction of run x observer cells that fire)
+mode         noise     qp
+control                  
+amp_ramp       NaN  0.917
+baseline     0.217  0.237
+freq_double    NaN  0.259
+freq_half      NaN  0.250
+lr_step      0.967  0.864
+noise_step   0.883    NaN
+obs_scale    0.933  0.492
+rotate       0.000  0.400
+
+median |MG shift| vs the baseline level
+mode         noise     qp
+control                  
+amp_ramp       NaN  1.321
+baseline     0.098  0.211
+freq_double    NaN  0.488
+freq_half      NaN  0.502
+lr_step      0.597  0.158
+noise_step   0.384    NaN
+obs_scale    0.586  1.155
+rotate       0.149  0.862
+
+====================================================================================================
+E5 -- this project's own 120k-step logs, on the atlas axes
+         run      column          MG       MG_2E   ident  PRdelay  roughness  acorr    osc  degen  n
+  grokpos_s0   train_acc 1899974.516 1899973.985   1.000   20.000      1.415    1.0    3.0  1.000  5
+  grokpos_s0  train_loss      15.273      24.007   1.576   14.682      1.143    1.0   10.0  0.000  9
+  grokpos_s0     val_acc 1899974.516 1899973.985   1.000   20.000      1.070    2.0    4.0  1.000  5
+  grokpos_s0    val_loss      13.825      21.195   1.542    1.775      0.749  172.0    4.0  0.000  9
+  grokpos_s0 weight_norm      15.308      21.232   1.289    1.017      0.030  335.0   56.0  0.000  9
+lowdata15_s0   train_acc       0.525       5.180   9.481   17.959      0.904    2.0  216.0  1.000  9
+lowdata15_s0  train_loss       3.691       6.411   1.773   15.442      0.760    3.0  306.0  0.000  9
+lowdata15_s0     val_acc      12.757      18.635   1.410    1.027      0.095  745.0  370.0  0.000  9
+lowdata15_s0    val_loss       5.249       7.787   1.521    1.362      0.075  677.0  160.0  0.000  9
+lowdata15_s0 weight_norm       4.930       7.548   1.599    1.518      0.068  434.0  146.0  0.000  9
+lowdata15_s1   train_acc       0.417       4.999  10.913   18.515      0.926    2.0  198.0  1.000  9
+lowdata15_s1  train_loss       3.531       5.449   1.613   15.369      0.767    3.0  235.0  0.000  9
+lowdata15_s1     val_acc      13.829      20.155   1.496    1.455      0.476  525.0  816.0  0.000  9
+lowdata15_s1    val_loss       3.773       5.604   1.488    3.625      0.137   11.0  150.0  0.000  9
+lowdata15_s1 weight_norm       4.141       6.628   1.554    2.171      0.093  161.0  150.0  0.000  9
+lowdata15_s2   train_acc       0.419       4.398  10.287   18.019      0.936    2.0  188.0  1.000  9
+lowdata15_s2  train_loss       3.495       5.111   1.500   14.132      0.765    3.0  211.0  0.000  9
+lowdata15_s2     val_acc       7.855      20.442   1.758    4.100      0.873   72.0 1022.0  0.333  9
+lowdata15_s2    val_loss       3.628       5.020   1.384    3.128      0.150   10.0  154.0  0.000  9
+lowdata15_s2 weight_norm       4.467       6.729   1.514    3.945      0.149   10.0  151.0  0.000  9
+lowdata20_s0   train_acc       0.677       1.251   0.623   19.998      1.280    1.0   44.0  1.000  9
+lowdata20_s0  train_loss       4.160       3.671   0.882   19.846      1.272    1.0   76.0  0.000  9
+lowdata20_s0     val_acc       4.031       2.220   0.560   19.949      1.225    1.0   26.0  0.889  9
+lowdata20_s0    val_loss       4.248       3.499   0.824   19.810      1.204    1.0   54.0  0.000  9
+lowdata20_s0 weight_norm       3.939       4.284   1.366    1.490      0.044   66.0   32.0  0.000  9
+      wd0_s0   train_acc      53.028     106.727   2.013    1.112      0.077   30.0    6.0  1.000  1
+      wd0_s0  train_loss      13.631      20.952   1.535    1.098      0.309  756.0 1028.0  0.143  7
+      wd0_s0     val_acc      32.573     303.440   1.000    1.034      0.039  653.0    4.0  1.000  9
+      wd0_s0    val_loss      28.140      28.150   0.999    1.000      0.000  857.0    2.0  0.000  9
+      wd0_s0 weight_norm      28.079      28.056   0.999    1.000      0.000  858.0    2.0  0.000  9
+      wd0_s1   train_acc     623.751  950025.969 792.140    3.473      0.621   16.5   38.5  1.000  2
+      wd0_s1  train_loss      13.766      20.809   1.477    1.153      0.370  696.5  718.0  0.333  6
+      wd0_s1     val_acc     932.194    2327.551   1.781    1.125      0.206  396.0   29.0  1.000  3
+      wd0_s1    val_loss      27.817      27.820   1.001    1.000      0.000  856.0    2.0  0.000  9
+      wd0_s1 weight_norm      27.996      27.962   0.999    1.000      0.000  857.0    2.0  0.000  9
