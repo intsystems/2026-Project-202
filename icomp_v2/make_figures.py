@@ -81,12 +81,13 @@ def fig_regimes():
         ("gd", "transient", TRANSIENT, ":", "D"),
     ]
 
-    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 2.35),
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 2.10),
                                  gridspec_kw={"width_ratios": [1.15, 1.0]})
 
     ax.axhline(20, color=GREY, lw=0.8, ls=(0, (1, 2)), zorder=0)
-    # placed away from x = 1, where the transient series piles up
-    ax.text(2.3, 20.8, r"ceiling $E_{\max}$", color=GREY, fontsize=6.5,
+    # a reference line, not a bound: no clamping is applied and a violated model
+    # returns values above E. Placed away from x = 1, where the transient piles up.
+    ax.text(2.3, 20.8, r"$E_{\max}$, not a bound", color=GREY, fontsize=6.5,
             ha="left", va="bottom")
     ax.plot([0.9, 8.3], [0.9, 8.3], color=GREY, lw=1.1, ls=(0, (4, 3)), zorder=1)
     ax.text(8.6, 7.6, "truth", color=GREY, fontsize=6.5, ha="left", va="center")
@@ -132,8 +133,8 @@ def fig_regimes():
     bx.text(1.025, 4.42, "admissible", color=BAND, fontsize=6.5, ha="center")
     # inside the axes, on the empty right of the transient row: outside it the
     # text ran into the spine and the x label
-    bx.annotate("passes, yet returns 29\nwhere the truth is 1",
-                xy=(1.055, 0.0), xytext=(1.15, 0.0), fontsize=6.5,
+    bx.annotate("passes, yet returns 29\nwhere the measurement is 1",
+                xy=(1.06, 0.0), xytext=(1.135, 0.0), fontsize=6.0,
                 color=TRANSIENT, va="center", ha="left",
                 arrowprops=dict(arrowstyle="->", color=TRANSIENT, lw=0.9,
                                 shrinkA=2, shrinkB=2))
@@ -161,7 +162,7 @@ def fig_dip():
               ("PR_pos_det", "(b) parameter space", None),
               ("move", "(c) displacement", "log")]
 
-    fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.32), sharex=True)
+    fig, axes = plt.subplots(1, 3, figsize=(5.5, 2.05), sharex=True)
     grid = np.arange(-5000, 5200, 100)
 
     for ax, (col, title, scale) in zip(axes, panels):
@@ -189,9 +190,8 @@ def fig_dip():
         ax.set_xticklabels(["-5k", "$t_{gen}$", "5k"])
         ax.set_title(title, loc="left", pad=4)
 
-    # short labels only: at this panel height a spelt-out y label is taller than
-    # the axes and gets clipped. The titles carry the rest.
-    axes[0].set_ylabel(r"$\mathrm{PR}$")
+    axes[0].set_ylabel("participation ratio")
+    axes[2].set_ylabel("displacement")
     axes[1].set_xlabel("steps since generalisation")
     h, l = axes[0].get_legend_handles_labels()
     fig.tight_layout(rect=[0, 0.14, 1, 1])

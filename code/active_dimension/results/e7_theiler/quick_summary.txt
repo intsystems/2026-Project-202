@@ -1,0 +1,3 @@
+ranks (2, 5, 8, 11, 14, 17, 20), observers ('w_fro', 'c_norm', 'g_fro'), 3 seeds
+  capped_150  used=[np.float64(150.0)]  median MAE  2.784  median rho +1.000  median MG at r=20  13.64
+    span_624  used=[np.float64(624.0)]  median MAE  3.129  median rho +1.000  median MG at r=20  13.45

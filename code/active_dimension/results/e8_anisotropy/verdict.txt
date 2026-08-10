@@ -1,0 +1,5 @@
+  r=2:  mean |MG - r| =  0.33   mean |MG - PR| =  0.53   -> closer to the manifold dimension
+  r=4:  mean |MG - r| =  0.14   mean |MG - PR| =  1.06   -> closer to the manifold dimension
+  r=6:  mean |MG - r| =  1.47   mean |MG - PR| =  3.20   -> closer to the manifold dimension
+  r=8:  mean |MG - r| =  2.15   mean |MG - PR| =  1.89   -> closer to the PR
+  all  :  mean |MG - r| =  1.02   mean |MG - PR| =  1.67

@@ -1,7 +1,7 @@
 # icomp_v2
 
-Draft of the article *Estimating the Number of Active Degrees of Freedom of a Training Run
-from a Single Scalar Log*.
+Draft of the article *Counting the Active Degrees of Freedom of a Training Run: What a Single
+Scalar Log Can and Cannot Measure*.
 
 The previous report, on delay-embedding preconditions and convergent cross mapping, is
 archived unchanged in [`../icomp_attempts/`](../icomp_attempts/). This draft does not build
@@ -25,7 +25,7 @@ head reads ``Under review''. Uncomment `\icomparxivcopy` for a named preprint bu
 **Page budget.** ICOMP allows nine pages excluding references. The body ends on page 9 and the
 references begin on page 10, so the limit is met, but **with no slack at all**: section 8 fills
 the last lines of page 9. Any addition to the body needs a matching cut, and the appendices,
-which follow the references, are where new material should go. The body is about 4950 words
+which follow the references, are where new material should go. The body is about 5300 words
 excluding floats. What was moved out to reach nine pages, and can be moved back if the limit
 ever rises: the regime map (appendix F), the k = 20 table (appendix B), the change-detection
 protocol (appendix D), and the label-matched-pair figure (appendix F). Limitations and
@@ -33,25 +33,27 @@ conclusion are one section. There is no keywords line: the style file defines no
 it cost three lines on page 1.
 
 Figures are generated at the exact text width of the style file (5.5 in) with 8 pt type, so
-LaTeX does not rescale them. Do not include a figure wider than that. `fig_dip` is drawn at
-1.32 in for the page budget, which is below the height at which a spelt-out y-axis label fits;
-its label is therefore `PR`, and raising the height is the precondition for lengthening it.
+LaTeX does not rescale them. Do not include a figure wider than that. `fig_dip` moved to appendix F in the
+August revision and was enlarged to 2.05 in there, because the review found it unreadable at
+the height the body budget allowed.
 
 ## The argument in one paragraph
 
 The number of directions an optimiser actively excites over a window is a well-defined
 quantity, distinct both from the number of directions it is allowed to move in and from the
 rank of the map to the model's outputs. It can be estimated from one scalar log by delay
-reconstruction followed by the pooled Levina-Bickel estimator. We calibrate that estimate on
-five systems of increasing realism whose active dimension is known by construction and then
-verified by measurement, establishing that recovery is accurate to under one component up to
-about eight active directions and ordinal up to twenty. Two diagnostics, computable from the
-series without a ground truth, decide whether a given value is a count or a property of the
-embedding space. Applied to delayed generalisation, the instrument places the two standard
-experimental settings in different dynamical regimes, separates generalising from
-non-generalising runs in four label-matched pairs, and, measured directly from the
-trajectory covariance, records a transient collapse to essentially one dimension at
-generalisation in the regularised stochastic setting.
+reconstruction followed by the pooled Levina-Bickel estimator. We evaluate that estimate on six
+systems of increasing realism whose active dimension is fixed by construction and then verified
+by measurement, establishing that recovery is accurate to under one component up to about eight
+active directions and ordinal up to twenty. Two diagnostics, computable from the series without
+a ground truth, flag the two regimes in which the value cannot be read as a count. Applied to
+delayed generalisation, the instrument places the two standard experimental settings in
+different dynamical regimes and separates generalising from non-generalising runs in four
+label-matched pairs; measured directly from the trajectory covariance, it records a transient
+collapse to essentially one dimension near generalisation in four regularised runs and not in
+their two controls. What the estimator counts is resolvable excited modes rather than the
+covariance participation ratio, which the two coincide with only because the constructions
+equalise the drive amplitudes.
 
 ## Where the numbers come from
 
@@ -70,7 +72,9 @@ generalisation in the regularised stochastic setting.
 | 7.2 label-matched pairs | `../code/gromov_polynomials/report.md`, `../code/gromov_arithmetic/report.md` |
 | 7.3 direct measurement | `../code/active_rank/report.md` |
 | appendix H, full-batch setting and window-length sweep | `../code/gromov_arithmetic/report.md`, `../code/gromov_arithmetic/results/rank_fb_long/pr_vs_window.csv` |
-| appendix I, representation dimension | `../code/gromov_arithmetic/report.md`, `../code/gromov_polynomials/report.md` |
+| appendix J, representation dimension | `../code/gromov_arithmetic/report.md`, `../code/gromov_polynomials/report.md` |
+| 6.4 effective rank or mode count | `../code/active_dimension/e8_anisotropy.py`, `results/e8_anisotropy/` |
+| appendix L, the Theiler exclusion | `../code/active_dimension/e7b_theiler_quick.py`, `results/e7_theiler/` |
 
 ## Open items
 
@@ -89,8 +93,10 @@ generalisation in the regularised stochastic setting.
 | F | the label-matched pairs, with the training loss that explains them | complete |
 | G | the trajectory sketch and the three checks behind it | complete |
 | H | the full-batch measurement, its resolution limit, and the window-length sweep that removes it | complete |
-| I | the representation dimension in closed form, per task | complete |
-| J | inventory of every training run the paper uses | complete |
+| I | what falls, and when: the non-specific fall and the censored budgets | complete |
+| J | the representation dimension in closed form, per task | complete |
+| K | inventory of every training run the paper uses | complete |
+| L | the Theiler exclusion of the twenty-direction configuration | complete |
 
 ## Figures
 
@@ -133,3 +139,33 @@ source repository.
 * The k = 1..20 calibration on real data has never been written up. Its result files are in
   the repository but neither `report.md` nor `README.md` in `active_dimension/` mentions it.
   Table 2 of this article is computed from `scores_frozen.csv`.
+
+## What the August review changed
+
+An external audit of the 22-page draft raised twelve critical points. The ones that were
+correct and what was done:
+
+| point | status |
+| --- | --- |
+| PR of the covariance is an effective rank, not a count of directions | correct; section 3.1 now says so, and section 6.4 measures the difference with a new anisotropy experiment (`../code/active_dimension/e8_anisotropy.py`) |
+| the ground truth (covariance PR) and the estimator's target (manifold dimension) are different quantities | correct; they agree only because the constructions equalise the drive amplitudes, which is now stated, and the new experiment shows the estimator follows the mode count |
+| positions, increments and detrended positions were all called `d_act` | correct; now `d_pos`, `d_upd`, `d_det`, with the primary endpoint named per section |
+| "a transient has active dimension 1" conflates manifold dimension with PR | correct; the measured range 1.02-1.09 is quoted instead |
+| table 1 was too categorical | correct; the last column now says what the estimator returns in our constructions |
+| "recurrence count" does not measure recurrence | correct; renamed the trend-crossing count, with its exact definition (least-squares line over the window) |
+| tau is claimed to be estimated from the autocorrelation time on grokking logs | correct and it was false: tau = 4 is transplanted from calibration while the logs' autocorrelation time is 161-858. Section 6.2 now says so, which strengthens the paper's own conclusion |
+| the k = 20 result uses a Theiler window smaller than its embedding span | correct: 150 against a span of 624. The result is now marked exploratory and appendix K measures the cost |
+| "active dimension identically one" at zero learning rate | correct, and worse than stated: the parameters do not move at all, so the 1.0 is a floating-point artefact of centring a constant trajectory. The control is now stated without it |
+| the fall in the p=211 wd=0 run is used as evidence of trajectory simplification | correct, and this was the paper's most serious logical error. That series is inadmissible by the paper's own diagnostics; abstract, section 7.4 and section 8 now separate the two claims |
+| the direct measurement has undocumented confounds | correct: alignment, window centring, detrending and the position/update distinction are now all stated |
+| "five systems" when there are six | correct |
+| S5 weight decay is 1.0 in the text and 0.2 in the table | correct: it is 0.2, and those runs also step the optimiser twice per batch |
+| "never generalises" for censored runs | correct; the run table now carries final validation accuracy |
+| Algorithm 1 does not match the code | correct: the dither, the 1 per cent degeneracy tolerance and the (N(m-1)-1)/S form are now in it |
+| CountSketch guarantee attributed to Charikar et al. | correct: that is the frequent-items paper, the bound is a pairwise one and does not transfer to a spectrum. The appendix now claims no spectral guarantee and reports the two-sketch disagreement instead (1.1 per cent median, 8.4 per cent worst) |
+| the sketch validation looks biased at rank 5 and 10 | the deficit is the estimator's, not the sketch's; the uncompressed column that shows this was in the log and missing from the paper, and is now table 8 |
+| appendix H concludes "the same place" from one pair | correct: the two maxima are adjacent points of a 3450-step grid and cannot be separated. The claim is now the negative one only |
+| appendix I mixes three different numbers | correct: mode count (49), order parameter (1.000) and weight-matrix effective rank (148.8) are now defined separately, with the note that random initialisation already reads 139.1 |
+| "MG > E_max is a ceiling" | correct: no clamping is applied, so it is not a bound. Figure 1 relabelled |
+
+Points not adopted, with reasons, are in the response to the review.
