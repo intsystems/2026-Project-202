@@ -1,0 +1,6 @@
+[
+  ["gromov_arithmetic/run_rank.py", "a_add", "x_no_grok",
+   "--outdir", "/content/out/rank_fb_long", "--steps", "150000", "--log-every", "50"],
+
+  ["gromov_arithmetic/pr_vs_window.py", "--indir", "/content/out/rank_fb_long", "--check"]
+]

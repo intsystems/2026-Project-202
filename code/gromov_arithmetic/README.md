@@ -172,6 +172,7 @@ a CSV truncated at step 60 000 is still a usable trajectory.
 | [`rank.py`](rank.py) | the trajectory sketch, reusing `../active_rank`'s CountSketch |
 | [`run_rank.py`](run_rank.py) | train the matched pairs with the sketch attached |
 | [`rank_dip.py`](rank_dip.py) | the dip test, generalising run against its own matched control |
+| [`pr_vs_window.py`](pr_vs_window.py) | the participation ratio against window length, 600 to 120 000 steps |
 | [`verify_rank_noninvasive.py`](verify_rank_noninvasive.py) | proof the sketch leaves training bit-identical |
 | [`colab_gromov.ps1`](colab_gromov.ps1) | sync / launch detached / poll / fetch / stop |
 | [`colab_recover.py`](colab_recover.py) | re-adopt or terminate a runtime the CLI lost the name of |
@@ -188,6 +189,7 @@ python dimension_probe.py --results .\results\arith        # ../active_dimension
 python run_rank.py pairs --outdir .\results\rank           # ../active_rank's observer
 python ..\active_rank\analyze_rank.py --indir .\results\rank --window 60 --stride 5
 python rank_dip.py --indir .\results\rank
+python pr_vs_window.py --indir .\results\rank_fb_long --check
 ```
 
 `run_rank.py` takes `--set`, so the same pairs can be re-run under a different regime --

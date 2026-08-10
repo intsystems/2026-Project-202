@@ -313,6 +313,62 @@ smooth function of the weights, and the trajectory is a curve rather than a clou
 is the same fact that saturates the delay-embedding estimators above (`roughness` 0.001,
 `PRdelay` exactly 1.0) -- one cause, two symptoms.
 
+### The 1.0 is the window, not the run -- and lengthening it does not help
+
+The reading above is that 600 steps is too short to see the curvature of a smooth
+trajectory, so the statistic reports the window length. That is a testable claim: make
+the window long enough and the number has to move. `pr_vs_window.py` tests it, on runs
+of 150 000 steps logged every 50 (`jobs/07_pr_window.json`, `results/rank_fb_long/`), by
+sliding windows spanning 3 000 to 120 000 steps across `a_add` and its label-matched
+control `x_no_grok`.
+
+The window is lengthened by **spreading 60 samples further apart**, not by adding
+samples: 60 is the sample count of the published measurement, so the bound on the
+statistic and its noise floor are held exactly where they were and only the span
+changes. The other ladder -- every logged row, more of them per window -- is computed
+beside it as the control, and agrees to within 0.02 everywhere, so nothing below is a
+sample-count effect. `pr_vs_window.py --check` verifies its Gram-matrix form of `pr()`
+against `../active_rank/analyze_rank.py`'s SVD form on real windows: they agree to
+9e-16.
+
+Detrended position participation ratio in parameter space, over window placements:
+
+| window (steps) | `a_add` median | `a_add` max | `x_no_grok` median | `x_no_grok` max |
+| --- | --- | --- | --- | --- |
+| 600 | 1.002 | 1.035 | 1.001 | 1.011 |
+| 3 000 | 1.070 | 1.253 | 1.003 | 1.092 |
+| 6 000 | 1.028 | 1.537 | 1.005 | 1.360 |
+| 12 000 | 1.011 | 1.877 | 1.020 | 1.843 |
+| 30 000 | 1.007 | 2.111 | 1.113 | 1.725 |
+| 60 000 | 1.021 | 1.660 | 1.335 | 1.975 |
+| 120 000 | 1.256 | 1.659 | 1.929 | 2.337 |
+
+The 600-step row is the published measurement, on the same configuration and seed.
+
+**The diagnosis was right.** The statistic does leave the floor, and the scale at which
+it leaves is about 10^4 steps: two orders of magnitude above the window that produced
+the 1.000-1.362. The absence of a feature at 600 steps was a resolution limit.
+
+**Removing the limit does not produce a signal.** What appears at 12 000 steps is a
+single localised maximum, and both runs have one, of the same size (1.877 against
+1.843), in the same place -- centred at step 12 800 for `a_add`, which memorises at
+9 200 and generalises at 11 950, and at 9 350 for `x_no_grok`, which memorises at 9 800
+and never generalises. It tracks *memorisation*, which both runs do. Function space says
+the same with more range and no more separation: 2.618 against 2.145 at 12 000 steps,
+3.474 against 2.989 at 30 000.
+
+Beyond 30 000 steps the ordering reverses and the control moves *more* than the
+generalising run -- median 1.929 against 1.256 at 120 000 steps -- because by then the
+window is a large fraction of a run whose weight norm is still climbing (6.24 against
+5.07 at step 150 000), and what the statistic measures is that late drift.
+
+So the full-batch trajectory carries no rank signature of generalisation at any window
+length from 600 to 120 000 steps. This strengthens rather than weakens the reading of
+the next section: the collapse `../active_rank/` reports is a property of the
+regularised stochastic setting, and a trajectory participation ratio has to be
+controlled for batch size, noise scale *and* window length before anything is read from
+it.
+
 ### Mini batch: the statistic comes alive, and there is still no dip
 
 Re-running the same runs with `batch_size = 512` (of 4 704 training examples) moves the
@@ -402,6 +458,7 @@ block, effective rank of each layer, top five singular values) and
 | `a_add`, `a_sub`, `a_sq_sum`, `a_mul`, `x_mix_quad`, `x_no_grok` (100 000 steps) | complete |
 | `a_sum_sq` | 46 000 steps, 5x past its grokking step; `_obs.csv` not fetched |
 | trajectory-rank runs, full batch and mini batch, p=97 | complete |
+| window-length sweep, `a_add` and `x_no_grok` at 150 000 steps | complete; the two sketches were not kept, so a new statistic costs a re-run (~6 min each on a T4) |
 | `c_add_lowalpha`, `c_mix_quad_hi`, `a_add_s1` | not run |
 | `r_add_adamw` | **not run, and should not be** -- broken, see `runs.py` |
 
