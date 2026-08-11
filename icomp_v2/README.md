@@ -202,3 +202,28 @@ Consequences worth knowing, because they change what several results claim:
   effective rank collapses to essentially one", which is what the data show.
 * Section 6.4's anisotropy experiment now reads as confirmation that the estimator tracks
   `d_act` rather than the effective rank, which is a cleaner statement than the one it replaced.
+
+## Section 7, rewritten
+
+The grokking section read as a sequence of things the method cannot do. It now leads with what
+was measured, in this order:
+
+1. **The trajectory simplifies at generalisation** (7.1). The function-space effective rank falls
+   by a factor of 2.9 to 15.6, median 6.6, reaching bottom 235-712 steps after the generalisation
+   step, then re-expands; parameter space follows one to eight hundred steps later. This is
+   compared against Nanda et al.'s cleanup phase and Varma et al.'s efficiency argument, and
+   qualified by appendix J, where the Fourier order parameter is still rising 87 000 steps later.
+2. **Without weight decay the function settles and the norm does not** (7.2, new). The two
+   controls fall from 28.6 to about 6 and from 19.3 to 8.1 and stay there, while their parameter
+   norm saturates at 1.4x or grows to 2.4x, where every generalising run peaks and then falls by
+   more than half. A low rank alone therefore separates nothing; what marks the transition is
+   that the fall is sharp and reverses.
+3. **What a scalar log adds, and on what scale** (7.3). The regime classification, and then the
+   argument the section rests on: the level is uninterpretable, but within a run the observer,
+   the configuration and the series are fixed, so a *change* is read against a fixed nuisance,
+   which section 6.3 measures at about a third of a four-component change. Fast localised changes
+   above that floor are informative; slow drifts are not, being what a growing norm produces.
+
+The numbers in 7.2 were measured for this revision from `results_fine/rank_windows.csv`; the
+dip depths in 7.1 replace the earlier "factor of five to twelve", which was read off the plotted
+mean rather than computed per run.

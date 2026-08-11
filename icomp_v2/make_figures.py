@@ -81,7 +81,7 @@ def fig_regimes():
         ("gd", "transient", TRANSIENT, ":", "D"),
     ]
 
-    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.90),
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.85),
                                  gridspec_kw={"width_ratios": [1.15, 1.0]})
 
     ax.axhline(20, color=GREY, lw=0.8, ls=(0, (1, 2)), zorder=0)
