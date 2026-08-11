@@ -15,6 +15,14 @@ Design notes, so that later edits do not undo them:
 * The palette passes the categorical checks (OKLCH lightness band, chroma floor,
   Machado severity-1.0 protan and deutan separation on all pairs, normal-vision
   floor, WCAG contrast against the page) with no warnings.
+* Where a point is an aggregate the spread is drawn with it: a low-alpha
+  interquartile fill in the regime colour in fig_regimes(a), range and
+  interquartile bars in fig_pairs(a). Do not remove them for tidiness.
+* Where points coincide, the multiplicity is made visible rather than hidden:
+  fig_regimes(b) plots every raw value on a per-observer row, fig_map offsets
+  the twelve runs that share (2 crossings, rho_ident = 1.00) and labels the
+  offset. Any figure edit that reintroduces a single mark for many runs must
+  also fix the caption.
 """
 from __future__ import annotations
 
@@ -99,9 +107,20 @@ def fig_regimes():
             continue
         t = g.groupby("r").traj_PR.median().values
         y = g.groupby("r").MG.median().values
+        # interquartile band over the forty values behind each point (four seeds
+        # x ten observers). Sorted in x only so that the transient, whose seven
+        # points all sit at x ~ 1.05 in no particular order, fills a blob rather
+        # than a self-intersecting polygon; the other arms are already monotone.
+        q1 = g.groupby("r").MG.quantile(0.25).values
+        q3 = g.groupby("r").MG.quantile(0.75).values
+        o = np.argsort(t)
+        ax.fill_between(t[o], q1[o], q3[o], color=c, alpha=0.16, lw=0, zorder=2)
         ax.plot(t, y, ls, color=c, marker=mk, ms=3.2, mec="white", mew=0.5,
                 label=label, zorder=4, clip_on=False)
-        ident[arm] = g.groupby("r").ident_ratio.median()
+        # rho_ident is populated for seed 0, three observers and r in {2, 6} only,
+        # so panel (b) plots the six raw values rather than an aggregate.
+        ident[arm] = g.dropna(subset=["ident_ratio"])[["observer", "r",
+                                                       "ident_ratio"]]
 
     ax.set_xscale("log")
     ax.set_yscale("log")
@@ -116,21 +135,28 @@ def fig_regimes():
     ax.set_title("(a) what the estimator returns", loc="left", pad=6)
 
     bx.axvspan(0.95, 1.10, color=BAND, alpha=0.10, lw=0, zorder=0)
+    # one row of markers per observer, so that coincident values stay countable
+    OBS_DY = {"c_proj1": 0.17, "g_fro": 0.0, "w_fro": -0.17}
     for i, (arm, label, c, ls, mk) in enumerate(series):
         v = ident.get(arm)
-        if v is None:
+        if v is None or v.empty:
             continue
         y = len(series) - 1 - i
-        bx.plot(v.values, np.full(len(v), y), mk, color=c, ms=4.2,
-                mec="white", mew=0.6, zorder=3, clip_on=False)
+        bx.plot([v.ident_ratio.min(), v.ident_ratio.max()], [y, y], "-",
+                color=c, lw=0.7, alpha=0.45, zorder=2)
+        bx.plot(v.ident_ratio.values, y + v.observer.map(OBS_DY).values, mk,
+                color=c, ms=3.4, mec="white", mew=0.5, zorder=3, clip_on=False)
     bx.set_yticks(range(len(series)))
     bx.set_yticklabels([lbl for _, lbl, _, _, _ in series][::-1])
-    bx.set_ylim(-0.55, len(series) - 0.35)
+    bx.set_ylim(-0.60, len(series) + 0.05)
     bx.set_xlim(0.92, 1.70)
     bx.set_xticks([1.0, 1.2, 1.4, 1.6])
     bx.set_xlabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
     bx.set_title("(b) is it a count?", loc="left", pad=6)
     bx.text(1.025, 4.42, "admissible", color=BAND, fontsize=6.5, ha="center")
+    bx.text(1.70, 4.79, "6 values per row: seed 0,\n"
+                        r"3 observers, $r \in \{2, 6\}$",
+            color=GREY, fontsize=5.5, ha="right", va="center", linespacing=1.35)
     # inside the axes, on the empty right of the transient row: outside it the
     # text ran into the spine and the x label
     bx.annotate("passes, yet returns 29\nwhere the measurement is 1",
@@ -221,17 +247,31 @@ def fig_map():
 
     hi = tr[tr.ident > 1.15]
     lo = tr[tr.ident <= 1.15]
-    ax.plot(gr.osc, gr.ident, "s", mfc="none", mec=TRANSIENT, mew=1.2, ms=9,
-            ls="none", label="perceptron, full batch", zorder=3)
+
+    # All ten perceptron runs and both zero-weight-decay transformer runs sit at
+    # exactly two crossings and rho_ident = 1.00 to three decimals, so without an
+    # offset the twelve of them render as one mark. The offset is cosmetic and is
+    # declared in the caption; the true abscissa of every point is the grey tick.
+    OFF = 1.18
+    ax.plot([2 / OFF, 2 * OFF], [0.999, 0.999], "-", color=GREY, lw=0.7,
+            alpha=0.6, zorder=2)
+    ax.plot([2, 2], [0.978, 1.020], "-", color=GREY, lw=0.7, alpha=0.6, zorder=2)
+    ax.plot(gr.osc / OFF, gr.ident, "s", mfc="none", mec=TRANSIENT, mew=1.2, ms=9,
+            ls="none", label="perceptron, full batch (10)", zorder=3)
     ax.plot(hi.osc, hi.ident, "o", color=STOCHASTIC, ms=5.5, mec="white", mew=0.8,
-            ls="none", label="transformer, mini-batch", zorder=4)
-    ax.plot(lo.osc, lo.ident, "o", color=TRANSIENT, ms=5.5, mec="white", mew=0.8,
-            ls="none", label="transformer, no weight decay", zorder=5)
+            ls="none", label="transformer, mini-batch (5)", zorder=4)
+    ax.plot(lo.osc * OFF, lo.ident, "o", color=TRANSIENT, ms=5.5, mec="white",
+            mew=0.8, ls="none", label="transformer, no weight decay (2)", zorder=5)
+    ax.text(2 / OFF / 1.13, 0.999, r"$\times 10$", color=TRANSIENT, fontsize=6.5,
+            ha="right", va="center")
+    ax.text(2 * OFF * 1.11, 0.999, r"$\times 2$", color=TRANSIENT, fontsize=6.5,
+            ha="left", va="center")
 
     ax.set_xscale("log")
     ax.set_xlim(0.7, 500)
-    ax.set_ylim(0.88, 1.74)
-    ax.set_xlabel("recurrences per window")
+    ax.set_ylim(0.85, 1.74)
+    ax.set_yticks([0.9, 1.0, 1.2, 1.4, 1.6])
+    ax.set_xlabel("trend crossings per window")
     ax.set_ylabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
 
     ax.text(90, 1.025, "admissible: no run is here", color=BAND,
@@ -240,11 +280,13 @@ def fig_map():
             ha="left", va="center")
     ax.text(12, 1.555, "no invariant set exists", color=STOCHASTIC,
             fontsize=6.5, ha="left", va="center")
-    ax.text(1.05, 1.34, "transient", color=TRANSIENT, fontsize=7,
+    ax.text(0.78, 1.34, "transient", color=TRANSIENT, fontsize=7,
             ha="left", va="center")
-    ax.text(1.05, 1.245, "monotone, so stable\nfor the wrong reason",
+    ax.text(0.78, 1.245, "monotone, so stable\nfor the wrong reason",
             color=TRANSIENT, fontsize=6.5, ha="left", va="center")
-    ax.text(7.0, 1.70, "too few recurrences", color=GREY, fontsize=6.5,
+    ax.text(0.75, 0.908, "12 runs at exactly 2 crossings,\noffset to separate the groups",
+            color=GREY, fontsize=6.0, ha="left", va="center")
+    ax.text(7.0, 1.70, "too few crossings", color=GREY, fontsize=6.5,
             ha="right", va="top")
     ax.text(440, 1.135, "unstable in $E$", color=GREY, fontsize=6.5,
             ha="right", va="bottom")
@@ -262,6 +304,11 @@ def fig_pairs():
         pd.read_csv(CODE / "gromov_arithmetic/results/arith/dimension_probe_summary.csv"),
         pd.read_csv(CODE / "gromov_polynomials/results/dimension_probe_summary.csv")])
     mg = mg[mg.column == "train_loss"].set_index("run").MG
+    # the seven sliding windows behind each of those run-level medians
+    win = pd.concat([
+        pd.read_csv(CODE / "gromov_arithmetic/results/arith/dimension_probe.csv"),
+        pd.read_csv(CODE / "gromov_polynomials/results/dimension_probe.csv")])
+    win = win[win.column == "train_loss"].groupby("run").MG
 
     pairs = [("g_p1_p97", "g_p1x_p97", r"$(4n_1{+}n_2^2)^3$"),
              ("g_p2_p97", "g_p2x_p97", r"$(2n_1{+}3n_2)^4$"),
@@ -271,26 +318,40 @@ def fig_pairs():
     fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 2.35),
                                  gridspec_kw={"width_ratios": [1.0, 1.05]})
 
+    def spread(run, y, colour):
+        v = win.get_group(run)
+        # thin line the full range of the seven windows, thick line the middle
+        # half, marker the median that the run-level summary reports
+        ax.plot([v.min(), v.max()], [y, y], "-", color=colour, lw=0.7,
+                alpha=0.55, zorder=2)
+        ax.plot([v.quantile(0.25), v.quantile(0.75)], [y, y], "-", color=colour,
+                lw=2.6, alpha=0.30, solid_capstyle="butt", zorder=2)
+
     for i, (good, bad, name) in enumerate(pairs):
         y = len(pairs) - 1 - i
-        ax.plot([mg[good], mg[bad]], [y, y], color=GREY, lw=1.0, zorder=1)
-        ax.plot(mg[good], y, "o", color=RECURRENT, ms=5.5, mec="white", mew=0.8,
-                zorder=3, label="generalises" if i == 0 else None)
-        ax.plot(mg[bad], y, "o", color=STOCHASTIC, ms=5.5, mec="white", mew=0.8,
-                zorder=3, label="does not" if i == 0 else None)
+        ax.plot([mg[good], mg[bad]], [y + 0.19, y - 0.19], color=GREY, lw=0.8,
+                zorder=1)
+        spread(good, y + 0.19, RECURRENT)
+        spread(bad, y - 0.19, STOCHASTIC)
+        ax.plot(mg[good], y + 0.19, "o", color=RECURRENT, ms=5.0, mec="white",
+                mew=0.8, zorder=3, label="generalises" if i == 0 else None)
+        ax.plot(mg[bad], y - 0.19, "o", color=STOCHASTIC, ms=5.0, mec="white",
+                mew=0.8, zorder=3, label="does not" if i == 0 else None)
     ax.set_yticks(range(len(pairs)))
     ax.set_yticklabels([n for _, _, n in pairs][::-1])
-    ax.set_ylim(-0.7, len(pairs) - 0.3)
-    ax.set_xlim(18.5, 23.6)
+    ax.set_ylim(-0.75, len(pairs) - 0.25)
+    ax.set_xlim(17.4, 28.0)
+    ax.set_xticks([18, 20, 22, 24, 26, 28])
     ax.set_xlabel("estimate on the training loss")
     ax.set_title("(a) four label-matched pairs", loc="left", pad=6)
     ax.spines["left"].set_visible(False)
     ax.tick_params(axis="y", length=0)
 
-
+    # panel (b) plots the g_p2 pair, the second row of panel (a): its two members
+    # end three orders of magnitude apart, which the top pair does not (2.7)
     for key, colour, ls, lbl in [
-            ("g_p1_p97", RECURRENT, "-", "generalises"),
-            ("g_p1x_p97", STOCHASTIC, "--", "does not")]:
+            ("g_p2_p97", RECURRENT, "-", "generalises"),
+            ("g_p2x_p97", STOCHASTIC, "--", "does not")]:
         t = pd.read_csv(CODE / f"gromov_polynomials/results/{key}_train.csv")
         bx.plot(t.step, t.train_loss, ls, color=colour, lw=1.3, label=lbl)
     bx.set_yscale("log")
@@ -299,9 +360,7 @@ def fig_pairs():
     bx.set_xticklabels(["0", "50k", "100k"])
     bx.set_xlabel("step")
     bx.set_ylabel("training loss")
-    # panel (b) plots g_p1, which is the top row of panel (a)
-    bx.set_title("(b) the top pair, training loss",
-                 loc="left", pad=6)
+    bx.set_title(r"(b) the $(2n_1{+}3n_2)^4$ pair", loc="left", pad=6)
     h, l = bx.get_legend_handles_labels()
     fig.tight_layout(rect=[0, 0.12, 1, 1])
     fig.legend(h, l, frameon=False, ncol=2, loc="lower center",
