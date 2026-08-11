@@ -81,21 +81,39 @@ multiplicity.
 **The body is back inside nine pages**, with no undefined references, no citation warnings and no
 overfull boxes.
 
+**Installment 4 — the missing experiment, the tables, the prose** (applied). Removed from this
+file: 1.6, 1.8, 2.4, 2.5, 2.6, the rest of 3.13, 4.4, 4.8, 4.9, 5.3, 5.4 and 7.4. The
+sliding-window estimate was run on the 281 committed windows and returns a resolution limit: the
+frozen window spans $39\,990$ optimiser steps, one of twenty-seven centres falls near a
+generalisation step, and the largest excursion in the set is in a run that never generalises. That
+is now a new appendix and figure, and §7.1 states the claim as untested at this resolution instead
+of leaving it hanging. Figure 2 gains an uncertainty band, so every figure now has one. Sections 3
+and 6 are rewritten in the plainer register: the functional dimension is demoted to the bound it
+is, the terminology is made consistent, the degeneracy flag is described as the conditioning guard
+it is, and §6.2 now states that $
+ho_{\mathrm{ident}}$ doubles the delay span along with
+$E_{\max}$, so a large value cannot be told from a mismatched lag. Eighteen tables were audited;
+the observer table's roughness column is now a flag, correlations are signed and two-decimal
+throughout, three derivable columns are gone, and the anisotropy decay factor is renamed $q$.
+
 ---
 
 ## Contents
 
-1. [The story: what this paper is about and in what order to say it](#1-the-story)
-2. [Definitions, theory and formulas](#2-definitions-theory-and-formulas)
-3. [Claims that the code and data do not support](#3-claims-that-the-code-and-data-do-not-support)
-4. [The grokking section: evidence, logic and what is missing](#4-the-grokking-section)
-5. [Figures and tables](#5-figures-and-tables)
-6. [Structure, placement and the page budget](#6-structure-placement-and-the-page-budget)
-7. [Writing: title, abstract, headings, sentences](#7-writing)
-8. [Citations and related work](#8-citations-and-related-work)
-9. [Reproducibility and the artifact](#9-reproducibility-and-the-artifact)
+Section numbering follows the original review, so gaps are items that have been applied and
+deleted. Section 6 is gone entirely; sections 2, 3 and 4 retain only their "verified correct"
+records, which exist so nobody re-checks ground already covered.
 
-Appendix: [the priority list](#appendix-priority-list), if you only fix fifteen things.
+1. [The story](#1-the-story) — one open item: is the admissible regime ever realised?
+2. [Definitions, theory and formulas](#2-definitions-theory-and-formulas) — closed
+3. [Claims that the code and data do not support](#3-claims-that-the-code-and-data-do-not-support) — closed
+4. [The grokking section](#4-the-grokking-section) — closed
+5. [Figures and tables](#5-figures-and-tables) — figures that could still be added
+6. [Writing](#7-writing) — the title
+7. [Citations and related work](#8-citations-and-related-work) — optional additions
+8. [Reproducibility and the artifact](#9-reproducibility-and-the-artifact)
+
+Appendix: [what remains](#appendix-priority-list).
 
 ---
 
@@ -103,73 +121,6 @@ Appendix: [the priority list](#appendix-priority-list), if you only fix fifteen 
 
 *Scope: the thesis, the arc, the contributions list, what to lead with, what is missing from the
 argument. Owner: whoever rewrites the spine. Nothing in this section is a line edit.*
-
-### 1.1 The thesis is good and the paper does not say it plainly
-
-The best sentence in the draft is in the abstract: *"The estimator is standard [...]; the
-contribution is knowing when its output is a count."* That is a real contribution and an unusual
-one — a paper about the conditions under which an existing instrument may be read. Everything else
-should be arranged to serve it.
-
-The frame I would recommend, stated once, early, and then never re-argued:
-
-> A scalar log is free and a stored trajectory is expensive. The question is what survives the
-> projection. Under conditions that can be checked from the series itself, almost nothing is lost
-> up to about eight components. In the two settings in which grokking is actually studied,
-> everything is lost — and the diagnostics say so before the number is believed. When one does pay
-> for the trajectory, there is something to see.
-
-That framing makes the negative result *the point* rather than the disappointment. As written, the
-reader meets the negative result as the last in a series of retreats, and a tired reviewer will
-summarise the paper as "the method does not work on the thing they wanted to use it for."
-
-### 1.2 The reader is never told why they should want this number
-
-There is no motivation paragraph anywhere. §1 opens with an $r$-torus. The only stated reason to
-want the active dimension is that a scalar log is cheap — which is a reason to prefer *this
-estimator*, not a reason to want *the quantity*. Before the definition, the paper needs one
-paragraph answering: who measures this, and what do they do differently once they know it?
-Candidate answers already latent in the draft — pick two, do not list five:
-
-- detecting phase transitions in training cheaply, from logs that already exist;
-- deciding whether an apparent simplification is a real reduction in degrees of freedom or an
-  artefact of a shrinking scale (the paper's own §6.3 nuisance);
-- adjudicating "the optimiser moves in a low-dimensional subspace" claims, which are made in the
-  literature with four different quantities that the paper's §3.1 separates.
-
-### 1.6 §7.3's constructive conclusion has no supporting experiment
-
-§7.3 ends with the paper's forward-looking claim: the *level* of the estimate is uninterpretable,
-but a *change* within a run is read against a fixed configuration, so "a change that is fast,
-localised and larger than that floor carries information the level does not."
-
-No experiment in the paper demonstrates such a change in a training log. The only fall actually
-detected on a real log is the $p = 211$ run of Appendix I, which is slow, in an inadmissible
-regime, and attributed to the growing norm. So the section's positive half is a hypothesis
-presented in the grammar of a conclusion.
-
-Two ways out, and the first is much better:
-
-1. **Run it.** `active_dimension/results/e5_real_logs/real_logs_windows.csv` already holds 281
-   sliding windows of MG and $\rho_{\mathrm{ident}}$ per run and per column. Plot the windowed
-   estimate against step for the regularised runs, aligned on $t_{\mathrm{gen}}$, against the
-   controls. Whatever it shows is a result: if the estimate moves at $t_{\mathrm{gen}}$ you have
-   closed the loop from a free log to the transition; if it does not, you have the strongest
-   possible statement of the paper's thesis, because the direct measurement in the same runs *does*
-   move. Either way this is the experiment the paper is set up to run and does not.
-2. Reframe §7.3's second half explicitly as what would be required, not as what follows.
-
-### 1.8 The hedging, in aggregate, argues against the paper
-
-Individually every qualification in the draft is correct and I would not remove one of them. But
-there are, by my count, more than twenty, and several results are hedged twice in the same
-sentence ("which is a match and not a guarantee on an arbitrary manifold"). The cumulative effect
-on a reader skimming for a verdict is that nothing was established.
-
-The fix is structural, not a matter of deleting hedges: **collect them**. Give §6 or §8 an explicit
-"What this does not establish" block that carries the scope limits in one place, and let the result
-sentences be declarative. You lose no honesty and you gain the ability to state a finding without
-apologising inside the same clause.
 
 ### 1.10 The unanswered question: is the admissible regime ever realised in real training?
 
@@ -208,67 +159,11 @@ exhibited in an undriven training run, and whether it occurs is open.
 
 ## 2. Definitions, theory and formulas
 
-*Scope: §3 and the mathematical statements throughout. Owner: whoever holds the theory. Several of
-these are cheap fixes that materially raise the paper's rigour.*
-
-### 2.4 MAJOR — $\\rho_{\mathrm{ident}}$ conflates dependence on $E$ with dependence on the delay span
-
-$\rho_{\mathrm{ident}} = \hat d_{\mathrm{MG}}(2E_{\max}) / \hat d_{\mathrm{MG}}(E_{\max})$ is
-computed with $\tau$ held fixed (confirmed in `runner.py:59`, `e5_real_logs.py:68`). Doubling $E$
-at fixed $\tau$ **doubles the delay span** $(E-1)\tau$. §6.2 then demonstrates, at length, that the
-estimate is violently span-dependent: on a correct system at $r = 8$, doubling the span from
-$0.19$ to $0.38$ of a period moves the estimate from $4.29$ to $8.53$ — a ratio of 1.99.
-
-So on a system that is perfectly admissible but whose lag is mismatched, $\rho_{\mathrm{ident}}$
-would read about 2, and the diagnostic would reject it. The interpretation offered in §3.4 — the
-estimate "is a property of the embedding space rather than of the data" — is only one of two
-readings; the other is "the lag is wrong". The paper cannot currently distinguish them, and the
-grokking logs are precisely the case where the lag is known to be wrong by an order of magnitude
-(§6.2 says so).
-
-Concrete fixes, in increasing order of effort:
-
-- state the confound explicitly, and note that on the grokking logs a large
-  $\rho_{\mathrm{ident}}$ is consistent with both a missing invariant set and a mismatched lag;
-- add the **span-preserving variant**: double $E$ while halving $\tau$, so the delay window is
-  unchanged and only the embedding dimension moves. This is the clean test of the property §3.4
-  claims to measure, it is a two-line change, and running it on the five calibration arms plus the
-  seventeen logs would either confirm the existing diagnostic or replace it with a better one.
-
-### 2.5 The taxonomy: four quantities, a title that names three, and one that never works
-
-§3.1 is titled "Available, functional and active dimension" and defines four things (the fourth,
-the trajectory effective rank, arrives in the second paragraph). §1 says "we separate four
-quantities". Fix the title.
-
-More substantively: the **functional dimension** is defined with equal billing, given a formal
-definition as the rank of $\partial\vf/\partial\vc$, and then does nothing. It appears once more, in
-Appendix E, as a constant ($10$ at every rank, seed and regime). A four-way distinction in which one
-member is inert weakens the taxonomy rather than strengthening it. Either demote it to a remark
-inside the paragraph on available dimension, or give it a job — the obvious one is a system where
-functional and active dimension differ, which would be a genuinely novel control and is the natural
-companion to §6.4's separation of active dimension from effective rank.
-
-### 2.6 Smaller mathematical and notational points
-
-- §3.4: "it is what separates the transient regime, where $\rho_{\mathrm{ident}}$ is near unity for
-  the wrong reason" — separates it *from what*? The sentence has no second term.
-- The **degeneracy flag** is a numerical-conditioning check, not a dynamical-regime diagnostic, but
-  it is introduced as the third of the "admissibility diagnostics". Say what it is: a guard against
-  quantised or constant observers, which is how it is actually used (it fires on probe accuracy in
-  100 % of windows and on nothing else in the calibration data).
-- The abstract says "Two diagnostics"; §3.4 says "two statistics and one flag". Pick one.
-- Notation drift, one canonical name each please: *trajectory effective rank* / *effective rank* /
-  *participation ratio* / *trajectory participation ratio* / *measured effective rank* are used for
-  the same object; $\PR^{\mathrm{pos}}$, $\PR^{\mathrm{det}}$ and $\PR^{\mathrm{upd}}$ are defined
-  in §3.1 but the text then says "the effective rank" without saying which; *the estimate* / *MG* /
-  *the estimator* alternate; $E$ and $E_{\max}$ alternate for the same quantity.
-- The `definition` theorem environment is declared and never used. Equation (1) is the paper's
-  central definition and would gain from being a numbered Definition.
-- The $\todo$ macro is defined and unused; `nicefrac`, `subcaption` and (with `\todo` gone)
-  `xcolor` are loaded and unused.
-
----
+*Nothing open. The estimand is now defined at a resolution, the taxonomy names the three
+quantities that matter plus the bound that is only reported, the $E > 2d$ violation at twenty
+directions is stated in §5.2, the $(m-1)/(m-2)$ claim is gone, and §6.2 records the confound
+between a large identifiability ratio and a mismatched lag. See `review_fable_archive.md` for what
+these items said.*
 
 ## 3. Claims that the code and data do not support
 
@@ -281,29 +176,6 @@ from the result files. The canonical estimator is
 `code/active_dimension/mg.py::all_estimators`, importing neighbour and Theiler machinery from
 `code/grokking_analysis/edm/`. **Three rows of Table 3 were produced by a different, older
 estimator** (`code/dimension_recovery/estimators.py`) with different defaults; see 3.4.
-
-### 3.13 Smaller discrepancies
-
-- **$
-ho_{\mathrm{ident}}$ is aggregated by two different rules**: the ladder takes the ratio of
-  window-medians, the grokking pipeline takes the median of per-window ratios. The paper describes
-  one rule. They are not the same statistic.
-- **Standardisation happens in different places**: per window in the grokking pipelines (as
-  Algorithm 1 states), once over the whole series in the ladder pipelines (`runner.py:68`,
-  `e1_calibration.py:74`, `score_k20_parallel.py:39`). Immaterial on stationary arms; on the
-  non-stationary transient arm the dither and the numerical floors then sit at the wrong scale.
-- **"Six excitation regimes"** (§5.3) against "five excitation regimes" (Figure 1 caption) against
-  nine arms plus controls in Table 10, against eleven arm labels in the CSV (including a second
-  $\eta = 0$ control, `noise_eta0`, that Table 10 omits). Enumerate the six in §5.3 and have the
-  caption say "five of the nine arms of Table 10". *(The figure caption half of this is section 5.)*
-- **The twelve observers are never defined.** Table 5 names them in English ("margin", "probe
-  loss", "function-space norm", "parameter norms (two)") and no definition appears anywhere in the
-  paper. From `dynamics.py:86-95` they are `loss_step, loss_full, loss_probe, w_fro, c_norm,
-  fn_fro, g_fro, g_proj, c_proj1, fn_proj1, margin, acc_probe`, and "parameter norms (two)" merges
-  `w_fro` (norm of the full parameter vector) with `c_norm` (norm of the subspace coordinate) —
-  two quite different quantities reported as one row and one MAE. An appendix table with a formula
-  per observer is required for reproducibility, and the merge needs a justification, particularly
-  since those two are the paper's only observers with a perfect roughness–rank correlation.
 
 ### 3.14 Verified correct
 
@@ -353,56 +225,6 @@ incommensurate frequencies in a fixed octave.
 *Scope: §7 and Appendices F–K. Owner: whoever holds the application. Read §1.3 and §1.6 first —
 they are about the same section and are not repeated here.*
 
-### 4.4 The direct measurement's controls are the weak point and the paper knows it
-
-Four generalising runs against two controls, and the controls differ from the treated runs in the
-one variable (weight decay) that also drives the parameter norm, which is the observable the
-nuisance analysis of §6.3 identifies as the dangerous one. §8 says "two imperfectly matched
-controls" and stops. The reader needs to know what a *well*-matched control would be and why it was
-not run. Two candidates that would substantially strengthen the claim, in order of cost:
-
-- the same weight decay with a training fraction below the grokking threshold, so the regulariser
-  is present and generalisation is not — this separates "weight decay" from "generalisation" and it
-  is the control the argument actually needs;
-- the label-matched perceptron pairs, which *are* properly matched, and where Appendix H reports
-  that the direct measurement finds nothing. That negative is currently presented as a resolution
-  limit; after the window-length sweep it is a genuine negative, and the paper says so in Appendix
-  H but not in §7 or §8. The honest headline is: the collapse is present in the regularised
-  stochastic setting and absent in the properly controlled one. That is a weaker claim than the
-  abstract makes and it is the one the data supports.
-
-### 4.8 The label-matched pairs prove something narrower than the section implies
-
-The pairs are the paper's best-controlled comparison and the result is real (about three units of
-separation, no overlap, confirmed in the committed summaries). But the paper's own Figure 4(b)
-shows the mechanism: the two members' training losses differ by two-to-three orders of magnitude,
-so the estimator is reading a difference that is visible by eye in the standard log. §7.3 says this
-("the mechanism is visible in the standard log"), which is right and honest — but it means the
-result is *not* evidence that the estimator adds anything. Consider making that explicit as the
-conclusion of the paragraph rather than leaving the reader to infer it, and consider adding the
-obvious comparison: does any simple statistic of the loss curve (final value, slope, curvature)
-separate the pairs equally well? If yes, say so; if no, that is a much stronger result than the one
-currently claimed.
-
-### 4.9 Appendix H is a better result than its placement suggests
-
-The window-length sweep is, methodologically, one of the most useful things in the paper: it shows
-that a trajectory participation ratio computed over a badly chosen window reports the curvature of
-the trajectory rather than anything about learning, that the scale at which the statistic acquires
-range is two orders of magnitude above the published window, and that at that scale the generalising
-run and its matched control are not separated. It also establishes that introducing mini-batches
-moves the statistic by a decade while learning is unchanged.
-
-That is a warning the field needs and it is in Appendix H under the title "The full-batch setting".
-At minimum it deserves a sentence in the body's practical-guidance block (§1.7) and a mention in §8.
-
-Every one of Appendix H's twenty-eight table entries and all of its surrounding claims reproduce
-exactly from `rank_fb_long/pr_vs_window.csv` — this appendix is the most solid piece of arithmetic in
-the paper. One caveat to add: "the same statistic then ranges over more than a decade" under
-mini-batching is true of `PR_step` ($46\times$), `fn_PR_pos_det` ($17\times$) and `fn_PR_step`
-($19\times$), but only $7.3\times$ for `PR_pos_det`, which is the statistic Table 18 actually
-tabulates. Name the column or soften to "by up to a factor of forty".
-
 ### 4.12 Verified correct
 
 The damage above is concentrated in §7.1, §7.2 and Appendix I. Everything else in the application
@@ -447,45 +269,6 @@ misleading — the logs actually used live in `code/dimension_recovery/results/e
 *Scope: the four figures, their captions, the sixteen tables, and what should be added. Owner:
 whoever holds the plots. Findings are from a dedicated audit against `make_figures.py` and the
 source CSVs.*
-
-### 5.3 MAJOR — not one figure in the paper carries an uncertainty
-
-For a paper whose subject is the reliability of an estimator, this is the first thing a referee will
-write down. The data exists in every case:
-
-- Figure 1(a): forty values behind each point (four seeds × ten observers) in `sweep_raw.csv` — an
-  interquartile band is a one-line change;
-- Figure 3: the two-hash-family disagreement is recorded per window in `*_sketchsd` columns, and
-  Appendix G quotes it (1.1 % median, 8.4 % worst) — plot it as a band and the appendix's argument
-  becomes visible;
-- Figure 4(a): window-level values exist in `dimension_probe.csv`, so whiskers are available.
-
-Figure 2 is per-run and can remain point-only.
-
-### 5.4 Table hygiene
-
-- **Aggregation unstated** in the captions of Tables 10 (`tab:controls`), 12
-  (`tab:grok-diagnostics`) and 7 (`tab:alts`, which says "the same convention" without saying
-  which). Table 3's caption is the model to copy — it states the unit of analysis explicitly.
-- **Digits.** Spearman correlations are quoted to three decimals on four withheld ranks; the
-  $\rho(\text{roughness})$ column of Table 5 is a sequence of $\pm 0.200$ and $\pm 0.800$ values,
-  which is $n=4$ noise printed as precision. Two decimals at most, and consider replacing that
-  column with a two-level flag, which is all the paper claims from it.
-- **Cross-table rounding mismatches**: Table 3's $1.62$ against Table 7's $1.632$; §5.3's "median of
-  $0.47$" against Table 7's $0.457$.
-- **Redundant columns.** Table 15 (`tab:ipr`): the "generalises" column is derivable from the
-  "grokking step" column (a dash means no). Table 16 (`tab:runs`): the `arch` column takes two
-  values already given by the block headers, and `wd` is zero for the entire perceptron block, also
-  stated in its header. Table 5's `family` column is nearly redundant with the observer names.
-  Table 2 has three rows identical in both columns ($m$, Theiler rule, dither) — fold them into a
-  "common to both" note.
-- **Overfull boxes** on four tables, worst at $+18.2$ pt for Table 16.
-- **Tables that want to be figures**: the $\tau$ sweep (a divergence spanning $2.6$ to $63.4$),
-  the twenty-direction saturation curve, the anisotropy table (the paper's central conceptual
-  separation, currently twelve rows of digits), and the window-length sweep. See 5.6.
-- **Table 3's `truth` column** is a binary "constructed / measured", which contradicts requirement 1,
-  under which every system is both constructed *and* verified. Recast as "how the realisation was
-  verified". The `protocol` column's values ("ordering only", "rank split only") need a legend.
 
 ### 5.6 Figures the paper should add
 
@@ -545,80 +328,6 @@ long and abstract. Options:
 - *The Active Dimension of a Training Window, and What a Scalar Log Can Measure of It*
 
 Remove the `\\` breaks from the canonical title; they leak into metadata and other renderings.
-
-### 7.2 The abstract
-
-About 250 words in one block, and the third sentence is 47 words with two nested relative clauses
-whose attachment is ambiguous. Target 160–180 words with this skeleton:
-
-1. the quantity and why one would want it (two sentences);
-2. the instrument and its hazard (one);
-3. the validation, with **one** number (one);
-4. the diagnostics (one);
-5. grokking: the diagnostics refuse both settings, and the direct measurement shows the collapse —
-   with **one** number (two).
-
-Cut from the abstract: the weight-decay-zero norm behaviour (a fourth-order detail), "on withheld
-ranks and seeds" (say it once in the body), and either the $0.87$ or the "median factor of six",
-not both plus three more. Fix "at the onset of generalisation" per §4.3, and reconcile "random
-subspace" with the construction actually used.
-
-### 7.3 The systemic prose problems
-
-These are patterns, not instances; the examples are illustrative and the fix should be applied
-throughout.
-
-**Periodic sentences that withhold the point until the end.** §3.1: *"So stated it exists only where
-such a set does, which in two of the three regimes of §3.3 it does not, and that is why the
-diagnostics of §3.4 come before any number."* → "It exists only where a recurrent set exists. In two
-of the three regimes of §3.3, none does. That is why the diagnostics come before any number."
-
-**Design and result compressed into one sentence.** The "Recovery" paragraph of §5.3 carries twelve
-observers, five families, five estimator parameters, four selection observers, reserved seeds and
-ranks, and the out-of-sample status of six of ten — before reaching a number. Split: one sentence of
-design, one of result.
-
-**Numbers in prose.** §5.3, §6.4 and §7.1 carry roughly ten inline numbers each. Rule: one anchor
-number per claim in the prose, full precision in the table the sentence cites. Specific demotions:
-the LB/MG bias pair, the $\rho$-sweep quadruples of §6.4, and the collapse ranges of §7.1
-($2.9$–$15.6$, median $6.6$, $235$–$712$, $1.09$–$1.60$, "one to eight hundred") — the last of these
-wants a per-run appendix table with columns for depth, bottom offset and re-expansion, which would
-replace six inline ranges with one reference.
-
-**Ambiguous antecedents.** §5.2: "the two series correlating above $0.98$" — which two? Appendix C:
-"Both figures also use the delay lag that is best for that observer" — which figures?
-
-**Headings that carry no finding.** "Adding an optimiser, and then a network"; "Figures for the
-grokking application". Compare "Without weight decay the function settles and the norm does not",
-which is exactly right and should be the model.
-
-**Terminology drift.** Listed in 2.6. Add a one-line notation summary at the end of §3.1.
-
-**Requirement list formatting.** Each of the six requirements is currently an aphorism with its
-justification embedded in a subordinate clause — requirement 6 in particular ("or a construction in
-which each added direction adds a higher frequency lets the roughness alone order the rank") takes
-three readings. Use: **bold name** — one sentence of rule — one sentence of reason.
-
-### 7.4 Line-level notes
-
-- "on a scale fixed by no free parameter" → "with no tunable scale".
-- "sklearn digits" → name it properly once (the 8×8 handwritten-digit set distributed with
-  scikit-learn); a library name is not a dataset name in a caption.
-- "uncalibrated" (contribution 2) is unexplained at first use.
-- "two of them are results and not settings" appears verbatim in both §5.3 and Appendix E.
-- §6.1: "the error rises tenfold" — from what to what?
-- §6.3 says "about a third of a real four-component change" for the observer gain; the table gives
-  29 % for the gain and 33 % for the state amplitude. The text is quoting the wrong row's number
-  for the named factor.
-- §5.1: "That is the clearest evidence available that the geometry does work smoothness cannot" —
-  "does work smoothness cannot" needs a comma or a rewrite; it reads as a garden path.
-- Table 3 mixes bare and signed correlations ($0.980$ against $+1.000$).
-- §4's preamble ("Delay-embedding statistics return a finite number on data satisfying none of their
-  hypotheses") is the fourth appearance of that sentence's content.
-- The paper uses "the estimate", "the estimator" and "MG" for three different things in adjacent
-  sentences in §6.4.
-
----
 
 ## 8. Citations and related work
 
@@ -741,20 +450,20 @@ the repository. Owner: whoever prepares the release. Short section, mostly actio
 
 ## Appendix: priority list
 
-Six items remain. Everything else in the original list has been applied.
+Four items remain, and two of them need compute rather than editing.
 
-1. **Run the sliding-window estimate on the grokking logs**, or withdraw §7.3's constructive claim
-   that a fast localised change carries information. The 281 windows are already computed. *(1.6)*
-2. **Confront whether the admissible regime is ever realised in undriven training.** The conclusion
-   now names the edge-of-stability experiment as future work, which is honest but weaker than
-   running it. *(1.10)*
-3. **$\rho_{\mathrm{ident}}$ conflates dependence on $E$ with dependence on
-   the delay span**, and the span-preserving variant is a two-line change. *(2.4)*
-4. **The functional dimension is defined with equal billing and never does any work.** *(2.5)*
-5. **Table hygiene**: significant figures, redundant columns, aggregation stated in captions. *(5.4)*
-6. **The remaining prose pass**: the title, the systemic sentence patterns, and the line-level
-   notes. Sections 5 and 7 were rewritten in the new register; sections 3 and 6 were only
-   compressed, so they still carry the old cadence. *(7.1, 7.3, 7.4)*
+1. **The edge-of-stability run.** The conclusion names it as future work, which is honest but
+   weaker than doing it. It is the one experiment that could show the admissible regime is ever
+   occupied by an undriven training run, and until it is run the instrument has no demonstrated
+   domain outside constructed systems. *(1.10)*
+2. **Re-run the log estimate at a window matched to the transition.** \Cref{app:window} now
+   establishes that the published window cannot resolve a feature at $t_{\mathrm{gen}}$; the raw
+   logs exist, so this is a re-run of the estimator rather than new training. It would convert an
+   untested claim into a tested one either way.
+3. **The $E_{\max}$ and record-length sweeps**, which would separate the two explanations of the
+   ceiling that §5.2 currently leaves open.
+4. **The title.** Nineteen words and a colon; three alternatives are in the archived review. This
+   is the last purely editorial item. *(7.1)*
 
 Still worth adding if space is ever found: the anisotropy plot, the $\tau$-sweep plot, and raw
 scalar-log traces per regime *(5.6)*.
