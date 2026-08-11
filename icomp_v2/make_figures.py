@@ -17,12 +17,18 @@ Design notes, so that later edits do not undo them:
   floor, WCAG contrast against the page) with no warnings.
 * Where a point is an aggregate the spread is drawn with it: a low-alpha
   interquartile fill in the regime colour in fig_regimes(a), range and
-  interquartile bars in fig_pairs(a). Do not remove them for tidiness.
+  interquartile bars in fig_pairs(a), the two-hash-family disagreement as a
+  band on the mean of fig_dip(a) and (b), and in fig_window(b) the 39,990-step
+  window each point summarises, drawn as a horizontal bar. Do not remove them
+  for tidiness. The fig_dip band is about 1 % of the value and is therefore
+  nearly invisible: that is the finding, and the legend names it so that the
+  reader knows it was drawn rather than omitted.
 * Where points coincide, the multiplicity is made visible rather than hidden:
   fig_regimes(b) plots every raw value on a per-observer row, fig_map offsets
   the twelve runs that share (2 crossings, rho_ident = 1.00) and labels the
-  offset. Any figure edit that reintroduces a single mark for many runs must
-  also fix the caption.
+  offset, fig_window(c) gives each run its own sub-row so that the eight
+  strides of a flat run stay countable. Any figure edit that reintroduces a
+  single mark for many runs must also fix the caption.
 """
 from __future__ import annotations
 
@@ -89,7 +95,7 @@ def fig_regimes():
         ("gd", "transient", TRANSIENT, ":", "D"),
     ]
 
-    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.85),
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.72),
                                  gridspec_kw={"width_ratios": [1.15, 1.0]})
 
     ax.axhline(20, color=GREY, lw=0.8, ls=(0, (1, 2)), zorder=0)
@@ -188,18 +194,33 @@ def fig_dip():
               ("PR_pos_det", "(b) parameter space", None),
               ("move", "(c) displacement", "log")]
 
-    fig, axes = plt.subplots(1, 3, figsize=(5.5, 2.05), sharex=True)
+    fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.90), sharex=True)
     grid = np.arange(-5000, 5200, 100)
 
     for ax, (col, title, scale) in zip(axes, panels):
-        stack = []
+        stack, sdstack = [], []
+        # the two CountSketch hash families disagree by <col>_sketchsd per window;
+        # 'move' is computed on the raw parameter vector and has no such column,
+        # which is why panel (c) carries no band. Said in the caption.
+        sdcol = col + "_sketchsd" if col + "_sketchsd" in d.columns else None
         for r in groks:
             g = d[d.run == r].sort_values("right_step")
             x = 0.5 * (g.right_step + g.left_step) - meta[r]["t_gen"]
             ax.plot(x, g[col], color=RECURRENT, lw=0.7, alpha=0.30)
             stack.append(np.interp(grid, x, g[col], left=np.nan, right=np.nan))
-        ax.plot(grid, np.nanmean(np.vstack(stack), axis=0), color=RECURRENT,
-                lw=2.2, label="generalises (4 runs)", zorder=5)
+            if sdcol:
+                sdstack.append(np.interp(grid, x, g[sdcol], left=np.nan,
+                                         right=np.nan))
+        m = np.nanmean(np.vstack(stack), axis=0)
+        if sdcol:
+            # the sketch uncertainty of the plotted mean, propagated as the mean
+            # of the four per-run disagreements. It is about 1 % of the value, so
+            # it is meant to be invisible at the scale of the collapse.
+            s = np.nanmean(np.vstack(sdstack), axis=0)
+            ax.fill_between(grid, m - s, m + s, facecolor=RECURRENT, alpha=0.55,
+                            edgecolor=RECURRENT, lw=0.4, zorder=4)
+        ax.plot(grid, m, color=RECURRENT,
+                lw=1.7, label="generalises (4 runs)", zorder=5)
 
         for r, ls in zip(ctrls, ["--", (0, (1, 1.6))]):
             g = d[d.run == r].sort_values("right_step")
@@ -220,9 +241,16 @@ def fig_dip():
     axes[2].set_ylabel("displacement")
     axes[1].set_xlabel("steps since generalisation")
     h, l = axes[0].get_legend_handles_labels()
+    # the band is drawn to scale and is therefore almost invisible, which is the
+    # point; naming it in the legend costs no plot area and tells the reader it
+    # is there. Panel (c) has none because 'move' is not a sketched statistic.
+    h.append(mpl.patches.Patch(facecolor=RECURRENT, alpha=0.55, lw=0,
+                               label="hash-family spread, (a) and (b)"))
+    l.append("hash-family spread, (a) and (b)")
     fig.tight_layout(rect=[0, 0.14, 1, 1])
-    fig.legend(h, l, frameon=False, ncol=2, loc="lower center",
-               bbox_to_anchor=(0.5, 0.005), handlelength=2.2)
+    fig.legend(h, l, frameon=False, ncol=3, loc="lower center",
+               bbox_to_anchor=(0.5, 0.005), handlelength=2.2,
+               columnspacing=1.2, handletextpad=0.5)
     save(fig, "fig_dip")
 
 
@@ -368,8 +396,162 @@ def fig_pairs():
     save(fig, "fig_pairs")
 
 
+# ------------------------------------------------------------------ figure 5
+def fig_window():
+    """The windowed log estimate against t_gen: the change test of section 7.1.
+
+    Colour is the regime as everywhere else. None of these seven runs is
+    recurrent, so RECURRENT never appears here: the five regularised runs are
+    stochastic and the two weight-decay-zero runs transient, exactly as
+    fig_map() classifies them. Generalisation is carried by line style and
+    marker, never by hue.
+    """
+    d = pd.read_csv(CODE / "active_dimension/results/e5_real_logs/real_logs_windows.csv")
+    d = d[d.column == "weight_norm"].copy()
+    out = pd.read_csv(CODE / "dimension_recovery/results/exp8_outcomes.csv")
+    tgen = out.set_index("run").t_gen.to_dict()
+
+    # The frozen configuration of section 7.1: window a third of the 12,000-sample
+    # record, stride 1,000 samples, logging stride 10 optimiser steps. So a window
+    # spans 39,990 steps and the centres are 10,000 steps apart: nine per run, and
+    # a feature is located only to within half a span.
+    SPAN = 39990.0
+    HALF = SPAN / 2
+    FLOOR = 1.16  # the ramped-gain nuisance bound of section 6.3
+    d["centre"] = d.right_step - HALF
+
+    # (regime colour, generalises, linestyle, marker)
+    runs = [
+        ("grokpos_s0",   STOCHASTIC, True,  "-",            "o"),
+        ("lowdata20_s0", STOCHASTIC, True,  "-",            "^"),
+        ("lowdata15_s0", STOCHASTIC, True,  "-",            "s"),
+        ("lowdata15_s1", STOCHASTIC, False, "--",           "v"),
+        ("lowdata15_s2", STOCHASTIC, False, "--",           "D"),
+        ("wd0_s0",       TRANSIENT,  False, (0, (1, 1.6)),  "o"),
+        ("wd0_s1",       TRANSIENT,  False, (0, (1, 1.6)),  "s"),
+    ]
+
+    fig, (ax, bx, cx) = plt.subplots(1, 3, figsize=(5.5, 2.2),
+                                     gridspec_kw={"width_ratios": [1.0, 1.06, 0.82]})
+
+    # ---- (a) the raw windowed estimate over training, every run --------------
+    for r, c, gen, ls, mk in runs:
+        g = d[d.run == r].sort_values("centre")
+        ax.plot(g.centre / 1000, g.MG, linestyle=ls, color=c, marker=mk,
+                ms=2.4, mec="white", mew=0.35, lw=1.0, alpha=0.95, zorder=3)
+    # the three generalisation steps, marked on the axis rather than by hue
+    for r, c, gen, ls, mk in runs:
+        if gen:
+            ax.plot([tgen[r] / 1000], [2.05], marker="^", color=GREY, ms=3.4,
+                    mew=0, zorder=5, clip_on=False)
+    # a window is an aggregate over 39,990 steps: draw that span once, to scale
+    ax.plot([4, 4 + SPAN / 1000], [37.0, 37.0], "-", color=GREY, lw=2.0,
+            solid_capstyle="butt", zorder=4)
+    ax.text(4 + SPAN / 2000, 39.0, "one window", color=GREY, fontsize=5.8,
+            ha="center", va="bottom")
+    ax.text(8.0, 2.05, r"$t_{\mathrm{gen}}$", color=GREY, fontsize=6.2,
+            ha="left", va="center")
+    ax.set_yscale("log")
+    ax.set_xlim(-2, 122)
+    ax.set_ylim(1.9, 46)
+    ax.set_yticks([2, 4, 8, 16, 32])
+    ax.set_yticklabels(["2", "4", "8", "16", "32"])
+    ax.set_xticks([0, 60, 120])
+    ax.set_xticklabels(["0", "60k", "120k"])
+    ax.set_xlabel("window centre (steps)")
+    ax.set_ylabel("estimate on the norm")
+    ax.set_title("(a) the whole record", loc="left", pad=4)
+
+    # ---- (b) aligned on t_gen, in components, against the nuisance floor -----
+    bx.axvspan(-5, 5, color=STOCHASTIC, alpha=0.11, lw=0, zorder=0)
+    bx.axhspan(-FLOOR, FLOOR, color=GREY, alpha=0.15, lw=0, zorder=0)
+    bx.axvline(0, color=GREY, lw=0.9, ls=(0, (2, 2)), zorder=1)
+    for r, c, gen, ls, mk in runs:
+        if not gen:
+            continue
+        g = d[d.run == r].sort_values("centre")
+        off = (g.centre - tgen[r]).values
+        ref = g.MG.values[np.abs(off).argmin()]
+        y = g.MG.values - ref
+        # every marker carries the span of the window it summarises, so that the
+        # reader can see that consecutive windows overlap by three quarters and
+        # that the record localises nothing to better than +-20,000 steps
+        for xi, yi in zip(off, y):
+            bx.plot([(xi - HALF) / 1000, (xi + HALF) / 1000], [yi, yi], "-",
+                    color=c, lw=0.7, alpha=0.30, zorder=2)
+        bx.plot(off / 1000, y, linestyle=ls, color=c, marker=mk, ms=3.0,
+                mec="white", mew=0.4, lw=1.0, zorder=3)
+    bx.set_xlim(-108, 108)
+    bx.set_ylim(-11.6, 3.4)
+    bx.set_xticks([-100, -50, 0, 50, 100])
+    bx.set_xticklabels(["-100k", "", "$t_{gen}$", "", "100k"])
+    bx.set_yticks([-10, -5, 0])
+    bx.set_xlabel("steps since generalisation")
+    bx.set_ylabel("change (components)")
+    bx.set_title("(b) aligned on $t_{\\mathrm{gen}}$", loc="left", pad=4)
+    bx.text(-105, 2.5, "$\\pm 1.16$: the nuisance floor", color=GREY,
+            fontsize=5.8, ha="left", va="center")
+    # the rest of the reading -- what the bars are, and that the shaded column
+    # holds one of the twenty-seven centres -- is in the caption: written into
+    # the panel it collides with the two runs that descend through it.
+    bx.text(0, -11.2, "$\\pm 5$k: 1 of 27 centres", color=STOCHASTIC,
+            fontsize=5.6, ha="center", va="center")
+
+    # ---- (c) every stride-to-stride change, by outcome -----------------------
+    cx.axvline(FLOOR, color=GREY, lw=0.9, ls=(0, (2, 2)), zorder=1)
+    ROWS = {True: 1.0, False: 0.0}
+    seen = {True: 0, False: 0}
+    nrun = {True: 3, False: 4}
+    for r, c, gen, ls, mk in runs:
+        g = d[d.run == r].sort_values("centre")
+        v = np.abs(np.diff(g.MG.values))
+        # one sub-row per run, so that the eight near-coincident points of a flat
+        # run stay countable instead of piling into a single smear
+        k = seen[gen]
+        seen[gen] += 1
+        dy = 0.34 * (2 * k / (nrun[gen] - 1) - 1)
+        cx.plot(v, np.full_like(v, ROWS[gen] + dy), marker=mk, color=c, ms=2.8,
+                mec="white", mew=0.35, ls="none", zorder=3, clip_on=False)
+    cx.set_yticks([1.0, 0.0])
+    cx.set_yticklabels(["generalises", "does not"])
+    cx.set_ylim(-1.30, 1.60)
+    cx.set_xlim(-0.2, 7.0)
+    cx.set_xticks([0, 2, 4, 6])
+    cx.set_xlabel("$|\\Delta|$ per stride")
+    cx.set_title("(c) specificity", loc="left", pad=4)
+    cx.spines["left"].set_visible(False)
+    cx.tick_params(axis="y", length=0)
+    cx.text(1.35, 1.58, "floor", color=GREY, fontsize=5.8, ha="left", va="top")
+    # the 6.36 is grokpos_s0, whose sub-row is the lowest of the three
+    cx.annotate("$t_{\\mathrm{gen}}\\!+\\!95$k", xy=(6.36, 0.66),
+                xytext=(6.95, 1.30), fontsize=5.4, color=STOCHASTIC,
+                ha="right", va="center",
+                arrowprops=dict(arrowstyle="->", color=STOCHASTIC, lw=0.7,
+                                shrinkA=1, shrinkB=2))
+    cx.annotate("largest of all, in a run\nthat never generalises",
+                xy=(5.20, 0.34), xytext=(-0.15, -0.86), fontsize=5.4,
+                color=TRANSIENT, va="center", ha="left", linespacing=1.4,
+                arrowprops=dict(arrowstyle="->", color=TRANSIENT, lw=0.8,
+                                shrinkA=3, shrinkB=2))
+
+    handles = [
+        Line2D([], [], color=STOCHASTIC, ls="-", marker="o", ms=3.0,
+               mec="white", mew=0.4, label="stochastic, generalises (3)"),
+        Line2D([], [], color=STOCHASTIC, ls="--", marker="v", ms=3.0,
+               mec="white", mew=0.4, label="stochastic, does not (2)"),
+        Line2D([], [], color=TRANSIENT, ls=(0, (1, 1.6)), marker="s", ms=3.0,
+               mec="white", mew=0.4, label="transient, does not (2)"),
+    ]
+    fig.tight_layout(rect=[0, 0.15, 1, 1], w_pad=0.9)
+    fig.legend(handles=handles, frameon=False, ncol=3, loc="lower center",
+               bbox_to_anchor=(0.5, 0.005), handlelength=2.2,
+               columnspacing=1.1, handletextpad=0.4)
+    save(fig, "fig_window")
+
+
 if __name__ == "__main__":
     fig_regimes()
     fig_dip()
     fig_map()
     fig_pairs()
+    fig_window()
