@@ -1,8 +1,21 @@
 """The two architectures the paper's logs were produced with.
 
-``omnigrok``  -- the 1-layer transformer of Liu et al. (2022), written out
+``omnigrok``  -- the 1-layer transformer of **Nanda et al. (2023)**, written out
                  parameter-by-parameter (no ``nn.Linear``, no LayerNorm).  Used
                  for every mini-batch experiment (Figs. 1-3).
+
+                 The key and the class name are historical and misleading: this
+                 configuration (d_model 128, 4 heads of 32, d_mlp 512, p = 113,
+                 AdamW at 1e-3, betas 0.9/0.98, weight decay 1) is Nanda et
+                 al.'s, which Liu et al. (2022) adopt rather than originate.
+                 They are left in place because the registry key and the
+                 parameter-construction order below are load-bearing for
+                 bit-identical reproduction of the published logs; the
+                 attribution in the paper is to Nanda et al.
+
+                 Note also that we train on mini-batches of 256 where the
+                 source is full-batch.  That departure is deliberate and is
+                 what places these runs in the paper's stochastic regime.
 ``encoder``   -- a stock ``nn.TransformerEncoder`` stack, used only for the
                  full-batch baseline of App. B.
 

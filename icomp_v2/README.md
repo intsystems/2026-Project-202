@@ -14,8 +14,8 @@ python make_figures.py    # regenerates figures/ from the committed result files
 pdflatex report && bibtex report && pdflatex report && pdflatex report
 ```
 
-`report.pdf` is committed, so neither step is required to read it. The build is clean and no
-red bracketed items remain in the PDF; the open items below are editorial.
+`report.pdf` is committed, so neither step is required to read it. The build is clean: no
+undefined references, no citation warnings, no overfull boxes.
 
 The submission is **anonymous**: neither `\icompfinalcopy` nor `\icomparxivcopy` is set, so
 the style file prints ``Anonymous authors / Paper under double-blind review'' and the running
@@ -23,207 +23,123 @@ head reads ``Under review''. Uncomment `\icomparxivcopy` for a named preprint bu
 `\icompfinalcopy` for camera-ready.
 
 **Page budget.** ICOMP allows nine pages excluding references. The body ends on page 9 and the
-references begin on page 10, so the limit is met, but **with no slack at all**: section 8 fills
-the last lines of page 9. Any addition to the body needs a matching cut, and the appendices,
-which follow the references, are where new material should go. The body is about 5300 words
-excluding floats. What was moved out to reach nine pages, and can be moved back if the limit
-ever rises: the regime map (appendix F), the k = 20 table (appendix B), the change-detection
-protocol (appendix D), and the label-matched-pair figure (appendix F). Limitations and
-conclusion are one section. There is no keywords line: the style file defines no such field and
-it cost three lines on page 1.
+references begin on page 10, with about one line of slack. Anything added to the body needs a
+matching cut. The appendices follow the references and are unconstrained, so new material goes
+there. There is no keywords line: the style file defines no such field.
 
 Figures are generated at the exact text width of the style file (5.5 in) with 8 pt type, so
-LaTeX does not rescale them. Do not include a figure wider than that. `fig_dip` moved to appendix F in the
-August revision and was enlarged to 2.05 in there, because the review found it unreadable at
-the height the body budget allowed.
+LaTeX does not rescale them. Do not include a figure wider than that, and read the design rules
+in the `make_figures.py` docstring before changing one — several of them exist because a review
+found the figure misrepresenting its own data.
 
 ## The argument in one paragraph
 
-The number of independent components of the set an optimiser recurrently visits over a window
-is a well-defined quantity, distinct from the number of directions it may move in, from the rank
-of the map to the model's outputs, and from the effective rank of its trajectory covariance. It can be estimated from one scalar log by delay
-reconstruction followed by the pooled Levina-Bickel estimator. We evaluate that estimate on six
-systems of increasing realism whose active dimension is fixed by construction and then verified
-by measurement, establishing that recovery is accurate to under one component up to about eight
-active directions and ordinal up to twenty. Two diagnostics, computable from the series without
-a ground truth, flag the two regimes in which the value cannot be read as a count. Applied to
-delayed generalisation, the instrument places the two standard experimental settings in
-different dynamical regimes and separates generalising from non-generalising runs in four
-label-matched pairs; measured directly from the trajectory covariance, the effective rank
-collapses to essentially one near generalisation in four regularised runs and not in their two
-controls. What the estimator counts is resolvable components of the recurrent set, not the
-covariance participation ratio; the two coincide only because the constructions equalise the
-drive amplitudes.
+The number of independent components of the set an optimiser recurrently visits over a window is
+a well-defined quantity, distinct from the number of directions it may move in, from the rank of
+the map to the model's outputs, and from the effective rank of its trajectory covariance. It is
+defined at a resolution, because over a finite window the orbit closure is a curve for every rank
+and a neighbour statistic sees the visited set at the scale of its own neighbourhoods. It can be
+estimated from one scalar log by delay reconstruction followed by the pooled Levina-Bickel
+estimator. We evaluate that estimate on six systems whose component count is fixed by
+construction and then verified by measurement: recovery reaches a mean absolute error of 0.87
+components up to eight active directions, and the ceiling above which it fails is consistent with
+the embedding condition E > 2d. Two diagnostics, computable from the series without a ground
+truth, flag the two regimes in which the value cannot be read as a count. Applied to delayed
+generalisation they place both standard experimental settings outside that regime. Measured
+directly from the stored trajectory instead, the effective rank collapses by a median factor of
+seven near generalisation in four regularised runs and re-expands; the controls fall too, so what
+marks the transition is the timing and shape of the fall rather than its depth.
 
 ## Where the numbers come from
 
 | section | source |
 | --- | --- |
 | 5.1 oscillating diagonal matrix | `../code/dimension_recovery/` exp1--exp3, exp9, exp10 |
-| 5.2 online linear and logistic regression | `../code/dimension_recovery/` exp11, exp12 |
-| 5.3 decoder and constrained perceptron | `../code/dimension_recovery/` exp13, exp14, and the audit in `../code/active_dimension/README.md` |
+| 5.2 the ceiling | `../code/dimension_recovery/` exp11, exp12; `../code/active_dimension/results/k20_calibration/` |
+| 5.3 the silence control | `../code/dimension_recovery/` exp13, exp14; `../code/active_dimension/` E2 (`qp_eta0`) |
 | 5.4 image data, parameter subspace | `../code/active_dimension/` E1, E2, and `results/k20_calibration/` |
 | 5.4 image data, function subspace | `../code/dimension_recovery/results/exp15_real_digits_functional_subspace_v3/` |
-| appendix D, detection of a change | `../code/active_dimension/` E3 |
 | 6.1 dynamical regime | `../code/active_dimension/` E0, E2 |
 | 6.2 delay lag | `../code/active_dimension/` E6 |
 | 6.3 nuisance factors | `../code/active_dimension/` E4 |
+| 6.4 effective rank or mode count | `../code/active_dimension/e8_anisotropy.py`, `results/e8_anisotropy/` |
 | 7.1 regime classification | `../code/active_dimension/` E5; `../code/gromov_arithmetic/dimension_probe.py` |
 | 7.2 label-matched pairs | `../code/gromov_polynomials/report.md`, `../code/gromov_arithmetic/report.md` |
-| 7.3 direct measurement | `../code/active_rank/report.md` |
-| appendix H, full-batch setting and window-length sweep | `../code/gromov_arithmetic/report.md`, `../code/gromov_arithmetic/results/rank_fb_long/pr_vs_window.csv` |
-| appendix J, representation dimension | `../code/gromov_arithmetic/report.md`, `../code/gromov_polynomials/report.md` |
-| 6.4 effective rank or mode count | `../code/active_dimension/e8_anisotropy.py`, `results/e8_anisotropy/` |
-| appendix L, the Theiler exclusion | `../code/active_dimension/e7b_theiler_quick.py`, `results/e7_theiler/` |
-
-## Open items
-
-1. None outstanding. The draft has no TODO markers, builds without errors or undefined
-   references, and meets the page limit.
+| 7.3 direct measurement | `../code/active_rank/report.md`; `dip.py` regenerates `results_fine/rank_dip.csv` |
+| appendix E, detection of a change | `../code/active_dimension/` E3 |
+| appendix H, the collapse run by run | `../code/active_rank/results_fine/rank_dip*.csv` |
+| appendix J, full-batch and window length | `../code/gromov_arithmetic/results/rank_fb_long/pr_vs_window.csv` |
+| appendix L, representation dimension | `../code/gromov_arithmetic/report.md`, `../code/gromov_polynomials/report.md` |
+| appendix M, the Theiler exclusion | `../code/active_dimension/e7b_theiler_quick.py`, `results/e7_theiler/` |
 
 ## Appendices
 
-| # | contents | status |
-| --- | --- | --- |
-| A | the estimator, as an algorithm | complete |
-| B | the two frozen configurations and the grids they came from | complete |
-| C | per-observer results, and MG against every alternative statistic | complete |
-| D | delay lag, nuisance factors, and the change-detection rule | complete |
-| E | how the excitation is built, and the effective rank it achieves | complete |
-| F | the label-matched pairs, with the training loss that explains them | complete |
-| G | the trajectory sketch and the three checks behind it | complete |
-| H | the full-batch measurement, its resolution limit, and the window-length sweep that removes it | complete |
-| I | what falls, and when: the non-specific fall and the censored budgets | complete |
-| J | the representation dimension in closed form, per task | complete |
-| K | inventory of every training run the paper uses | complete |
-| L | the Theiler exclusion of the twenty-direction configuration | complete |
+| # | contents |
+| --- | --- |
+| A | the estimator, as an algorithm |
+| B | the twelve observers, defined |
+| C | the two frozen configurations and the grids they came from |
+| D | per-observer results, and MG against every alternative statistic |
+| E | delay lag, nuisance factors, and the change-detection rule |
+| F | how the excitation is built, and the effective rank it achieves |
+| G | diagnostics and figures for the grokking application |
+| H | the collapse, run by run |
+| I | the trajectory sketch and the checks behind it |
+| J | the full-batch measurement and the window-length sweep |
+| K | what falls, and when |
+| L | the representation dimension in closed form, per task |
+| M | the Theiler exclusion of the twenty-direction configuration |
+| N | inventory of every training run the paper uses |
 
 ## Figures
 
-Regenerate with `python make_figures.py`. Four figures, all drawn at exactly 5.5 in, the text
-width of the style file, at 8 pt so that LaTeX never rescales them.
+Regenerate with `python make_figures.py`. All are drawn at exactly 5.5 in, the text width of the
+style file, at 8 pt so that LaTeX never rescales them.
 
 | figure | what it shows | where |
 | --- | --- | --- |
-| `fig_regimes` | recovery and admissibility on the image-data system of section 5.4 | section 6 |
-| `fig_dip` | the collapse of the trajectory effective rank at generalisation | appendix F |
-| `fig_map` | every training log in the plane of the two diagnostics, for section 7.1 | appendix F |
-| `fig_pairs` | the label-matched pairs and the loss curves behind them, for section 7.2 | appendix F |
+| `fig_regimes` | recovery and admissibility on the image-data system | section 6 |
+| `fig_dip` | the collapse of the trajectory effective rank at generalisation | section 7.3 |
+| `fig_map` | every training log in the plane of the two diagnostics | appendix G |
+| `fig_pairs` | the label-matched pairs and the loss curves behind them | appendix G |
 
 Colour encodes the three dynamical regimes of table 1 and nothing else: recurrent, stochastic,
-transient. Line style separates variants inside a regime and marker shape separates
-experimental settings, so identity never rests on colour alone. The palette is
-`#0072B2 / #D55E00 / #5D3A9B`; it passes the OKLCH lightness band, the chroma floor, the
-Machado severity-1.0 protan and deutan separation on all pairs, the normal-vision floor and
-the WCAG contrast check against the page, with no warnings. Re-run those checks before
-changing any colour.
+transient. Line style separates variants inside a regime and marker shape separates experimental
+settings, so identity never rests on colour alone. The palette is `#0072B2 / #D55E00 / #5D3A9B`;
+it passes the OKLCH lightness band, the chroma floor, the Machado severity-1.0 protan and deutan
+separation on all pairs, the normal-vision floor and the WCAG contrast check against the page.
+Re-run those checks before changing any colour.
 
-Do not set `savefig(bbox_inches="tight")` here. A legend wider than the axes then expands the
-canvas past 5.5 in, LaTeX scales the figure down to fit, and the type shrinks with it; the
-figures reserve space for the legend with `tight_layout(rect=...)` instead.
+Two further rules were added after a review found figures misdescribing their own data. Where a
+plotted point is an aggregate, its spread is drawn with it. Where points coincide, the
+multiplicity is made visible rather than hidden — `fig_regimes(b)` plots every raw value because
+it rests on 54 of 2240 rows, and `fig_map` offsets and labels the twelve runs that share a single
+coordinate. Any edit that reintroduces one mark for many runs must also fix the caption.
 
-## Corrections carried into this draft
+Do not set `savefig(bbox_inches="tight")`. A legend wider than the axes then expands the canvas
+past 5.5 in, LaTeX scales the figure down to fit, and the type shrinks with it; the figures
+reserve space for the legend with `tight_layout(rect=...)` instead.
 
-Two defects found while assembling the draft, both fixed here and both needing a fix in the
-source repository.
+## Review status
+
+The full external review is in [`review_fable_archive.md`](review_fable_archive.md). The live
+copy, [`review_fable.md`](review_fable.md), has resolved items deleted from it and a changelog at
+the top recording what each installment changed. What remains open is listed in its priority
+list; the two substantive items are an experiment that has not been run (a sliding-window
+estimate on the grokking logs, whose input data is already computed) and one that needs training
+compute (full-batch descent above the stability threshold, to find whether an undriven run is
+ever admissible).
+
+Two defects in upstream result files were found while assembling the draft and are fixed here but
+still need fixing at source:
 
 * `../code/active_dimension/results/k20_calibration/invariance_controls.csv` reports the
   constant-rescaling control moving the estimate by 1.68 to 4.96 components. It cannot: the
-  scorer standardises the series and the control applies a constant gain to the fluctuation,
-  so the two cancel exactly. Recomputed from `scores_frozen.csv`, the control moves the
-  estimate by 0.000 on all eight observers, and the rotation control by 0.000 on seven of
-  eight, the exception being the fixed random projection, which is not rotation invariant.
-  The published deltas are the difference between seed 0 and the median over seeds, that is
-  seed scatter. The article quotes the corrected values and quotes the seed scatter
-  separately, in table 2, where it belongs.
-* The k = 1..20 calibration on real data has never been written up. Its result files are in
-  the repository but neither `report.md` nor `README.md` in `active_dimension/` mentions it.
-  Table 2 of this article is computed from `scores_frozen.csv`.
-
-## What the August review changed
-
-An external audit of the 22-page draft raised twelve critical points. The ones that were
-correct and what was done:
-
-| point | status |
-| --- | --- |
-| PR of the covariance is an effective rank, not a count of directions | correct; section 3.1 now says so, and section 6.4 measures the difference with a new anisotropy experiment (`../code/active_dimension/e8_anisotropy.py`) |
-| the ground truth (covariance PR) and the estimator's target (manifold dimension) are different quantities | correct; they agree only because the constructions equalise the drive amplitudes, which is now stated, and the new experiment shows the estimator follows the mode count |
-| positions, increments and detrended positions were all called `d_act` | correct; now `d_pos`, `d_upd`, `d_det`, with the primary endpoint named per section |
-| "a transient has active dimension 1" conflates manifold dimension with PR | correct; the measured range 1.02-1.09 is quoted instead |
-| table 1 was too categorical | correct; the last column now says what the estimator returns in our constructions |
-| "recurrence count" does not measure recurrence | correct; renamed the trend-crossing count, with its exact definition (least-squares line over the window) |
-| tau is claimed to be estimated from the autocorrelation time on grokking logs | correct and it was false: tau = 4 is transplanted from calibration while the logs' autocorrelation time is 161-858. Section 6.2 now says so, which strengthens the paper's own conclusion |
-| the k = 20 result uses a Theiler window smaller than its embedding span | correct: 150 against a span of 624. The result is now marked exploratory and appendix K measures the cost |
-| "active dimension identically one" at zero learning rate | correct, and worse than stated: the parameters do not move at all, so the 1.0 is a floating-point artefact of centring a constant trajectory. The control is now stated without it |
-| the fall in the p=211 wd=0 run is used as evidence of trajectory simplification | correct, and this was the paper's most serious logical error. That series is inadmissible by the paper's own diagnostics; abstract, section 7.4 and section 8 now separate the two claims |
-| the direct measurement has undocumented confounds | correct: alignment, window centring, detrending and the position/update distinction are now all stated |
-| "five systems" when there are six | correct |
-| S5 weight decay is 1.0 in the text and 0.2 in the table | correct: it is 0.2, and those runs also step the optimiser twice per batch |
-| "never generalises" for censored runs | correct; the run table now carries final validation accuracy |
-| Algorithm 1 does not match the code | correct: the dither, the 1 per cent degeneracy tolerance and the (N(m-1)-1)/S form are now in it |
-| CountSketch guarantee attributed to Charikar et al. | correct: that is the frequent-items paper, the bound is a pairwise one and does not transfer to a spectrum. The appendix now claims no spectral guarantee and reports the two-sketch disagreement instead (1.1 per cent median, 8.4 per cent worst) |
-| the sketch validation looks biased at rank 5 and 10 | the deficit is the estimator's, not the sketch's; the uncompressed column that shows this was in the log and missing from the paper, and is now table 8 |
-| appendix H concludes "the same place" from one pair | correct: the two maxima are adjacent points of a 3450-step grid and cannot be separated. The claim is now the negative one only |
-| appendix I mixes three different numbers | correct: mode count (49), order parameter (1.000) and weight-matrix effective rank (148.8) are now defined separately, with the note that random initialisation already reads 139.1 |
-| "MG > E_max is a ceiling" | correct: no clamping is applied, so it is not a bound. Figure 1 relabelled |
-
-Points not adopted, with reasons, are in the response to the review.
-
-## The definition, corrected
-
-A later note pointed out that the draft was defining its target as the participation ratio of
-the trajectory covariance, when that is not the quantity a delay reconstruction estimates. The
-paper now separates them.
-
-* **Active dimension**, `d_act(W) = dim M_W`, where `M_W` is the set of states the trajectory
-  recurrently visits in the window: the local part of the invariant set, or the orbit closure.
-  Under `r` independent quasiperiodic phases the closure is an `r`-torus and `d_act = r`. It is
-  not the dimension of the time-parameterised curve, which is 1 for every `r`. **This is the
-  estimand**, and the only quantity the embedding theorems speak about.
-* **Trajectory effective rank**, `PR^pos`, `PR^upd`, `PR^det`: the covariance participation
-  ratio, formerly written `d^pos` and so on. It equals `r` only when the `r` directions carry
-  comparable variance. It has two jobs: verifying that a construction excites the directions it
-  claims to, and being the quantity measured directly in section 7.3.
-* **Scalar delay estimate**, MG: readable as a component count only in the admissible
-  deterministic recurrent regime.
-
-Consequences worth knowing, because they change what several results claim:
-
-* `d_act` is **undefined** for a decaying transient and for a stochastically driven trajectory,
-  since neither has a set the orbit returns to. Table 1 says so, and it is a sharper statement
-  of the paper's own thesis than "the estimate is wrong there".
-* Requirement 1 was "the ground truth is measured, not assumed". The count is in fact
-  *constructed*; what is measured is that the construction realises it, all `r` directions being
-  comparably excited. The numbers do not move, because the two agree to within 0.008 in these
-  systems, but the claim is now the one the design supports.
-* Section 7.3 measures an **effective rank**, not `d_act`, and the transformer runs have no
-  recurrent set at all. "The trajectory passes through a one-dimensional bottleneck" became "the
-  effective rank collapses to essentially one", which is what the data show.
-* Section 6.4's anisotropy experiment now reads as confirmation that the estimator tracks
-  `d_act` rather than the effective rank, which is a cleaner statement than the one it replaced.
-
-## Section 7, rewritten
-
-The grokking section read as a sequence of things the method cannot do. It now leads with what
-was measured, in this order:
-
-1. **The trajectory simplifies at generalisation** (7.1). The function-space effective rank falls
-   by a factor of 2.9 to 15.6, median 6.6, reaching bottom 235-712 steps after the generalisation
-   step, then re-expands; parameter space follows one to eight hundred steps later. This is
-   compared against Nanda et al.'s cleanup phase and Varma et al.'s efficiency argument, and
-   qualified by appendix J, where the Fourier order parameter is still rising 87 000 steps later.
-2. **Without weight decay the function settles and the norm does not** (7.2, new). The two
-   controls fall from 28.6 to about 6 and from 19.3 to 8.1 and stay there, while their parameter
-   norm saturates at 1.4x or grows to 2.4x, where every generalising run peaks and then falls by
-   more than half. A low rank alone therefore separates nothing; what marks the transition is
-   that the fall is sharp and reverses.
-3. **What a scalar log adds, and on what scale** (7.3). The regime classification, and then the
-   argument the section rests on: the level is uninterpretable, but within a run the observer,
-   the configuration and the series are fixed, so a *change* is read against a fixed nuisance,
-   which section 6.3 measures at about a third of a four-component change. Fast localised changes
-   above that floor are informative; slow drifts are not, being what a growing norm produces.
-
-The numbers in 7.2 were measured for this revision from `results_fine/rank_windows.csv`; the
-dip depths in 7.1 replace the earlier "factor of five to twelve", which was read off the plotted
-mean rather than computed per run.
+  scorer standardises the series and the control applies a constant gain to the fluctuation, so
+  the two cancel exactly. Recomputed from `scores_frozen.csv`, the control moves the estimate by
+  0.000 on all eight observers, and the rotation control by 0.000 on seven of eight, the
+  exception being the fixed random projection, which is not rotation invariant. The published
+  deltas are seed scatter.
+* The k = 1..20 calibration on real data is written up nowhere in `active_dimension/`, though its
+  result files are committed. Appendix C and table 6 of this article are computed from
+  `scores_frozen.csv`.
