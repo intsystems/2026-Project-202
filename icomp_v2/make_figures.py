@@ -8,17 +8,37 @@ Design notes, so that later edits do not undo them:
 
 * Every figure is drawn at 5.5 in, the exact \\textwidth of the ICOMP style, with
   8 pt type, so LaTeX never rescales it and the type stays at 8 pt on the page.
+  Figures in the appendices may be up to 5.5 in wide and about 2.2 in tall.
 * Colour encodes the paper's three dynamical regimes and nothing else:
   recurrent, stochastic, transient. Line style distinguishes variants inside a
   regime and marker shape distinguishes experimental settings, so identity is
-  never carried by colour alone.
-* The palette passes the categorical checks (OKLCH lightness band, chroma floor,
-  Machado severity-1.0 protan and deutan separation on all pairs, normal-vision
-  floor, WCAG contrast against the page) with no warnings.
+  never carried by colour alone. When every run in a figure belongs to one
+  regime, that figure is monochrome by construction: fig_pairs and fig_prwindow
+  are all-transient, fig_aniso, fig_tau and fig_observers all-recurrent. Do not
+  reintroduce a second hue there to separate two groups; use fill and dash.
+* The palette is Paul Tol's high-contrast qualitative scheme:
+
+      recurrent   #004488   deep blue
+      stochastic  #BB5566   brick rose
+      transient   #997700   dark gold
+      neutral     #666666   grey, for reference lines and pointers
+
+  Measured: worst-pair separation 45.3 dE under simulated protanopia and
+  50.7 dE under simulated deuteranopia, minimum WCAG contrast 4.21 against
+  white. This replaces an earlier Okabe-Ito-style blue/orange/purple set whose
+  worst pair separated by only 8.8 dE under deuteranopia.
+* Inside the axes: axis labels, tick labels, a legend, and at most one very
+  short pointer per panel where a mark would otherwise be unreadable. Every
+  explanatory sentence lives in the LaTeX caption. If a panel needs a sentence
+  to be understood, move the sentence, not the ink.
+* The style is deliberately light: 0.5 pt spines, short 0.5 pt ticks, no black,
+  markers at 2.5-4 pt, no gridlines except the row guides of fig_observers,
+  which is a dot plot and needs them.
 * Where a point is an aggregate the spread is drawn with it: a low-alpha
   interquartile fill in the regime colour in fig_regimes(a), range and
   interquartile bars in fig_pairs(a), the two-hash-family disagreement as a
-  band on the mean of fig_dip(a) and (b), and in fig_window(b) the 39,990-step
+  band on the mean of fig_dip(a) and (b), the seed spread as a bar in
+  fig_aniso, fig_tau and fig_observers, and in fig_window(b) the 39,990-step
   window each point summarises, drawn as a horizontal bar. Do not remove them
   for tidiness. The fig_dip band is about 1 % of the value and is therefore
   nearly invisible: that is the finding, and the legend names it so that the
@@ -26,7 +46,7 @@ Design notes, so that later edits do not undo them:
 * Where points coincide, the multiplicity is made visible rather than hidden:
   fig_regimes(b) plots every raw value on a per-observer row, fig_map offsets
   the twelve runs that share (2 crossings, rho_ident = 1.00) and labels the
-  offset, fig_window(c) gives each run its own sub-row so that the eight
+  multiplicity, fig_window(c) gives each run its own sub-row so that the eight
   strides of a flat run stay countable. Any figure edit that reintroduces a
   single mark for many runs must also fix the caption.
 """
@@ -46,12 +66,15 @@ CODE = HERE.parent / "code"
 OUT = HERE / "figures"
 OUT.mkdir(exist_ok=True)
 
-# Validated categorical palette, in fixed order: one hue per dynamical regime.
-RECURRENT = "#0072B2"
-STOCHASTIC = "#D55E00"
-TRANSIENT = "#5D3A9B"
+# Paul Tol high-contrast qualitative, in fixed order: one hue per regime.
+RECURRENT = "#004488"
+STOCHASTIC = "#BB5566"
+TRANSIENT = "#997700"
 GREY = "#666666"
-BAND = "#0072B2"
+FAINT = "#BBBBBB"
+BAND = "#004488"
+
+INK = "#333333"
 
 mpl.rcParams.update({
     "font.size": 8,
@@ -62,19 +85,45 @@ mpl.rcParams.update({
     "legend.fontsize": 7,
     "axes.spines.top": False,
     "axes.spines.right": False,
-    "axes.edgecolor": "#999999",
-    "axes.labelcolor": "#222222",
-    "text.color": "#222222",
-    "xtick.color": "#666666",
-    "ytick.color": "#666666",
-    "lines.linewidth": 1.4,
+    "axes.linewidth": 0.5,
+    "axes.edgecolor": "#AAAAAA",
+    "axes.labelcolor": INK,
+    "axes.labelpad": 2.5,
+    "axes.titlepad": 4.0,
+    "axes.titlecolor": INK,
+    "axes.grid": False,
+    "text.color": INK,
+    "xtick.color": "#AAAAAA",
+    "ytick.color": "#AAAAAA",
+    "xtick.labelcolor": INK,
+    "ytick.labelcolor": INK,
+    "xtick.major.width": 0.5,
+    "ytick.major.width": 0.5,
+    "xtick.minor.width": 0.4,
+    "ytick.minor.width": 0.4,
+    "xtick.major.size": 2.4,
+    "ytick.major.size": 2.4,
+    "xtick.minor.size": 1.3,
+    "ytick.minor.size": 1.3,
+    "xtick.major.pad": 2.0,
+    "ytick.major.pad": 2.0,
+    "lines.linewidth": 1.1,
+    "lines.markersize": 3.0,
+    "legend.frameon": False,
+    "legend.borderpad": 0.0,
+    "legend.handletextpad": 0.45,
+    "legend.borderaxespad": 0.0,
     "figure.dpi": 200,
+    "savefig.dpi": 300,
 })
+
+POINTER = dict(color=GREY, fontsize=6.2)
 
 
 def save(fig, stem):
     # No bbox="tight": it expands the canvas past 5.5 in when a legend is wider
     # than the axes, and LaTeX then scales the figure down and the type with it.
+    assert abs(fig.get_size_inches()[0] - 5.5) < 1e-9, "figure must be 5.5 in wide"
     fig.savefig(OUT / f"{stem}.pdf")
     fig.savefig(OUT / f"{stem}.png")
     plt.close(fig)
@@ -88,23 +137,23 @@ def fig_regimes():
     d = d[(~d.eta_zero) & (~d.observer.isin(["acc_probe", "loss_step"]))]
 
     series = [
-        ("qp", "recurrent, fast drive", RECURRENT, "-", "o"),
-        ("qp_slow", "recurrent, slow drive", RECURRENT, "--", "s"),
-        ("mixed", "recurrent $+$ weak noise", STOCHASTIC, "--", "^"),
+        ("qp", "recurrent, fast", RECURRENT, "-", "o"),
+        ("qp_slow", "recurrent, slow", RECURRENT, "--", "s"),
+        ("mixed", "recurrent + noise", STOCHASTIC, "--", "^"),
         ("noise", "stochastic", STOCHASTIC, "-", "v"),
         ("gd", "transient", TRANSIENT, ":", "D"),
     ]
 
-    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.72),
-                                 gridspec_kw={"width_ratios": [1.15, 1.0]})
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.85),
+                                 gridspec_kw={"width_ratios": [1.18, 1.0]})
 
-    ax.axhline(20, color=GREY, lw=0.8, ls=(0, (1, 2)), zorder=0)
-    # a reference line, not a bound: no clamping is applied and a violated model
-    # returns values above E. Placed away from x = 1, where the transient piles up.
-    ax.text(2.3, 20.8, r"$E_{\max}$, not a bound", color=GREY, fontsize=6.5,
-            ha="left", va="bottom")
-    ax.plot([0.9, 8.3], [0.9, 8.3], color=GREY, lw=1.1, ls=(0, (4, 3)), zorder=1)
-    ax.text(8.6, 7.6, "truth", color=GREY, fontsize=6.5, ha="left", va="center")
+    # two reference lines, each named by a six-character label at its own end:
+    # E_max is not a bound (no clamping is applied) and the diagonal is the truth
+    ax.axhline(20, color=FAINT, lw=0.7, ls=(0, (1, 2.5)), zorder=0)
+    ax.text(9.6, 20, r"$E_{\max}$", va="center", ha="left", **POINTER)
+    ax.plot([0.9, 8.6], [0.9, 8.6], color=FAINT, lw=0.9, ls=(0, (3.5, 2.5)),
+            zorder=1)
+    ax.text(9.6, 8.6, "truth", va="center", ha="left", **POINTER)
 
     ident = {}
     for arm, label, c, ls, mk in series:
@@ -120,9 +169,9 @@ def fig_regimes():
         q1 = g.groupby("r").MG.quantile(0.25).values
         q3 = g.groupby("r").MG.quantile(0.75).values
         o = np.argsort(t)
-        ax.fill_between(t[o], q1[o], q3[o], color=c, alpha=0.16, lw=0, zorder=2)
-        ax.plot(t, y, ls, color=c, marker=mk, ms=3.2, mec="white", mew=0.5,
-                label=label, zorder=4, clip_on=False)
+        ax.fill_between(t[o], q1[o], q3[o], color=c, alpha=0.15, lw=0, zorder=2)
+        ax.plot(t, y, ls, color=c, marker=mk, ms=2.8, mec="white", mew=0.5,
+                lw=1.1, label=label, zorder=4, clip_on=False)
         # rho_ident is populated for seed 0, three observers and r in {2, 6} only,
         # so panel (b) plots the six raw values rather than an aggregate.
         ident[arm] = g.dropna(subset=["ident_ratio"])[["observer", "r",
@@ -130,17 +179,18 @@ def fig_regimes():
 
     ax.set_xscale("log")
     ax.set_yscale("log")
-    ax.set_xlim(0.85, 9.5)
+    ax.set_xlim(0.85, 9.2)
     ax.set_ylim(0.6, 42)
     ax.set_xticks([1, 2, 4, 8])
     ax.set_xticklabels(["1", "2", "4", "8"])
     ax.set_yticks([1, 2, 4, 8, 16, 32])
     ax.set_yticklabels(["1", "2", "4", "8", "16", "32"])
+    ax.minorticks_off()
     ax.set_xlabel("measured effective rank")
     ax.set_ylabel("estimated dimension")
-    ax.set_title("(a) what the estimator returns", loc="left", pad=6)
+    ax.set_title("(a) what the estimator returns", loc="left")
 
-    bx.axvspan(0.95, 1.10, color=BAND, alpha=0.10, lw=0, zorder=0)
+    bx.axvspan(0.95, 1.10, color=BAND, alpha=0.08, lw=0, zorder=0)
     # one row of markers per observer, so that coincident values stay countable
     OBS_DY = {"c_proj1": 0.17, "g_fro": 0.0, "w_fro": -0.17}
     for i, (arm, label, c, ls, mk) in enumerate(series):
@@ -149,41 +199,39 @@ def fig_regimes():
             continue
         y = len(series) - 1 - i
         bx.plot([v.ident_ratio.min(), v.ident_ratio.max()], [y, y], "-",
-                color=c, lw=0.7, alpha=0.45, zorder=2)
+                color=c, lw=0.6, alpha=0.40, zorder=2)
         bx.plot(v.ident_ratio.values, y + v.observer.map(OBS_DY).values, mk,
-                color=c, ms=3.4, mec="white", mew=0.5, zorder=3, clip_on=False)
+                color=c, ms=3.0, mec="white", mew=0.5, zorder=3, clip_on=False)
     bx.set_yticks(range(len(series)))
     bx.set_yticklabels([lbl for _, lbl, _, _, _ in series][::-1])
-    bx.set_ylim(-0.60, len(series) + 0.05)
-    bx.set_xlim(0.92, 1.70)
+    bx.set_ylim(-0.65, len(series) - 0.20)
+    bx.set_xlim(0.92, 1.66)
     bx.set_xticks([1.0, 1.2, 1.4, 1.6])
     bx.set_xlabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
-    bx.set_title("(b) is it a count?", loc="left", pad=6)
-    bx.text(1.025, 4.42, "admissible", color=BAND, fontsize=6.5, ha="center")
-    bx.text(1.70, 4.79, "6 values per row: seed 0,\n"
-                        r"3 observers, $r \in \{2, 6\}$",
-            color=GREY, fontsize=5.5, ha="right", va="center", linespacing=1.35)
-    # inside the axes, on the empty right of the transient row: outside it the
-    # text ran into the spine and the x label
-    bx.annotate("passes, yet returns 29\nwhere the measurement is 1",
-                xy=(1.06, 0.0), xytext=(1.135, 0.0), fontsize=6.0,
-                color=TRANSIENT, va="center", ha="left",
-                arrowprops=dict(arrowstyle="->", color=TRANSIENT, lw=0.9,
-                                shrinkA=2, shrinkB=2))
+    bx.set_title("(b) is it a count?", loc="left")
+    bx.text(1.025, 4.30, "admissible", color=BAND, fontsize=6.2, ha="center",
+            va="bottom")
     bx.spines["left"].set_visible(False)
     bx.tick_params(axis="y", length=0)
 
-    handles = [Line2D([], [], color=c, ls=ls, marker=mk, ms=3.2, mec="white",
+    handles = [Line2D([], [], color=c, ls=ls, marker=mk, ms=2.8, mec="white",
                       mew=0.5, label=lbl) for _, lbl, c, ls, mk in series]
-    fig.tight_layout(rect=[0, 0.15, 1, 1])
-    fig.legend(handles=handles, frameon=False, ncol=3, loc="lower center",
-               bbox_to_anchor=(0.5, 0.005), handlelength=2.2, columnspacing=1.2)
+    fig.tight_layout(rect=[0, 0.095, 1, 1], w_pad=1.4)
+    fig.legend(handles=handles, ncol=5, loc="lower center",
+               bbox_to_anchor=(0.5, 0.005), handlelength=2.0,
+               columnspacing=1.1)
     save(fig, "fig_regimes")
 
 
 # ------------------------------------------------------------------ figure 2
 def fig_dip():
-    """The trajectory-rank collapse at generalisation, aligned on t_gen."""
+    """The trajectory-rank collapse at generalisation, aligned on t_gen.
+
+    Every run here is a mini-batch transformer. The four that generalise carry
+    weight decay and are stochastic; the two controls have none and are
+    transient, exactly as fig_map() classifies the same two configurations. No
+    run is recurrent, so RECURRENT does not appear.
+    """
     d = pd.read_csv(CODE / "active_rank/results_fine/rank_windows.csv")
     meta = {m["run"]: m for m in
             json.loads((CODE / "active_rank/results_fine/rank_milestones.json").read_text())}
@@ -194,7 +242,7 @@ def fig_dip():
               ("PR_pos_det", "(b) parameter space", None),
               ("move", "(c) displacement", "log")]
 
-    fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.90), sharex=True)
+    fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.95), sharex=True)
     grid = np.arange(-5000, 5200, 100)
 
     for ax, (col, title, scale) in zip(axes, panels):
@@ -206,7 +254,7 @@ def fig_dip():
         for r in groks:
             g = d[d.run == r].sort_values("right_step")
             x = 0.5 * (g.right_step + g.left_step) - meta[r]["t_gen"]
-            ax.plot(x, g[col], color=RECURRENT, lw=0.7, alpha=0.30)
+            ax.plot(x, g[col], color=STOCHASTIC, lw=0.6, alpha=0.28)
             stack.append(np.interp(grid, x, g[col], left=np.nan, right=np.nan))
             if sdcol:
                 sdstack.append(np.interp(grid, x, g[sdcol], left=np.nan,
@@ -217,40 +265,39 @@ def fig_dip():
             # of the four per-run disagreements. It is about 1 % of the value, so
             # it is meant to be invisible at the scale of the collapse.
             s = np.nanmean(np.vstack(sdstack), axis=0)
-            ax.fill_between(grid, m - s, m + s, facecolor=RECURRENT, alpha=0.55,
-                            edgecolor=RECURRENT, lw=0.4, zorder=4)
-        ax.plot(grid, m, color=RECURRENT,
-                lw=1.7, label="generalises (4 runs)", zorder=5)
+            ax.fill_between(grid, m - s, m + s, facecolor=STOCHASTIC, alpha=0.55,
+                            edgecolor=STOCHASTIC, lw=0.4, zorder=4)
+        ax.plot(grid, m, color=STOCHASTIC, lw=1.5, zorder=5)
 
         for r, ls in zip(ctrls, ["--", (0, (1, 1.6))]):
             g = d[d.run == r].sort_values("right_step")
             ref = meta["mod_wd1" if r.startswith("mod") else "s5_wd1"]["t_gen"]
-            ax.plot(0.5 * (g.right_step + g.left_step) - ref, g[col], linestyle=ls,
-                    color=STOCHASTIC, lw=1.2,
-                    label="no weight decay (2 runs)" if r == "mod_wd0" else None)
+            ax.plot(0.5 * (g.right_step + g.left_step) - ref, g[col],
+                    linestyle=ls, color=TRANSIENT, lw=1.0)
 
-        ax.axvline(0, color=GREY, lw=0.9, ls=(0, (2, 2)))
+        ax.axvline(0, color=FAINT, lw=0.7, ls=(0, (2, 2.5)), zorder=0)
         if scale:
             ax.set_yscale(scale)
         ax.set_xlim(-5000, 5000)
         ax.set_xticks([-5000, 0, 5000])
-        ax.set_xticklabels(["-5k", "$t_{gen}$", "5k"])
-        ax.set_title(title, loc="left", pad=4)
+        ax.set_xticklabels(["$-5$k", "$t_{\\mathrm{gen}}$", "5k"])
+        ax.set_title(title, loc="left")
 
     axes[0].set_ylabel("participation ratio")
     axes[2].set_ylabel("displacement")
     axes[1].set_xlabel("steps since generalisation")
-    h, l = axes[0].get_legend_handles_labels()
-    # the band is drawn to scale and is therefore almost invisible, which is the
-    # point; naming it in the legend costs no plot area and tells the reader it
-    # is there. Panel (c) has none because 'move' is not a sketched statistic.
-    h.append(mpl.patches.Patch(facecolor=RECURRENT, alpha=0.55, lw=0,
-                               label="hash-family spread, (a) and (b)"))
-    l.append("hash-family spread, (a) and (b)")
-    fig.tight_layout(rect=[0, 0.14, 1, 1])
-    fig.legend(h, l, frameon=False, ncol=3, loc="lower center",
-               bbox_to_anchor=(0.5, 0.005), handlelength=2.2,
-               columnspacing=1.2, handletextpad=0.5)
+
+    handles = [
+        Line2D([], [], color=STOCHASTIC, lw=1.5, label="generalises (4)"),
+        Line2D([], [], color=TRANSIENT, ls="--", lw=1.0,
+               label="no weight decay (2)"),
+        mpl.patches.Patch(facecolor=STOCHASTIC, alpha=0.55, lw=0,
+                          label="hash-family spread"),
+    ]
+    fig.tight_layout(rect=[0, 0.090, 1, 1], w_pad=1.4)
+    fig.legend(handles=handles, ncol=3, loc="lower center",
+               bbox_to_anchor=(0.5, 0.005), handlelength=2.0,
+               columnspacing=1.4)
     save(fig, "fig_dip")
 
 
@@ -264,14 +311,14 @@ def fig_map():
         pd.read_csv(CODE / "gromov_polynomials/results/dimension_probe_summary.csv")])
     gr = gr[gr.column == "train_loss"]
 
-    fig, ax = plt.subplots(figsize=(5.5, 2.35))
+    fig, ax = plt.subplots(figsize=(5.5, 2.05))
 
     # one highlighted target zone: stable in E and recurrent enough to embed
     ax.add_patch(mpl.patches.Rectangle(
-        (8.0, 0.95), 500 - 8.0, 0.15, facecolor=BAND, alpha=0.10,
-        edgecolor=BAND, lw=1.0, ls=(0, (4, 3)), zorder=0))
-    ax.axvline(8.0, color=GREY, lw=0.8, ls=(0, (2, 3)), zorder=0)
-    ax.axhline(1.10, color=GREY, lw=0.8, ls=(0, (2, 3)), zorder=0)
+        (8.0, 0.95), 500 - 8.0, 0.15, facecolor=BAND, alpha=0.08,
+        edgecolor=BAND, lw=0.7, ls=(0, (3.5, 3)), zorder=0))
+    ax.axvline(8.0, color=FAINT, lw=0.7, ls=(0, (2, 3)), zorder=0)
+    ax.axhline(1.10, color=FAINT, lw=0.7, ls=(0, (2, 3)), zorder=0)
 
     hi = tr[tr.ident > 1.15]
     lo = tr[tr.ident <= 1.15]
@@ -280,54 +327,45 @@ def fig_map():
     # exactly two crossings and rho_ident = 1.00 to three decimals, so without an
     # offset the twelve of them render as one mark. The offset is cosmetic and is
     # declared in the caption; the true abscissa of every point is the grey tick.
-    OFF = 1.18
-    ax.plot([2 / OFF, 2 * OFF], [0.999, 0.999], "-", color=GREY, lw=0.7,
-            alpha=0.6, zorder=2)
-    ax.plot([2, 2], [0.978, 1.020], "-", color=GREY, lw=0.7, alpha=0.6, zorder=2)
-    ax.plot(gr.osc / OFF, gr.ident, "s", mfc="none", mec=TRANSIENT, mew=1.2, ms=9,
-            ls="none", label="perceptron, full batch (10)", zorder=3)
-    ax.plot(hi.osc, hi.ident, "o", color=STOCHASTIC, ms=5.5, mec="white", mew=0.8,
-            ls="none", label="transformer, mini-batch (5)", zorder=4)
-    ax.plot(lo.osc * OFF, lo.ident, "o", color=TRANSIENT, ms=5.5, mec="white",
-            mew=0.8, ls="none", label="transformer, no weight decay (2)", zorder=5)
-    ax.text(2 / OFF / 1.13, 0.999, r"$\times 10$", color=TRANSIENT, fontsize=6.5,
-            ha="right", va="center")
-    ax.text(2 * OFF * 1.11, 0.999, r"$\times 2$", color=TRANSIENT, fontsize=6.5,
-            ha="left", va="center")
+    OFF = 1.20
+    ax.plot([2 / OFF, 2 * OFF], [0.999, 0.999], "-", color=FAINT, lw=0.6,
+            zorder=2)
+    ax.plot([2, 2], [0.981, 1.017], "-", color=GREY, lw=0.6, zorder=2)
+    ax.plot(gr.osc / OFF, gr.ident, "s", mfc="none", mec=TRANSIENT, mew=1.0,
+            ms=6.5, ls="none", label="perceptron, full batch (10)", zorder=3)
+    ax.plot(hi.osc, hi.ident, "o", color=STOCHASTIC, ms=4.6, mec="white",
+            mew=0.7, ls="none", label="transformer, mini-batch (5)", zorder=4)
+    ax.plot(lo.osc * OFF, lo.ident, "D", color=TRANSIENT, ms=4.0, mec="white",
+            mew=0.7, ls="none", label="transformer, no weight decay (2)",
+            zorder=5)
+    ax.text(2 / OFF / 1.16, 0.999, r"$\times 10$", color=TRANSIENT,
+            fontsize=6.2, ha="right", va="center")
+    ax.text(2 * OFF * 1.13, 0.999, r"$\times 2$", color=TRANSIENT,
+            fontsize=6.2, ha="left", va="center")
 
     ax.set_xscale("log")
     ax.set_xlim(0.7, 500)
-    ax.set_ylim(0.85, 1.74)
-    ax.set_yticks([0.9, 1.0, 1.2, 1.4, 1.6])
+    ax.set_ylim(0.90, 1.68)
+    ax.set_yticks([1.0, 1.2, 1.4, 1.6])
     ax.set_xlabel("trend crossings per window")
     ax.set_ylabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
+    ax.text(430, 1.025, "admissible", color=BAND, fontsize=6.5, ha="right",
+            va="center")
 
-    ax.text(90, 1.025, "admissible: no run is here", color=BAND,
-            fontsize=7, ha="center", va="center")
-    ax.text(12, 1.63, "stochastic", color=STOCHASTIC, fontsize=7,
-            ha="left", va="center")
-    ax.text(12, 1.555, "no invariant set exists", color=STOCHASTIC,
-            fontsize=6.5, ha="left", va="center")
-    ax.text(0.78, 1.34, "transient", color=TRANSIENT, fontsize=7,
-            ha="left", va="center")
-    ax.text(0.78, 1.245, "monotone, so stable\nfor the wrong reason",
-            color=TRANSIENT, fontsize=6.5, ha="left", va="center")
-    ax.text(0.75, 0.908, "12 runs at exactly 2 crossings,\noffset to separate the groups",
-            color=GREY, fontsize=6.0, ha="left", va="center")
-    ax.text(7.0, 1.70, "too few crossings", color=GREY, fontsize=6.5,
-            ha="right", va="top")
-    ax.text(440, 1.135, "unstable in $E$", color=GREY, fontsize=6.5,
-            ha="right", va="bottom")
-
-    fig.tight_layout(rect=[0, 0.16, 1, 1])
-    ax.legend(frameon=False, ncol=3, loc="lower center",
-              bbox_to_anchor=(0.5, -0.44), handletextpad=0.3, columnspacing=0.9)
+    fig.tight_layout(rect=[0, 0.085, 1, 1])
+    fig.legend(ncol=3, loc="lower center", bbox_to_anchor=(0.5, 0.005),
+               handletextpad=0.3, columnspacing=1.2)
     save(fig, "fig_map")
 
 
 # ------------------------------------------------------------------ figure 4
 def fig_pairs():
-    """The label-matched pairs, and the training loss that explains them."""
+    """The label-matched pairs, and the training loss that explains them.
+
+    All eight runs are full-batch perceptrons, which fig_map() classifies as
+    transient, so the figure is monochrome by the palette rule: generalisation
+    is carried by marker fill and line style, never by hue.
+    """
     mg = pd.concat([
         pd.read_csv(CODE / "gromov_arithmetic/results/arith/dimension_probe_summary.csv"),
         pd.read_csv(CODE / "gromov_polynomials/results/dimension_probe_summary.csv")])
@@ -343,56 +381,62 @@ def fig_pairs():
              ("g_p3_p97", "g_p3x_p97", r"$(5n_1^3{+}2n_2^4)^2$"),
              ("a_add", "x_no_grok", r"$n{+}m$")]
 
-    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 2.35),
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 2.10),
                                  gridspec_kw={"width_ratios": [1.0, 1.05]})
 
-    def spread(run, y, colour):
+    def spread(run, y):
         v = win.get_group(run)
         # thin line the full range of the seven windows, thick line the middle
         # half, marker the median that the run-level summary reports
-        ax.plot([v.min(), v.max()], [y, y], "-", color=colour, lw=0.7,
-                alpha=0.55, zorder=2)
-        ax.plot([v.quantile(0.25), v.quantile(0.75)], [y, y], "-", color=colour,
-                lw=2.6, alpha=0.30, solid_capstyle="butt", zorder=2)
+        ax.plot([v.min(), v.max()], [y, y], "-", color=TRANSIENT, lw=0.6,
+                alpha=0.50, zorder=2)
+        ax.plot([v.quantile(0.25), v.quantile(0.75)], [y, y], "-",
+                color=TRANSIENT, lw=2.4, alpha=0.25, solid_capstyle="butt",
+                zorder=2)
 
     for i, (good, bad, name) in enumerate(pairs):
         y = len(pairs) - 1 - i
-        ax.plot([mg[good], mg[bad]], [y + 0.19, y - 0.19], color=GREY, lw=0.8,
+        ax.plot([mg[good], mg[bad]], [y + 0.19, y - 0.19], color=FAINT, lw=0.7,
                 zorder=1)
-        spread(good, y + 0.19, RECURRENT)
-        spread(bad, y - 0.19, STOCHASTIC)
-        ax.plot(mg[good], y + 0.19, "o", color=RECURRENT, ms=5.0, mec="white",
-                mew=0.8, zorder=3, label="generalises" if i == 0 else None)
-        ax.plot(mg[bad], y - 0.19, "o", color=STOCHASTIC, ms=5.0, mec="white",
-                mew=0.8, zorder=3, label="does not" if i == 0 else None)
+        spread(good, y + 0.19)
+        spread(bad, y - 0.19)
+        ax.plot(mg[good], y + 0.19, "o", color=TRANSIENT, ms=4.4, mec="white",
+                mew=0.7, zorder=3)
+        ax.plot(mg[bad], y - 0.19, "o", mfc="white", mec=TRANSIENT, mew=1.1,
+                ms=4.4, zorder=3)
     ax.set_yticks(range(len(pairs)))
     ax.set_yticklabels([n for _, _, n in pairs][::-1])
-    ax.set_ylim(-0.75, len(pairs) - 0.25)
-    ax.set_xlim(17.4, 28.0)
-    ax.set_xticks([18, 20, 22, 24, 26, 28])
+    ax.set_ylim(-0.72, len(pairs) - 0.28)
+    ax.set_xlim(17.7, 27.7)
+    ax.set_xticks([18, 20, 22, 24, 26])
     ax.set_xlabel("estimate on the training loss")
-    ax.set_title("(a) four label-matched pairs", loc="left", pad=6)
+    ax.set_title("(a) four label-matched pairs", loc="left")
     ax.spines["left"].set_visible(False)
     ax.tick_params(axis="y", length=0)
 
     # panel (b) plots the g_p2 pair, the second row of panel (a): its two members
     # end three orders of magnitude apart, which the top pair does not (2.7)
-    for key, colour, ls, lbl in [
-            ("g_p2_p97", RECURRENT, "-", "generalises"),
-            ("g_p2x_p97", STOCHASTIC, "--", "does not")]:
+    for key, ls in [("g_p2_p97", "-"), ("g_p2x_p97", (0, (3.5, 2)))]:
         t = pd.read_csv(CODE / f"gromov_polynomials/results/{key}_train.csv")
-        bx.plot(t.step, t.train_loss, ls, color=colour, lw=1.3, label=lbl)
+        bx.plot(t.step, t.train_loss, linestyle=ls, color=TRANSIENT, lw=1.1)
     bx.set_yscale("log")
     bx.set_xlim(0, 100000)
     bx.set_xticks([0, 50000, 100000])
     bx.set_xticklabels(["0", "50k", "100k"])
     bx.set_xlabel("step")
     bx.set_ylabel("training loss")
-    bx.set_title(r"(b) the $(2n_1{+}3n_2)^4$ pair", loc="left", pad=6)
-    h, l = bx.get_legend_handles_labels()
-    fig.tight_layout(rect=[0, 0.12, 1, 1])
-    fig.legend(h, l, frameon=False, ncol=2, loc="lower center",
-               bbox_to_anchor=(0.5, 0.005), handlelength=2.2)
+    bx.set_title(r"(b) the $(2n_1{+}3n_2)^4$ pair", loc="left")
+
+    handles = [
+        Line2D([], [], color=TRANSIENT, ls="-", marker="o", ms=4.4,
+               mec="white", mew=0.7, label="generalises"),
+        Line2D([], [], color=TRANSIENT, ls=(0, (3.5, 2)), marker="o",
+               mfc="white", mec=TRANSIENT, mew=1.1, ms=4.4, label="does not"),
+    ]
+    fig.tight_layout(rect=[0, 0.085, 1, 1], w_pad=1.6)
+    fig.legend(handles=handles, ncol=2, loc="lower center",
+               bbox_to_anchor=(0.5, 0.005), handlelength=2.2,
+               columnspacing=2.0)
     save(fig, "fig_pairs")
 
 
@@ -432,40 +476,35 @@ def fig_window():
     ]
 
     fig, (ax, bx, cx) = plt.subplots(1, 3, figsize=(5.5, 2.2),
-                                     gridspec_kw={"width_ratios": [1.0, 1.06, 0.82]})
+                                     gridspec_kw={"width_ratios": [1.0, 1.06, 0.84]})
 
     # ---- (a) the raw windowed estimate over training, every run --------------
     for r, c, gen, ls, mk in runs:
         g = d[d.run == r].sort_values("centre")
         ax.plot(g.centre / 1000, g.MG, linestyle=ls, color=c, marker=mk,
-                ms=2.4, mec="white", mew=0.35, lw=1.0, alpha=0.95, zorder=3)
+                ms=2.2, mec="white", mew=0.3, lw=0.9, zorder=3)
     # the three generalisation steps, marked on the axis rather than by hue
     for r, c, gen, ls, mk in runs:
         if gen:
-            ax.plot([tgen[r] / 1000], [2.05], marker="^", color=GREY, ms=3.4,
+            ax.plot([tgen[r] / 1000], [2.05], marker="^", color=GREY, ms=3.0,
                     mew=0, zorder=5, clip_on=False)
-    # a window is an aggregate over 39,990 steps: draw that span once, to scale
-    ax.plot([4, 4 + SPAN / 1000], [37.0, 37.0], "-", color=GREY, lw=2.0,
-            solid_capstyle="butt", zorder=4)
-    ax.text(4 + SPAN / 2000, 39.0, "one window", color=GREY, fontsize=5.8,
-            ha="center", va="bottom")
-    ax.text(8.0, 2.05, r"$t_{\mathrm{gen}}$", color=GREY, fontsize=6.2,
-            ha="left", va="center")
+    ax.text(9.0, 2.05, r"$t_{\mathrm{gen}}$", ha="left", va="center", **POINTER)
     ax.set_yscale("log")
-    ax.set_xlim(-2, 122)
-    ax.set_ylim(1.9, 46)
+    ax.set_xlim(-2, 124)
+    ax.set_ylim(1.9, 44)
     ax.set_yticks([2, 4, 8, 16, 32])
     ax.set_yticklabels(["2", "4", "8", "16", "32"])
+    ax.minorticks_off()
     ax.set_xticks([0, 60, 120])
     ax.set_xticklabels(["0", "60k", "120k"])
     ax.set_xlabel("window centre (steps)")
     ax.set_ylabel("estimate on the norm")
-    ax.set_title("(a) the whole record", loc="left", pad=4)
+    ax.set_title("(a) the whole record", loc="left")
 
     # ---- (b) aligned on t_gen, in components, against the nuisance floor -----
-    bx.axvspan(-5, 5, color=STOCHASTIC, alpha=0.11, lw=0, zorder=0)
-    bx.axhspan(-FLOOR, FLOOR, color=GREY, alpha=0.15, lw=0, zorder=0)
-    bx.axvline(0, color=GREY, lw=0.9, ls=(0, (2, 2)), zorder=1)
+    bx.axvspan(-5, 5, color=STOCHASTIC, alpha=0.10, lw=0, zorder=0)
+    bx.axhspan(-FLOOR, FLOOR, color=GREY, alpha=0.12, lw=0, zorder=0)
+    bx.axvline(0, color=FAINT, lw=0.7, ls=(0, (2, 2.5)), zorder=1)
     for r, c, gen, ls, mk in runs:
         if not gen:
             continue
@@ -478,27 +517,21 @@ def fig_window():
         # that the record localises nothing to better than +-20,000 steps
         for xi, yi in zip(off, y):
             bx.plot([(xi - HALF) / 1000, (xi + HALF) / 1000], [yi, yi], "-",
-                    color=c, lw=0.7, alpha=0.30, zorder=2)
-        bx.plot(off / 1000, y, linestyle=ls, color=c, marker=mk, ms=3.0,
-                mec="white", mew=0.4, lw=1.0, zorder=3)
+                    color=c, lw=0.6, alpha=0.28, zorder=2)
+        bx.plot(off / 1000, y, linestyle=ls, color=c, marker=mk, ms=2.6,
+                mec="white", mew=0.35, lw=0.9, zorder=3)
     bx.set_xlim(-108, 108)
     bx.set_ylim(-11.6, 3.4)
-    bx.set_xticks([-100, -50, 0, 50, 100])
-    bx.set_xticklabels(["-100k", "", "$t_{gen}$", "", "100k"])
+    bx.set_xticks([-100, 0, 100])
+    bx.set_xticklabels(["$-100$k", "$t_{\\mathrm{gen}}$", "100k"])
     bx.set_yticks([-10, -5, 0])
     bx.set_xlabel("steps since generalisation")
     bx.set_ylabel("change (components)")
-    bx.set_title("(b) aligned on $t_{\\mathrm{gen}}$", loc="left", pad=4)
-    bx.text(-105, 2.5, "$\\pm 1.16$: the nuisance floor", color=GREY,
-            fontsize=5.8, ha="left", va="center")
-    # the rest of the reading -- what the bars are, and that the shaded column
-    # holds one of the twenty-seven centres -- is in the caption: written into
-    # the panel it collides with the two runs that descend through it.
-    bx.text(0, -11.2, "$\\pm 5$k: 1 of 27 centres", color=STOCHASTIC,
-            fontsize=5.6, ha="center", va="center")
+    bx.set_title("(b) aligned on $t_{\\mathrm{gen}}$", loc="left")
+    bx.text(105, 1.45, "floor", ha="right", va="bottom", **POINTER)
 
     # ---- (c) every stride-to-stride change, by outcome -----------------------
-    cx.axvline(FLOOR, color=GREY, lw=0.9, ls=(0, (2, 2)), zorder=1)
+    cx.axvline(FLOOR, color=FAINT, lw=0.7, ls=(0, (2, 2.5)), zorder=1)
     ROWS = {True: 1.0, False: 0.0}
     seen = {True: 0, False: 0}
     nrun = {True: 3, False: 4}
@@ -509,44 +542,262 @@ def fig_window():
         # run stay countable instead of piling into a single smear
         k = seen[gen]
         seen[gen] += 1
-        dy = 0.34 * (2 * k / (nrun[gen] - 1) - 1)
-        cx.plot(v, np.full_like(v, ROWS[gen] + dy), marker=mk, color=c, ms=2.8,
-                mec="white", mew=0.35, ls="none", zorder=3, clip_on=False)
+        dy = 0.30 * (2 * k / (nrun[gen] - 1) - 1)
+        cx.plot(v, np.full_like(v, ROWS[gen] + dy), marker=mk, color=c, ms=2.4,
+                mec="white", mew=0.3, ls="none", zorder=3, clip_on=False)
     cx.set_yticks([1.0, 0.0])
     cx.set_yticklabels(["generalises", "does not"])
-    cx.set_ylim(-1.30, 1.60)
+    cx.set_ylim(-0.62, 1.62)
     cx.set_xlim(-0.2, 7.0)
     cx.set_xticks([0, 2, 4, 6])
     cx.set_xlabel("$|\\Delta|$ per stride")
-    cx.set_title("(c) specificity", loc="left", pad=4)
+    cx.set_title("(c) specificity", loc="left")
     cx.spines["left"].set_visible(False)
     cx.tick_params(axis="y", length=0)
-    cx.text(1.35, 1.58, "floor", color=GREY, fontsize=5.8, ha="left", va="top")
-    # the 6.36 is grokpos_s0, whose sub-row is the lowest of the three
-    cx.annotate("$t_{\\mathrm{gen}}\\!+\\!95$k", xy=(6.36, 0.66),
-                xytext=(6.95, 1.30), fontsize=5.4, color=STOCHASTIC,
-                ha="right", va="center",
-                arrowprops=dict(arrowstyle="->", color=STOCHASTIC, lw=0.7,
-                                shrinkA=1, shrinkB=2))
-    cx.annotate("largest of all, in a run\nthat never generalises",
-                xy=(5.20, 0.34), xytext=(-0.15, -0.86), fontsize=5.4,
-                color=TRANSIENT, va="center", ha="left", linespacing=1.4,
-                arrowprops=dict(arrowstyle="->", color=TRANSIENT, lw=0.8,
-                                shrinkA=3, shrinkB=2))
+    cx.text(1.45, 1.52, "floor", ha="left", va="top", **POINTER)
 
     handles = [
-        Line2D([], [], color=STOCHASTIC, ls="-", marker="o", ms=3.0,
-               mec="white", mew=0.4, label="stochastic, generalises (3)"),
-        Line2D([], [], color=STOCHASTIC, ls="--", marker="v", ms=3.0,
-               mec="white", mew=0.4, label="stochastic, does not (2)"),
-        Line2D([], [], color=TRANSIENT, ls=(0, (1, 1.6)), marker="s", ms=3.0,
-               mec="white", mew=0.4, label="transient, does not (2)"),
+        Line2D([], [], color=STOCHASTIC, ls="-", marker="o", ms=2.6,
+               mec="white", mew=0.35, label="stochastic, generalises (3)"),
+        Line2D([], [], color=STOCHASTIC, ls="--", marker="v", ms=2.6,
+               mec="white", mew=0.35, label="stochastic, does not (2)"),
+        Line2D([], [], color=TRANSIENT, ls=(0, (1, 1.6)), marker="s", ms=2.6,
+               mec="white", mew=0.35, label="transient, does not (2)"),
     ]
-    fig.tight_layout(rect=[0, 0.15, 1, 1], w_pad=0.9)
-    fig.legend(handles=handles, frameon=False, ncol=3, loc="lower center",
-               bbox_to_anchor=(0.5, 0.005), handlelength=2.2,
-               columnspacing=1.1, handletextpad=0.4)
+    fig.tight_layout(rect=[0, 0.080, 1, 1], w_pad=1.5)
+    fig.legend(handles=handles, ncol=3, loc="lower center",
+               bbox_to_anchor=(0.5, 0.005), handlelength=2.0,
+               columnspacing=1.3)
     save(fig, "fig_window")
+
+
+# ------------------------------------------------------------------ figure 6
+def fig_aniso():
+    """Anisotropy: the estimate follows the count, not the participation ratio.
+
+    One panel per r. The CSV column is `rho`, but the paper renamed the
+    amplitude decay factor to q, rho being the Spearman correlation everywhere
+    else, so the axis says q. Everything here is one r-torus, i.e. the
+    recurrent regime, so the figure is monochrome: the estimate is in the
+    regime colour and every reference quantity is grey.
+    """
+    d = pd.read_csv(CODE / "active_dimension/results/e8_anisotropy/aniso_summary.csv")
+    rs = sorted(d.r.unique())
+
+    fig, axes = plt.subplots(1, len(rs), figsize=(5.5, 2.2), sharey=True)
+    for ax, r in zip(axes, rs):
+        g = d[d.r == r].sort_values("rho")
+        # the closed form (sum a^2)^2 / sum a^4 and the measured covariance PR
+        # agree to two decimals: draw the prediction as a line and the
+        # measurement as open markers on top of it, so the reader sees both
+        ax.plot(g.rho, g.pr_pred, "-", color=GREY, lw=0.9, alpha=0.75, zorder=2)
+        ax.plot(g.rho, g.pr_pos, "s", mfc="white", mec=GREY, mew=0.9, ms=3.2,
+                ls="none", zorder=3)
+        ax.axhline(r, color=FAINT, lw=0.7, ls=(0, (1, 2.5)), zorder=1)
+        # MG is the median of three seeds and MG_sd their standard deviation
+        ax.errorbar(g.rho, g.MG, yerr=g.MG_sd, color=RECURRENT, lw=1.2,
+                    marker="o", ms=3.0, mec="white", mew=0.5, elinewidth=0.8,
+                    capsize=1.6, capthick=0.8, zorder=4)
+        ax.set_title(f"$r = {r}$", loc="left")
+        ax.set_xlim(0.44, 1.06)
+        ax.set_xticks([0.5, 0.7, 0.9])
+        ax.set_xlabel("$q$")
+    axes[0].set_ylim(0, 9.6)
+    axes[0].set_yticks([0, 2, 4, 6, 8])
+    axes[0].set_ylabel("components")
+
+    handles = [
+        Line2D([], [], color=RECURRENT, ls="-", marker="o", ms=3.0,
+               mec="white", mew=0.5, label="estimate (3 seeds, $\\pm$ s.d.)"),
+        Line2D([], [], color=GREY, ls="-", marker="s", mfc="white", mec=GREY,
+               mew=0.9, ms=3.2, label="participation ratio"),
+        Line2D([], [], color=FAINT, ls=(0, (1, 2.5)), lw=0.7,
+               label="active dimension"),
+    ]
+    fig.tight_layout(rect=[0, 0.080, 1, 1], w_pad=0.9)
+    fig.legend(handles=handles, ncol=3, loc="lower center",
+               bbox_to_anchor=(0.5, 0.005), handlelength=2.0,
+               columnspacing=1.4)
+    save(fig, "fig_aniso")
+
+
+# ------------------------------------------------------------------ figure 7
+def fig_tau():
+    """The delay-lag sweep: the usable span is about four tenths of a period.
+
+    One torus of period 400 at E_max = 20, the configuration the paper's table
+    reports. All of it is the recurrent regime, so the figure is monochrome and
+    the six ranks are separated by marker shape.
+    """
+    d = pd.read_csv(CODE / "active_dimension/results/e6_tau/tau_sensitivity.csv")
+    d = d[(d.period == 400) & (d.max_E == 20)]
+    # tau='acorr' picks the lag from the autocorrelation, so its span differs
+    # between the two seeds and it is not a point on a common x grid; the six
+    # fixed lags 1..32 are. Reported in the caption.
+    d = d[d.tau != "acorr"].copy()
+    d["span_periods"] = d.span_periods.astype(float)
+
+    rs = sorted(d.r.unique())
+    marks = ["o", "s", "^", "v", "D", "X"]
+
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 2.2))
+
+    for r, mk in zip(rs, marks):
+        g = d[d.r == r]
+        a = g.groupby("span_periods").MG.agg(["median", "min", "max"]).sort_index()
+        x = a.index.values
+        for panel, scale in ((ax, 1.0), (bx, float(r))):
+            panel.vlines(x, a["min"] / scale, a["max"] / scale, color=RECURRENT,
+                         lw=0.7, alpha=0.55, zorder=2)
+            panel.plot(x, a["median"] / scale, "-", color=RECURRENT, lw=1.0,
+                       marker=mk, ms=3.0, mec="white", mew=0.5, zorder=3,
+                       label=f"$r = {r}$" if panel is ax else None)
+
+    for panel in (ax, bx):
+        panel.axvspan(0.30, 0.50, color=GREY, alpha=0.10, lw=0, zorder=0)
+        panel.set_xscale("log")
+        panel.set_yscale("log")
+        panel.set_xlim(0.038, 1.95)
+        panel.set_xticks([0.05, 0.1, 0.2, 0.5, 1.0])
+        panel.set_xticklabels(["0.05", "0.1", "0.2", "0.5", "1"])
+        panel.set_xticks([], minor=True)
+        panel.set_xlabel("delay span (periods)")
+
+    ax.set_ylim(1.15, 90)
+    ax.set_yticks([2, 5, 10, 20, 50])
+    ax.set_yticklabels(["2", "5", "10", "20", "50"])
+    ax.set_yticks([], minor=True)
+    ax.set_ylabel("estimated dimension")
+    ax.set_title("(a) the estimate", loc="left")
+
+    bx.axhline(1.0, color=FAINT, lw=0.7, ls=(0, (1, 2.5)), zorder=1)
+    bx.set_ylim(0.26, 11)
+    bx.set_yticks([0.3, 0.5, 1, 2, 5, 10])
+    bx.set_yticklabels(["0.3", "0.5", "1", "2", "5", "10"])
+    bx.set_yticks([], minor=True)
+    bx.set_ylabel("estimate / true rank")
+    bx.set_title("(b) relative to the truth", loc="left")
+    bx.text(0.40, 9.6, "usable", ha="center", va="top", **POINTER)
+
+    h, l = ax.get_legend_handles_labels()
+    fig.tight_layout(rect=[0, 0.080, 1, 1], w_pad=1.8)
+    fig.legend(h, l, ncol=6, loc="lower center", bbox_to_anchor=(0.5, 0.005),
+               handlelength=1.8, columnspacing=1.2)
+    save(fig, "fig_tau")
+
+
+# ------------------------------------------------------------------ figure 8
+def fig_observers():
+    """Which scalar log should you keep? Per-observer error on the recurrent arm.
+
+    One arm (qp), one regime, so the figure is monochrome and the five observer
+    families are separated by marker shape.
+    """
+    d = pd.read_csv(CODE / "active_dimension/results/e2_rank_sweep/observer_scores.csv")
+    d = d[d.arm == "qp"]
+    # acc_probe is degenerate in every window and has no score; loss_step fails
+    # the zero-learning-rate control and is excluded from every aggregate in the
+    # paper. Both exclusions are named in the caption.
+    d = d[~d.observer.isin(["acc_probe", "loss_step"])].sort_values("mae_raw")
+
+    NAMES = {"loss_probe": "probe loss", "loss_full": "full-batch loss",
+             "w_fro": "parameter norm", "c_norm": "subspace norm",
+             "fn_fro": "function-space norm", "g_fro": "gradient norm",
+             "g_proj": "gradient projection", "c_proj1": "parameter projection",
+             "fn_proj1": "function-space projection", "margin": "margin"}
+    MARKS = {"loss": "o", "norm": "s", "gradient": "^", "projection": "D",
+             "function": "v"}
+    LOGGED = {"w_fro", "c_norm"}  # the two parameter norms
+
+    fig, ax = plt.subplots(figsize=(5.5, 2.35))
+
+    y = np.arange(len(d))[::-1]
+    # the two parameter norms are adjacent in the ordering, so one band marks them
+    band = [yy for yy, o in zip(y, d.observer) if o in LOGGED]
+    ax.axhspan(min(band) - 0.5, max(band) + 0.5, color=GREY, alpha=0.09, lw=0,
+               zorder=0)
+    ax.axvline(0.0, color=FAINT, lw=0.7, ls=(0, (1, 2.5)), zorder=1)
+    for yy in y:
+        ax.plot([-0.35, 2.75], [yy, yy], "-", color="#EEEEEE", lw=0.5, zorder=0)
+
+    for yy, (_, row) in zip(y, d.iterrows()):
+        # bar: the mean across-seed standard deviation of the estimate, drawn at
+        # the point as +- that half-width. It is a spread of the estimate, not of
+        # the error, so it may reach below zero; the caption says so.
+        ax.plot([row.mae_raw - row.seed_sd, row.mae_raw + row.seed_sd],
+                [yy, yy], "-", color=RECURRENT, lw=0.8, alpha=0.45, zorder=2)
+        ax.plot([row.mae_raw], [yy], MARKS[row.family], color=RECURRENT,
+                ms=3.6, mec="white", mew=0.6, zorder=3)
+
+    ax.set_yticks(y)
+    ax.set_yticklabels([NAMES.get(o, o) for o in d.observer])
+    for tick, o in zip(ax.get_yticklabels(), d.observer):
+        if o in LOGGED:
+            tick.set_fontweight("bold")
+    ax.set_ylim(-0.7, len(d) - 0.3)
+    ax.set_xlim(-0.35, 2.75)
+    ax.set_xticks([0, 0.5, 1.0, 1.5, 2.0, 2.5])
+    ax.set_xlabel("mean absolute error (components)")
+    ax.spines["left"].set_visible(False)
+    ax.tick_params(axis="y", length=0)
+
+    handles = [Line2D([], [], color=RECURRENT, ls="none", marker=m, ms=3.6,
+                      mec="white", mew=0.6, label=f) for f, m in MARKS.items()]
+    fig.tight_layout(rect=[0, 0.075, 1, 1])
+    fig.legend(handles=handles, ncol=5, loc="lower center",
+               bbox_to_anchor=(0.5, 0.005), handlelength=1.2,
+               columnspacing=1.6)
+    save(fig, "fig_observers")
+
+
+# ------------------------------------------------------------------ figure 9
+def fig_prwindow():
+    """The full-batch participation ratio against window length.
+
+    Both runs are full-batch perceptrons, which fig_map() classifies as
+    transient, so the figure is monochrome: the generalising run is filled and
+    solid, its label-matched control open and dashed.
+    """
+    d = pd.read_csv(CODE / "gromov_arithmetic/results/rank_fb_long/pr_vs_window.csv")
+    # the paper's ladder: sixty samples spread further apart, so the bound on the
+    # statistic and its noise floor stay where the published measurement put
+    # them and only the span changes. The other ladder agrees; see the caption.
+    d = d[d.ladder == "fixed_n"].sort_values("window_steps")
+
+    PUB = 600.0  # the published window of section 7, not in this file
+    runs = [("a_add", "generalises", dict(marker="o", ls="-", color=TRANSIENT,
+                                          ms=3.4, mec="white", mew=0.6)),
+            ("x_no_grok", "label-matched control",
+             dict(marker="o", ls=(0, (3.5, 2)), color=TRANSIENT, ms=3.4,
+                  mfc="white", mec=TRANSIENT, mew=1.0))]
+    panels = [("PR_pos_det_med", "(a) median over windows"),
+              ("PR_pos_det_max", "(b) maximum over windows")]
+
+    fig, axes = plt.subplots(1, 2, figsize=(5.5, 2.1), sharey=True)
+    for ax, (col, title) in zip(axes, panels):
+        ax.axhline(1.0, color=FAINT, lw=0.7, ls=(0, (1, 2.5)), zorder=1)
+        ax.axvline(PUB, color=GREY, lw=0.7, ls=(0, (2, 2.5)), zorder=1)
+        for run, label, kw in runs:
+            g = d[d.run == run]
+            ax.plot(g.window_steps, g[col], lw=1.1, zorder=3, **kw)
+        ax.set_xscale("log")
+        ax.set_xlim(380, 260000)
+        ax.set_xticks([1e3, 1e4, 1e5])
+        ax.set_xticks([], minor=True)
+        ax.set_xticklabels(["$10^3$", "$10^4$", "$10^5$"])
+        ax.set_xlabel("window length (optimiser steps)")
+        ax.set_title(title, loc="left")
+    axes[0].set_ylim(0.94, 2.48)
+    axes[0].set_yticks([1.0, 1.5, 2.0])
+    axes[0].set_ylabel("participation ratio")
+    axes[0].text(PUB * 1.25, 2.42, "published", ha="left", va="top", **POINTER)
+
+    handles = [Line2D([], [], lw=1.1, label=lbl, **kw) for _, lbl, kw in runs]
+    fig.tight_layout(rect=[0, 0.085, 1, 1], w_pad=1.6)
+    fig.legend(handles=handles, ncol=2, loc="lower center",
+               bbox_to_anchor=(0.5, 0.005), handlelength=2.2,
+               columnspacing=2.0)
+    save(fig, "fig_prwindow")
 
 
 if __name__ == "__main__":
@@ -555,3 +806,7 @@ if __name__ == "__main__":
     fig_map()
     fig_pairs()
     fig_window()
+    fig_aniso()
+    fig_tau()
+    fig_observers()
+    fig_prwindow()

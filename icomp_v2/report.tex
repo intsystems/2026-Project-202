@@ -403,17 +403,19 @@ image data, function subspace  & measured    & $1$--$8$  & 0.50 & $+0.99$ & fail
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_regimes.pdf}
-\caption{The evaluation of \cref{sec:digits}: a frozen tanh network on the digits data, a
-linear head confined to ten directions of which $r$ are excited, five of the nine arms. (a) The
-estimate against the measured effective rank, which the construction holds at $r$; the marker is
-the median of the forty values behind each point, four seeds by ten observers, and the band their
-interquartile range. It tracks the truth only under a fast recurrent drive. The seven transient
-points pile up at $x \approx 1.05$ because that arm's measured rank is about one at every nominal
-$r$; that is the measurement, not missing data. (b) The identifiability ratio, which separates
-the regimes with no ground truth. It is \emph{not} computed on the runs of (a): the sweep
-populates it for seed $0$, three observers and $r \in \{2, 6\}$ only, so each regime rests on the
-six values plotted, one sub-row per observer. The transient is the one regime it passes, hence
-the trend-crossing count of \cref{sec:diagnostics}.}
+\caption{The evaluation of \cref{sec:digits}: a frozen tanh network on the digits data, a linear
+head confined to ten directions of which $r$ are excited, five of the nine arms. Colour is the
+regime of \cref{tab:classes}; ``fast'' and ``slow'' are the two recurrent drive rates and
+``$+$ noise'' the fast drive with weak noise added. (a) The estimate against the measured
+effective rank, which the construction holds at $r$; the marker is the median of the forty values
+behind each point, four seeds by ten observers, and the band their interquartile range. The
+dashed diagonal is the truth and the dotted line $E_{\max}$, a reference and not a bound: no
+clamping is applied and the transient arm sits above it, its seven points piled at
+$x \approx 1.05$ because its measured rank is about one at every $r$. (b) The identifiability
+ratio, which separates the regimes with no ground truth; the shaded column is the admissible
+band. It is \emph{not} computed on the runs of (a): the sweep populates it for seed $0$, three
+observers and $r \in \{2,6\}$ only, so each regime rests on the six values plotted. The transient
+is the one regime it passes, hence the trend-crossing count of \cref{sec:diagnostics}.}
 \label{fig:regimes}
 \end{figure}
 
@@ -509,8 +511,8 @@ A change inside a run might still be read: the configuration is constant within 
 the lag, the window, the observer --- and with it the level offset, so a change cannot be
 attributed to it. The floor such a change must clear is the observer's own drift, which
 \cref{sec:nuisance} bounds at $1.16$ components. We cannot test that here, for want of resolution
-rather than of signal: the frozen window spans $39\,990$ optimiser steps, and the largest
-excursion in the set is in a run that never generalises (\cref{app:window}). These logs also offer
+rather than of signal: the frozen window spans $39\,990$ optimiser steps, and the two largest
+excursions in the set are nowhere near a transition (\cref{app:window}). These logs also offer
 one observer, the parameter norm, and it is the one for which \cref{sec:nuisance} cannot exclude a
 smoothness explanation.
 
@@ -536,12 +538,14 @@ generalisation (\cref{app:falls}).
 \includegraphics[width=\textwidth]{figures/fig_dip.pdf}
 \caption{The trajectory effective rank measured directly, on three seeds of modular addition at
 weight decay $1.0$ and one $S_5$ composition at $0.2$, against the same two configurations at
-weight decay zero, which memorise and stay at chance validation accuracy. The statistic is
-$\PR^{\mathrm{det}}$ of \cref{sec:three}, an effective rank: these runs have no recurrent set, so no
-active dimension is defined for them. Windows are $600$ optimiser steps for the modular runs and
-$300$ for $S_5$, at their midpoint, so a feature is located to within $\pm 300$ and $\pm 150$
-steps; each control is aligned on the generalisation step of its matched run, and the band on
-(a) and (b) is the two-hash disagreement, under two per cent of the mean (\cref{app:sketch}).}
+weight decay zero, which memorise and stay at chance validation accuracy. Colour is the regime of
+\cref{tab:classes}, so the four regularised runs are stochastic and the two controls transient; the
+thick line is the mean of the four that generalise. The statistic is $\PR^{\mathrm{det}}$, an
+effective rank: these runs have no recurrent set, so no active dimension is defined for them.
+Windows are $600$ optimiser steps for the modular runs and $300$ for $S_5$, at their midpoint, so
+a feature is located to within $\pm 300$ and $\pm 150$ steps, and each control is aligned on the
+generalisation step of its matched run. The band on (a) and (b) is the two-hash disagreement,
+under two per cent of the mean (\cref{app:sketch}).}
 \label{fig:dip}
 \end{figure}
 
@@ -817,6 +821,25 @@ probe accuracy             & function   & \multicolumn{3}{l}{degenerate in every
 \end{tabular}
 \end{table}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_observers.pdf}
+\caption{Which scalar log to keep. Ten of the twelve observers of \cref{tab:obsdef}, scored on the
+fast recurrent arm of \cref{sec:digits}. The point is the mean absolute error of the estimate
+against the measured effective rank over the seven simulated ranks, taking the median over the
+four seeds at each; the bar is the mean across-seed standard deviation of the estimate, drawn
+either side of the point. It is the spread of the estimate and not of the error, so it may extend
+below zero, and where it does the observer's error is inside its own seed-to-seed noise. Marker
+shape is the observer family. The shaded rows are the two parameter norms, which are what a
+training run ordinarily logs and the only two whose roughness also orders the withheld ranks of
+\cref{tab:obs}. Eight of the ten lie between $0.25$ and $0.58$ components with every bar
+overlapping every other, so this experiment does not choose among them; the gradient norm and the
+full-batch loss are more than three times worse than the next observer and are the two to avoid.
+The ordering differs slightly from \cref{tab:obs}, which scores only the four withheld ranks and
+reports the two parameter norms as one row.}
+\label{fig:observers}
+\end{figure}
+
 Two observers are excluded from every aggregate, for different reasons. Probe accuracy is
 quantised, which drives the delay vectors together and trips the degeneracy flag in $100\,\%$
 of its windows; it is the sole source of the degenerate fraction reported anywhere in this
@@ -938,6 +961,24 @@ $\tau$ & span & $r=1$ & $2$ & $3$ & $4$ & $6$ & $8$ \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_tau.pdf}
+\caption{The delay lag, swept on one system: a fixed torus of period $400$ samples at
+$E_{\max} = 20$, two seeds, six fixed lags $\tau \in \{1,2,4,8,16,32\}$ spanning $0.05$ to $1.52$
+periods. Marker shape is the true rank, the marker the median of the two seeds and the bar their
+range. (a) The estimate. (b) The same divided by the true rank, so one reference line replaces
+six; the shaded column is three tenths to a half of a period. Below a tenth of a period every rank
+returns the same tangent constant near $2.5$ and the ordering is gone; above one period the
+estimate diverges, reaching $63.4$ at $r = 8$; in between it is within one component at $r = 6$
+and $r = 8$ and overshoots by one to two at $r = 3$ and $r = 4$. Across the sweep the estimate at
+$r = 8$ moves by $60.7$ components and at $r = 1$ by $0.03$, so the failure is a collapse of the
+ordering at one end and a divergence at the other, not a uniform bias. \Cref{tab:tau} gives the
+same numbers. A seventh setting, in which $\tau$ is taken from the autocorrelation, is omitted
+because its span differs between the two seeds.}
+\label{fig:tau}
+\end{figure}
+
 \paragraph{Nuisance factors.} \Cref{tab:controls} varies seven factors at a fixed active
 dimension of four, over five seeds and twelve observers, against the real four-component
 change measured below. Rotating the coordinates is scored on the fixed parameter projection
@@ -1026,6 +1067,24 @@ $r$ & $q$ & $\PR$ & MG & $\PR_{\mathrm{delay}}$ \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_aniso.pdf}
+\caption{Anisotropy separates the two candidate estimands, and the estimate follows the count. The
+system of \cref{sec:matrix} with mode $l$ driven at amplitude $q^{l}$, three seeds, observed
+through the squared Frobenius norm and estimated with the frozen eight-direction configuration;
+one panel per $r$. The manifold dimension is $r$ in every panel, drawn dotted: the orbit closes
+onto an $r$-torus whatever $q$ does. Filled circles are the estimate, the median over seeds, with
+their standard deviation as bars; open squares are the measured participation ratio of the
+covariance, which agrees with the closed form $(\sum_l a_l^2)^2/\sum_l a_l^4$ to two decimals in
+all twenty-four cells and so carries no spread. At $r = 2$ and $r = 4$ the estimate is flat in $q$
+while the participation ratio falls to $1.47$ and $1.65$: the estimator counts the coordinates of
+the set rather than measuring its effective rank. At $r = 6$ and $r = 8$ it falls too, once the
+weakest mode is under a hundredth of the strongest, because it counts only the directions it can
+resolve, as \cref{sec:three} defines it. \Cref{tab:aniso} gives twelve of these points in digits.}
+\label{fig:aniso}
+\end{figure}
 
 At two and four directions the estimate is flat in $q$ while the participation ratio falls by
 a factor of $1.4$ and $2.4$, which is the clean case. At six and eight it falls too, and the
@@ -1139,19 +1198,23 @@ is monotone.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_map.pdf}
-\caption{Every training log of \cref{sec:grokking} in the plane of the two diagnostics, one
-point per run: seven transformer runs of $120\,000$ steps observed through the parameter norm, and
-ten perceptron runs of $100\,000$ steps observed through the training loss. The vertical axis is
-the identifiability ratio, near unity when the estimate does not depend on the embedding
-dimension; the horizontal axis is the trend-crossing count, which tests non-monotonicity of the
-series and not recurrence in the reconstructed space. Twelve of the seventeen runs coincide: all
-ten perceptron runs and both zero-weight-decay transformer runs have exactly two crossings, with
-$\rho_{\mathrm{ident}}$ between $0.9975$ and $0.9992$. Those two groups are drawn with a small
-offset either side of their true abscissa, which the grey tick marks, and labelled with their
-multiplicity. The shaded rectangle is where every accurate case of \cref{sec:validity} fell:
-$\rho_{\mathrm{ident}} \le 1.10$ and more than eight crossings. It describes the calibration and is
-not a validated decision rule; no run of either setting is inside it, and the two settings fail in
-different corners without reference to any label.}
+\caption{Every training log of \cref{sec:grokking} in the plane of the two diagnostics, one point
+per run: seven transformer runs of $120\,000$ steps observed through the parameter norm, and ten
+perceptron runs of $100\,000$ steps observed through the training loss. Colour is the regime of
+\cref{tab:classes} and marker shape the setting: the five regularised mini-batch runs are
+stochastic, the ten full-batch perceptron runs and the two zero-weight-decay transformer runs
+transient. The vertical axis is the identifiability ratio, near unity when the estimate does not
+depend on the embedding dimension; the horizontal axis is the trend-crossing count, which tests
+non-monotonicity of the series and not recurrence in the reconstructed space. The grey lines are
+the edges of the shaded rectangle: to their left too few crossings, above them instability in $E$.
+Twelve of the seventeen runs coincide at exactly two crossings with $\rho_{\mathrm{ident}}$
+between $0.9975$ and $0.9992$; those two groups are drawn with a small offset either side of their
+true abscissa, which the grey tick marks, and labelled with their multiplicity. The shaded
+rectangle is where every accurate case of \cref{sec:validity} fell, $\rho_{\mathrm{ident}} \le
+1.10$ and more than eight crossings. It describes the calibration and is not a validated decision
+rule; no run of either setting is inside it, and the two settings fail in different corners
+without reference to any label, the stochastic runs by having no invariant set and the transient
+ones by being monotone.}
 \label{fig:map}
 \end{figure}
 
@@ -1166,16 +1229,18 @@ members differ in the shape of their curves long before any question of dimensio
 \caption{(a) The estimate on the training loss for the four label-matched pairs of
 \cref{sec:pairs}: three modular polynomials at $p = 97$, each against itself perturbed by one
 monomial, and modular addition against $n^3+nm^2+m$. Both members of a pair reach full training
-accuracy under identical optimisation on identical data budgets. The marker is the median over
-the seven sliding windows, the thick bar their interquartile range and the thin line their full
-range. The medians separate the two members of every pair, by $2.88$ to $3.54$ units and with no
-overlap between the two groups of medians, but the window-level ranges overlap heavily, because
-the estimate drifts upward over training in every run rather than scattering about a level.
-(b) The $(2n_1{+}3n_2)^4$ pair, the second row of (a). The representable target drives the
-training loss to $2.3 \times 10^{-6}$ while the perturbed one stops at $3.6 \times 10^{-3}$, three
-orders of magnitude short despite fitting the training set completely, so the two curves differ in
-shape rather than in any attractor dimension. Across the four pairs that gap runs from $2.7$ to
-$3.2$ orders.}
+accuracy under identical optimisation on identical data budgets. All eight runs are full-batch
+perceptrons, which \cref{fig:map} places in the transient regime, so the figure carries that one
+hue and generalisation is carried by fill and dash. The marker is the median over the seven
+sliding windows, the thick bar their interquartile range and the thin line their full range. The
+medians separate the two members of every pair, by $2.88$ to $3.54$ units and with no overlap
+between the two groups of medians, but the window-level ranges overlap heavily, because the
+estimate drifts upward over training in every run rather than scattering about a level. (b) The
+$(2n_1{+}3n_2)^4$ pair, the second row of (a). The representable target drives the training loss
+to $2.3 \times 10^{-6}$ while the perturbed one stops at $3.6 \times 10^{-3}$, three orders of
+magnitude short despite fitting the training set completely, so the two curves differ in shape
+rather than in any attractor dimension. Across the four pairs that gap runs from $2.7$ to $3.2$
+orders.}
 \label{fig:pairs}
 \end{figure}
 
@@ -1352,6 +1417,26 @@ $120\,000$ & 1.256 & 1.659 & 1.929 & 2.337 \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_prwindow.pdf}
+\caption{The trajectory participation ratio against window length, on the full-batch pair of this
+appendix: modular addition, which memorises at $9\,200$ and generalises at $11\,950$, and its
+label-matched control, which memorises at $9\,800$ and does not generalise. The statistic is
+$\PR^{\mathrm{det}}$ on the sketched parameter trajectory over windows of $3\,000$ to $120\,000$
+optimiser steps, the window lengthened by spreading sixty samples further apart rather than by
+adding samples, so that the bound and the noise floor stay where the published measurement put
+them and only the span changes. (a) The median over a run's windows, (b) the maximum; the dotted
+line at $1$ is the floor a straight trajectory returns, and the dashed vertical the $600$-step
+window of \cref{sec:grok-diagnostics}, which is not part of this sweep. The median stays on the
+floor until about $10^4$ steps, two orders of magnitude above that window, so the absence of a
+feature there was a resolution limit and not a fact about the run. Where the statistic finally has
+range it does not separate the two runs, and beyond $30\,000$ steps the ordering reverses, because
+the window is then a large fraction of a run whose weight norm is still climbing. Both runs are
+transient, so the figure carries one hue and the control is drawn open and dashed.}
+\label{fig:prwindow}
+\end{figure}
+
 Introducing mini-batches confirms the diagnosis. The same statistic then ranges over more
 than a decade while the generalisation step moves by one logged step, so the learning is
 unchanged and the statistic has moved by an order of magnitude. Any claim read from a
@@ -1403,8 +1488,9 @@ inside four of its nine windows, and the falling windows are where its parameter
 which is the ramped gain of \cref{sec:nuisance}. The other two show nothing: one has a total range
 of $0.77$ components over its whole record. Nor is any of this specific. Across the fifty-six
 stride-to-stride changes, six of twenty-four clear the floor in the runs that generalise and six
-of thirty-two in the runs that do not, and the largest change in the set, $5.20$ components,
-belongs to a run that ends at seven per cent validation accuracy. The tightest comparison
+of thirty-two in the runs that do not. The largest change in the set, $6.36$ components, is in a
+run that does generalise, but it falls more than $100\,000$ steps after its generalisation step;
+the next largest, $5.20$, is in a run that ends at seven per cent validation accuracy. The tightest comparison
 available is three runs of one configuration, of which one generalises: their ranges are $0.77$,
 $0.78$ and $0.67$ components, and nothing separates them.
 
@@ -1421,13 +1507,17 @@ re-run of the estimator, not a re-reading of what we have.
 under the frozen configuration of \cref{sec:grok-diagnostics}: nine windows per run of $39\,990$
 optimiser steps each, advanced by $10\,000$, plotted at their centres. Colour is the regime of
 \cref{tab:classes}, five runs stochastic and two transient, none recurrent. (a) All sixty-three
-windows, with the three generalisation steps marked and one window drawn to scale in grey.
-(b) The three generalising runs aligned on their own generalisation step, each point a change
-from the window before it and its bar the span it summarises, so consecutive points share three
-quarters of their span. The grey band is the $\pm 1.16$-component floor of \cref{sec:nuisance} and
-the shaded column is $\pm 5\,000$ steps of $t_{\mathrm{gen}}$, which one of the twenty-seven centres
-reaches. (c) Every stride-to-stride change, one sub-row per run so that coincident changes stay
-countable. The largest in the set is in a run that never generalises.}
+windows, with the three generalisation steps marked on the axis. (b) The three generalising runs
+aligned on their own generalisation step, each point a change from the window before it and its
+bar the span it summarises, so consecutive points share three quarters of their span and nothing
+is localised to better than $\pm 20\,000$ steps. The grey band is the $\pm 1.16$-component floor
+of \cref{sec:nuisance} and the shaded column is $\pm 5\,000$ steps of $t_{\mathrm{gen}}$, which one
+of the twenty-seven centres reaches. (c) Every stride-to-stride change, one sub-row per run so
+that coincident changes stay countable, against the same floor. Six of the twenty-four changes in
+the runs that generalise clear it and six of the thirty-two in the runs that do not. The largest
+in the set, $6.36$ components, is in a run that generalises but falls more than $100\,000$ steps
+after its generalisation step; the next largest, $5.20$, is in a run that ends at seven per cent
+validation accuracy.}
 \label{fig:window}
 \end{figure}
 

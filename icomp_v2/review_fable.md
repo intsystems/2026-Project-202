@@ -270,46 +270,27 @@ misleading — the logs actually used live in `code/dimension_recovery/results/e
 whoever holds the plots. Findings are from a dedicated audit against `make_figures.py` and the
 source CSVs.*
 
-### 5.6 Figures the paper should add
+### 5.6 Figures — what was added, and what is still missing
 
-Ranked. All are feasible from committed result files unless noted.
+Applied. The paper now has nine figures, four of them added in this pass: the anisotropy
+separation (appendix E), the delay-lag sweep (appendix E), per-observer error with across-seed
+spread (appendix D), and the participation ratio against window length (appendix J). Each sits
+beside the table it visualises, so the table keeps the exact values and the figure carries the
+shape. The palette was replaced — the old one separated by only 8.8 ΔE under simulated
+deuteranopia despite the build notes claiming otherwise — and every explanatory sentence moved
+from inside the axes into the captions.
 
-1. **Move Figure 3 into §7.1.** Not new, but the highest-value change in this section.
-2. **The $E_{\max}$ ceiling** (§1.5) — the estimate against true $r$ at two or more $E_{\max}$, with
-   the $E_{\max}/2$ prediction drawn. This is the figure that would turn the paper's most-noticed
-   weakness into a result. Needs the sweep of §1.5; partial data exists at $E_{\max} \in \{10,20\}$
-   and $\{20,40\}$.
-3. **The anisotropy experiment as a plot** — MG flat against $\rho$ while $\PR$ falls, one panel per
-   $r$, from `e8_anisotropy/aniso_summary.csv` (which carries `MG_sd` and the closed-form
-   prediction, so error bars and a reference curve are free). This is the separation the title turns
-   on and it is currently invisible inside twelve rows of digits.
-4. **Raw scalar-log traces, one per regime.** The paper is about reading time series and never shows
-   one. Small multiples: a recurrent arm, a stochastic arm, a transient arm, and a real parameter-norm
-   log from a grokking run, on a common axis, each labelled with its regime and its
-   $\rho_{\mathrm{ident}}$. This single figure would make Table 1 and the whole of §6 concrete.
-   Note: for the synthetic arms only windowed summaries are committed, so the raw series would need
-   regenerating; the real logs are in `active_rank/results_fine/`. The accuracy, loss and
-   parameter-norm traces for all four transformer runs already exist as plots in the previous draft
-   (`icomp_article/images/{mod,s5}_wd{0,1}_{acc,loss,norm}.png`), so the real-log half of this
-   figure is a restyling job rather than new work — and dropping every raw trace between drafts is
-   arguably the one thing the rewrite lost.
-5. **Sliding-window MG over training** for the transformer runs, from
-   `e5_real_logs/real_logs_windows.csv` (281 windows already computed) — this is the missing
-   experiment of §1.6, and it is a figure, not a table.
-6. **Per-observer recovery with across-seed spread** — replaces or supports Table 5 and answers the
-   practical question the paper raises and never resolves: which log should I keep? `observer_scores.csv`
-   carries `seed_sd`.
-7. **The $\tau$ sweep as a plot** (estimate against span in periods, log axes, one line per $r$),
-   from `e6_tau/tau_sensitivity.csv`, which has 336 rows including seeds, so error bars are free.
-8. **A schematic of the four quantities of §3.1** — one cartoon: an affine subspace, a torus inside
-   it, an anisotropic cloud on the torus, and the map to outputs. No data needed, and §3.1 is the
-   densest prose in the paper.
-9. **The window-length sweep as a plot** (Appendix H), log-x, which makes the resolution-limit
-   argument visual in a way fourteen numbers do not.
+Still not drawn, and both need computation rather than plotting:
 
-If only three can be added: 2, 3 and 4.
-
----
+- **The $E_{\max}$ ceiling.** The figure that would settle §5.2's open question needs the sweep
+  described there; there is nothing to plot until it is run.
+- **Raw scalar-log traces, one per regime.** For the synthetic arms only windowed summaries are
+  committed, so the raw series would have to be regenerated. The real grokking logs do exist
+  (`active_rank/results_fine/*_train.csv`), and the accuracy, loss and norm traces for all four
+  transformer runs were plotted in the previous draft
+  (`icomp_article/images/{mod,s5}_wd{0,1}_{acc,loss,norm}.png`), so the real half of this figure
+  remains a restyling job. It is the one figure a reader of a paper about reading time series
+  might still miss.
 
 ## 7. Writing
 

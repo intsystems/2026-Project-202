@@ -100,21 +100,32 @@ style file, at 8 pt so that LaTeX never rescales them.
 | --- | --- | --- |
 | `fig_regimes` | recovery and admissibility on the image-data system | section 6 |
 | `fig_dip` | the collapse of the trajectory effective rank at generalisation | section 7.3 |
+| `fig_observers` | per-observer error with across-seed spread: which log to keep | appendix D |
+| `fig_tau` | the delay-lag sweep, collapsing at one end and diverging at the other | appendix E |
+| `fig_aniso` | the count against the effective rank as the drive is made anisotropic | appendix E |
 | `fig_map` | every training log in the plane of the two diagnostics | appendix G |
 | `fig_pairs` | the label-matched pairs and the loss curves behind them | appendix G |
+| `fig_prwindow` | the participation ratio against window length | appendix J |
+| `fig_window` | the windowed estimate on the grokking logs, and what it cannot resolve | appendix L |
 
-Colour encodes the three dynamical regimes of table 1 and nothing else: recurrent, stochastic,
-transient. Line style separates variants inside a regime and marker shape separates experimental
-settings, so identity never rests on colour alone. The palette is `#0072B2 / #D55E00 / #5D3A9B`;
-it passes the OKLCH lightness band, the chroma floor, the Machado severity-1.0 protan and deutan
-separation on all pairs, the normal-vision floor and the WCAG contrast check against the page.
-Re-run those checks before changing any colour.
+Colour encodes the three dynamical regimes of table 1 and nothing else: recurrent `#004488`,
+stochastic `#BB5566`, transient `#997700`, with `#666666` for reference lines. This is Paul Tol's
+high-contrast qualitative scheme. It replaced an Okabe-Ito-style blue/orange/purple set whose
+worst pair separated by only 8.8 ΔE under simulated deuteranopia; the current set measures 45.3 ΔE
+protan and 50.7 ΔE deutan at minimum WCAG contrast 4.21 against the page. Re-run those checks
+before changing any colour, and note that the earlier README claimed the old palette passed them
+when it did not.
 
-Two further rules were added after a review found figures misdescribing their own data. Where a
-plotted point is an aggregate, its spread is drawn with it. Where points coincide, the
-multiplicity is made visible rather than hidden — `fig_regimes(b)` plots every raw value because
-it rests on 54 of 2240 rows, and `fig_map` offsets and labels the twelve runs that share a single
-coordinate. Any edit that reintroduces one mark for many runs must also fix the caption.
+Line style and marker shape carry every distinction that is not the regime, so identity never
+rests on colour alone. Three further rules exist because reviews found figures misrepresenting
+their own data, and should not be undone for tidiness:
+
+* where a plotted point is an aggregate, its spread is drawn with it;
+* where points coincide, the multiplicity is made visible — `fig_regimes(b)` plots every raw value
+  because it rests on 54 of 2240 rows, and `fig_map` offsets and labels the twelve runs that share
+  one coordinate;
+* explanatory prose lives in captions, not inside the axes. Inside the axes there is at most one
+  short pointer per panel.
 
 Do not set `savefig(bbox_inches="tight")`. A legend wider than the axes then expands the canvas
 past 5.5 in, LaTeX scales the figure down to fit, and the type shrinks with it; the figures
