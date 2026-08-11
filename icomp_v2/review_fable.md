@@ -67,8 +67,19 @@ Also fixed in the repository: `code/active_rank/dip.py` now defaults to `results
 the statistics the paper uses, so it regenerates the committed `rank_dip.csv` bit for bit; it also
 writes the aligned-window control measurement the paper now quotes.
 
-**Known regression:** the body is now ten pages against a nine-page limit. Installment 3 is the
-restructuring pass that pays it back; installment 2 is net-negative on length.
+**Installment 3 — structure, compression and figures** (applied). Removed from this file: 1.3,
+1.4, 1.5, 1.7, 1.9, 1.11, 2.1, 2.2, 4.3, 4.6, 4.7, 4.10, 4.11, 5.1, 5.2, 5.5 and all of section 6.
+Section 5 is split into *the ceiling* and *the silence control*; section 7 is reordered so the
+diagnostics come first and the direct measurement second, with a roadmap sentence; the estimand is
+defined at a resolution, which turns section 6.4 into a confirmation; the twelve observers are
+defined in a new appendix; the protocol requirements are named; Table 3 and Figure 3 move into the
+body; related work is compressed from 68 lines to 44; the introduction gains a motivation
+paragraph; the conclusion becomes *what this does not establish* plus *what we would do next*; and
+the three figure captions are replaced against regenerated figures that show uncertainty and
+multiplicity.
+
+**The body is back inside nine pages**, with no undefined references, no citation warnings and no
+overfull boxes.
 
 ---
 
@@ -126,91 +137,6 @@ Candidate answers already latent in the draft — pick two, do not list five:
 - adjudicating "the optimiser moves in a low-dimensional subspace" claims, which are made in the
   literature with four different quantities that the paper's §3.1 separates.
 
-### 1.3 The arc of §7 fights the thesis
-
-Given the methodology-first framing you have chosen, §7 currently runs backwards. It opens with a
-direct trajectory measurement that does **not** use the instrument the previous four sections
-built, and the instrument does not reappear until §7.3. A reader who has just spent five pages on
-delay embeddings is entitled to ask, at the top of page 8, why they read them.
-
-Two acceptable orders. Either:
-
-- **(A) instrument-first**: §7.1 the diagnostics refuse both settings and say why (this is the
-  instrument *working*); §7.2 so we pay for the trajectory, and here is the collapse; §7.3 what a
-  log can still contribute, and the label-matched pairs. This matches the title and abstract.
-- **(B) result-first**, which is what you have: then you need **one roadmap sentence** at the top
-  of §7 that states the whole logic in advance — "the logs of both settings turn out to be
-  inadmissible, which we establish in §7.3; we therefore begin with what can be measured when the
-  trajectory itself is stored." Without it the section reads as a topic change.
-
-I would take (A). It costs nothing and it is the only order in which the paper's own instrument is
-doing work at the moment of the headline result.
-
-### 1.4 The self-caught leakage is an asset, currently filed as an embarrassment
-
-Requirement 4 — set the learning rate to zero and the observer must fall silent — caught two of
-your own systems reproducing their reported result with no training taking place, at correlation
-above 0.98. It also caught the instantaneous mini-batch loss, an observer that scored in the best
-three. That is the most quotable methodological result in the paper: **a control that most
-published dimension-on-training-logs analyses do not run, which invalidates two of six of our own
-systems.**
-
-Right now it is delivered in a subordinate clause inside a subsection called "Adding an optimiser,
-and then a network". Give it a name and a heading of its own ("The silence control", §5.2 or a
-short §4.1), state it as a finding, and let the two rejected systems be the evidence rather than
-the subject.
-
-### 1.5 The saturation ceiling is a result, not a limitation — and you can probably explain it
-
-This is the most substantive scientific suggestion in this review, and it addresses the concern
-you raised directly: the intermediate systems may not be "built wrong", they may be showing a real
-property of the instrument.
-
-The draft reports three saturation points and never connects them:
-
-| where | $E_{\max}$ | saturates above about |
-| --- | --- | --- |
-| §5.1, oscillating matrix extended to twenty | 25 (`exp9`, `best_config.json`) | 9 |
-| §5.2, linear and logistic regression to twenty | not stated | 12 |
-| §5.3, image data at twenty available directions | 40 | 6, reaching 15.1 at $r=20$ |
-
-Takens' condition as the paper itself states it in §3.2 is $E > 2d$. That gives a **predicted
-ceiling of $E_{\max}/2$**: 10 for $E_{\max} = 20$, 20 for $E_{\max} = 40$. The observed ceiling at
-the eight-direction configuration is "above about nine", which is $E_{\max}/2$ to within the
-resolution of the experiment. And the twenty-direction configuration uses $E_{\max} = 40$ for
-$d = 20$, i.e. $E = 2d$ exactly, which **fails** the paper's own sufficient condition — so the
-observed 15.1 against a true 20.0 is not a mysterious shortfall, it is what the design predicts.
-
-Your own calibration grid already contains supporting evidence: at $E_{\max} = 10$ the selection
-error over ranks $\{2,4,6\}$ is $0.500$, against $0.324$ at $E_{\max} = 20$
-(`active_dimension/results/e1_calibration/config_ranking.csv`), and the difference must come from
-$r = 6$, which exceeds $E_{\max}/2 = 5$.
-
-Two consequences:
-
-- **Reframe.** Replace the scattered saturation remarks with one named paragraph — "the ceiling" —
-  that states the $E_{\max}/2$ prediction, shows it, and thereby converts the paper's most-noticed
-  weakness into a confirmed property of the instrument. It also disposes of the awkward "the
-  twenty-direction result is exploratory" framing: the honest statement is that $E_{\max} = 40$
-  cannot recover twenty components *by construction*, and the experiment confirms it.
-- **One cheap experiment closes it, and there is a rival hypothesis it must beat.** The competing
-  explanation is the classical finite-record bound: Eckmann and Ruelle's rule of thumb is
-  $D \lesssim 2\log_{10} N$, which at your window of $N = 8000$ gives $7.8$ — uncomfortably close to
-  the observed eight-direction ceiling. The two hypotheses are cleanly separated by two sweeps:
-  vary $E_{\max} \in \{10, 20, 40, 80\}$ at fixed record length, and vary the record length at fixed
-  $E_{\max}$. The $E_{\max}/2$ hypothesis predicts movement in the first and none in the second; the
-  record-length hypothesis predicts the reverse. Note that the record-length bound does **not**
-  explain the twenty-direction ceiling of $\approx 15$ at the same $N = 8000$, while $E_{\max}/2$
-  does, so the evidence you already have favours the embedding explanation — which is why this is
-  worth running rather than merely conceding. Either outcome is publishable and either beats the
-  present silence, and the identifiability ratio already computes a $2E_{\max}$ arm, so half the
-  machinery exists. Eckmann and Ruelle must be cited whichever way it comes out; see §8.7.
-
-Per your instruction, keep the intermediate systems in the story but do not leave them mixed in one
-subsection. Split §5.2 along the two threads that are currently tangled: **the ceiling** (regression
-systems, matrix extension, $k=20$) and **the silence control** (decoder, perceptron, instantaneous
-loss). Constructions and per-system tables go to the appendix; the body keeps a paragraph each.
-
 ### 1.6 §7.3's constructive conclusion has no supporting experiment
 
 §7.3 ends with the paper's forward-looking claim: the *level* of the estimate is uninterpretable,
@@ -233,20 +159,6 @@ Two ways out, and the first is much better:
    move. Either way this is the experiment the paper is set up to run and does not.
 2. Reframe §7.3's second half explicitly as what would be required, not as what follows.
 
-### 1.7 There is no "so what should I do" for the reader
-
-Three actionable rules are derivable from the paper and are currently scattered across five
-sections. Collect them, in the body, as a short numbered block — reviewers reward this and it costs
-eight lines:
-
-- do not read a delay-embedding dimension off a training log without the two diagnostics; both
-  standard grokking settings fail them;
-- if you want the trajectory rank, a CountSketch to $\mathbb{R}^{1024}$ is enough and the
-  validation is in Appendix G — this is a cheap, reusable recipe and the paper undersells it;
-- a trajectory participation ratio must be controlled for window length and for batch size before
-  anything is attributed to learning (Appendix H proves this on your own data and it is currently
-  buried).
-
 ### 1.8 The hedging, in aggregate, argues against the paper
 
 Individually every qualification in the draft is correct and I would not remove one of them. But
@@ -258,22 +170,6 @@ The fix is structural, not a matter of deleting hedges: **collect them**. Give �
 "What this does not establish" block that carries the scope limits in one place, and let the result
 sentences be declarative. You lose no honesty and you gain the ability to state a finding without
 apologising inside the same clause.
-
-### 1.9 The contributions list overclaims relative to the body
-
-- Contribution 2 says the estimator "orders it to twenty". The body marks the twenty-direction
-  result exploratory (no seed split; Theiler window smaller than the embedding span). A
-  contribution bullet must not claim what §5.3 disclaims. Either promote the result — which
-  §1.5 above gives you a principled way to do — or say "ordinally to twenty in an exploratory
-  configuration".
-- The abstract says "On six systems [...] recovery is accurate to under one component". Only two
-  rows of Table 3 carry a recovery number the protocol accepts, and the headline $0.87$ comes from
-  **one** system. The sentence as written implies six-system agreement. Say: evaluated on six
-  systems, of which the two that pass every control give $0.87$ and $0.50$.
-- "to $0.87$ components" reads as a bound; it is a mean absolute error. Same for "to under one
-  component" throughout.
-- §8 says "Four limits bound this" and then gives three sentences, the second containing four
-  clauses. Either itemise or fix the count.
 
 ### 1.10 The unanswered question: is the admissible regime ever realised in real training?
 
@@ -310,78 +206,12 @@ Either outcome is worth more than the current sentence. If neither is feasible b
 the framing must at least be honest and explicit in §8: the admissible regime has not been
 exhibited in an undriven training run, and whether it occurs is open.
 
-### 1.11 Limitations that are missing
-
-Currently absent from §8 and needed:
-
-- **Scale.** Every system is tiny: at most twenty active directions, an 8×8-pixel dataset, a
-  one-layer transformer. Nothing here is tested at a scale anyone trains at. Say so; it is not
-  disqualifying and the reviewer will otherwise say it for you.
-- **The configuration is a choice.** Appendix B reports the selection error spanning a factor of
-  five across the grid on identical data, and both configurations sitting at a grid boundary. That
-  belongs in the limitations, not only in an appendix.
-- **The diagnostics' calibration set is five arms of one system.** The admissible region in the
-  figure is two thresholds fitted on a handful of points, with no held-out validation. The paper
-  says "calibrated against no wider family" once, in passing; it should be a stated limit.
-
----
-
 ## 2. Definitions, theory and formulas
 
 *Scope: §3 and the mathematical statements throughout. Owner: whoever holds the theory. Several of
 these are cheap fixes that materially raise the paper's rigour.*
 
-### 2.1 CRITICAL — the definition of $d_{\mathrm{act}}$ is not well-posed as written
-
-Equation (1) defines $d_{\mathrm{act}}(\gW) = \dim \gM_{\gW}$ where $\gM_{\gW}$ is "the set of
-states the trajectory recurrently visits inside the window, the local part of the invariant set or
-the closure of the orbit."
-
-Over a *finite window*, the closure of $\{\vc_t : t \in \gW\}$ is a compact set of dimension one —
-a curve segment. The $r$-torus is the closure of the **infinite** orbit, or equivalently the
-support of the invariant measure. So the definition, read literally, gives $d_{\mathrm{act}} = 1$
-for every $r$, which is exactly the reading the following sentence tries to exclude ("It is not the
-dimension of the time-parameterised curve $t \mapsto \vc_t$, which is one for every $r$, but of the
-set the curve fills"). A finite orbit segment does not fill a torus. As it stands the definition
-and its disclaimer contradict each other, and a referee from dynamical systems will open here.
-
-**The fix also solves a second problem, which is why I would take it.** Define the estimand *at a
-resolution*:
-
-$$d_{\mathrm{act}}^{\varepsilon}(\gW) \;=\; \dim_{\varepsilon} \overline{\{\vc_t : t \in \gW\}},$$
-
-the dimension of the $\varepsilon$-neighbourhood of the visited set — equivalently the dimension of
-the support of the empirical measure resolved at scale $\varepsilon$ — with the window taken long
-compared to the recurrence time so that the empirical measure approximates the invariant one. Then:
-
-- the $r$-torus statement becomes true rather than aspirational, for $\varepsilon$ smaller than the
-  smallest mode amplitude and a window covering several recurrence times;
-- the Levina–Bickel estimator, which is intrinsically a finite-neighbourhood-scale statistic,
-  becomes an estimator **of the thing you defined** rather than of an idealisation it can only
-  approach;
-- and §6.4's result — "It counts the components it can *resolve*" — stops being a caveat about the
-  estimator and becomes a correct measurement of $d_{\mathrm{act}}^{\varepsilon}$. The anisotropy
-  experiment then *confirms* the estimator rather than qualifying it, which is a strictly stronger
-  claim from the same data.
-
-You should also state the two idealisations explicitly, because the honest version is short: over
-the window the dynamics is treated as autonomous (quasi-static), and the window is assumed long
-relative to the recurrence time. Both are true by construction in your systems and false on the
-grokking logs, which is a second, independent way of saying why those logs are inadmissible.
-
-### 2.2 MAJOR — $E > 2d$ is violated by the twenty-direction configuration
-
-§3.2 states the embedding condition as $E > 2d$. The twenty-direction configuration uses
-$E_{\max} = 40$ and targets $d = 20$: $40 > 40$ is false. The design cannot satisfy its own stated
-sufficient condition at the top of its range. See §1.5 — this is worth stating as a prediction that
-the data confirms, not hiding. Minimum fix: one sentence in §5.3 or Appendix B.
-
-Also, the sentence conflates two theorems in sequence: the manifold form (integer $d$, $E \ge 2d+1$,
-equivalently $E > 2d$) and the prevalence form (box-counting $d$, possibly fractional, $E > 2d$).
-Written in one breath, the reader cannot tell which $d$ the paper's own $E > 2d$ refers to. Split
-into two sentences and say which one licenses your choice of $E$.
-
-### 2.4 MAJOR — $\rho_{\mathrm{ident}}$ conflates dependence on $E$ with dependence on the delay span
+### 2.4 MAJOR — $\\rho_{\mathrm{ident}}$ conflates dependence on $E$ with dependence on the delay span
 
 $\rho_{\mathrm{ident}} = \hat d_{\mathrm{MG}}(2E_{\max}) / \hat d_{\mathrm{MG}}(E_{\max})$ is
 computed with $\tau$ held fixed (confirmed in `runner.py:59`, `e5_real_logs.py:68`). Doubling $E$
@@ -523,13 +353,6 @@ incommensurate frequencies in a fixed octave.
 *Scope: §7 and Appendices F–K. Owner: whoever holds the application. Read §1.3 and §1.6 first —
 they are about the same section and are not repeated here.*
 
-### 4.3 The strongest result is stated in the weakest position
-
-The rank collapse is named in the abstract, named in the conclusion, and shown on page 19 of an
-appendix titled "Figures for the grokking application". A reviewer who reads the body and skims the
-appendices never sees the paper's best plot. Move it into §7.1 (see section 6 for what pays for the
-space).
-
 ### 4.4 The direct measurement's controls are the weak point and the paper knows it
 
 Four generalising runs against two controls, and the controls differ from the treated runs in the
@@ -547,31 +370,6 @@ not run. Two candidates that would substantially strengthen the claim, in order 
   H but not in §7 or §8. The honest headline is: the collapse is present in the regularised
   stochastic setting and absent in the properly controlled one. That is a weaker claim than the
   abstract makes and it is the one the data supports.
-
-### 4.6 §7.3's "fixed nuisance" argument has a logical slip in a load-bearing sentence
-
-*"A change inside a run is therefore read against a fixed nuisance, which §6.3 measures at about a
-third of a real four-component change for the largest of them."*
-
-What is fixed within a run is the *configuration* — $E_{\max}$, $\tau$, the window, the observer —
-and therefore the level offset. The nuisance §6.3 measures is precisely **not** fixed: a ramping
-observer gain produces a *drift* of up to $1.16$ components, and a ramping state amplitude $1.32$.
-The sentence says the nuisance is fixed and then quantifies how much it moves. Rewrite as: the
-configuration is fixed, so a change cannot be attributed to it; the residual nuisance is the
-observer's own drift, which §6.3 bounds at about $1.2$ components over a run.
-
-There is a second-order version of the same problem worth checking: the Theiler window is
-recomputed per window from the autocorrelation time, so it is only constant within a run because
-the 150-sample cap happens to bind (see 3.2). If any window of a run has $t_{\mathrm{acf}} < 150$,
-$W_T$ changes inside that run and the "fixed configuration" premise fails for it. Verify and state.
-
-### 4.7 The observer used on real logs is the one the paper flags as least trustworthy
-
-Both §6.3 and Appendix C establish that the two parameter norms are the only observers whose
-roughness orders the withheld ranks perfectly, so "for the cheapest observer a run logs a smoothness
-explanation cannot be excluded". The observer used for every transformer row of Table 12 and for
-Figure 3 is the parameter norm. The paper makes this point in §6.3 in the abstract and never
-connects it to §7, where it bites. One sentence in §7.3.
 
 ### 4.8 The label-matched pairs prove something narrower than the section implies
 
@@ -650,46 +448,6 @@ misleading — the logs actually used live in `code/dimension_recovery/results/e
 whoever holds the plots. Findings are from a dedicated audit against `make_figures.py` and the
 source CSVs.*
 
-### 5.1 CRITICAL — Figure 1(b) is not computed on the data its caption claims
-
-The caption reads "(a) [...] median over four seeds and ten observers. (b) The identifiability
-ratio **on the same runs**." In `e2_rank_sweep/sweep_raw.csv`, `ident_ratio` is non-null in 54 of
-2 240 filtered rows: **seed 0 only, three observers only** (`c_proj1`, `g_fro`, `w_fro`), **ranks 2
-and 6 only**. Each row of panel (b) is therefore two points, each a median over three observers at
-one seed. The caption's aggregation is false for that panel, and the reader has no way to know that
-each regime is represented by two measurements.
-
-Either recompute $\rho_{\mathrm{ident}}$ over the full sweep — which would also give the diagnostic
-a defensible calibration, currently its weakest point (§1.10) — or state the restriction in the
-caption. The first is much better: the diagnostic is one of the paper's four claimed contributions
-and it is calibrated on 54 numbers.
-
-### 5.2 Other caption-versus-data defects
-
-- **Figure 3 caption says "Windows of 600 steps"** for all six runs; the $S_5$ runs use 295-step
-  windows (Appendix G says so correctly). The $\pm 300$ localisation claim is $\pm 150$ for those
-  runs, and the plotted mean averages curves computed at two different window lengths on one step
-  axis — worth a clause.
-- **Figure 4's x-axis is labelled "recurrences per window"** and plots the trend-crossing count.
-  §3.4 insists the statistic "tests non-monotonicity of the series, **not** recurrence". The
-  rename after the August audit did not reach the axis label (or the phrase "hence the recurrence
-  count of §3.4" in Figure 1's caption).
-- **Figure 4 promises seventeen runs and shows about seven marks.** All ten perceptron runs sit at
-  (crossings 2, $\rho_{\mathrm{ident}} \approx 1.0$) and plot as one open square, inside which the
-  two zero-weight-decay transformer points also land. The coincidence is arguably the message — they
-  degenerate identically — but it must be said in the caption, or jittered, or annotated "×10".
-- **Figure 4's caption and §7.3's text disagree about Table 12**: the text says the table is what
-  the figure plots; the table has 4 of the 7 transformer runs and 3 of the 10 perceptron runs.
-- **"Three orders of magnitude short"** (§7.3, Figure 4 caption) is $2.65$ orders for the pair
-  actually plotted (final training loss $8.84\times10^{-6}$ against $3.96\times10^{-3}$). The other
-  pairs give $3.19$ and $3.06$. Either soften, or plot a pair where it is true.
-- **Figure 1's transient points pile up** at $x \approx 1.05$ (seven points, two visible diamonds)
-  because the transient's measured rank is $\approx 1$ at every nominal $r$. That is the correct
-  behaviour and the caption should say it, or a reader reads it as missing data.
-- **Figure 3's two controls** are dashed and dotted and only one is in the legend; which is $S_5$
-  is undiscoverable, and in panel (c) they differ by three decades, which invites a question the
-  figure does not answer. Give each its own legend entry.
-
 ### 5.3 MAJOR — not one figure in the paper carries an uncertainty
 
 For a paper whose subject is the reliability of an estimator, this is the first thing a referee will
@@ -729,22 +487,6 @@ Figure 2 is per-run and can remain point-only.
   under which every system is both constructed *and* verified. Recast as "how the realisation was
   verified". The `protocol` column's values ("ordering only", "rank split only") need a legend.
 
-### 5.5 LaTeX
-
-- **Paragraph labels resolve to misleading numbers.** `sec:pairs`, `sec:whatfalls` and
-  `sec:grok-diagnostics` all print "section 7.3"; `sec:diagnostics-validated` prints "section 6.4",
-  whose title is about something else. Table 16's "used in" column shows "7.3" for rows pointing at
-  three different paragraphs. Promote the two `\paragraph`s in §7 to subsections.
-- **Appendix references are inconsistent**: three `\cref{app:...}` print "section A / B / K" while
-  about twenty hand-written `Appendix~\ref{...}` print "Appendix". Add
-  `\crefname{appendix}{appendix}{appendices}` and use `\cref` throughout.
-- No undefined references, no duplicate labels, no citation warnings; `\PR` defined once; macros all
-  present; the anonymous block behaves correctly. The `[capitalize]` option to `cleveref` is dead
-  weight given the explicit lowercase `\crefname`s.
-- The title's manual line breaks strand "of a" at the end of line 1; rebreak after "Freedom", and
-  remove the breaks from any metadata copy of the title.
-- Unused packages: `nicefrac`, `subcaption`, and `xcolor` once `\todo` is deleted.
-
 ### 5.6 Figures the paper should add
 
 Ranked. All are feasible from committed result files unless noted.
@@ -783,82 +525,6 @@ Ranked. All are feasible from committed result files unless noted.
    argument visual in a way fourteen numbers do not.
 
 If only three can be added: 2, 3 and 4.
-
----
-
-## 6. Structure, placement and the page budget
-
-*Scope: what goes where. Owner: whoever does the restructure. Assumes the nine-page body limit is
-the only hard constraint.*
-
-### 6.1 The current distribution is indefensible
-
-The body has **one figure in nine pages**. The evaluation section (§5) has **no float at all** —
-its summary table is on page 14. The application section's table is on page 18 and both its figures
-are on page 19. Meanwhile the body carries some of the densest prose I have read in a submission.
-A reviewer's experience of this paper is nine pages of unbroken argument followed by a
-well-illustrated appendix.
-
-### 6.2 What should move into the body
-
-- **Table 3** (the ladder summary) into §5. It is eight rows and it is cited four times from §§5–5.3.
-- **Figure 3** (the rank collapse) into §7.1. It is named in the abstract and the conclusion.
-- **Figure 4** (the diagnostics map) into §7.3 if anything is left over. It is the visual statement
-  of the paper's methodology-first thesis: the instrument refusing two settings, without labels.
-- **Table 12** should sit beside whichever of the two survives, not in a different appendix from the
-  figure that plots it.
-
-### 6.3 Where the space comes from
-
-I estimate 1.2 to 1.4 pages are needed. In descending order of how painless the cut is:
-
-1. **§2, related work.** Currently four dense paragraphs, of which "Dimension in optimisation" is
-   the one that must stay at full strength — it is where the paper positions itself. The delay-
-   reconstruction and spurious-dimension paragraphs are enumerative citation lists that can each
-   lose half their length to a footnote or an appendix without losing a reference. Saving: ~0.4 page.
-2. **De-duplicate the motif.** "The estimator returns a number whether or not an invariant set
-   exists" appears in the abstract, twice in §1, in §2, at the top of §4 and in §6. Once, with
-   force, in §1, and a pointer thereafter. The recovery headline ("under one component up to eight")
-   likewise appears four times. Saving: ~0.2 page.
-3. **§5.2–5.3**, restructured per §1.5 into the ceiling thread and the silence-control thread, with
-   constructions and per-system numbers in the appendix. Saving: ~0.3 page.
-4. **§6.4** can lose half its length: its role is confirmatory, one number pair in prose suffices and
-   the rest belongs with the (new) anisotropy figure. Saving: ~0.2 page.
-5. **§3.1** loses the forward-referenced numbers ($7.99 \to 6.43$ and the rank-10 Jacobian) which
-   mean nothing to a reader on page 3. Saving: ~0.1 page.
-6. **§7.3's** "two conclusions pointing opposite ways" paragraph re-derives §6.3 from scratch.
-   Saving: ~0.1 page.
-
-### 6.4 Section-level renaming and re-ordering
-
-- §3.1's title names three quantities and defines four.
-- §5.2 "Adding an optimiser, and then a network" says nothing about what was found. Under the split
-  of §1.5 the two new headings write themselves: "The ceiling" and "The silence control".
-- §8 "Limitations and conclusion" — the conventional order is the reverse, and the section
-  currently opens with a summary and ends with limits, so the title is inverted relative to its own
-  content.
-- Appendix F, "Figures for the grokking application", is a dumping-ground title and it opens with a
-  table.
-- Appendix C, "Results by observer, and the alternatives", contains Table 3, which is neither.
-- The protocol requirements are referenced by number a dozen times ("fails req. 4"). Name them —
-  the silence control, the frozen configuration, the disjoint split, the matched bandwidth — and use
-  the names. The reader will not otherwise remember which is which, and Table 3's `protocol` column
-  becomes readable at a glance.
-
-### 6.5 A proposed body layout
-
-For reference, not prescription:
-
-| § | content | floats |
-| --- | --- | --- |
-| 1 | motivation, the four quantities in one paragraph, contributions | — |
-| 2 | related work, compressed | — |
-| 3 | definitions, estimator, regimes, diagnostics | Table 1; schematic (fig. 5.6-8) if space |
-| 4 | the protocol, requirements named | — |
-| 5 | the ladder: the ceiling; the silence control; the image-data system | **Table 3** |
-| 6 | conditions of validity | Figure 1; anisotropy figure |
-| 7 | grokking: diagnostics refuse both settings; the direct collapse; what a log adds | **Figure 3**, **Figure 4** |
-| 8 | practical guidance, limitations, conclusion | — |
 
 ---
 
@@ -1075,21 +741,20 @@ the repository. Owner: whoever prepares the release. Short section, mostly actio
 
 ## Appendix: priority list
 
-Ten items remain. Items 1, 2 and 12 of the previous list were applied in installment 2.
+Six items remain. Everything else in the original list has been applied.
 
-1. **Figure 1(b) is computed on 54 numbers from one seed** and its caption says otherwise. *(5.1)*
-2. **Reorder §7 so the instrument is present at the headline result**, or add a roadmap sentence.
-   *(1.3)*
-3. **Move Figure 3 and Table 3 into the body**, paid for from §2 and the repetitions — and pay
-   back the page the first installment cost. *(6.2, 6.3)*
-4. **Turn the saturation ceiling into a result** — $E_{\max}/2$ predicts every saturation point in
-   the paper, and $E_{\max} = 40$ cannot recover twenty components by construction. *(1.5, 2.2)*
-5. **Fix the estimand definition** — a finite orbit closure is a curve; define it at a resolution
-   $\varepsilon$ and §6.4 becomes a confirmation rather than a caveat. *(2.1)*
-6. **Run the sliding-window estimate on the grokking logs**, or withdraw §7.3's constructive claim.
-   The 281 windows are already computed. *(1.6)*
-7. **Confront whether the admissible regime is ever realised in undriven training.** *(1.10)*
-8. **Define the twelve observers.** *(3.13)*
-9. **Fix the paragraph labels and appendix cross-references** that print misleading numbers. *(5.5)*
-10. **Fix the four figure captions** that describe data the figures do not show, and add
-    uncertainty to the two figures whose spread is committed. *(5.1, 5.2, 5.3)*
+1. **Run the sliding-window estimate on the grokking logs**, or withdraw §7.3's constructive claim
+   that a fast localised change carries information. The 281 windows are already computed. *(1.6)*
+2. **Confront whether the admissible regime is ever realised in undriven training.** The conclusion
+   now names the edge-of-stability experiment as future work, which is honest but weaker than
+   running it. *(1.10)*
+3. **$\rho_{\mathrm{ident}}$ conflates dependence on $E$ with dependence on
+   the delay span**, and the span-preserving variant is a two-line change. *(2.4)*
+4. **The functional dimension is defined with equal billing and never does any work.** *(2.5)*
+5. **Table hygiene**: significant figures, redundant columns, aggregation stated in captions. *(5.4)*
+6. **The remaining prose pass**: the title, the systemic sentence patterns, and the line-level
+   notes. Sections 5 and 7 were rewritten in the new register; sections 3 and 6 were only
+   compressed, so they still carry the old cadence. *(7.1, 7.3, 7.4)*
+
+Still worth adding if space is ever found: the anisotropy plot, the $\tau$-sweep plot, and raw
+scalar-log traces per regime *(5.6)*.
