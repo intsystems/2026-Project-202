@@ -39,9 +39,9 @@ the height the body budget allowed.
 
 ## The argument in one paragraph
 
-The number of directions an optimiser actively excites over a window is a well-defined
-quantity, distinct both from the number of directions it is allowed to move in and from the
-rank of the map to the model's outputs. It can be estimated from one scalar log by delay
+The number of independent components of the set an optimiser recurrently visits over a window
+is a well-defined quantity, distinct from the number of directions it may move in, from the rank
+of the map to the model's outputs, and from the effective rank of its trajectory covariance. It can be estimated from one scalar log by delay
 reconstruction followed by the pooled Levina-Bickel estimator. We evaluate that estimate on six
 systems of increasing realism whose active dimension is fixed by construction and then verified
 by measurement, establishing that recovery is accurate to under one component up to about eight
@@ -49,11 +49,11 @@ active directions and ordinal up to twenty. Two diagnostics, computable from the
 a ground truth, flag the two regimes in which the value cannot be read as a count. Applied to
 delayed generalisation, the instrument places the two standard experimental settings in
 different dynamical regimes and separates generalising from non-generalising runs in four
-label-matched pairs; measured directly from the trajectory covariance, it records a transient
-collapse to essentially one dimension near generalisation in four regularised runs and not in
-their two controls. What the estimator counts is resolvable excited modes rather than the
-covariance participation ratio, which the two coincide with only because the constructions
-equalise the drive amplitudes.
+label-matched pairs; measured directly from the trajectory covariance, the effective rank
+collapses to essentially one near generalisation in four regularised runs and not in their two
+controls. What the estimator counts is resolvable components of the recurrent set, not the
+covariance participation ratio; the two coincide only because the constructions equalise the
+drive amplitudes.
 
 ## Where the numbers come from
 
@@ -89,7 +89,7 @@ equalise the drive amplitudes.
 | B | the two frozen configurations and the grids they came from | complete |
 | C | per-observer results, and MG against every alternative statistic | complete |
 | D | delay lag, nuisance factors, and the change-detection rule | complete |
-| E | how the excitation is built, and the active dimension it achieves | complete |
+| E | how the excitation is built, and the effective rank it achieves | complete |
 | F | the label-matched pairs, with the training loss that explains them | complete |
 | G | the trajectory sketch and the three checks behind it | complete |
 | H | the full-batch measurement, its resolution limit, and the window-length sweep that removes it | complete |
@@ -106,7 +106,7 @@ width of the style file, at 8 pt so that LaTeX never rescales them.
 | figure | what it shows | where |
 | --- | --- | --- |
 | `fig_regimes` | recovery and admissibility on the image-data system of section 5.4 | section 6 |
-| `fig_dip` | the trajectory-rank collapse at generalisation | section 7.3 |
+| `fig_dip` | the collapse of the trajectory effective rank at generalisation | appendix F |
 | `fig_map` | every training log in the plane of the two diagnostics, for section 7.1 | appendix F |
 | `fig_pairs` | the label-matched pairs and the loss curves behind them, for section 7.2 | appendix F |
 
@@ -169,3 +169,36 @@ correct and what was done:
 | "MG > E_max is a ceiling" | correct: no clamping is applied, so it is not a bound. Figure 1 relabelled |
 
 Points not adopted, with reasons, are in the response to the review.
+
+## The definition, corrected
+
+A later note pointed out that the draft was defining its target as the participation ratio of
+the trajectory covariance, when that is not the quantity a delay reconstruction estimates. The
+paper now separates them.
+
+* **Active dimension**, `d_act(W) = dim M_W`, where `M_W` is the set of states the trajectory
+  recurrently visits in the window: the local part of the invariant set, or the orbit closure.
+  Under `r` independent quasiperiodic phases the closure is an `r`-torus and `d_act = r`. It is
+  not the dimension of the time-parameterised curve, which is 1 for every `r`. **This is the
+  estimand**, and the only quantity the embedding theorems speak about.
+* **Trajectory effective rank**, `PR^pos`, `PR^upd`, `PR^det`: the covariance participation
+  ratio, formerly written `d^pos` and so on. It equals `r` only when the `r` directions carry
+  comparable variance. It has two jobs: verifying that a construction excites the directions it
+  claims to, and being the quantity measured directly in section 7.3.
+* **Scalar delay estimate**, MG: readable as a component count only in the admissible
+  deterministic recurrent regime.
+
+Consequences worth knowing, because they change what several results claim:
+
+* `d_act` is **undefined** for a decaying transient and for a stochastically driven trajectory,
+  since neither has a set the orbit returns to. Table 1 says so, and it is a sharper statement
+  of the paper's own thesis than "the estimate is wrong there".
+* Requirement 1 was "the ground truth is measured, not assumed". The count is in fact
+  *constructed*; what is measured is that the construction realises it, all `r` directions being
+  comparably excited. The numbers do not move, because the two agree to within 0.008 in these
+  systems, but the claim is now the one the design supports.
+* Section 7.3 measures an **effective rank**, not `d_act`, and the transformer runs have no
+  recurrent set at all. "The trajectory passes through a one-dimensional bottleneck" became "the
+  effective rank collapses to essentially one", which is what the data show.
+* Section 6.4's anisotropy experiment now reads as confirmation that the estimator tracks
+  `d_act` rather than the effective rank, which is a cleaner statement than the one it replaced.

@@ -81,7 +81,7 @@ def fig_regimes():
         ("gd", "transient", TRANSIENT, ":", "D"),
     ]
 
-    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 2.10),
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.90),
                                  gridspec_kw={"width_ratios": [1.15, 1.0]})
 
     ax.axhline(20, color=GREY, lw=0.8, ls=(0, (1, 2)), zorder=0)
@@ -111,7 +111,7 @@ def fig_regimes():
     ax.set_xticklabels(["1", "2", "4", "8"])
     ax.set_yticks([1, 2, 4, 8, 16, 32])
     ax.set_yticklabels(["1", "2", "4", "8", "16", "32"])
-    ax.set_xlabel("measured active dimension")
+    ax.set_xlabel("measured effective rank")
     ax.set_ylabel("estimated dimension")
     ax.set_title("(a) what the estimator returns", loc="left", pad=6)
 
