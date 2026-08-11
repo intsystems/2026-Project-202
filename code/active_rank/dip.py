@@ -13,9 +13,15 @@ the displacement does not: a statistic that merely tracked displacement would st
 That comparison is quantified here, together with the matched no-weight-decay control,
 whose displacement collapses far harder and earlier without generalising at all.
 
-    python dip.py
+    python dip.py                 # the finely logged runs the paper reports
+    python dip.py --results results
+
+The default is ``results_fine``, which is the set the paper's section 7.1 is computed from;
+``STATS`` lists the columns it reports, so that re-running this script reproduces the committed
+``rank_dip.csv`` rather than a different set of statistics.
 """
 
+import argparse
 from pathlib import Path
 
 import matplotlib
@@ -25,11 +31,11 @@ import numpy as np                        # noqa: E402
 import pandas as pd                       # noqa: E402
 
 HERE = Path(__file__).resolve().parent
-RES, FIG = HERE / "results", HERE / "figures"
-FIG.mkdir(exist_ok=True)
 GROK = ["mod_wd1", "mod_wd1_s43", "mod_wd1_s44", "s5_wd1"]
 CTRL = ["mod_wd0", "s5_wd0"]
-STATS = ["fn_PR_step5", "fn_PR_step20", "PR_step20", "PR_pos_det"]
+# the run whose t_gen defines the aligned window for each control
+CTRL_REF = {"mod_wd0": "mod_wd1", "s5_wd0": "s5_wd1"}
+STATS = ["fn_PR_pos_det", "fn_PR_step5", "PR_pos_det", "PR_step5"]
 
 
 def milestones(log, thresh=0.95):
@@ -51,6 +57,14 @@ def load():
 
 
 def main():
+    global RES, FIG
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--results", default="results_fine")
+    args = ap.parse_args()
+    RES = HERE / args.results
+    FIG = HERE / "figures"
+    FIG.mkdir(exist_ok=True)
+
     win, info = load()
     print("run            t_mem   t_gen")
     for r, (m, g) in info.items():
@@ -99,6 +113,25 @@ def main():
         print(f"\n-- {s} --")
         print(ctab[ctab.stat == s][["run", "early", "min", "at", "end", "depth"]]
               .round(2).to_string(index=False))
+
+    # ---- the controls again, in the window the generalising runs define ----------
+    # A control has no t_gen, so the depth above is measured over its whole budget and
+    # is not comparable with the grokking rows.  This is the like-for-like number.
+    print("\n=== controls, aligned on the matched run's t_gen (same window as above) ===")
+    arows = []
+    for run in CTRL:
+        tg = info[CTRL_REF[run]][1]
+        g = win[win.run == run].sort_values("centre")
+        for s in STATS + ["move"]:
+            pre = g[(g.centre >= tg - 4000) & (g.centre < tg)][s]
+            near = g[(g.centre >= tg - 4000) & (g.centre <= tg + 4000)][s]
+            if not len(pre) or not len(near):
+                continue
+            arows.append(dict(run=run, stat=s, plateau=pre.median(), dip=near.min(),
+                              depth=pre.median() / max(near.min(), 1e-9)))
+    atab = pd.DataFrame(arows)
+    atab.to_csv(RES / "rank_dip_controls_aligned.csv", index=False)
+    print(atab.round(3).to_string(index=False))
 
     # ---- figure: centre-aligned, all four grokking runs + both controls ----------
     grid = np.arange(-5000, 6001, 200)

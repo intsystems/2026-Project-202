@@ -49,6 +49,24 @@ foreshadow the ceiling. Bibliography: five entries corrected, five added
 (Eckmann–Ruelle, Casdagli et al., Clarkson–Woodruff, Roy–Vetterli, Merrill et al.), nine leftover
 CCM entries deleted, six previously uncited entries brought into the text.
 
+**Installment 2 — the numbers** (applied). Removed from this file: 3.7–3.12, most of 3.13, 4.1,
+4.2, 4.5, 4.10 and 4.11. §7.1's collapse is now reported as the committed data has it — a factor
+of $5.2$ to $12.2$, median $7.0$ — with the controls given both ways, $1.6$ and $1.3$ in the
+aligned window and $3.2$ and $7.1$ over their whole budget, and the honest conclusion that the
+groups are separated by timing and shape rather than depth. A new appendix table gives every run.
+§7.2's peak values, norm ratios and "falls by more than half" are corrected. Table 7's
+twenty-direction column is regenerated from `scores_frozen.csv` under the recipe that reproduces
+its neighbour column. Table 12 no longer prints `n/a` for values that were computed. The
+Appendix I memorisation step is $1\,800$, not $2\,250$, and its fall is a delay from memorisation
+rather than an absolute step. Four missing runs are added to the inventory. Appendix A's
+window-dropping convention now says what the code does, and the degeneracy tally states its
+counting rule. A note in Appendix C reconciles $0.87$, $0.47$ and $0.457$ as three aggregations of
+one measurement.
+
+Also fixed in the repository: `code/active_rank/dip.py` now defaults to `results_fine` and reports
+the statistics the paper uses, so it regenerates the committed `rank_dip.csv` bit for bit; it also
+writes the aligned-window control measurement the paper now quotes.
+
 **Known regression:** the body is now ten pages against a nine-page limit. Installment 3 is the
 restructuring pass that pays it back; installment 2 is net-negative on length.
 
@@ -434,171 +452,20 @@ from the result files. The canonical estimator is
 `code/grokking_analysis/edm/`. **Three rows of Table 3 were produced by a different, older
 estimator** (`code/dimension_recovery/estimators.py`) with different defaults; see 3.4.
 
-### 3.7 MAJOR — requirement 5 is violated in the paper's own headline table
-
-Requirement 5: *"The three statistics of §3.2 are reported on every call."* Table 12
-(`tab:grok-diagnostics`) prints `n/a` in two places and both are computed and committed:
-
-- $\PR_{\mathrm{delay}}$ on the transformer rows — the values are $1.0169$, $1.5182$, $3.9450$ and
-  $1.0000$. The $3.94$ is not close to one, which is presumably why its absence is noticeable;
-- the trend-crossing count on the perceptron rows — `osc = 2.0` for all of them, **and §7.3 quotes
-  exactly that number** ("two trend crossings per window"). The table is hiding a value its own
-  discussion relies on.
-
-Print all four. Withholding computed companion statistics in the table that classifies the paper's
-application, under a protocol that requires reporting them, is the kind of thing a hostile reviewer
-finds and a friendly one resents.
-
-### 3.8 MAJOR — the flagged-window convention described in Appendix A is not what the grokking pipeline does
-
-Appendix A: *"windows are dropped only when a series is summarised over its sliding windows, which
-is where every number in this paper is formed."* True of `mg.py::summarise` (lines 234–245), used by
-the ladder pipelines. The grokking summaries do **not** call it: `e5_real_logs.py:98-103` and
-`dimension_probe.py:124-129` take pandas medians over all windows, flagged or not. No published
-cell is affected (all have zero degenerate fraction), so this is a documentation defect rather than
-a numerical one — but "every number in this paper" is false precisely for the application section.
-
-Relatedly, "the degeneracy flag fires on eleven of the thirty-five run-by-column cells" counts cells
-in which *more than half* the windows flag; cells with at least one flagged window number **14**.
-State the counting rule.
-
-### 3.9 MAJOR — the twenty-direction column of Table 7 cannot be reproduced
-
-Every cell of the *eight-direction* column of Table 7 reproduces exactly from
-`e2_rank_sweep/sweep_raw.csv` under a clearly identifiable recipe (qp arm, withheld ranks, drop
-`acc_probe` and `loss_step`, median over seeds and observers at each $r$, score against `traj_PR`).
-Applying the same recipe to `k20_calibration/scores_frozen.csv` does **not** give the
-twenty-direction column:
-
-| statistic | paper | recomputed |
-| --- | --- | --- |
-| MG | 1.632 / +0.961 | 1.624 / +0.973 |
-| LB | 1.358 / +0.979 | 1.358 / +0.983 |
-| TwoNN | 3.296 / +0.864 | 3.484 / +0.889 |
-| delay PR | 2.320 / +0.982 | 2.185 / +0.979 |
-| spectral PR, 256 | 5.401 / +0.996 | 5.286 / +0.998 |
-| spectral PR, 1024 | 4.547 / +0.996 | 4.471 / +0.998 |
-| spectral PR, native | 2.760 / +0.968 | 2.784 / +0.934 |
-| roughness | 10.069 / −0.482 | 9.895 / −0.568 |
-
-Mean and median aggregation, both orderings, per-observer aggregation, leave-one-observer-out and
-leave-one-rank-out were all tried; none reproduces the column. The differences are small
-($\le 0.2$) and directionally consistent, so this is most likely a stale table computed from an
-earlier version of the scores rather than an error of substance — but an unreproducible table
-column is exactly what a reviewer requesting the artifact will find. Regenerate it from a script
-that is committed alongside, and record the recipe in the caption.
-
-Note also that Table 3's $+0.973$ for the same quantity **is** reproducible ($0.9729$ exactly),
-while Table 7's $+0.961$ is not. The paper quotes both, in different places, for the same
-measurement.
-
-### 3.10 MAJOR — three claims are not supported by the tables that are supposed to support them
-
-- **"At four tenths of a period the estimate follows the rank to within one component"**
-  (Appendix D, describing the correct lag). Table 9's own $\tau = 8$ row gives $4.18$ at $r = 3$
-  (error $1.18$) and $6.16$ at $r = 4$ (error $2.16$). The claim is false against the table printed
-  three lines below it, and it is the sentence that establishes what a *correct* lag looks like.
-- **"The estimate stays between $3.74$ and $4.06$" at four active directions** (§6.4). The $3.74$
-  is the $\rho = 0.6$ row, and Table 11 prints only $\rho \in \{1.0, 0.7, 0.5\}$. The table cannot
-  support its own sentence. Either print the full six-value $\rho$ grid or quote the range the
-  table shows.
-- **"The measured effective rank equals $r$ to within $0.008$ components"** (§5.3). From
-  `sweep_raw.csv`, the largest deviation of the per-$r$ median from $r$ is $0.0034$ and the largest
-  over individual runs is $0.0128$. Neither is $0.008$. Right order of magnitude, wrong number under
-  both conventions — pick one and quote it.
-
-And one claim that cannot be checked at all: **"the effective rank measures $r$ to within $0.003$"**
-for the oscillating matrix (§5.1). Neither `exp9_frobenius_k10` nor `exp10_frobenius_k20` records any
-participation ratio; there is no PR column in `calibration_grid.csv` or `stationary_validation.csv`
-and neither report mentions one. The closest committed measurement of that system is the anisotropy
-experiment at $\rho = 1.0$, where the deviation is below $1.1\times10^{-4}$. Under requirement 1
-every system's realisation must be verified by measurement; for this system the verification is not
-in the repository.
-
-### 3.11 MAJOR — the aggregation convention changes between rows of the same table
-
-Table 3's caption states one unit of analysis: "one (rank, seed, observer) run". The image-data
-$1$–$8$ row ($0.87$) follows it. The image-data $1$–$20$ row ($1.62$) does not — it is computed
-after aggregating over seeds and observers. Run by run, that row would read **2.94**. Conversely
-the $1$–$8$ row under the aggregated convention reads $0.457$, which is what Table 7 prints.
-
-So $0.87$, $0.47$ and $0.457$ are three aggregations of *the same cell of data*, and $1.62$ and
-$2.94$ are two aggregations of another; the paper prints four of these five numbers in three
-different places without saying that any of them describe the same measurement. This is the single
-most confusing thing in the results, and it is fixed by one sentence defining the convention plus a
-consistent application of it. If both conventions are wanted, print both columns.
-
-### 3.12 MAJOR — $r = 7$ was never simulated
-
-`e2_rank_sweep` runs $r \in \{1, 2, 3, 4, 5, 6, 8\}$. Every statement of the form "across
-$r = 1, \dots, 8$" is therefore wrong, including the zero-learning-rate sequence in Appendix C whose
-seven values were flagged above as a possible missing entry — nothing is missing, the range is
-misstated. Write $r \in \{1, \dots, 6, 8\}$ wherever it appears, or say "seven ranks between one and
-eight".
-
 ### 3.13 Smaller discrepancies
 
-- **Table 2, "withheld seeds 0–4"** implies five seeds; the code uses `SEEDS = (0, 1, 2, 3)`
-  (`e2_rank_sweep.py:71`) and the text elsewhere says four. Write 0–3.
-- **Appendix D, "the estimate at $r=8$ moves by $61.5$ components across the sweep"** uses the raw
-  per-seed extremes while Table 9 prints seed medians, under which the move is $60.75$. Same
-  sentence, two conventions.
-- **Appendix D, rotation "is scored on the three projection observers alone, since the remaining
-  nine are invariant to it"**: `controls_scored.csv` has the rotation control on **one** observer,
-  `c_proj1`. One and eleven, not three and nine.
-- **§3.1, "the effective rank falls from $7.99$ to $6.43$ under stochastic forcing"** — the two rows
-  are `noise` and `noise_nopre`, and Table 10 prints the first as $7.98$. The text contradicts its
-  own table by $0.01$; $7.99$ is the `qp_slow`/`mixed` value.
-- **The true value at twenty directions** is printed as $20.0$ in §5.3 and $19.99$ in Table 17; the
-  measured value is $19.993$. Also, Table 6 has no truth row, so "saturates at $15.1$ against a
-  true $20.0$" cannot be checked against the table it cites.
-- **Appendix C's roughness caveat is generous to itself**: "for seven of the nine usable observers
-  the roughness statistic carries little or no ordering" describes a column containing $+0.800$,
-  $-0.800$ and $-0.800$. Three of the nine have $|\rho| = 0.8$ on four points. Either say so, or
-  drop the column and make the point qualitatively — with $n = 4$ it cannot carry this weight.
-- **Appendix L, "the absolute value moves down by $0.1$ to $0.5$ components"** — the data gives
-  $0.11$ to $0.51$.
-- **"a factor of four across seven runs"** (§7.3): across the seven transformer runs the MG values
-  span $3.94$–$28.08$, a factor of $7.1$. The factor of $\approx 4$ and the quoted
-  $\rho_{\mathrm{ident}}$ band $1.29$–$1.60$ both describe the **five** regularised runs only; the
-  two zero-weight-decay runs sit at $0.999$ and are classified transient in the same paragraph.
-  Write "five".
-- **$\rho_{\mathrm{ident}}$ is aggregated by two different rules**: the ladder takes the ratio of
+- **$
+ho_{\mathrm{ident}}$ is aggregated by two different rules**: the ladder takes the ratio of
   window-medians, the grokking pipeline takes the median of per-window ratios. The paper describes
   one rule. They are not the same statistic.
 - **Standardisation happens in different places**: per window in the grokking pipelines (as
   Algorithm 1 states), once over the whole series in the ladder pipelines (`runner.py:68`,
   `e1_calibration.py:74`, `score_k20_parallel.py:39`). Immaterial on stationary arms; on the
   non-stationary transient arm the dither and the numerical floors then sit at the wrong scale.
-- **§5.3 and Appendix C disagree on the aggregation**: the body says the four seeds are "averaged
-  first", the appendix says "the median over the four seeds [...] is taken before scoring". Pick
-  one word.
-- **The reported error changes across tables for the same quantity**: $0.87$ (§5.3, run by run),
-  $0.47$ (§5.3, after seed aggregation), $0.457$ (Table 7, MG at eight directions), $1.62$
-  (Table 3) against $1.632$ (Table 7). Some of these differ by aggregation and some by rounding;
-  as printed the reader cannot tell which. One convention, stated once.
-- **Appendix C's zero-learning-rate sequence** lists seven values "across $r = 1, \dots, 8$". All
-  seven are correct; the range is wrong — see 3.12.
-- **The observer-dependence paragraph's closing sentence** — "at a lag common to both observers the
-  two factors become $6.6$ and $1.9$" — is misleading. $6.65$ is the equal-weight observer's factor
-  at $\tau = 4$ and $1.91$ is the generic observer's factor at $\tau = 1$: two *different* common
-  lags, presented as one. At $\tau = 4$ for both, the factors are $6.65$ and $4.69$; at $\tau = 1$
-  for both, $3.38$ and $1.91$. The point survives either way, but as written it is not a
-  common-lag comparison.
-- **The constant-rescaling control never appears in Table 10**, and the corrected value ($0.000$ on
-  all eight observers) is never printed anywhere; §6.3 refers to it only qualitatively. Given that
-  the repository's own notes record this as a defect found and fixed, printing the corrected zero is
-  worth two characters — it is the cleanest invariance result in the paper.
-- **Table 10's percentages** are computed against a denominator of $3.95$, the observed fall of the
-  change-detection experiment. Say so in the caption; "as % of a real four-component change" invites
-  the reader to divide by 4 and get different numbers.
 - **"Six excitation regimes"** (§5.3) against "five excitation regimes" (Figure 1 caption) against
   nine arms plus controls in Table 10, against eleven arm labels in the CSV (including a second
   $\eta = 0$ control, `noise_eta0`, that Table 10 omits). Enumerate the six in §5.3 and have the
-  caption say "five of the nine arms of Table 10".
-- **"Six systems"** (§5, abstract) against seven distinct systems in Table 3 if the function-space
-  construction is counted separately, which §5.3 treats as separate ("A second construction in
-  function space"). State the mapping from systems to table rows.
+  caption say "five of the nine arms of Table 10". *(The figure caption half of this is section 5.)*
 - **The twelve observers are never defined.** Table 5 names them in English ("margin", "probe
   loss", "function-space norm", "parameter norms (two)") and no definition appears anywhere in the
   paper. From `dynamics.py:86-95` they are `loss_step, loss_full, loss_probe, w_fro, c_norm,
@@ -656,71 +523,6 @@ incommensurate frequencies in a fixed octave.
 *Scope: §7 and Appendices F–K. Owner: whoever holds the application. Read §1.3 and §1.6 first —
 they are about the same section and are not repeated here.*
 
-### 4.1 CRITICAL — the headline collapse numbers are not reproducible, and the committed data is less favourable
-
-This is the most serious finding in the review. §7.1's central sentence reads: the function-space
-effective rank collapses "by a factor between $2.9$ and $15.6$, median $6.6$".
-
-The committed per-run values in `active_rank/results_fine/rank_dip.csv` are:
-
-| run | plateau | dip | factor | bottom, steps after $t_{\mathrm{gen}}$ | parameter-space dip | lag |
-| --- | --- | --- | --- | --- | --- | --- |
-| `mod_wd1` | 23.12 | 4.42 | **5.23** | +595 | 1.086 | 500 |
-| `mod_wd1_s43` | 33.06 | 2.71 | **12.21** | +235 | 1.148 | 700 |
-| `mod_wd1_s44` | 28.26 | 3.65 | **7.74** | +515 | 1.133 | 800 |
-| `s5_wd1` | 21.15 | 3.41 | **6.20** | +712.5 | 1.601 | 150 |
-
-The range is $5.23$–$12.21$ with median $6.97$, not $2.9$–$15.6$ with median $6.6$. About two hundred
-alternative plateau and dip definitions were tried — different pre-window lengths, mean against
-median against max, dip measured near $t_{\mathrm{gen}}$ or after $t_{\mathrm{mem}}$ or globally, all
-eight recorded participation-ratio columns — and none produces the published triple. No script in the
-repository emits it.
-
-What makes this worse rather than merely careless: `icomp_v2/README.md` records that these figures
-"replace the earlier *factor of five to twelve*, which was read off the plotted mean rather than
-computed per run". **Five to twelve is exactly the committed per-run range.** The revision replaced
-correct numbers with unreproducible ones, in the direction of a wider and more impressive interval.
-
-Three further claims in the same paragraph do not survive:
-
-- **"Both then re-expanding above the level they started from."** True in parameter space for all
-  four runs. In function space, by the committed `recovered` column the post-dip level is *below*
-  the plateau in three of the four ($20.4 < 23.1$, $22.4 < 33.1$, $23.4 < 28.3$). Only if
-  re-expansion is measured by the post-dip *maximum* does it exceed the plateau, and then only in
-  three of four. The claim needs a stated definition and a weaker verb.
-- **"The two runs without weight decay fall by only $1.5$ and $1.6$."** Not reproducible under any
-  definition tried. `rank_dip_controls.csv` gives, for the deepest dip anywhere, `mod_wd0` at
-  **3.15** in function space and `s5_wd0` at **7.06**. Aligned at the matched run's
-  $t_{\mathrm{gen}}$, as Figure 3 does, they give $1.61$ and $1.33$. Your own
-  `active_rank/report.md` states the honest version: "$1.17\times$–$3.15\times$ (with one
-  $7.06\times$ outlier)".
-- Consequently the contrast the paper rests on is **much narrower than reported**. A control falling
-  by $7.06$ against treated runs falling by $5.23$ to $12.21$ is not "a median factor of six in four
-  regularised runs and not in their controls". The defensible claim is about the *shape* — the
-  treated runs collapse within a few hundred steps of a specific event and then recover, the
-  controls decline once and stay down — which is exactly what §7.2 already argues and argues well.
-  §7.1's magnitude framing should be replaced by §7.2's shape framing, and the abstract with it.
-
-Also worth knowing before you re-derive anything: `active_rank/dip.py` as committed computes a
-different set of statistics (`fn_PR_step5`, `fn_PR_step20`, `PR_step20`, `PR_pos_det`) than the ones
-in the committed `rank_dip.csv` (`fn_PR_pos_det`, `PR_step5`). **The script in the repository does
-not regenerate the file §7.1 depends on.** Fix that first, then re-derive every number in the
-paragraph from it.
-
-### 4.2 MAJOR — §7.2's numbers do not match the data either
-
-- **"The function-space effective rank falls from $28.6$ to about $6$"** (modular). The final value
-  is right ($6.64$; median over the last eight windows $5.97$), the $28.6$ is not in the data: the
-  peak is $32.70$, the rolling-smoothed peak $29.2$, and the value at memorisation $5.15$.
-- **"From $19.3$ to $8.1$"** ($S_5$). Final value $8.10$ correct; $19.3$ not reproducible — the peak
-  is $33.43$ and the median over the thousand steps after memorisation is $19.65$.
-- **"Saturating at $1.4$ times its initial value" / "growing steadily to $2.4$ times"**. These are
-  ratios to the **first logged window**, not to the initial norm. Against the true step-0 norm they
-  are $1.73\times$ and $2.61\times$. Say which baseline you mean.
-- **"Where in every generalising run it peaks and then falls by more than half."** Final over maximum
-  is $0.448$, $0.473$, $0.517$ and $0.626$. **Two of the four fall by less than half.** Write "by
-  between a third and a half".
-
 ### 4.3 The strongest result is stated in the weakest position
 
 The rank collapse is named in the abstract, named in the conclusion, and shown on page 19 of an
@@ -745,16 +547,6 @@ not run. Two candidates that would substantially strengthen the claim, in order 
   H but not in §7 or §8. The honest headline is: the collapse is present in the regularised
   stochastic setting and absent in the properly controlled one. That is a weaker claim than the
   abstract makes and it is the one the data supports.
-
-### 4.5 "At the onset of generalisation" overstates the timing, in the wrong direction
-
-The abstract says the collapse occurs "at the onset of generalisation"; §8 says "at
-generalisation"; §7.1 says the bottom is reached **235 to 712 steps after** the generalisation step
-in function space and up to eight hundred steps later again in parameter space, with a $\pm 300$
-step localisation from the window. The body's own word — "near" — is the defensible one, and §7.1
-already explains why it cannot be sharpened. Make the abstract and conclusion agree with the body.
-This matters more than it looks: "at the onset" invites the reading that the collapse is a
-*cause* or a *predictor*, which §8 explicitly disclaims two sentences later.
 
 ### 4.6 §7.3's "fixed nuisance" argument has a logical slip in a load-bearing sentence
 
@@ -812,40 +604,6 @@ the paper. One caveat to add: "the same statistic then ranges over more than a d
 mini-batching is true of `PR_step` ($46\times$), `fn_PR_pos_det` ($17\times$) and `fn_PR_step`
 ($19\times$), but only $7.3\times$ for `PR_pos_det`, which is the statistic Table 18 actually
 tabulates. Name the column or soften to "by up to a factor of forty".
-
-### 4.10 Appendix I's two anchor numbers are wrong
-
-- **"which memorises at step $2\,250$"** for the $p = 211$ run. The log
-  (`Grokking/modular_addition_grokking_colab/training_log_p_211_wd_0.csv`) first crosses 95 % training
-  accuracy at step **1 800**, and every sustained-block variant gives 1 800 as well;
-  `exp7_inventory.csv` records `t_mem = 1800`. The $2\,250$ traces to a legacy audit note using a
-  different criterion than the one Appendix K defines. Table 16 carries the same $2\,250$.
-- **"a fall is detected at step $49\,250$"**. In `exp7_transcript.txt` that figure is in the *delay*
-  column, and the transcript's own budget column ($198\,200 = 200\,000 - 1\,800$) confirms delay is
-  measured from memorisation. The absolute step is therefore about **$51\,050$**. Nothing in the
-  argument turns on it, which is exactly why it should be right.
-- The $3.6\,\%$ against Table 16's $0.04$ is **not** a contradiction — $0.0361$ rounds to $0.04$ —
-  but printing the same quantity to different precisions in two places invites the reader to think
-  it is.
-
-### 4.11 The run inventory is incomplete, and Appendix K's memorisation claim is wrong
-
-Table 16 claims to list "every training run the paper draws on". Missing:
-
-- **`x_mix_quad`**, which is plotted in Figure 4 — `make_figures.py:207-211` loads the whole of
-  `arith/dimension_probe_summary.csv` with no run filter, so it is one of the squares;
-- **`a_sub`** ($n-m$) and **`a_sq_sum`** ($n^2+m^2$), which are two rows of Table 15.
-
-Also present in the results and absent from the inventory, though not obviously used: `a_sum_sq`,
-the two `f_p1*` Adam runs at weight decay 5, and six `g_*_p23` polynomial runs — the sentence "a
-third pair repeats them at $p = 23$" covers only the sketch pair, not these.
-
-Separately, Appendix K states that the two memorisation criteria "differ on one run in this table and
-by $1\,080$ steps". The $1\,080$ is correct, but it is the difference in the **generalisation** step
-of `lowdata15_s0`. The **memorisation** column differs under the two rules on **six of the seven**
-extended runs (first-crossing $1\,380, 600, 640, 650, 800, 590, 620$ against the table's
-$1\,450, 620, 630, 660, 800, 610, 630$). The differences are small and no claim turns on them, which
-is what the sentence should say instead.
 
 ### 4.12 Verified correct
 
@@ -1317,29 +1075,21 @@ the repository. Owner: whoever prepares the release. Short section, mostly actio
 
 ## Appendix: priority list
 
-Twelve items remain, in the order I would do them. Items 2, 3, 4, 7 and 13 of the original list
-were applied in installment 1 and are struck.
+Ten items remain. Items 1, 2 and 12 of the previous list were applied in installment 2.
 
-1. **§7.1's collapse factors do not reproduce and the controls fall further than reported.**
-   Re-derive every number in that paragraph from a script that regenerates the committed file, and
-   replace the magnitude framing with the shape framing §7.2 already uses. *(4.1)*
-2. **Reconcile the remaining overclaims**: "on six systems", "orders it to twenty", "at the onset
-   of generalisation", "a factor of four across seven runs", "$28.6$ to about $6$", "falls by more
-   than half", "$r = 1, \dots, 8$". *(3.10, 3.12, 3.13, 1.9, 4.2, 4.5)*
-3. **Figure 1(b) is computed on 54 numbers from one seed** and its caption says otherwise. *(5.1)*
-4. **Reorder §7 so the instrument is present at the headline result**, or add a roadmap sentence.
+1. **Figure 1(b) is computed on 54 numbers from one seed** and its caption says otherwise. *(5.1)*
+2. **Reorder §7 so the instrument is present at the headline result**, or add a roadmap sentence.
    *(1.3)*
-5. **Move Figure 3 and Table 3 into the body**, paid for from §2 and the repetitions — and pay
+3. **Move Figure 3 and Table 3 into the body**, paid for from §2 and the repetitions — and pay
    back the page the first installment cost. *(6.2, 6.3)*
-6. **Turn the saturation ceiling into a result** — $E_{\max}/2$ predicts every saturation point in
+4. **Turn the saturation ceiling into a result** — $E_{\max}/2$ predicts every saturation point in
    the paper, and $E_{\max} = 40$ cannot recover twenty components by construction. *(1.5, 2.2)*
-7. **Fix the estimand definition** — a finite orbit closure is a curve; define it at a resolution
+5. **Fix the estimand definition** — a finite orbit closure is a curve; define it at a resolution
    $\varepsilon$ and §6.4 becomes a confirmation rather than a caveat. *(2.1)*
-8. **Run the sliding-window estimate on the grokking logs**, or withdraw §7.3's constructive claim.
+6. **Run the sliding-window estimate on the grokking logs**, or withdraw §7.3's constructive claim.
    The 281 windows are already computed. *(1.6)*
-9. **Confront whether the admissible regime is ever realised in undriven training.** *(1.10)*
-10. **Define the twelve observers.** *(3.13)*
-11. **Fix the paragraph labels and appendix cross-references** that print misleading numbers.
-    *(5.5)*
-12. **Regenerate Table 7's twenty-direction column** and print $\PR_{\mathrm{delay}}$ and the
-    crossings in Table 12 instead of `n/a`. *(3.9, 3.7)*
+7. **Confront whether the admissible regime is ever realised in undriven training.** *(1.10)*
+8. **Define the twelve observers.** *(3.13)*
+9. **Fix the paragraph labels and appendix cross-references** that print misleading numbers. *(5.5)*
+10. **Fix the four figure captions** that describe data the figures do not show, and add
+    uncertainty to the two figures whose spread is committed. *(5.1, 5.2, 5.3)*
