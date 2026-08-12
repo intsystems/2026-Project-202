@@ -594,7 +594,7 @@ by the run. Three qualifications keep the second modest. Its level cannot be rea
 the identifiability ratio being uncomputable here, so only the change is read. The observer is the
 parameter norm, for which \cref{sec:nuisance} cannot exclude a smoothness explanation, so the
 surrogate control carries the claim. A simpler statistic registers the change more strongly: the
-roughness of the same windows collapses by an order of magnitude where the estimate merely halves,
+roughness of the same windows collapses by an order of magnitude while the estimate merely halves,
 so most of what this log says about the transition is in that collapse, which needs no embedding.
 
 \section{Conclusion}\label{sec:concl}
@@ -753,8 +753,8 @@ Five properties of these choices should be stated with them.
 five swept axes and the twenty-direction one at the top of both. That is less serious than it
 appears for the first: four of its five axes have only two levels, so every configuration in that
 grid is at a boundary in four of them, and $\tau$, the only axis with an interior value, has its
-winner at the top end. But neither configuration is interior, and a wider grid could move the
-level.
+winner at the top end. Even so, neither configuration is interior, and a wider grid could move
+the level.
 
 \emph{The selection error spans a factor of five on identical data.} Across the
 eight-direction grid the error runs from $0.32$ to $1.50$ on the same logs, so the level is a
@@ -1269,7 +1269,7 @@ drive rather than the optimiser.
 
 Two properties of the backbone bear on the construction. The functional rank is $10$ at every
 rank, seed and regime, with a participation ratio between $8.40$ and $9.03$; it belongs to the
-frozen backbone and does not depend on the excitation. And the condition number of the
+frozen backbone and does not depend on the excitation. The condition number of the
 drive-direction matrix is $1.00$ at $r=1$ by construction and has a median of $13.3$ at $r=8$,
 which is the anisotropy the mixing matrix exists to remove.
 
@@ -1874,7 +1874,7 @@ $r$ & measured $\PR^{\mathrm{pos}}$ & MG at $W_T = 150$ & MG at $W_T = 624$ \\
 Three things follow. The ordering, the claim \cref{sec:digits} makes at this range, is
 unaffected: the rank correlation is $1.00$ under both exclusions. The absolute value moves
 down by $0.11$ to $0.52$ components, so the capped exclusion was mildly inflating it, in the
-direction that a shortage of exclusion predicts. And the correction makes the recovery slightly
+direction that a shortage of exclusion predicts. The correction makes the recovery slightly
 worse rather than better, so the cap was not improving the reported result: enforcing the protocol
 costs accuracy and gains correctness. The saturation above about six directions is present at both
 settings and is therefore not an artefact of the exclusion.
@@ -1910,7 +1910,7 @@ Three departures from the source configurations should be stated, since two of t
 in the regimes \cref{sec:grok-diagnostics} assigns. \citet{nanda2023progress} train
 full batch; we use mini-batches of $256$, which makes this setting stochastic rather than
 deterministic. The $S_5$ weight decay of $0.2$ and the $S_5$ task itself
-\citep{power2022grokking} are outside that configuration. And the two $S_5$ runs step the
+\citep{power2022grokking} are outside that configuration. The two $S_5$ runs also step the
 optimiser twice per batch, reproducing a duplicated update in our own earlier released logs, so
 their effective learning rate and decay are about double the nominal ones.
 
@@ -1989,7 +1989,7 @@ $94\,\%$ validation accuracy and still rising, so it is the clearest censored ob
 the set rather than a negative. The generalisation step of \texttt{lowdata15\_s0} is $110\,940$
 under the sustained-block criterion used for the extended reruns and $109\,860$ under the plain
 first-crossing rule used elsewhere; nothing in the paper depends on the difference.
-And \texttt{g\_p3x} reaches $73\,\%$ validation accuracy against a majority-class baseline of
+Finally, \texttt{g\_p3x} reaches $73\,\%$ validation accuracy against a majority-class baseline of
 $1.3\,\%$ while being provably outside the class the architecture can represent, so it is the
 one row in this table that neither of the source papers accounts for.
 
@@ -2055,7 +2055,7 @@ $26.4$.
 \emph{Two qualifications.} Recurrence is not always needed even here: in the fast case $W_T = 0$
 already returns $r$, because it is not oversampled, and it is the slow case --- nearest
 neighbours $574$ samples away --- that the exclusion rescues, from a rank-blind $2.1$ to its
-published $3.5$. And a transient need not have dimension one: a decaying \emph{oscillation}
+published $3.5$. A transient also need not have dimension one: a decaying \emph{oscillation}
 returns $2.36$ at every exclusion, correctly, because at $k = 20$ the neighbourhood spans several
 turns of the spiral and the two-dimensional sheet they lie on is all there is to see at that
 resolution. The asymmetry is general; the value is not.
@@ -2087,7 +2087,7 @@ plain transient, which is the pair of conditions \cref{sec:classes} asks for.
 rates by two seeds, $30\,000$ steps, summarised in \cref{tab:eos}. Two departures are deliberate.
 The log is written at \emph{every} optimiser step, because the oscillation is the two-cycle of the
 unstable mode and its period is a few steps, while every other full-batch log here is strided at
-ten or more. And the sharpness is measured along the run by power iteration on Hessian-vector
+ten or more. The sharpness is measured along the run by power iteration on Hessian-vector
 products, taking the largest \emph{algebraic} eigenvalue: the Hessian is indefinite early in
 training, when the most negative direction is the steeper, and plain power iteration then returns
 a negative sharpness. The routine agrees with an exact eigendecomposition on a $120$-parameter
@@ -2122,7 +2122,7 @@ $3 \times 10^{6}$   & ---              & ---              & ---              & d
 
 \paragraph{Oscillation without recurrence.} The oscillation is real and not round-off:
 the largest single-step rise is $0.99$ to $4.1$ times the loss itself, against a float32 relative
-epsilon of $1.2 \times 10^{-7}$. But oscillation is not recurrence. Two of the seven
+epsilon of $1.2 \times 10^{-7}$. Oscillation is still not recurrence. Two of the seven
 edge-of-stability runs return near states they have left; five trace a curve past the exclusion
 exactly as the monotone runs do, and the return column of \cref{tab:eos} separates the two groups
 by an order of magnitude with nothing between them.
@@ -2215,12 +2215,12 @@ $E_{\max} = 20$ this paper froze, which is the coincidence \cref{sec:ceiling} re
 the record at fixed $E_{\max}$. The dotted line is $2\log_{10}N$; the dashed line is $E_{\max}/2$
 for the filled series only, the open series having a Takens prediction of $28$ that is off scale.
 The open series is the control that decides it: at $E_{\max} = 56$ the estimate still tracks to
-$10.4$ on a record of one thousand samples, where a finite-record bound allows $6.0$.}
+$10.4$ on a record of one thousand samples, whereas a finite-record bound allows $6.0$.}
 \label{fig:ceiling}
 \end{figure}
 
 \paragraph{Outcome of the two scans.} The level at high rank is the embedding's: sixty-four times the
-record adds $1.7$ components, where a factor of $5.6$ in $E_{\max}$ adds $7.2$. The tracking
+record adds $1.7$ components, whereas a factor of $5.6$ in $E_{\max}$ adds $7.2$. The tracking
 ceiling is neither's. It never passes $10.4$ over the sixteen distinct $(E_{\max}, N)$ cells --- the
 two scans above plus a third that repeats the record scan at $E_{\max} = 56$ --- and the cell
 that attains it is $E_{\max} = 56$ at $N = 1000$, the \emph{shortest} record in the study, where
