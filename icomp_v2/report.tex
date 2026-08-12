@@ -357,10 +357,9 @@ tracks} moves with neither, never passing $10.4$ over sixteen combinations and r
 \emph{shortest} record. A finite-record bound \citep{eckmann1992fundamental} is therefore not the
 explanation, allowing $6.0$ where we measure $10.4$, and $E > 2d$ is right in direction and wrong
 in form: the rise is about $0.05$ components per unit of $E_{\max}$, not a half, so $E_{\max}/2$ is
-a coincidence at the value we froze. Both dependences are logarithmic, and the linear participation
-ratio of the delay cloud follows the same curve to $0.09$ components --- so much of what saturates
-is how many components the delay window resolves linearly, not any geometry. Why the tracking
-ceiling sits near ten is open.
+a coincidence at the value we froze. Both dependences are logarithmic. And the linear participation
+ratio of the delay cloud follows the same curve to $0.09$ components, so much of what saturates is
+how many components the delay window resolves linearly rather than any geometry.
 
 \subsection{The silence control}\label{sec:silence}
 
@@ -391,7 +390,8 @@ a run ordinarily logs, sit in the middle of that range and are also the only obs
 roughness orders the withheld ranks, so for the cheapest observer a smoothness explanation cannot
 be excluded. Twenty available directions give the same picture with a lower ceiling, saturating at
 $15.1$ against a measured $19.99$ at Spearman $+0.97$; that arm is exploratory, having no seed
-split and a Theiler exclusion smaller than its own embedding span (\cref{app:theiler}). A second
+split, a Theiler exclusion smaller than its own embedding span (\cref{app:theiler}), and
+$E = 2d$ exactly, one short of \cref{sec:estimator}'s condition. A second
 construction in function space is the most accurate row of \cref{tab:ladder}, its rank set by an
 external teacher.
 
@@ -505,11 +505,10 @@ set by $E_{\max}$ and the record, not a rank, as \cref{fig:regimes} predicts for
 excitation. The full-batch runs carry a transient's signature instead: identifiability ratio unity,
 roughness of one part in a thousand, two crossings per window. In neither is the value a count.
 
-A change inside a run might still be read, since the configuration and with it the level offset are
-constant within a run; the floor such a change must clear is the observer's own drift, $1.16$
-components by \cref{sec:nuisance}. At this window it cannot be tested, for want of resolution and
-not of signal: the window spans $39\,990$ optimiser steps against a transition hundreds wide
-(\cref{app:window}). \Cref{sec:matched} shortens it.
+A change inside a run might still be read, the configuration and with it the level offset being
+constant within a run, against a floor of $1.16$ components (\cref{sec:nuisance}). Not at this
+window, though: it spans $39\,990$ optimiser steps against a transition hundreds wide, for want of
+resolution and not of signal, so \cref{sec:matched} shortens it (\cref{app:window}).
 
 \paragraph{Label-matched pairs.}\label{sec:pairs} The perceptron setting supplies the control the
 first cannot: both members of a pair fit the training set completely under identical optimisation
@@ -597,8 +596,8 @@ innovation collapses, which needs no embedding.
 In a deterministic recurrent system with a matched delay lag, one scalar log of a suitable observer
 counts the independent components of the set the optimiser visits, to a mean absolute error of
 $0.87$ components up to eight of them. Outside that regime what comes back is not that count, for
-two different reasons: on a transient the visited set is a curve and the estimate is thirty times
-its dimension; under stochastic forcing there is no invariant set to have one. What makes it usable
+two different reasons: a transient's visited set is a curve and the estimate is thirty times its
+dimension, and stochastic forcing leaves no invariant set to have one. What makes it usable
 is therefore the pair of diagnostics beside it. Applied to grokking they place both standard
 settings outside the admissible regime; measured directly instead, the trajectory effective rank
 collapses by a median factor of seven near generalisation and re-expands in four regularised runs,
