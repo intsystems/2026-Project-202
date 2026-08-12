@@ -208,7 +208,7 @@ def fig_regimes():
     bx.set_xlim(0.92, 1.66)
     bx.set_xticks([1.0, 1.2, 1.4, 1.6])
     bx.set_xlabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
-    bx.set_title("(b) is it a count?", loc="left")
+    bx.set_title("(b) admissibility", loc="left")
     bx.text(1.025, 4.30, "admissible", color=BAND, fontsize=6.2, ha="center",
             va="bottom")
     bx.spines["left"].set_visible(False)
