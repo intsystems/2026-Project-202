@@ -105,29 +105,48 @@ def select(patterns: Iterable[str]) -> List[Experiment]:
 
 
 def order(targets: Sequence[Experiment], include_needs: bool = True) -> List[Experiment]:
-    """Topologically order the targets, with their prerequisites first.
+    """Order the targets so that every prerequisite runs before what needs it.
 
-    Raises on a cycle rather than looping, and names the cycle.
+    Among steps that are ready at the same moment, the lower tier goes first, and ties
+    inside a tier break by id. Dependency always wins over tier: the two disagreed once --
+    the article's figures were drawn at a point where the section 6 experiments had not
+    run, and three of the twelve came out of stale data reporting themselves clean -- and
+    the fix is to state the dependency, not to reorder around it.
+
+    Raises on a cycle rather than looping, and names the steps involved.
     """
     load()
-    resolved: List[Experiment] = []
-    seen: Dict[str, int] = {}  # 1 = in progress, 2 = done
+    wanted: Dict[str, Experiment] = {}
 
-    def visit(exp: Experiment, path: Tuple[str, ...]) -> None:
-        state = seen.get(exp.id, 0)
-        if state == 2:
-            return
-        if state == 1:
+    def collect(exp: Experiment, path: Tuple[str, ...]) -> None:
+        if exp.id in path:
             raise ValueError("dependency cycle: " + " -> ".join(path + (exp.id,)))
-        seen[exp.id] = 1
+        if exp.id in wanted:
+            return
+        wanted[exp.id] = exp
         if include_needs:
             for need in exp.needs:
-                visit(get(need), path + (exp.id,))
-        seen[exp.id] = 2
-        resolved.append(exp)
+                collect(get(need), path + (exp.id,))
 
     for target in targets:
-        visit(target, ())
+        collect(target, ())
+
+    # Kahn's algorithm, taking the lowest (tier, id) among whatever is ready. Needs that
+    # fall outside the selection -- when --no-deps is given -- are not waited on.
+    remaining = {
+        id: {need for need in exp.needs if need in wanted} if include_needs else set()
+        for id, exp in wanted.items()
+    }
+    resolved: List[Experiment] = []
+    while remaining:
+        ready = [id for id, needs in remaining.items() if not needs]
+        if not ready:
+            raise ValueError("dependency cycle among: " + ", ".join(sorted(remaining)))
+        chosen = min(ready, key=lambda id: (wanted[id].tier, id))
+        resolved.append(wanted.pop(chosen))
+        remaining.pop(chosen)
+        for needs in remaining.values():
+            needs.discard(chosen)
     return resolved
 
 

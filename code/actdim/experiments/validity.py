@@ -1624,9 +1624,14 @@ CEILING_ARMS: Tuple[str, ...] = ("frozen", "theiler76", "fixedspan")
 CEILING_IDENT_SEED = 0
 CEILING_IDENT_BIG: Tuple[int, ...] = (32000, 64000)
 CEILING_IDENT_BIG_RANKS: Tuple[int, ...] = (20,)
-#: Above this record length a cell is memory bound rather than processor bound, so fewer
-#: workers finish it sooner and none of them is killed by the machine.
+#: Above this record length the cells that also compute the doubled embedding become
+#: memory bound rather than processor bound: at 64,000 samples one of them holds a third of
+#: a gigabyte of candidate distances, and eight at once is how an overnight run dies. Only
+#: those cells get fewer workers. The ordinary cells at the same length resolve their
+#: exclusion to the embedding span rather than to the cap, so they hold a fifth as much and
+#: run at the full worker count -- which is most of this experiment's cost.
 CEILING_HEAVY_FROM = 32000
+CEILING_HEAVY_JOBS = 3
 
 
 #: The delay span at the frozen configuration, in samples, which two of the three arms
@@ -1881,14 +1886,16 @@ def _ceiling_slopes(summary) -> Any:
     title="The ceiling: the embedding dimension against the record length",
     paper=("app:ceiling", "tab:ceiling", "tab:ceilingfit", "fig:ceiling"),
     device=CPU,
-    minutes=180,
+    minutes=360,
     promotes=("ceiling_summary.csv", "ceiling_cells.csv", "ceiling_fits.csv",
               "ceiling_slopes.csv"),
-    tier=2,
-    notes="Three hours on eight cores. Each record length is a prefix of one trajectory, "
-          "so the delay lag keeps its meaning in periods. The raw table is rewritten "
-          "after every record-length block, so a run that dies late still leaves a usable "
-          "scan on disk.",
+    tier=1,
+    notes="The longest experiment here, and the estimate is measured rather than "
+          "inherited: the archived script claimed three hours, and one cell at 32,000 "
+          "samples takes 130 seconds on this machine, which puts the record scan alone "
+          "above four. Each record length is a prefix of one trajectory, so the delay lag "
+          "keeps its meaning in periods. The raw table is rewritten after every "
+          "record-length block, so a run that dies late still leaves a usable scan.",
 )
 def ceiling(ctx: Context) -> None:
     import pandas as pd
@@ -1929,20 +1936,32 @@ def ceiling(ctx: Context) -> None:
                          reference_n, CEILING_REFERENCE_E, CEILING_WIDE_E, directory,
                          tuple(cfg.as_dict().items()))
     blocks: Dict[int, List[Any]] = {}
-    for job in jobs:
-        blocks.setdefault(job[3], []).append(job)
+    for index, job in enumerate(jobs):
+        blocks.setdefault(job[3], []).append((index, job))
 
-    rows: List[Dict[str, Any]] = []
+    # Kept with their job index and sorted before writing, because the heavy cells of a
+    # record-length block are dispatched in a second pass and the raw table has to come out
+    # in one deterministic order whichever pass produced a row.
+    collected: List[Tuple[int, Dict[str, Any]]] = []
     for length in sorted(blocks):
-        # The longest records are memory bound, not processor bound: one cell at 64,000
-        # samples holds a third of a gigabyte of candidate distances, and eight of them at
-        # once is how an overnight run dies.
-        workers = (max(1, min(default_jobs(ctx.jobs), 3))
-                   if length >= CEILING_HEAVY_FROM else ctx.jobs)
-        collected = map_ordered(_ceiling_cell, blocks[length], jobs=workers,
-                                desc=f"valid.ceiling N={length}")
-        rows.extend(row for row in collected if row is not None)
-        ctx.store.table("ceiling_raw.csv", pd.DataFrame(rows))
+        heavy = length >= CEILING_HEAVY_FROM
+        passes = ((("", [pair for pair in blocks[length] if not (heavy and pair[1][7])],
+                    ctx.jobs),
+                   (" 2E", [pair for pair in blocks[length] if heavy and pair[1][7]],
+                    max(1, min(default_jobs(ctx.jobs), CEILING_HEAVY_JOBS))))
+                  if heavy else (("", blocks[length], ctx.jobs),))
+        for label, batch, workers in passes:
+            if not batch:
+                continue
+            results = map_ordered(_ceiling_cell, [pair[1] for pair in batch], jobs=workers,
+                                  desc=f"valid.ceiling N={length}{label}")
+            collected.extend((pair[0], row) for pair, row in zip(batch, results)
+                             if row is not None)
+        # Rewritten after every block, so a run that dies late still leaves a usable scan.
+        ctx.store.table("ceiling_raw.csv",
+                        pd.DataFrame([row for _, row in sorted(collected,
+                                                               key=lambda p: p[0])]))
+    rows = [row for _, row in sorted(collected, key=lambda pair: pair[0])]
     raw = pd.DataFrame(rows)
 
     per_cell = (raw.groupby(["sweep", "arm", "max_E", "N", "r"], sort=True)

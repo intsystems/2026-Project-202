@@ -42,7 +42,7 @@ def _summary(ctx: Context, rows: List[dict], name: str = "milestones.csv") -> No
     device=GPU,
     minutes=24,
     promotes=("milestones.csv",),
-    tier=3,
+    tier=2,
     notes="The runs section 7.2 measures. Each writes a 60-95 MB sketch into runs/.",
 )
 def transformer_sketched(ctx: Context) -> None:
@@ -62,7 +62,7 @@ def transformer_sketched(ctx: Context) -> None:
     device=GPU,
     minutes=150,
     promotes=("milestones.csv",),
-    tier=3,
+    tier=2,
     notes="The logs the two admissibility diagnostics are computed on. Produced in the "
           "archived tree by a shell script, not by the planner that claims to plan them.",
 )
@@ -82,7 +82,7 @@ def transformer_extended(ctx: Context) -> None:
     device=GPU,
     minutes=180,
     promotes=("milestones.csv",),
-    tier=3,
+    tier=2,
     notes="Re-specified rather than reproduced: the archived log came from a notebook "
           "with a class-balanced split and float32. See the registry entry.",
 )
@@ -123,7 +123,7 @@ def _train_perceptron(ctx: Context, keys: Sequence[str], sketch: bool = False,
     device=GPU,
     minutes=36,
     promotes=("milestones.csv",),
-    tier=3,
+    tier=2,
 )
 def perceptron_arith(ctx: Context) -> None:
     _summary(ctx, _train_perceptron(ctx, _perceptron_group(ctx, "arith", limit=1)))
@@ -136,7 +136,7 @@ def perceptron_arith(ctx: Context) -> None:
     device=GPU,
     minutes=72,
     promotes=("milestones.csv", "g_p2_p97_train.csv", "g_p2x_p97_train.csv"),
-    tier=3,
+    tier=2,
     notes="The two promoted logs are what fig_pairs draws; the rest stay in runs/.",
 )
 def perceptron_poly(ctx: Context) -> None:
@@ -157,7 +157,7 @@ def perceptron_poly(ctx: Context) -> None:
     device=GPU,
     minutes=12,
     promotes=("milestones.csv",),
-    tier=3,
+    tier=2,
     notes="a_add, x_no_grok, g_p1, g_p1x. Not the article's 'top four rows of the "
           "inventory', which names a different set; see docs/errata.md item 11.",
 )
@@ -175,7 +175,7 @@ def perceptron_sketched_fb(ctx: Context) -> None:
     device=GPU,
     minutes=12,
     promotes=("milestones.csv",),
-    tier=3,
+    tier=2,
     notes="The comparison arm of appendix J. Its milestones agree with the full-batch "
           "arm to within six logged steps, not the one or two the article states.",
 )
@@ -194,7 +194,7 @@ def perceptron_sketched_mb(ctx: Context) -> None:
     device=GPU,
     minutes=12,
     promotes=("milestones.csv",),
-    tier=3,
+    tier=2,
     notes="150,000 steps logged every 50. This is the input to the window-length sweep "
           "of appendix J, whose archived sketches were not kept, so the committed "
           "pr_vs_window.csv cannot be regenerated without this run.",
@@ -213,7 +213,7 @@ def perceptron_sketched_long(ctx: Context) -> None:
     device=GPU,
     minutes=30,
     promotes=("eos_runs.csv",),
-    tier=3,
+    tier=2,
     notes="Appendix Q. Sharpness by power iteration every hundred steps, seeded from a "
           "stream that cannot move the trajectory.",
 )

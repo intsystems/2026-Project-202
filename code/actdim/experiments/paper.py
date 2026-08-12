@@ -17,6 +17,19 @@ from ..runtime.store import repo_root
 ARTICLE_FIGURES = repo_root().parent / "icomp_v2" / "figures"
 
 
+#: What the figures read, taken from the one place the paths are written. Declared as
+#: dependencies rather than left implicit: without them a full run draws the figures
+#: wherever registration order happens to put them, which is before the section 6
+#: experiments, and three of the twelve come out of stale data reporting themselves clean.
+FIGURE_INPUTS = (
+    "sys.digits.parameter",
+    "valid.tau", "valid.anisotropy", "valid.ceiling", "valid.theiler.contrast",
+    "train.perceptron.eos", "train.perceptron.poly",
+    "grok.diagnostics.logs", "grok.diagnostics.perceptron", "grok.eos",
+    "grok.extended.outcomes", "grok.matched.window", "grok.prwindow", "grok.rank.dip",
+)
+
+
 @experiment(
     id="paper.figures",
     title="The twelve figures, into ../icomp_v2/figures/",
@@ -25,8 +38,9 @@ ARTICLE_FIGURES = repo_root().parent / "icomp_v2" / "figures"
            "fig:traces"),
     device=CPU,
     minutes=2,
+    needs=FIGURE_INPUTS,
     promotes=(),
-    tier=6,
+    tier=5,
     notes="Set install=false to draw into runs/ only; allow_archive=true to build from "
           "../archived_code where an experiment has not been re-run.",
 )
@@ -73,8 +87,16 @@ def figures(ctx: Context) -> None:
            "tab:grok-diagnostics", "tab:dip", "tab:frozen"),
     device=CPU,
     minutes=1,
+    # The auditor reads across the whole tree, so it goes last. Anything not yet
+    # regenerated it reads from `data/`, and it says which of its inputs are still the
+    # archived ones -- a table checked against archived data has been checked against the
+    # numbers the article was written from, not against a regeneration.
+    needs=FIGURE_INPUTS + ("calib.e8", "calib.e20", "sys.matrix", "sys.linear",
+                           "sys.logistic", "sys.decoder", "sys.subspace",
+                           "sys.digits.function", "train.transformer.sketched",
+                           "train.perceptron.arith", "grok.matched.surrogate"),
     promotes=("table_audit.csv",),
-    tier=6,
+    tier=5,
     notes="The release check. This repository has twice committed a result file its own "
           "script could no longer reproduce; run this before submitting anything.",
 )

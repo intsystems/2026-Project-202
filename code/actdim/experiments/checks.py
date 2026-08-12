@@ -145,7 +145,7 @@ def _compare_logs(left: Any, right: Any) -> Any:
     device=GPU,
     minutes=12,
     promotes=("sketch_noninvasive.csv",),
-    tier=5,
+    tier=4,
     notes="Trains one registry run twice, with the observer and without, at the production "
           "sketch width. Set run= to check another key and steps= to shorten the budget.",
 )
@@ -250,7 +250,7 @@ def sketch_noninvasive(ctx: Context) -> None:
     device=GPU,
     minutes=6,
     promotes=("sketch_cost.json",),
-    tier=5,
+    tier=4,
     notes="Appendix S. The archived measurement recorded device 'auto' and so cannot say "
           "whether it ran on a GPU; the resolved device is written here. A negative "
           "overhead is a bound, not a result.",

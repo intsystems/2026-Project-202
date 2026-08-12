@@ -1,61 +1,75 @@
 # What is ported, and what is not
 
-The port is not finished. This file says exactly where it stands, so that the gaps are
-visible rather than discovered by running something and getting nothing.
+`python -m actdim list` is the live catalogue. This file says what the catalogue cannot:
+which parts have been run against real data, which have only been exercised, and what is
+known to be missing.
 
-`python -m actdim list` is the live version of the top half; this file adds what is
-missing, which a catalogue of what exists cannot show.
+## The port is complete
 
-## Ported, tested, and runnable
+Every section of the article has an experiment. Forty of them, 14.4 hours of CPU work and
+9.1 of GPU, and `python -m actdim plan --all` prints the order.
 
 | area | state |
 | --- | --- |
 | runtime: device, seeding, provenance, storage, catalogue, CLI | complete |
-| the estimator: embedding, neighbours, MG/LB/TwoNN, companions, diagnostics, surrogates, windows | complete, and equal to the archived implementation on real logged series to 1.6e-13 on the estimate |
-| the two frozen configurations | committed under `data/calib.e8/` and `data/calib.e20/`, loaded by `actdim.frozen` |
-| the drive, the observers, six of the seven ladder systems | complete; the seed defect is fixed and tested |
-| the transformer, its tasks, and the run registry of appendix O | complete, all fourteen rows |
-| the perceptron, its tasks, the closed form of appendix M | complete, all thirteen rows |
-| the trajectory sketch and its non-invasiveness check | complete; the check is a test that trains twice and requires bit-identical logs |
-| the edge-of-stability campaign | complete |
+| the estimator | complete, and equal to the archived implementation on real logged series to 1.6e-13 on the estimate |
+| the drive, the observers, all seven ladder systems | complete; the seed defect is fixed and tested |
+| the transformer and the perceptron, with the run registry of appendix O | complete: all fourteen transformer rows and all thirteen perceptron rows |
+| the trajectory sketch | complete; a test trains the same configuration twice and requires every logged value bit-identical |
 | the twelve figures | complete, and pixel-identical to the published ones |
-| the training experiments (`train.*`) | wired |
-| the grokking experiments (`grok.*`) | wired, all nine. Seven reproduce their archived table from the logs their `needs` name; `grok.repr` is new and has none to reproduce; `grok.prwindow` cannot be run at all until `train.perceptron.sketched.long` has been trained, as below |
-| the ladder experiments (`sys.*`) | wired for the six ported systems |
-| the figure experiment (`paper.figures`) | wired |
+| the table auditor | complete: 21 of 28 tables, 731 cells and claims |
+| `calib.*`, `sys.*`, `valid.*`, `train.*`, `grok.*`, `check.*`, `paper.*` | all wired |
 
-257 tests pass. `python -m pytest tests/ -q`.
+381 tests pass. `python -m pytest tests/ -q`.
 
-## Not ported
+## How far each part has been verified
 
-Each of these is a piece of the article that cannot yet be regenerated. The archived
-implementation is named so the work can be picked up.
+Verification here means run against real data and compared with the archived result, not
+merely exercised.
 
-| what | where the archived version is | what depends on it |
-| --- | --- | --- |
-| **The parameter-subspace system** | `archived_code/active_dimension/{system,dynamics}.py` | rows six and seven of `tab:ladder`, section 5.3's silence control, section 5.4, section 6.1. Named in `actdim.systems.spec.NOT_PORTED`. |
-| **The synthetic generators** (quasiperiodic, Ornstein-Uhlenbeck, coloured noise) | `archived_code/active_dimension/generators.py` | `valid.regime`, `valid.tau`, `valid.anisotropy` |
-| **The `valid.*` experiments** | `archived_code/active_dimension/e0`, `e3`, `e4`, `e6`, `e7b`, `e8`, `e10_ceiling_sweep` | section 6 entire, appendices E, N, P, R |
-| **The `calib.*` experiments** | `archived_code/active_dimension/e1_calibration.py`, `calibration_k20.py` | appendix C. The configurations they select are committed, so only re-selection needs them. |
-| **The table auditor** | `archived_code/active_dimension/paper_tables.py` covers two tables | `check.tables`. `actdim/tables.py` exists but is unfinished. |
-| **The sketch cost and non-invasiveness experiments** | `archived_code/gromov_arithmetic/sketch_cost.py`, `verify_*.py` | appendix S. The library functions are ported; only the experiment wrappers are missing. |
+**Reproduces the archived result bit for bit.** `grok.extended.outcomes`,
+`grok.diagnostics.logs`, `grok.eos` (all three tables), `grok.rank.dip`,
+`grok.matched.window`'s headline trace, and the polynomial half of
+`grok.diagnostics.perceptron`. On the arithmetic half every shared window agrees to the
+bit on all seven statistics.
 
-`actdim.runtime.archive` maps every one of those experiments' outputs to the archived file
-it should reproduce, and `data/` is already seeded from them, so the figures and the
-article build today. Every seeded file is marked `source: archived` in
-`data/manifest.json`; `python -m actdim verify` lists them.
+**Reproduces it with a stated difference.** `grok.matched.window`'s grid tables differ by
+at most 4.4e-5, because the archived grids were computed from a copy rounded to five
+decimals; all 72 rows align and the verdicts are identical. `grok.matched.surrogate`'s
+individual depths differ because the archived stream was seeded from `hash()`, which
+Python salts per interpreter; the verdict is unchanged and `tab:matched` reproduces
+exactly.
+
+**Run, but not yet compared at full size.** The six ladder rows, `sys.silence`, and the
+`valid.*` set. `sys.matrix` at full size recovers with a mean absolute error of 0.27 and a
+rank correlation of 1.0, against the published 0.30 and 0.69 — the corrected held-out
+split did not cost recovery on that system.
+
+**Exercised only.** The `train.*` campaigns and the two `check.sketch.*` experiments have
+run at reduced size on a CPU. They need the GPU box.
+
+## What still needs a decision
+
+**Errata item 31.** The corrected drive excites its directions less evenly than the
+published one — 0.86 k against 0.94 to 0.96 k on the function-subspace system — while
+holding a resonance margin two orders of magnitude better. Every hard rank is still exactly
+k. Neither construction dominates. A test holds the measured ratio so it cannot drift while
+the question is open.
+
+**The silence control.** Run for the first time, it invalidates five systems where section
+5.3 says two. Which rows of `tab:ladder` that changes depends on the observers each row is
+scored on, which is an editorial decision; `runs/sys.silence/silence.csv` is the evidence.
 
 ## Two things no code can recover
 
-The trajectory sketches behind appendix H's fine windows and behind appendix J's
-window-length sweep were never kept, and the scripts that consumed them exit when they
-find none. Those two appendices need GPU time before they can be regenerated at all:
-`train.transformer.sketched` and `train.perceptron.sketched.long`. Everything else in the
-article can be rebuilt from `data/`.
+The trajectory sketches behind appendix H's fine windows and appendix J's window-length
+sweep were never kept. `grok.rank.dip` and `grok.prwindow` therefore refuse to run until
+`train.transformer.sketched` and `train.perceptron.sketched.long` have been trained, and
+say so with the command that does it. Everything else in the article rebuilds from `data/`.
 
 ## Where the numbers will move
 
-`docs/errata.md` is the full register. The four that change a published value are the seed
-defect in the drive, the Theiler cap, the discarded null statistics on degenerate windows,
-and the window-length labels of appendix J. Item 31 records a cost the drive fix carries
-with it, which needs a decision rather than a default.
+`docs/errata.md` is the register: thirty-seven items, plus one the port introduced and
+closed. Twelve are text or caption corrections needing no re-run. Four change a published
+value: the seed defect in the drive, the Theiler cap, the null statistics discarded on
+degenerate windows, and the window-length labels of appendix J.

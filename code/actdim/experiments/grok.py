@@ -131,7 +131,7 @@ def _diagnostic_frames(ctx: Context, upstream: str, runs: Sequence[str],
     minutes=5,
     needs=("train.transformer.extended",),
     promotes=("real_logs_windows.csv", "real_logs_summary.csv"),
-    tier=2,
+    tier=3,
     notes="The seven 120,000-step reruns, five observers each, at the frozen "
           "configuration with only the window geometry shortened to fit the record.",
 )
@@ -161,7 +161,7 @@ def diagnostics_logs(ctx: Context) -> None:
     needs=("train.perceptron.arith", "train.perceptron.poly"),
     promotes=("dimension_probe.csv", "dimension_probe_summary.csv",
               "dimension_probe_poly.csv", "dimension_probe_summary_poly.csv"),
-    tier=2,
+    tier=3,
     notes="Four arithmetic runs and six polynomial ones, two observers each. The run set "
           "and the observers are declared here; the archived command globbed both.",
 )
@@ -240,7 +240,7 @@ def _rename_offset(frame):
     promotes=("rank_windows.csv", "rank_summary.csv", "rank_milestones.json",
               "rank_dip.csv", "rank_dip_controls.csv", "rank_dip_controls_aligned.csv",
               "mod_wd1_train.csv"),
-    tier=2,
+    tier=3,
     notes="Reads the six trajectory sketches. Both window geometries are run; the fine "
           "one is what the article reports and the coarse one is stamped with its name, "
           "because in the archived tree the second pass overwrote the first's output.",
@@ -482,7 +482,7 @@ def _matched_inputs(ctx: Context, runs: Sequence[str]):
     needs=("train.transformer.sketched", "grok.rank.dip"),
     promotes=("headline_trace.csv", "grid_weight_norm.csv", "grid_train_loss.csv",
               "grid_val_loss.csv"),
-    tier=2,
+    tier=3,
     notes="Thirty-six configurations by two detrendings by six runs by five observers, "
           "on the midpoints the direct measurement used. The headline cell is named by a "
           "rule blind to the outcome and is not the best cell.",
@@ -661,7 +661,7 @@ def _surrogate_cell(args) -> List[Dict[str, Any]]:
     minutes=8,
     needs=("train.transformer.sketched", "grok.rank.dip"),
     promotes=("surrogates.csv", "surrogate_summary.csv", "surrogate_seed_spread.csv"),
-    tier=2,
+    tier=3,
     notes="Thirty-nine surrogates per cell at three smoothing lengths and five seedings. "
           "The surrogates are unmatched at the endpoints, which is what keeps them on the "
           "observed window grid.",
@@ -758,7 +758,7 @@ EARLY_BUDGET = 20_000
     minutes=1,
     needs=("train.transformer.extended",),
     promotes=("exp8_outcomes.csv", "exp8_at_20k.csv"),
-    tier=2,
+    tier=3,
     notes="Two tables: the outcome at the full budget, and what each run looked like at "
           "step 20,000. Two configurations previously counted as negatives generalise.",
 )
@@ -920,7 +920,7 @@ def _prwindow_summary(frame, t_mem, t_gen):
     minutes=15,
     needs=("train.perceptron.sketched.long",),
     promotes=("pr_vs_window.csv",),
-    tier=2,
+    tier=3,
     notes="Two 150,000-step sketched runs, windows spanning 600 to 120,000 steps. The "
           "archived sketches were never kept, so this needs the GPU campaign first, and "
           "its cost is the one estimate here that could not be measured: the long ladder "
@@ -1161,7 +1161,7 @@ def _eos_recurrence_run(args) -> List[Dict[str, Any]]:
     needs=("train.perceptron.eos",),
     promotes=("eos_diagnostics.csv", "eos_diagnostics_summary.csv",
               "eos_recurrence.csv"),
-    tier=2,
+    tier=3,
     notes="Reads the campaign table and skips every run that diverged: a run that blew "
           "up after a few hundred steps is not a trajectory and has no post-transition "
           "segment to slice. Nine minutes measured on eight cores over the eleven "
@@ -1306,7 +1306,7 @@ REPR_BUDGET = 40_000
     device=CPU,
     minutes=4,
     promotes=("repr_reference.csv", "repr_analytic.csv", "repr_decomposition.csv"),
-    tier=2,
+    tier=3,
     notes="No training and no logs: the closed form of appendix M, scored on the whole "
           "p x p table, and a proof that the three perturbed polynomials are outside the "
           "class the architecture can represent.",
