@@ -72,8 +72,8 @@ the number of directions the optimiser may move in, the rank of the map from tho
 and the effective rank of the trajectory covariance. Measuring it directly means storing the
 trajectory; a scalar log costs nothing, so we ask how much of it survives the projection onto one.
 The estimator is standard, delay reconstruction followed by a maximum likelihood intrinsic
-dimension, and it fails in one specific way: it returns a plausible number when the trajectory
-visits no invariant set. On six constructed systems, ending with a linear head on a frozen image
+dimension. It fails in one specific way: it returns a plausible number when the trajectory visits
+no invariant set. On six constructed systems, ending with a linear head on a frozen image
 classifier, it recovers the active dimension on withheld ranks and seeds to within about one
 component, up to a ceiling near eight directions. Two diagnostics computed from the series alone
 identify the regimes in which the estimate may not be read as a dimension; on grokking they place
@@ -90,8 +90,8 @@ signatures of one event, the second already written by the run.
 \section{Introduction}\label{sec:intro}
 
 A neural network is trained in a parameter space of dimension $P$, but the trajectory the optimiser
-follows does not fill it. Over a window it moves on a much smaller set, and that set grows and
-shrinks over a run. We call its dimension the \emph{active dimension} of the window
+follows does not fill it. Over a window it moves on a much smaller set, which grows and shrinks
+over a run. We call its dimension the \emph{active dimension} of the window
 (\cref{eq:act}). It is a count of independent components: if the optimiser is carried by $r$
 independent quasiperiodic phases the orbit closes onto an $r$-torus and the active dimension is
 $r$, with no tunable scale. It is not the dimension of the subspace the optimiser is confined to,
@@ -151,7 +151,8 @@ the top Hessian eigenvectors \citep{gurari2018gradient, sagun2018empirical}.
 data set or of a layer's representations. Those are properties of a point cloud; the active
 dimension is a property of a path. The participation ratio we adopt \citep{gao2017theory} is not
 the spectral-entropy quantity of the same name \citep{roy2007effective}. We know of one prior
-measurement of it, and it is incidental: nearly all of a grokking trajectory's variance lies in two principal components
+measurement of it, an incidental one: nearly all of a grokking trajectory's variance lies in two
+principal components
 \citep{notsawo2023predicting}. All of these quantities need weights, gradients or activations; the
 nearest precedent for a scalar computed during training and acted on is the gradient noise scale
 \citep{mccandlish2018empirical}. Mini-batch descent near a minimum is modelled as a stochastic
@@ -180,7 +181,7 @@ one window, and a run is described by a sequence of them, because what the optim
 changes over training. Let $\vtheta_t \in \R^P$ be the parameter vector at step $t$, confined by
 construction or by the dynamics to an affine subspace $\vtheta = \vtheta_0 + \mV^{\top}\vc$ with
 $\mV \in \R^{k \times P}$ orthonormal, so that $\vc_t \in \R^k$ holds the coordinates that can
-move. Three dimensions can be defined on $\gW$, and they are different numbers.
+move. Three dimensions can be defined on $\gW$. They are different numbers.
 
 The \emph{available} dimension is $k$: how many directions the parameterisation permits. The
 \emph{functional} dimension is the rank of $\partial \vf(\vc)/\partial \vc$, with $\vf$ the outputs
@@ -254,7 +255,7 @@ ratio} on the power spectrum of $x$.
 
 \subsection{Dynamical regimes}\label{sec:classes}
 
-Two conditions must hold, and they are not the same. The theorems require a deterministic flow on a
+Two conditions must hold. They are not the same. The theorems require a deterministic flow on a
 compact invariant set, which licenses the delay map as an embedding. The neighbour statistic needs
 more: the record must visit that set densely enough for a point's nearest neighbours to be returns
 rather than its own temporal neighbours, which the Theiler exclusion enforces and
@@ -283,17 +284,17 @@ stochastically driven & no low-dimensional invariant set & none & set by $E_{\ma
 \end{tabular}
 \end{table}
 
-Mini-batch gradient noise produces the third regime, and the theory covers it less well than it
+Mini-batch gradient noise produces the third regime, which the theory covers less well than it
 first appears. The embedding theorems for forced systems \citep{stark1999delay, stark2003delay}
 cover it
-in part: the update may depend on the state arbitrarily, and their iterated-function-system form
+in part: the update may depend on the state arbitrarily, while their iterated-function-system form
 admits a driver selecting among finitely many maps, as sampling a finite dataset does. But they
 deliver an embedding \emph{fibre by fibre}, one per realisation of the drive, and a single run
 crosses fibres, so no invariant measure exists there to sample. Coloured noise alone yields a
 finite reproducible dimension set by its spectral exponent \citep{osborne1989finite}, or at least
 an estimate that behaves like one \citep{theiler1991some}. The second regime is less often noticed: a
 decaying transient traces a curve it never returns to, so the record offers the neighbour statistic
-no returns to work with, and its effective rank remains near unity (\cref{tab:gt}) only because
+no returns to work with; its effective rank remains near unity (\cref{tab:gt}) only because
 that curve is nearly straight.
 
 \subsection{Admissibility diagnostics}\label{sec:diagnostics}
@@ -313,7 +314,7 @@ or log-ratio sums reach their numerical floors, and guards against quantised or 
 
 \section{Validation protocol}\label{sec:protocol}
 
-Six requirements were fixed before any result, and each is named so that \cref{tab:ladder} can say
+Six requirements were fixed before any result. Each is named, so that \cref{tab:ladder} can say
 which a system fails.
 
 \emph{(1) Constructed truth.} Every system is built with $r$ independent quasiperiodic phases, so
@@ -322,7 +323,7 @@ all $r$ are comparably excited.
 
 \emph{(2) Frozen configuration.} The estimator is chosen once, by a search over estimator settings
 only. Searching the system's settings at the same time --- the drive period, say --- would choose
-the data along with the method, and the winning cell would report how favourable a system we found
+the data along with the method: the winning cell would report how favourable a system we found
 rather than how well the estimator works.
 
 \emph{(3) Disjoint split}, in seed and in rank. Withholding seeds alone is not enough: whenever the
@@ -339,7 +340,7 @@ participation ratio of \cref{sec:estimator} are reported with every estimate, an
 does as well as the estimator we say so.
 
 \emph{(6) Matched bandwidth} across ranks. In a construction where each added direction also adds a
-higher frequency, the roughness alone orders the rank, and no embedding is being tested.
+higher frequency, the roughness alone orders the rank, so no embedding is being tested.
 
 \section{Evaluation on systems with a known active dimension}\label{sec:ladder}
 
@@ -353,8 +354,8 @@ excited, and the estimator sees one scalar series. \Cref{tab:ladder} collects th
 
 The first system has no optimiser and no feedback, so a negative result there would be decisive. In
 $\mW(t) = \operatorname{diag}(b_i + \delta_i(t))$, $r$ coordinates oscillate at rationally
-independent frequencies over non-zero offsets, and the estimate tracks $r$ across the whole range
-on both held-out seeds (\cref{tab:ladder}). It also supplies the geometry control. If several coordinates are driven from a single phase, the
+independent frequencies over non-zero offsets. The estimate tracks $r$ across the whole range on
+both held-out seeds (\cref{tab:ladder}). It also supplies the geometry control. If several coordinates are driven from a single phase, the
 set they trace has one degree of freedom rather than several, and is no smoother for it. The
 estimate separates that case from the same number of independent oscillators by a factor of
 several, while the roughness of the series distinguishes them by a few per cent; smoothness alone
@@ -366,7 +367,7 @@ The estimator saturates above about eight directions. Varying the embedding dime
 record length separates two quantities we had treated as one (\cref{app:ceiling}). The \emph{level}
 returned at high rank belongs to the embedding: widening the delay window raises it, lengthening
 the record does not. The \emph{rank up to which the estimate still tracks the truth} belongs to
-neither: it never passes about ten components, and it reaches that at the \emph{shortest} record
+neither: it never passes about ten components, reaching that at the \emph{shortest} record
 examined.
 
 Both candidate explanations therefore fail. A finite-record bound \citep{eckmann1992fundamental}
@@ -418,7 +419,7 @@ digits data, a linear head confined to ten directions of which $r$ are excited, 
 excitation cases; colour is the regime of \cref{tab:classes}. (a) The estimate against the measured effective rank, which the
 construction holds at $r$; the marker is the median of forty values, four seeds by ten observers,
 and the band their interquartile range. The dashed diagonal is the truth and the dotted line
-$E_{\max}$, a reference and not a bound: no clamping is applied, and the transient case lies
+$E_{\max}$, a reference and not a bound: no clamping is applied, so the transient case lies
 above it, its seven points piled at $x \approx 1.05$ because its measured rank is about one at every $r$.
 (b) The identifiability ratio on a smaller grid --- seed $0$, three observers, $r \in \{2,6\}$. The transient is the one regime it passes, which is why
 \cref{sec:diagnostics} adds the trend-crossing count.}
@@ -451,15 +452,15 @@ admit the runs that never return near a state they have left, and reject the min
 
 \subsection{The delay lag}\label{sec:tau}
 
-The delay window spans $(E_{\max}-1)\tau$ samples, and it must cover a real fraction of the
+The delay window spans $(E_{\max}-1)\tau$ samples, and must cover a real fraction of the
 oscillation period; otherwise the delay coordinates are collinear and the torus never unfolds. This is a property of the
 delay window rather than of the lag alone, which is standard \citep{casdagli1991state}. On a fixed
-torus, varying $\tau$ alone moves the estimate over more than an order of magnitude, and it passes
+torus, varying $\tau$ alone moves the estimate over more than an order of magnitude, passing
 through the truth only where the delay window covers a few tenths of a period (\cref{tab:tau},
 \cref{fig:tau}).
 
 The right lag follows from the oscillation period, which a controlled experiment knows and a
-training log does not, and we do not solve this. The lag used in \cref{sec:grokking} is the frozen
+training log does not. We do not solve this. The lag used in \cref{sec:grokking} is the frozen
 one, transplanted from a calibration system whose drive period is far shorter than the
 autocorrelation time of those logs, which by itself forbids reading an absolute value there. The
 identifiability ratio inherits the problem: doubling $E_{\max}$ doubles the delay span, so a large
@@ -514,7 +515,7 @@ then return to the logs with the one question a rejected level still permits.
 
 The frozen configuration of \cref{sec:digits}, with only the window and stride shortened to fit
 these records, gives \cref{tab:grok-diagnostics} and \cref{fig:map}. The two settings fail in
-different ways, and neither failure appeals to any label. The regularised mini-batch runs occupy
+different ways. Neither failure appeals to any label. The regularised mini-batch runs occupy
 a band of the identifiability ratio the deterministic regimes never reach, and their estimates
 scatter widely across seeds of one configuration, set by $E_{\max}$ and the record rather than by
 any rank, exactly as \cref{fig:regimes} predicts for stochastic excitation. The full-batch runs
@@ -567,7 +568,7 @@ $d_{\mathrm{act}}$.
 \paragraph{The controls.}\label{sec:nowd} In the transition window the controls decline
 much less than the generalising runs, but over their whole budget one of them declines just as far
 (\cref{tab:dip}): depth does not separate the groups, timing and shape do. Both controls peak early
-and then settle, and their parameter norm never returns to its earlier level, whereas every
+and then settle; their parameter norm never returns to its earlier level, whereas every
 generalising run gives back much of its growth. A low rank is reached both by a run that has come
 to rest and by one about to generalise; the growing norm is the ramped gain of
 \cref{sec:nuisance}, the mechanism behind the decline of \cref{sec:pairs}.
@@ -609,7 +610,7 @@ collapses at generalisation and re-expands, while the controls move much less, a
 window the log estimate declines with it.
 
 \paragraph{Limitations.} The measurement needs a recurrent regime and a lag matched to a period no
-log reveals; above about eight components it is only ordinal, and the configuration is a choice as
+log reveals; above about eight components it is only ordinal, the configuration being a choice as
 much as a measurement (\cref{app:config}). The collapse rests on four runs against two controls
 differing in the variable that also drives the parameter norm; it is a signature, not an early
 warning, and does not reproduce in the second setting. The matched-window drop is close to
@@ -627,7 +628,7 @@ edge-of-stability evidence is seven runs on one task (\cref{app:fb,app:window,ap
 \section{The estimator}\label{app:alg}
 
 \Cref{alg:mg} is the estimator as it was run. It computes \cref{eq:mg} with three departures that
-affect what is reported, and it fixes the constants the main text leaves unnamed.
+affect what is reported. It also states the constants the main text leaves unnamed.
 
 \begin{algorithm}[H]
 \caption{Pooled Levina--Bickel intrinsic dimension of a delay reconstruction}
@@ -654,12 +655,13 @@ exclusion $W_T$; dither $\sigma$
 \end{algorithmic}
 \end{algorithm}
 
-The three departures are these. \emph{The returned value is $(N(m-1)-1)/S$ rather than
+The three departures are as follows. \emph{The returned value is $(N(m-1)-1)/S$ rather than
 $N(m-1)/S$}, the exactly unbiased pooled maximum likelihood estimate for a $\Gamma(N(m-1), 1/d)$
 sample, which differs from \cref{eq:mg} by less than $10^{-5}$ at the sizes used here.
-\emph{A window marked degenerate is returned rather than discarded}: the ladder pipelines drop
-marked windows when summarising a series over its sliding windows, the two grokking pipelines take the
-median over all of them, and no published cell of \cref{tab:grok-diagnostics} contains one.
+\emph{A window marked degenerate is returned rather than discarded}: the constructed-system
+pipelines drop marked windows when summarising a series over its sliding windows, the two grokking
+pipelines take the median over all of them, and no published cell of \cref{tab:grok-diagnostics}
+contains one.
 \emph{The returned value is never clamped to $E$}, so a divergent estimate is reported as
 divergent; clamping would convert the transient regime of \cref{tab:classes} into a plausible
 number.
@@ -682,8 +684,8 @@ two decimals; they are distinct quantities and both are given here.
 \begin{table}[H]
 \centering
 \caption{The twelve observers. $\vc$ is the coordinate in the $k$-dimensional subspace and
-$\vtheta_0$ the frozen head at initialisation; $\mL$ is the matrix of probe logits, the probe being
-a fixed held-out set drawn once before training; $\vg = \partial \ell / \partial \vc$. The
+$\vtheta_0$ the frozen head at initialisation; $\mL$ is the matrix of probe logits, where the probe
+is a fixed held-out set drawn once before training; $\vg = \partial \ell / \partial \vc$. The
 projection directions $\vu$, $\vv$ and $\va$, and the rotation $\mR$, are drawn once from a fixed
 seed and never redrawn.}
 \label{tab:obsdef}
@@ -747,7 +749,7 @@ observer family. The eight-direction objective adds a penalty on the rank correl
 the spread across seeds; at the twenty-direction configuration both penalties are identically
 zero, so the objective there reduces to the error alone.
 
-Five properties of these choices should be stated with them.
+Five properties of these choices need to be stated.
 
 \emph{Both lie at a grid boundary.} The eight-direction configuration is at the top of all
 five swept axes and the twenty-direction one at the top of both. That is less serious than it
@@ -758,14 +760,14 @@ the level.
 
 \emph{The selection error spans a factor of five on identical data.} Across the
 eight-direction grid the error runs from $0.32$ to $1.50$ on the same logs, so the level is a
-choice as much as a measurement, and only the withheld numbers of \cref{sec:digits} may be read
-as recovery.
+choice as much as a measurement. Only the withheld numbers of \cref{sec:digits} may be read as
+recovery.
 
 \emph{The Theiler axis is inert on this data.} The autocorrelation rule returns the larger of
-the embedding span $(E_{\max}-1)\tau$ and the measured autocorrelation time, and on these logs
-the autocorrelation time is one to three samples against an embedding span of nine or more. The
-two Theiler settings therefore return bit-identical values wherever they are compared, and the
-$48$-point grid contains $24$ distinct measurements.
+the embedding span $(E_{\max}-1)\tau$ and the measured autocorrelation time. On these logs the
+autocorrelation time is one to three samples against an embedding span of nine or more, so the two
+Theiler settings return bit-identical values wherever they are compared and the $48$-point grid
+contains $24$ distinct measurements.
 
 \emph{Neither configuration always uses the exclusion its parameters name.} The implementation
 caps the Theiler exclusion at $150$ samples, which binds unconditionally at the twenty-direction
@@ -773,11 +775,11 @@ configuration and on five of the seven training logs of \cref{sec:grokking}.
 \Cref{app:theiler} states the departure and measures what it costs.
 
 \emph{The stride is not always the frozen one.} Three pipelines override the window geometry and
-no estimator field, and \cref{tab:geometry} states what each of them uses. The constructed-system
-setting is the one behind the $0.87$ of \cref{sec:digits}, so ``at the frozen configuration'' is true
-there of the estimator and not of the stride. Every other field --- $E_{\max}$, $\tau$, $m$, the
-Theiler rule, the dither --- is used as frozen throughout, so what moves between experiments is how
-the record is cut up, not how a window is scored.
+no estimator field; \cref{tab:geometry} states what each of them uses. The constructed-system
+setting produced the $0.87$ of \cref{sec:digits}, so ``at the frozen configuration'' is true there
+of the estimator and not of the stride. Every other field --- $E_{\max}$, $\tau$, $m$, the Theiler
+rule, the dither --- is used as frozen throughout. The division of the record into windows changes
+between experiments; the scoring of a window does not.
 
 \begin{table}[H]
 \centering
@@ -800,9 +802,9 @@ training logs (\cref{sec:grokking})      & a third of the record & $1\,000$ \\
 
 \section{Per-observer results and alternative statistics}\label{app:nulls}
 
-\Cref{tab:ladder} is the ladder of \cref{sec:ladder} in full, \cref{tab:obs} scores each observer
-on its own, and \cref{tab:alts} sets the estimator against every statistic we could compute on the
-same data. Two rows of the ladder carry a caveat, and they are taken first.
+\Cref{tab:ladder} gives the evaluation of \cref{sec:ladder} in full, \cref{tab:obs} scores each
+observer on its own, and \cref{tab:alts} sets the estimator against every statistic we could
+compute on the same data. Two rows of \cref{tab:ladder} carry a caveat and are taken first.
 
 \begin{table}[H]
 \centering
@@ -835,7 +837,7 @@ Two rows of \cref{tab:ladder} predate the estimator of \cref{app:alg}. The oscil
 scored with an earlier implementation that applies no Theiler exclusion and clamps the returned
 value to $E$, at $E = 25$ and $m = 30$ rather than at the frozen configuration; its grid swept the
 drive period alongside the estimator parameters, which is the breach of requirement~2 that also
-disqualifies the two regression systems, and it reports no companion statistics, which is
+disqualifies the two regression systems. It reports no companion statistics either, which is
 requirement~5. The function-subspace row shares the clamping and the mixed grid, computes one
 window per run rather than a median over sliding windows, and has no zero-learning-rate control, so
 requirement~4 is untested there rather than passed.
@@ -844,14 +846,14 @@ Both rows are kept because they locate the ceiling, and because the oscillating 
 synchronisation control of \cref{sec:matrix}, which no other system provides. Neither should be
 read as a recovery result.
 
-The gap between the two implementations is in their defaults and not in their arithmetic: at
-matched settings they agree to $0.0$ on all thirty cells of a validation set and on twelve
-further series, both calling the same neighbour kernel. Of the two defaults that differ, the
-clamp never fired --- the largest estimate anywhere in these files is $22.34$ against a
-threshold of $62$ --- so it is a latent hazard rather than a correction that was applied. The
-missing exclusion does cost something, but the cost is small and not consistently signed:
-switching it on moves the held-out error of \cref{tab:ladder} by about three hundredths, upward
-on one seed and downward on the other, and costs the first its perfect rank correlation.
+The two implementations differ in their defaults and not in their arithmetic: at matched settings
+they agree to $0.0$ on all thirty cells of a validation set and on twelve further series, both
+calling the same neighbour kernel. Of the two defaults that differ, the clamp never fired --- the
+largest estimate anywhere in these files is $22.34$ against a threshold of $62$ --- so it is a
+difference that never took effect rather than a correction that was applied. The missing exclusion
+is not free, but its cost is small and not consistently signed. Switching it on moves the held-out
+error of \cref{tab:ladder} by about three hundredths, upward on one seed and downward on the
+other; on the first seed it also costs the perfect rank correlation.
 
 All numbers in this appendix are computed on the withheld ranks $r \in \{1,3,5,8\}$ and the
 withheld seeds of \cref{sec:digits}, in the deterministic recurrent regime, and are scored
@@ -928,8 +930,8 @@ ranks and reports the two parameter norms as one row.}
 \end{figure}
 
 Two observers are excluded from every aggregate, for different reasons. Probe accuracy is
-quantised, which drives the delay vectors together and raises the degeneracy indicator in $100\,\%$
-of its windows; it is the sole source of the degenerate fraction reported anywhere in this
+quantised, which collapses the delay vectors onto one another and raises the degeneracy indicator
+in $100\,\%$ of its windows; it is the sole source of the degenerate fraction reported anywhere in this
 study, every other observer being at zero. The instantaneous mini-batch loss is excluded
 because it fails requirement~4: at zero learning rate, where the parameters do not move at all,
 its estimate still climbs from $0.91$ to $6.93$ across the seven simulated ranks, a range of six
@@ -938,9 +940,9 @@ that control, so no estimate is defined for them.
 
 The roughness column makes the main text's caveat precise. For eight of the nine scored rows the
 roughness statistic does not order the four withheld ranks, so their agreement with the truth is
-not available from smoothness. For the two parameter norms it orders them perfectly, and those
-are exactly the observers a training run ordinarily logs: their result should be read as
-consistent with, rather than as evidence against, a smoothness explanation.
+not available from smoothness. For the two parameter norms it orders them perfectly. Those are
+exactly the observers a training run ordinarily logs, so their result should be read as consistent
+with, rather than as evidence against, a smoothness explanation.
 
 \begin{table}[H]
 \centering
@@ -990,7 +992,7 @@ roughness                         & 3.65  & $0.20$ & 9.90 & $-0.568$ \\
 \end{tabular}
 \end{table}
 
-\Cref{tab:alts} should be read with three things in mind, and none of them favours MG.
+\Cref{tab:alts} should be read with three qualifications, none of which favours MG.
 
 First, MG is not the most accurate statistic at either range: the uncorrected per-point average
 LB is ahead of it at both. The correction of \cref{sec:estimator} removes a positive bias, and
@@ -1007,10 +1009,10 @@ eight directions, not the factor of six that the selection split of \cref{app:co
 reports. That larger figure is computed on the ranks and seeds the configuration was chosen on
 and is a property of the selection, not a recovery result.
 
-\paragraph{Dependence on the observer.} Running the same torus through two scalar
-observers that differ only in how evenly they weight the modes settles which statistic is
-preferable, and the answer is that neither is, in general (\cref{tab:obsdep}). Under an observer
-that weights all modes equally the spectral participation ratio is the more accurate; under a
+\paragraph{Dependence on the observer.} We run the same torus through two scalar observers that
+differ only in how evenly they weight the modes. Neither statistic is preferable in general
+(\cref{tab:obsdep}). Under an observer that weights all modes equally the spectral participation
+ratio is the more accurate; under a
 generic observer with random weights --- the form a random projection of a network's parameters
 actually takes --- MG is. Both orderings are perfect in three of those four cells, so the
 statistics are separated by absolute recovery and not by rank agreement.
@@ -1046,8 +1048,8 @@ active dimension is detected when one occurs.
 
 \paragraph{The delay lag.} The delay window spans $(E_{\max}-1)\tau$ samples, and
 \cref{tab:tau} varies $\tau$ on a fixed torus of period $400$ at $E_{\max}=20$, leaving the
-system unchanged. Below a tenth of a period every rank returns the same tangent constant near
-$2.5$ and the ordering is gone; between three tenths and a half of a period the estimate follows
+system unchanged. Below a tenth of a period every rank returns the same value near $2.5$ and the
+ordering is lost; between three tenths and a half of a period the estimate follows
 the rank; above one period it diverges. The failure is a collapse of the ordering at one end and
 a divergence at the other, not a uniform bias.
 
@@ -1123,8 +1125,8 @@ Under stochastic excitation the same true change is observed as $0.15$.
 
 The rule fires when the estimate falls below the median of the pre-switch segment by three
 times that segment's window-to-window scatter, for two consecutive windows. The threshold uses
-the pre-switch segment alone, never the midpoint of the two observed levels, which would give the
-detector the answer and would decide arbitrarily the case in which the two levels coincide.
+the pre-switch segment alone, never the midpoint of the two observed levels: a midpoint would give
+the detector the answer, and would resolve the case of two coinciding levels arbitrarily.
 
 \Cref{tab:switch} gives the three schedules on the parameter norm. The level error is $0.89$ at the
 high level and $0.22$ at the low one: the estimate is more accurate the fewer directions are
@@ -1191,7 +1193,7 @@ $r$ & $q$ & $\PR$ & MG & $\PR_{\mathrm{delay}}$ \\
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_aniso.pdf}
-\caption{Anisotropy separates the two candidate estimands, and the estimate follows the number of
+\caption{Anisotropy separates the two candidate estimands; the estimate follows the number of
 modes. The
 system of \cref{sec:matrix} with mode $l$ driven at amplitude $q^{l}$, three seeds, observed
 through the squared Frobenius norm and estimated with the frozen eight-direction configuration;
@@ -1199,7 +1201,7 @@ one panel per $r$. The manifold dimension is $r$ in every panel, drawn dotted: t
 onto an $r$-torus whatever $q$ does. Filled circles are the estimate, the median over seeds, with
 their standard deviation as bars; open squares are the measured participation ratio of the
 covariance, which agrees with the closed form $(\sum_l a_l^2)^2/\sum_l a_l^4$ to two decimals in
-all twenty-four cells and so carries no spread --- the check that the construction does what it
+all twenty-four cells and so has no spread --- the check that the construction does what it
 claims. Where the estimate stays flat while the participation ratio declines, the estimator is
 reporting how many coordinates the set has rather than how evenly they are used.
 \Cref{tab:aniso} gives twelve of these points in digits.}
@@ -1207,7 +1209,7 @@ reporting how many coordinates the set has rather than how evenly they are used.
 \end{figure}
 
 At two and four directions the estimate is flat in $q$ while the participation ratio declines, as
-intended. At six and eight it declines too, and the reason is visible in the amplitudes: at
+intended. At six and eight it declines too. The reason is visible in the amplitudes: at
 $q = 0.5$ and $r = 8$ the weakest mode is driven at $0.008$ of the strongest, far below the
 neighbourhood scale the estimator works at, so the torus it sees really does have fewer
 dimensions than the one that was built. The estimator therefore reports the number of modes it can resolve,
@@ -1221,15 +1223,15 @@ function-space variant scored beside it, and the same system at twenty available
 
 \paragraph{The image-data system of \cref{sec:digits}.} The data is partitioned into twelve
 fixed groups, the same partition at every rank so that the partition is not itself a function
-of $r$, and the loss weights of $r$ of them are modulated by $r$ rationally independent
+of $r$; the loss weights of $r$ of them are modulated by $r$ rationally independent
 sinusoids filling one octave. Modulating group $j$ tilts the gradient along a direction
 $\vphi_j$. These directions are neither orthogonal nor of equal effect, since random data
 groups have correlated gradients, so a mixing matrix $\mathrm{pinv}(\Phi) Q$ with $Q$ an
-orthonormal basis of $\operatorname{range}(\Phi)$ orthogonalises them, and the per-mode scalar
-response gain of the linearised update is divided out. Without this correction the trajectory
+orthonormal basis of $\operatorname{range}(\Phi)$ orthogonalises them. The per-mode scalar
+response gain of the linearised update is then divided out. Without this correction the trajectory
 participation ratio falls well below $r$.
 
-\Cref{tab:gt} verifies that the construction achieves what it intends, and two of its rows are
+\Cref{tab:gt} verifies that each construction excites the rank it claims. Two of its rows are
 results rather than settings. A decaying transient does not recur whatever $r$ is, since a
 converging trajectory is a curve; and plain mini-batch descent remains at $6.2$ regardless of $r$,
 because its noise rank is fixed by the per-example gradient covariance of the data and is not a
@@ -1274,7 +1276,7 @@ drive-direction matrix is $1.00$ at $r=1$ by construction and has a median of $1
 which is the anisotropy the mixing matrix exists to remove.
 
 \paragraph{The function-space construction.} A local adapter is built around a trained network of
-widths $64$, $16$ and $10$, and its function-space Jacobian is QR-whitened, so that its first
+widths $64$, $16$ and $10$. Its function-space Jacobian is QR-whitened, so that the first
 $r$ columns have rank $r$ at equal local scale. A quasiperiodic teacher excites every adapter
 coordinate and the student tracks it by exact backpropagation through both layers. The
 functional, trajectory-covariance and update-covariance ranks were all verified to equal $r$.
@@ -1287,7 +1289,7 @@ at $r = 20$, and the decaying transient stays between $1.02$ and $1.09$ througho
 
 \section{Diagnostics and figures for the grokking application}\label{app:pairs}
 
-This appendix carries the diagnostic values behind \cref{sec:grok-diagnostics}, a map of every
+This appendix gives the diagnostic values behind \cref{sec:grok-diagnostics}, a map of every
 training log in the plane of those diagnostics, and the label-matched pairs of \cref{sec:pairs}
 beside the loss curves that account for them.
 
@@ -1355,8 +1357,8 @@ dimension arises.
 (a) The estimate on the training loss for the four pairs of \cref{sec:pairs}: three modular polynomials at $p = 97$, each against itself perturbed by one
 monomial, and modular addition against $n^3+nm^2+m$. Both members of a pair reach full training
 accuracy under identical optimisation on identical data budgets. All eight runs are full-batch
-perceptrons, which \cref{fig:map} places in the transient regime, so the figure carries that one
-hue and generalisation is carried by fill and dash. The marker is the median over the seven
+perceptrons, which \cref{fig:map} places in the transient regime, so all eight are drawn in one
+colour and generalisation is shown by fill and dash. The marker is the median over the seven
 sliding windows, the thick bar their interquartile range and the thin line their full range. The
 medians separate the two members of every pair, by $2.88$ to $3.54$ units and with no overlap
 between the two groups of medians, but the window-level ranges overlap heavily, because the
@@ -1418,26 +1420,27 @@ compressed by a CountSketch \citep{charikar2002finding, weinberger2009feature} t
 with two independent hash families. Two spaces are recorded: the parameters, and the probe logits
 after centring each example over classes and normalising to unit length. The normalisation is
 necessary: the raw logit scale is mechanically coupled to weight decay, so a signal read off it
-could not be distinguished from a detector of weight decay.
+could not be distinguished from a measurement of weight decay.
 
-We do not verify a spectral guarantee for this. The elementary bound for a sketch of this kind is
+We do not verify a spectral guarantee for the compression. The elementary bound for a sketch of
+this kind is
 on pairwise inner products \citep{weinberger2009feature}, and a participation ratio is a
 functional of the whole spectrum, on which an entrywise Gram bound is weak. A subspace-embedding
 guarantee does exist for CountSketch \citep{clarkson2013low} and would apply here, since a
 sixty-sample window has rank at most sixty, but it requires a rank we do not measure per window.
 The two hash families supply a direct estimate of the error instead: every reported value is the
-mean of the two, and their disagreement is recorded with it. Over the published
+mean of the two, with their disagreement recorded beside it. Over the published
 transformer windows that disagreement is $1.1\,\%$ of the value at the median and $8.4\,\%$ at
-its worst, which is the number the reader should use, and it is smaller than every effect
+its worst, which is the number the reader should use; it is smaller than every effect
 \cref{sec:direct} reads.
 
 Three checks stand behind the numbers. \emph{The sketch is accurate on synthetic trajectories of
-known rank.} \Cref{tab:sketch} pushes such trajectories through it and compares against the same
+known rank.} \Cref{tab:sketch} passes such trajectories through it and compares against the same
 statistic computed on the uncompressed trajectory: the sketch is accurate to $0.04$ components
-throughout, and the shortfall against the nominal rank at $5$ and $10$ is present without any
+throughout. The shortfall against the nominal rank at $5$ and $10$ is present without any
 compression, so it belongs to the participation ratio on a sixty-sample cloud and not to the
-sketch. Nothing above rank ten is tested, however, and the plateaus in \cref{fig:dip} are higher
-than that.
+sketch. Nothing above rank ten is tested, however; the plateaus in \cref{fig:dip} are higher than
+that.
 
 \emph{It agrees with exact arithmetic on a real run.} On the perceptron architecture, where the
 parameter count is small enough to allow it, the participation ratio computed on all $145\,500$ raw
@@ -1486,13 +1489,13 @@ statistics the comparison uses, and between $1.000$ and $2.171$ over all eight r
 columns. This is not an artefact of the sketch, which \cref{app:sketch} checks against exact
 arithmetic on the same architecture.
 
-A deterministic update makes the trajectory a smooth curve, and over a $600$-step window a smooth
-curve is straight to within the measurement precision, so what the statistic reports is the
-curvature of the trajectory at the scale the window sets, and at that scale there is almost none.
+A deterministic update makes the trajectory a smooth curve. Over a $600$-step window such a curve
+is straight to within the measurement precision, so the statistic reports the curvature of the
+trajectory at the scale the window sets, and at that scale there is almost none.
 The statistic has no range in which a collapse could appear, so the absence of a feature is not
 evidence of its absence: the window must be set in units of the curvature scale of the trajectory.
 
-Repeating the measurement against window length confirms the diagnosis and withdraws the
+Repeating the measurement against window length confirms the diagnosis and closes the
 opening it appeared to leave. Two runs of $150\,000$ steps, a generalising one and its
 label-matched control, are measured over windows spanning $600$ to $120\,000$ optimiser
 steps, with the window lengthened by spreading sixty samples further apart rather than by
@@ -1502,8 +1505,8 @@ the result. The statistic does leave the floor, at a scale of about $10^4$ steps
 orders of magnitude above the window that produced the $1.000$--$1.362$: the absence of a
 feature there was a resolution limit and not a fact about the run.
 
-It is not, however, a hidden signal. At $12\,000$ steps one localised maximum appears, and both
-runs have one of the same size (\cref{tab:prwindow}); function space agrees, with more range
+It is not, however, a hidden signal. At $12\,000$ steps one localised maximum appears, of the same
+size in both runs (\cref{tab:prwindow}); function space agrees, with more range
 and no more separation, $2.618$ against $2.145$. Nor can the maximum be placed
 relative to either milestone: the two centres are adjacent points of a $3\,450$-step grid and
 their windows overlap over $6\,900$ to $15\,250$ steps. Measured against memorisation the two
@@ -1557,7 +1560,7 @@ adding samples, so that the bound and the noise floor stay where the published m
 them and only the span changes. (a) The median over a run's windows, (b) the maximum; the dotted
 line at $1$ is the floor a straight trajectory returns, and the dashed vertical the $600$-step
 window of \cref{sec:grok-diagnostics}, which is not part of this series. Both runs are transient,
-so the figure carries one hue and the control is drawn open and dashed.}
+so both are drawn in one colour and the control is open and dashed.}
 \label{fig:prwindow}
 \end{figure}
 
@@ -1573,17 +1576,17 @@ A decline of the estimate is not specific to generalisation. In a $200\,000$-ste
 with no weight decay, which memorises at step $1\,800$ and ends at $3.6\,\%$ validation accuracy,
 a decline is detected $49\,250$ steps after memorisation. The amplitude control of
 \cref{sec:nuisance} supplies a mechanism that needs no dimension at all: a ramped observer gain
-moves the estimate by $1.16$ components, and this run's parameter norm grows from $43$ to $126$
+moves the estimate by $1.16$ components, while this run's parameter norm grows from $43$ to $126$
 over the budget. It is the growth \cref{sec:nowd} reports in the two weight-decay-zero controls,
 acting through the observer.
 
 That run does not show a simplified trajectory. Its diagnostics place it in the transient regime
 (\cref{tab:grok-diagnostics}), where the estimate is not a dimension, so a decline in it is a
-decline of a quantity we have argued should not be read as one. The two must be kept apart: the direct
+decline of a quantity we have argued should not be read as one. The two must be kept apart. The direct
 measurement of \cref{sec:direct} is an effective rank of the trajectory itself, and it declines in
-four generalising runs and not in their controls, whereas the estimate on a log, at the frozen
-window and in these settings, is neither a dimension nor an effective rank and declines in at least
-one run that does not generalise. The defensible claim is therefore the weaker one: a decline on a
+four generalising runs and not in their controls. The estimate on a log, at the frozen window and
+in these settings, is neither a dimension nor an effective rank, and it declines in at least one
+run that does not generalise. The defensible claim is therefore the weaker one: a decline on a
 log is not evidence of generalisation.
 
 \Cref{sec:matched} does not overturn it. There the log estimate declines where the trajectory does,
@@ -1597,11 +1600,11 @@ is extended, so such runs are censored and no specificity figure may be computed
 \section{Resolution of a windowed estimate on a training log}\label{app:window}
 
 The claim of \cref{sec:grok-diagnostics} that a change within a run could be read against a fixed
-configuration is testable on the seven extended runs, and the test returns a resolution limit
-rather than an answer. The frozen configuration takes a window of a third of each record: $4\,000$
+configuration is testable on the seven extended runs. The test returns a resolution limit rather
+than an answer. The frozen configuration takes a window of a third of each record: $4\,000$
 logged samples, which at the logging stride is $39\,990$ optimiser steps, advanced by $10\,000$
-steps. That is nine windows per run and sixty-three weight-norm windows in all, and it localises
-a feature only to $\pm 19\,995$ steps, sixty-seven times coarser than the direct measurement of
+steps. That is nine windows per run and sixty-three weight-norm windows in all, localising a
+feature only to $\pm 19\,995$ steps, sixty-seven times coarser than the direct measurement of
 \cref{sec:direct}.
 
 The consequence is that the alignment \cref{fig:dip} performs cannot be performed here. Of the
@@ -1613,8 +1616,8 @@ reduced-data run that generalises at $110\,940$, no window centre falls after th
 all.
 
 The runs are consistent with that. The one run with a centre near its generalisation
-step falls by $3.54$ components over the next stride, three times the floor --- but the step lies
-inside four of its nine windows, and the falling windows are those in which its parameter norm is
+step falls by $3.54$ components over the next stride, three times the floor. That step, however,
+lies inside four of its nine windows, and the falling windows are those in which its parameter norm is
 itself moving fastest, which is the ramped gain of \cref{sec:nuisance}. The other two runs show
 nothing.
 
@@ -1624,9 +1627,9 @@ largest change in the set, $6.36$ components, is in a run that does generalise, 
 nearly ninety thousand steps after its generalisation step; the next largest, $5.20$, is in a run
 that ends at seven per cent validation accuracy. The tightest comparison available is three runs
 of one configuration, of which one generalises: their ranges are $0.77$, $0.78$ and $0.67$
-components, and nothing separates them.
+components, with nothing to separate them.
 
-This is the argument of \cref{app:fb} in a second place. At the window the configuration provides,
+This repeats the argument of \cref{app:fb}. At the window the configuration provides,
 the statistic has no range in which a feature localised to the transition could appear, so its
 absence is not evidence of absence. Testing the claim needs a window set in units of the width of
 the transition, which for these runs is hundreds of steps and not tens of thousands: a re-run of
@@ -1661,16 +1664,16 @@ cell on the linearly detrended window --- the removal $\PR^{\mathrm{det}}$ perfo
 --- leaves no cell separating the two groups. The two removals are not comparable: on a
 $1024$-dimensional sketch a per-coordinate linear detrend takes one direction of many, while on a
 scalar it takes most of the series. The surrogate control keeps the shape and destroys only the
-fine structure, and it is the one that discriminates. Both are reported in \cref{tab:matched}.
+fine structure, which is why it is the one that discriminates. Both are reported in \cref{tab:matched}.
 
 \emph{The observer matters.} The result above is the parameter norm. On the training loss ten of
 the twenty-six cells separate the groups and the surrogate control passes in the $S_5$ run only;
-on the validation loss fifteen do, and that observer defines the event being aligned on, so it is
+on the validation loss fifteen do. That observer defines the event being aligned on, so it is
 listed for completeness and not read.
 
 \emph{The controls have almost no dynamic range.} At this window the baseline belongs to the
 configuration and not to the run: on a standardised $60$-sample straight line \cref{eq:mg} returns
-$2.7733$, and every run's pre-transition level lies within $0.28$ of that. The modular control's
+$2.7733$, within $0.28$ of every run's pre-transition level. The modular control's
 parameter-norm log is straight to $0.7\,\%$ of its own spread across the whole comparison
 interval, so its estimate cannot move --- a span of $0.0029$ components over fifty windows, against
 $2.05$ to $2.56$ in the generalising runs. Its $D = 1.00$ therefore records that the observer
@@ -1681,9 +1684,9 @@ $3.2\,\%$ residual and a $0.22$-component span.
 
 This removes any reading of the two controls' $D$ and quantile columns as informative dimensional
 negatives. It leaves the surrogate control untouched, since there each run is compared
-only against surrogates of itself, and it leaves the four generalising runs untouched; and it
-reinforces the point already made, that the separation between the groups is mechanically a
-separation in local roughness.
+only against surrogates of itself, and it leaves the four generalising runs untouched. It also
+reinforces the point already made: the separation between the groups is mechanically a separation
+in local roughness.
 
 \begin{table}[H]
 \centering
@@ -1714,7 +1717,8 @@ $S_5$, no decay & $1.05$ & $0.38$ & $+1112$ & $0.650$ & $0.850$ & $0.975$ \\
 \end{tabular}
 \end{table}
 
-The same comparison on the nulls the estimator carries: $\PR_{\mathrm{delay}}$ gives $1.01$ to
+The same comparison on the two nulls reported beside the estimate: $\PR_{\mathrm{delay}}$ gives
+$1.01$ to
 $1.52$ on the four generalising runs against $1.00$ on both controls, and the roughness gives
 $6.5$ to $55.4$ against $1.39$ and $1.23$. The linear participation ratio therefore responds
 less than the estimator and the roughness far more, which is the reading \cref{sec:matched} gives.
@@ -1740,7 +1744,7 @@ that coincident changes stay countable, against the same floor.}
 \section{The representation dimension in closed form}\label{app:repr}
 
 The perceptron setting of \cref{sec:grokking} makes the learned representation analytically
-available, and three different numbers can be read off it. They are not commensurable and the
+available. Three different numbers can be read off it. They are not commensurable, and the
 literature does not always separate them.
 
 The \emph{mode count} is $(p+1)/2$, or $49$ at $p = 97$: the number of distinct Fourier
@@ -1751,7 +1755,7 @@ random initialisation; it measures how concentrated each neuron is, not how many
 \emph{effective rank} is the participation ratio of the singular values of the first-layer weight
 matrix, which for the analytic solution is $148.8$: that matrix is $500 \times 194$ and full rank,
 because each non-zero frequency contributes a sine and a cosine direction in each of the two input
-blocks, so $148.8$ says how evenly those $194$ directions are used and does not count anything.
+blocks, so $148.8$ measures how evenly those $194$ directions are used rather than counting them.
 Only the first is a dimension in the sense the closed form fixes. Two things follow from measuring
 the other two, and both qualify readings of the representation dimension elsewhere.
 
@@ -1766,7 +1770,7 @@ representation is complete, and requires it only to be periodic enough.
 \caption{Whether the representation is complete when generalisation occurs. The order parameter
 through one modular addition run at $p = 97$, full-batch gradient descent with no weight decay,
 against the analytic solution of \citet{gromov2023grokking}. The run generalises at step
-$11\,950$, and the budget ends some $87\,000$ steps after validation accuracy first reaches
+$11\,950$; the budget ends some $87\,000$ steps after validation accuracy first reaches
 $100\,\%$.}
 \label{tab:ipr-trajectory}
 \begin{tabular}{lr}
@@ -1783,10 +1787,10 @@ the analytic generalising solution            & 1.000 \\
 \end{tabular}
 \end{table}
 
-The effective rank of the same layer carries almost no signal at all: it reads $139.1$ at random
+The effective rank of the same layer carries almost no signal: it reads $139.1$ at random
 initialisation, within seven per cent of the analytic $148.8$ before any training, then spans
 $132.6$ to $150.9$ over the run without being monotone and overshoots the reference before falling
-back. Landing near the reference is therefore not evidence of anything.
+back. Agreement with the reference is therefore not evidence of anything.
 
 \emph{The order parameter is only interpretable against its own reference.} \Cref{tab:ipr}
 gives the measured value beside each task's own closed form. Two of the tasks that generalise
@@ -1794,8 +1798,8 @@ have a reference near the floor, because the representation is periodic in $g_1(
 spectrum is taken over the raw index $n$, and $g_1$ is not linear there. Read against modular
 addition's $1.000$, a measured $0.044$ says nothing was learned; read against that task's own
 $0.062$, it says the run has essentially converged. The tasks that never generalise remain at the
-initialisation floor, and the analysis returns no reference for them rather than substituting
-another task's.
+initialisation floor. The analysis returns no reference for them rather than substituting one from
+another task.
 
 \begin{table}[H]
 \centering
@@ -1827,7 +1831,7 @@ $n^3+nm^2+m$              & 0.040 & ---   & none \\
 \section{The exclusion cap at the twenty-direction configuration}\label{app:theiler}
 
 The Theiler exclusion is meant to remove neighbours that are close in time rather than in phase
-space, and the rule this study asks for is $W_T = \max((E-1)\tau,\, t_{\mathrm{acf}})$: at least
+space. The rule this study asks for is $W_T = \max((E-1)\tau,\, t_{\mathrm{acf}})$: at least
 the full span of a delay vector, so that two neighbours cannot be near each other merely because
 their windows overlap. The implementation caps $W_T$ at $150$ samples, because the neighbour
 query cost is linear in it.
@@ -1839,8 +1843,8 @@ autocorrelation time is one to three samples, but on five of the seven parameter
 at the value the rule asks for, in the direction that inflates the estimate. At the
 twenty-direction configuration the span is $(40-1) \times 16 = 624$, so the cap binds
 unconditionally and every row of those scores records $W_T = 150$, under a quarter of what the
-rule asks for. This is a departure from the stated protocol, not a choice we made deliberately,
-and it is why \cref{sec:digits} marks that result exploratory.
+rule asks for. This is a departure from the stated protocol rather than a deliberate
+choice. It is why \cref{sec:digits} marks that result exploratory.
 
 \Cref{tab:theiler} measures what it costs, by re-scoring the stored trajectories at both
 exclusions. Nothing is regenerated, so the systems cannot drift between the two settings.
@@ -1875,9 +1879,9 @@ Three things follow. The ordering, the claim \cref{sec:digits} makes at this ran
 unaffected: the rank correlation is $1.00$ under both exclusions. The absolute value moves
 down by $0.11$ to $0.52$ components, so the capped exclusion was mildly inflating it, in the
 direction that a shortage of exclusion predicts. The correction makes the recovery slightly
-worse rather than better, so the cap was not improving the reported result: enforcing the protocol
-costs accuracy and gains correctness. The saturation above about six directions is present at both
-settings and is therefore not an artefact of the exclusion.
+worse rather than better, so the cap was not improving the reported result. Enforcing the protocol
+costs accuracy and is correct nonetheless. The saturation above about six directions is present at
+both settings and is therefore not an artefact of the exclusion.
 
 The same cap has a second effect that the identifiability ratio inherits. The exclusion actually
 applied is $W_T = \min\bigl(\max((E-1)\tau,\, t_{\mathrm{acf}}),\, 150\bigr)$, and the ratio's
@@ -1887,12 +1891,12 @@ numerator is capped at $150$ whatever the data does, while the denominator is ca
 $t_{\mathrm{acf}}$ reaches $150$. The two are treated identically exactly when
 $t_{\mathrm{acf}} \ge 150$ and differently when it is smaller.
 
-Five of the seven parameter-norm records of \cref{sec:grokking} are clean by this test. The
+Five of the seven parameter-norm records of \cref{sec:grokking} are unaffected by this. The
 asymmetric cases are the other two and, more consequentially, the calibration systems of
 \cref{sec:ladder}, whose autocorrelation time is one to three samples, so that the reference band
 of \cref{sec:diagnostics-validated} was itself measured with $76$ against $150$. The effect is
 small at this span and the diagnostic separates the regimes of \cref{sec:validity} without
-overlap, but a ratio built from two differently excluded estimates is not the clean quantity
+overlap, but a ratio built from two differently excluded estimates is not the quantity
 \cref{sec:diagnostics} describes, and lifting the cap is the first thing to change in any
 follow-up.
 
@@ -1918,11 +1922,11 @@ their effective learning rate and decay are about double the nominal ones.
 at which the training and the validation accuracy respectively reach $95\,\%$, with no
 persistence requirement. Training accuracy is measured on the current mini-batch and validation
 accuracy on a fixed $512$-example subset of the validation split, so both carry a sampling
-error of a few tenths of a per cent, and the step is resolved only to the logging stride, which
+error of a few tenths of a per cent; the step is resolved only to the logging stride, which
 is $10$ steps for the modular runs and $5$ for $S_5$. The extended reruns of \cref{sec:pairs}
 instead require the threshold to hold over a sustained block, which is the stricter rule; the two
 rules put memorisation within $70$ steps of each other on every run here and differ by $1\,080$
-steps on one generalisation step, and no claim turns on either.
+steps on one generalisation step. No claim turns on either.
 
 A dash means the criterion was not met inside the budget. Nothing here establishes that such a
 run would never generalise, and \cref{tab:runs} records the final validation accuracy so that the
@@ -2011,7 +2015,7 @@ this appendix: a quasiperiodic drive of period sixteen samples over twenty-five 
 orbit closes onto a torus. Middle, the transient case over its whole record --- a decay that
 increases on none of its eight thousand steps. Right, a real mini-batch transformer run through
 the parameter norm, which is the stochastic regime. The last two are the ones the diagnostics of
-\cref{sec:diagnostics} must refuse, and the difference between them is why one statistic will not
+\cref{sec:diagnostics} must reject, and the difference between them is why one statistic will not
 do it: the transient is monotone and the driven run is not, so a test of non-monotonicity catches
 the first and a test of embedding stability the second.}
 \label{fig:traces}
@@ -2020,8 +2024,8 @@ the first and a test of embedding stability the second.}
 \begin{table}[H]
 \centering
 \caption{The estimate against the Theiler exclusion, median over observers, seeds and windows. The
-transient's estimand is $1$: at $W_T = 0$ the estimator returns it, and the exclusion is what
-removes it. The recurrent cases are unchanged under the same variation, and $28.96$ is not a level but the
+transient's estimand is $1$: at $W_T = 0$ the estimator returns it, and the exclusion removes
+it. The recurrent cases are unchanged under the same variation, and $28.96$ is not a level but the
 value a divergent quantity happens to take at the implementation's cap of $150$.}
 \label{tab:exclusion}
 \begin{tabular}{lrrrrrrr}
@@ -2038,11 +2042,11 @@ transient          & $1.20$ & $1.71$ & $2.38$ & $5.51$ & $20.83$ & $28.96$ & $39
 Three things follow. \emph{The number at $W_T = 0$ is the right one.} On a uniformly sampled curve
 the $20$ nearest neighbours lie at offsets $\pm 1 \dots \pm 10$, for which \cref{eq:mg} returns
 $1.19928$ exactly; the transient case returns $1.1971 \pm 0.0010$ across all forty-eight cells. The
-excess over unity is the lattice bias of a deterministically sampled curve, not an error, and the
+excess over unity is the lattice bias of a deterministically sampled curve, not an error; the
 measured trajectory participation ratio of the same case is $1.03$ to $1.07$.
 
 \emph{The mechanism is the loss of near neighbours, not of neighbours.} The estimator fills its
-twenty slots at every exclusion; what changes is how far away they are. Before any exclusion the
+twenty slots at every exclusion; only their distance changes. Before any exclusion the
 median temporal separation of a point's twenty nearest neighbours is $2546$ samples on the fast
 case and $6$ on the transient --- there, the nearest neighbours in space simply \emph{are} the
 temporal ones. Excluding $150$ samples costs the fast case almost nothing, $138\,048$ close pairs
@@ -2053,9 +2057,9 @@ floor. An exponential decay with no optimiser and no data reproduces both ends, 
 $26.4$.
 
 \emph{Two qualifications.} Recurrence is not always needed even here: in the fast case $W_T = 0$
-already returns $r$, because it is not oversampled, and it is the slow case --- nearest
-neighbours $574$ samples away --- that the exclusion rescues, from a rank-blind $2.1$ to its
-published $3.5$. A transient also need not have dimension one: a decaying \emph{oscillation}
+already returns $r$, because it is not oversampled. The exclusion rescues the slow case instead,
+whose nearest neighbours lie $574$ samples away, from a rank-blind $2.1$ to its published
+$3.5$. A transient also need not have dimension one: a decaying \emph{oscillation}
 returns $2.36$ at every exclusion, correctly, because at $k = 20$ the neighbourhood spans several
 turns of the spiral and the two-dimensional sheet they lie on is all there is to see at that
 resolution. The asymmetry is general; the value is not.
@@ -2069,18 +2073,18 @@ recurrence in the reconstructed space rather than non-monotonicity of the series
 report it rather than adopt it: it is calibrated on the same systems that produced the two
 diagnostics and has not been validated out of sample. The principled alternative is older than
 either. A space--time separation plot \citep{provenzale1992distinguishing} shows directly how
-neighbour distance depends on temporal separation, and reading $W_T$ off one would replace the rule
-of \cref{sec:estimator} with a measurement; the variation above is a coarse version of that plot, and
-choosing the exclusion this way rather than by rule is the obvious improvement to the protocol.
+neighbour distance depends on temporal separation. Reading $W_T$ off one would replace the rule of
+\cref{sec:estimator} with a measurement, and the variation above is a coarse version of that plot.
+Choosing the exclusion this way rather than by rule is the obvious improvement to the protocol.
 
 \section{Descent at the edge of stability}\label{app:eos}
 
-Every system of \cref{sec:ladder} is driven, so the ladder establishes a conditional, and
+Every system of \cref{sec:ladder} is driven, so that evaluation establishes a conditional, and
 \cref{sec:regime} asks whether anything undriven occupies the admissible regime. The one candidate
 the literature offers is the edge of stability \citep{cohen2021gradient}: gradient descent at a
-fixed rate sharpens until the top Hessian eigenvalue reaches $2/\eta$ and then hovers, and while it
-hovers the loss descends on long scales and not on short ones. That is deterministic and not a
-plain transient, which is the pair of conditions \cref{sec:classes} asks for.
+fixed rate sharpens until the top Hessian eigenvalue reaches $2/\eta$ and then stays there, while
+the loss descends on long scales and not on short ones. That is deterministic and not a plain
+transient, which is the pair of conditions \cref{sec:classes} asks for.
 
 \paragraph{Setting.} Full-batch descent, no weight decay, on the quadratic perceptron of
 \cref{app:constructions}: modular addition at $p = 97$, width $500$, half the pairs held out, eight
@@ -2129,19 +2133,19 @@ by an order of magnitude with nothing between them.
 
 \paragraph{Performance of the diagnostics.} On the training loss, the observer this
 paper's full-batch analysis uses, the admissible rectangle of \cref{sec:diagnostics} admits all
-five runs that do not recur and refuses both that do. The estimate agrees with the recurrence
+five runs that do not recur and rejects both that do. The estimate agrees with the recurrence
 measurement and not with the rectangle: $3.49$ and $2.44$ in the two runs that return, against
 $29.2$ to $30.8$ --- the transient value of \cref{app:exclusion} --- in the five that do not.
 
 The cause is visible in the inputs. Every run at the edge has a rise fraction of $0.50$, so the
 trend-crossing count, which tests non-monotonicity and not recurrence, passes all of them, while
-$\rho_{\mathrm{ident}}$ happens to equal unity in the five and at $1.23$ and $1.30$ in the two.
+$\rho_{\mathrm{ident}}$ happens to equal unity in the five and $1.23$ and $1.30$ in the two.
 On the parameter norm the rectangle admits all seven. This is seven runs of one configuration on
-one task and we draw no rule from it, but it is the failure mode \cref{sec:diagnostics} names,
-occurring.
+one task and we draw no rule from it, but it is an instance of the failure mode
+\cref{sec:diagnostics} names.
 
-\paragraph{Dependence on the logging stride.} Read at the stride every other full-batch log here uses, the
-phenomenon is largely erased: over these seven runs the median trend-crossing count falls
+\paragraph{Dependence on the logging stride.} At the stride every other full-batch log here uses,
+the phenomenon is largely erased: over these seven runs the median trend-crossing count falls
 from $80$ to $2$ and the median rise fraction from $0.500$ to $0.000$ exactly, and where five of
 the seven were admissible at every step, none is at a stride of ten and one is at fifty. The
 collapse is not uniform --- the run with the most intermittent oscillation keeps a rise fraction
@@ -2167,7 +2171,7 @@ which the loss rises, for each edge-of-stability rate, against the stride the lo
 paper could not choose between them: the embedding condition $E > 2d$, which at $E_{\max} = 20$
 allows ten components, and the finite-record bound $D \lesssim 2\log_{10} N$
 \citep{eckmann1992fundamental}, which at $N = 8000$ allows $7.8$. They are separable because each
-is insensitive to the other's knob. We vary $E_{\max} \in \{10,14,20,28,40,56\}$ at $N = 8000$, and
+is insensitive to the variable the other names. We vary $E_{\max} \in \{10,14,20,28,40,56\}$ at $N = 8000$, and
 $N \in \{10^3 \dots 6.4\times10^4\}$ at $E_{\max} = 20$, over $r \in \{2 \dots 20\}$ and three
 seeds with everything else frozen; \cref{tab:ceiling} gives both. Each $N$ is a \emph{prefix} of
 one longer record, not a resampling of a fixed span, so the delay lag keeps its meaning in periods;
@@ -2207,9 +2211,9 @@ slope & $0.22$ & $0.23$ & $0.24$ & $0.24$ & $0.25$ & $0.25$ & $0.25$ \\
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_ceiling.pdf}
-\caption{The rank the estimate tracks to, against each hypothesis's knob and against what that
-hypothesis predicts. Every series is the constructed recurrent system, so the figure carries one hue
-and the two predictions are reference lines. (a) Sweeping $E_{\max}$ at a fixed record. The
+\caption{The rank the estimate tracks to, against the variable each hypothesis names and against
+what that hypothesis predicts. Every series is the constructed recurrent system, so all are drawn in
+one colour and the two predictions are reference lines. (a) Sweeping $E_{\max}$ at a fixed record. The
 measured ceiling rises from $6.6$ to $9.0$ while $E_{\max}/2$ rises to $28$; the two cross near the
 $E_{\max} = 20$ this paper froze, which is the coincidence \cref{sec:ceiling} reports. (b) Sweeping
 the record at fixed $E_{\max}$. The dotted line is $2\log_{10}N$; the dashed line is $E_{\max}/2$
@@ -2231,9 +2235,9 @@ happens to be right at $E_{\max} = 20$ and is wrong at both ends --- which is
 \citeauthor{sauer1993how}'s point in the other direction, that how many delay coordinates one
 needs does not follow from the embedding theorem alone \citep{sauer1993how}.
 
-Fitting the level at $r \ge 16$ separates the candidates outright (\cref{tab:ceilingfit}). Neither
+Fitting the level at $r \ge 16$ separates the candidates (\cref{tab:ceilingfit}). Neither
 hypothesis fits; their pointwise minimum fits no better, so they do not jointly bind either; and a
-form logarithmic in both knobs fits an order of magnitude inside the data's own spread. Both
+form logarithmic in both variables fits an order of magnitude inside the data's own spread. Both
 dependences are therefore logarithmic: $2.6$ components per doubling of $E_{\max}$, $1.0$ per
 decade of record.
 
@@ -2257,10 +2261,11 @@ $8.63\log_{10}E_{\max} + 1.03\log_{10}N - 5.52$             & 0.19 \\
 \end{table}
 
 \paragraph{Two qualifications.} First, $E_{\max}$, $\tau$ and the delay span
-$(E_{\max}-1)\tau$ are algebraically locked, and a third scan holding the span at $76$ while $\tau$
+$(E_{\max}-1)\tau$ are algebraically dependent. A third scan holding the span at $76$ while $\tau$
 falls from $8$ to $1$ finds that $E_{\max}$ then adds nothing (regression slope $0.000$). The
-operative variable looks like the temporal extent of the delay window, which is not what $E > 2d$
-is about either; that scan is defective at both endpoints, so it does not settle the converse.
+operative variable appears to be the temporal extent of the delay window, which is not what
+$E > 2d$ constrains either; that scan is defective at both endpoints, so it does not settle the
+converse.
 
 Second and more seriously, \emph{the linear null reproduces the whole dependence}.
 $\PR_{\mathrm{delay}}$, a
@@ -2271,12 +2276,13 @@ root-mean-square error of $0.09$, the tightest fit anywhere in this appendix. Mo
 been calling a ceiling is therefore how many components the delay window resolves \emph{linearly},
 which is a spectral reading of the saturation and not a geometric one.
 
-\paragraph{The unexplained tracking limit.} Why the tracking ceiling lies near ten components. It is not
-$E_{\max}/2$, since it is $10.4$ at $E_{\max} = 56$; not $2\log_{10}N$, since it is $10.4$ at
-$N = 1000$; and not the measured effective rank, which equals $r$ to $0.01$ at every $N \ge 2000$.
-No form we fitted accounts for it, and the controls are clean --- the Theiler axis is inert (a
-fixed-$76$ scan reproduces the frozen setting to two decimals at every cell), and none of the $3240$
-cells is marked degenerate. This is a real limit of the instrument that we can bound but not name.
+\paragraph{The unexplained tracking limit.} We cannot say why the tracking ceiling lies near ten
+components. It is not $E_{\max}/2$, since it is $10.4$ at $E_{\max} = 56$; not $2\log_{10}N$, since
+it is $10.4$ at $N = 1000$; and not the measured effective rank, which equals $r$ to $0.01$ at
+every $N \ge 2000$. No form we fitted accounts for it. The controls are clean: the Theiler axis is
+inert (a fixed-$76$ scan reproduces the frozen setting to two decimals at every cell), and none of
+the $3240$ cells is marked degenerate. This is a real limit of the estimator, which we can bound
+but not explain.
 
 \Cref{sec:diagnostics}'s own ratio does see it: $\rho_{\mathrm{ident}}$ at $r = 20$ is $1.31$ to
 $1.40$ at every record length, a longer record never making an unidentifiable estimate
@@ -2291,10 +2297,10 @@ sixteen runs of $30\,000$ full-batch steps, logged at every step and with the sh
 three hundred times per run, in $1770$ seconds total on a single T4. The analysis is the more
 expensive half and is all CPU, a few core-hours per experiment, the ceiling scan of
 \cref{app:ceiling} the largest single item. Nothing in this paper needs a cluster, which is
-deliberate: the instrument is meant to be inexpensive enough to run on a log one already has.
+deliberate: the estimator is meant to be inexpensive enough to run on a log one already has.
 
 \paragraph{Cost of the trajectory sketch.} The claim of \cref{sec:direct} that measuring the
-trajectory directly is affordable should carry a number. In storage it is exact arithmetic: at
+trajectory directly is affordable should be given a number. In storage it is exact arithmetic: at
 each logged step the sketch keeps $1024$ coordinates in each of two spaces under two hash
 families, $4096$ floats, against the full parameter vectors of \cref{app:runs} --- a factor of
 $36$ for the perceptron and $55$ for the transformer. Over the $151$ logged steps of a
