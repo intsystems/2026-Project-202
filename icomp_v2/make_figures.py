@@ -847,21 +847,35 @@ def fig_eos():
     ax.set_xticks([0, 15000, 30000])
     ax.set_xticklabels(["0", "15k", "30k"])
 
-    # (b) sixty consecutive steps deep in the edge-of-stability phase, against the
-    # same series read at the stride every full-batch log in this repository uses.
-    tr = pd.read_csv(d / "eos_lr1e+06_s1_train.csv")
+    # (b) sixty consecutive steps deep in the edge-of-stability phase, against the same
+    # series read at the stride every full-batch log in this repository uses.
+    #
+    # Detrended, and that is not cosmetic. Over sixty steps the descent is much larger
+    # than the two-cycle riding on it, so the raw loss is a straight line to the eye at
+    # every window and the panel would show nothing -- an earlier draft of this figure
+    # did exactly that. Removing the linear fit over the window shown puts the two
+    # series on the scale of the thing being compared. The window is a typical one, not
+    # a chosen one: its rise fraction, 0.492, is the run's own median.
+    tr = pd.read_csv(d / "eos_lr2e+06_s1_train.csv")
     seg = tr.iloc[20000:20060]
-    ax2 = bx
-    ax2.plot(seg["step"], seg["train_loss"], "-", color=RECURRENT, lw=0.9,
-             marker="o", ms=1.8, mec="none", label="every step")
-    s10 = seg.iloc[::10]
-    ax2.plot(s10["step"], s10["train_loss"], ls=(0, (4, 2)), color=TRANSIENT, lw=1.0,
-             marker="s", ms=3.0, mec="white", mew=0.5, label="stride 10")
-    ax2.set_xlabel("optimiser step")
-    ax2.set_ylabel("training loss")
-    ax2.set_xticks([20000, 20030, 20060])
-    ax2.set_xticklabels(["20k", "+30", "+60"])
-    ax2.legend(loc="upper right", handlelength=1.8)
+    step = seg["step"].to_numpy(float)
+    loss = seg["train_loss"].to_numpy(float)
+    resid = (loss - np.polyval(np.polyfit(np.arange(60.0), loss, 1),
+                               np.arange(60.0))) * 1e9
+    bx.axhline(0, color=FAINT, lw=0.7, ls=(0, (1, 2.5)), zorder=0)
+    bx.plot(step, resid, "-", color=RECURRENT, lw=0.9, marker="o", ms=1.8,
+            mec="none", label="every step", zorder=3)
+    bx.plot(step[::10], resid[::10], ls=(0, (4, 2)), color=TRANSIENT, lw=1.0,
+            marker="s", ms=3.0, mec="white", mew=0.5, label="stride 10", zorder=4)
+    bx.set_xlabel("optimiser step")
+    bx.set_ylabel("detrended loss ($10^{-9}$)")
+    bx.set_xticks([20000, 20030, 20060])
+    bx.set_xticklabels(["20k", "+30", "+60"])
+    # headroom for the legend: the two-cycle fills the axes, and the stride-10 series
+    # rides its upper branch, so an unexpanded top puts the legend on top of the data.
+    bx.set_ylim(-3.0, 4.6)
+    bx.set_yticks([-2, 0, 2])
+    bx.legend(loc="upper right", handlelength=1.8)
 
     # (c) what the two non-monotonicity statistics do as the log is decimated.
     diag = pd.read_csv(d / "eos_diagnostics.csv")
