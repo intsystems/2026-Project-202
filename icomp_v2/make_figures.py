@@ -144,7 +144,7 @@ def fig_regimes():
         ("gd", "transient", TRANSIENT, ":", "D"),
     ]
 
-    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.85),
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.62),
                                  gridspec_kw={"width_ratios": [1.18, 1.0]})
 
     # two reference lines, each named by a six-character label at its own end:
@@ -236,13 +236,24 @@ def fig_dip():
     meta = {m["run"]: m for m in
             json.loads((CODE / "active_rank/results_fine/rank_milestones.json").read_text())}
 
+    # panel (d) is a different statistic on the same windows: the delay estimate on the
+    # parameter-norm log, at the window matched to the transition (E9).  It is joined on
+    # mid_step, which E9 takes from this very file, so the two curves are sampled at
+    # identical instants and the alignment below is the same alignment.
+    e9 = pd.read_csv(CODE / "active_dimension/results/e9_matched_window/headline_trace.csv")
+    e9 = e9[e9.column == "weight_norm"].rename(columns={"mid_step": "mid"})
+    d["mid"] = 0.5 * (d.right_step + d.left_step)
+    d = d.merge(e9[["run", "mid", "MG"]], on=["run", "mid"], how="left")
+    assert d.MG.notna().sum() > 1000, "E9 trace did not join onto the direct grid"
+
     groks = ["mod_wd1", "mod_wd1_s43", "mod_wd1_s44", "s5_wd1"]
     ctrls = ["mod_wd0", "s5_wd0"]
     panels = [("fn_PR_pos_det", "(a) function space", None),
               ("PR_pos_det", "(b) parameter space", None),
-              ("move", "(c) displacement", "log")]
+              ("move", "(c) displacement", "log"),
+              ("MG", "(d) scalar log", None)]
 
-    fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.95), sharex=True)
+    fig, axes = plt.subplots(1, 4, figsize=(5.5, 1.62), sharex=True)
     grid = np.arange(-5000, 5200, 100)
 
     for ax, (col, title, scale) in zip(axes, panels):
@@ -285,7 +296,8 @@ def fig_dip():
 
     axes[0].set_ylabel("participation ratio")
     axes[2].set_ylabel("displacement")
-    axes[1].set_xlabel("steps since generalisation")
+    axes[3].set_ylabel("components")
+
 
     handles = [
         Line2D([], [], color=STOCHASTIC, lw=1.5, label="generalises (4)"),
@@ -294,7 +306,12 @@ def fig_dip():
         mpl.patches.Patch(facecolor=STOCHASTIC, alpha=0.55, lw=0,
                           label="hash-family spread"),
     ]
-    fig.tight_layout(rect=[0, 0.090, 1, 1], w_pad=1.4)
+    fig.tight_layout(rect=[0, 0.150, 1, 1], w_pad=0.9)
+    # one x label under four panels: placed against the measured axes box, because
+    # supxlabel(y=...) and tight_layout(rect=...) do not know about each other and
+    # leave a band of white between the ticks and the label
+    fig.text(0.5, min(a.get_position().y0 for a in axes) - 0.105,
+             "steps since generalisation", ha="center", va="top")
     fig.legend(handles=handles, ncol=3, loc="lower center",
                bbox_to_anchor=(0.5, 0.005), handlelength=2.0,
                columnspacing=1.4)

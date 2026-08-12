@@ -63,14 +63,15 @@ marks the transition is the timing and shape of the fall rather than its depth.
 | 6.2 delay lag | `../code/active_dimension/` E6 |
 | 6.3 nuisance factors | `../code/active_dimension/` E4 |
 | 6.4 effective rank or mode count | `../code/active_dimension/e8_anisotropy.py`, `results/e8_anisotropy/` |
-| 7.1 regime classification | `../code/active_dimension/` E5; `../code/gromov_arithmetic/dimension_probe.py` |
-| 7.2 label-matched pairs | `../code/gromov_polynomials/report.md`, `../code/gromov_arithmetic/report.md` |
-| 7.3 direct measurement | `../code/active_rank/report.md`; `dip.py` regenerates `results_fine/rank_dip.csv` |
+| 7.1 regime classification, label-matched pairs | `../code/active_dimension/` E5; `../code/gromov_arithmetic/dimension_probe.py`; `../code/gromov_polynomials/report.md` |
+| 7.2 direct measurement | `../code/active_rank/report.md`; `dip.py` regenerates `results_fine/rank_dip.csv` |
+| 7.3 the matched window | `../code/active_dimension/e9_matched_window.py`, `e9_analyse.py`, `e10_surrogate.py`, `results/e9_matched_window/` |
 | appendix E, detection of a change | `../code/active_dimension/` E3 |
 | appendix H, the collapse run by run | `../code/active_rank/results_fine/rank_dip*.csv` |
 | appendix J, full-batch and window length | `../code/gromov_arithmetic/results/rank_fb_long/pr_vs_window.csv` |
-| appendix L, representation dimension | `../code/gromov_arithmetic/report.md`, `../code/gromov_polynomials/report.md` |
-| appendix M, the Theiler exclusion | `../code/active_dimension/e7b_theiler_quick.py`, `results/e7_theiler/` |
+| appendix L, the matched-window re-run | `../code/active_dimension/results/e9_matched_window/` |
+| appendix M, representation dimension | `../code/gromov_arithmetic/report.md`, `../code/gromov_polynomials/report.md` |
+| appendix N, the Theiler exclusion | `../code/active_dimension/e7b_theiler_quick.py`, `results/e7_theiler/` |
 
 ## Appendices
 
@@ -79,7 +80,7 @@ marks the transition is the timing and shape of the fall rather than its depth.
 | A | the estimator, as an algorithm |
 | B | the twelve observers, defined |
 | C | the two frozen configurations and the grids they came from |
-| D | per-observer results, and MG against every alternative statistic |
+| D | the ladder table, per-observer results, and MG against every alternative statistic |
 | E | delay lag, nuisance factors, and the change-detection rule |
 | F | how the excitation is built, and the effective rank it achieves |
 | G | diagnostics and figures for the grokking application |
@@ -87,9 +88,10 @@ marks the transition is the timing and shape of the fall rather than its depth.
 | I | the trajectory sketch and the checks behind it |
 | J | the full-batch measurement and the window-length sweep |
 | K | what falls, and when |
-| L | the representation dimension in closed form, per task |
-| M | the Theiler exclusion of the twenty-direction configuration |
-| N | inventory of every training run the paper uses |
+| L | what a windowed estimate on a log can resolve, and the matched-window re-run |
+| M | the representation dimension in closed form, per task |
+| N | the Theiler exclusion of the twenty-direction configuration |
+| O | inventory of every training run the paper uses |
 
 ## Figures
 
@@ -131,15 +133,44 @@ Do not set `savefig(bbox_inches="tight")`. A legend wider than the axes then exp
 past 5.5 in, LaTeX scales the figure down to fit, and the type shrinks with it; the figures
 reserve space for the legend with `tight_layout(rect=...)` instead.
 
+## The matched window
+
+Section 7.3 is the experiment the earlier draft named as missing and then declined to run. The
+frozen configuration's window spans 39 990 optimiser steps; the collapse section 7.2 measures
+lasts one to two thousand, so nothing localised to the transition could appear in it, and the
+draft said so and stopped. `e9_matched_window.py` re-runs the estimator at the window the direct
+measurement uses --- 600 steps, on that measurement's own window midpoints, so the two statistics
+are paired sample by sample --- and `e10_surrogate.py` asks whether what appears there is the
+observer's shape.
+
+Four things about it are worth keeping in mind when editing:
+
+* **The configuration is not the frozen one and cannot be.** At 60 samples the frozen delay span,
+  (20 - 1) x 4 = 76, exceeds the window. Choosing a replacement on the outcome is exactly the
+  failure requirement 2 exists to prevent, so the whole 36-cell grid is written out and the
+  headline cell is named by a rule that cannot see the answer. 25 of the 26 cells long enough to
+  return a value separate the groups; the article reports that count, not the best cell.
+* **The linear-detrend arm is negative and is reported.** Removing a linear trend from the window
+  --- what `PR^det` does per coordinate --- leaves no cell separating the groups. On a
+  1024-dimensional sketch that removal takes one direction of many; on a scalar it takes most of
+  the series. The surrogate control, which keeps the shape and destroys only the fine structure,
+  is the one that discriminates, and both are in appendix L.
+* **The nulls beat the estimator here.** The roughness of the same windows falls by 6.5 to 55
+  where the estimate falls by 2. Section 7.3 says so. Any edit that drops that sentence makes the
+  article claim more than it measured.
+* **The identifiability ratio is not computable at this window** for the headline cell, since it
+  needs 2 E_max. The level there is therefore uncertified and only the change is read; appendix K
+  states that the weaker claim of the frozen-window analysis still stands.
+
 ## Review status
 
 The full external review is in [`review_fable_archive.md`](review_fable_archive.md). The live
 copy, [`review_fable.md`](review_fable.md), has resolved items deleted from it and a changelog at
 the top recording what each installment changed. What remains open is listed in its priority
-list; the two substantive items are an experiment that has not been run (a sliding-window
-estimate on the grokking logs, whose input data is already computed) and one that needs training
-compute (full-batch descent above the stability threshold, to find whether an undriven run is
-ever admissible).
+list. The sliding-window estimate on the grokking logs it asked for has now been run, at a window
+matched to the transition, and is section 7.3 and appendix L. What remains needs training compute:
+full-batch descent above the stability threshold, to find whether an undriven run is ever
+admissible, and a sweep of E_max against the record length to fix the ceiling.
 
 Two defects in upstream result files were found while assembling the draft and are fixed here but
 still need fixing at source:
