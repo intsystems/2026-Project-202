@@ -1,6 +1,8 @@
 # What the port found
 
-Four read-only surveys of the archived tree preceded this rewrite, one per cluster. What
+Thirty-five items. Four read-only surveys of the archived tree preceded this rewrite, one
+per cluster, and the table auditor of `check.tables` found four more by recomputing every
+mechanical cell of the article from the data behind it. What
 they found is recorded here in full, whether or not the port fixes it, because several
 items are statements in `icomp_v2/report.tex` that no committed file supports.
 
@@ -91,9 +93,31 @@ sixth digit.
 
 | 31 | **The corrected drive excites its directions less evenly than the published one.** Fixing item 1 changed the frequency layout, and the change has a cost: on the function-subspace system the participation ratio of the trajectory covariance reaches about 0.86 k where the published construction reached 0.94 to 0.96 k. Every hard rank is still exactly k -- the covariance, the update covariance and the map to the outputs -- so the construction excites k directions; what falls short is requirement 1's word *comparably*. The trade runs the other way on rational independence: the corrected resonance margin stays above 1e-3 at every rank where the published one fell to 1.5e-5. Neither construction dominates, so the choice has to be made rather than defaulted. | `actdim/systems/drive.py`; measured against `data/sys.digits.function/rank_diagnostics.csv` | **open** — held by a test so the number cannot drift unnoticed |
 
+## G. Found by the table auditor
+
+`check.tables` recomputes every mechanical cell from `data/` and diffs it against what the
+article prints. It confirms items 3, 5, 6, 9 and 11 above, confirms that item 24 is fixed,
+and reports these, which no survey found. It checks 21 of the 28 tables, 731 cells and
+claims; the seven it cannot check are named in `actdim/tables.py`, and a skipped table
+contributes a row saying so, since a report that checked nothing must not look clean.
+
+| # | what | where | status |
+| --- | --- | --- | --- |
+| 32 | **The record-length scan's slope row is wrong in three of its cells.** At the three record lengths, the article prints 0.24, 0.24 and 0.25 where the file gives 0.2865, 0.2682 and 0.2713. This is not rounding: the printed row rises monotonically with the record length and the measured one does not, so the shape of the row is wrong as well as its values. | `tab:ceiling` against `data/valid.ceiling/ceiling_summary.csv` | **paper** |
+| 33 | **The two ceiling scans disagree on the one cell they share.** The embedding scan and the record scan both cover E_max = 20 at N = 8000. The slope row prints 0.27 in the first block and 0.24 in the second. That is a contradiction inside one table and needs no file to settle it; the file gives 0.2682, so the first block is right. Tracking and level agree across both blocks, which puts the fault in the slope row alone. | `tab:ceiling` | **paper** |
+| 34 | **A row labelled "median absolute error" reports the mean.** The article prints 2.78 and 3.13; the median over the seven ranks is 2.18 and 2.66. The mean is a defensible statistic and the label is not. | `tab:theiler` against `data/valid.theiler.cap/` | **paper** |
+| 35 | **One ground-truth cell is misrounded.** The `noise_nopre` arm at r = 6 prints 5.47 where the file gives 5.464913, which rounds to 5.46. | `tab:gt` | **paper** |
+
+One check the auditor cannot make is worth naming rather than leaving silent: item 12, the
+claim that the full-batch and mini-batch arms agree to within one or two logged steps,
+needs the milestones of both sketched perceptron campaigns, and neither was promoted. The
+auditor records that as a note on `tab:runs` so that its silence is not read as agreement.
+
 ## What this means for the article
 
-Items 3, 5, 6, 9, 11, 12, 13 and 23 are text or caption changes with no re-run behind them.
+Items 3, 5, 6, 9, 11, 12, 13, 23, 32, 33, 34 and 35 are text or caption changes with no
+re-run behind them. Item 33 is a contradiction inside one table, so it needs correcting
+whatever else happens.
 Item 1 changes numbers in section 5 and in `tab:ladder` once the constructed systems are
 re-run. Item 10 needs the control to be run before section 5.3 can keep its sentence.
 Items 15 and 16 need GPU time before appendices H and J can be regenerated at all.
