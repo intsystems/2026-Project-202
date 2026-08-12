@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "actdim"
+version = "2.0.0"
+description = "Counting the active degrees of freedom of a training run"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "../LICENSE" }
+dependencies = [
+    "numpy>=1.23",
+    "scipy>=1.9",
+    "pandas>=2.0",
+    "scikit-learn>=1.1",
+    "matplotlib>=3.6",
+    "tqdm>=4.64",
+]
+
+[project.optional-dependencies]
+train = ["torch>=1.13"]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+actdim = "actdim.runtime.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["actdim*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["error::RuntimeWarning"]
+
+[tool.pytest]
+# The estimator returns NaN by design on a degenerate window, and the code that does so
+# suppresses the warning locally. A RuntimeWarning that escapes to a test is a bug: the
+# archived tree captured three of them into a committed table.

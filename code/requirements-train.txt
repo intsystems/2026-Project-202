@@ -1,0 +1,11 @@
+# Training half: the transformer and the perceptron campaigns of appendix O.
+# Install the analysis requirements first.
+-r requirements.txt
+
+# Both trainers run in float64. On a T4 that is a thirty-second of the float32 rate,
+# which is why a run takes minutes rather than seconds -- do not "optimise" it to
+# float32, the article's runs are double precision and the milestones move.
+#
+# Install the CUDA build for your driver rather than the default wheel, e.g.
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121
+torch>=1.13

@@ -10,9 +10,13 @@ on it and shares no text with it.
 ## Build
 
 ```bash
-python make_figures.py    # regenerates figures/ from the committed result files
+(cd ../code && python -m actdim run paper.figures)   # regenerates figures/ from ../code/data/
 pdflatex report && bibtex report && pdflatex report && pdflatex report
 ```
+
+The figure generator moved into the code package. `../code/README.md` is the entry point,
+and `python -m actdim check.tables` recomputes every mechanical table cell and diffs it
+against the printed value.
 
 `report.pdf` is committed, so neither step is required to read it. The build is clean: no
 undefined references, no citation warnings, no overfull boxes.
@@ -29,7 +33,7 @@ there. There is no keywords line: the style file defines no such field.
 
 Figures are generated at the exact text width of the style file (5.5 in) with 8 pt type, so
 LaTeX does not rescale them. Do not include a figure wider than that, and read the design rules
-in the `make_figures.py` docstring before changing one — several of them exist because a review
+in the `../code/actdim/figures/panels.py` docstring before changing one — several of them exist because a review
 found the figure misrepresenting its own data.
 
 ## The argument in one paragraph
@@ -52,31 +56,39 @@ marks the transition is the timing and shape of the fall rather than its depth.
 
 ## Where the numbers come from
 
-| section | source |
+Every number is produced by one registered experiment in `../code/`. Run
+`python -m actdim list` for the catalogue with costs, or `python -m actdim plan --all` for
+the order a full regeneration takes. The previous tree is archived unchanged in
+`../archived_code/`, and `../code/docs/errata.md` records what the port found wrong in it.
+
+| section | experiment |
 | --- | --- |
-| 5.1 oscillating diagonal matrix | `../code/dimension_recovery/` exp1--exp3, exp9, exp10 |
-| 5.2 the ceiling | `../code/dimension_recovery/` exp11, exp12; `../code/active_dimension/results/k20_calibration/` |
-| 5.3 the silence control | `../code/dimension_recovery/` exp13, exp14; `../code/active_dimension/` E2 (`qp_eta0`) |
-| 5.4 image data, parameter subspace | `../code/active_dimension/` E1, E2, and `results/k20_calibration/` |
-| 5.4 image data, function subspace | `../code/dimension_recovery/results/exp15_real_digits_functional_subspace_v3/` |
-| 6.1 dynamical regime | `../code/active_dimension/` E0, E2 |
-| 6.2 delay lag | `../code/active_dimension/` E6 |
-| 6.3 nuisance factors | `../code/active_dimension/` E4 |
-| 6.4 effective rank or mode count | `../code/active_dimension/e8_anisotropy.py`, `results/e8_anisotropy/` |
-| 7.1 regime classification, label-matched pairs | `../code/active_dimension/` E5; `../code/gromov_arithmetic/dimension_probe.py`; `../code/gromov_polynomials/report.md` |
-| 7.2 direct measurement | `../code/active_rank/report.md`; `dip.py` regenerates `results_fine/rank_dip.csv` |
-| 7.3 the matched window | `../code/active_dimension/e9_matched_window.py`, `e9_analyse.py`, `e10_surrogate.py`, `results/e9_matched_window/` |
-| appendix E, detection of a change | `../code/active_dimension/` E3 |
-| appendix H, the collapse run by run | `../code/active_rank/results_fine/rank_dip*.csv` |
-| appendix J, full-batch and window length | `../code/gromov_arithmetic/results/rank_fb_long/pr_vs_window.csv` |
-| appendix L, the matched-window re-run | `../code/active_dimension/results/e9_matched_window/` |
-| appendix M, representation dimension | `../code/gromov_arithmetic/report.md`, `../code/gromov_polynomials/report.md` |
-| appendix N, the Theiler exclusion | `../code/active_dimension/e7b_theiler_quick.py`, `results/e7_theiler/` |
-| appendix P, the exclusion contrast | `../code/active_dimension/e11_theiler_contrast.py`, `results/e11_theiler_contrast/` |
-| appendix Q, edge of stability | `../code/gromov_arithmetic/eos.py`, `eos_probe.py`, `eos_recurrence.py`, `results/eos/report.md` |
-| appendix R, the ceiling sweeps | `../code/active_dimension/e10_ceiling_sweep.py`, `results/e10_ceiling/report.md` |
-| appendix S, the sketch's cost | `../code/gromov_arithmetic/sketch_cost.py`, `results/sketch_cost.json` |
-| `fig_traces` extract | `../code/active_dimension/e11_export_traces.py` |
+| 5.1 oscillating diagonal matrix | `sys.matrix`, `sys.matrix.sync` |
+| 5.2 the ceiling | `sys.matrix.k20`, `sys.linear`, `sys.logistic`, `calib.e20` |
+| 5.3 the silence control | `sys.decoder`, `sys.subspace`, `sys.silence` |
+| 5.4 image data, parameter subspace | `sys.digits.parameter`, `calib.e8`, `calib.e20` |
+| 5.4 image data, function subspace | `sys.digits.function` |
+| 6.1 dynamical regime | `valid.regime`, `sys.digits.parameter` |
+| 6.2 delay lag | `valid.tau` |
+| 6.3 nuisance factors | `valid.nuisance` |
+| 6.4 effective rank or mode count | `valid.anisotropy` |
+| 7.1 regime classification, label-matched pairs | `grok.diagnostics.logs`, `grok.diagnostics.perceptron` |
+| 7.2 direct measurement | `grok.rank.dip` |
+| 7.3 the matched window | `grok.matched.window`, `grok.matched.surrogate` |
+| appendix E, detection of a change | `valid.transitions` |
+| appendix G, the extended reruns | `grok.extended.outcomes` |
+| appendix H, the collapse run by run | `grok.rank.dip` |
+| appendix J, full-batch and window length | `grok.prwindow`, `train.perceptron.sketched` |
+| appendix L, the matched-window re-run | `grok.matched.window` |
+| appendix M, representation dimension | `grok.repr` |
+| appendix N, the Theiler exclusion | `valid.theiler.cap` |
+| appendix O, the run inventory | `train.transformer.*`, `train.perceptron.*` |
+| appendix P, the exclusion contrast | `valid.theiler.contrast` |
+| appendix Q, edge of stability | `train.perceptron.eos`, `grok.eos` |
+| appendix R, the ceiling sweeps | `valid.ceiling` |
+| appendix S, the sketch's cost | `check.sketch.cost`, `check.sketch.noninvasive` |
+| every figure | `paper.figures` |
+| every mechanical table | `check.tables` |
 
 ## Appendices
 
@@ -104,8 +116,8 @@ marks the transition is the timing and shape of the fall rather than its depth.
 
 ## Figures
 
-Regenerate with `python make_figures.py`. All are drawn at exactly 5.5 in, the text width of the
-style file, at 8 pt so that LaTeX never rescales them.
+Regenerate with `python -m actdim run paper.figures` from `../code/`. All are drawn at exactly
+5.5 in, the text width of the style file, at 8 pt so that LaTeX never rescales them.
 
 | figure | what it shows | where |
 | --- | --- | --- |
@@ -191,19 +203,21 @@ quantitatively — the ceiling rises about 0.05 components per unit of E_max rat
 **A release check this repository has now failed twice.** `active_rank/dip.py` did not regenerate
 the file section 7.1 depended on, and `active_dimension/e10_surrogate.py` could not regenerate
 `surrogates.csv` in any process, because it seeded from `hash()` of a string and Python salts that
-per interpreter. Before release, re-run every committed script and diff its output against the
-committed file. Both are fixed; the point is that neither was caught by reading the code.
+per interpreter. Both were fixed before the port; the point is that neither was caught by reading
+the code. The check is now mechanical: `python -m actdim check.tables` recomputes every table cell
+from `../code/data/` and exits non-zero on a mismatch, and `python -m actdim verify` checks that
+tree against the checksums recorded when each file was produced.
 
-Two defects in upstream result files were found while assembling the draft and are fixed here but
-still need fixing at source:
+Two defects in upstream result files were found while assembling the draft. Both have since been
+fixed at source, and this section is kept only as the record of what they were:
 
-* `../code/active_dimension/results/k20_calibration/invariance_controls.csv` reports the
-  constant-rescaling control moving the estimate by 1.68 to 4.96 components. It cannot: the
+* `../archived_code/active_dimension/results/k20_calibration/invariance_controls.csv` once
+  reported the constant-rescaling control moving the estimate by 1.68 to 4.96 components. It cannot: the
   scorer standardises the series and the control applies a constant gain to the fluctuation, so
   the two cancel exactly. Recomputed from `scores_frozen.csv`, the control moves the estimate by
   0.000 on all eight observers, and the rotation control by 0.000 on seven of eight, the
   exception being the fixed random projection, which is not rotation invariant. The published
   deltas are seed scatter.
-* The k = 1..20 calibration on real data is written up nowhere in `active_dimension/`, though its
-  result files are committed. Appendix C and table 6 of this article are computed from
-  `scores_frozen.csv`.
+* The k = 1..20 calibration on real data was written up nowhere, though its result files were
+  committed. Appendix C and table 6 of this article are computed from `scores_frozen.csv`, which
+  `calib.e20` now produces with a provenance record naming the code that wrote it.

@@ -1,0 +1,16 @@
+{
+  "cfg_id": 3,
+  "config": {
+    "max_E": 40,
+    "tau": 16,
+    "k_neighbors": 20,
+    "theiler": "autocorr",
+    "window": 8000,
+    "stride": 4000,
+    "dither": 1e-09
+  },
+  "calibration_r": [2, 6, 10, 14, 18],
+  "calibration_seeds": [0, 1, 2],
+  "selection": "minimum median raw absolute error across non-degenerate calibration observers",
+  "observers": ["w_fro", "c_norm", "g_fro", "g_proj", "c_proj1", "fn_fro", "fn_proj1", "loss_full"]
+}

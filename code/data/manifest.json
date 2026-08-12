@@ -1,0 +1,749 @@
+{
+  "files": {
+    "calib.e20/frozen_k20.json": {
+      "archived_path": "active_dimension/results/k20_calibration/frozen_k20.json",
+      "bytes": 463,
+      "command": "python -m actdim run calib.e20",
+      "experiment": "calib.e20",
+      "sha256": "d82990ccdc2cc0729793daf704e37b6871ee76dcd5ba82a3d2c321bda2749ea9",
+      "source": "archived"
+    },
+    "calib.e20/frozen_per_r.csv": {
+      "archived_path": "active_dimension/results/k20_calibration/frozen_per_r.csv",
+      "bytes": 45710,
+      "command": "python -m actdim run calib.e20",
+      "experiment": "calib.e20",
+      "sha256": "44d5536f44c6f16710ea2faea2a27ff77d0bb02423abde587cd9a8e8f32fedda",
+      "source": "archived"
+    },
+    "calib.e20/heldout_qp_summary.csv": {
+      "archived_path": "active_dimension/results/k20_calibration/heldout_qp_summary.csv",
+      "bytes": 904,
+      "command": "python -m actdim run calib.e20",
+      "experiment": "calib.e20",
+      "sha256": "059db84a46a60ada5d5f39262783864b908b66e6f1552c34679482eb8164a463",
+      "source": "archived"
+    },
+    "calib.e20/invariance_controls.csv": {
+      "archived_path": "active_dimension/results/k20_calibration/invariance_controls.csv",
+      "bytes": 422,
+      "command": "python -m actdim run calib.e20",
+      "experiment": "calib.e20",
+      "sha256": "2942ed5bd4f3b9120fdfe44834add5e574c75686779b8b076019234a142ec236",
+      "source": "archived"
+    },
+    "calib.e20/scores_frozen.csv": {
+      "archived_path": "active_dimension/results/k20_calibration/scores_frozen.csv",
+      "bytes": 222548,
+      "command": "python -m actdim run calib.e20",
+      "experiment": "calib.e20",
+      "sha256": "bfe9ca76d81eb0ff3d348433394a0a3ba26d0ca374b90de9c6b63ee6e8d6a209",
+      "source": "archived"
+    },
+    "calib.e8/calibration_scores.csv": {
+      "archived_path": "active_dimension/results/e1_calibration/calibration_scores.csv",
+      "bytes": 54893,
+      "command": "python -m actdim run calib.e8",
+      "experiment": "calib.e8",
+      "sha256": "7604dcebca13204d7242c480ec8d315ad4ab18cf2b99e0a56ad16ed49889337d",
+      "source": "archived"
+    },
+    "calib.e8/config_ranking.csv": {
+      "archived_path": "active_dimension/results/e1_calibration/config_ranking.csv",
+      "bytes": 5394,
+      "command": "python -m actdim run calib.e8",
+      "experiment": "calib.e8",
+      "sha256": "fceba12918b73500e66164e759b228a4e3e3b5423f64cab56c789244bfcd967e",
+      "source": "archived"
+    },
+    "calib.e8/frozen_config.json": {
+      "archived_path": "active_dimension/results/e1_calibration/frozen_config.json",
+      "bytes": 8465,
+      "command": "python -m actdim run calib.e8",
+      "experiment": "calib.e8",
+      "sha256": "04ad33608f4b8df34449f17da1d8159198060ef047cbe0faffecaaa8f789e7bd",
+      "source": "archived"
+    },
+    "check.sketch.cost/sketch_cost.json": {
+      "archived_path": "gromov_arithmetic/results/sketch_cost.json",
+      "bytes": 352,
+      "command": "python -m actdim run check.sketch.cost",
+      "experiment": "check.sketch.cost",
+      "sha256": "12d5073e27e2a09772e3514c7989947247d00170d4d6f7c7dd3108aed7b9dc83",
+      "source": "archived"
+    },
+    "grok.diagnostics.logs/real_logs_summary.csv": {
+      "archived_path": "active_dimension/results/e5_real_logs/real_logs_summary.csv",
+      "bytes": 4760,
+      "command": "python -m actdim run grok.diagnostics.logs",
+      "experiment": "grok.diagnostics.logs",
+      "sha256": "373d00f72a3ff753315c078f6c109bb64a552e82e3782a585688fe6947fd1b01",
+      "source": "archived"
+    },
+    "grok.diagnostics.logs/real_logs_windows.csv": {
+      "archived_path": "active_dimension/results/e5_real_logs/real_logs_windows.csv",
+      "bytes": 49748,
+      "command": "python -m actdim run grok.diagnostics.logs",
+      "experiment": "grok.diagnostics.logs",
+      "sha256": "8c4ae1c2c90f2bc7eb9327bc82d90446c763da279609235cfefe2423c5ac5c75",
+      "source": "archived"
+    },
+    "grok.diagnostics.perceptron/dimension_probe.csv": {
+      "archived_path": "gromov_arithmetic/results/arith/dimension_probe.csv",
+      "bytes": 6947,
+      "command": "python -m actdim run grok.diagnostics.perceptron",
+      "experiment": "grok.diagnostics.perceptron",
+      "sha256": "f91f1ee59f1f0ccd050334e35ef9b3dd1d742221b35f31c99aed006fde11c71a",
+      "source": "archived"
+    },
+    "grok.diagnostics.perceptron/dimension_probe_poly.csv": {
+      "archived_path": "gromov_polynomials/results/dimension_probe.csv",
+      "bytes": 11756,
+      "command": "python -m actdim run grok.diagnostics.perceptron",
+      "experiment": "grok.diagnostics.perceptron",
+      "sha256": "00c6f7e45a53724cd26c11077d14b301b7e59b2d716e31e4c20e505dbe52d8a3",
+      "source": "archived"
+    },
+    "grok.diagnostics.perceptron/dimension_probe_summary.csv": {
+      "archived_path": "gromov_arithmetic/results/arith/dimension_probe_summary.csv",
+      "bytes": 1127,
+      "command": "python -m actdim run grok.diagnostics.perceptron",
+      "experiment": "grok.diagnostics.perceptron",
+      "sha256": "5fbe05f7f610761e59c986798616e8cc1fd7f46c06fc5e0cbbc4d74a0524d77e",
+      "source": "archived"
+    },
+    "grok.diagnostics.perceptron/dimension_probe_summary_poly.csv": {
+      "archived_path": "gromov_polynomials/results/dimension_probe_summary.csv",
+      "bytes": 1688,
+      "command": "python -m actdim run grok.diagnostics.perceptron",
+      "experiment": "grok.diagnostics.perceptron",
+      "sha256": "97801a878daa7470dd56eafae0cfdbb4290d4bef5cc0153846005e3e984c6088",
+      "source": "archived"
+    },
+    "grok.eos/eos_diagnostics.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_diagnostics.csv",
+      "bytes": 557231,
+      "command": "python -m actdim run grok.eos",
+      "experiment": "grok.eos",
+      "sha256": "e616c36620a2800810a20039cadf898a6571a6002a802afc8e6622bf9256e123",
+      "source": "archived"
+    },
+    "grok.eos/eos_diagnostics_summary.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_diagnostics_summary.csv",
+      "bytes": 37852,
+      "command": "python -m actdim run grok.eos",
+      "experiment": "grok.eos",
+      "sha256": "df618eab0297b630017cd48f350b84d2200289c196b8990b60428257c949f209",
+      "source": "archived"
+    },
+    "grok.eos/eos_recurrence.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_recurrence.csv",
+      "bytes": 7612,
+      "command": "python -m actdim run grok.eos",
+      "experiment": "grok.eos",
+      "sha256": "415091f65e895133251674b6a080fcfe7ba5dc659290c168f777b635cd8c23a3",
+      "source": "archived"
+    },
+    "grok.extended.outcomes/exp8_at_20k.csv": {
+      "archived_path": "dimension_recovery/results/exp8_at_20k.csv",
+      "bytes": 516,
+      "command": "python -m actdim run grok.extended.outcomes",
+      "experiment": "grok.extended.outcomes",
+      "sha256": "f92fe04505c8e9ef70b614ad2d765cb32558453a1b36749865d50dd8562f0367",
+      "source": "archived"
+    },
+    "grok.extended.outcomes/exp8_outcomes.csv": {
+      "archived_path": "dimension_recovery/results/exp8_outcomes.csv",
+      "bytes": 429,
+      "command": "python -m actdim run grok.extended.outcomes",
+      "experiment": "grok.extended.outcomes",
+      "sha256": "0c67c9b6cca39da8588def1f0185d2af2dc2cb3768fa66baa39600bea10dd43c",
+      "source": "archived"
+    },
+    "grok.matched.surrogate/surrogate_seed_spread.csv": {
+      "archived_path": "active_dimension/results/e9_matched_window/surrogate_seed_spread.csv",
+      "bytes": 3118,
+      "command": "python -m actdim run grok.matched.surrogate",
+      "experiment": "grok.matched.surrogate",
+      "sha256": "9718b4b23d9576bdca8dcf5df25afd6e501fcaf3fec440d801fcb4ddb0357109",
+      "source": "archived"
+    },
+    "grok.matched.surrogate/surrogate_summary.csv": {
+      "archived_path": "active_dimension/results/e9_matched_window/surrogate_summary.csv",
+      "bytes": 17508,
+      "command": "python -m actdim run grok.matched.surrogate",
+      "experiment": "grok.matched.surrogate",
+      "sha256": "bae2250f51466a2def58cf81509fc60eabdad934ecd33d2b16abc8d73aced048",
+      "source": "archived"
+    },
+    "grok.matched.surrogate/surrogates.csv": {
+      "archived_path": "active_dimension/results/e9_matched_window/surrogates.csv",
+      "bytes": 488786,
+      "command": "python -m actdim run grok.matched.surrogate",
+      "experiment": "grok.matched.surrogate",
+      "sha256": "8eeb0a1911194bffd3a738e779419304dbca86a0638451bce3ec0a929b63d130",
+      "source": "archived"
+    },
+    "grok.matched.window/headline_trace.csv": {
+      "archived_path": "active_dimension/results/e9_matched_window/headline_trace.csv",
+      "bytes": 296739,
+      "command": "python -m actdim run grok.matched.window",
+      "experiment": "grok.matched.window",
+      "sha256": "a26b1acc87340a75959f45c5c4f028aaced29edb109c3cad4cf7f1cd5c505523",
+      "source": "archived"
+    },
+    "grok.prwindow/pr_vs_window.csv": {
+      "archived_path": "gromov_arithmetic/results/rank_fb_long/pr_vs_window.csv",
+      "bytes": 7699,
+      "command": "python -m actdim run grok.prwindow",
+      "experiment": "grok.prwindow",
+      "sha256": "bf5242d988afdf87ac80a524ad7fdce73e13d1537ca13789230fce1699455e7e",
+      "source": "archived"
+    },
+    "grok.rank.dip/mod_wd1_train.csv": {
+      "archived_path": "active_rank/results_fine/mod_wd1_train.csv",
+      "bytes": 156534,
+      "command": "python -m actdim run grok.rank.dip",
+      "experiment": "grok.rank.dip",
+      "sha256": "bce90501d7214c36cf6cec0581894eba76d8c3a9d9ef7ee05be0fe5389403a51",
+      "source": "archived"
+    },
+    "grok.rank.dip/rank_dip.csv": {
+      "archived_path": "active_rank/results_fine/rank_dip.csv",
+      "bytes": 2054,
+      "command": "python -m actdim run grok.rank.dip",
+      "experiment": "grok.rank.dip",
+      "sha256": "7c8a61b3298ef998d318ec1d65d1069d631fd77fc79a931aa84b9c559f38ccab",
+      "source": "archived"
+    },
+    "grok.rank.dip/rank_dip_controls.csv": {
+      "archived_path": "active_rank/results_fine/rank_dip_controls.csv",
+      "bytes": 1020,
+      "command": "python -m actdim run grok.rank.dip",
+      "experiment": "grok.rank.dip",
+      "sha256": "b62eb06d2cb4257c031634c8900151f439252efe09a498875e7d95dfd4b3fad7",
+      "source": "archived"
+    },
+    "grok.rank.dip/rank_dip_controls_aligned.csv": {
+      "archived_path": "active_rank/results_fine/rank_dip_controls_aligned.csv",
+      "bytes": 766,
+      "command": "python -m actdim run grok.rank.dip",
+      "experiment": "grok.rank.dip",
+      "sha256": "cf4a828af879059ab1ffe5447c3c61138b4c39ea57bce78188b13557fe367f09",
+      "source": "archived"
+    },
+    "grok.rank.dip/rank_milestones.json": {
+      "archived_path": "active_rank/results_fine/rank_milestones.json",
+      "bytes": 910,
+      "command": "python -m actdim run grok.rank.dip",
+      "experiment": "grok.rank.dip",
+      "sha256": "1686565c846003e92db70e5aa3857acdb163f3e518d418a0bb29fbdcd18bbb0c",
+      "source": "archived"
+    },
+    "grok.rank.dip/rank_summary.csv": {
+      "archived_path": "active_rank/results_fine/rank_summary.csv",
+      "bytes": 310,
+      "command": "python -m actdim run grok.rank.dip",
+      "experiment": "grok.rank.dip",
+      "sha256": "1110af8b4a2aa2aca4c211914f520efee5437647ecffd4f50dee24beaaa68dd5",
+      "source": "archived"
+    },
+    "grok.rank.dip/rank_windows.csv": {
+      "archived_path": "active_rank/results_fine/rank_windows.csv",
+      "bytes": 523499,
+      "command": "python -m actdim run grok.rank.dip",
+      "experiment": "grok.rank.dip",
+      "sha256": "9166ee4cb70d717045d88843dca7ca4e35c1b17a21544016b61c8e8c7f66549b",
+      "source": "archived"
+    },
+    "sys.decoder/calibration_raw.csv": {
+      "archived_path": "dimension_recovery/results/exp13_frozen_nonlinear_decoder_k20/calibration_raw.csv",
+      "bytes": 46693,
+      "command": "python -m actdim run sys.decoder",
+      "experiment": "sys.decoder",
+      "sha256": "ea99a44e9e5771f94f6ffa824bf698f604d534c2d30f2ad8638e2a598f799565",
+      "source": "archived"
+    },
+    "sys.decoder/heldout_raw.csv": {
+      "archived_path": "dimension_recovery/results/exp13_frozen_nonlinear_decoder_k20/heldout_raw.csv",
+      "bytes": 23550,
+      "command": "python -m actdim run sys.decoder",
+      "experiment": "sys.decoder",
+      "sha256": "062dfab00183a53902ef7208ab89f8810fba429802e83084374b3a3341e92eb4",
+      "source": "archived"
+    },
+    "sys.decoder/heldout_summary.csv": {
+      "archived_path": "dimension_recovery/results/exp13_frozen_nonlinear_decoder_k20/heldout_summary.csv",
+      "bytes": 1348,
+      "command": "python -m actdim run sys.decoder",
+      "experiment": "sys.decoder",
+      "sha256": "42b184b9fae100dc6874cc57f349dc5e0d05e10aa7821b35c8acd63654b6f941",
+      "source": "archived"
+    },
+    "sys.decoder/observer_ranking.csv": {
+      "archived_path": "dimension_recovery/results/exp13_frozen_nonlinear_decoder_k20/observer_ranking.csv",
+      "bytes": 561,
+      "command": "python -m actdim run sys.decoder",
+      "experiment": "sys.decoder",
+      "sha256": "89a693a4eeafe7bbc21d081718b33821bff0ac9ac511406a536c32d21b4eb1bc",
+      "source": "archived"
+    },
+    "sys.digits.function/calibration_raw.csv": {
+      "archived_path": "dimension_recovery/results/exp15_real_digits_functional_subspace_v3/calibration_raw.csv",
+      "bytes": 66748,
+      "command": "python -m actdim run sys.digits.function",
+      "experiment": "sys.digits.function",
+      "sha256": "45d86e8c917372d0fe37f9a9adf7e024ee370cf55ce6a741754319b5b5d18a54",
+      "source": "archived"
+    },
+    "sys.digits.function/heldout_raw.csv": {
+      "archived_path": "dimension_recovery/results/exp15_real_digits_functional_subspace_v3/heldout_raw.csv",
+      "bytes": 33496,
+      "command": "python -m actdim run sys.digits.function",
+      "experiment": "sys.digits.function",
+      "sha256": "d8d993711e1086ad6ac6bb4684e5bfd38879c6b501cfbb205f3808606893f073",
+      "source": "archived"
+    },
+    "sys.digits.function/heldout_summary.csv": {
+      "archived_path": "dimension_recovery/results/exp15_real_digits_functional_subspace_v3/heldout_summary.csv",
+      "bytes": 1684,
+      "command": "python -m actdim run sys.digits.function",
+      "experiment": "sys.digits.function",
+      "sha256": "74f2420fcdebfbdc58931c50af1da033180a95609a07ddfd42f70eac387a426a",
+      "source": "archived"
+    },
+    "sys.digits.function/observer_ranking.csv": {
+      "archived_path": "dimension_recovery/results/exp15_real_digits_functional_subspace_v3/observer_ranking.csv",
+      "bytes": 709,
+      "command": "python -m actdim run sys.digits.function",
+      "experiment": "sys.digits.function",
+      "sha256": "c296399f679f68abfdadc3c0228d1a6a55bd8a1c16b4432e2b966a0ff14d7627",
+      "source": "archived"
+    },
+    "sys.digits.function/rank_diagnostics.csv": {
+      "archived_path": "dimension_recovery/results/exp15_real_digits_functional_subspace_v3/rank_diagnostics.csv",
+      "bytes": 8883,
+      "command": "python -m actdim run sys.digits.function",
+      "experiment": "sys.digits.function",
+      "sha256": "802b4d589c061d4693d54867c3ac48f938e602fb83744f361c1a2e069c4d74cf",
+      "source": "archived"
+    },
+    "sys.digits.parameter/calibrated_mae.csv": {
+      "archived_path": "active_dimension/results/e2_rank_sweep/calibrated_mae.csv",
+      "bytes": 6891,
+      "command": "python -m actdim run sys.digits.parameter",
+      "experiment": "sys.digits.parameter",
+      "sha256": "919c54eea05f619842ebd94ba89353a51652e00e168f8ae46ea5f71630c0b00a",
+      "source": "archived"
+    },
+    "sys.digits.parameter/ground_truth_PR.csv": {
+      "archived_path": "active_dimension/results/e2_rank_sweep/ground_truth_PR.csv",
+      "bytes": 1328,
+      "command": "python -m actdim run sys.digits.parameter",
+      "experiment": "sys.digits.parameter",
+      "sha256": "5015fc551f33c867fbfaebae47c17cbbe6401d883126656c4e78ad0899729cd2",
+      "source": "archived"
+    },
+    "sys.digits.parameter/observer_scores.csv": {
+      "archived_path": "active_dimension/results/e2_rank_sweep/observer_scores.csv",
+      "bytes": 20032,
+      "command": "python -m actdim run sys.digits.parameter",
+      "experiment": "sys.digits.parameter",
+      "sha256": "95b24b446f72d57c5f111d22eae0152a3d24bb53ea453d64933475772be2ae6f",
+      "source": "archived"
+    },
+    "sys.digits.parameter/sweep_raw.csv": {
+      "archived_path": "active_dimension/results/e2_rank_sweep/sweep_raw.csv",
+      "bytes": 2280421,
+      "command": "python -m actdim run sys.digits.parameter",
+      "experiment": "sys.digits.parameter",
+      "sha256": "6820100d96efd64e7f568a6f8615cf1a2f0a1e60e966d052b30ea6d4830e8bb3",
+      "source": "archived"
+    },
+    "sys.linear/calibration_raw.csv": {
+      "archived_path": "dimension_recovery/results/exp11_online_regression_k20/calibration_raw.csv",
+      "bytes": 39478,
+      "command": "python -m actdim run sys.linear",
+      "experiment": "sys.linear",
+      "sha256": "dfeb37672fcc169dff758242d980f23660a9f23c68a571d5c572e06218b37ce2",
+      "source": "archived"
+    },
+    "sys.linear/heldout_raw.csv": {
+      "archived_path": "dimension_recovery/results/exp11_online_regression_k20/heldout_raw.csv",
+      "bytes": 19933,
+      "command": "python -m actdim run sys.linear",
+      "experiment": "sys.linear",
+      "sha256": "b563c58e8f44596c60c20e95b072b56ab2347f0491e9143985e23e06178eb7aa",
+      "source": "archived"
+    },
+    "sys.linear/heldout_summary.csv": {
+      "archived_path": "dimension_recovery/results/exp11_online_regression_k20/heldout_summary.csv",
+      "bytes": 1163,
+      "command": "python -m actdim run sys.linear",
+      "experiment": "sys.linear",
+      "sha256": "87b1c74dbdb635d741921bbf82ada0cf9e8876dee3b384468bacd6f7706c5e86",
+      "source": "archived"
+    },
+    "sys.linear/observer_ranking.csv": {
+      "archived_path": "dimension_recovery/results/exp11_online_regression_k20/observer_ranking.csv",
+      "bytes": 483,
+      "command": "python -m actdim run sys.linear",
+      "experiment": "sys.linear",
+      "sha256": "82ed21dc79ede6e3b87395ce0195b28da17af644aaae74db8ece8fddf61dc0eb",
+      "source": "archived"
+    },
+    "sys.logistic/calibration_raw.csv": {
+      "archived_path": "dimension_recovery/results/exp12_logistic_regression_k20/calibration_raw.csv",
+      "bytes": 46210,
+      "command": "python -m actdim run sys.logistic",
+      "experiment": "sys.logistic",
+      "sha256": "f9f115994676bef506b24169ec87ec8c843e55c235b20caeeb6d7f35be8473c3",
+      "source": "archived"
+    },
+    "sys.logistic/heldout_raw.csv": {
+      "archived_path": "dimension_recovery/results/exp12_logistic_regression_k20/heldout_raw.csv",
+      "bytes": 23308,
+      "command": "python -m actdim run sys.logistic",
+      "experiment": "sys.logistic",
+      "sha256": "f54dd94a48f7c6cc797af22cd1be5fffa49b91001124062f1255d5a669c6c9ed",
+      "source": "archived"
+    },
+    "sys.logistic/heldout_summary.csv": {
+      "archived_path": "dimension_recovery/results/exp12_logistic_regression_k20/heldout_summary.csv",
+      "bytes": 1355,
+      "command": "python -m actdim run sys.logistic",
+      "experiment": "sys.logistic",
+      "sha256": "f7d9b19aca281cfdff532f9f746f510ae51c8c494d615eb96a34fd747bc59179",
+      "source": "archived"
+    },
+    "sys.logistic/observer_ranking.csv": {
+      "archived_path": "dimension_recovery/results/exp12_logistic_regression_k20/observer_ranking.csv",
+      "bytes": 563,
+      "command": "python -m actdim run sys.logistic",
+      "experiment": "sys.logistic",
+      "sha256": "8798b6f794f0485543b40cd4146ba36de96b90679ea2ef881155aa211c934265",
+      "source": "archived"
+    },
+    "sys.matrix.k20/best_config.json": {
+      "archived_path": "dimension_recovery/results/exp10_frobenius_k20/best_config.json",
+      "bytes": 85,
+      "command": "python -m actdim run sys.matrix.k20",
+      "experiment": "sys.matrix.k20",
+      "sha256": "1b46bc24086c06635620a7cdc105c1e24b52bdc44e3c688a892b0a2f8f87cd31",
+      "source": "archived"
+    },
+    "sys.matrix.k20/calibration_grid.csv": {
+      "archived_path": "dimension_recovery/results/exp10_frobenius_k20/calibration_grid.csv",
+      "bytes": 3545,
+      "command": "python -m actdim run sys.matrix.k20",
+      "experiment": "sys.matrix.k20",
+      "sha256": "d939c30103b05182df2e1d17cc36fd3d9fc43fe8283f97229fd8306d4afe2727",
+      "source": "archived"
+    },
+    "sys.matrix.k20/stationary_validation.csv": {
+      "archived_path": "dimension_recovery/results/exp10_frobenius_k20/stationary_validation.csv",
+      "bytes": 8990,
+      "command": "python -m actdim run sys.matrix.k20",
+      "experiment": "sys.matrix.k20",
+      "sha256": "16ad4d5d23ec7691f9dd78b7835ff33a7039e88f8fcacf9a5941b6c173f0429a",
+      "source": "archived"
+    },
+    "sys.matrix.k20/zigzag_segments.csv": {
+      "archived_path": "dimension_recovery/results/exp10_frobenius_k20/zigzag_segments.csv",
+      "bytes": 998,
+      "command": "python -m actdim run sys.matrix.k20",
+      "experiment": "sys.matrix.k20",
+      "sha256": "a347bfba353602f9d1e6b5d9cf8c016fc3ffa81001c630b6be0ff89fcd47363e",
+      "source": "archived"
+    },
+    "sys.matrix/best_config.json": {
+      "archived_path": "dimension_recovery/results/exp9_frobenius_k10/best_config.json",
+      "bytes": 568,
+      "command": "python -m actdim run sys.matrix",
+      "experiment": "sys.matrix",
+      "sha256": "539bf883e8495634e672071d42cbd16742c7d100f280f7d47b1cf1b14e97c270",
+      "source": "archived"
+    },
+    "sys.matrix/calibration_grid.csv": {
+      "archived_path": "dimension_recovery/results/exp9_frobenius_k10/calibration_grid.csv",
+      "bytes": 14482,
+      "command": "python -m actdim run sys.matrix",
+      "experiment": "sys.matrix",
+      "sha256": "c81153ab9e488366b062955f9b8ac791015c8ecc85fd106932ca1746de965d0d",
+      "source": "archived"
+    },
+    "sys.matrix/stationary_validation.csv": {
+      "archived_path": "dimension_recovery/results/exp9_frobenius_k10/stationary_validation.csv",
+      "bytes": 4627,
+      "command": "python -m actdim run sys.matrix",
+      "experiment": "sys.matrix",
+      "sha256": "fda2c1d162e879a4d024bc25d89f02541d60ea1ee19f44e117dcc079dc1baff3",
+      "source": "archived"
+    },
+    "sys.matrix/zigzag_segments.csv": {
+      "archived_path": "dimension_recovery/results/exp9_frobenius_k10/zigzag_segments.csv",
+      "bytes": 528,
+      "command": "python -m actdim run sys.matrix",
+      "experiment": "sys.matrix",
+      "sha256": "4af47466692ca997b5ab85b22c9b7a0480b5c1d0233f84fa21d9c7fffab4e408",
+      "source": "archived"
+    },
+    "sys.subspace/calibration_raw.csv": {
+      "archived_path": "dimension_recovery/results/exp14_mlp_intrinsic_subspace_k20/calibration_raw.csv",
+      "bytes": 58128,
+      "command": "python -m actdim run sys.subspace",
+      "experiment": "sys.subspace",
+      "sha256": "6d6f47fe4c23ef53681317892a995cc541d7939a51815e8a3edc0b7e0e80141c",
+      "source": "archived"
+    },
+    "sys.subspace/functional_rank_check.csv": {
+      "archived_path": "dimension_recovery/results/exp14_mlp_intrinsic_subspace_k20/functional_rank_check.csv",
+      "bytes": 1122,
+      "command": "python -m actdim run sys.subspace",
+      "experiment": "sys.subspace",
+      "sha256": "594a00ce1e3a538cb7a15fbf86e6f61e2ad1130c997a63a80c33f14a6cf8515d",
+      "source": "archived"
+    },
+    "sys.subspace/heldout_raw.csv": {
+      "archived_path": "dimension_recovery/results/exp14_mlp_intrinsic_subspace_k20/heldout_raw.csv",
+      "bytes": 29122,
+      "command": "python -m actdim run sys.subspace",
+      "experiment": "sys.subspace",
+      "sha256": "91c325c1283f3d26188045c8ee751f0d0d2fadbd129295a723fa0dc4a6c527b0",
+      "source": "archived"
+    },
+    "sys.subspace/heldout_summary.csv": {
+      "archived_path": "dimension_recovery/results/exp14_mlp_intrinsic_subspace_k20/heldout_summary.csv",
+      "bytes": 1349,
+      "command": "python -m actdim run sys.subspace",
+      "experiment": "sys.subspace",
+      "sha256": "fafa8f30e38a88e5cc2575bb59d8b9dbdbacfa786e6de4452b94691dfddaa30c",
+      "source": "archived"
+    },
+    "sys.subspace/observer_ranking.csv": {
+      "archived_path": "dimension_recovery/results/exp14_mlp_intrinsic_subspace_k20/observer_ranking.csv",
+      "bytes": 559,
+      "command": "python -m actdim run sys.subspace",
+      "experiment": "sys.subspace",
+      "sha256": "2995f73249afc40f4ae2304d624b94d18df34d2cca4d52ad50ffa3aa40348c91",
+      "source": "archived"
+    },
+    "train.perceptron.eos/eos_lr1.5e+06_s1_sharp.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_lr1.5e+06_s1_sharp.csv",
+      "bytes": 22039,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "sha256": "19758b33cda1713dcb33b595723e757d0c949682898efbf17ecb71a80153955f",
+      "source": "archived"
+    },
+    "train.perceptron.eos/eos_lr100000_s1_sharp.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_lr100000_s1_sharp.csv",
+      "bytes": 22278,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "sha256": "3f8299d2f76a2ebf581a6b613720c948496b1d3145a67a7438933bbdc5fa916f",
+      "source": "archived"
+    },
+    "train.perceptron.eos/eos_lr1e+06_s1_sharp.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_lr1e+06_s1_sharp.csv",
+      "bytes": 21988,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "sha256": "ba471b4b6cc2001302a14deb1bcb50cbd665b9c49a39bd0954914f455591d977",
+      "source": "archived"
+    },
+    "train.perceptron.eos/eos_lr2.5e+06_s1_sharp.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_lr2.5e+06_s1_sharp.csv",
+      "bytes": 21900,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "sha256": "b0eb44881f0a7e635e873870672d9c4b92d8dcce5a45c4176e52c1a92f9dbc1f",
+      "source": "archived"
+    },
+    "train.perceptron.eos/eos_lr2.8e+06_s1_sharp.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_lr2.8e+06_s1_sharp.csv",
+      "bytes": 490,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "sha256": "0bf29496c8c5049479669078ffa3d5d8db6cd1c310a63a13cc5c9a87637fbef6",
+      "source": "archived"
+    },
+    "train.perceptron.eos/eos_lr2e+06_s1_sharp.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_lr2e+06_s1_sharp.csv",
+      "bytes": 21841,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "sha256": "7fe361d6177ed3befce6b7cb7a6ba051ac58111f1cc3a60f874ce28cbb7e3407",
+      "source": "archived"
+    },
+    "train.perceptron.eos/eos_lr2e+06_s1_train.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_lr2e+06_s1_train.csv",
+      "bytes": 2339943,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "sha256": "1fb4b794267e18408934fc3bcf76eb3b63f6e224cd9d6fdf82a056c6dcece435",
+      "source": "archived"
+    },
+    "train.perceptron.eos/eos_lr300000_s1_sharp.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_lr300000_s1_sharp.csv",
+      "bytes": 22059,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "sha256": "a98504a5271536a3971472bb2c374f38f39c99d6aa192a8bc8deb490a867d0c6",
+      "source": "archived"
+    },
+    "train.perceptron.eos/eos_lr3e+06_s1_sharp.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_lr3e+06_s1_sharp.csv",
+      "bytes": 489,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "sha256": "cafa09e118ff487a1b9c08348567b6cc157c123850ae245c7d515e3922747392",
+      "source": "archived"
+    },
+    "train.perceptron.eos/eos_runs.csv": {
+      "archived_path": "gromov_arithmetic/results/eos/eos_runs.csv",
+      "bytes": 4157,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "sha256": "d954787bb6a2181ae48f2f1b4f7fbe2b0ce3308c20ab2d9aec306f317135a2d6",
+      "source": "archived"
+    },
+    "train.perceptron.poly/g_p2_p97_train.csv": {
+      "archived_path": "gromov_polynomials/results/g_p2_p97_train.csv",
+      "bytes": 800642,
+      "command": "python -m actdim run train.perceptron.poly",
+      "experiment": "train.perceptron.poly",
+      "sha256": "5d6d5693001838071fcba1fd6f4bf34bfe73e8b73b770653eeed09c184ec1c74",
+      "source": "archived"
+    },
+    "train.perceptron.poly/g_p2x_p97_train.csv": {
+      "archived_path": "gromov_polynomials/results/g_p2x_p97_train.csv",
+      "bytes": 962328,
+      "command": "python -m actdim run train.perceptron.poly",
+      "experiment": "train.perceptron.poly",
+      "sha256": "464a4f43fdca212eb5edb05bd5bf5cb411ce433a504c09333e9de320bd8af026",
+      "source": "archived"
+    },
+    "valid.anisotropy/aniso_raw.csv": {
+      "archived_path": "active_dimension/results/e8_anisotropy/aniso_raw.csv",
+      "bytes": 10274,
+      "command": "python -m actdim run valid.anisotropy",
+      "experiment": "valid.anisotropy",
+      "sha256": "191445030e6bfd00c585b84195bdc36ee1bde944abcd058fa8defcac26019b74",
+      "source": "archived"
+    },
+    "valid.anisotropy/aniso_summary.csv": {
+      "archived_path": "active_dimension/results/e8_anisotropy/aniso_summary.csv",
+      "bytes": 2437,
+      "command": "python -m actdim run valid.anisotropy",
+      "experiment": "valid.anisotropy",
+      "sha256": "a32db44217fbbcdf7cd45d5aaa7e2a293d155a9eb1846371e568e5e561938ae1",
+      "source": "archived"
+    },
+    "valid.ceiling/ceiling_cells.csv": {
+      "archived_path": "active_dimension/results/e10_ceiling/ceiling_cells.csv",
+      "bytes": 61171,
+      "command": "python -m actdim run valid.ceiling",
+      "experiment": "valid.ceiling",
+      "sha256": "ab41ab5ddca9284e0f5836ec316aa4f446d13ebcafd52c8c08cd9e2ed63c0b6f",
+      "source": "archived"
+    },
+    "valid.ceiling/ceiling_fits.csv": {
+      "archived_path": "active_dimension/results/e10_ceiling/ceiling_fits.csv",
+      "bytes": 991,
+      "command": "python -m actdim run valid.ceiling",
+      "experiment": "valid.ceiling",
+      "sha256": "3e703326b5b5c23f7df29fcb91270a5c8056cb5bbac64ff8ef280fc6c26b8e80",
+      "source": "archived"
+    },
+    "valid.ceiling/ceiling_slopes.csv": {
+      "archived_path": "active_dimension/results/e10_ceiling/ceiling_slopes.csv",
+      "bytes": 2144,
+      "command": "python -m actdim run valid.ceiling",
+      "experiment": "valid.ceiling",
+      "sha256": "c7d16ec65cd223e55162470a5e25a846cb8a149cdf3e1ba62aa9d6ae44e87f2f",
+      "source": "archived"
+    },
+    "valid.ceiling/ceiling_summary.csv": {
+      "archived_path": "active_dimension/results/e10_ceiling/ceiling_summary.csv",
+      "bytes": 7814,
+      "command": "python -m actdim run valid.ceiling",
+      "experiment": "valid.ceiling",
+      "sha256": "d07f9a4394e47d42911ba576d3bb72647c4675bca49a17216e8b40840acd1179",
+      "source": "archived"
+    },
+    "valid.nuisance/controls_raw.csv": {
+      "archived_path": "active_dimension/results/e4_controls/controls_raw.csv",
+      "bytes": 111656,
+      "command": "python -m actdim run valid.nuisance",
+      "experiment": "valid.nuisance",
+      "sha256": "27e5cd7df1e282787933852c664852e7e08e995441fd7ee5e685481a1c2cea11",
+      "source": "archived"
+    },
+    "valid.nuisance/controls_scored.csv": {
+      "archived_path": "active_dimension/results/e4_controls/controls_scored.csv",
+      "bytes": 161006,
+      "command": "python -m actdim run valid.nuisance",
+      "experiment": "valid.nuisance",
+      "sha256": "1a6795fc6328765285f4734a5b702d87098b161a0f19e14e6d4f5b99c5660f09",
+      "source": "archived"
+    },
+    "valid.regime/atlas_raw.csv": {
+      "archived_path": "active_dimension/results/e0_atlas/atlas_raw.csv",
+      "bytes": 184942,
+      "command": "python -m actdim run valid.regime",
+      "experiment": "valid.regime",
+      "sha256": "7d2edab0cb13565424af7433c2799042dd6d994645a894882bf041e16eae01b4",
+      "source": "archived"
+    },
+    "valid.regime/identifiability_ratio.csv": {
+      "archived_path": "active_dimension/results/e0_atlas/identifiability_ratio.csv",
+      "bytes": 75347,
+      "command": "python -m actdim run valid.regime",
+      "experiment": "valid.regime",
+      "sha256": "4f92352ca9d3d8ebaa4fc598423b682c636fc74fecd74ffe01cd26864296b4b0",
+      "source": "archived"
+    },
+    "valid.tau/tau_sensitivity.csv": {
+      "archived_path": "active_dimension/results/e6_tau/tau_sensitivity.csv",
+      "bytes": 50766,
+      "command": "python -m actdim run valid.tau",
+      "experiment": "valid.tau",
+      "sha256": "f9cf3d088e0ea6d336243e14fcaaf50c9ded5d997374c178c17beb73ac41ebbb",
+      "source": "archived"
+    },
+    "valid.theiler.cap/theiler_quick_raw.csv": {
+      "archived_path": "active_dimension/results/e7_theiler/theiler_quick_raw.csv",
+      "bytes": 14139,
+      "command": "python -m actdim run valid.theiler.cap",
+      "experiment": "valid.theiler.cap",
+      "sha256": "e311f523759c3b5af3c5910763fe7d790f3d2b1e52e153c3ce8ce6643115ed29",
+      "source": "archived"
+    },
+    "valid.theiler.contrast/example_traces.csv": {
+      "archived_path": "active_dimension/results/e11_theiler_contrast/example_traces.csv",
+      "bytes": 349111,
+      "command": "python -m actdim run valid.theiler.contrast",
+      "experiment": "valid.theiler.contrast",
+      "sha256": "1b4f83c849e8a80c082e542b13c2eef26363c367c53fa6c264bd43a4dd0c4882",
+      "source": "archived"
+    },
+    "valid.theiler.contrast/sweep_windows.csv": {
+      "archived_path": "active_dimension/results/e11_theiler_contrast/sweep_windows.csv",
+      "bytes": 3866540,
+      "command": "python -m actdim run valid.theiler.contrast",
+      "experiment": "valid.theiler.contrast",
+      "sha256": "0d2ef83b9c8a0810541deddd851f1660b435cded71c48f907fe05467c931a29d",
+      "source": "archived"
+    },
+    "valid.transitions/transitions_raw.csv": {
+      "archived_path": "active_dimension/results/e3_transitions/transitions_raw.csv",
+      "bytes": 55523,
+      "command": "python -m actdim run valid.transitions",
+      "experiment": "valid.transitions",
+      "sha256": "838af4f9b21d8c48a0d7491ec9f4dedcd0a68c95948d95c6a2910e1c775ca8de",
+      "source": "archived"
+    }
+  },
+  "schema": 1
+}

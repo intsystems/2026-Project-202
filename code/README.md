@@ -1,25 +1,76 @@
-# Detecting Optimization Regimes via Convergent Cross Mapping
+# Counting the active degrees of freedom of a training run
 
-Данная директория содержит исходный код для вычислительных экспериментов, представленных в статье. Проект демонстрирует применимость методов эмпирического динамического моделирования (EDM) и фазовой реконструкции к анализу логов глубокого обучения.
+The code behind the article in [`../icomp_v2/`](../icomp_v2/): the estimator, the six
+systems whose active dimension is fixed by construction, the two training settings, the
+trajectory sketch, and the analysis that turns their logs into every number and figure.
 
-Исследование разделено на два независимых модуля:
+The previous tree is archived unchanged in [`../archived_code/`](../archived_code/). This
+one is a port, not a copy: what changed and why is in [`docs/errata.md`](docs/errata.md).
 
-1.[**Poisoned Batch (Causal Discovery)**](poisoned_batch/README.md)  
-   Эксперимент по выявлению скрытых причинно-следственных связей в условиях стохастического шума оптимизатора SGD с использованием метода Convergent Cross Mapping (CCM).
+## Getting started
 
-
-2.[**Grokking (Dimensionality Collapse)**](Grokking/README.md)  
-   Исследование феномена отложенной генерализации (гроккинга). Исходная версия на ноутбуках: обучение Трансформеров на алгоритмических задачах (модульная арифметика и группа $S_5$) и отслеживание коллапса внутренней размерности аттрактора. Заменена модулями 3 и 4; сохраняется ради истории и сырых CSV-логов (`grokking_logs/`), включая разведочные прогоны, которых больше нигде нет.
-
-3.[**Grokking Train (генерация логов)**](grokking_train/README.md)  
-   Версия генерирующей части без ноутбуков: пакет `grok/` (задачи $a+b \bmod p$ и композиция в $S_n$, архитектуры, наблюдаемые), реестр запусков и CLI `train.py`, который пересобирает CSV-логи статьи. Логи `mod_wd*` и `s5_wd*` воспроизводятся побитово.
-
-4.[**Grokking Analysis (воспроизведение графиков статьи)**](grokking_analysis/README.md)  
-   Версия аналитической части без ноутбуков: пакет `edm/` (вложение с задержкой, оценка размерности), реестр экспериментов и CLI `reproduce_figures.py`, который пересобирает все рисунки из `icomp_article/` по CSV-логам.
-
-## Зависимости
-
-Для запуска экспериментов требуются следующие библиотеки:
 ```bash
-pip install torch torchvision pandas numpy matplotlib tqdm scikit-learn
-pip install causal-ccm einops
+cd code
+pip install -r requirements.txt        # analysis only, no torch, no GPU
+python -m actdim doctor                # device, libraries, disk, what has run
+python -m actdim list                  # every experiment, its cost, its paper section
+```
+
+Nothing needs installing: `python -m actdim` runs from this directory. `pip install -e .`
+also works and adds an `actdim` command.
+
+## Running something
+
+```bash
+python -m actdim plan sys              # what it would run, in order, and what it costs
+python -m actdim run sys.matrix        # one experiment, with its prerequisites
+python -m actdim run sys --jobs 8      # a whole group
+python -m actdim run sys.matrix --fast # the smallest grid that exercises every branch
+```
+
+An experiment writes to `runs/<id>/`, alongside a `provenance.json` recording the commit,
+the resolved configuration, every seed, the device, the library versions, and a checksum
+of every file it wrote. `python -m actdim promote sys.matrix` copies the outputs the
+article reads into `data/`, which is the tracked half.
+
+## Where the work runs
+
+The split is not a Colab special case; it is a property of the experiments.
+
+**The analysis half is CPU and runs anywhere**, including a laptop. That is all of
+sections 5 and 6, every diagnostic, and every figure: about twelve core-hours for the
+lot, dominated by the rank sweep and the ceiling scan.
+
+**The training half needs a GPU.** Both trainers run in float64, which a CPU will do but
+slowly enough that a silent fallback wastes hours, so a GPU experiment refuses a CPU
+unless `--allow-cpu` says otherwise. About eleven T4-hours in total.
+
+```bash
+python -m actdim run train --device cuda:0     # on a Linux GPU box
+```
+
+For Colab, [`colab/`](colab/README.md) holds a notebook and a five-function helper.
+Nothing in `actdim` imports it, and deleting the directory changes no result.
+
+## The documentation
+
+| | |
+| --- | --- |
+| [`docs/architecture.md`](docs/architecture.md) | the module map, the experiment contract, the three rules that hold it together |
+| [`docs/experiments.md`](docs/experiments.md) | every section of the article, and the experiment that produced its numbers |
+| [`docs/data.md`](docs/data.md) | what is stored, where, in what format, and what is tracked |
+| [`docs/reproduce.md`](docs/reproduce.md) | regenerating the article end to end, and what each stage costs |
+| [`docs/errata.md`](docs/errata.md) | what the port found wrong in the archived code, and what changed |
+| [`colab/README.md`](colab/README.md) | the Colab mode |
+
+## Tests
+
+```bash
+python -m pytest tests/ -q
+```
+
+The estimator is tested against analytic cases with a known answer, against the archived
+implementation on real logged series, and against the article's appendix A line by line.
+The trajectory sketch is tested by training the same configuration with and without it
+and requiring every logged value to be bit-identical, which is the claim appendix I makes
+for it.

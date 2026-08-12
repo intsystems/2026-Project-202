@@ -1,0 +1,11 @@
+# Analysis half: the estimator, the constructed systems, every figure and table.
+# No torch, no GPU. This is all that is needed to rebuild the article from the
+# committed data/ tree.
+numpy>=1.23
+scipy>=1.9
+pandas>=2.0
+scikit-learn>=1.1
+matplotlib>=3.6
+tqdm>=4.64
+
+# The training campaigns need torch as well; see requirements-train.txt.

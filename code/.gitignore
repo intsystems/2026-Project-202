@@ -1,0 +1,14 @@
+# Raw experiment output. Regenerable by `python -m actdim run <id>`, and large: the
+# trajectory sketches alone run to hundreds of megabytes. The article reads none of it
+# directly -- what it reads is promoted into data/, which is tracked.
+runs/
+
+# Local scratch: a place to keep source material that is not worth committing.
+local/
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+.venv/

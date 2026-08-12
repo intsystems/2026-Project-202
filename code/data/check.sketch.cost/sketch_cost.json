@@ -1,0 +1,15 @@
+{
+  "steps": 1500,
+  "log_every": 10,
+  "n_logged": 151,
+  "n_params": 145500,
+  "sketch_dim": 1024,
+  "seconds_bare": 41.7521694,
+  "seconds_probed": 40.4443969,
+  "overhead_frac": -0.03132226465818082,
+  "sketched_float32_MB": 2.473984,
+  "full_float32_MB": 87.882,
+  "storage_ratio": 35.5224609375,
+  "device": "auto",
+  "repeats": 2
+}
