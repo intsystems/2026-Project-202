@@ -107,8 +107,15 @@ def make_spec(mode, r, seed, **kw):
 
 def job(mode, r, seed, cfg, tag, **kw):
     import dataclasses
-    # keep the number of windows ~10 whatever window length the calibration froze, so the
-    # cost of the sweep does not depend on that choice
+    # ---------------------------------------------------------------- FROZEN CONFIG OVERRIDE
+    # stride : frozen 2000 (results/e1_calibration/frozen_config.json)  ->  3000 for every arm
+    #          except "gd", where the absent burn-in makes n larger and the rule gives 3666.
+    # Why: keep the number of windows ~10 whatever window length the calibration froze, so the
+    # cost of the sweep does not depend on that choice.  Every other frozen field -- max_E 20,
+    # tau 4, k_neighbors 20, theiler "autocorr", window 8000 -- is used as frozen.
+    # This is the sweep behind the headline 0.87 of section 5.4 and the two image-data rows of
+    # tab:ladder, so the paper's "at the frozen configuration" is true of the estimator but not
+    # of the stride.
     n = T - (0 if mode == "gd" else BURN)
     cfg = dataclasses.replace(cfg, stride=max(500, (n - cfg.window) // 6))
     spec = make_spec(mode, r, seed, **kw)

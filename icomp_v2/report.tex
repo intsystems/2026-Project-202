@@ -740,7 +740,7 @@ observer family. The eight-direction objective adds a penalty on the rank correl
 the spread across seeds; at the twenty-direction configuration both penalties are identically
 zero, so the objective there reduces to the error alone.
 
-Four properties of these choices should be stated with them.
+Five properties of these choices should be stated with them.
 
 \emph{Both sit at a grid boundary.} The eight-direction configuration is at the top of all
 five swept axes and the twenty-direction one at the top of both. That is less alarming than it
@@ -768,6 +768,18 @@ eight-direction configuration requests $76$ and is uncapped on every system of
 \cref{sec:ladder}, but on the training logs of \cref{sec:grokking} the autocorrelation branch of
 the rule asks for $161$ to $858$ and is likewise truncated to $150$. \cref{app:theiler}
 measures what the truncation costs.
+
+\emph{The stride is not always the frozen one.} Three pipelines override the window geometry,
+and no estimator field: on the constructed systems the stride goes from the frozen $2\,000$ to
+$3\,000$, or $3\,666$ where the absent burn-in makes the record longer, so that the number of
+windows stays near ten whatever window length was frozen --- and that sweep is the one behind
+the $0.87$ of \cref{sec:digits}, so ``at the frozen configuration'' is true there of the
+estimator and not of the stride. On the training logs of \cref{sec:grokking} the window
+additionally shortens to a third of the record and the stride to $1\,000$, which is the
+$39\,990$-step window \cref{app:window} is about and which that appendix states. Every other
+field --- $E_{\max}$, $\tau$, $m$, the Theiler rule, the dither --- is used as frozen
+throughout, so what moves between experiments is how the record is cut up, not how a window is
+scored. The three sites are marked in the code.
 
 \section{Results by observer, and the alternatives}\label{app:nulls}
 
@@ -808,6 +820,15 @@ window per run rather than a median over sliding windows, and has no zero-learni
 so requirement~4 is untested there rather than passed. Both rows are kept because they locate the
 ceiling and because the oscillating matrix supplies the synchronisation control of
 \cref{sec:matrix}, which no other system provides; neither should be read as a recovery result.
+
+The gap between the two implementations is in their defaults and not in their arithmetic: at
+matched settings they agree to $0.0$ on all thirty cells of a validation set and on twelve
+further series, both calling the same neighbour kernel. Of the two defaults that differ, the
+clamp never fired --- the largest estimate anywhere in these files is $22.34$ against a
+threshold of $62$ --- so it is a latent hazard rather than a correction that was applied. The
+missing exclusion does cost something, and the cost is small but not signed: switching it on
+moves the held-out mean absolute error from $0.302$ to $0.335$ on one seed and from $0.693$ to
+$0.677$ on the other, and costs the first its perfect rank correlation.
 
 All numbers in this appendix are computed on the withheld ranks $r \in \{1,3,5,8\}$ and the
 withheld seeds of \cref{sec:digits}, in the deterministic recurrent regime, and are scored
@@ -910,7 +931,10 @@ spread across seeds         & 0.00 & 0.20 & 1.49 & 2.15 & 2.11 & 2.95 & 1.50 & 2
 \centering
 \caption{The estimator against the alternatives, on the same data and under the same
 convention, at both ranges. Statistics marked $\dagger$ need a neighbour search; the rest are
-one-line computations on the series or its spectrum.}
+one-line computations on the series or its spectrum. The eight-direction correlations are exact
+at two decimals --- with four ranks, Spearman takes only the values shown --- while the
+twenty-direction ones are given to three, so that $0.998$ is not printed as $1.00$ beside a
+correlation that really is one. \texttt{paper\_tables.py} regenerates every cell.}
 \label{tab:alts}
 \begin{tabular}{lrrrr}
 \toprule
@@ -918,14 +942,14 @@ one-line computations on the series or its spectrum.}
 \cmidrule(lr){2-3}\cmidrule(lr){4-5}
 statistic & MAE & $\rho$ & MAE & $\rho$ \\
 \midrule
-MG $\dagger$                      & 0.457 & $+1.00$ & 1.62 & $+0.97$ \\
-LB $\dagger$                      & 0.44  & $+1.00$ & 1.36 & $+0.98$ \\
-TwoNN $\dagger$                   & 1.81  & $+1.00$ & 3.48 & $+0.89$ \\
-$\PR_{\mathrm{delay}}$                & 0.89  & $+1.00$ & 2.19 & $+0.98$ \\
-spectral $\PR$, 256 bands          & 1.60  & $+1.00$ & 5.29 & $+0.99$ \\
-spectral $\PR$, 1024 bands         & 1.35  & $+1.00$ & 4.47 & $+0.99$ \\
-spectral $\PR$, native resolution  & 1.03  & $+0.80$ & 2.78 & $+0.93$ \\
-roughness                         & 3.65  & $+0.20$ & 9.90 & $-0.57$ \\
+MG $\dagger$                      & 0.457 & $+1.00$ & 1.62 & $+0.973$ \\
+LB $\dagger$                      & 0.43  & $+1.00$ & 1.36 & $+0.983$ \\
+TwoNN $\dagger$                   & 1.81  & $+1.00$ & 3.48 & $+0.889$ \\
+$\PR_{\mathrm{delay}}$                & 0.89  & $+1.00$ & 2.18 & $+0.979$ \\
+spectral $\PR$, 256 bands          & 1.60  & $+1.00$ & 5.29 & $+0.998$ \\
+spectral $\PR$, 1024 bands         & 1.35  & $+1.00$ & 4.47 & $+0.998$ \\
+spectral $\PR$, native resolution  & 1.03  & $+0.80$ & 2.78 & $+0.934$ \\
+roughness                         & 3.65  & $+0.20$ & 9.90 & $-0.568$ \\
 \bottomrule
 \end{tabular}
 \end{table}

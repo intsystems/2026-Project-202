@@ -26,8 +26,8 @@
   ma_to_flat_grokking                       1     130  6997.0  6867.0        42->30   generalises, gap
   ma_to_flat_grokking_st                   10    1630 13800.0 12170.0        42->30   generalises, gap
   ma_st                                     1   14457 14456.0    -1.0       114->32   generalises, no gap
-  p_211_wd_0                               49    1800     nan     nan       43->126   NEVER generalises
-  p_211_wd_0_point_5                       49    7650 45950.0 38300.0        43->37   generalises, gap
+  p_211_wd_0                               50    1800     nan     nan       43->126   NEVER generalises
+  p_211_wd_0_point_5                       50    7650 45950.0 38300.0        43->37   generalises, gap
   grokpos_s0                               10    1450  5110.0  3660.0        42->31   generalises, gap
   lowdata15_s0                             10     620110940.0110320.0        42->37   generalises, gap
   lowdata15_s1                             10     630     nan     nan        42->40   NEVER generalises

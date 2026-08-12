@@ -130,6 +130,16 @@ corrected. And the modular control's log is locally straight to $0.7\,\%$, so it
 three thousandths of a component across fifty windows: its $D = 1.00$ is not an informative
 dimensional negative, and the paper now says so.
 
+**Installment 8 — the artifact** (applied). Section 9 is closed; see the notes on each item there.
+Two of them changed numbers the article prints. `paper_tables.py`, written to make table 7
+regenerable, found four cells the article had rounded wrongly. And the frozen-configuration audit
+found that the stride behind the headline $0.87$ is not the frozen one — every estimator field is,
+but the window geometry is overridden in three pipelines, which appendix C now states as a fifth
+property of the frozen configurations. Two committed result CSVs were regenerated at source, both
+with a diagnosis rather than a silent replacement, and in both cases the conclusion survives and
+only the published intermediate was wrong. `OmnigrokTransformer` became `NandaTransformer`, proved
+inert to the bit.
+
 **Installment 7 — the last two figures, the citations, and what it all cost** (applied). Removed
 from this file: the rest of 5.6, the optional half of 8.7, and section 9's items 4 and 5. Two
 figures the review wanted and could not have: `fig_ceiling` needed the sweep, and `fig_traces`
@@ -469,6 +479,52 @@ the repository. Owner: whoever prepares the release. Short section, mostly actio
    now run, and the across-seed spread is reported because a $p$ resolved to fortieths from one
    draw is not a quotable number. **The lesson for the artifact: re-run every committed script and
    diff its output against the committed file, as a release check.**
+**Installment 8 closed items 1, 3, 6, 7, 8, 9 and 10.** What follows records what each turned out
+to be; the originals are in `review_fable_archive.md`.
+
+1. ~~**Three tables' worth of results come from a different estimator.**~~ **Bounded, and smaller
+   than feared.** The two implementations are *numerically identical at matched settings* — they
+   call the same neighbour kernel and agree to $0.0$ on thirty validation cells and twelve further
+   series. Only the defaults differ, and only two of those matter. The clamp **never fired in any
+   committed result file** (largest estimate $22.34$ against a threshold of $62$), so it is a
+   latent hazard, not an applied correction. The missing Theiler exclusion does cost something,
+   small and unsigned: held-out MAE $0.302 \to 0.335$ on one seed, $0.693 \to 0.677$ on the other,
+   and one lost perfect rank correlation. `estimators.py` now carries a SUPERSEDED banner with all
+   of this in it, and appendix D states it.
+3. ~~**The pipeline overrides the frozen configuration in three places.**~~ **Found, annotated, and
+   disclosed.** All three override the *window geometry* and no estimator field. The one that
+   matters: `e2_rank_sweep.py` moves the stride from the frozen $2000$ to $3000$ (or $3666$), and
+   that is the sweep behind the headline $0.87$ — so "at the frozen configuration" was true of the
+   estimator and not of the stride. Appendix C now says so, as a fifth property of the frozen
+   configurations.
+6. ~~**Two upstream defects fixed only in the paper.**~~ **Both fixed at source, both diagnosed.**
+   `invariance_controls.csv` had compared a one-seed control against a three-seed median baseline,
+   so it was reporting seed scatter as a failure of invariance; regenerated, the rescaling control
+   moves $0.000$ on all eight observers and the rotation control on seven of eight. A second defect
+   surfaced while writing the missing k20 write-up: `config_observer_ranking.csv` had every
+   `cal_mae` at exactly $0.000$ because it was produced by a version that fitted an isotonic
+   regression on the same five ranks it then scored. Regenerated; **the selected configuration is
+   unchanged**, so the frozen configuration was always right and only the file justifying it was
+   wrong. The missing write-up is now `results/k20_calibration/report.md`.
+7. ~~**Appendix K points at an empty directory.**~~ The paper never actually names that directory,
+   so this was a repository problem only; `grokking_train/grokking_logs/README.md` now says the
+   directory is empty by design and where the logs really live.
+8. ~~**`OmnigrokTransformer` is Nanda's architecture.**~~ Renamed to `NandaTransformer`, with the
+   old name kept as a deprecated alias and the registry key `"omnigrok"` and the parameter
+   construction order untouched. **Verified inert**: eleven tensors bit-identical under a fixed
+   seed, maximum absolute difference $0.0$, $226\,816$ parameters as published.
+9. ~~**Table 7's twenty-direction column is not regenerable.**~~ `paper_tables.py` now regenerates
+   tables 6 and 7 from the committed CSVs and checks them cell by cell. It found four cells that
+   the article had rounded wrongly — LB's MAE, $\PR_{\mathrm{delay}}$'s MAE, and two spectral
+   correlations printed as $0.99$ where the value is $0.9985$. Fixed, and the twenty-direction
+   correlations now carry three decimals so that $0.998$ is not printed as $1.00$ beside a
+   correlation that really is one.
+10. ~~**Release hygiene.**~~ `X.log` and `texput.log` deleted; `icomp_v2/.gitignore` added for the
+    LaTeX artefacts, deliberately not ignoring `report.pdf`; the `exp7_inventory.csv` stride
+    corrected from 49 to 50.
+
+<details><summary>The items as originally written</summary>
+
 1. **Three tables' worth of results come from a different estimator than Algorithm 1** (3.4). If the
    experiments are not re-run, the paper must say which rows used which implementation, and the
    repository should carry a single canonical estimator with the older one deleted or clearly marked
@@ -501,6 +557,8 @@ the repository. Owner: whoever prepares the release. Short section, mostly actio
     `icomp_v2/`, should not be in a release. `exp7_inventory.csv` records a logging stride of 49 for
     the $p = 211$ run where the log has 50 — harmless, but it is a file a reviewer would open.
 
+</details>
+
 ---
 
 ## Appendix: priority list
@@ -529,8 +587,22 @@ the repository. Owner: whoever prepares the release. Short section, mostly actio
 4. ~~**The title.**~~ **Done** — *Counting the Active Dimension of a Training Run*. "Active degrees
    of freedom" appeared only in the title and nowhere in the paper. *(7.1)*
 
-**The list is empty.** What remains is not review items but the two things appendix R turned up:
-the spectral reading of the ceiling, and the unexplained wall at ten components.
+**Every item in this review is now closed**, including the whole of section 9, and the three
+figures this line used to ask for are drawn (`fig_aniso`, `fig_tau`, `fig_traces`).
 
-Still worth adding if space is ever found: the anisotropy plot, the $\tau$-sweep plot, and raw
-scalar-log traces per regime *(5.6)*.
+What remains is not review items but what the work turned up, and it is worth writing down
+because a referee may reach it before we do:
+
+- **The ceiling may be spectral, not geometric.** $\PR_{\mathrm{delay}}$ — a linear statistic of
+  the delay covariance with no geometry in it — reproduces the whole $E_{\max}$ dependence to
+  $0.09$ components, the tightest fit in appendix R. Much of what the paper calls a dimension
+  ceiling is how many components the delay window resolves linearly.
+- **The wall at ten components is unexplained.** Not $E_{\max}/2$, not $2\log_{10}N$, not the
+  effective rank. No fitted form accounts for it.
+- **The diagnostics can be anti-correlated with recurrence.** On the seven edge-of-stability runs
+  the admissible rectangle admits all five that do not recur and refuses both that do. Appendix P
+  offers a Theiler-saturation ratio that tests recurrence directly and separates the arms with no
+  overlap, but it is calibrated on the same systems as the other two and is reported, not adopted.
+- **A release check, not a finding.** Two committed scripts have now failed to regenerate the file
+  the paper depended on, for two unrelated reasons, and neither was visible by reading the code.
+  Before release, run every committed script and diff its output against the committed file.

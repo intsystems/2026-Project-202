@@ -91,8 +91,12 @@ def inventory():
             name = name.replace("_with_stochastic", "_st").replace("training_log_", "")
             tm = first_sustained(s, d["train_acc"].to_numpy())
             tg = first_sustained(s, d["val_acc"].to_numpy())
+            # Median of the step differences, not s[1] - s[0].  The p = 211 Colab logs
+            # start at step 1 and then move to the 50-step grid, so their first gap is 49
+            # and every one of the other 3 999 is 50; taking the first gap recorded a
+            # logging stride of 49 for a log written at 50.
             runs.append({"name": name[:34], "path": f, "n": len(d),
-                         "stride": int(s[1] - s[0]), "t_mem": tm, "t_gen": tg,
+                         "stride": int(np.median(np.diff(s))), "t_mem": tm, "t_gen": tg,
                          "gap": (tg - tm) if (tm is not None and tg is not None) else None,
                          "wn0": float(d.weight_norm.iloc[0]),
                          "wn1": float(d.weight_norm.iloc[-1])})
@@ -137,7 +141,7 @@ def revised_fire(r, d, delta=0.20, beta=0.10, Qrows=30, dhold=0.15, dispmax=0.08
         # r is in optimisation steps, so the Theil-Sen slope is per step; the interval
         # is H_ROWS rows = H_ROWS * stride steps. Normalising by the baseline makes the
         # test scale-free and comparable across logs written at different strides.
-        stride = r[1] - r[0]
+        stride = int(np.median(np.diff(r)))      # median, for the reason inventory() gives
         if (H_ROWS * stride) * theilslopes(a, r[am])[0] / mb > -beta:
             continue
         h = d[i:min(n, i + Qrows + 1)]

@@ -59,10 +59,20 @@ def job(path, col, cfg):
     x = df[col].to_numpy(float)
     step = df["step"].to_numpy()
     dstep = int(np.median(np.diff(step)))
-    # The logs are 12 000 samples (120 000 steps at stride 10), so the frozen 8 000-sample
-    # window leaves three positions.  Shortened to a third of the record for a usable number
-    # of windows; cfg2 is derived AFTER the resize so the identifiability ratio compares two
-    # embedding dimensions on the *same* window rather than on two different ones.
+    # ---------------------------------------------------------------- FROZEN CONFIG OVERRIDE
+    # This departs from results/e1_calibration/frozen_config.json in two fields.  Anything
+    # computed below is NOT at the frozen configuration and must not be quoted as if it were.
+    #
+    #   window : frozen 8000  ->  min(8000, max(2000, len(x)//3))
+    #   stride : frozen 2000  ->  1000   (unconditional)
+    #
+    # Why: the logs are 12 000 samples (120 000 steps at a logging stride of 10), so the
+    # frozen 8 000-sample window leaves three positions.  Shortened to a third of the record
+    # for a usable number of windows -- realised value here is 4000 samples = 39 990 steps,
+    # which is the span icomp_v2/make_figures.py hard-codes as SPAN.  max_E, tau, k_neighbors,
+    # theiler and dither are untouched, so the estimator itself is the frozen one; only the
+    # window geometry moves.  cfg2 is derived AFTER the resize so the identifiability ratio
+    # compares two embedding dimensions on the *same* window rather than on two different ones.
     cfg = dataclasses.replace(cfg, window=min(cfg.window, max(2000, len(x) // 3)),
                               stride=1000)
     cfg2 = dataclasses.replace(cfg, max_E=2 * cfg.max_E)

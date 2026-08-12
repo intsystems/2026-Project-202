@@ -42,7 +42,7 @@ mini-batch runs roughly interactive.
 | --- | --- |
 | `grok/groups.py` | Finite-group algebra: permutations by lexicographic rank, Lehmer-code ranking, `S_n` Cayley tables. NumPy only — no torch |
 | `grok/tasks.py` | `a + b (mod p)` and composition in `S_n` as `[a, b, =] -> a*b` prompts, plus the train/val split |
-| `grok/models.py` | `OmnigrokTransformer` (1L, LayerNorm-free — Figs. 1–3) and `EncoderTransformer` (stock `nn.TransformerEncoder` — App. B). **The name is historical**: this configuration is Nanda et al. (2023)'s, which Liu et al. (2022) adopt rather than originate. It is kept because the registry key and parameter order are load-bearing for bit-identical reproduction. |
+| `grok/models.py` | `NandaTransformer` (1L, LayerNorm-free — Figs. 1–3) and `EncoderTransformer` (stock `nn.TransformerEncoder` — App. B). The class was formerly called `OmnigrokTransformer`, a misattribution: this configuration is Nanda et al. (2023)'s, which Liu et al. (2022) adopt rather than originate. `OmnigrokTransformer` remains as a deprecated alias, and the registry key `"omnigrok"` is unchanged, because the key and the parameter-construction order are load-bearing for bit-identical reproduction. |
 | `grok/metrics.py` | The scalar observables: weight norm, accuracy, and the gradient probe |
 | `grok/config.py` | `RunConfig` — one dataclass describing a run end to end |
 | `grok/loop.py` | The training loop; the only place that touches the optimizer |

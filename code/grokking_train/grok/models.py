@@ -4,14 +4,16 @@
                  parameter-by-parameter (no ``nn.Linear``, no LayerNorm).  Used
                  for every mini-batch experiment (Figs. 1-3).
 
-                 The key and the class name are historical and misleading: this
+                 The registry key is historical and misleading: this
                  configuration (d_model 128, 4 heads of 32, d_mlp 512, p = 113,
                  AdamW at 1e-3, betas 0.9/0.98, weight decay 1) is Nanda et
                  al.'s, which Liu et al. (2022) adopt rather than originate.
-                 They are left in place because the registry key and the
-                 parameter-construction order below are load-bearing for
-                 bit-identical reproduction of the published logs; the
-                 attribution in the paper is to Nanda et al.
+                 The class is therefore named ``NandaTransformer``, with
+                 ``OmnigrokTransformer`` kept only as a deprecated alias.  The
+                 key is left in place because it and the parameter-construction
+                 order below are load-bearing for bit-identical reproduction of
+                 the published logs; the attribution in the paper is to Nanda et
+                 al.
 
                  Note also that we train on mini-batches of 256 where the
                  source is full-batch.  That departure is deliberate and is
@@ -19,7 +21,7 @@
 ``encoder``   -- a stock ``nn.TransformerEncoder`` stack, used only for the
                  full-batch baseline of App. B.
 
-The parameter-construction order of ``OmnigrokTransformer`` is load-bearing:
+The parameter-construction order of ``NandaTransformer`` is load-bearing:
 every weight is drawn from the global torch RNG, so reordering the ``nn.Parameter``
 assignments changes the initial weights and the run stops reproducing the
 published logs.
@@ -117,8 +119,24 @@ class TransformerBlock(nn.Module):
         return x + self.mlp(x)
 
 
-class OmnigrokTransformer(nn.Module):
-    """1-layer, LayerNorm-free transformer; logits for the last position only."""
+class NandaTransformer(nn.Module):
+    """1-layer, LayerNorm-free transformer; logits for the last position only.
+
+    This is the architecture of **Nanda et al., "Progress measures for grokking
+    via mechanistic interpretability"** (Nanda, Chan, Lieberum, Smith &
+    Steinhardt, ICLR 2023), together with the hyperparameters that paper uses
+    (d_model 128, 4 heads of 32, d_mlp 512, p = 113, AdamW at 1e-3, betas
+    0.9/0.98, weight decay 1).  Liu et al. (2022) ("Omnigrok") adopt that
+    configuration rather than originate it, so the class's original name,
+    ``OmnigrokTransformer``, was a misattribution.  That name is kept below
+    purely as a deprecated alias for compatibility; the registry key
+    ``"omnigrok"`` is kept for the same reason.
+
+    The ``nn.Parameter`` construction order here and in the submodules above is
+    load-bearing: every weight is drawn from the global torch RNG, so reordering
+    the assignments changes the initial weights and the runs stop reproducing
+    the published logs.
+    """
 
     def __init__(self, d_vocab, d_model=128, d_mlp=512, d_head=32, num_heads=4,
                  n_ctx=3, high_variance_init=False):
@@ -139,6 +157,13 @@ class OmnigrokTransformer(nn.Module):
         x = self.block(x)
         x = self.unembed(x)
         return x[:, -1]
+
+
+# Deprecated alias.  The class used to be called ``OmnigrokTransformer``, which
+# misattributed the architecture (see the docstring above); the old name is kept
+# only for backwards compatibility, because checkpoints, configs and scripts
+# refer to it.  New code should use ``NandaTransformer``.
+OmnigrokTransformer = NandaTransformer
 
 
 class EncoderTransformer(nn.Module):
@@ -169,7 +194,7 @@ class EncoderTransformer(nn.Module):
 
 
 def _build_omnigrok(config, vocab_size, n_ctx):
-    return OmnigrokTransformer(
+    return NandaTransformer(
         d_vocab=vocab_size,
         d_model=config.d_model,
         d_mlp=config.d_mlp,

@@ -174,6 +174,63 @@ def run_simulations(fast=True):
               f"({time.time()-t0:.1f}s)", flush=True)
 
 
+def rank_configs(cal, cfgs):
+    """Stage-1 selection: rank (config, observer) pairs and freeze the winning config.
+
+    Extracted from :func:`score` so that ``--rank-only`` can regenerate
+    ``config_observer_ranking.csv`` and ``frozen_k20.json`` from the committed
+    ``calibration_configs.csv`` in seconds, without re-simulating or re-scoring.  That
+    matters: the version of this file that shipped before Installment 5 scored an *isotonic*
+    fit of MG onto the truth, fitted on the same five calibration ranks it then scored.  An
+    isotonic fit interpolates five monotone points exactly, so every cal_mae came out 0.000
+    and the four configurations tied -- see the comment below, which is why the fit was
+    removed.  The code was fixed and the CSV was not regenerated, so the committed ranking
+    file disagreed with the committed script until this path existed.  The selection outcome
+    was unaffected (``frozen_k20.json`` already recorded cfg_id 3, which is what the raw
+    criterion picks; the stale tie would have picked cfg_id 0).
+    """
+    ranking = []
+    for (cid, obs), g in cal.groupby(["cfg_id", "observer"]):
+        med = g.groupby("r").MG.median()
+        truth = g.groupby("r").traj_pr.median()
+        if len(med) < 3 or med.isna().any():
+            continue
+        # Select the estimator by its *raw* numerical agreement with the known
+        # trajectory dimension.  Isotonic regression is deliberately not used
+        # here: with only five calibration ranks it can interpolate any
+        # monotone curve and make all configurations look equally good.
+        pred = med.values
+        ranking.append(dict(cfg_id=cid, observer=obs,
+                            cal_mae=float(np.mean(np.abs(pred-truth.values))),
+                            cal_rho=float(pd.Series(med).corr(pd.Series(truth), method="spearman")),
+                            cal_degenerate=float(g.frac_degenerate.mean())))
+    rank = pd.DataFrame(ranking)
+    rank["score"] = rank.cal_mae + 0.25 * (1-rank.cal_rho.fillna(0)) + 2*rank.cal_degenerate
+    rank = rank.sort_values("score")
+    rank.to_csv(OUT / "config_observer_ranking.csv", index=False)
+
+    # Freeze the best config globally by median calibration score across observers.
+    best_cfg = int(rank.groupby("cfg_id").score.median().idxmin())
+    with open(OUT / "frozen_k20.json", "w") as fh:
+        json.dump(dict(cfg_id=best_cfg, config=cfgs[best_cfg].as_dict(),
+                       calibration_r=list(CAL_R), calibration_seeds=list(SEEDS),
+                       selection="minimum median raw absolute error across "
+                                 "non-degenerate calibration observers",
+                       observers=OBSERVERS), fh, indent=2)
+    return rank, best_cfg
+
+
+def rank_only(fast=True):
+    """Regenerate the stage-1 ranking from the committed calibration_configs.csv."""
+    p = OUT / "calibration_configs.csv"
+    if not p.exists():
+        raise RuntimeError("run --score first")
+    rank, best = rank_configs(pd.read_csv(p), configs(fast))
+    print(rank.to_string(index=False))
+    print(f"\nfrozen cfg_id = {best}: {configs(fast)[best]}")
+    return rank, best
+
+
 def score(fast=True):
     cfgs = configs(fast)
     paths = sorted((OUT / "trajectories").glob("*.npz"))
@@ -211,35 +268,7 @@ def score(fast=True):
     if cal.empty:
         raise RuntimeError("No calibration trajectories; run --simulate first")
 
-    ranking = []
-    for (cid, obs), g in cal.groupby(["cfg_id", "observer"]):
-        med = g.groupby("r").MG.median()
-        truth = g.groupby("r").traj_pr.median()
-        if len(med) < 3 or med.isna().any():
-            continue
-        # Select the estimator by its *raw* numerical agreement with the known
-        # trajectory dimension.  Isotonic regression is deliberately not used
-        # here: with only five calibration ranks it can interpolate any
-        # monotone curve and make all configurations look equally good.
-        pred = med.values
-        ranking.append(dict(cfg_id=cid, observer=obs,
-                            cal_mae=float(np.mean(np.abs(pred-truth.values))),
-                            cal_rho=float(pd.Series(med).corr(pd.Series(truth), method="spearman")),
-                            cal_degenerate=float(g.frac_degenerate.mean())))
-    rank = pd.DataFrame(ranking)
-    rank["score"] = rank.cal_mae + 0.25 * (1-rank.cal_rho.fillna(0)) + 2*rank.cal_degenerate
-    rank = rank.sort_values("score")
-    rank.to_csv(OUT / "config_observer_ranking.csv", index=False)
-
-    # Freeze the best config globally by median calibration score across observers.
-    best_cfg = int(rank.groupby("cfg_id").score.median().idxmin())
-    best = rank[rank.cfg_id == best_cfg]
-    with open(OUT / "frozen_k20.json", "w") as fh:
-        json.dump(dict(cfg_id=best_cfg, config=cfgs[best_cfg].as_dict(),
-                       calibration_r=list(CAL_R), calibration_seeds=list(SEEDS),
-                       selection="minimum median raw absolute error across "
-                                 "non-degenerate calibration observers",
-                       observers=OBSERVERS), fh, indent=2)
+    rank, best_cfg = rank_configs(cal, cfgs)
 
     # Stage 2: one frozen configuration on every trajectory and observer.
     cfg = cfgs[best_cfg]
@@ -317,18 +346,28 @@ def report():
              "A frozen nonlinear MLP backbone is followed by a trainable adapter with 20 fixed orthonormal parameter directions. The dynamics excite r directions, r=1,...,20. The true active dimension is measured from the trajectory covariance (participation ratio), not equated to r. Functional rank is measured from the held-out-logit Jacobian.", "",
              "The primary arm is deterministic and recurrent (incommensurate sinusoidal forcing). Additional arms are a slow recurrent torus, rank-r stochastic forcing, projected mini-batch noise, and full-batch transient descent. Fixed-r controls test coordinate rotation and constant observer scaling.", "",
              "## Frozen estimator", "", f"The estimator configuration was selected only on r={frozen['calibration_r']} and seeds={frozen['calibration_seeds']}; test ranks are the complementary values. Configuration: `{frozen['config']}`.", "",
-             "## Held-out recurrent test", "", s.to_markdown(index=False, floatfmt='.3f'), "",
+             # to_string, not to_markdown: to_markdown needs `tabulate`, which is not
+             # installed here and is in no requirements file, so --report raised ImportError
+             # on every invocation.  That is why this directory had no report.md at all.
+             "## Held-out recurrent test", "",
+             "```", s.round(3).to_string(index=False), "```", "",
              "## Interpretation", "",
              "For the recurrent arm, a successful estimator should increase monotonically with measured trajectory PR and remain stable across observers and seeds. The stochastic and transient arms are deliberately not expected to have an r-dimensional deterministic attractor; they test whether MG spuriously reports the injected rank.", "",
              "The decisive comparison is MG versus the directly measured `traj_pr`/`update_pr` and versus linear `PRdelay`. A good result supports equality only for the identifiable recurrent regime, not for arbitrary training trajectories.", ""]
-    (p / "report.md").write_text("\n".join(lines), encoding="utf-8")
-    print(p / "report.md")
+    # NOT report.md.  ``results/k20_calibration/report.md`` is the hand-written write-up of
+    # this experiment -- the one the audit found missing -- and it records two defects in this
+    # directory that no generator can restate.  This function only assembles the machine
+    # tables, so it writes beside it rather than over it.
+    (p / "report_auto.md").write_text("\n".join(lines), encoding="utf-8")
+    print(p / "report_auto.md")
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--simulate", action="store_true")
     ap.add_argument("--score", action="store_true")
+    ap.add_argument("--rank-only", action="store_true",
+                    help="redo stage-1 selection from the committed calibration_configs.csv")
     ap.add_argument("--report", action="store_true")
     ap.add_argument("--fast", action="store_true", default=True)
     args = ap.parse_args()
@@ -336,9 +375,11 @@ def main():
         run_simulations(args.fast)
     if args.score:
         score(args.fast)
+    if args.rank_only:
+        rank_only(args.fast)
     if args.report:
         report()
-    if not (args.simulate or args.score or args.report):
+    if not (args.simulate or args.score or args.rank_only or args.report):
         ap.print_help()
 
 

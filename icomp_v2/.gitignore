@@ -1,3 +1,6 @@
+# LaTeX build artefacts.  report.pdf is deliberately NOT ignored: it is committed so the
+# draft can be read without a TeX installation.  Do not add *.pdf here -- the figures under
+# figures/ are committed too.
 *.aux
 *.log
 *.out
@@ -6,3 +9,5 @@
 *.synctex.gz
 *.fdb_latexmk
 *.fls
+*.toc
+report.txt

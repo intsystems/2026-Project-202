@@ -100,7 +100,13 @@ POOL_THEILER = 150       # the realised frozen exclusion on the transient arm
 
 # ============================================================================== simulation
 def stride_for(n, cfg):
-    """E2's rule: keep ~7 windows whatever window length the calibration froze."""
+    """E2's rule: keep ~7 windows whatever window length the calibration froze.
+
+    FROZEN CONFIG OVERRIDE.  stride: frozen 2000
+    (results/e1_calibration/frozen_config.json) -> 3000 on the fast/slow arms (n = 26 000)
+    and 3666 on the transient arm (n = 30 000).  No other frozen field is changed here; the
+    theiler sweep below is the experiment's own variable, not an override.
+    """
     return max(500, (n - cfg.window) // 6)
 
 

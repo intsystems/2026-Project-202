@@ -26,7 +26,8 @@ _LAZY = {
     "EncoderTransformer": "models",
     "GradientProbe": "metrics",
     "MODELS": "models",
-    "OmnigrokTransformer": "models",
+    "NandaTransformer": "models",
+    "OmnigrokTransformer": "models",   # deprecated alias of NandaTransformer
     "TASKS": "tasks",
     "Task": "tasks",
     "accuracy": "metrics",

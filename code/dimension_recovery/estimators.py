@@ -1,5 +1,42 @@
 """The dimension estimators under test, behind one signature.
 
+**SUPERSEDED by ``../active_dimension/mg.py``.  Do not use for new experiments.**
+
+This module is kept only because ``exp1``--``exp15`` in this directory import it and their
+committed result files are cited by the paper; re-pointing them at ``mg.py`` would change
+nothing numerically (see below) but would invalidate every committed CSV's provenance.
+``active_dimension/mg.py`` is the canonical estimator -- it is Algorithm 1 of the paper.
+
+*The two implementations are numerically identical at matched settings.*  Verified:
+``mg.all_estimators(x, MGConfig(max_E=25, tau=4, k_neighbors=30, theiler=0))["MG"]``
+reproduces ``estimators.mg(x, max_E=25, k=30, tau=4)`` to 0.0e+00 on all 30 cells of
+``results/exp9_frobenius_k10/stationary_validation.csv`` and on twelve further random and
+quasiperiodic series across ``max_E`` in {15,21,25,31,41}, ``k`` in {5,20,30,50}, ``tau`` in
+{1,2,4}.  Both call the same ``edm`` kernel.  What differs is the **defaults**, and only two
+of them matter:
+
+* **Theiler exclusion.**  Here the default is ``theiler=0`` -- no exclusion.  ``mg.py``
+  defaults to ``"embedding"``, the delay span ``(max_E - 1) * tau``, capped at 150.  Every
+  experiment in this directory except ``exp15_real_digits_functional_subspace_v3``
+  (which sets ``theiler = (max_E - 1) * tau`` explicitly, so it already matches ``mg.py``)
+  ran at 0.  Measured cost on ``exp9``: turning the exclusion on -- 96 samples at that
+  configuration -- moves the held-out MAE from 0.302 to 0.335 on seed 1 and from 0.693 to
+  0.677 on seed 2, and costs seed 1 its perfect rank correlation (rho +1.00 -> +0.99, one
+  inversion).  Small, but it is not zero and it is not signed.
+* **Clamping.**  ``edm.mle_intrinsic_dimension`` has ``clamp_to_max_E=True`` and nothing here
+  overrides it, so a raw estimate above ``2 * max_E`` is returned as exactly ``max_E``.
+  ``mg.py`` does not clamp; it returns the raw value and sets ``degenerate=True``.  The clamp
+  **never fired in any committed result file**: the largest estimate anywhere in exp9 and
+  exp11--exp15 is 22.34 against the lowest clamp threshold of 62, and no cell equals its
+  ``max_E``.  It is a latent hazard, not a correction that was applied.  Where it does fire
+  it is silent and severe: on an exactly periodic series at ``max_E=25`` this module returns
+  25.0 while ``mg.py`` returns 399974.85 with ``degenerate=True``; on a constant window this
+  module returns 25.0 and ``mg.py`` returns ``nan``.
+
+``mg.py`` also reports the nulls (linear PR of the delay matrix, spectral PR, roughness,
+autocorrelation time) on every call and flags degenerate windows, neither of which this
+module does.
+
 LB and MG come from the project's own package, so what is validated here is the code the
 report actually runs, not a reimplementation. PR, TwoNN and correlation dimension are
 added because agreement across estimators with different failure modes is worth more than

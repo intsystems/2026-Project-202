@@ -69,6 +69,20 @@ def probe(path: Path, column, cfg):
         return []
     x = df[column].to_numpy(float)
     step = df["step"].to_numpy()
+    # ---------------------------------------------------------------- FROZEN CONFIG OVERRIDE
+    # Same rule as active_dimension/e5_real_logs.py.  Departs from
+    # active_dimension/results/e1_calibration/frozen_config.json in two fields:
+    #
+    #   window : frozen 8000  ->  min(8000, max(2000, len(x)//3))
+    #   stride : frozen 2000  ->  1000   (unconditional)
+    #
+    # Why: these logs are ~10 000 samples, so the frozen 8 000-sample window leaves one or two
+    # positions.  Realised window here is ~3333 samples.  max_E, tau, k_neighbors, theiler and
+    # dither are untouched.  Note also that frozen_config() above falls back to MG.DEFAULT
+    # (max_E 20, tau 1, k 5, theiler "embedding", window 6000) if the E1 JSON cannot be
+    # imported -- a different estimator, reported only through the `provenance` string.
+    # Downstream: dimension_probe.csv/_summary.csv, read by icomp_v2/make_figures.py for the
+    # regime-classification panel of section 7.1.
     cfg = dataclasses.replace(cfg, window=min(cfg.window, max(2000, len(x) // 3)),
                               stride=1000)
     cfg2 = dataclasses.replace(cfg, max_E=2 * cfg.max_E)

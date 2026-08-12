@@ -22,8 +22,8 @@ ma_gd,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\grokking_logs\gro
 ma_to_flat_grokking,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\grokking_logs\grokking_modular_addition_logs_to_flat_grokking.csv,20000,1,130,6997.0,6867.0,42.28186468150542,30.268887366488464
 ma_to_flat_grokking_st,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\grokking_logs\grokking_modular_addition_logs_to_flat_grokking_with_stochastic.csv,2000,10,1630,13800.0,12170.0,42.23943428741358,29.883379298732297
 ma_st,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\grokking_logs\grokking_modular_addition_logs_with_stochastic.csv,15000,1,14457,14456.0,-1.0,114.36267930305912,32.10355251914614
-p_211_wd_0,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\modular_addition_grokking_colab\training_log_p_211_wd_0.csv,4001,49,1800,,,43.29525868374871,125.80529375563314
-p_211_wd_0_point_5,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\modular_addition_grokking_colab\training_log_p_211_wd_0_point_5.csv,1024,49,7650,45950.0,38300.0,43.2736116136656,37.36669180419845
+p_211_wd_0,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\modular_addition_grokking_colab\training_log_p_211_wd_0.csv,4001,50,1800,,,43.29525868374871,125.80529375563314
+p_211_wd_0_point_5,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\Grokking\modular_addition_grokking_colab\training_log_p_211_wd_0_point_5.csv,1024,50,7650,45950.0,38300.0,43.2736116136656,37.36669180419845
 grokpos_s0,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results\extended\grokpos_s0_train.csv,12000,10,1450,5110.0,3660.0,42.1604263547633,31.28496179555304
 lowdata15_s0,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results\extended\lowdata15_s0_train.csv,12000,10,620,110940.0,110320.0,42.162835771607945,36.67225744746027
 lowdata15_s1,C:\Users\Alex\Documents\GitHub\EDMGrokking\code\dimension_recovery\results\extended\lowdata15_s1_train.csv,12000,10,630,,,42.117702109590525,39.64042247709183
