@@ -42,8 +42,8 @@ and a neighbour statistic sees the visited set at the scale of its own neighbour
 estimated from one scalar log by delay reconstruction followed by the pooled Levina-Bickel
 estimator. We evaluate that estimate on six systems whose component count is fixed by
 construction and then verified by measurement: recovery reaches a mean absolute error of 0.87
-components up to eight active directions, and the ceiling above which it fails is consistent with
-the embedding condition E > 2d. Two diagnostics, computable from the series without a ground
+components up to eight active directions, and neither candidate explanation of the ceiling above
+which it fails survives the sweeps of appendix R. Two diagnostics, computable from the series without a ground
 truth, flag the two regimes in which the value cannot be read as a count. Applied to delayed
 generalisation they place both standard experimental settings outside that regime. Measured
 directly from the stored trajectory instead, the effective rank collapses by a median factor of
