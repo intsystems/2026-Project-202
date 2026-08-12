@@ -139,10 +139,10 @@ def cmd_run(args: argparse.Namespace) -> int:
     for index, exp in enumerate(ordered, 1):
         if exp.device == reg.GPU and device_mod.resolve(args.device) == "cpu" and not args.allow_cpu:
             print(f"[{index}/{len(ordered)}] {exp.id}: needs a GPU, skipping "
-                  f"(pass --allow-cpu to run it anyway)")
+                  f"(pass --allow-cpu to run it anyway)", flush=True)
             continue
 
-        print(f"[{index}/{len(ordered)}] {exp.id}: {exp.title}")
+        print(f"[{index}/{len(ordered)}] {exp.id}: {exp.title}", flush=True)
         started = time.time()
         ctx = build_context(exp.id, device=args.device, jobs=jobs, seed=args.seed,
                             fast=args.fast, options=_parse_options(args.set))
@@ -159,7 +159,18 @@ def cmd_run(args: argparse.Namespace) -> int:
             continue
         ctx.store.close("ok")
         print(f"     done in {_fmt_minutes((time.time() - started) / 60)} "
-              f"-> runs/{exp.id}/")
+              f"-> runs/{exp.id}/", flush=True)
+
+        # An experiment declares the outputs the article reads. If it did not write one,
+        # say so now rather than at promotion time: without --promote the mismatch would
+        # surface only after the campaign, and with it the run would already have taken
+        # its hours before failing on a filename.
+        undeclared = [name for name in exp.promotes
+                      if not (ctx.store.dir / name).exists()]
+        if undeclared:
+            print(f"     WARNING: declared but not written: {', '.join(undeclared)}",
+                  flush=True)
+
         if args.promote and exp.promotes:
             if args.fast:
                 # A --fast run computes the smallest grid that exercises every branch.

@@ -38,7 +38,7 @@ fixed at source before this port began, and that README is stale on the point: s
 | # | what | where | status |
 | --- | --- | --- | --- |
 | 9 | **`tab:ladder`'s caption describes a sliding-window median for rows that have one window.** It says each side of the error is a median over the run's sliding windows "except the last row". In fact rows 1 to 5 also compute exactly one window per run; only the two rows from the parameter-subspace system slide. | `report.tex:810-813` | **paper** |
-| 10 | **The zero-learning-rate control that marks two systems "fails 4" has no implementation.** Section 5.3 says the test invalidated two of the six systems, and `tab:ladder` marks the frozen decoder and the subspace perceptron accordingly. No zero-learning-rate arm exists in either script and no result file records one. The only such code is in the parameter-subspace system, a different cluster. | `report.tex:381-388`; absent from `dimension_recovery/exp13*.py`, `exp14*.py` | **open** — the port implements the control so the claim can be made or withdrawn on evidence |
+| 10 | **The zero-learning-rate control that marks two systems "fails 4" had no implementation.** Section 5.3 says the test invalidated two of the six systems, and `tab:ladder` marks the frozen decoder and the subspace perceptron accordingly. No zero-learning-rate arm existed in either script and no result file recorded one. `sys.silence` implements it, and **it invalidates five systems, not two** — see below. | `report.tex:381-388`; absent from `dimension_recovery/exp13*.py`, `exp14*.py` | **open** — the claim understates its own result |
 | 11 | **The sketched perceptron runs are not the table's first four rows.** The article says "the top four perceptron rows are repeated with the trajectory sketch attached"; the four that were sketched are `a_add`, `x_no_grok`, `g_p1`, `g_p1x`. | `report.tex:1949` vs `rank_fb/rank_runs.json` | **paper** |
 | 12 | **"Agree to within one or two logged steps" understates the mini-batch arm**, which differs by up to six logged steps, sixty optimiser steps. Full batch agrees exactly. | `report.tex:1951` | **paper** |
 | 13 | **Section 5.1's "tracks r across the whole range" covers a range where the estimate is already saturating.** The held-out medians at the top of the first system's range are 8.185 and 8.491 against truths of 9 and 10, with an inversion on the second seed. Section 5.2 concedes the ceiling; section 5.1 does not qualify the claim. | `report.tex:354-363` vs `exp9` held-out results | **paper** |
@@ -119,6 +119,40 @@ auditor records that as a note on `tab:runs` so that its silence is not read as 
 | --- | --- | --- | --- |
 | 36 | **A committed table was computed from a log that is not the one committed beside it.** The perceptron diagnostics were computed from a 60,000-step `x_mix_quad` run, giving four windows; the log committed in the same directory is the full 100,000-step run, which gives seven. Re-running the command on the committed input therefore moves that run's summary from MG 18.57 and 18.86 to 24.35. Nothing published moves — `fig_map` plots the crossing count and the identifiability ratio, which do not change, and `tab:grok-diagnostics` does not list this run — but it is a second instance of item 8, from a different direction: there the command did not produce the committed file, here the committed input does not produce it either. | `gromov_arithmetic/results/arith/` | **fixed** (the run set and the columns are declared) |
 | 37 | **One appendix M number depends on a seed the archived code fixed by literal.** The effective rank of the closed-form weights is 148.8 in the article and 147.4 under the port, because the drive phases now come from the run's own stream rather than a hard-coded `seed=0`; across seeds it spans 145.2 to 150.0. Appendix M already declines to treat that number as evidence, which this makes measurable rather than asserted, but it is a published digit and it moves. | `gromov_arithmetic/analytic.py` | **fixed** |
+
+## The silence control, run for the first time
+
+Requirement 4 asks that setting the learning rate to zero silence the observer: the
+parameters cannot move, so an observer of the optimiser must be flat, and a constant log is
+the right answer. `sys.silence` runs it on every constructed system and scores the same
+observers at the frozen configuration.
+
+Section 5.3 says the control "invalidated two of our six systems". On this evidence it
+invalidates **five**, and the two the article names are among them:
+
+| system | observers | still moving at zero learning rate | reproduce their estimate |
+| --- | --- | --- | --- |
+| oscillating matrix | 13 | 0 | 0 |
+| parameter subspace | 12 | 1 | 0 |
+| frozen decoder | 7 | 3 | 2 |
+| function subspace | 9 | 3 | 2 |
+| online linear regression | 6 | 3 | **3** |
+| logistic regression | 7 | 3 | **3** |
+| subspace perceptron | 7 | 2 | 2 |
+
+The failing observers are the same three everywhere — the loss, the gradient norm and the
+gradient projection — and the mechanism is the one section 5.3 already names: the drive
+acts on the targets, so the residual keeps moving while the parameters are fixed. What is
+new is the extent. The correlation between the trained and the silenced series runs from
+0.94 to 0.998, and the estimate is reproduced to within a tenth of a component on nine of
+the twelve failing observer-system pairs: the frozen-parameter run returns the same number.
+
+Two qualifications. This is a reduced run, so the cell counts are small and the exact
+values will move; the pattern is structural rather than sampled, since an observer that
+reads the drive rather than the optimiser does so at any grid size. And a system is only
+invalidated for the observers it is *scored* on — a row scored on an observer that does go
+silent stands. Which rows those are is a decision for whoever revises `tab:ladder`, and the
+per-observer table in `runs/sys.silence/silence.csv` is what it should be decided on.
 
 ## I. A defect in the port itself
 

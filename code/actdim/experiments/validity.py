@@ -477,39 +477,58 @@ def _silence_cell(args) -> List[Dict[str, Any]]:
     return rows
 
 
+def _claims_state_only(observer: str) -> bool:
+    """Is this observer declared to be a function of the optimiser state alone?
+
+    Requirement 4 is about that claim, so the verdict has to know which observers make it.
+    Eleven of the article's twelve do; ``loss_step`` does not, because it contains the
+    instantaneous drive weights, and it is kept in the panel precisely so that the
+    contamination is visible rather than assumed away. Every other constructed system's
+    observers are functions of the optimiser state and none of them declares an exception.
+    """
+    from .. import observers as registry
+
+    return registry.REGISTRY[observer].state_only if observer in registry.REGISTRY else True
+
+
 def _silence_verdict(raw):
     """Per (system, observer): does the reading survive the optimiser being switched off?
 
-    An observer fails requirement 4 when, at zero learning rate, its series still varies
-    *and* its estimate still orders the ranks. Both halves are needed: a series that stops
+    A reading *survives the control* when, at zero learning rate, the series still varies
+    and its estimate still orders the ranks. Both halves are needed: a series that stops
     moving carries nothing, and one that moves without ordering the ranks is reading the
     drive's amplitude rather than its dimension.
+
+    Surviving is a failure of requirement 4 only for an observer that claims to be a
+    function of the optimiser state. The two are kept in separate columns so that the one
+    observer designed to survive does not by itself condemn the system it belongs to.
     """
     import pandas as pd
 
     records = []
     for (system, observer), group in raw.groupby(["system", "observer"], sort=True):
+        claims = _claims_state_only(observer)
         if not bool(group["applicable"].iloc[0]):
             records.append({"system": system, "observer": observer, "applicable": False,
-                            "n_cells": int(len(group)),
+                            "claims_state_only": claims, "n_cells": int(len(group)),
                             "moves_when_silent": float("nan"),
                             "sd_ratio": float("nan"),
                             "series_correlation": float("nan"),
                             "rho_trained": float("nan"), "rho_silent": float("nan"),
                             "mae_trained": float("nan"), "mae_silent": float("nan"),
                             "MG_trained": float("nan"), "MG_silent": float("nan"),
-                            "fails_requirement_4": False})
+                            "survives_silence": False, "fails_requirement_4": False})
             continue
         cell = group.groupby("k", sort=True).agg(
             trained=("MG_trained", "median"), silent=("MG_silent", "median"),
             truth=("truth", "first")).reset_index()
         moving = float(group["moves_when_silent"].mean())
         rho_silent = spearman(cell["silent"], cell["k"])
-        fails = bool(moving > 0.5 and np.isfinite(rho_silent)
-                     and rho_silent >= TRACKS_RANK)
+        survives = bool(moving > 0.5 and np.isfinite(rho_silent)
+                        and rho_silent >= TRACKS_RANK)
         records.append({
             "system": system, "observer": observer, "applicable": True,
-            "n_cells": int(len(group)),
+            "claims_state_only": claims, "n_cells": int(len(group)),
             "moves_when_silent": moving,
             "sd_ratio": _median(group["sd_ratio"]),
             "series_correlation": _median(group["series_correlation"]),
@@ -519,13 +538,14 @@ def _silence_verdict(raw):
             "mae_silent": mae(cell["silent"], cell["truth"]),
             "MG_trained": _median(cell["trained"]),
             "MG_silent": _median(cell["silent"]),
-            "fails_requirement_4": fails,
+            "survives_silence": survives,
+            "fails_requirement_4": bool(survives and claims),
         })
     verdict = pd.DataFrame(records)
     if verdict.empty:
         return verdict
-    invalidated = (verdict.groupby("system")["fails_requirement_4"].transform("any"))
-    verdict["system_invalidated"] = invalidated
+    verdict["system_invalidated"] = (
+        verdict.groupby("system")["fails_requirement_4"].transform("any"))
     return verdict
 
 
@@ -593,11 +613,17 @@ def silence(ctx: Context) -> None:
     ctx.store.table("silence_cells.csv", pd.DataFrame(rows))
 
     failing = verdict[verdict["fails_requirement_4"]]
+    surviving = verdict[verdict["survives_silence"] & ~verdict["fails_requirement_4"]]
     ctx.note("no_learning_rate", skipped)
     ctx.note("invalidated", sorted(set(failing["system"])))
     ctx.note("observers_that_fail",
              {system: sorted(group["observer"])
               for system, group in failing.groupby("system")})
+    # Recorded separately: an observer that is not claimed to be a function of the
+    # optimiser state is meant to survive this, and its surviving is not a defect.
+    ctx.note("survive_by_design",
+             {system: sorted(group["observer"])
+              for system, group in surviving.groupby("system")})
 
 
 # ============================================================== valid.regime
@@ -632,7 +658,12 @@ def _atlas_cell(args) -> Dict[str, Any]:
            "max_E": max_e, "state_rank": hard, "state_PR": effective,
            "margin": float(meta.get("margin", np.nan)),
            "innov_ratio": float(meta.get("innov_ratio", np.nan)),
-           "tau_c": float(meta.get("tau_c", np.nan))}
+           "tau_c": float(meta.get("tau_c", np.nan)),
+           # The base period, which the archived table did not carry and which two of its
+           # cells needed: 200 cycles at a period of 400 and 50 cycles at a period of 100
+           # are both 20,000 samples, so a key without it merges two different systems and
+           # the identifiability ratio below is then a ratio of two averages over them.
+           "f0": float(dict(options).get("f0", np.nan))}
     row.update({name: scored[name] for name in windows.statistic_names(cfg)})
     row["degenerate"] = bool(scored["degenerate"])
     return row
@@ -696,7 +727,7 @@ def regime(ctx: Context) -> None:
     # it is a property of the embedding space and no dimension is identifiable at this
     # sample size. Grouped with dropna=False because the torus arm has no correlation time
     # and would otherwise vanish from the table entirely.
-    key = ["family", "r", "N", "seed", "observer", "tau_c"]
+    key = ["family", "r", "N", "seed", "observer", "tau_c", "f0"]
     wide = (raw.groupby(key + ["max_E"], dropna=False)["MG"].median()
             .unstack("max_E").reset_index())
     low, high = ATLAS_EMBEDDINGS

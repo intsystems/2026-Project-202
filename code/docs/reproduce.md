@@ -15,9 +15,13 @@ estimate for anything that has not, so the total gets more honest as the campaig
 On a machine with a GPU, the whole thing is one command:
 
 ```bash
-python -m actdim run --all --device cuda:0 --jobs 8 --keep-going --promote \
+python -u -m actdim run --all --device cuda:0 --jobs 8 --keep-going --promote \
     2>&1 | tee actdim.log
 ```
+
+`python -u` matters more than it looks. Redirected stdout is block-buffered, so without it
+the log can show nothing for minutes at a time and a hang is indistinguishable from work.
+The runner flushes its own progress lines; a library that prints will not.
 
 Four flags matter for an overnight run.
 
@@ -66,10 +70,14 @@ bits.
 python -m actdim run calib --jobs 8          # about 1.5 hours on eight cores
 ```
 
-Everything downstream depends on these. They are also committed under `data/frozen/`, so
-this stage can be skipped entirely and the rest of the article rebuilt against the frozen
-configurations the article used. Re-run it only to check the selection, and note that
-requirement 2 forbids reselecting on any later outcome.
+Everything downstream depends on these. They are also committed, each with the rest of its
+calibration run's outputs, as `data/calib.e8/frozen_config.json` and
+`data/calib.e20/frozen_k20.json`, so this stage can be skipped entirely and the rest of the
+article rebuilt against the configurations it was written from. Re-run it only to check the
+selection, and note that requirement 2 forbids reselecting on any later outcome.
+
+A `--fast` calibration is refused as a source: it selects a configuration like a real one
+and writes it to the same file, and the configuration it selects is a plumbing check.
 
 ## 2. The analysis half — CPU, about twelve core-hours
 

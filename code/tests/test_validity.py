@@ -199,10 +199,10 @@ def test_the_constructed_stride_is_the_one_appendix_c_states():
 
 # -- the silence verdict ---------------------------------------------------------------
 
-def _silence_rows(mg_silent):
-    return [{"system": "toy", "k": k, "seed": 0, "observer": "loss", "applicable": True,
-             "truth": float(k), "sd_trained": 1.0, "sd_silent": 0.5, "sd_ratio": 0.5,
-             "moves_when_silent": True, "series_correlation": 0.99,
+def _silence_rows(mg_silent, observer="loss"):
+    return [{"system": "toy", "k": k, "seed": 0, "observer": observer,
+             "applicable": True, "truth": float(k), "sd_trained": 1.0, "sd_silent": 0.5,
+             "sd_ratio": 0.5, "moves_when_silent": True, "series_correlation": 0.99,
              "MG_trained": float(k), "MG_silent": value}
             for k, value in zip((2, 4, 6, 8), mg_silent)]
 
@@ -211,6 +211,7 @@ def test_an_observer_that_still_orders_the_ranks_in_silence_fails_requirement_4(
     import pandas as pd
 
     verdict = validity._silence_verdict(pd.DataFrame(_silence_rows([2.1, 4.0, 5.8, 7.9])))
+    assert bool(verdict.iloc[0]["survives_silence"])
     assert bool(verdict.iloc[0]["fails_requirement_4"])
     assert bool(verdict.iloc[0]["system_invalidated"])
 
@@ -222,7 +223,22 @@ def test_an_observer_that_stops_moving_passes_it():
     for row in rows:
         row.update(moves_when_silent=False, sd_silent=1e-18, sd_ratio=1e-18)
     verdict = validity._silence_verdict(pd.DataFrame(rows))
+    assert not bool(verdict.iloc[0]["survives_silence"])
     assert not bool(verdict.iloc[0]["fails_requirement_4"])
+
+
+def test_the_one_observer_designed_to_survive_does_not_condemn_its_system():
+    """``loss_step`` contains the instantaneous drive weights and is not claimed to be a
+    function of the optimiser state. It is in the panel so that the contamination is
+    visible; counting it as a failure would condemn the one system that passes."""
+    import pandas as pd
+
+    verdict = validity._silence_verdict(
+        pd.DataFrame(_silence_rows([2.1, 4.0, 5.8, 7.9], observer="loss_step")))
+    assert not bool(verdict.iloc[0]["claims_state_only"])
+    assert bool(verdict.iloc[0]["survives_silence"])
+    assert not bool(verdict.iloc[0]["fails_requirement_4"])
+    assert not bool(verdict.iloc[0]["system_invalidated"])
 
 
 def test_a_system_with_no_learning_rate_has_no_control_to_run():
