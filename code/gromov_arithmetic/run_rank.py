@@ -101,8 +101,16 @@ def run_one(key, outdir: Path, steps, log_every, force, dim, n_probe, overrides=
 
     probe.save(npz_path)
     s = grok_summary(train_rows)
+    # Record the fields that DISTINGUISH one rank campaign from another, not just the ones
+    # that identify the task. Without batch_size in particular, results/rank_fb/rank_runs.json
+    # and results/rank_mb/rank_runs.json are identical except for their timings, even though
+    # the second was launched with `--set batch_size=512` -- so the committed metadata could
+    # not tell a full-batch run from a mini-batch one, which is the whole point of that pair.
     s.update(key=key, task=cfg.task, p=cfg.p, n_params=probe.n_params,
-             rows=len(train_rows), seconds=round(time.time() - t0, 1))
+             rows=len(train_rows), seconds=round(time.time() - t0, 1),
+             batch_size=cfg.batch_size, optimizer=cfg.optimizer, lr=cfg.lr,
+             weight_decay=cfg.weight_decay, width=cfg.width, fraction=cfg.fraction,
+             max_steps=cfg.max_steps, log_every=cfg.log_every, init_seed=cfg.init_seed)
     print(f"[{key}] t_mem={s['t_memorise']} t_gen={s['t_grok']} "
           f"val={s['final_val_acc']:.2%} {s['seconds']:.0f}s "
           f"-> {npz_path.name}", flush=True)
