@@ -35,8 +35,55 @@ def _fmt_minutes(minutes: float) -> str:
     return f"{minutes / 60:.1f}h"
 
 
+def _provenance(exp: reg.Experiment) -> Optional[dict]:
+    path = store_mod.runs_root() / exp.id / "provenance.json"
+    if not path.exists():
+        return None
+    try:
+        import json
+
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
 def _has_run(exp: reg.Experiment) -> bool:
-    return (store_mod.runs_root() / exp.id / "provenance.json").exists()
+    record = _provenance(exp)
+    return bool(record) and record.get("status") == "ok"
+
+
+def _measured_minutes(exp: reg.Experiment) -> Optional[float]:
+    """What the experiment actually took last time, if it has run.
+
+    The declared cost is an estimate written by hand and is routinely wrong by a factor
+    of two or three; a measured time is not. Both are shown, because a plan made before
+    anything has run has only the estimate to go on.
+    """
+    record = _provenance(exp)
+    if not record or record.get("fast"):
+        return None
+    seconds = record.get("wall_seconds")
+    return float(seconds) / 60.0 if seconds else None
+
+
+def _preflight(experiments: List[reg.Experiment], device: str) -> None:
+    """Say what an unattended run is about to need, before it needs it.
+
+    A campaign that fills the disk at three in the morning has wasted the night, and the
+    trajectory sketches are large: a single sketched transformer run is 60 to 95 MB and a
+    full regeneration writes upwards of a gigabyte.
+    """
+    free = device_mod.free_disk_gb(str(store_mod.repo_root()))
+    gpu_steps = [e for e in experiments if e.device == reg.GPU]
+    if gpu_steps and device_mod.resolve(device) == "cpu":
+        print(f"note: {len(gpu_steps)} of {len(experiments)} steps want a GPU and none was "
+              f"found; they will be skipped unless --allow-cpu is given")
+    if free < 2.0:
+        print(f"warning: {free:.1f} GB free. A full regeneration writes about 1.2 GB into "
+              f"runs/, and a run that fills the disk loses the campaign, not just the step.")
+    totals = reg.cost(experiments)
+    print(f"{len(experiments)} step(s), about {_fmt_minutes(totals['cpu_minutes'])} of CPU "
+          f"work and {_fmt_minutes(totals['gpu_minutes'])} of GPU work, {free:.1f} GB free\n")
 
 
 def cmd_list(args: argparse.Namespace) -> int:
@@ -60,8 +107,10 @@ def cmd_plan(args: argparse.Namespace) -> int:
     ordered = reg.order(targets)
     for index, exp in enumerate(ordered, 1):
         mark = "ok " if _has_run(exp) else "   "
-        print(f"{index:3}. {mark} {exp.id:<32} {exp.device:<3} {_fmt_minutes(exp.minutes):>6}"
-              f"  {exp.title}")
+        measured = _measured_minutes(exp)
+        cost = (f"{_fmt_minutes(measured):>6} measured" if measured is not None
+                else f"{_fmt_minutes(exp.minutes):>6} est.    ")
+        print(f"{index:3}. {mark} {exp.id:<32} {exp.device:<3} {cost}  {exp.title}")
     totals = reg.cost(ordered)
     print(f"\n{len(ordered)} steps   cpu {_fmt_minutes(totals['cpu_minutes'])}   "
           f"gpu {_fmt_minutes(totals['gpu_minutes'])}")
@@ -79,6 +128,7 @@ def cmd_run(args: argparse.Namespace) -> int:
         ordered = [e for e in ordered if e in targets or not _has_run(e)]
 
     jobs = default_jobs(args.jobs)
+    _preflight(ordered, args.device)
     failures: List[str] = []
     for index, exp in enumerate(ordered, 1):
         if exp.device == reg.GPU and device_mod.resolve(args.device) == "cpu" and not args.allow_cpu:
@@ -115,7 +165,9 @@ def cmd_run(args: argparse.Namespace) -> int:
                 print(f"     promoted {len(exp.promotes)} file(s) to data/{exp.id}/")
 
     if failures:
-        print(f"\n{len(failures)} failed: {', '.join(failures)}")
+        print(f"\n{len(failures)} of {len(ordered)} failed: {', '.join(failures)}")
+        print("Everything else finished and is skipped on the next run. To retry only "
+              "these:\n  python -m actdim run " + " ".join(failures))
         return 1
     return 0
 

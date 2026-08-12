@@ -496,7 +496,7 @@ class SketchRecorder:
 
     @torch.no_grad()
     def on_log(self, step: int, model: torch.nn.Module) -> None:
-        from ..sketch.probe import preserve_torch_rng
+        from ..sketch.probe import normalise_logits, preserve_torch_rng
 
         theta = flat_parameters(model)
         self._steps.append(int(step))
@@ -513,7 +513,11 @@ class SketchRecorder:
         with preserve_torch_rng(self._device):
             logits = model(self._probe_inputs)
         self._zf.append(self._sketch.sketch_function(logits))
-        fn = logits.reshape(-1)
+        # Centred and L2-normalised, as the sketch itself is and as the archived probe
+        # was. On raw logits this scalar measures the growth of the output scale rather
+        # than a change in the function, and the two architectures' displacements would
+        # not be on one axis -- appendix J compares them.
+        fn = normalise_logits(logits).reshape(-1)
         self._scalars["fn_step"].append(
             float("nan") if self._prev_fn is None
             else float(torch.linalg.norm(fn - self._prev_fn)))

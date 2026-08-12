@@ -7,6 +7,47 @@ unless it is named on the command line or `--force` is given.
 python -m actdim plan --all      # the whole order, and what it costs, before starting
 ```
 
+`plan` shows the measured wall time for anything that has already run and the declared
+estimate for anything that has not, so the total gets more honest as the campaign proceeds.
+
+## Running it unattended
+
+On a machine with a GPU, the whole thing is one command:
+
+```bash
+python -m actdim run --all --device cuda:0 --jobs 8 --keep-going --promote \
+    2>&1 | tee actdim.log
+```
+
+Four flags matter for an overnight run.
+
+`--keep-going` is the important one. Without it the first failure stops the campaign and
+the rest of the night is wasted; with it, every other experiment still runs and the
+summary at the end names what failed and prints the command that retries only those.
+
+`--promote` copies each experiment's article-facing outputs into `data/` as it finishes,
+so a campaign that dies half way still leaves the half it completed usable. A `--fast` run
+is never promoted, whatever the flag says: its outputs have the right columns and the
+wrong numbers.
+
+`--jobs` should be the core count less one or two. Every worker pins BLAS to one thread,
+so the pool is the only parallelism and over-subscribing makes it slower rather than
+faster.
+
+`--device cuda:0` rather than `auto` fails loudly if the GPU is missing, instead of
+quietly skipping nine training campaigns and leaving section 7 with nothing to read.
+
+Before starting, the runner prints what the campaign will need — the number of steps, the
+CPU and GPU time, and the free disk. A full regeneration writes about 1.2 GB into `runs/`.
+
+Afterwards:
+
+```bash
+python -m actdim diff --all      # every number that moved against the archived results
+python -m actdim run check.tables   # every table cell against what the article prints
+python -m actdim verify          # data/ against the checksums recorded when it was written
+```
+
 ## 0. Check the machine
 
 ```bash
