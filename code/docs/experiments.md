@@ -3,6 +3,9 @@
 One experiment per row. `python -m actdim list` prints the same catalogue with what has
 run; `python -m actdim plan --all` prints it in dependency order with its cost.
 
+This table is the target. Not all of it is built yet: [`status.md`](status.md) says what is
+ported, what is not, and where the archived implementation of each gap is.
+
 Cost is measured: on eight cores where the device is cpu, on a T4 where it is gpu.
 
 ## Calibration

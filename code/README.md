@@ -61,6 +61,7 @@ Nothing in `actdim` imports it, and deleting the directory changes no result.
 | [`docs/data.md`](docs/data.md) | what is stored, where, in what format, and what is tracked |
 | [`docs/reproduce.md`](docs/reproduce.md) | regenerating the article end to end, and what each stage costs |
 | [`docs/errata.md`](docs/errata.md) | what the port found wrong in the archived code, and what changed |
+| [`docs/status.md`](docs/status.md) | what is ported and what is not, with the archived source of each gap |
 | [`colab/README.md`](colab/README.md) | the Colab mode |
 
 ## Tests
