@@ -38,8 +38,18 @@
 \Crefname{figure}{Figure}{Figures}
 \crefname{equation}{equation}{equations}
 
-% explicit breaks: left to itself the title hyphenates "Mea-sure" across lines
-\title{Counting the Active Degrees of Freedom of a\\
+% "Active dimension" and not "active degrees of freedom": the former is the term
+% \cref{eq:act} defines and the paper uses throughout. No manual \\ breaks -- they
+% leak into the PDF metadata and into every non-LaTeX rendering of the title -- and
+% "Active dimension", not "active degrees of freedom": the former is what \cref{eq:act}
+% defines and what the paper says everywhere else.
+%
+% The explicit breaks stay, and are not a stylistic choice. The style file sets the title
+% in small caps at about forty characters to the line, and left to itself it hyphenates
+% -- "Train-ing", "Can-not", "Mea-sure". Suppressing that with \hyphenpenalty inside
+% \title breaks the title block outright, and a single break at the colon leaves a second
+% line that is still too long. Each chunk below is therefore under forty characters.
+\title{Counting the Active Dimension of a\\
 Training Run: What a Single Scalar Log\\
 Can and Cannot Measure}
 
