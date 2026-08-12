@@ -3,3 +3,8 @@
 # result; these are the intermediate the scorer reads, and they stay out of the repo
 # for the same reason gromov_arithmetic keeps its weight snapshots out.
 results/e11_theiler_contrast/series/
+
+# The e10 ceiling sweep's 27 x 64,000-sample records, ~95 MB, regenerated exactly by
+# `python e10_ceiling_sweep.py --simulate`. Each shorter record in the sweep is a prefix
+# of one of these, so the scored outputs beside them carry the whole result.
+results/e10_ceiling/trajectories/

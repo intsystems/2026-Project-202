@@ -347,28 +347,29 @@ work.
 
 \subsection{The ceiling}\label{sec:ceiling}
 
-The estimator saturates, and the ladder locates where. The matrix error rises to $1.51$ at ten
-directions; a $D = 64$ linear model and a logistic model order the rank to twenty but saturate
-above about twelve; the image-data system at twenty directions saturates at $15.1$. The condition
-of \cref{sec:estimator} is $E > 2d$, so $E_{\max} = 20$ cannot resolve more than ten components
-and $E_{\max} = 40$ cannot resolve twenty, and the observed ceilings agree: above about nine at
-$E_{\max} = 20$, and $15.1$ against a measured $19.99$ at $E_{\max} = 40$, where $E = 2d$ exactly
-and the condition fails. The twenty-direction result is therefore not an anomaly; that design
-cannot recover twenty components. The explanation is not settled, since a finite record also bounds
-the measurable dimension \citep{eckmann1992fundamental}, comparably so at this window, and
-separating the two needs the sweep of \cref{sec:concl}.
+The estimator saturates: the matrix error rises to $1.51$ at ten directions and the image-data
+system at twenty saturates at $15.1$. Sweeping $E_{\max}$ against the record length separates two
+things we had run together (\cref{app:ceiling}). The \emph{level} at high rank belongs to the
+embedding, moving from $7.3$ to $14.5$ as $E_{\max}$ goes from $10$ to $56$ but only from $9.4$ to
+$11.1$ when the record is lengthened sixty-four-fold. The \emph{rank up to which the estimate
+tracks} moves with neither, never passing $10.4$ over sixteen combinations and reaching that at the
+\emph{shortest} record. A finite-record bound \citep{eckmann1992fundamental} is therefore not the
+explanation, allowing $6.0$ where we measure $10.4$, and $E > 2d$ is right in direction and wrong
+in form: the rise is about $0.05$ components per unit of $E_{\max}$, not a half, so $E_{\max}/2$ is
+a coincidence at the value we froze. Both dependences are logarithmic, and the linear participation
+ratio of the delay cloud follows the same curve to $0.09$ components --- so much of what saturates
+is how many components the delay window resolves linearly, not any geometry. Why the tracking
+ceiling sits near ten is open.
 
 \subsection{The silence control}\label{sec:silence}
 
 Requirement~4 asks that a zero learning rate silence the observer. Most published
-dimension-on-training-logs analyses do not run it, and it invalidated two of our six systems: a
-trainable $\vz$ through a frozen decoder, and a perceptron restricted to
-$\vtheta = \vtheta_0 + \mU \vz$, both read naively succeed, yet at zero learning rate each
-reproduces its reported result almost exactly, correlating above $0.98$ at every rank, because the
-drive reaches the observers through the residual and not through the optimiser. It also rejects the
-instantaneous mini-batch loss of \cref{sec:digits}, otherwise among the best three observers. Two
-further systems fall to requirement~2, their configuration having been selected on a grid that
-varied the system as well as the estimator (\cref{tab:ladder}, \cref{app:validity}).
+dimension-on-training-logs analyses do not run it, and it invalidated two of our six systems: both
+read naively succeed, yet at zero learning rate each reproduces its reported result almost exactly,
+correlating above $0.98$ at every rank, because the drive reaches the observers through the
+residual and not the optimiser. It also rejects the instantaneous mini-batch loss of
+\cref{sec:digits}, otherwise among the best three observers; two further systems fall to
+requirement~2 (\cref{tab:ladder}, \cref{app:validity}).
 
 \subsection{A constrained head on a network trained on image data}\label{sec:digits}
 
@@ -2020,5 +2021,98 @@ ten: the two-cycle is not blurred by that stride but removed by it. (c) The frac
 which the loss rises, for each edge-of-stability rate, against the stride the log is read at.}
 \label{fig:eos}
 \end{figure}
+
+\section{The ceiling: sweeping the embedding against the record}\label{app:ceiling}
+
+\Cref{sec:ceiling} reports that the estimator saturates. Two explanations were available and the
+paper could not choose between them: the embedding condition $E > 2d$, which at $E_{\max} = 20$
+allows ten components, and the finite-record bound $D \lesssim 2\log_{10} N$
+\citep{eckmann1992fundamental}, which at $N = 8000$ allows $7.8$. They are separable because each
+is insensitive to the other's knob. We sweep $E_{\max} \in \{10,14,20,28,40,56\}$ at $N = 8000$ and
+$N \in \{10^3 \dots 6.4\times10^4\}$ at $E_{\max} = 20$, over $r \in \{2 \dots 20\}$ and three
+seeds, everything else frozen. Each $N$ is a \emph{prefix} of one longer record, not a resampling
+of a fixed span, so the delay lag keeps its meaning in periods; all twenty-seven trajectories are
+bit-identical to the published ones over their common prefix, and rescoring the published
+twenty-direction configuration returns $15.09$ against its published $15.1$.
+
+\begin{table}[H]
+\centering
+\caption{Two sweeps, three seeds per cell. \emph{Tracking} is the largest $r$ at which the median
+estimate stays within one component of the truth; \emph{level} is the median estimate at $r = 20$;
+\emph{slope} is $\mathrm{d}\hat d_{MG}/\mathrm{d}r$ over $r \ge 8$, which is $1$ if the estimator
+still counts and $0$ if it has stopped. The predictions each hypothesis makes for the tracking
+column are given beneath it.}
+\label{tab:ceiling}
+\begin{tabular}{lrrrrrrr}
+\toprule
+$E_{\max}$ at $N = 8000$ & $10$ & $14$ & $20$ & $28$ & $40$ & $56$ & \\
+\midrule
+tracking & $6.6$ & $7.4$ & $7.9$ & $8.5$ & $8.6$ & $9.0$ & \\
+\emph{$E_{\max}/2$ predicts} & $5$ & $7$ & $10$ & $14$ & $20$ & $28$ & \\
+level at $r = 20$ & $7.3$ & $8.7$ & $10.5$ & $11.9$ & $13.3$ & $14.5$ & \\
+slope & $0.10$ & $0.16$ & $0.27$ & $0.38$ & $0.50$ & $0.60$ & \\
+\midrule
+$N$ at $E_{\max} = 20$ & $10^3$ & $2\!\cdot\!10^3$ & $4\!\cdot\!10^3$ & $8\!\cdot\!10^3$ &
+$1.6\!\cdot\!10^4$ & $3.2\!\cdot\!10^4$ & $6.4\!\cdot\!10^4$ \\
+\midrule
+tracking & $7.5$ & $8.0$ & $7.6$ & $7.9$ & $8.2$ & $9.3$ & $9.8$ \\
+\emph{$2\log_{10}N$ predicts} & $6.0$ & $6.6$ & $7.2$ & $7.8$ & $8.4$ & $9.0$ & $9.6$ \\
+level at $r = 20$ & $9.4$ & $9.7$ & $10.2$ & $10.5$ & $10.6$ & $10.8$ & $11.1$ \\
+slope & $0.22$ & $0.23$ & $0.24$ & $0.24$ & $0.25$ & $0.25$ & $0.25$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_ceiling.pdf}
+\caption{The rank the estimate tracks to, against each hypothesis's knob and against what that
+hypothesis predicts. Every arm is the constructed recurrent system, so the figure carries one hue
+and the two predictions are reference lines. (a) Sweeping $E_{\max}$ at a fixed record. The
+measured ceiling rises from $6.6$ to $9.0$ while $E_{\max}/2$ rises to $28$; the two cross near the
+$E_{\max} = 20$ this paper froze, which is the coincidence \cref{sec:ceiling} reports. (b) Sweeping
+the record at fixed $E_{\max}$. The dotted line is $2\log_{10}N$; the dashed line is $E_{\max}/2$
+for the filled series only, the open series having a Takens prediction of $28$ that is off scale.
+The open series is the control that decides it: at $E_{\max} = 56$ the estimate still tracks to
+$10.4$ on a record of one thousand samples, where a finite-record bound allows $6.0$.}
+\label{fig:ceiling}
+\end{figure}
+
+\paragraph{What the sweeps decide.} The level at high rank is the embedding's: sixty-four times the
+record buys $1.7$ components, where a factor of $5.6$ in $E_{\max}$ buys $7.2$. The tracking
+ceiling is neither's. It never passes $10.4$ over the sixteen distinct cells, and the cell that
+attains it is $E_{\max} = 56$ at $N = 1000$ --- the \emph{shortest} record in the study, where
+$2\log_{10}N$ allows $6.0$. A record-length bound cannot produce that, so \citet{eckmann1992fundamental}
+is not the explanation here. Nor is $E > 2d$ in the form we used it: the ceiling rises by $0.047$
+components per unit of $E_{\max}$, not by a half, so $E_{\max}/2$ happens to be right at
+$E_{\max} = 20$ and is wrong at both ends. Fitting the level at $r \ge 16$, whose own spread is
+$2.01$, gives a root-mean-square error of $8.54$ for $E_{\max}/2$, $3.91$ for $2\log_{10}N$, $3.95$
+for their pointwise minimum --- so they do not jointly bind either --- and $0.19$ for
+$8.63\log_{10}E_{\max} + 1.03\log_{10}N - 5.52$. Both dependences are logarithmic: $2.6$ components
+per doubling of $E_{\max}$, $1.0$ per decade of record.
+
+\paragraph{Two cautions, one of them serious.} First, $E_{\max}$, $\tau$ and the delay span
+$(E_{\max}-1)\tau$ are algebraically locked, and a third arm holding the span at $76$ while $\tau$
+falls from $8$ to $1$ finds that $E_{\max}$ then buys nothing (regression slope $0.000$). The
+operative variable looks like the temporal extent of the delay window, which is not what $E > 2d$
+is about either; that arm is defective at both endpoints, so it does not settle the converse.
+Second and more seriously, \emph{the linear null does the same thing}. $\PR_{\mathrm{delay}}$, a
+spectral statistic of the delay covariance with no geometry in it and capped only by $E$, rises
+from $5.33$ to $13.53$ across the $E_{\max}$ sweep where MG rises from $6.94$ to $13.55$, and is
+flat to two decimals across the record sweep. It is fitted by $11.09\log_{10}E_{\max}$ with a
+root-mean-square error of $0.09$, the tightest fit anywhere in this appendix. Most of what we have
+been calling a ceiling is therefore how many components the delay window resolves \emph{linearly},
+which is a spectral reading of the saturation and not a geometric one.
+
+\paragraph{What is left unexplained.} Why the tracking ceiling sits near ten components. It is not
+$E_{\max}/2$, since it is $10.4$ at $E_{\max} = 56$; not $2\log_{10}N$, since it is $10.4$ at
+$N = 1000$; and not the measured effective rank, which equals $r$ to $0.01$ at every $N \ge 2000$.
+No form we fitted accounts for it. The controls are clean --- the Theiler axis is inert (a
+fixed-$76$ arm reproduces the frozen arm to two decimals at every cell, realised exclusions
+$36$ to $150$), and none of the $3240$ cells is flagged degenerate --- so this is a real limit of
+the instrument that we can bound but not name. \Cref{sec:diagnostics}'s own ratio does see it:
+$\rho_{\mathrm{ident}}$ at $r = 20$ is $1.31$ to $1.40$ at every record length, a longer record
+never making an unidentifiable estimate identifiable, and falls from $1.22$ to $1.02$ as $E_{\max}$
+grows, crossing the band at about the rank where tracking stops.
 
 \end{document}

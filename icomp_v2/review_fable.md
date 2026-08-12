@@ -130,6 +130,14 @@ corrected. And the modular control's log is locally straight to $0.7\,\%$, so it
 three thousandths of a component across fifty windows: its $D = 1.00$ is not an informative
 dimensional negative, and the paper now says so.
 
+**Installment 6 — the ceiling sweeps** (applied). Removed from this file: priority-list items 3
+and 4. The sweeps were meant to choose between the Takens condition and the Eckmann–Ruelle bound
+and instead refuted both, so §5.2 no longer claims that "the observed ceilings agree" with
+$E > 2d$ — that agreement held at $E_{\max} = 20$ and nowhere else. The sweeps also separate two
+quantities the section had run together: the *level* returned at high rank, which is the
+embedding's, and the *rank up to which the estimate tracks*, which moves with neither knob and
+never passes $10.4$. New appendix R and a figure. The title is fixed.
+
 ---
 
 ## Contents
@@ -487,10 +495,23 @@ the repository. Owner: whoever prepares the release. Short section, mostly actio
    falls at the generalisation step in all four generalising runs and in neither control, and
    survives a surrogate control on the observer's shape. This list was not updated at the time, so
    the item sat here stale for two commits.
-3. **The $E_{\max}$ and record-length sweeps**, which would separate the two explanations of the
-   ceiling that §5.2 currently leaves open.
-4. **The title.** Nineteen words and a colon; three alternatives are in the archived review. This
-   is the last purely editorial item. *(7.1)*
+3. ~~**The $E_{\max}$ and record-length sweeps.**~~ **Done** — appendix R. They do not settle §5.2's
+   open question so much as dissolve it: **both** candidate explanations are wrong. The
+   finite-record bound is refuted outright (at $E_{\max} = 56$ the estimate still tracks to $10.4$
+   on a thousand samples, where $2\log_{10}N$ allows $6.0$), and $E > 2d$ is right in direction and
+   wrong in form — the ceiling rises about $0.05$ components per unit of $E_{\max}$, not a half, so
+   $E_{\max}/2$ matched only at the value the paper had frozen. §5.2 said "the observed ceilings
+   agree" with $E > 2d$; that agreement was a coincidence and the section now says so. Two further
+   findings are uncomfortable and are reported: at a fixed delay span, $E_{\max}$ buys nothing, so
+   the operative variable is the window's temporal extent rather than its dimension; and the purely
+   linear $\PR_{\mathrm{delay}}$ reproduces the whole $E_{\max}$ dependence to $0.09$ components,
+   which makes most of the saturation spectral rather than geometric. Why the tracking ceiling sits
+   near ten is unexplained.
+4. ~~**The title.**~~ **Done** — *Counting the Active Dimension of a Training Run*. "Active degrees
+   of freedom" appeared only in the title and nowhere in the paper. *(7.1)*
+
+**The list is empty.** What remains is not review items but the two things appendix R turned up:
+the spectral reading of the ceiling, and the unexplained wall at ten components.
 
 Still worth adding if space is ever found: the anisotropy plot, the $\tau$-sweep plot, and raw
 scalar-log traces per regime *(5.6)*.
