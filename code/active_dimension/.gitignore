@@ -1,0 +1,5 @@
+﻿# Simulated input series for e11: ~24 MB of float64 traces, regenerated exactly by
+# `python e11_theiler_contrast.py --simulate`. The scored outputs beside them are the
+# result; these are the intermediate the scorer reads, and they stay out of the repo
+# for the same reason gromov_arithmetic keeps its weight snapshots out.
+results/e11_theiler_contrast/series/

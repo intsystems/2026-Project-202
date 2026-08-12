@@ -11,10 +11,15 @@ Design, fixed before looking at any output:
   of a window in ``active_rank/results_fine/rank_windows.csv``, so ``MG(t)`` and
   ``PR^det(t)`` are two statistics of the same run at the same instants and "do they fall
   together" is a question about paired samples rather than about two plots.
-* **One window for every run**, ``WINDOW`` samples = 600 optimiser steps at the stride-10
-  logging of these runs.  The direct measurement's own windows are 590 steps for the modular
-  runs and 295 for S5; matching the midpoint and not the width keeps one configuration across
-  the six runs, and the S5 mismatch is a factor of two and is disclosed.
+* **One window for every run**, ``WINDOW`` = 60 logged samples.  The two logging strides differ,
+  so that is *not* the same number of optimiser steps in every run: the four modular runs log
+  every 10 steps, making the window 600 steps against the 590-step windows of ``sec:direct``;
+  the two S5 runs log every 5 steps, making it 300 steps against their 295-step windows.  The
+  window is therefore matched to within two per cent of the direct measurement's own width in
+  all six runs -- fixing the sample count, not the step count, is what achieves that.  (An
+  earlier version of this docstring, and of ``app:window``, asserted stride-10 logging for all
+  six runs and disclosed a factor-of-two mismatch on S5; both were wrong.  There is no
+  mismatch.)
 * **The whole grid is reported.**  A window this short cannot carry the frozen ``max_E = 20``
   at ``tau = 4`` -- the delay span alone is 76 of the 60 samples -- so a configuration has to
   be chosen, and choosing one on the outcome is exactly the failure requirement 2 of the
@@ -130,15 +135,22 @@ def main():
           f"{len(DETREND)} detrends = {len(jobs)} jobs", flush=True)
     t0 = time.time()
     res = Parallel(n_jobs=12, verbose=5, batch_size=4)(delayed(job)(*j) for j in jobs)
-    df = pd.DataFrame([r for rr in res for r in rr])
+    raw = pd.DataFrame([r for rr in res for r in rr])
+
+    # The bulk grid is rounded to keep the gzip a sensible size; ``headline_trace.csv`` is the
+    # file ``icomp_v2/make_figures.py`` plots from and is written at **full precision**, from
+    # ``raw`` and not from the rounded copy.  Taking it from the rounded frame -- which an
+    # earlier version of this script did -- silently changed every value in it by up to 5e-6
+    # and made the committed artefact unreproducible from the committed code.
+    df = raw.copy()
     for c in df.select_dtypes("float").columns:
         df[c] = df[c].round(5)
     df.to_csv(OUT / "matched_windows.csv.gz", index=False, compression="gzip")
     print(f"\n{len(df)} rows in {time.time() - t0:.0f}s -> {OUT/'matched_windows.csv.gz'}")
 
-    h = df[(df.max_E == HEADLINE["max_E"]) & (df.tau == HEADLINE["tau"])
-           & (df.k == HEADLINE["k_neighbors"]) & (df.theiler == HEADLINE["theiler"])
-           & (~df.detrend) & (df.column.isin(("weight_norm", "train_loss")))]
+    h = raw[(raw.max_E == HEADLINE["max_E"]) & (raw.tau == HEADLINE["tau"])
+            & (raw.k == HEADLINE["k_neighbors"]) & (raw.theiler == HEADLINE["theiler"])
+            & (~raw.detrend) & (raw.column.isin(("weight_norm", "train_loss")))]
     h[["run", "column", "mid_step", "MG", "PRdelay", "roughness", "PR_det", "t_gen"]] \
         .to_csv(OUT / "headline_trace.csv", index=False)
 

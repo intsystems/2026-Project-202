@@ -1,0 +1,16 @@
+[
+  ["gromov_arithmetic/eos.py",
+   "--lrs", "5e5", "7e5",
+   "--seeds", "1", "2",
+   "--steps", "30000",
+   "--sharp-every", "100",
+   "--outdir", "/content/out/eos"],
+
+  ["gromov_arithmetic/eos.py",
+   "--lrs", "1e6",
+   "--seeds", "1",
+   "--steps", "30000",
+   "--sharp-every", "100",
+   "--dtype", "float64",
+   "--outdir", "/content/out/eos"]
+]

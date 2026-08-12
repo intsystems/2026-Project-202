@@ -437,10 +437,12 @@ Four items remain, and two of them need compute rather than editing.
    weaker than doing it. It is the one experiment that could show the admissible regime is ever
    occupied by an undriven training run, and until it is run the instrument has no demonstrated
    domain outside constructed systems. *(1.10)*
-2. **Re-run the log estimate at a window matched to the transition.** \Cref{app:window} now
-   establishes that the published window cannot resolve a feature at $t_{\mathrm{gen}}$; the raw
-   logs exist, so this is a re-run of the estimator rather than new training. It would convert an
-   untested claim into a tested one either way.
+2. ~~**Re-run the log estimate at a window matched to the transition.**~~ **Done** in commit
+   `b5a4a7c`, which added `active_dimension/e9_matched_window.py`, `e9_analyse.py` and
+   `e10_surrogate.py`, and rewrote section 7 around the result: at a $600$-step window the estimate
+   falls at the generalisation step in all four generalising runs and in neither control, and
+   survives a surrogate control on the observer's shape. This list was not updated at the time, so
+   the item sat here stale for two commits.
 3. **The $E_{\max}$ and record-length sweeps**, which would separate the two explanations of the
    ceiling that §5.2 currently leaves open.
 4. **The title.** Nineteen words and a colon; three alternatives are in the archived review. This
