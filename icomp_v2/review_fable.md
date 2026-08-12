@@ -96,6 +96,40 @@ $E_{\max}$, so a large value cannot be told from a mismatched lag. Eighteen tabl
 the observer table's roughness column is now a flag, correlations are signed and two-decimal
 throughout, three derivable columns are gone, and the anisotropy decay factor is renamed $q$.
 
+**Installment 5 — the two experiments, and what auditing them cost** (applied). Removed from this
+file: 1.10, and priority-list items 1 and 2. Section 9 gains the surrogate finding.
+
+*The edge-of-stability run* (1.10) was done and answers the question in a way neither outcome I
+predicted covers. Full-batch descent does reach the edge — from $\eta = 10^6$ to $2.5\times10^6$
+the sharpness self-limits at $2/\eta$ and the loss rises on half of all steps, where below
+$4\times10^5$ it rises on none — but **oscillation is not recurrence**. Measured against how far
+the orbit travels during the Theiler exclusion, two of seven edge runs return near states they
+have left and five do not; the admissible rectangle then refuses both that recur and admits all
+five that do not, because the trend-crossing count tests non-monotonicity and every edge run
+alternates perfectly. And at the logging stride every other full-batch log here uses, the whole
+phenomenon aliases away: median crossings $80 \to 2$, rise fraction $0.50 \to 0.00$. New appendix,
+new figure, six lines in §6.1.
+
+*The recurrence claim* was reframed throughout, and then tested rather than asserted. At zero
+Theiler exclusion the transient arm returns $1.197$ at every rank, seed and observer, against the
+$1.19928$ maximum likelihood must return on a uniformly sampled curve; the recurrent arms do not
+move under the same sweep. So the estimand is $1$, the estimator recovers it, and the exclusion is
+what destroys it. \Cref{tab:classes}'s transient row now reads $1$ rather than "undefined", the
+definition is on the visited set rather than the recurrent part, and recurrence is demoted from the
+definition to the identifiability condition it actually is. Two qualifications the experiment
+forced: the fast recurrent arm needs no exclusion at all, so the symmetry is about *oversampled*
+recurrence; and a decaying *oscillation* reads $2.36$, so "a transient is a curve, hence $1$" is
+not universal.
+
+*Three audit findings changed published numbers.* `e10_surrogate.py` seeded from `hash()` of a
+string, which Python salts per process, so `surrogates.csv` could not be regenerated at all — the
+`dip.py` failure mode again. Fixed and re-run at five seedings: the paper's $p \le 0.075$ is false
+(4 of 60 cells violate it) and is replaced by the threshold-free statement, every generalising
+cell below every control cell, $0.125$ against $0.500$. Four factual errors in Appendix L are
+corrected. And the modular control's log is locally straight to $0.7\,\%$, so its estimate spans
+three thousandths of a component across fifty windows: its $D = 1.00$ is not an informative
+dimensional negative, and the paper now says so.
+
 ---
 
 ## Contents
@@ -119,8 +153,13 @@ Appendix: [what remains](#appendix-priority-list).
 
 ## 1. The story
 
-*Scope: the thesis, the arc, the contributions list, what to lead with, what is missing from the
-argument. Owner: whoever rewrites the spine. Nothing in this section is a line edit.*
+*Nothing open. 1.10 asked whether the admissible regime is ever realised in an undriven training
+run; it has been measured (see Installment 5 and `app:eos`). The answer is that the edge of
+stability supplies the non-monotonicity and not the recurrence, that two runs of seven do recur,
+and that the paper's own diagnostics identify the wrong ones. The section is kept below only as the
+record of what was asked.*
+
+<details><summary>1.10, as originally written</summary>
 
 ### 1.10 The unanswered question: is the admissible regime ever realised in real training?
 
@@ -156,6 +195,8 @@ negative result" and "a validated instrument plus its first real application":
 Either outcome is worth more than the current sentence. If neither is feasible before the deadline,
 the framing must at least be honest and explicit in §8: the admissible regime has not been
 exhibited in an undriven training run, and whether it occurs is open.
+
+</details>
 
 ## 2. Definitions, theory and formulas
 
@@ -392,12 +433,18 @@ listed in 8.9.
 *Scope: what a reader would need to reproduce this, and what the code audit found about the state of
 the repository. Owner: whoever prepares the release. Short section, mostly actionable.*
 
-0. **A committed analysis script does not regenerate the committed file the paper depends on.**
-   `active_rank/dip.py` computes `fn_PR_step5, fn_PR_step20, PR_step20, PR_pos_det`; the
-   `results_fine/rank_dip.csv` that §7.1 is built on contains `fn_PR_pos_det` and `PR_step5`. This
-   is almost certainly why §7.1's numbers cannot be reproduced (4.1), and it is the first thing to
-   repair — not for the paper's sake but so that the next person to touch these numbers can check
-   them.
+0. ~~**A committed analysis script does not regenerate the committed file the paper depends on.**~~
+   Fixed for `active_rank/dip.py` in Installment 2. **It happened a second time** and is worth a
+   standing check on every script that writes a file the paper cites: `active_dimension/e10_surrogate.py`
+   seeded its RNG with `np.random.default_rng(abs(hash((run, col, smooth))) % 2**31)`, and Python
+   salts `str.__hash__` per process, so the committed `surrogates.csv` could not be regenerated in
+   any interpreter — three fresh processes gave three different seeds for the same cell. It also
+   passed the observed run's window grid to the depth statistic together with a *surrogate's*
+   values, which crashed three invocations in four and would have silently mis-aligned the
+   statistic whenever the two lengths happened to match. Both fixed in Installment 5, five seedings
+   now run, and the across-seed spread is reported because a $p$ resolved to fortieths from one
+   draw is not a quotable number. **The lesson for the artifact: re-run every committed script and
+   diff its output against the committed file, as a release check.**
 1. **Three tables' worth of results come from a different estimator than Algorithm 1** (3.4). If the
    experiments are not re-run, the paper must say which rows used which implementation, and the
    repository should carry a single canonical estimator with the older one deleted or clearly marked
@@ -431,12 +478,9 @@ the repository. Owner: whoever prepares the release. Short section, mostly actio
 
 ## Appendix: priority list
 
-Four items remain, and two of them need compute rather than editing.
-
-1. **The edge-of-stability run.** The conclusion names it as future work, which is honest but
-   weaker than doing it. It is the one experiment that could show the admissible regime is ever
-   occupied by an undriven training run, and until it is run the instrument has no demonstrated
-   domain outside constructed systems. *(1.10)*
+1. ~~**The edge-of-stability run.**~~ **Done** — see Installment 5, `app:eos`, and
+   `code/gromov_arithmetic/results/eos/report.md`. The instrument now has a demonstrated domain
+   outside constructed systems, and a demonstrated blind spot inside it. *(1.10)*
 2. ~~**Re-run the log estimate at a window matched to the transition.**~~ **Done** in commit
    `b5a4a7c`, which added `active_dimension/e9_matched_window.py`, `e9_analyse.py` and
    `e10_surrogate.py`, and rewrote section 7 around the result: at a $600$-step window the estimate

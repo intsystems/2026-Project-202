@@ -72,6 +72,8 @@ marks the transition is the timing and shape of the fall rather than its depth.
 | appendix L, the matched-window re-run | `../code/active_dimension/results/e9_matched_window/` |
 | appendix M, representation dimension | `../code/gromov_arithmetic/report.md`, `../code/gromov_polynomials/report.md` |
 | appendix N, the Theiler exclusion | `../code/active_dimension/e7b_theiler_quick.py`, `results/e7_theiler/` |
+| appendix P, the exclusion contrast | `../code/active_dimension/e11_theiler_contrast.py`, `results/e11_theiler_contrast/` |
+| appendix Q, edge of stability | `../code/gromov_arithmetic/eos.py`, `eos_probe.py`, `eos_recurrence.py`, `results/eos/report.md` |
 
 ## Appendices
 
@@ -92,6 +94,8 @@ marks the transition is the timing and shape of the fall rather than its depth.
 | M | the representation dimension in closed form, per task |
 | N | the Theiler exclusion of the twenty-direction configuration |
 | O | inventory of every training run the paper uses |
+| P | the exclusion sweep: a transient's dimension is 1, and identifiable only without it |
+| Q | full-batch descent at the edge of stability, and what the logging stride hides |
 
 ## Figures
 
@@ -109,6 +113,7 @@ style file, at 8 pt so that LaTeX never rescales them.
 | `fig_pairs` | the label-matched pairs and the loss curves behind them | appendix G |
 | `fig_prwindow` | the participation ratio against window length | appendix J |
 | `fig_window` | the windowed estimate on the grokking logs, and what it cannot resolve | appendix L |
+| `fig_eos` | the stability ratio, the two-cycle, and what a stride of ten removes | appendix Q |
 
 Colour encodes the three dynamical regimes of table 1 and nothing else: recurrent `#004488`,
 stochastic `#BB5566`, transient `#997700`, with `#666666` for reference lines. This is Paul Tol's
@@ -167,10 +172,18 @@ Four things about it are worth keeping in mind when editing:
 The full external review is in [`review_fable_archive.md`](review_fable_archive.md). The live
 copy, [`review_fable.md`](review_fable.md), has resolved items deleted from it and a changelog at
 the top recording what each installment changed. What remains open is listed in its priority
-list. The sliding-window estimate on the grokking logs it asked for has now been run, at a window
-matched to the transition, and is section 7.3 and appendix L. What remains needs training compute:
-full-batch descent above the stability threshold, to find whether an undriven run is ever
-admissible, and a sweep of E_max against the record length to fix the ceiling.
+list. The sliding-window estimate on the grokking logs it asked for has been run, at a window
+matched to the transition, and is section 7.3 and appendix L. So has the edge-of-stability run,
+which is appendix Q: full-batch descent does reach the edge, but oscillation turns out not to be
+recurrence, and the paper's two diagnostics identify the wrong runs when both are present. What
+remains is the sweep of E_max against the record length, to separate the Takens condition from the
+Eckmann-Ruelle finite-record bound as explanations of the ceiling.
+
+**A release check this repository has now failed twice.** `active_rank/dip.py` did not regenerate
+the file section 7.1 depended on, and `active_dimension/e10_surrogate.py` could not regenerate
+`surrogates.csv` in any process, because it seeded from `hash()` of a string and Python salts that
+per interpreter. Before release, re-run every committed script and diff its output against the
+committed file. Both are fixed; the point is that neither was caught by reading the code.
 
 Two defects in upstream result files were found while assembling the draft and are fixed here but
 still need fixing at source:
