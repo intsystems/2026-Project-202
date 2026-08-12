@@ -219,12 +219,36 @@ def register(id: str, title: str, config: type, paper: str = "") -> Callable:
     return decorate
 
 
-def load() -> Dict[str, SystemEntry]:
-    """Import every system module, populating the catalogue."""
-    from . import (decoder, digits_function, digits_parameter, matrix,  # noqa: F401
-                   regression, subspace)
+#: Systems named by ``LADDER`` that have no module yet. Listed rather than silently
+#: absent: a ladder row missing from the catalogue is a row of the article that cannot be
+#: regenerated, and it should be visible in ``actdim list`` and in the catalogue itself
+#: rather than surfacing as an import error three frames down.
+NOT_PORTED: Dict[str, str] = {
+    "digits_parameter": (
+        "the parameter-subspace system of section 5.4, rows six and seven of the ladder, "
+        "and the source of sections 5.3 and 6.1. Archived at "
+        "archived_code/active_dimension/{system,dynamics}.py."
+    ),
+}
 
+
+def load() -> Dict[str, SystemEntry]:
+    """Import every system module that exists, populating the catalogue."""
+    from importlib import import_module
+
+    for name in ("matrix", "regression", "decoder", "subspace", "digits_function",
+                 "digits_parameter"):
+        if name in NOT_PORTED:
+            continue
+        import_module(f"{__package__}.{name}")
     return SYSTEMS
+
+
+def missing() -> Dict[str, str]:
+    """Ladder rows with no implementation, and where the archived one is."""
+    load()
+    return {name: NOT_PORTED[name] for name in LADDER
+            if name in NOT_PORTED or (name not in SYSTEMS and name in NOT_PORTED)}
 
 
 def get(id: str) -> SystemEntry:

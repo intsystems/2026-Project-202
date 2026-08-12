@@ -229,7 +229,13 @@ class Table:
 
 
 def _norm(text: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "", text.lower())
+    """A label reduced to what identifies it.
+
+    The arithmetic operators are kept. Without them the two perceptron rows of
+    ``tab:grok-diagnostics``, ``n+m`` and ``n \\cdot m``, reduce to the same string and a
+    check aimed at one silently reads the other.
+    """
+    return re.sub(r"[^a-z0-9+*^<>=]+", "", text.lower())
 
 
 def read_tables(path: Optional[Path] = None) -> Dict[str, Table]:
@@ -560,13 +566,20 @@ class Data:
 
 @dataclass
 class Computed:
-    """One recomputed cell, ready to be diffed against what the article prints."""
+    """One recomputed cell, ready to be diffed against what the article prints.
+
+    ``tolerance`` widens the comparison for a cell whose printed form is not a rounding of
+    the computed one. The only use is a step index that falls between two logged steps: the
+    S_5 runs log every five steps, so a window centre lands on 712.5 and the article prints
+    712. Everything else compares at the precision printed and nothing else.
+    """
 
     row: int
     column: int
     value: Any                                    # float, str, None, or a list of those
     source: str
     note: str = ""
+    tolerance: float = 0.0
 
 
 Check = Callable[[Table, Data], Iterable[Computed]]
@@ -1282,7 +1295,7 @@ def check_ceiling(table: Table, data: Data) -> Iterable[Computed]:
     tracking = table.find_all("tracking")
     level = table.find_all("level at")
     slope = table.find_all("slope")
-    predicts = [table.find("predicts"), table.find("predicts", start=table.find("predicts") + 1)]
+    predicts = table.find_all("predicts")
 
     for block, (sweep, axis, values, prediction) in enumerate(_CEILING_BLOCKS):
         part = frame[frame.sweep == sweep].set_index(axis)
@@ -1299,7 +1312,7 @@ def check_ceiling(table: Table, data: Data) -> Iterable[Computed]:
 _CEILING_FITS = (("embedding condition", "rmse_takens"),
                  ("finite-record bound", "rmse_er"),
                  ("pointwise minimum", "rmse_min"),
-                 ("log", "rmse_loglog"))
+                 ("5.52", "rmse_loglog"))
 
 
 def check_ceilingfit(table: Table, data: Data) -> Iterable[Computed]:
@@ -1412,7 +1425,7 @@ REGISTRY: Tuple[Registered, ...] = (
 
 # ---------------------------------------------------------------- comparison
 
-def compare(printed: Optional[str], computed: Any) -> Tuple[str, str]:
+def compare(printed: Optional[str], computed: Any, tolerance: float = 0.0) -> Tuple[str, str]:
     """Diff one cell at the precision the article prints it to.
 
     Returns a status and a note. A value out by no more than one unit in the last printed
@@ -1420,7 +1433,7 @@ def compare(printed: Optional[str], computed: Any) -> Tuple[str, str]:
     not, which is a different defect and a different fix.
     """
     if isinstance(computed, (list, tuple)):
-        return _compare_list(printed, list(computed))
+        return _compare_list(printed, list(computed), tolerance)
     if computed is None:
         if printed is None:
             return OK, ""
@@ -1438,6 +1451,8 @@ def compare(printed: Optional[str], computed: Any) -> Tuple[str, str]:
     if not np.isfinite(computed):
         return MISMATCH, "the recomputed value is not finite"
 
+    if tolerance and abs(computed - target) <= tolerance + 1e-9:
+        return OK, ""
     places = decimals(printed)
     if round_half_up(computed, places) == round_half_up(target, places):
         return OK, ""
@@ -1447,17 +1462,21 @@ def compare(printed: Optional[str], computed: Any) -> Tuple[str, str]:
     return MISMATCH, ""
 
 
-def _compare_list(printed: Optional[str], computed: List[Any]) -> Tuple[str, str]:
+def _compare_list(printed: Optional[str], computed: List[Any],
+                  tolerance: float = 0.0) -> Tuple[str, str]:
     if printed is None:
         return MISMATCH, "the article prints a dash where the file has values"
     parts = [p.strip() for p in re.split(r"[/,]", printed)]
     parts = [None if p in _MISSING else p for p in parts]
+    if len(parts) == 1 and len(computed) > 1:
+        # One printed value for several seeds, which the article does where they agree.
+        parts = parts * len(computed)
     if len(parts) != len(computed):
         return MISMATCH, (f"the article prints {len(parts)} value(s) and the file has "
                           f"{len(computed)}")
     worst, notes = OK, []
     for part, value in zip(parts, computed):
-        status, note = compare(part, value)
+        status, note = compare(part, value, tolerance)
         if status != OK:
             notes.append(f"{part}:{status}" + (f" ({note})" if note else ""))
             if worst == OK or status == MISMATCH:

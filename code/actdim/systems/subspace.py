@@ -13,8 +13,21 @@ independent ways is a fact about the frame and the network, not a definition. Th
 experiment measured it -- ``functional_rank() == k`` -- and that check is kept here and
 reported, because a construction whose truth is never measured is requirement 1 unmet.
 
-The system fails requirement 4 for the same reason the decoder does: the drive moves the
-targets, so a zero learning rate leaves the loss still varying through the residual.
+What the archived experiment did *not* measure is how comparably those directions are
+excited, and the answer is: not very. The response gain of mode ``j`` goes as
+``1 / |eta + i omega_j|`` and the ``r`` forcing directions are not orthogonal in the
+network's own metric, so the trajectory's effective rank reaches 3.1 at r = 10 and 4.7 at
+r = 20. That is measured here and reported beside the rank. The image-data system of
+:mod:`actdim.systems.digits_parameter` exists partly because it removes exactly this
+defect, by equalising the gains.
+
+The system also fails requirement 4: the drive moves the targets, so a zero learning rate
+leaves the loss still varying through the residual.
+
+The two-layer tanh perceptron below is shared with :mod:`actdim.systems.digits_function`,
+which builds its adapter around the same architecture at a different size. The archived
+tree had the layout, forward pass and backward pass written out in both files, differing
+only in the names of the constants.
 """
 from __future__ import annotations
 
@@ -30,13 +43,76 @@ from .spec import GroundTruth, Simulation, excitation, register, standardise
 
 
 @dataclass(frozen=True)
+class Perceptron:
+    """A two-layer tanh network held as one flat parameter vector.
+
+    Flat because the systems here move the parameters along a fixed frame, and a frame is
+    a matrix in ``R^P``: keeping the network in that shape means the subspace arithmetic
+    never has to know the layer structure.
+    """
+
+    inputs: int
+    hidden: int
+    outputs: int
+
+    @property
+    def size(self) -> int:
+        return (self.hidden * self.inputs + self.hidden
+                + self.outputs * self.hidden + self.outputs)
+
+    def split(self, theta: np.ndarray):
+        at = 0
+        W1 = theta[at:at + self.hidden * self.inputs].reshape(self.hidden, self.inputs)
+        at += self.hidden * self.inputs
+        b1 = theta[at:at + self.hidden]
+        at += self.hidden
+        W2 = theta[at:at + self.outputs * self.hidden].reshape(self.outputs, self.hidden)
+        at += self.outputs * self.hidden
+        return W1, b1, W2, theta[at:at + self.outputs]
+
+    def forward(self, theta: np.ndarray, X: np.ndarray):
+        W1, b1, W2, b2 = self.split(theta)
+        hidden = np.tanh(X @ W1.T + b1)
+        return hidden @ W2.T + b2, hidden
+
+    def loss_gradient(self, theta: np.ndarray, X: np.ndarray, target: np.ndarray):
+        """Mean squared error and its exact gradient in the full parameter vector."""
+        _, _, W2, _ = self.split(theta)
+        output, hidden = self.forward(theta, X)
+        residual = output - target
+        d_output = residual / len(X)
+        gW2 = d_output.T @ hidden
+        gb2 = d_output.sum(axis=0)
+        d_hidden = (d_output @ W2) * (1.0 - hidden * hidden)
+        gradient = np.concatenate([(d_hidden.T @ X).ravel(), d_hidden.sum(axis=0),
+                                   gW2.ravel(), gb2])
+        return 0.5 * float(np.sum(residual * residual)) / len(X), gradient, output
+
+    def functional_rank(self, theta0: np.ndarray, U: np.ndarray, X: np.ndarray,
+                        z: np.ndarray, eps: float = 1e-5) -> Tuple[int, float]:
+        """Numerical rank of ``z -> flattened predictions``, by central differences.
+
+        Two allowed directions can produce the same change in the function. If they do, the
+        available dimension overstates the functional one and the rung's claim is wrong;
+        this is the measurement that would show it.
+        """
+        k = len(z)
+        eye = np.eye(k)
+        columns = []
+        for j in range(k):
+            plus = self.forward(theta0 + U[:, :k] @ (z + eps * eye[j]), X)[0]
+            minus = self.forward(theta0 + U[:, :k] @ (z - eps * eye[j]), X)[0]
+            columns.append(((plus - minus) / (2.0 * eps)).ravel())
+        report = rank_report(np.column_stack(columns), center=False)
+        return report.rank, report.singular_ratio
+
+
+@dataclass(frozen=True)
 class SubspaceConfig:
     """One network, one ``k``-dimensional slice of its parameter space."""
 
     k: int = 4
-    inputs: int = 8
-    hidden: int = 20
-    outputs: int = 3
+    network: Perceptron = Perceptron(8, 20, 3)
     examples: int = 40
     window: int = 4000
     burn: int = 1500
@@ -56,91 +132,38 @@ class SubspaceConfig:
 
     @property
     def parameters(self) -> int:
-        return (self.hidden * self.inputs + self.hidden
-                + self.outputs * self.hidden + self.outputs)
-
-
-def _layout(theta: np.ndarray, config: SubspaceConfig):
-    at = 0
-    W1 = theta[at:at + config.hidden * config.inputs].reshape(config.hidden, config.inputs)
-    at += config.hidden * config.inputs
-    b1 = theta[at:at + config.hidden]
-    at += config.hidden
-    W2 = theta[at:at + config.outputs * config.hidden].reshape(config.outputs, config.hidden)
-    at += config.outputs * config.hidden
-    return W1, b1, W2, theta[at:at + config.outputs]
-
-
-def forward(theta: np.ndarray, X: np.ndarray, config: SubspaceConfig):
-    W1, b1, W2, b2 = _layout(theta, config)
-    hidden = np.tanh(X @ W1.T + b1)
-    return hidden @ W2.T + b2, hidden
-
-
-def loss_gradient(theta: np.ndarray, X: np.ndarray, target: np.ndarray,
-                  config: SubspaceConfig):
-    """Mean squared error and its exact gradient in the full parameter vector."""
-    W1, b1, W2, b2 = _layout(theta, config)
-    output, hidden = forward(theta, X, config)
-    residual = output - target
-    d_output = residual / len(X)
-    gW2 = d_output.T @ hidden
-    gb2 = d_output.sum(axis=0)
-    d_hidden = (d_output @ W2) * (1.0 - hidden * hidden)
-    gW1 = d_hidden.T @ X
-    gb1 = d_hidden.sum(axis=0)
-    gradient = np.concatenate([gW1.ravel(), gb1, gW2.ravel(), gb2])
-    return 0.5 * float(np.sum(residual * residual)) / len(X), gradient, output
+        return self.network.size
 
 
 def setup(config: SubspaceConfig, seed: int):
     """The fixed dataset, the initial parameters and a generic frame of ``k`` directions."""
     generator = stream_rng(seed, f"subspace_setup:{config.k}")
-    X = generator.standard_normal((config.examples, config.inputs))
+    X = generator.standard_normal((config.examples, config.network.inputs))
     X /= np.linalg.norm(X, axis=1, keepdims=True)
     theta0 = 0.18 * generator.standard_normal(config.parameters)
-    U = orthonormal((config.parameters, config.k), generator)
-    return X, theta0, U
-
-
-def functional_rank(config: SubspaceConfig, X: np.ndarray, theta0: np.ndarray,
-                    U: np.ndarray, z: np.ndarray, eps: float = 1e-5) -> Tuple[int, float]:
-    """Numerical rank of ``z -> flattened predictions``, by central differences.
-
-    Two allowed directions can produce the same change in the function. If they do, the
-    available dimension overstates the functional one and the rung's claim is wrong; this
-    is the measurement that would show it.
-    """
-    k = len(z)
-    eye = np.eye(k)
-    columns = []
-    for j in range(k):
-        plus = forward(theta0 + U @ (z + eps * eye[j]), X, config)[0]
-        minus = forward(theta0 + U @ (z - eps * eye[j]), X, config)[0]
-        columns.append(((plus - minus) / (2.0 * eps)).ravel())
-    report = rank_report(np.column_stack(columns), center=False)
-    return report.rank, report.singular_ratio
+    return X, theta0, orthonormal((config.parameters, config.k), generator)
 
 
 def trajectory(config: SubspaceConfig, seed: int):
     n, k = config.length, int(config.k)
+    network = config.network
     X, theta0, U = setup(config, seed)
     drive = build_drive(config.drive, k, seed)
     z_star = drive.series(n)
 
-    targets = np.empty((n, config.examples, config.outputs))
+    targets = np.empty((n, config.examples, network.outputs))
     for step in range(n):
-        targets[step] = forward(theta0 + U @ z_star[step], X, config)[0]
+        targets[step] = network.forward(theta0 + U @ z_star[step], X)[0]
 
     latent = np.empty((n, k))
     thetas = np.empty((n, config.parameters))
     gradients = np.empty((n, config.parameters))
-    outputs = np.empty((n, config.examples * config.outputs))
+    outputs = np.empty((n, config.examples * network.outputs))
     losses = np.empty(n)
     z = drive.offsets.copy()
     for step in range(n):
         theta = theta0 + U @ z
-        loss, gradient, output = loss_gradient(theta, X, targets[step], config)
+        loss, gradient, output = network.loss_gradient(theta, X, targets[step])
         latent[step], thetas[step], gradients[step] = z, theta, gradient
         outputs[step], losses[step] = output.ravel(), loss
         z = z - config.eta * (U.T @ gradient)
@@ -176,7 +199,7 @@ def simulate(config: SubspaceConfig, seed: int = 0) -> Simulation:
                          seed, config.jitter)
 
     measured, checks = excitation(latent, config.k)
-    rank, ratio = functional_rank(config, X, theta0, U, drive.offsets)
+    rank, ratio = config.network.functional_rank(theta0, U, X, drive.offsets)
     measured["functional_rank"] = float(rank)
     measured["jacobian_ratio"] = ratio
     measured["resonance_margin"] = drive.margin
