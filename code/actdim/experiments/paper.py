@@ -81,18 +81,31 @@ def figures(ctx: Context) -> None:
 def tables(ctx: Context) -> None:
     import pandas as pd
 
-    from ..tables import audit, format_report
+    from ..tables import MISMATCH, ROUNDING, audit, format_report
 
     report = audit()
-    rows = report.get("rows") if isinstance(report, dict) else None
-    if rows is None:
-        rows = report if isinstance(report, list) else []
-    frame = pd.DataFrame(rows)
-    ctx.store.table("table_audit.csv", frame)
-    text = format_report(report)
+    rows = report.rows()
+    ctx.store.table("table_audit.csv", pd.DataFrame(rows))
+    text = format_report(report, verbose=bool(ctx.option("verbose", False)))
     ctx.store.text("table_audit.txt", text)
     print(text)
 
-    mismatches = int(sum(1 for row in rows if row.get("status") == "mismatch"))
-    ctx.note("mismatches", mismatches)
-    ctx.config(tables_checked=sorted({row.get("table") for row in rows}))
+    mismatches = sum(1 for row in rows if row["status"] == MISMATCH)
+    rounding = sum(1 for row in rows if row["status"] == ROUNDING)
+    ctx.note("mismatches", int(mismatches))
+    ctx.note("rounding", int(rounding))
+    ctx.note("archived_inputs", report.archived_inputs)
+    ctx.config(
+        article=report.article,
+        tables_checked=sorted(r.label for r in report.results if r.state == "checked"),
+        tables_skipped=sorted(r.label for r in report.results if r.state == "skipped"),
+        cells_compared=sum(1 for row in rows if row["kind"] != "table"),
+    )
+
+    # A mismatch is the whole point of this experiment, so it must not fail the run: the
+    # report is the result, and a caller that stopped here would leave it unwritten. The
+    # count is in the provenance and `python -m actdim.tables` exits non-zero for the
+    # release check that wants a status rather than a file.
+    if not report.ok:
+        print(f"\n{len(report.mismatches)} cell(s) or claim(s) disagree with the article. "
+              f"See runs/{ctx.experiment}/table_audit.csv.")

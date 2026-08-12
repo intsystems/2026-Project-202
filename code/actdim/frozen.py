@@ -34,7 +34,7 @@ from typing import Any, Dict, Optional, Tuple
 
 from .estimator.calibration import Calibration
 from .estimator.config import EstimatorConfig
-from .runtime.store import data_root, runs_root
+from .runtime.store import data_root, is_plumbing_check, runs_root
 
 #: The file each configuration lives in, and the experiment that wrote it. A frozen
 #: configuration is an output of its calibration run like any other, so it lives with that
@@ -53,9 +53,10 @@ PRODUCER: Dict[str, str] = {
 def frozen_path(name: str) -> Path:
     """Where a frozen configuration is read from: its calibration run's output.
 
-    ``runs/`` first, so a fresh calibration is picked up without promoting it; then the
+    ``runs/`` first, so a fresh calibration is picked up without promoting it, then the
     tracked ``data/`` copy, which is what a clone has and what the article was written
-    from.
+    from. A ``--fast`` run in ``runs/`` is skipped rather than used: see
+    :func:`_is_plumbing_check`.
     """
     experiment = PRODUCER.get(name)
     if experiment is None:
@@ -63,7 +64,7 @@ def frozen_path(name: str) -> Path:
                        f"Known: {', '.join(sorted(PRODUCER))}")
     for root in (runs_root(), data_root()):
         path = root / experiment / name
-        if path.exists():
+        if path.exists() and not (root == runs_root() and is_plumbing_check(path.parent)):
             return path
     return data_root() / experiment / name
 

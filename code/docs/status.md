@@ -20,6 +20,7 @@ missing, which a catalogue of what exists cannot show.
 | the edge-of-stability campaign | complete |
 | the twelve figures | complete, and pixel-identical to the published ones |
 | the training experiments (`train.*`) | wired |
+| the grokking experiments (`grok.*`) | wired, all nine. Seven reproduce their archived table from the logs their `needs` name; `grok.repr` is new and has none to reproduce; `grok.prwindow` cannot be run at all until `train.perceptron.sketched.long` has been trained, as below |
 | the ladder experiments (`sys.*`) | wired for the six ported systems |
 | the figure experiment (`paper.figures`) | wired |
 
@@ -36,7 +37,6 @@ implementation is named so the work can be picked up.
 | **The synthetic generators** (quasiperiodic, Ornstein-Uhlenbeck, coloured noise) | `archived_code/active_dimension/generators.py` | `valid.regime`, `valid.tau`, `valid.anisotropy` |
 | **The `valid.*` experiments** | `archived_code/active_dimension/e0`, `e3`, `e4`, `e6`, `e7b`, `e8`, `e10_ceiling_sweep` | section 6 entire, appendices E, N, P, R |
 | **The `calib.*` experiments** | `archived_code/active_dimension/e1_calibration.py`, `calibration_k20.py` | appendix C. The configurations they select are committed, so only re-selection needs them. |
-| **The `grok.*` experiments** | `archived_code/active_dimension/e5_real_logs.py`, `e9_matched_window.py`, `e9_analyse.py`, `e10_surrogate.py`; `archived_code/gromov_arithmetic/dimension_probe.py`, `eos_probe.py`, `eos_recurrence.py`, `pr_vs_window.py`; `archived_code/active_rank/analyze_rank.py`, `dip.py`; `archived_code/dimension_recovery/exp8_extended.py` | section 7 entire, appendices G, H, J, L, Q |
 | **The table auditor** | `archived_code/active_dimension/paper_tables.py` covers two tables | `check.tables`. `actdim/tables.py` exists but is unfinished. |
 | **The sketch cost and non-invasiveness experiments** | `archived_code/gromov_arithmetic/sketch_cost.py`, `verify_*.py` | appendix S. The library functions are ported; only the experiment wrappers are missing. |
 

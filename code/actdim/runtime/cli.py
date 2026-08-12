@@ -48,8 +48,14 @@ def _provenance(exp: reg.Experiment) -> Optional[dict]:
 
 
 def _has_run(exp: reg.Experiment) -> bool:
+    """Has this experiment produced a real result?
+
+    A ``--fast`` run does not count. It writes a provenance record like any other, and
+    treating it as done would let a smoke test at teatime quietly drop an experiment from
+    the overnight campaign.
+    """
     record = _provenance(exp)
-    return bool(record) and record.get("status") == "ok"
+    return bool(record) and record.get("status") == "ok" and not record.get("fast")
 
 
 def _measured_minutes(exp: reg.Experiment) -> Optional[float]:

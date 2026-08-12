@@ -14,7 +14,7 @@ from typing import Any, Dict, Optional
 from . import device as device_mod
 from .determinism import rng, seed_map, stream_seed
 from .provenance import Provenance
-from .store import Store, data_root, runs_root
+from .store import Store, data_root, is_plumbing_check, runs_root
 
 
 @dataclass
@@ -53,10 +53,15 @@ class Context:
         Looks in ``runs/`` first, then in the tracked ``data/`` tree, so that a fresh
         clone can rebuild the downstream half of the article from committed files without
         re-running the expensive upstream half.
+
+        A ``--fast`` run in ``runs/`` is skipped. Its outputs have the right columns and
+        the wrong numbers, and letting one satisfy a downstream experiment's input would
+        put plumbing-check values into a real result with nothing in the output to say so.
         """
-        candidates = [runs_root() / experiment / name,
-                      data_root() / experiment / name,
-                      data_root() / experiment / Path(name).name]
+        candidates = [] if is_plumbing_check(runs_root() / experiment) else [
+            runs_root() / experiment / name]
+        candidates += [data_root() / experiment / name,
+                       data_root() / experiment / Path(name).name]
         for path in candidates:
             if path.exists():
                 self.store.provenance.inputs.setdefault(

@@ -1,6 +1,6 @@
 # What the port found
 
-Thirty-five items. Four read-only surveys of the archived tree preceded this rewrite, one
+Thirty-seven items, plus one the port introduced and then closed. Four read-only surveys of the archived tree preceded this rewrite, one
 per cluster, and the table auditor of `check.tables` found four more by recomputing every
 mechanical cell of the article from the data behind it. What
 they found is recorded here in full, whether or not the port fixes it, because several
@@ -112,6 +112,30 @@ One check the auditor cannot make is worth naming rather than leaving silent: it
 claim that the full-batch and mini-batch arms agree to within one or two logged steps,
 needs the milestones of both sketched perceptron campaigns, and neither was promoted. The
 auditor records that as a note on `tab:runs` so that its silence is not read as agreement.
+
+## H. Found while wiring section 7
+
+| # | what | where | status |
+| --- | --- | --- | --- |
+| 36 | **A committed table was computed from a log that is not the one committed beside it.** The perceptron diagnostics were computed from a 60,000-step `x_mix_quad` run, giving four windows; the log committed in the same directory is the full 100,000-step run, which gives seven. Re-running the command on the committed input therefore moves that run's summary from MG 18.57 and 18.86 to 24.35. Nothing published moves — `fig_map` plots the crossing count and the identifiability ratio, which do not change, and `tab:grok-diagnostics` does not list this run — but it is a second instance of item 8, from a different direction: there the command did not produce the committed file, here the committed input does not produce it either. | `gromov_arithmetic/results/arith/` | **fixed** (the run set and the columns are declared) |
+| 37 | **One appendix M number depends on a seed the archived code fixed by literal.** The effective rank of the closed-form weights is 148.8 in the article and 147.4 under the port, because the drive phases now come from the run's own stream rather than a hard-coded `seed=0`; across seeds it spans 145.2 to 150.0. Appendix M already declines to treat that number as evidence, which this makes measurable rather than asserted, but it is a published digit and it moves. | `gromov_arithmetic/analytic.py` | **fixed** |
+
+## I. A defect in the port itself
+
+Recorded because it is the failure this rewrite most nearly repeated, and because the
+guard against it is now the thing to preserve.
+
+A `--fast` run writes the right files with the right columns and the wrong numbers. The
+frozen configuration is read from the calibration run's output, `runs/` before `data/`, so
+a twenty-five-second `--fast` run of `calib.e8` left `max_E = 10` and a different Theiler
+rule where every downstream experiment and the whole test suite read the estimator. It
+shadowed the committed configuration silently: a configuration file that exists is a
+configuration file that loads. An overnight campaign would have run to completion at a
+plumbing-check estimator with nothing in any output to say so.
+
+`actdim.runtime.store.is_plumbing_check` is now consulted in three places — promotion into
+`data/`, resolution of a downstream input, and the "has this already run" test that decides
+what a campaign skips — and `tests/test_runtime.py` holds all three.
 
 ## What this means for the article
 

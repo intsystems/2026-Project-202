@@ -130,6 +130,25 @@ def _default(obj: Any) -> Any:
 
 # -- the tracked half ----------------------------------------------------------
 
+def is_plumbing_check(run_dir: Path) -> bool:
+    """Was this run directory produced by a ``--fast`` run?
+
+    A ``--fast`` run computes the smallest grid that exercises every branch: the right
+    files, the right columns, the wrong numbers. Three places have to know the difference,
+    and each of them was a real failure before they did. It must not be promoted into
+    ``data/``; it must not satisfy a downstream experiment's input; and it must not count
+    as "already run", or a smoke test at teatime silently removes an experiment from the
+    overnight campaign.
+    """
+    record = run_dir / "provenance.json"
+    if not record.exists():
+        return False
+    try:
+        return bool(json.loads(record.read_text(encoding="utf-8")).get("fast"))
+    except (OSError, ValueError):
+        return False
+
+
 MANIFEST = "manifest.json"
 
 

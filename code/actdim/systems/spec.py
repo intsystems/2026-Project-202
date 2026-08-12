@@ -223,13 +223,7 @@ def register(id: str, title: str, config: type, paper: str = "") -> Callable:
 #: absent: a ladder row missing from the catalogue is a row of the article that cannot be
 #: regenerated, and it should be visible in ``actdim list`` and in the catalogue itself
 #: rather than surfacing as an import error three frames down.
-NOT_PORTED: Dict[str, str] = {
-    "digits_parameter": (
-        "the parameter-subspace system of section 5.4, rows six and seven of the ladder, "
-        "and the source of sections 5.3 and 6.1. Archived at "
-        "archived_code/active_dimension/{system,dynamics}.py."
-    ),
-}
+NOT_PORTED: Dict[str, str] = {}
 
 
 def load() -> Dict[str, SystemEntry]:
