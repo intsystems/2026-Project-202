@@ -130,6 +130,17 @@ corrected. And the modular control's log is locally straight to $0.7\,\%$, so it
 three thousandths of a component across fifty windows: its $D = 1.00$ is not an informative
 dimensional negative, and the paper now says so.
 
+**Installment 7 — the last two figures, the citations, and what it all cost** (applied). Removed
+from this file: the rest of 5.6, the optional half of 8.7, and section 9's items 4 and 5. Two
+figures the review wanted and could not have: `fig_ceiling` needed the sweep, and `fig_traces`
+needed raw synthetic series that were never committed — the exclusion experiment regenerates them,
+so a small committed extract now backs it. Three citations that were optional in 8.7 have been
+earned by the new appendices: Provenzale et al. on the space–time separation plot, which is the
+principled way to choose the Theiler exclusion that appendix P sweeps by hand; Sauer and Yorke on
+how many delay coordinates one actually needs, which is appendix R's subject; and Theiler 1991
+qualifying the finite dimension of power-law noise. And appendix S reports the compute, measures
+the sketch's cost instead of asserting it, and carries the code-availability statement.
+
 **Installment 6 — the ceiling sweeps** (applied). Removed from this file: priority-list items 3
 and 4. The sweeps were meant to choose between the Takens condition and the Eckmann–Ruelle bound
 and instead refuted both, so §5.2 no longer claims that "the observed ceilings agree" with
@@ -146,14 +157,16 @@ Section numbering follows the original review, so gaps are items that have been 
 deleted. Section 6 is gone entirely; sections 2, 3 and 4 retain only their "verified correct"
 records, which exist so nobody re-checks ground already covered.
 
-1. [The story](#1-the-story) — one open item: is the admissible regime ever realised?
+1. [The story](#1-the-story) — closed; the open question was measured, not argued
 2. [Definitions, theory and formulas](#2-definitions-theory-and-formulas) — closed
 3. [Claims that the code and data do not support](#3-claims-that-the-code-and-data-do-not-support) — closed
 4. [The grokking section](#4-the-grokking-section) — closed
-5. [Figures and tables](#5-figures-and-tables) — figures that could still be added
-6. [Writing](#7-writing) — the title
-7. [Citations and related work](#8-citations-and-related-work) — optional additions
-8. [Reproducibility and the artifact](#9-reproducibility-and-the-artifact)
+5. [Figures and tables](#5-figures-and-tables) — closed; twelve figures
+6. [Writing](#7-writing) — closed; the title is fixed
+7. [Citations and related work](#8-citations-and-related-work) — closed, including the three
+   entries that were optional until the new appendices earned them
+8. [Reproducibility and the artifact](#9-reproducibility-and-the-artifact) — **the last open
+   block**, and the one that matters most for the release
 
 Appendix: [what remains](#appendix-priority-list).
 
@@ -329,17 +342,20 @@ shape. The palette was replaced — the old one separated by only 8.8 ΔE under 
 deuteranopia despite the build notes claiming otherwise — and every explanatory sentence moved
 from inside the axes into the captions.
 
-Still not drawn, and both need computation rather than plotting:
+Both remaining figures are now drawn, and the paper has twelve.
 
-- **The $E_{\max}$ ceiling.** The figure that would settle §5.2's open question needs the sweep
-  described there; there is nothing to plot until it is run.
-- **Raw scalar-log traces, one per regime.** For the synthetic arms only windowed summaries are
-  committed, so the raw series would have to be regenerated. The real grokking logs do exist
-  (`active_rank/results_fine/*_train.csv`), and the accuracy, loss and norm traces for all four
-  transformer runs were plotted in the previous draft
-  (`icomp_article/images/{mod,s5}_wd{0,1}_{acc,loss,norm}.png`), so the real half of this figure
-  remains a restyling job. It is the one figure a reader of a paper about reading time series
-  might still miss.
+- ~~**The $E_{\max}$ ceiling.**~~ `fig_ceiling`, appendix R. It plots the rank tracked against each
+  hypothesis's knob with that hypothesis's prediction overlaid, which is what makes the refutation
+  legible: the measured curve is nearly flat where $E_{\max}/2$ climbs to $28$, and the two cross
+  near the $E_{\max} = 20$ the paper had frozen.
+- ~~**Raw scalar-log traces, one per regime.**~~ `fig_traces`, appendix P. The blocker was that
+  only windowed summaries were committed for the synthetic arms; the exclusion experiment
+  regenerates the raw series, so `e11_export_traces.py` now writes a small committed extract and
+  the figure builds from committed files alone. Three panels, one per row of \cref{tab:classes}:
+  the recurrent arm over twenty-five drive periods, the transient over its whole record, and a
+  real mini-batch transformer run through the parameter norm. It is worth the space precisely
+  because it shows why one diagnostic cannot do the job — the transient is monotone and the driven
+  run is not.
 
 ## 7. Writing
 
@@ -462,11 +478,14 @@ the repository. Owner: whoever prepares the release. Short section, mostly actio
 3. **The pipeline overrides the frozen configuration in three places** without the paper saying so
    (3.3). Either make the frozen configuration authoritative in code, or document the overrides in
    Appendix B beside the configuration they modify.
-4. **No compute cost is reported.** Total GPU or CPU hours, and the cost of the trajectory sketch
-   relative to training, belong in an appendix; the sketch's cheapness is one of the paper's
-   practical selling points and is never quantified.
-5. **No code-availability statement.** For an anonymous submission, a sentence promising release on
-   acceptance, naming the modules, is standard and costs one line.
+4. ~~**No compute cost is reported.**~~ **Done** — appendix S. The whole campaign is hours on one
+   consumer GPU and one desktop CPU, with the per-item figures given. The sketch's cheapness is now
+   measured rather than asserted, by `sketch_cost.py`: in storage it is a factor of $36$ to $55$,
+   which is exact arithmetic; in time it is *smaller than the machine's own run-to-run variation* —
+   the A/B returns a nominal $-3.1\,\%$ overhead, which is a bound and not a measurement, and the
+   appendix says so rather than quoting a negative number as a result.
+5. ~~**No code-availability statement.**~~ **Done** — appendix S, promising release on acceptance
+   and naming the modules.
 6. **`icomp_v2/README.md` documents two known defects in upstream result files** (the
    `invariance_controls.csv` deltas that are really seed scatter, and the never-written-up $k = 20$
    calibration). Those fixes exist only in the paper. Push them back into the source repository, or

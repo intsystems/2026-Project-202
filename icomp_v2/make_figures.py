@@ -905,6 +905,44 @@ def fig_eos():
     save(fig, "fig_eos")
 
 
+def fig_traces():
+    """One raw scalar log per regime -- what the estimator is actually reading."""
+    syn = pd.read_csv(CODE / "active_dimension/results/e11_theiler_contrast"
+                             "/example_traces.csv")
+    real = pd.read_csv(CODE / "active_rank/results_fine/mod_wd1_train.csv")
+
+    def z(a):
+        a = np.asarray(a, float)
+        return (a - a.mean()) / a.std()
+
+    # Each panel spans what that regime needs to be legible: the recurrent arm's drive
+    # period is 16 samples, so 400 samples is 25 cycles, while the transient and the
+    # real run are shown whole. Standardised, because the estimator standardises.
+    panels = [
+        ("recurrent", z(syn["recurrent"].to_numpy()[:400]), np.arange(400),
+         RECURRENT, "deterministic, recurrent", "sample"),
+        ("transient", z(syn["transient"].to_numpy()), np.arange(len(syn)),
+         TRANSIENT, "deterministic, transient", "sample"),
+        ("stochastic", z(real["weight_norm"].to_numpy()),
+         real["step"].to_numpy() / 1000.0, STOCHASTIC, "stochastically driven",
+         "step ($10^3$)"),
+    ]
+
+    fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.55))
+    for ax, (_, y, x, c, title, xlab) in zip(axes, panels):
+        ax.plot(x, y, "-", color=c, lw=0.6, zorder=3)
+        ax.set_title(title, pad=3.0)
+        ax.set_xlabel(xlab)
+        ax.set_ylim(-3.4, 3.4)
+        ax.set_yticks([-2, 0, 2])
+    axes[0].set_ylabel("standardised")
+    for ax in axes[1:]:
+        ax.set_yticklabels([])
+
+    fig.tight_layout(w_pad=1.2)
+    save(fig, "fig_traces")
+
+
 def fig_ceiling():
     """The tracking ceiling against each hypothesis's knob, and against its prediction."""
     d = pd.read_csv(CODE / "active_dimension/results/e10_ceiling/ceiling_summary.csv")
@@ -965,3 +1003,4 @@ if __name__ == "__main__":
     fig_prwindow()
     fig_eos()
     fig_ceiling()
+    fig_traces()

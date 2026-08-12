@@ -75,6 +75,8 @@ marks the transition is the timing and shape of the fall rather than its depth.
 | appendix P, the exclusion contrast | `../code/active_dimension/e11_theiler_contrast.py`, `results/e11_theiler_contrast/` |
 | appendix Q, edge of stability | `../code/gromov_arithmetic/eos.py`, `eos_probe.py`, `eos_recurrence.py`, `results/eos/report.md` |
 | appendix R, the ceiling sweeps | `../code/active_dimension/e10_ceiling_sweep.py`, `results/e10_ceiling/report.md` |
+| appendix S, the sketch's cost | `../code/gromov_arithmetic/sketch_cost.py`, `results/sketch_cost.json` |
+| `fig_traces` extract | `../code/active_dimension/e11_export_traces.py` |
 
 ## Appendices
 
@@ -98,6 +100,7 @@ marks the transition is the timing and shape of the fall rather than its depth.
 | P | the exclusion sweep: a transient's dimension is 1, and identifiable only without it |
 | Q | full-batch descent at the edge of stability, and what the logging stride hides |
 | R | sweeping the embedding against the record: neither explains the ceiling |
+| S | compute cost, what the trajectory sketch costs, and code availability |
 
 ## Figures
 
@@ -117,6 +120,7 @@ style file, at 8 pt so that LaTeX never rescales them.
 | `fig_window` | the windowed estimate on the grokking logs, and what it cannot resolve | appendix L |
 | `fig_eos` | the stability ratio, the two-cycle, and what a stride of ten removes | appendix Q |
 | `fig_ceiling` | the rank tracked against each hypothesis's knob, and its prediction | appendix R |
+| `fig_traces` | one raw scalar log per regime: what the estimator actually reads | appendix P |
 
 Colour encodes the three dynamical regimes of table 1 and nothing else: recurrent `#004488`,
 stochastic `#BB5566`, transient `#997700`, with `#666666` for reference lines. This is Paul Tol's

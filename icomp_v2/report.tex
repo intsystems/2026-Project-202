@@ -295,7 +295,8 @@ admits a driver selecting among finitely many maps, as sampling a finite dataset
 deliver an embedding \emph{fibre by fibre}, one per realisation of the drive, and a single run
 crosses fibres, so its cloud is not confined to the image of any one and no invariant measure
 exists there to sample. Coloured noise alone yields a finite reproducible dimension set by its
-spectral exponent \citep{osborne1989finite}. The second regime is less often noticed. A decaying
+spectral exponent \citep{osborne1989finite}, or at least an estimate that behaves like
+one \citep{theiler1991some}. The second regime is less often noticed. A decaying
 transient traces a curve it never returns to, so it has no $\gM_{\gW}$; its effective rank
 measures $1.03$ to $1.06$ in \cref{sec:digits} only because the curve is nearly straight.
 
@@ -1884,6 +1885,21 @@ family, three seeds, $r \in \{2,4,6,8\}$, seven windows each; the estimator is o
 configuration, and at the frozen setting every cell reproduces \cref{sec:digits} to every stored
 digit.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_traces.pdf}
+\caption{The three regimes of \cref{tab:classes} as raw scalar logs, each standardised as the
+estimator standardises it, since that is all the estimator is given. Left, the recurrent arm of
+this appendix: a quasiperiodic drive of period sixteen samples over twenty-five of them, whose
+orbit closes onto a torus. Middle, the transient arm over its whole record --- a decay that
+increases on none of its eight thousand steps. Right, a real mini-batch transformer run through
+the parameter norm, which is the stochastic regime. The last two are the ones the diagnostics of
+\cref{sec:diagnostics} must refuse, and the difference between them is why one statistic will not
+do it: the transient is monotone and the driven run is not, so a test of non-monotonicity catches
+the first and a test of embedding stability the second.}
+\label{fig:traces}
+\end{figure}
+
 \begin{table}[H]
 \centering
 \caption{The estimate against the Theiler exclusion, median over observers, seeds and windows. The
@@ -1934,7 +1950,11 @@ $\hat d_{MG}(100)/\hat d_{MG}(50)$ separates as cleanly. Unlike the trend-crossi
 recurrence in the reconstructed space rather than non-monotonicity of the series, which is the gap
 \cref{sec:diagnostics} leaves open and which \cref{app:eos} shows costs something on real runs. We
 report it rather than adopt it: it is calibrated on the same systems that produced the two
-diagnostics and has not been validated out of sample.
+diagnostics and has not been validated out of sample. The principled alternative is older than
+either. A space--time separation plot \citep{provenzale1992distinguishing} shows directly how
+neighbour distance depends on temporal separation, and reading $W_T$ off one would replace the rule
+of \cref{sec:estimator} with a measurement; the sweep above is a coarse version of that plot, and
+choosing the exclusion this way rather than by rule is the obvious improvement to the protocol.
 
 \section{Descent at the edge of stability}\label{app:eos}
 
@@ -2085,7 +2105,9 @@ attains it is $E_{\max} = 56$ at $N = 1000$ --- the \emph{shortest} record in th
 $2\log_{10}N$ allows $6.0$. A record-length bound cannot produce that, so \citet{eckmann1992fundamental}
 is not the explanation here. Nor is $E > 2d$ in the form we used it: the ceiling rises by $0.047$
 components per unit of $E_{\max}$, not by a half, so $E_{\max}/2$ happens to be right at
-$E_{\max} = 20$ and is wrong at both ends. Fitting the level at $r \ge 16$, whose own spread is
+$E_{\max} = 20$ and is wrong at both ends --- which is \citeauthor{sauer1993how}'s point in the
+other direction, that how many delay coordinates one needs does not follow from the embedding
+theorem alone \citep{sauer1993how}. Fitting the level at $r \ge 16$, whose own spread is
 $2.01$, gives a root-mean-square error of $8.54$ for $E_{\max}/2$, $3.91$ for $2\log_{10}N$, $3.95$
 for their pointwise minimum --- so they do not jointly bind either --- and $0.19$ for
 $8.63\log_{10}E_{\max} + 1.03\log_{10}N - 5.52$. Both dependences are logarithmic: $2.6$ components
@@ -2114,5 +2136,40 @@ the instrument that we can bound but not name. \Cref{sec:diagnostics}'s own rati
 $\rho_{\mathrm{ident}}$ at $r = 20$ is $1.31$ to $1.40$ at every record length, a longer record
 never making an unidentifiable estimate identifiable, and falls from $1.22$ to $1.02$ as $E_{\max}$
 grows, crossing the band at about the rank where tracking stops.
+
+\section{Compute, and code availability}\label{app:compute}
+
+\paragraph{What this cost.} Everything here runs on one consumer GPU and one desktop CPU, in hours
+rather than days. The largest GPU item is the edge-of-stability campaign of \cref{app:eos}: sixteen
+runs of $30\,000$ full-batch steps, logged at every step and with the sharpness measured three
+hundred times per run, in $1770$ seconds total on a single T4, a median of $154$ seconds a run.
+The sketched perceptron runs of \cref{app:fb} take about $95$ seconds per $30\,000$ steps on the
+same hardware. The analysis is the more expensive half and is all CPU: the exclusion sweep of
+\cref{app:exclusion} is $1440$ scored cells, the ceiling sweep of \cref{app:ceiling} $3240$, and
+the diagnostics of \cref{app:eos} $324$ windows at $E_{\max}$ and $2E_{\max}$ on records of eight
+thousand samples --- a few core-hours each, the ceiling sweep the largest single item. Nothing in
+this paper needs a cluster, which is part of the point: the instrument is meant to be cheap enough
+to run on a log one already has.
+
+\paragraph{What the trajectory sketch costs.} \Cref{sec:direct} argues that measuring the
+trajectory directly is affordable, and that claim should carry a number. In storage it is exact
+arithmetic: at each logged step the sketch keeps $1024$ coordinates in each of two spaces under two
+hash families, $4096$ floats, against $145\,500$ for the perceptron's full parameter vector and
+$226\,816$ for the transformer's --- a factor of $36$ and $55$. Over the $151$ logged steps of a
+$1500$-step run that is $2.5$ against $88$ megabytes.
+
+In time it is smaller than we can measure. Training the same configuration with and without the
+observer attached, alternating the order so that warm-up cannot favour one arm, and checking that
+the two arms agree on every logged loss to the last bit, gives $41.75$ seconds bare against
+$40.44$ probed --- a nominal overhead of $-3.1\,\%$. A negative overhead is not a result but a
+bound: at the same logging stride the transformer runs use, the cost of the sketch is under the
+run-to-run variation of the machine, which here is a few per cent. \texttt{sketch\_cost.py}
+records the measurement.
+
+\paragraph{Code availability.} All code, configurations and result files behind every number and
+figure in this paper will be released publicly on acceptance: the estimator and its frozen
+configurations, the six constructed systems, the trajectory sketch, the training scripts for both
+grokking settings, and the analysis scripts named throughout these appendices. The figures
+regenerate from the committed result files with a single command.
 
 \end{document}
