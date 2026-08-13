@@ -45,8 +45,8 @@ def bad(report, label):
 
 
 def test_every_labelled_table_in_the_article_is_read(parsed):
-    """Twenty-eight ``tabular`` blocks, and none of them silently dropped."""
-    assert len(parsed) == 28
+    """Twenty-nine ``tabular`` blocks, and none of them silently dropped."""
+    assert len(parsed) == 29
     assert all(label.startswith("tab:") for label in parsed)
 
 
@@ -175,15 +175,20 @@ def test_the_rows_carry_what_the_caller_needs(report):
                                                "skipped"}
     disagreeing = [row for row in rows if row["status"] in (MISMATCH, ROUNDING)]
     assert len(disagreeing) == len(report.mismatches)
-    assert sum(1 for row in rows if row["status"] == MISMATCH) == 10
+    assert sum(1 for row in rows if row["status"] == MISMATCH) == 4
 
 
 def test_the_computed_value_is_reported_at_full_precision(report):
-    """Rounding it here would hide exactly the disagreement being reported."""
+    """Rounding it here would hide exactly the disagreement being reported.
+
+    The cell agrees now that the slope row has been corrected, but the report still has to
+    carry the unrounded value: a reader checking a cell that passes needs to see what it
+    was compared against, and the next edit to this row will be judged against it.
+    """
     row = next(r for r in report.rows()
                if r["table"] == "tab:ceiling" and r["column"] == "N = 4000"
                and r["row"] == "slope")
-    assert row["printed"] == "0.24"
+    assert row["printed"] == "0.29"
     assert row["computed"].startswith("0.2865")
 
 
@@ -206,17 +211,22 @@ def test_errata_3_the_two_halves_of_tab_alts_are_aggregated_differently(report):
     assert "all twenty" in claims[0].computed
 
 
-def test_errata_5_the_a_sum_sq_budget_is_46000_and_not_100k(report):
-    finding = next(f for f in bad(report, "tab:runs") if f.row == "a_sum_sq")
-    assert finding.column == "budget"
-    assert finding.printed == "100k" and finding.computed == 46_000.0
+def test_errata_5_the_a_sum_sq_budget_now_prints_the_46000_that_ran(report):
+    """Corrected in the article. The run was stopped at 46,000 steps and the budget column
+    said 100k; it now says what ran, so the cell agrees and no finding is raised."""
+    assert not [f for f in bad(report, "tab:runs")
+                if f.row == "a_sum_sq" and f.column == "budget"]
+    row = next(r for r in report.rows()
+               if r["table"] == "tab:runs" and r["row"] == "a_sum_sq"
+               and r["column"] == "budget")
+    assert row["status"] == OK and row["printed"] == "46k"
 
 
-def test_errata_6_tab_ladder_prints_its_two_correlations_in_the_other_seed_order(report):
-    finding = next(f for f in bad(report, "tab:ladder")
-                   if f.row == "oscillating matrix" and f.kind != CLAIM)
-    assert finding.printed == "0.99 / 1.00"
-    assert finding.computed.startswith("1, 0.9878")
+def test_errata_6_tab_ladder_now_prints_its_correlations_in_the_seed_order(report):
+    """Corrected in the article: the pair was printed as 0.99 / 1.00 and the seeds give
+    1.00 / 0.99."""
+    assert not [f for f in bad(report, "tab:ladder")
+                if f.row == "oscillating matrix" and f.kind != CLAIM]
 
 
 def test_errata_9_five_rows_of_tab_ladder_have_one_window_and_not_several(report):
@@ -250,19 +260,10 @@ def test_errata_24_the_rescaling_control_reads_zero(report):
 # -- what the auditor found that the errata does not list ----------------------
 
 
-def test_the_two_ceiling_scans_disagree_on_the_cell_they_share(report):
-    """E_max = 20 at N = 8000 is one cell printed twice, as 0.27 and as 0.24. One of them is
-    wrong whatever the measurement says, and the file gives 0.2682."""
-    claim = next(f for f in bad(report, "tab:ceiling") if f.kind == CLAIM)
-    assert claim.row == "slope, the shared cell"
-    assert "0.2682" in claim.computed
-
-
-def test_three_slopes_of_the_record_scan_do_not_reproduce(report):
-    """Not rounding: the printed row rises monotonically and the file does not."""
-    slopes = [f for f in bad(report, "tab:ceiling") if f.row == "slope" and f.kind != CLAIM]
-    assert {f.column for f in slopes} == {"N = 4000", "N = 8000", "N = 16000"}
-    assert all(f.status == MISMATCH for f in slopes)
+def test_the_ceiling_scans_now_agree_on_the_cell_they_share(report):
+    """E_max = 20 at N = 8000 is one cell printed twice, once in each scan. It read 0.27
+    against 0.24, and the file gives 0.2682; both now print the same value."""
+    assert not bad(report, "tab:ceiling")
 
 
 def test_the_theiler_error_row_is_the_mean_under_its_own_label(report):
@@ -270,10 +271,9 @@ def test_the_theiler_error_row_is_the_mean_under_its_own_label(report):
     assert "mean absolute error" in claim.computed
 
 
-def test_one_ground_truth_cell_is_rounded_the_wrong_way(report):
-    finding = next(f for f in bad(report, "tab:gt"))
-    assert finding.status == ROUNDING
-    assert finding.printed == "5.47"
+def test_the_ground_truth_cell_is_rounded_the_way_the_file_reads(report):
+    """5.4649 was printed as 5.47 and now prints 5.46."""
+    assert not bad(report, "tab:gt")
 
 
 # -- the whole report ----------------------------------------------------------
@@ -281,21 +281,19 @@ def test_one_ground_truth_cell_is_rounded_the_wrong_way(report):
 
 #: Every disagreement the audit reports today, as (table, row, column). Written out rather
 #: than counted, so that a new defect names itself in the failure and a defect that stops
-#: being reported does too. Ten mismatches and one rounding cell over six tables: six are on
-#: record in docs/errata.md and the rest are named in the tests above. Editing this set is
-#: the correct fix once the change has been recorded somewhere a reader will find it.
+#: being reported does too. Editing this set is the correct fix once the change has been
+#: recorded somewhere a reader will find it.
+#:
+#: Seven cells left this set when the article was corrected: the a_sum_sq budget, the
+#: ladder's correlation order, the ground-truth rounding, and the four ceiling-slope
+#: findings. What remains is four claims, none of them a number. Each is a statement the
+#: article makes *about* a table which the data does not support, and each needs an
+#: editorial decision rather than an edit to a cell.
 KNOWN = {
-    ("tab:ladder", "oscillating matrix", "rho"),
     ("tab:ladder", "one window or several", "claim"),
     ("tab:alts", "aggregation of the two halves", "claim"),
-    ("tab:gt", "noise_nopre", "6"),
     ("tab:theiler", "median absolute error", "claim"),
-    ("tab:runs", "a_sum_sq", "budget"),
     ("tab:runs", "which four carry the sketch", "claim"),
-    ("tab:ceiling", "slope", "N = 4000"),
-    ("tab:ceiling", "slope", "N = 8000"),
-    ("tab:ceiling", "slope", "N = 16000"),
-    ("tab:ceiling", "slope, the shared cell", "claim"),
 }
 
 
@@ -303,7 +301,7 @@ def test_the_known_disagreements_and_no_others(report):
     seen = {(f.label, f.row, f.column) for f in report.mismatches}
     assert len(seen) == len(report.mismatches), "two findings share a cell"
     assert seen == KNOWN
-    assert sum(1 for f in report.mismatches if f.status == ROUNDING) == 1
+    assert sum(1 for f in report.mismatches if f.status == ROUNDING) == 0
 
 
 def test_the_command_line_exits_non_zero_while_a_cell_disagrees(capsys):
