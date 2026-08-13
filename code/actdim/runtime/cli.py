@@ -177,6 +177,19 @@ def cmd_run(args: argparse.Namespace) -> int:
                 # Its outputs have the right columns and the wrong numbers, and data/ is
                 # what the article reads, so the two must never meet.
                 print("     not promoted: --fast output is a plumbing check, not a result")
+            elif undeclared:
+                # The warning above used to be followed by promotion anyway, which raised
+                # on the first missing name and took the whole campaign with it -- past
+                # experiments that had already succeeded, and past --keep-going, which
+                # exists to prevent exactly that. The training here did run; what failed
+                # is the experiment's contract with data/, so it is recorded as a failure
+                # and the campaign goes on.
+                print("     not promoted: the declared outputs above were not written")
+                failures.append(exp.id)
+                if not args.keep_going:
+                    print(f"\nstopped at {exp.id}. Its outputs are in runs/{exp.id}/; "
+                          f"the promotes list names files it does not write.")
+                    return 1
             else:
                 store_mod.promote(exp.id, exp.promotes)
                 print(f"     promoted {len(exp.promotes)} file(s) to data/{exp.id}/")

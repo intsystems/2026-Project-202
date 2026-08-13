@@ -1612,6 +1612,47 @@ def _collapse(values: List[Optional[float]]) -> Any:
     return None if all(v is None for v in values) else values
 
 
+#: The two arms above the rule of ``tab:clocks``, and the five observer scales below it,
+#: in the order the table prints them. Declared rather than parsed out of the row labels:
+#: the article typesets the scales as ``$x + 0.25x^{3}$`` and the experiment records them
+#: as ``x + 0.25 x^3``, and a checker that matched on those strings would break on a
+#: purely typographical edit.
+_CLOCK_ARMS = ("four independent clocks", "one clock, four hands")
+_CLOCK_WARPS = ("identity", "x + 0.25 x^3", "x + x^3", "x + x^5", "x + 0.1 x^7")
+
+
+def check_clocks(table: Table, data: Data) -> Iterable[Computed]:
+    """Both halves of ``tab:clocks``: the roughness-matched arms, then the observer scales.
+
+    Every cell is a median over the eight seeds, which is what the caption says it is.
+    """
+    levels = data.frame("valid.geometry/geometry_levels.csv")
+    warps = data.frame("valid.geometry/observer_warps.csv")
+    levels_file = Data.name("valid.geometry/geometry_levels.csv")
+    warps_file = Data.name("valid.geometry/observer_warps.csv")
+
+    body = table.body()
+    for row, arm in zip(body, _CLOCK_ARMS):
+        got = levels[levels.arm == arm]
+        if got.empty:
+            continue
+        yield Computed(row, 1, float(got.truth.iloc[0]), levels_file)
+        yield Computed(row, 2, float(got.MG.median()), levels_file)
+        yield Computed(row, 3, float(got.matched_roughness.median()), levels_file)
+        yield Computed(row, 4, float(got.PRdelay.median()), levels_file)
+
+    for row, observer in zip(body[len(_CLOCK_ARMS):], _CLOCK_WARPS):
+        got = warps[warps.observer == observer]
+        if got.empty:
+            continue
+        # A monotone map cannot change an intrinsic dimension, so the truth column is 4
+        # by construction rather than by measurement; the file records it per row.
+        yield Computed(row, 1, float(got.truth.iloc[0]), warps_file)
+        yield Computed(row, 2, float(got.MG.median()), warps_file)
+        yield Computed(row, 3, float(got.observed_roughness.median()), warps_file)
+        yield Computed(row, 4, float(got.PRdelay.median()), warps_file)
+
+
 _CEILING_BLOCKS = (
     ("E", "max_E", (10, 14, 20, 28, 40, 56), "takens"),
     ("N", "N", (1000, 2000, 4000, 8000, 16000, 32000, 64000), "eckmann_ruelle"),
@@ -1790,6 +1831,10 @@ REGISTRY: Tuple[Registered, ...] = (
         "checked against the table itself before any file is opened",
     )),
     Registered("tab:ceilingfit", check_ceilingfit),
+    Registered("tab:clocks", check_clocks, notes=(
+        "the truth column is the construction, not a measurement: four independent "
+        "phases against one, and an invertible map that cannot change either",
+    )),
 )
 
 
