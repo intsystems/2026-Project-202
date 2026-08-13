@@ -4,7 +4,14 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-\usepackage{hyperref}
+% Coloured link text, not boxed link borders. Loaded bare, hyperref draws a rectangle
+% around every reference -- red for \cref, green for \citep -- which a reviewer of the
+% August build reported seeing throughout the PDF, and which prints as a black box. The
+% colour is the deep blue of the figure palette, so links and plots agree.
+\usepackage{xcolor}
+\definecolor{linkblue}{HTML}{004488}
+\usepackage[colorlinks=true, linkcolor=linkblue, citecolor=linkblue,
+            urlcolor=linkblue, filecolor=linkblue]{hyperref}
 \usepackage{url}
 \usepackage{booktabs}
 \usepackage{microtype}
