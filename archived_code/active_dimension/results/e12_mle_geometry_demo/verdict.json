@@ -1,0 +1,38 @@
+{
+  "geometry_mg_one": 1.1186641481015784,
+  "geometry_mg_four": 3.953248643018493,
+  "geometry_roughness_relative_change": 0.0001412621933555072,
+  "geometry_pass": true,
+  "warp_roughness_relative_span": 0.8407475810512223,
+  "warp_mg_span": 0.10429362643536866,
+  "warp_max_abs_error": 0.06773231266101565,
+  "warp_pass": true,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "trace_config": {
+    "max_E": 20,
+    "tau": 4,
+    "k_neighbors": 20,
+    "theiler": "autocorr",
+    "window": 4000,
+    "stride": 400,
+    "dither": 1e-09
+  },
+  "level_config": {
+    "max_E": 20,
+    "tau": 4,
+    "k_neighbors": 20,
+    "theiler": "autocorr",
+    "window": 8000,
+    "stride": 4000,
+    "dither": 1e-09
+  }
+}

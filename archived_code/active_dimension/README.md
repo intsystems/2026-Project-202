@@ -15,6 +15,7 @@ is scored against **active**, never against available and never against nominal 
 ```
 python e1_calibration.py    # freeze the estimator on calibration seeds AND r      ~50 min
 python run_all.py           # e0, e6, e2, e3, e4, e5, figures                      ~3.5 h
+python e12_mle_geometry_demo.py # two presentation-ready MLE-vs-roughness controls   ~1.5 min
 python analyze.py           # every table the report quotes  -> results/tables.txt
 ```
 
@@ -31,6 +32,7 @@ from `results/e1_calibration/frozen_config.json`.  Results in `results/`, figure
 | `e3_transitions.py` | r_high -> r_low -> r_high: level error, detection rate, lag |
 | `e4_controls.py` | seven things that change while r does not |
 | `e5_real_logs.py` | where this project's own 120k-step logs sit on the atlas |
+| `e12_mle_geometry_demo.py` | does MLE see phase geometry that roughness and linear PR miss? |
 
 **The answer, in one line.** MG recovers the active dimension of a real network with MAE 0.84
 on held-out r and held-out seeds -- but only for deterministic, recurrent dynamics whose
