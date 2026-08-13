@@ -135,7 +135,7 @@ def perceptron_arith(ctx: Context) -> None:
     paper=("app:runs", "sec:pairs", "app:repr"),
     device=GPU,
     minutes=72,
-    promotes=("milestones.csv", "g_p2_p97_train.csv", "g_p2x_p97_train.csv"),
+    promotes=("milestones.csv", "g_p2_train.csv", "g_p2x_train.csv"),
     tier=2,
     notes="The two promoted logs are what fig_pairs draws; the rest stay in runs/.",
 )

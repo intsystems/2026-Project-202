@@ -1,0 +1,10 @@
+{
+  "geometry_mg_four": 3.97640147044264,
+  "geometry_mg_one": 1.0997672870913182,
+  "geometry_pass": true,
+  "geometry_roughness_relative_change": 0.0006729807160256398,
+  "warp_max_abs_error": 0.08346579896335493,
+  "warp_mg_span": 0.10133303643711278,
+  "warp_pass": true,
+  "warp_roughness_relative_span": 0.8342660455520219
+}

@@ -672,6 +672,54 @@
       "sha256": "d07f9a4394e47d42911ba576d3bb72647c4675bca49a17216e8b40840acd1179",
       "source": "archived"
     },
+    "valid.geometry/geometry_levels.csv": {
+      "bytes": 7941,
+      "command": "python -m actdim run valid.geometry",
+      "experiment": "valid.geometry",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "77b1149afd21e155609ab45247418cd1643197e5"
+      },
+      "produced_utc": "2026-08-13T06:27:47Z",
+      "sha256": "e0784db1ca1fe43d2e64f6360d47efa4d40cba89aa85ea8b95d17a5ab787d9e5"
+    },
+    "valid.geometry/geometry_switch_summary.csv": {
+      "bytes": 1585,
+      "command": "python -m actdim run valid.geometry",
+      "experiment": "valid.geometry",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "77b1149afd21e155609ab45247418cd1643197e5"
+      },
+      "produced_utc": "2026-08-13T06:27:47Z",
+      "sha256": "20737023e5fca53f4a4c4240b0810244d666214fd6d927eecb3f90ce05cd89fa"
+    },
+    "valid.geometry/observer_warps.csv": {
+      "bytes": 16698,
+      "command": "python -m actdim run valid.geometry",
+      "experiment": "valid.geometry",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "77b1149afd21e155609ab45247418cd1643197e5"
+      },
+      "produced_utc": "2026-08-13T06:27:47Z",
+      "sha256": "1812088367be5901d65e9dba316c02dcd94b6fcd0b79b0eb9806a834fece8bc1"
+    },
+    "valid.geometry/verdict.json": {
+      "bytes": 341,
+      "command": "python -m actdim run valid.geometry",
+      "experiment": "valid.geometry",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "77b1149afd21e155609ab45247418cd1643197e5"
+      },
+      "produced_utc": "2026-08-13T06:27:47Z",
+      "sha256": "6948d0f964117e8847df491f2832c66db82a1e458cf2a1bc3aaae88585135f12"
+    },
     "valid.nuisance/controls_raw.csv": {
       "archived_path": "active_dimension/results/e4_controls/controls_raw.csv",
       "bytes": 111656,

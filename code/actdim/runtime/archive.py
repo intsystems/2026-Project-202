@@ -187,9 +187,11 @@ BASELINE: Dict[str, Dict[str, str]] = {
         "eos_lr3e+06_s1_sharp.csv": "gromov_arithmetic/results/eos/eos_lr3e+06_s1_sharp.csv",
         "eos_lr2e+06_s1_train.csv": "gromov_arithmetic/results/eos/eos_lr2e+06_s1_train.csv",
     },
+    # The keys are what this package's trainer writes, keyed by the run names appendix O
+    # prints; the values carry the modulus because the archived filenames did.
     "train.perceptron.poly": {
-        "g_p2_p97_train.csv": "gromov_polynomials/results/g_p2_p97_train.csv",
-        "g_p2x_p97_train.csv": "gromov_polynomials/results/g_p2x_p97_train.csv",
+        "g_p2_train.csv": "gromov_polynomials/results/g_p2_p97_train.csv",
+        "g_p2x_train.csv": "gromov_polynomials/results/g_p2x_p97_train.csv",
     },
     "check.sketch.cost": {
         "sketch_cost.json": "gromov_arithmetic/results/sketch_cost.json",

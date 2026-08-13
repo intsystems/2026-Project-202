@@ -132,6 +132,19 @@ def resolve_run(kind: str, run: str, allow_archive: bool = False) -> Source:
         raise KeyError(f"no such per-run source: {kind!r}")
     experiment, pattern, archive_dir = RUN_SOURCES[kind]
     filename = pattern.format(run=run)
+    # A polynomial training log exists under either the label the article prints,
+    # ``g_p2_p97_train.csv``, which is what the archived tree wrote, or the shorter
+    # registry key this package's trainer writes. ``log_candidates`` is the one place that
+    # knows both; the archived tree only ever had the first, so the fallback keeps using
+    # the label. Without this a promoted re-run is invisible here and the figure quietly
+    # goes on drawing the archived log.
+    from ..analysis.logs import log_candidates
+
+    names = log_candidates(run) if pattern == "{run}_train.csv" else (filename,)
+    for candidate in names:
+        current = data_root() / experiment / candidate
+        if current.exists():
+            return Source(f"{kind}:{run}", experiment, current, False)
     return _resolve(f"{kind}:{run}", experiment, filename,
                     f"{archive_dir}/{filename}", allow_archive)
 

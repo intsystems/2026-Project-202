@@ -126,6 +126,25 @@ def test_the_per_run_resolvers_find_their_logs():
         assert source.experiment in ("train.perceptron.eos", "train.perceptron.poly")
 
 
+def test_every_promoted_name_is_one_the_experiment_can_write():
+    """A promotes entry naming a file the trainer never writes kills a whole campaign.
+
+    ``train.perceptron.poly`` declared ``g_p2_p97_train.csv`` while its trainer keys runs
+    as appendix O prints them and wrote ``g_p2_train.csv``. Every run in the group had
+    already finished when promotion raised on the filename.
+    """
+    from actdim.runtime import registry as reg
+    from actdim.training import runs_perceptron
+
+    poly = reg.load()["train.perceptron.poly"]
+    written = {f"{key}_train.csv" for key in runs_perceptron.GROUPS["poly"]}
+    for name in poly.promotes:
+        if name.endswith("_train.csv"):
+            assert name in written, (
+                f"train.perceptron.poly promotes {name!r}, which no run in its group "
+                f"writes; the group writes {sorted(written)}")
+
+
 def test_unknown_names_are_refused():
     with pytest.raises(KeyError):
         sources.resolve("no_such_dataset", allow_archive=True)
