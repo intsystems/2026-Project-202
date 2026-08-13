@@ -484,6 +484,16 @@ scorer standardising it away, but a \emph{ramped} gain moves it by about a compo
 run whose parameter norm grows will drift by that much even when nothing dimensional happens. That is the
 nuisance that matters most in \cref{sec:grokking}.
 
+Roughness tracks the estimate closely enough here, and again in \cref{sec:matched}, to raise a
+prior question: are the two statistics separable at all? \Cref{app:clocks} answers it in both
+directions. Collapsing a log's four independent phases into one and then restoring them, with
+roughness held fixed by construction, leaves the estimate following the count $4 \to 1 \to 4$.
+Passing a single four-phase system through five monotone observers changes roughness by more than
+four fifths without changing any intrinsic dimension, and the estimate stays at four. Neither
+control rescues the parameter norm, on which the two statistics move together and nothing here
+separates them. They establish instead that the confound belongs to that observer rather than to
+the pair.
+
 \subsection{The estimand is a dimension, not an effective rank}\label{sec:aniso}
 
 Every construction in \cref{sec:ladder} equalises the drive amplitudes, which makes the active
@@ -2259,6 +2269,75 @@ but not explain.
 $1.40$ at every record length, a longer record never making an unidentifiable estimate
 identifiable, and falls from $1.22$ to $1.02$ as $E_{\max}$ grows, crossing the band at about the
 rank where tracking stops.
+
+\section{Two controls separating the estimator from roughness}\label{app:clocks}
+
+Roughness, $\operatorname{std}(\Delta x)/\operatorname{std}(x)$, follows the estimate closely in two
+places in this paper. It orders the withheld ranks on the two parameter norms (\cref{sec:nuisance}),
+and it registers the grokking transition more sharply than the estimate does (\cref{sec:matched}).
+Neither observation can be interpreted until a prior question is settled: whether the two
+statistics are separable at all. The two controls below settle it in opposite directions, and each
+was given its pass criterion before it was run.
+
+\emph{The count changes and the roughness does not.} Both arms are a sum of four sinusoids. In the
+first the frequencies are rationally independent, so the orbit closes on a four-torus and
+$d_{\mathrm{act}} = 4$. In the second they are harmonics of one irrational base, so a single phase
+fixes all four hands, the orbit is a circle, and $d_{\mathrm{act}} = 1$: four components in the
+signal, one degree of freedom behind them. Bisection then sets the one-clock base frequency so that
+the two arms have the \emph{same} roughness, to a part in $10^{15}$, which leaves a roughness
+statistic nothing to separate them by. A scheduled run passes $4 \to 1 \to 4$ through ramped
+envelopes, and every window that a ramp reaches into is left unscored.
+
+\emph{The roughness changes and the count does not.} Five monotone observers $g(x) = x + a x^{p}$
+are applied to one four-phase system. Each is invertible, so it may bend the recorded set but
+cannot add or remove a coordinate. Each also changes the local scale $g'(x)$, and with it the
+spacing of consecutive samples.
+
+\begin{table}[H]
+\centering
+\caption{Both controls, median over eight seeds. Above the rule, two arms matched in roughness and
+differing in the number of independent phases. Below it, one four-phase system under five
+invertible maps. $\PR_{\mathrm{delay}}$ is the linear participation ratio of the delay covariance,
+included because it follows the roughness rather than the active dimension in both halves.}
+\label{tab:clocks}
+\begin{tabular}{lrrrr}
+\toprule
+ & $d_{\mathrm{act}}$ & estimate & roughness & $\PR_{\mathrm{delay}}$ \\
+\midrule
+four independent clocks & $4$ & $3.92$ & $0.091$ & $2.20$ \\
+one clock, four hands   & $1$ & $1.11$ & $0.091$ & $4.10$ \\
+\midrule
+identity                & $4$ & $3.92$ & $0.091$ & $2.20$ \\
+$x + 0.25x^{3}$         & $4$ & $3.96$ & $0.098$ & $2.32$ \\
+$x + x^{3}$             & $4$ & $3.96$ & $0.110$ & $2.58$ \\
+$x + x^{5}$             & $4$ & $4.01$ & $0.146$ & $3.62$ \\
+$x + 0.1x^{7}$          & $4$ & $4.02$ & $0.166$ & $4.29$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Both pre-specified criteria hold: the estimate follows the count while roughness moves by under a
+tenth of a per cent, and roughness spans $83\,\%$ while the median estimate stays within $0.08$ of
+four.
+
+\paragraph{What this does not settle.} Neither control rescues the parameter norm. There the two
+statistics move together, and nothing here separates them; the surrogate control of
+\cref{sec:matched} carries that claim instead. These controls establish only that the confound
+belongs to that observer rather than to the pair. Roughness measures how fast the recorded value
+moves; the estimate attempts to count how many independent phases move it.
+
+Two results go against the estimator. The first is the inversion in \cref{tab:clocks}: the linear
+participation ratio reads higher on the circle than on the four-torus, so anyone treating it as a
+mode count would order the two backwards. The second concerns the circle itself, on which the
+estimate turns out not to be geometric. Every admissible neighbour there is a sample from another
+pass, and the local speed of the curve multiplies all of a point's neighbour distances alike, so
+speed cancels from the log-ratios of \cref{eq:mg}. What remains depends on the arithmetic of the
+frequency. Two of the eight seeds in the first run of this control drew a base frequency whose
+period has a large early partial quotient, so its multiples cluster into near-duplicates and the
+estimate returns $0.60$ and $0.47$ rather than $1.1$. Both values are reproducible from the
+fractional parts of multiples of that frequency alone, with no signal and no neighbour search. On a
+closed orbit the estimator is therefore sensitive to a number-theoretic accident of the period,
+which should be known before a value near one is read as confirming a circle.
 
 \section{Compute cost and code availability}\label{app:compute}
 
