@@ -1,16 +1,47 @@
 {
+  "calibration_r": [
+    2,
+    6,
+    10,
+    14,
+    18
+  ],
+  "calibration_seeds": [
+    0,
+    1,
+    2
+  ],
   "cfg_id": 3,
   "config": {
-    "max_E": 40,
-    "tau": 16,
+    "degenerate_fraction": 0.01,
+    "dither": 1e-09,
+    "floor_distance": 1e-08,
+    "floor_ratio_sum": 1e-05,
     "k_neighbors": 20,
-    "theiler": "autocorr",
-    "window": 8000,
+    "max_E": 40,
+    "spectral_bins": [
+      64,
+      256,
+      1024,
+      0
+    ],
     "stride": 4000,
-    "dither": 1e-09
+    "tau": 16,
+    "theiler": "autocorr",
+    "theiler_cap": 150,
+    "twonn_discard": 0.1,
+    "twonn_min_points": 20,
+    "window": 8000
   },
-  "calibration_r": [2, 6, 10, 14, 18],
-  "calibration_seeds": [0, 1, 2],
-  "selection": "minimum median raw absolute error across non-degenerate calibration observers",
-  "observers": ["w_fro", "c_norm", "g_fro", "g_proj", "c_proj1", "fn_fro", "fn_proj1", "loss_full"]
+  "observers": [
+    "w_fro",
+    "c_norm",
+    "g_fro",
+    "g_proj",
+    "c_proj1",
+    "fn_fro",
+    "fn_proj1",
+    "loss_full"
+  ],
+  "selection": "minimum median raw absolute error across non-degenerate calibration observers"
 }
