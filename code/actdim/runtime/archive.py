@@ -112,6 +112,14 @@ BASELINE: Dict[str, Dict[str, str]] = {
     "valid.transitions": {
         "transitions_raw.csv": "active_dimension/results/e3_transitions/transitions_raw.csv",
     },
+    # Arrived by merge from a branch predating the reorganisation, so it was written against
+    # the archived `mg.py` and never had a place in this table until it was ported.
+    "valid.geometry": {
+        "geometry_levels.csv": "active_dimension/results/e12_mle_geometry_demo/geometry_levels.csv",
+        "geometry_switch_summary.csv": "active_dimension/results/e12_mle_geometry_demo/geometry_switch_summary.csv",
+        "observer_warps.csv": "active_dimension/results/e12_mle_geometry_demo/observer_warps.csv",
+        "verdict.json": "active_dimension/results/e12_mle_geometry_demo/verdict.json",
+    },
     "valid.theiler.cap": {
         "theiler_quick_raw.csv": "active_dimension/results/e7_theiler/theiler_quick_raw.csv",
     },

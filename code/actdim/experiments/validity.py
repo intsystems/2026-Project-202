@@ -1093,6 +1093,280 @@ def anisotropy(ctx: Context) -> None:
              mae(summary["MG"], summary["pr_pos"]))
 
 
+# ============================================================== valid.geometry
+
+#: Both controls run over these seeds. Eight, because the one-clock arm's estimate is a
+#: property of one frequency rather than of four and is correspondingly more variable across
+#: seeds; the verdict is taken on the median, and eight is enough for one to mean something.
+GEOMETRY_SEEDS: Tuple[int, ...] = (0, 1, 2, 3, 4, 5, 6, 7)
+#: The scheduled trace: three segments, four-dimensional either side of a one-dimensional
+#: middle, crossfaded over ``RAMP`` samples at each switch.
+GEOMETRY_SEGMENT = 12_000
+GEOMETRY_RAMP = 1_200
+#: The level and warp arms are stationary, so they need only enough record for a few
+#: windows at the frozen length.
+GEOMETRY_RECORD = 16_000
+#: Short enough to localise the switch, long enough to resolve four phases in this
+#: construction. Both are the frozen eight-direction configuration with the window geometry
+#: overridden and no estimator field touched -- the same discipline as the three overrides
+#: :mod:`actdim.frozen` states. The archived script wrote the seven fields out as literals,
+#: which is how a configuration comes to differ from the one that was calibrated.
+GEOMETRY_TRACE_GEOMETRY: Dict[str, int] = {"window": 4_000, "stride": 400}
+GEOMETRY_LEVEL_GEOMETRY: Dict[str, int] = {"window": 8_000, "stride": 4_000}
+
+#: **Pre-specified, before the experiment was first run, and not to be moved.** The switch
+#: passes when the estimate reads four either side and one in the middle, each within
+#: :data:`GEOMETRY_TOLERANCE` components, while the roughness the two arms were matched on
+#: changes by less than :data:`GEOMETRY_ROUGHNESS_LIMIT`. The observer control passes when
+#: the roughness spans at least :data:`WARP_ROUGHNESS_MINIMUM` of its own smallest value
+#: while every median estimate stays within :data:`WARP_ERROR_LIMIT` of four and the
+#: estimates span less than :data:`WARP_SPAN_LIMIT`.
+GEOMETRY_TOLERANCE = 0.5
+GEOMETRY_ROUGHNESS_LIMIT = 0.05
+WARP_ROUGHNESS_MINIMUM = 0.30
+WARP_SPAN_LIMIT = 0.5
+WARP_ERROR_LIMIT = 0.5
+
+#: Where the estimate is read from in the trace, and what is reported beside it. The three
+#: companions are the nulls this experiment exists to defeat: if any of them separated the
+#: two arms, the estimate would not be carrying anything of its own.
+GEOMETRY_TRACE_COLUMNS: Tuple[str, ...] = ("MG", "roughness", "PRdelay", "specPR0")
+
+
+def _pure_levels(envelope: np.ndarray, hands: int) -> Dict[float, np.ndarray]:
+    """Where the crossfade has finished, per level, read off the envelope itself.
+
+    The truth is undefined for the length of a ramp, and the honest way to say where a ramp
+    ends is to ask the envelope rather than to recompute the convolution's edges by hand:
+    ``mode="same"`` on an even-length kernel puts them half a sample from where the
+    arithmetic says, and a guard band derived from the arithmetic is off by that much.
+    """
+    envelope = np.asarray(envelope, dtype=float)
+    return {float(hands): envelope <= 1e-12, 1.0: envelope >= 1.0 - 1e-12}
+
+
+def _segment_truth(envelope: np.ndarray, left: np.ndarray, right: np.ndarray,
+                   hands: int) -> np.ndarray:
+    """The true dimension of each window, NaN for any window a ramp reaches into.
+
+    A window lying partly in a ramp has no single true answer. The archived version labelled
+    a window by its *centre* and marked only the centres inside the ramp, so a window whose
+    centre cleared the switch by one sample was scored against the post-switch level with a
+    third of its data from before it -- the defect the errata register's hygiene section
+    names for two other experiments. A window is scored here only when every sample in it is
+    at one settled level.
+    """
+    left = np.asarray(left, dtype=int)
+    right = np.asarray(right, dtype=int)
+    width = right - left + 1
+    truth = np.full(len(left), float("nan"))
+    for level, mask in _pure_levels(envelope, hands).items():
+        counted = np.concatenate(([0], np.cumsum(mask.astype(np.int64))))
+        truth[(counted[right + 1] - counted[left]) == width] = level
+    return truth
+
+
+def _geometry_trace_cell(args) -> List[Dict[str, Any]]:
+    """One seed of the scheduled 4D -> 1D -> 4D trace."""
+    seed, segment, ramp, cfg_values = args
+
+    from ..estimator import windows
+    from ..estimator.config import EstimatorConfig
+    from ..systems import clocks
+
+    length = 3 * int(segment)
+    cfg = EstimatorConfig.from_dict(dict(cfg_values))
+    pair = clocks.pair(seed, length)
+    envelope = clocks.switch_envelope(length, segment, ramp)
+    right, traces = windows.sliding(clocks.scheduled(pair, envelope), cfg, seed=seed)
+    left = right - cfg.window + 1
+    truth = _segment_truth(envelope, left, right, clocks.HANDS)
+
+    return [{"seed": seed, "start": int(a), "right": int(b),
+             "centre": float(b) - (cfg.window - 1) / 2.0, "truth": truth[index],
+             **{name: float(traces[name][index]) for name in GEOMETRY_TRACE_COLUMNS},
+             "degenerate": bool(traces["degenerate"][index] > 0.5)}
+            for index, (a, b) in enumerate(zip(left, right))]
+
+
+def _geometry_level_cell(args) -> List[Dict[str, Any]]:
+    """One seed, both arms held at their own level: what does each read?"""
+    seed, record, cfg_values = args
+
+    from ..estimator import windows
+    from ..estimator.config import EstimatorConfig
+    from ..systems import clocks
+
+    cfg = EstimatorConfig.from_dict(dict(cfg_values))
+    pair = clocks.pair(seed, record)
+    rows = []
+    for arm, label, series in (("one", "one clock, four hands", pair.one),
+                               ("four", "four independent clocks", pair.four)):
+        z = (series - series.mean()) / series.std()
+        rows.append({"seed": seed, "arm": label, **pair.report(arm),
+                     **windows.summarise(z, cfg, seed=seed)})
+    return rows
+
+
+def _geometry_warp_cell(args) -> List[Dict[str, Any]]:
+    """One seed of the four-torus, read through each monotone observer scale."""
+    seed, record, cfg_values = args
+
+    from ..estimator import windows
+    from ..estimator.companions import roughness
+    from ..estimator.config import EstimatorConfig
+    from ..systems import clocks
+
+    cfg = EstimatorConfig.from_dict(dict(cfg_values))
+    pair = clocks.pair(seed, record)
+    x = pair.four / pair.four.std()
+    rows = []
+    for observer in clocks.WARP_NAMES:
+        y = clocks.warp(observer, x)
+        z = (y - y.mean()) / y.std()
+        rows.append({"seed": seed, "observer": observer, "truth": float(clocks.HANDS),
+                     "observed_roughness": roughness(y),
+                     **windows.summarise(z, cfg, seed=seed)})
+    return rows
+
+
+def _geometry_segments(trace):
+    """Per (seed, segment): the median of each statistic over the windows that were scored.
+
+    The windows a ramp reached into carry a NaN truth and are dropped here rather than
+    averaged into whichever level they are nearest.
+    """
+    scored = trace[(~trace["degenerate"]) & trace["truth"].notna()].copy()
+    scored["segment"] = np.where(scored["truth"] == 1.0, "one clock", "four clocks")
+    return (scored.groupby(["seed", "segment", "truth"], as_index=False)
+            .agg(**{name: (name, "median") for name in GEOMETRY_TRACE_COLUMNS},
+                 n_windows=("MG", "size")))
+
+
+def _geometry_verdict(segments, warps) -> Dict[str, Any]:
+    """The two pre-specified criteria, applied to the medians over seeds."""
+    from ..systems.clocks import HANDS
+
+    levels = segments.groupby("segment").median(numeric_only=True)
+    mg_one = float(levels.loc["one clock", "MG"])
+    mg_four = float(levels.loc["four clocks", "MG"])
+    rough_one = float(levels.loc["one clock", "roughness"])
+    rough_four = float(levels.loc["four clocks", "roughness"])
+    rough_change = abs(rough_one - rough_four) / rough_four
+
+    by_observer = warps.groupby("observer").median(numeric_only=True)
+    rough = by_observer["observed_roughness"]
+    rough_span = float((rough.max() - rough.min()) / rough.min())
+    mg_span = float(by_observer["MG"].max() - by_observer["MG"].min())
+    mg_error = float(np.abs(by_observer["MG"] - float(HANDS)).max())
+
+    return {
+        "geometry_mg_one": mg_one,
+        "geometry_mg_four": mg_four,
+        "geometry_roughness_relative_change": rough_change,
+        "geometry_pass": bool(abs(mg_one - 1.0) < GEOMETRY_TOLERANCE
+                              and abs(mg_four - float(HANDS)) < GEOMETRY_TOLERANCE
+                              and rough_change < GEOMETRY_ROUGHNESS_LIMIT),
+        "warp_roughness_relative_span": rough_span,
+        "warp_mg_span": mg_span,
+        "warp_max_abs_error": mg_error,
+        "warp_pass": bool(rough_span >= WARP_ROUGHNESS_MINIMUM
+                          and mg_span < WARP_SPAN_LIMIT
+                          and mg_error < WARP_ERROR_LIMIT),
+    }
+
+
+@experiment(
+    id="valid.geometry",
+    title="Two controls separating the estimator from the roughness it is shadowed by",
+    paper=("app:nulls", "sec:nuisance"),
+    device=CPU,
+    minutes=2,
+    promotes=("geometry_levels.csv", "geometry_switch_summary.csv", "observer_warps.csv",
+              "verdict.json"),
+    tier=1,
+    notes="Every other null in section 6 is measured beside the estimate on data chosen "
+          "for something else. Here the data is built so that the roughness cannot "
+          "separate the two arms even in principle: the second arm's frequency is solved "
+          "for until it matches the first arm's roughness to the last bit. Both verdicts "
+          "were fixed before the first run and are in the code as named constants.",
+)
+def geometry(ctx: Context) -> None:
+    import pandas as pd
+
+    from ..systems.clocks import BAND_MODE, HANDS, WARP_NAMES
+
+    seeds = GEOMETRY_SEEDS
+    segment, ramp, record = GEOMETRY_SEGMENT, GEOMETRY_RAMP, GEOMETRY_RECORD
+    if ctx.fast:
+        # Two seeds so the medians over seeds are medians of something, and a segment long
+        # enough that each of the three levels still holds whole windows once the ramps are
+        # excluded -- otherwise the branch this experiment exists to exercise never fires.
+        seeds = (0, 1)
+        segment, ramp, record = 8_000, 800, 9_000
+
+    trace_cfg = _frozen(**GEOMETRY_TRACE_GEOMETRY)
+    level_cfg = _frozen(**GEOMETRY_LEVEL_GEOMETRY)
+    ctx.config(seeds=list(seeds), segment=segment, ramp=ramp, record=record,
+               hands=HANDS, observers=list(WARP_NAMES), band_mode=BAND_MODE,
+               trace_configuration=trace_cfg.tag(),
+               level_configuration=level_cfg.tag(),
+               criteria={"geometry_tolerance": GEOMETRY_TOLERANCE,
+                         "geometry_roughness_limit": GEOMETRY_ROUGHNESS_LIMIT,
+                         "warp_roughness_minimum": WARP_ROUGHNESS_MINIMUM,
+                         "warp_span_limit": WARP_SPAN_LIMIT,
+                         "warp_error_limit": WARP_ERROR_LIMIT},
+               geometry="frozen eight-direction, window and stride overridden")
+    # The frequency layout takes no stream in this mode, which is the point of it here: the
+    # four-clock reference is the same on every replicate and only the clocks' phases and
+    # amplitudes move. See actdim.systems.clocks.BAND_MODE.
+    ctx.declare_seeds("clock_phases", "clock_amplitudes")
+
+    trace_values = tuple(trace_cfg.as_dict().items())
+    level_values = tuple(level_cfg.as_dict().items())
+    trace = pd.DataFrame([row for cell in map_ordered(
+        _geometry_trace_cell, [(seed, segment, ramp, trace_values) for seed in seeds],
+        jobs=ctx.jobs, desc="valid.geometry switch") for row in cell])
+    levels = pd.DataFrame([row for cell in map_ordered(
+        _geometry_level_cell, [(seed, record, level_values) for seed in seeds],
+        jobs=ctx.jobs, desc="valid.geometry levels") for row in cell])
+    warps = pd.DataFrame([row for cell in map_ordered(
+        _geometry_warp_cell, [(seed, record, level_values) for seed in seeds],
+        jobs=ctx.jobs, desc="valid.geometry warps") for row in cell])
+
+    segments = _geometry_segments(trace)
+    ctx.store.table("geometry_switch_trace.csv", trace)
+    ctx.store.table("geometry_switch_summary.csv", segments)
+    ctx.store.table("geometry_levels.csv", levels)
+    ctx.store.table("observer_warps.csv", warps)
+
+    verdict = _geometry_verdict(segments, warps)
+    ctx.store.json("verdict.json", verdict)
+    for key, value in verdict.items():
+        ctx.note(key, value)
+    ctx.note("windows_excluded_by_a_ramp",
+             int(trace["truth"].isna().sum()) if len(trace) else 0)
+    # The matching is the premise of the whole control, so it is reported as a measurement
+    # and not asserted: the largest relative gap between the two arms' roughness over every
+    # seed. It should be at the level of the last bits of a float.
+    matched = levels.pivot_table(index="seed", columns="arm", values="matched_roughness")
+    if matched.shape[1] == 2:
+        left, right = (matched[name].to_numpy(dtype=float) for name in matched.columns)
+        ctx.note("worst_roughness_mismatch",
+                 float(np.max(np.abs(left - right) / np.abs(right))))
+
+    # TwoNN is in the levels table and it is not readable on the one-clock arm: the near
+    # recurrences of a circle sampled on an integer grid arrive in plus-and-minus pairs at
+    # the same phase offset, so the two nearest neighbours of a point are equidistant, the
+    # ratio it is built on is one, and its denominator collapses. It reaches four thousand on
+    # one seed here and 0.44 on one in the archived run. Nothing in the verdict uses it; the
+    # spread is recorded so that a reader who meets the number knows it was seen.
+    circle = levels[levels["arm"].str.startswith("one")]
+    if len(circle):
+        ctx.note("twonn_range_on_the_one_clock_arm",
+                 [float(circle["TwoNN"].min()), float(circle["TwoNN"].max())])
+
+
 # ============================================================== valid.transitions
 
 TRANSITION_LEVELS: Tuple[Tuple[int, int], ...] = ((6, 2), (8, 3), (4, 1))

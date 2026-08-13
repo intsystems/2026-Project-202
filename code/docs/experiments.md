@@ -51,10 +51,18 @@ The experiment runs the control so the claim can be kept or withdrawn on evidenc
 | `valid.tau` | 6.2, `fig_tau` — the delay-lag sweep | cpu | 11 min |
 | `valid.nuisance` | 6.3 — eight nuisance controls at fixed rank, and their false-alarm rates | cpu | 34 min |
 | `valid.anisotropy` | 6.4, `fig_aniso` — the count against the effective rank as the drive is made anisotropic | cpu | 4 min |
+| `valid.geometry` | 6.3, appendix `app:nulls` — four clocks against one clock with four hands, at equal roughness, and one four-torus through five monotone observer scales | cpu | 2 min |
 | `valid.transitions` | appendix E — detection of a change in the active dimension | cpu | 52 min |
 | `valid.theiler.cap` | appendix N — the capped against the full exclusion at the twenty-direction configuration | cpu | 3 min |
 | `valid.theiler.contrast` | appendix P, `fig_traces` — the exclusion sweep, recurrent against transient | cpu | 40 min |
 | `valid.ceiling` | appendix R, `fig_ceiling` — embedding dimension against record length; refutes both explanations of the ceiling | cpu | 180 min |
+
+`valid.geometry` is the only place the roughness null is denied its purchase by construction
+rather than measured beside the estimate and found to move with it. Its two arms are both a
+sum of four sinusoids, and the second arm's base frequency is *solved for* by bisection until
+its roughness equals the first arm's to the last bit of a float, so the pair differs by three
+degrees of freedom and by nothing the one-line statistic can see. Its two verdicts were fixed
+before the first run and are named constants in the code.
 
 ## Appendix O — the training runs
 
@@ -114,7 +122,7 @@ except where the port merged or split something:
 | `active_dimension/calibration_k20.py` + `score_k20_parallel.py` | `calib.e20` (two scorers merged; errata 17) |
 | `dimension_recovery/exp9`-`exp15v3` | `sys.*` |
 | `active_dimension/e2_rank_sweep.py` + `analyze.py` | `sys.digits.parameter` |
-| `active_dimension/e0`, `e3`, `e4`, `e6`, `e7b`, `e8`, `e10`, `e11` | `valid.*` |
+| `active_dimension/e0`, `e3`, `e4`, `e6`, `e7b`, `e8`, `e10`, `e11`, `e12` | `valid.*` |
 | `active_dimension/e9_matched_window.py` + `e9_analyse.py` | `grok.matched.window` |
 | `gromov_arithmetic/eos.py` + its copied training loop | `train.perceptron.eos` (one loop; errata E) |
 | `gromov_arithmetic/dimension_probe.py` + `gromov_polynomials` | `grok.diagnostics.perceptron` |

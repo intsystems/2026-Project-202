@@ -197,6 +197,205 @@ def test_the_constructed_stride_is_the_one_appendix_c_states():
     assert len(windows.window_starts(26_000, frozen.constructed_geometry(cfg, 26_000))) == 7
 
 
+# -- the two clocks ----------------------------------------------------------------------
+
+LEVEL_CFG = EstimatorConfig(max_E=20, tau=4, k_neighbors=20, theiler="autocorr",
+                            window=8000, stride=8000, dither=1e-9)
+
+
+@pytest.fixture(scope="module")
+def clock_pair():
+    """One matched pair, exactly one window long at the level geometry."""
+    from actdim.systems import clocks
+
+    return clocks.pair(0, LEVEL_CFG.window)
+
+
+@pytest.mark.parametrize("seed", [0, 1, 2])
+def test_the_roughness_matching_converges_to_the_last_bits(seed):
+    """The premise of the whole control: the two arms differ in nothing roughness sees.
+
+    A tolerance somebody chose would let the arms drift apart by whatever that tolerance
+    was, and the separation the estimator then shows would be worth exactly the difference.
+    Sixty halvings of the bracket land on the last bit of a float, so the assertion is
+    against machine precision rather than against a number in this file.
+    """
+    from actdim.estimator.companions import roughness
+    from actdim.systems import clocks
+
+    pair = clocks.pair(seed, 8000)
+    four, one = roughness(pair.four), roughness(pair.one)
+    assert abs(one - four) / four < 1e-12
+    assert pair.base > 0.0
+
+
+def test_an_unreachable_roughness_is_refused_rather_than_matched_to_an_endpoint():
+    """Out of bracket, bisection returns an endpoint and says nothing about it.
+
+    The two arms would then not be matched and the control would be measuring the
+    difference in roughness it exists to remove, with no output saying so.
+    """
+    from actdim.systems import clocks
+
+    t = np.arange(4000, dtype=float)
+    phases, amplitudes = clocks.draw(0)
+    with pytest.raises(ValueError, match="cannot be matched"):
+        clocks.match_one_clock(t, phases, amplitudes, 0.9)
+
+
+def test_one_clock_has_no_resonance_margin_and_four_clocks_have_one(clock_pair):
+    """"One clock with four hands" is an exact integer relation, and that is the definition.
+
+    ``2 f - (2 f) = 0`` has L1 norm three, so the margin of the harmonic stack is exactly
+    zero: the orbit closes on a circle. The four-clock arm is drawn until its margin clears
+    the drive construction's target, so its closure is the whole four-torus.
+    """
+    from actdim.systems.drive import resonance_margin
+
+    assert resonance_margin(clock_pair.one_freqs) == 0.0
+    assert resonance_margin(clock_pair.four_freqs) > 0.0
+    # The lower-dimensional arm is also the wider-band one, so no statistic of the frequency
+    # support orders the two the way the dimension does.
+    assert clock_pair.one_freqs.max() / clock_pair.one_freqs.min() == pytest.approx(4.0)
+    assert clock_pair.four_freqs.max() / clock_pair.four_freqs.min() < 2.1
+
+
+def test_the_estimator_separates_what_the_matched_roughness_cannot(clock_pair):
+    """The point of experiment A, on one seed and one window."""
+    four = windows.score(clock_pair.four, LEVEL_CFG, seed=0)
+    one = windows.score(clock_pair.one, LEVEL_CFG, seed=0)
+    assert four["roughness"] == pytest.approx(one["roughness"], rel=1e-12)
+    assert 3.0 < four["MG"] < 5.0
+    assert one["MG"] < 2.0
+    assert four["MG"] > 2.0 * one["MG"]
+
+
+@pytest.mark.parametrize("observer", ["x + 0.25 x^3", "x + x^3", "x + x^5", "x + 0.1 x^7"])
+def test_every_observer_scale_is_strictly_increasing(observer):
+    """Monotone and invertible, so no argument lets one change an intrinsic dimension.
+
+    That is why experiment B is a control and not a measurement: whatever the estimate does
+    across these maps, the right answer is that it does nothing.
+    """
+    from actdim.systems import clocks
+
+    x = np.linspace(-6.0, 6.0, 20_001)
+    assert np.all(np.diff(clocks.warp(observer, x)) > 0.0)
+
+
+def test_a_monotone_warp_moves_the_roughness_and_leaves_the_estimate(clock_pair):
+    """Experiment B in one cell: the null moves a long way and the estimate does not."""
+    from actdim.systems import clocks
+
+    x = clock_pair.four / clock_pair.four.std()
+    plain = windows.score(x, LEVEL_CFG, seed=0)
+    warped = windows.score(clocks.warp("x + 0.1 x^7", x), LEVEL_CFG, seed=0)
+    assert warped["roughness"] > 1.3 * plain["roughness"]
+    assert abs(warped["MG"] - plain["MG"]) < validity.WARP_SPAN_LIMIT
+    assert abs(warped["MG"] - 4.0) < 1.0
+
+
+def test_an_unknown_observer_scale_is_refused():
+    from actdim.systems import clocks
+
+    with pytest.raises(ValueError):
+        clocks.warp("x + log x", np.ones(4))
+
+
+# -- the ramp ----------------------------------------------------------------------------
+
+def _ramp_windows(segment=12_000, ramp=1_200, window=4_000, stride=400):
+    from actdim.systems import clocks
+
+    envelope = clocks.switch_envelope(3 * segment, segment, ramp)
+    start = np.arange(0, 3 * segment - window + 1, stride)
+    right = start + window - 1
+    return envelope, start, right, validity._segment_truth(envelope, start, right,
+                                                           clocks.HANDS)
+
+
+def test_a_window_a_ramp_reaches_into_is_not_scored():
+    """The switch is a crossfade, so the truth is undefined for the length of it.
+
+    The archived version labelled a window by its centre and marked only the centres inside
+    the ramp, which scored a window straddling the switch against whichever level its middle
+    sample happened to be in. A window is scored here only when every sample in it is at one
+    settled level, which is the rule ``valid.transitions`` already uses.
+    """
+    envelope, start, right, truth = _ramp_windows()
+
+    scored = np.isfinite(truth)
+    assert scored.any() and (~scored).any(), "both branches have to be exercised"
+    for index in np.flatnonzero(scored):
+        inside = envelope[start[index]:right[index] + 1]
+        # A scored window sees one settled level and no part of a crossfade.
+        assert inside.min() == pytest.approx(inside.max(), abs=1e-12)
+        assert truth[index] == pytest.approx(1.0 if inside[0] > 0.5 else 4.0)
+    for index in np.flatnonzero(~scored):
+        inside = envelope[start[index]:right[index] + 1]
+        assert inside.max() - inside.min() > 1e-12, (
+            "a window of one settled level was dropped, which loses evidence")
+
+
+def test_the_ramp_windows_are_dropped_rather_than_averaged_in():
+    """A NaN truth has to leave the segment medians alone, not join the nearest level."""
+    import pandas as pd
+
+    _, start, right, truth = _ramp_windows()
+    frame = pd.DataFrame({
+        "seed": 0, "start": start, "right": right, "truth": truth,
+        "MG": np.where(np.isnan(truth), 99.0, np.where(truth == 1.0, 1.1, 4.0)),
+        "roughness": 0.09, "PRdelay": 2.0, "specPR0": 5.0, "degenerate": False})
+    segments = validity._geometry_segments(frame)
+
+    assert set(segments["segment"]) == {"one clock", "four clocks"}
+    assert int(segments["n_windows"].sum()) == int(np.isfinite(truth).sum())
+    assert segments.set_index("segment")["MG"].to_dict() == {"one clock": 1.1,
+                                                             "four clocks": 4.0}
+
+
+# -- the pre-specified verdict -------------------------------------------------------------
+
+def _verdict_frames(mg_one=1.1, mg_four=4.0, rough_one=0.09, rough_four=0.09,
+                    warp_mg=(4.0, 4.05, 4.1), warp_rough=(0.09, 0.12, 0.17)):
+    import pandas as pd
+
+    segments = pd.DataFrame(
+        [{"seed": seed, "segment": "one clock", "truth": 1.0, "MG": mg_one,
+          "roughness": rough_one, "PRdelay": 4.0, "specPR0": 5.0, "n_windows": 10}
+         for seed in range(3)]
+        + [{"seed": seed, "segment": "four clocks", "truth": 4.0, "MG": mg_four,
+            "roughness": rough_four, "PRdelay": 2.0, "specPR0": 9.0, "n_windows": 10}
+           for seed in range(3)])
+    warps = pd.DataFrame(
+        [{"seed": seed, "observer": f"g{index}", "truth": 4.0,
+          "observed_roughness": rough, "MG": mg}
+         for seed in range(3) for index, (mg, rough) in enumerate(zip(warp_mg, warp_rough))])
+    return segments, warps
+
+
+def test_the_verdict_is_the_one_that_was_pre_specified():
+    verdict = validity._geometry_verdict(*_verdict_frames())
+    assert verdict["geometry_pass"] and verdict["warp_pass"]
+    assert verdict["geometry_mg_one"] == pytest.approx(1.1)
+    assert verdict["warp_roughness_relative_span"] == pytest.approx((0.17 - 0.09) / 0.09)
+    assert verdict["warp_mg_span"] == pytest.approx(0.1)
+    assert verdict["warp_max_abs_error"] == pytest.approx(0.1)
+
+
+@pytest.mark.parametrize("frames,failing", [
+    (dict(mg_one=1.6), "geometry_pass"),
+    (dict(mg_four=3.4), "geometry_pass"),
+    (dict(rough_one=0.096), "geometry_pass"),
+    (dict(warp_rough=(0.09, 0.10, 0.11)), "warp_pass"),
+    (dict(warp_mg=(4.0, 4.3, 4.6)), "warp_pass"),
+])
+def test_each_criterion_can_fail_on_its_own(frames, failing):
+    """Every clause of both verdicts is load bearing, so every one is shown to bite."""
+    verdict = validity._geometry_verdict(*_verdict_frames(**frames))
+    assert not verdict[failing]
+
+
 # -- the silence verdict ---------------------------------------------------------------
 
 def _silence_rows(mg_silent, observer="loss"):

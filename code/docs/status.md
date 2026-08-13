@@ -6,8 +6,8 @@ known to be missing.
 
 ## The port is complete
 
-Every section of the article has an experiment. Forty of them, 14.4 hours of CPU work and
-9.1 of GPU, and `python -m actdim plan --all` prints the order.
+Every section of the article has an experiment. Forty-one of them, 14.4 hours of CPU work
+and 9.1 of GPU, and `python -m actdim plan --all` prints the order.
 
 | area | state |
 | --- | --- |
@@ -20,7 +20,7 @@ Every section of the article has an experiment. Forty of them, 14.4 hours of CPU
 | the table auditor | complete: 21 of 28 tables, 731 cells and claims |
 | `calib.*`, `sys.*`, `valid.*`, `train.*`, `grok.*`, `check.*`, `paper.*` | all wired |
 
-381 tests pass. `python -m pytest tests/ -q`.
+401 tests pass. `python -m pytest tests/ -q`.
 
 ## How far each part has been verified
 
@@ -41,9 +41,15 @@ Python salts per interpreter; the verdict is unchanged and `tab:matched` reprodu
 exactly.
 
 **Run, but not yet compared at full size.** The six ladder rows, `sys.silence`, and the
-`valid.*` set. `sys.matrix` at full size recovers with a mean absolute error of 0.27 and a
-rank correlation of 1.0, against the published 0.30 and 0.69 — the corrected held-out
-split did not cost recovery on that system.
+`valid.*` set apart from `valid.geometry`. `sys.matrix` at full size recovers with a mean
+absolute error of 0.27 and a rank correlation of 1.0, against the published 0.30 and 0.69 —
+the corrected held-out split did not cost recovery on that system.
+
+**Run at full size and compared.** `valid.geometry`, the last experiment ported. Every cell
+of its four tables moved, because its two clock arms are seeded through the contract instead
+of from a bare literal (errata 38); both pre-specified verdicts still pass and the six
+headline numbers moved by less than the seed-to-seed spread. `python -m actdim diff
+valid.geometry` prints the comparison column by column.
 
 **Exercised only.** The `train.*` campaigns and the two `check.sketch.*` experiments have
 run at reduced size on a CPU. They need the GPU box.
@@ -69,7 +75,7 @@ say so with the command that does it. Everything else in the article rebuilds fr
 
 ## Where the numbers will move
 
-`docs/errata.md` is the register: thirty-seven items, plus one the port introduced and
+`docs/errata.md` is the register: thirty-eight items, plus one the port introduced and
 closed. Twelve are text or caption corrections needing no re-run. Four change a published
 value: the seed defect in the drive, the Theiler cap, the null statistics discarded on
 degenerate windows, and the window-length labels of appendix J.
