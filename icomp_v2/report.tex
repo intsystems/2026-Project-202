@@ -1710,21 +1710,27 @@ representation is complete, and requires it only to be periodic enough.
 \begin{table}[H]
 \centering
 \caption{Whether the representation is complete when generalisation occurs. The order parameter
-through one modular addition run at $p = 97$, full-batch gradient descent with no weight decay,
-against the analytic solution of \citet{gromov2023grokking}. The run generalises at step
-$11\,950$; the budget ends some $87\,000$ steps after validation accuracy first reaches
-$100\,\%$.}
+at the weight snapshots of one modular addition run at $p = 97$, full-batch gradient descent with
+no weight decay,
+against the analytic solution of \citet{gromov2023grokking}. Snapshots are twenty-one log-spaced
+steps and eight are shown. This run memorises at $9\,230$, generalises at $11\,760$ and first
+reaches $100\,\%$ validation accuracy at $12\,510$, all three between the snapshots at $8\,859$
+and $16\,238$, so one interval of the grid contains the whole transition.}
 \label{tab:ipr-trajectory}
-\begin{tabular}{lr}
+\begin{tabular}{rrl}
 \toprule
-point in the run & order parameter \\
+step & order parameter & \\
 \midrule
-just after memorisation                       & 0.067 \\
-just before generalisation                    & 0.189 \\
-validation accuracy first reaches $100\,\%$   & 0.263 \\
-end of the budget                             & 0.595 \\
+$0$        & 0.041 & at initialisation \\
+$2\,637$   & 0.041 &  \\
+$4\,833$   & 0.041 &  \\
+$8\,859$   & 0.060 &  \\
+$16\,238$  & 0.457 & the transition falls below \\
+$29\,764$  & 0.524 &  \\
+$54\,556$  & 0.560 &  \\
+$100\,000$ & 0.599 & end of the budget \\
 \midrule
-the analytic generalising solution            & 1.000 \\
+analytic   & 1.000 & the generalising solution \\
 \bottomrule
 \end{tabular}
 \end{table}

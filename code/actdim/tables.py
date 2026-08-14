@@ -2025,8 +2025,10 @@ REGISTRY: Tuple[Registered, ...] = (
         "their window centres fall on half-steps and the article prints +712 for 712.5",
     )),
     Registered("tab:ipr-trajectory", check_ipr_trajectory, notes=(
-        "the snapshots are log-spaced, so each row is the nearest snapshot to the "
-        "milestone it names and grok.repr.measured records the step actually used",
+        "the rows are snapshots and are matched by the step they print. They were named "
+        "points until the snapshots could be read: the run memorises, generalises and "
+        "reaches perfect validation accuracy inside one interval of the log-spaced grid, "
+        "so no snapshot separates the three and no row can name one of them",
     )),
     Registered("tab:ipr", check_ipr, notes=(
         "the grokking-step column repeats tab:runs and is checked there, against the "
