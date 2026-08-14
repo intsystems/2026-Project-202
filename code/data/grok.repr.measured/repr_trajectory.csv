@@ -1,0 +1,5 @@
+run,point,milestone,milestone_step,snapshot_step,order_parameter
+a_add,just after memorisation,t_memorise,9230.0,16238,0.45696089316711663
+a_add,just before generalisation,before_t_grok,11760.0,8859,0.05978651265946219
+a_add,validation accuracy first reaches 100%,t_perfect,12510.0,16238,0.45696089316711663
+a_add,end of the budget,last,100000.0,100000,0.5986266651009345

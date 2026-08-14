@@ -456,6 +456,30 @@
       "produced_utc": "2026-08-14T00:50:07Z",
       "sha256": "44261061ede31dbe38228311c496c21fb428423a18734e4c14c1d52e32d1e504"
     },
+    "grok.repr.measured/repr_measured.csv": {
+      "bytes": 593,
+      "command": "python -m actdim run grok.repr.measured",
+      "experiment": "grok.repr.measured",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
+      },
+      "produced_utc": "2026-08-14T12:00:56Z",
+      "sha256": "45d0afb4a2f0a7861ff390ff5ce8fe3b47598c6e01086bcafac52bef15a63637"
+    },
+    "grok.repr.measured/repr_trajectory.csv": {
+      "bytes": 372,
+      "command": "python -m actdim run grok.repr.measured",
+      "experiment": "grok.repr.measured",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
+      },
+      "produced_utc": "2026-08-14T12:00:56Z",
+      "sha256": "2e6cb3de4b6e8af22f6fbc2b1a9486e92d9b84bc33afb426c6fff75a328c0240"
+    },
     "grok.repr/repr_analytic.csv": {
       "bytes": 2426,
       "command": "python -m actdim run grok.repr",
@@ -774,10 +798,10 @@
       "experiment": "train.perceptron.arith",
       "git": {
         "branch": "main",
-        "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "dirty": false,
+        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
       },
-      "produced_utc": "2026-08-13T19:26:34Z",
+      "produced_utc": "2026-08-14T11:45:12Z",
       "sha256": "dbb95c371a8d4a044b076c011b498b3f8092c198ee0633afe3581dcd53cf9b60"
     },
     "train.perceptron.eos/eos_lr1.5e+06_s1_sharp.csv": {
@@ -907,9 +931,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
       },
-      "produced_utc": "2026-08-13T19:41:21Z",
+      "produced_utc": "2026-08-14T12:00:53Z",
       "sha256": "7de54fb72a8610e1e00e382489bb31de9903bc440d45dba2a6b744a5007422d8"
     },
     "train.perceptron.poly/g_p2x_train.csv": {
@@ -919,9 +943,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
       },
-      "produced_utc": "2026-08-13T19:41:21Z",
+      "produced_utc": "2026-08-14T12:00:53Z",
       "sha256": "c7443f9e5ae16386b6b12bf00fd05e9b751dfaaa605ce9b4155fc70833a3b41a"
     },
     "train.perceptron.poly/milestones.csv": {
@@ -931,9 +955,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
       },
-      "produced_utc": "2026-08-13T19:41:21Z",
+      "produced_utc": "2026-08-14T12:00:53Z",
       "sha256": "0d856b3fd97638a3103653efb423d332ac3bbe74b112dbbdf7fef8702f9919b1"
     },
     "train.perceptron.sketched.fb/milestones.csv": {
@@ -1207,22 +1231,34 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
       },
-      "produced_utc": "2026-08-13T19:00:35Z",
+      "produced_utc": "2026-08-14T12:08:38Z",
       "sha256": "c1e120b6833f7b2dcaf7abace6d2f85be095290a9c9c0baec9ff8a4be75838d3"
     },
-    "valid.theiler.contrast/sweep_windows.csv": {
-      "bytes": 4229351,
+    "valid.theiler.contrast/exclusion_table.csv": {
+      "bytes": 2293,
       "command": "python -m actdim run valid.theiler.contrast",
       "experiment": "valid.theiler.contrast",
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
       },
-      "produced_utc": "2026-08-13T19:00:35Z",
-      "sha256": "bd006070bf6d31dc7caf02f522839b4c1774ffd874d4efda1177382e4747f15b"
+      "produced_utc": "2026-08-14T12:08:38Z",
+      "sha256": "e012b1d7817706375480b77821ffb88f7f34d711d9dc721df75f7b1a26f686c5"
+    },
+    "valid.theiler.contrast/sweep_windows.csv": {
+      "bytes": 4235990,
+      "command": "python -m actdim run valid.theiler.contrast",
+      "experiment": "valid.theiler.contrast",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
+      },
+      "produced_utc": "2026-08-14T12:08:38Z",
+      "sha256": "4bb612cb54d17cda790b2505e9a456c5b521ddd784722b6391a552ce60d25b53"
     },
     "valid.transitions/transitions_raw.csv": {
       "bytes": 53518,
