@@ -48,7 +48,7 @@ Design notes, so that later edits do not undo them:
   nearly invisible: that is the finding, and the legend names it so that the
   reader knows it was drawn rather than omitted.
 * Where points coincide, the multiplicity is made visible rather than hidden:
-  fig_regimes(b) plots every raw value on a per-observer row, fig_map offsets
+  fig_regimes(b) plots every raw value on a per-rank, per-observer row, fig_map offsets
   the twelve runs that share (2 crossings, rho_ident = 1.00) and labels the
   multiplicity, fig_window(c) gives each run its own sub-row so that the eight
   strides of a flat run stay countable. Any figure edit that reintroduces a
@@ -84,7 +84,7 @@ def fig_regimes(read: Reader):
         ("gd", "transient", TRANSIENT, ":", "D"),
     ]
 
-    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.85),
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.66),
                                  gridspec_kw={"width_ratios": [1.18, 1.0]})
 
     # two reference lines, each named by a six-character label at its own end:
@@ -131,20 +131,32 @@ def fig_regimes(read: Reader):
     ax.set_title("(a) what the estimator returns", loc="left")
 
     bx.axvspan(0.95, 1.10, color=BAND, alpha=0.08, lw=0, zorder=0)
-    # one row of markers per observer, so that coincident values stay countable
-    OBS_DY = {"c_proj1": 0.17, "g_fro": 0.0, "w_fro": -0.17}
+    # Two sub-rows per arm, one per rank, because the rank is what connects this
+    # panel to (a): the slow recurrent arm tracks the truth at r = 2 and saturates
+    # by r = 6, and the diagnostic has to be seen changing across the same step or
+    # the panel only repeats what the regime labels already say. Fill encodes the
+    # rank (open r = 2, solid r = 6); the observers stay separated within a sub-row
+    # so that coincident values remain countable.
+    RANK_DY = {2: 0.18, 6: -0.18}
+    OBS_DY = {"c_proj1": 0.07, "g_fro": 0.0, "w_fro": -0.07}
     for i, (arm, label, c, ls, mk) in enumerate(series):
         v = ident.get(arm)
         if v is None or v.empty:
             continue
         y = len(series) - 1 - i
-        bx.plot([v.ident_ratio.min(), v.ident_ratio.max()], [y, y], "-",
-                color=c, lw=0.6, alpha=0.40, zorder=2)
-        bx.plot(v.ident_ratio.values, y + v.observer.map(OBS_DY).values, mk,
-                color=c, ms=3.0, mec="white", mew=0.5, zorder=3, clip_on=False)
+        for rank, dy in RANK_DY.items():
+            w = v[v.r == rank]
+            if w.empty:
+                continue
+            bx.plot([w.ident_ratio.min(), w.ident_ratio.max()], [y + dy] * 2, "-",
+                    color=c, lw=0.6, alpha=0.40, zorder=2)
+            bx.plot(w.ident_ratio.values, y + dy + w.observer.map(OBS_DY).values,
+                    mk, color=c, ms=3.0, mec=c if rank == 2 else "white",
+                    mfc="white" if rank == 2 else c, mew=0.6, zorder=3,
+                    clip_on=False)
     bx.set_yticks(range(len(series)))
     bx.set_yticklabels([lbl for _, lbl, _, _, _ in series][::-1])
-    bx.set_ylim(-0.65, len(series) - 0.20)
+    bx.set_ylim(-0.65, len(series) - 0.02)
     # The band has to stay in frame whatever the ratios do: the panel is about which
     # regimes fall inside it, and a frame that cut it off would answer the question by
     # cropping. Everything else follows the data.
@@ -154,7 +166,7 @@ def fig_regimes(read: Reader):
     bx.set_xticks(np.arange(low, high + 1e-9, 0.2))
     bx.set_xlabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
     bx.set_title("(b) admissibility", loc="left")
-    bx.text(1.025, 4.30, "admissible", color=BAND, fontsize=7.0, ha="center",
+    bx.text(1.025, 4.42, "admissible", color=BAND, fontsize=7.0, ha="center",
             va="bottom")
     bx.spines["left"].set_visible(False)
     bx.tick_params(axis="y", length=0)
@@ -201,7 +213,7 @@ def fig_dip(read: Reader):
               ("move", "(c) displacement", "log"),
               ("MG", "(d) scalar log", None)]
 
-    fig, axes = plt.subplots(1, 4, figsize=(5.5, 1.72), sharex=True)
+    fig, axes = plt.subplots(1, 4, figsize=(5.5, 1.56), sharex=True)
     grid = np.arange(-5000, 5200, 100)
 
     for ax, (col, title, scale) in zip(axes, panels):

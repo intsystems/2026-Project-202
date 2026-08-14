@@ -27,7 +27,7 @@ head reads ``Under review''. Uncomment `\icomparxivcopy` for a named preprint bu
 `\icompfinalcopy` for camera-ready.
 
 **Page budget.** ICOMP allows nine pages excluding references. The body ends on page 9 and the
-references begin on page 10, with about one line of slack. Anything added to the body needs a
+references begin on the same page, with about half a page of slack. Anything added to the body needs a
 matching cut. The appendices follow the references and are unconstrained, so new material goes
 there. There is no keywords line: the style file defines no such field.
 
@@ -63,11 +63,11 @@ the order a full regeneration takes. The previous tree is archived unchanged in
 
 | section | experiment |
 | --- | --- |
-| 5.1 oscillating diagonal matrix | `sys.matrix`, `sys.matrix.sync` |
-| 5.2 the ceiling | `sys.matrix.k20`, `sys.linear`, `sys.logistic`, `calib.e20` |
-| 5.3 the silence control | `sys.decoder`, `sys.subspace`, `sys.silence` |
-| 5.4 image data, parameter subspace | `sys.digits.parameter`, `calib.e8`, `calib.e20` |
-| 5.4 image data, function subspace | `sys.digits.function` |
+| 5.1 oscillating diagonal matrix | `sys.matrix` |
+| 5.2 image data, parameter subspace | `sys.digits.parameter`, `calib.e8`, `calib.e20` |
+| 5.2 image data, function subspace | `sys.digits.function` |
+| 5, the ceiling | `sys.matrix.k20`, `sys.linear`, `sys.logistic`, `calib.e20` |
+| 5, the zero-learning-rate test | `sys.decoder`, `sys.subspace`, `sys.silence` |
 | 6.1 dynamical regime | `valid.regime`, `sys.digits.parameter` |
 | 6.2 delay lag | `valid.tau` |
 | 6.3 nuisance factors | `valid.nuisance` |
@@ -75,44 +75,51 @@ the order a full regeneration takes. The previous tree is archived unchanged in
 | 7.1 regime classification, label-matched pairs | `grok.diagnostics.logs`, `grok.diagnostics.perceptron` |
 | 7.2 direct measurement | `grok.rank.dip` |
 | 7.3 the matched window | `grok.matched.window`, `grok.matched.surrogate` |
-| appendix E, detection of a change | `valid.transitions` |
-| appendix G, the extended reruns | `grok.extended.outcomes` |
-| appendix H, the collapse run by run | `grok.rank.dip` |
-| appendix J, full-batch and window length | `grok.prwindow`, `train.perceptron.sketched` |
-| appendix L, the matched-window re-run | `grok.matched.window` |
-| appendix M, representation dimension | `grok.repr` |
-| appendix N, the Theiler exclusion | `valid.theiler.cap` |
-| appendix O, the run inventory | `train.transformer.*`, `train.perceptron.*` |
-| appendix P, the exclusion contrast | `valid.theiler.contrast` |
-| appendix Q, edge of stability | `train.perceptron.eos`, `grok.eos` |
-| appendix R, the ceiling sweeps | `valid.ceiling` |
-| appendix S, the sketch's cost | `check.sketch.cost`, `check.sketch.noninvasive` |
+| appendix D, detection of a change | `valid.transitions` |
+| appendix F, the extended reruns | `grok.extended.outcomes` |
+| appendix G, the sketch and the collapse run by run | `grok.rank.dip`, `check.sketch.*` |
+| appendix H, full-batch, window length and the re-run | `grok.prwindow`, `train.perceptron.sketched`, `grok.matched.window` |
+| appendix I, the Theiler exclusion | `valid.theiler.cap`, `valid.theiler.contrast` |
+| appendix J, the run inventory | `train.transformer.*`, `train.perceptron.*` |
+| appendix K, edge of stability | `train.perceptron.eos`, `grok.eos` |
+| appendix L, the ceiling sweeps | `valid.ceiling` |
+| appendix N, the sketch's cost | `check.sketch.cost`, `check.sketch.noninvasive` |
 | every figure | `paper.figures` |
 | every mechanical table | `check.tables` |
 
+**Registered experiments the article no longer uses.** `grok.repr` and `grok.repr.measured`
+produced the closed-form representation-dimension appendix, which the August revision dropped as
+secondary: it argued about other people's measures of a learned representation and no claim in the
+body rested on it. The three perceptron runs whose only appearance was there --- `a_sub`,
+`a_sq_sum`, `a_sum_sq` --- are still listed in the run inventory, marked *recorded only*.
+`sys.matrix.sync` likewise no longer appears: section 5.1 made the geometry-against-smoothness
+point that appendix M now makes under proper controls. The experiments remain registered and
+runnable; nothing was deleted from `../code/`.
+
 ## Appendices
+
+Twenty-one appendices became fourteen in the August revision: the sections that answered one
+question from several directions were gathered under a parent naming the question. An
+unnumbered **Appendix outline** at the head of the appendix gives a paragraph per appendix
+saying which body claim it carries; it replaced a three-column roadmap table whose columns
+were too narrow to say anything useful.
 
 | # | contents |
 | --- | --- |
-| A | the estimator, as an algorithm |
-| B | the twelve observers, defined |
-| C | the two frozen configurations and the grids they came from |
-| D | the ladder table, per-observer results, and MG against every alternative statistic |
-| E | delay lag, nuisance factors, and the change-detection rule |
-| F | how the excitation is built, and the effective rank it achieves |
-| G | diagnostics and figures for the grokking application |
-| H | the collapse, run by run |
-| I | the trajectory sketch and the checks behind it |
-| J | the full-batch measurement and the window-length sweep |
-| K | what falls, and when |
-| L | what a windowed estimate on a log can resolve, and the matched-window re-run |
-| M | the representation dimension in closed form, per task |
-| N | the Theiler exclusion of the twenty-direction configuration |
-| O | inventory of every training run the paper uses |
-| P | the exclusion sweep: a transient's dimension is 1, and identifiable only without it |
-| Q | full-batch descent at the edge of stability, and what the logging stride hides |
-| R | sweeping the embedding against the record: neither explains the ceiling |
-| S | compute cost, what the trajectory sketch costs, and code availability |
+| A | Takens, Sauer et al., Stark and Levina--Bickel, stated without proof, and the two finite-record limits |
+| B | the estimator as an algorithm, the two frozen configurations, the twelve observers |
+| C | the ladder table, per-observer results, and MG against every alternative statistic |
+| D | delay lag, nuisance factors, anisotropy, and the change-detection rule |
+| E | how the excitation is built, and the effective rank it achieves |
+| F | diagnostics and figures for the grokking application |
+| G | the trajectory sketch, its checks, and the collapse run by run |
+| H | what a window can resolve: the full-batch null, declines that are not generalisation, the matched-window re-run |
+| I | the exclusion cap, and the sweep showing a transient's dimension is 1 |
+| J | inventory of every training run the paper uses |
+| K | full-batch descent at the edge of stability, and what the logging stride hides |
+| L | sweeping the embedding against the record: neither explains the ceiling |
+| M | two controls separating the estimator from roughness |
+| N | compute cost, what the trajectory sketch costs, and code availability |
 
 ## Figures
 
@@ -122,15 +129,15 @@ Regenerate with `python -m actdim run paper.figures` from `../code/`. All are dr
 | figure | what it shows | where |
 | --- | --- | --- |
 | `fig_regimes` | recovery and admissibility on the image-data system | section 6 |
-| `fig_dip` | the collapse of the trajectory effective rank at generalisation | section 7.3 |
-| `fig_observers` | per-observer error with across-seed spread: which log to keep | appendix D |
-| `fig_tau` | the delay-lag sweep, collapsing at one end and diverging at the other | appendix E |
-| `fig_aniso` | the count against the effective rank as the drive is made anisotropic | appendix E |
-| `fig_map` | every training log in the plane of the two diagnostics | appendix G |
-| `fig_pairs` | the label-matched pairs and the loss curves behind them | appendix G |
-| `fig_prwindow` | the participation ratio against window length | appendix J |
-| `fig_window` | the windowed estimate on the grokking logs, and what it cannot resolve | appendix L |
-| `fig_eos` | the stability ratio, the two-cycle, and what a stride of ten removes | appendix Q |
+| `fig_dip` | the collapse of the trajectory effective rank at generalisation | section 7.2 |
+| `fig_observers` | per-observer error with across-seed spread: which log to keep | appendix C |
+| `fig_tau` | the delay-lag sweep, collapsing at one end and diverging at the other | appendix D |
+| `fig_aniso` | the count against the effective rank as the drive is made anisotropic | appendix D |
+| `fig_map` | every training log in the plane of the two diagnostics | appendix F |
+| `fig_pairs` | the label-matched pairs and the loss curves behind them | appendix F |
+| `fig_prwindow` | the participation ratio against window length | appendix H |
+| `fig_window` | the windowed estimate on the grokking logs, and what it cannot resolve | appendix H |
+| `fig_eos` | the stability ratio, the two-cycle, and what a stride of ten removes | appendix K |
 | `fig_ceiling` | the rank tracked against each hypothesis's knob, and its prediction | appendix R |
 | `fig_traces` | one raw scalar log per regime: what the estimator actually reads | appendix P |
 

@@ -100,15 +100,22 @@ pdftotext -layout -f 10 -l 10 report.pdf - | awk '/REFERENCES/{exit} NF{n++} END
 grep -c "Overfull\|LaTeX Warning\|undefined" report.log
 ```
 
-Baseline at the end of this round, from `style_scan.py`. Treat these as ceilings, not targets:
+Baseline at the end of this round, from `style_scan.py`. Treat these as ceilings, not targets. The
+August revision rewrote the introduction, §3.1, §3.3 and §6.1, added a theory appendix and an
+appendix outline, and merged twenty-one appendices into fourteen:
 
 | | body | appendix |
 |---|---|---|
-| words / sentences | 5681 / 220 | 12275 / 454 |
-| `, and` clause-joins | 17 | 27 |
-| em dashes | 5 | 14 |
-| `read` | 11 | 16 |
-| inanimate `'s` | 14 | 16 |
+| words / sentences | 5536 / 214 | 13895 / 514 |
+| `, and` clause-joins | 15 | 38 |
+| em dashes | 0 | 10 |
+| `read` | 9 | 13 |
+| inanimate `'s` | 13 | 15 |
 
-Captions: 41, 3171 words, mean 77. The eight worst are still 110–162; they are the next thing to
-cut if space is needed.
+The appendix `, and` count rose with the appendix itself: the rate went from 2.2 to 2.7 per thousand
+words, and the prose added this round measures 3.7 on its own, all of it serial-comma lists. Every
+other count fell.
+
+Captions: 39, mean 77 words. The two body captions are 65 and 71 as the scanner counts them, which
+counts every macro as a word; in print they run to about sixty. The eight worst are appendix
+captions at 110–162 and are the next thing to cut if space is needed.
