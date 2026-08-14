@@ -83,8 +83,18 @@ def test_save_refuses_a_figure_of_the_wrong_width(tmp_path):
 
 # -- the sources table ---------------------------------------------------------
 
+#: Sources with no counterpart in the archived tree, and why. A figure that reads one of
+#: these cannot be drawn from the archive at all, which is a fact about the figure and has
+#: to be listed rather than discovered as a KeyError three frames down.
+NO_ARCHIVE = {
+    "controls_scored": "the nuisance sweep was rerun for this port; the archived tree "
+                       "kept only the summary the article printed",
+}
+
+
 def test_every_source_has_an_archived_counterpart():
-    assert sorted(sources.SOURCES) == sorted(sources.ARCHIVE)
+    assert sorted(sources.SOURCES) == sorted(set(sources.ARCHIVE) | set(NO_ARCHIVE))
+    assert not set(sources.ARCHIVE) & set(NO_ARCHIVE)
     for name, relative in sources.ARCHIVE.items():
         assert (sources.archive_root() / relative).is_file(), name
 
@@ -95,6 +105,11 @@ def test_the_archive_is_opt_in(monkeypatch, tmp_path):
     for name, (experiment, _) in sources.SOURCES.items():
         with pytest.raises(FileNotFoundError, match=experiment):
             sources.resolve(name)
+        if name in NO_ARCHIVE:
+            # Asking for the archive says so rather than pretending one exists.
+            with pytest.raises(FileNotFoundError, match="no archived equivalent"):
+                sources.resolve(name, allow_archive=True)
+            continue
         found = sources.resolve(name, allow_archive=True)
         assert found.archived and found.path.is_file(), name
 

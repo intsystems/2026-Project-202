@@ -40,13 +40,17 @@ INK = "#333333"
 
 # Deliberately light: 0.5 pt spines, short 0.5 pt ticks, no black, small markers, and no
 # gridlines. fig_observers draws its own row guides, being a dot plot that needs them.
+# The document sets 10 pt on 11 pt. Figure type at 9 pt reads a little below the body and
+# a little below the caption, which is the convention; the 8 pt it was set at earlier read
+# as small beside its own caption, and the tick labels at 7 pt read as small again beside
+# the axis names.
 RC: Dict[str, Any] = {
-    "font.size": 8,
-    "axes.labelsize": 8,
-    "axes.titlesize": 8,
-    "xtick.labelsize": 7,
-    "ytick.labelsize": 7,
-    "legend.fontsize": 7,
+    "font.size": 9,
+    "axes.labelsize": 9,
+    "axes.titlesize": 9,
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "legend.fontsize": 8,
     "axes.spines.top": False,
     "axes.spines.right": False,
     "axes.linewidth": 0.5,
@@ -72,7 +76,7 @@ RC: Dict[str, Any] = {
     "xtick.major.pad": 2.0,
     "ytick.major.pad": 2.0,
     "lines.linewidth": 1.1,
-    "lines.markersize": 3.0,
+    "lines.markersize": 3.4,
     "legend.frameon": False,
     "legend.borderpad": 0.0,
     "legend.handletextpad": 0.45,
@@ -83,7 +87,44 @@ RC: Dict[str, Any] = {
 
 # The one annotation style permitted inside the axes: at most one short pointer per
 # panel, where a mark would otherwise be unreadable.
-POINTER = dict(color=GREY, fontsize=6.2)
+POINTER = dict(color=GREY, fontsize=7.0)
+
+
+def bounds(*series: Any, pad: float = 0.06, step: float = 0.0,
+           include: Any = None) -> tuple:
+    """Limits that contain everything drawn, padded and rounded outward to ``step``.
+
+    The panels set their limits deliberately rather than letting matplotlib choose, so
+    that the same quantity is drawn on the same scale wherever it appears. What a
+    hand-written limit cannot do is survive the data moving under it: a limit chosen for
+    one campaign silently stops containing the next, and the panel then prints its data in
+    the margin or crops it away entirely. This keeps the deliberate part -- the padding,
+    the rounding, the ticks the caller sets -- and takes the range from the data.
+
+    ``include`` names values the panel needs inside the frame whatever the data does: a
+    reference line, a floor, the zero of a difference.
+    """
+    import numpy as np
+
+    values: List[float] = []
+    for block in series:
+        arr = np.asarray(block, dtype=float).ravel()
+        values.extend(arr[np.isfinite(arr)].tolist())
+    if include is not None:
+        arr = np.asarray(include, dtype=float).ravel()
+        values.extend(arr[np.isfinite(arr)].tolist())
+    if not values:
+        raise ValueError("no finite values to bound")
+
+    low, high = min(values), max(values)
+    margin = pad * (high - low) if high > low else pad * max(abs(high), 1.0)
+    low, high = low - margin, high + margin
+    if step > 0:
+        import math
+
+        low = step * math.floor(low / step)
+        high = step * math.ceil(high / step)
+    return low, high
 
 FORMATS = ("pdf", "png")  # PDF for LaTeX, PNG for preview
 

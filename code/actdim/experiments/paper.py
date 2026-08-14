@@ -24,6 +24,7 @@ ARTICLE_FIGURES = repo_root().parent / "icomp_v2" / "figures"
 FIGURE_INPUTS = (
     "sys.digits.parameter",
     "valid.tau", "valid.anisotropy", "valid.ceiling", "valid.theiler.contrast",
+    "valid.nuisance",
     "train.perceptron.eos", "train.perceptron.poly",
     "grok.diagnostics.logs", "grok.diagnostics.perceptron", "grok.eos",
     "grok.extended.outcomes", "grok.matched.window", "grok.prwindow", "grok.rank.dip",

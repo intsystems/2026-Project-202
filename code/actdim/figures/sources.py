@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, NamedTuple, Tuple
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple
 
 import pandas as pd
 
@@ -65,6 +65,7 @@ SOURCES: Dict[str, Tuple[str, str]] = {
     "pr_vs_window":         ("grok.prwindow", "pr_vs_window.csv"),
     "eos_runs":             ("train.perceptron.eos", "eos_runs.csv"),
     "eos_diagnostics":      ("grok.eos", "eos_diagnostics.csv"),
+    "controls_scored":      ("valid.nuisance", "controls_scored.csv"),
 }
 
 # The same names under ``../archived_code/``, taken from the constants of
@@ -93,6 +94,8 @@ ARCHIVE: Dict[str, str] = {
     "pr_vs_window":         "gromov_arithmetic/results/rank_fb_long/pr_vs_window.csv",
     "eos_runs":             "gromov_arithmetic/results/eos/eos_runs.csv",
     "eos_diagnostics":      "gromov_arithmetic/results/eos/eos_diagnostics.csv",
+    # No archived equivalent: the nuisance sweep was rerun for this port, and the
+    # archived tree records only the summary the article printed.
 }
 
 # -- the per-run table ---------------------------------------------------------
@@ -119,11 +122,15 @@ def archive_root() -> Path:
 
 
 def resolve(name: str, allow_archive: bool = False) -> Source:
-    """Find one named dataset, in ``data/`` first and the archive only on request."""
+    """Find one named dataset, in ``data/`` first and the archive only on request.
+
+    A source with no archived equivalent is resolvable from ``data/`` alone; asking for
+    the archive then fails with the name rather than with a KeyError on the lookup table.
+    """
     if name not in SOURCES:
         raise KeyError(f"no such figure source: {name!r}")
     experiment, filename = SOURCES[name]
-    return _resolve(name, experiment, filename, ARCHIVE[name], allow_archive)
+    return _resolve(name, experiment, filename, ARCHIVE.get(name), allow_archive)
 
 
 def resolve_run(kind: str, run: str, allow_archive: bool = False) -> Source:
@@ -149,18 +156,21 @@ def resolve_run(kind: str, run: str, allow_archive: bool = False) -> Source:
                     f"{archive_dir}/{filename}", allow_archive)
 
 
-def _resolve(name: str, experiment: str, filename: str, archive_rel: str,
+def _resolve(name: str, experiment: str, filename: str, archive_rel: Optional[str],
              allow_archive: bool) -> Source:
     current = data_root() / experiment / filename
     if current.exists():
         return Source(name, experiment, current, False)
 
-    old = archive_root() / archive_rel
-    if allow_archive and old.exists():
-        return Source(name, experiment, old, True)
+    if archive_rel is not None:
+        old = archive_root() / archive_rel
+        if allow_archive and old.exists():
+            return Source(name, experiment, old, True)
 
-    hint = ("" if allow_archive else
+    hint = ("" if allow_archive or archive_rel is None else
             "\nTo draw from the archived tree instead, pass allow_archive=True.")
+    if archive_rel is None:
+        hint = "\nThis source has no archived equivalent; it has to be run."
     raise FileNotFoundError(
         f"the figures need {filename!r} from {experiment!r}, which has not been "
         f"promoted.\nRun it first:  python -m actdim run {experiment}"

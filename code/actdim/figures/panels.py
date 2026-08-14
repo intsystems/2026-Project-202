@@ -11,7 +11,7 @@ directory it is handed, and the experiment module decides what that is.
 Design notes, so that later edits do not undo them:
 
 * Every figure is drawn at 5.5 in, the exact \\textwidth of the ICOMP style, with
-  8 pt type, so LaTeX never rescales it and the type stays at 8 pt on the page.
+  9 pt type, so LaTeX never rescales it and the type stays at 9 pt on the page.
   Figures in the appendices may be up to 5.5 in wide and about 2.2 in tall.
 * Colour encodes the paper's three dynamical regimes and nothing else:
   recurrent, stochastic, transient. Line style distinguishes variants inside a
@@ -67,7 +67,7 @@ from matplotlib.lines import Line2D
 
 from .sources import Reader
 from .style import (BAND, FAINT, GREY, POINTER, RECURRENT, STOCHASTIC, TRANSIENT,
-                    context, save)
+                    bounds, context, save)
 
 
 # ------------------------------------------------------------------ figure 1
@@ -84,7 +84,7 @@ def fig_regimes(read: Reader):
         ("gd", "transient", TRANSIENT, ":", "D"),
     ]
 
-    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.50),
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.85),
                                  gridspec_kw={"width_ratios": [1.18, 1.0]})
 
     # two reference lines, each named by a six-character label at its own end:
@@ -145,21 +145,29 @@ def fig_regimes(read: Reader):
     bx.set_yticks(range(len(series)))
     bx.set_yticklabels([lbl for _, lbl, _, _, _ in series][::-1])
     bx.set_ylim(-0.65, len(series) - 0.20)
-    bx.set_xlim(0.92, 1.66)
-    bx.set_xticks([1.0, 1.2, 1.4, 1.6])
+    # The band has to stay in frame whatever the ratios do: the panel is about which
+    # regimes fall inside it, and a frame that cut it off would answer the question by
+    # cropping. Everything else follows the data.
+    ratios = pd.concat(ident.values()).ident_ratio if ident else pd.Series([1.0])
+    low, high = bounds(ratios, pad=0.05, step=0.1, include=[0.95, 1.10])
+    bx.set_xlim(low, high)
+    bx.set_xticks(np.arange(low, high + 1e-9, 0.2))
     bx.set_xlabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
     bx.set_title("(b) admissibility", loc="left")
-    bx.text(1.025, 4.30, "admissible", color=BAND, fontsize=6.2, ha="center",
+    bx.text(1.025, 4.30, "admissible", color=BAND, fontsize=7.0, ha="center",
             va="bottom")
     bx.spines["left"].set_visible(False)
     bx.tick_params(axis="y", length=0)
 
     handles = [Line2D([], [], color=c, ls=ls, marker=mk, ms=2.8, mec="white",
                       mew=0.5, label=lbl) for _, lbl, c, ls, mk in series]
-    fig.tight_layout(rect=[0, 0.095, 1, 1], w_pad=1.4)
+    fig.tight_layout(rect=[0, 0.115, 1, 1], w_pad=1.4)
+    # Five entries across 5.5 in is the widest legend in the article, and at 9 pt type it
+    # is the one that runs out of room first. The handles and the gaps carry the reduction
+    # rather than the type, which has to stay level with the other eleven figures.
     fig.legend(handles=handles, ncol=5, loc="lower center",
-               bbox_to_anchor=(0.5, 0.005), handlelength=2.0,
-               columnspacing=1.1)
+               bbox_to_anchor=(0.5, 0.005), handlelength=1.5,
+               handletextpad=0.35, columnspacing=0.75)
     return fig
 
 
@@ -193,7 +201,7 @@ def fig_dip(read: Reader):
               ("move", "(c) displacement", "log"),
               ("MG", "(d) scalar log", None)]
 
-    fig, axes = plt.subplots(1, 4, figsize=(5.5, 1.40), sharex=True)
+    fig, axes = plt.subplots(1, 4, figsize=(5.5, 1.72), sharex=True)
     grid = np.arange(-5000, 5200, 100)
 
     for ax, (col, title, scale) in zip(axes, panels):
@@ -275,41 +283,55 @@ def fig_map(read: Reader):
     ax.axvline(8.0, color=FAINT, lw=0.7, ls=(0, (2, 3)), zorder=0)
     ax.axhline(1.10, color=FAINT, lw=0.7, ls=(0, (2, 3)), zorder=0)
 
-    hi = tr[tr.ident > 1.15]
-    lo = tr[tr.ident <= 1.15]
+    # Which transformer runs carry no weight decay is a property of the run, so it is
+    # taken from the run name the registry gives them. Splitting on rho_ident, as this
+    # did before, worked only while the two groups fell either side of 1.15: after the
+    # rerun both zero-decay runs read 1.77 and were drawn, and counted in the legend, as
+    # mini-batch runs.
+    undecayed = tr.run.astype(str).str.startswith("wd0")
+    lo, hi = tr[undecayed], tr[~undecayed]
 
-    # All ten perceptron runs and both zero-weight-decay transformer runs sit at
-    # exactly two crossings and rho_ident = 1.00 to three decimals, so without an
-    # offset the twelve of them render as one mark. The offset is cosmetic and is
-    # declared in the caption; the true abscissa of every point is the grey tick.
+    # Coincident points are separated by a small horizontal offset, and only then: the
+    # offset exists to show a multiplicity, so a group that has spread out on its own
+    # gets its true abscissa and no annotation. The archived campaign put ten perceptron
+    # runs and both zero-decay runs on one mark at two crossings.
     OFF = 1.20
-    ax.plot([2 / OFF, 2 * OFF], [0.999, 0.999], "-", color=FAINT, lw=0.6,
-            zorder=2)
-    ax.plot([2, 2], [0.981, 1.017], "-", color=GREY, lw=0.6, zorder=2)
-    ax.plot(gr.osc / OFF, gr.ident, "s", mfc="none", mec=TRANSIENT, mew=1.0,
-            ms=6.5, ls="none", label="perceptron, full batch (10)", zorder=3)
-    ax.plot(hi.osc, hi.ident, "o", color=STOCHASTIC, ms=4.6, mec="white",
-            mew=0.7, ls="none", label="transformer, mini-batch (5)", zorder=4)
-    ax.plot(lo.osc * OFF, lo.ident, "D", color=TRANSIENT, ms=4.0, mec="white",
-            mew=0.7, ls="none", label="transformer, no weight decay (2)",
-            zorder=5)
-    ax.text(2 / OFF / 1.16, 0.999, r"$\times 10$", color=TRANSIENT,
-            fontsize=6.2, ha="right", va="center")
-    ax.text(2 * OFF * 1.13, 0.999, r"$\times 2$", color=TRANSIENT,
-            fontsize=6.2, ha="left", va="center")
+    piled = [g for g in (gr, lo) if len(g) > 1 and g.ident.round(2).nunique() == 1]
+    shift = OFF if len(piled) > 1 else 1.0
+    ax.plot(gr.osc / shift, gr.ident, "s", mfc="none", mec=TRANSIENT, mew=1.0,
+            ms=6.5, ls="none", label=f"perceptron, full batch ({len(gr)})", zorder=3)
+    ax.plot(hi.osc, hi.ident, "o", color=STOCHASTIC, ms=4.6, mec="white", mew=0.7,
+            ls="none", label=f"transformer, mini-batch ({len(hi)})", zorder=4)
+    ax.plot(lo.osc * shift, lo.ident, "D", color=TRANSIENT, ms=4.0, mec="white",
+            mew=0.7, ls="none",
+            label=f"transformer, no weight decay ({len(lo)})", zorder=5)
+    if len(piled) > 1:
+        y = float(pd.concat(piled).ident.median())
+        ax.plot([2 / OFF, 2 * OFF], [y, y], "-", color=FAINT, lw=0.6, zorder=2)
+        ax.plot([2, 2], [y - 0.018, y + 0.018], "-", color=GREY, lw=0.6, zorder=2)
+        ax.text(2 / OFF / 1.16, y, rf"$\times {len(gr)}$", color=TRANSIENT,
+                fontsize=7.0, ha="right", va="center")
+        ax.text(2 * OFF * 1.13, y, rf"$\times {len(lo)}$", color=TRANSIENT,
+                fontsize=7.0, ha="left", va="center")
 
     ax.set_xscale("log")
     ax.set_xlim(0.7, 500)
-    ax.set_ylim(0.90, 1.68)
-    ax.set_yticks([1.0, 1.2, 1.4, 1.6])
+    # The admissible band is the reference every point is placed against, so it stays in
+    # frame; the top follows the runs.
+    low, high = bounds(gr.ident, tr.ident, pad=0.05, step=0.1, include=[0.95, 1.10])
+    ax.set_ylim(low, high)
+    ax.set_yticks(np.arange(1.0, high + 1e-9, 0.2))
     ax.set_xlabel("trend crossings per window")
     ax.set_ylabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
-    ax.text(430, 1.025, "admissible", color=BAND, fontsize=6.5, ha="right",
+    ax.text(430, 1.025, "admissible", color=BAND, fontsize=7.0, ha="right",
             va="center")
 
-    fig.tight_layout(rect=[0, 0.085, 1, 1])
+    fig.tight_layout(rect=[0, 0.095, 1, 1])
+    # Three long entries at 9 pt fill the text width exactly, so the legend carries no
+    # slack: the handles are short and the columns tight, and `figures.extent` measures
+    # what is left.
     fig.legend(ncol=3, loc="lower center", bbox_to_anchor=(0.5, 0.005),
-               handletextpad=0.3, columnspacing=1.2)
+               handlelength=1.3, handletextpad=0.28, columnspacing=0.6)
     return fig
 
 
@@ -359,8 +381,10 @@ def fig_pairs(read: Reader):
     ax.set_yticks(range(len(pairs)))
     ax.set_yticklabels([n for _, _, n in pairs][::-1])
     ax.set_ylim(-0.72, len(pairs) - 0.28)
-    ax.set_xlim(17.7, 27.7)
-    ax.set_xticks([18, 20, 22, 24, 26])
+    drawn = [win.get_group(r) for pair in pairs for r in pair[:2]]
+    low, high = bounds(*drawn, pad=0.05, step=1.0)
+    ax.set_xlim(low, high)
+    ax.set_xticks(np.arange(low, high + 1e-9, 1.0))
     ax.set_xlabel("estimate on the training loss")
     ax.set_title("(a) four label-matched pairs", loc="left")
     ax.spines["left"].set_visible(False)
@@ -413,19 +437,31 @@ def fig_window(read: Reader):
     # a feature is located only to within half a span.
     SPAN = 39990.0
     HALF = SPAN / 2
-    FLOOR = 1.16  # the ramped-gain nuisance bound of section 6.3
+    # The ramped-gain nuisance bound of section 6.3, read from the file that sets it
+    # rather than copied: it moved from 1.16 to 1.53 when the controls were rerun, and a
+    # copy here would have drawn the figure against a floor the text no longer states.
+    controls = read.table("controls_scored")
+    FLOOR = float(controls[(controls["mode"] == "qp")
+                           & (controls.control == "obs_scale")].between.median())
     d["centre"] = d.right_step - HALF
 
-    # (regime colour, generalises, linestyle, marker)
+    # (run, regime colour, marker). Whether a run generalised is read from its outcome
+    # record and not written down here: the two low-data seeds exchanged outcomes when the
+    # runs were redone, and a hard-coded flag would have drawn the one that generalises as
+    # a control and put it in panel (b) under the wrong heading.
     runs = [
-        ("grokpos_s0",   STOCHASTIC, True,  "-",            "o"),
-        ("lowdata20_s0", STOCHASTIC, True,  "-",            "^"),
-        ("lowdata15_s0", STOCHASTIC, True,  "-",            "s"),
-        ("lowdata15_s1", STOCHASTIC, False, "--",           "v"),
-        ("lowdata15_s2", STOCHASTIC, False, "--",           "D"),
-        ("wd0_s0",       TRANSIENT,  False, (0, (1, 1.6)),  "o"),
-        ("wd0_s1",       TRANSIENT,  False, (0, (1, 1.6)),  "s"),
+        ("grokpos_s0",   STOCHASTIC, "o"),
+        ("lowdata20_s0", STOCHASTIC, "^"),
+        ("lowdata15_s0", STOCHASTIC, "s"),
+        ("lowdata15_s1", STOCHASTIC, "v"),
+        ("lowdata15_s2", STOCHASTIC, "D"),
+        ("wd0_s0",       TRANSIENT,  "o"),
+        ("wd0_s1",       TRANSIENT,  "s"),
     ]
+    generalises = {r: bool(np.isfinite(tgen.get(r, np.nan))) for r, _, _ in runs}
+    runs = [(r, c, generalises[r],
+             "-" if generalises[r] else ((0, (1, 1.6)) if c is TRANSIENT else "--"), mk)
+            for r, c, mk in runs]
 
     fig, (ax, bx, cx) = plt.subplots(1, 3, figsize=(5.5, 2.2),
                                      gridspec_kw={"width_ratios": [1.0, 1.06, 0.84]})
@@ -457,6 +493,7 @@ def fig_window(read: Reader):
     bx.axvspan(-5, 5, color=STOCHASTIC, alpha=0.10, lw=0, zorder=0)
     bx.axhspan(-FLOOR, FLOOR, color=GREY, alpha=0.12, lw=0, zorder=0)
     bx.axvline(0, color=FAINT, lw=0.7, ls=(0, (2, 2.5)), zorder=1)
+    changes = []
     for r, c, gen, ls, mk in runs:
         if not gen:
             continue
@@ -464,6 +501,7 @@ def fig_window(read: Reader):
         off = (g.centre - tgen[r]).values
         ref = g.MG.values[np.abs(off).argmin()]
         y = g.MG.values - ref
+        changes.append(y)
         # every marker carries the span of the window it summarises, so that the
         # reader can see that consecutive windows overlap by three quarters and
         # that the record localises nothing to better than +-20,000 steps
@@ -473,10 +511,13 @@ def fig_window(read: Reader):
         bx.plot(off / 1000, y, linestyle=ls, color=c, marker=mk, ms=2.6,
                 mec="white", mew=0.35, lw=0.9, zorder=3)
     bx.set_xlim(-108, 108)
-    bx.set_ylim(-11.6, 3.4)
+    # The floor band is what the changes are being compared against, so it stays in
+    # frame; the rest follows whatever the runs did.
+    low, high = bounds(*changes, pad=0.06, step=2.5, include=[-FLOOR, FLOOR])
+    bx.set_ylim(low, high)
     bx.set_xticks([-100, 0, 100])
     bx.set_xticklabels(["$-100$k", "$t_{\\mathrm{gen}}$", "100k"])
-    bx.set_yticks([-10, -5, 0])
+    bx.set_yticks([t for t in np.arange(-30, 31, 5.0) if low <= t <= high])
     bx.set_xlabel("steps since generalisation")
     bx.set_ylabel("change (components)")
     bx.set_title("(b) aligned on $t_{\\mathrm{gen}}$", loc="left")
@@ -486,7 +527,8 @@ def fig_window(read: Reader):
     cx.axvline(FLOOR, color=FAINT, lw=0.7, ls=(0, (2, 2.5)), zorder=1)
     ROWS = {True: 1.0, False: 0.0}
     seen = {True: 0, False: 0}
-    nrun = {True: 3, False: 4}
+    nrun = {gen: max(2, sum(1 for _, _, g, _, _ in runs if g is gen))
+            for gen in (True, False)}
     for r, c, gen, ls, mk in runs:
         g = d[d.run == r].sort_values("centre")
         v = np.abs(np.diff(g.MG.values))
@@ -508,13 +550,18 @@ def fig_window(read: Reader):
     cx.tick_params(axis="y", length=0)
     cx.text(1.45, 1.52, "floor", ha="left", va="top", **POINTER)
 
+    # The counts are the runs actually drawn, so that a run changing outcome relabels the
+    # legend instead of leaving it claiming a split the panels no longer show.
+    def count(colour, gen):
+        return sum(1 for _, c, g, _, _ in runs if c is colour and g is gen)
+
     handles = [
-        Line2D([], [], color=STOCHASTIC, ls="-", marker="o", ms=2.6,
-               mec="white", mew=0.35, label="stochastic, generalises (3)"),
-        Line2D([], [], color=STOCHASTIC, ls="--", marker="v", ms=2.6,
-               mec="white", mew=0.35, label="stochastic, does not (2)"),
-        Line2D([], [], color=TRANSIENT, ls=(0, (1, 1.6)), marker="s", ms=2.6,
-               mec="white", mew=0.35, label="transient, does not (2)"),
+        Line2D([], [], color=STOCHASTIC, ls="-", marker="o", ms=2.6, mec="white", mew=0.35,
+               label=f"stochastic, generalises ({count(STOCHASTIC, True)})"),
+        Line2D([], [], color=STOCHASTIC, ls="--", marker="v", ms=2.6, mec="white", mew=0.35,
+               label=f"stochastic, does not ({count(STOCHASTIC, False)})"),
+        Line2D([], [], color=TRANSIENT, ls=(0, (1, 1.6)), marker="s", ms=2.6, mec="white",
+               mew=0.35, label=f"transient, does not ({count(TRANSIENT, False)})"),
     ]
     fig.tight_layout(rect=[0, 0.080, 1, 1], w_pad=1.5)
     fig.legend(handles=handles, ncol=3, loc="lower center",
@@ -912,7 +959,7 @@ def fig_traces(read: Reader):
          "step ($10^3$)"),
     ]
 
-    fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.55))
+    fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.78))
     for ax, (_, y, x, c, title, xlab) in zip(axes, panels):
         ax.plot(x, y, "-", color=c, lw=0.6, zorder=3)
         ax.set_title(title, pad=3.0)

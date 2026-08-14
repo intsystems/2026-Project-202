@@ -425,8 +425,8 @@ ground truth. Five of the nine excitation cases of \cref{sec:digits}; colour is 
 \cref{tab:classes}. (a) The estimate against the measured effective rank, which the construction
 holds at $r$; the marker is a median over four seeds and ten observers, the band their
 interquartile range, the dashed diagonal the truth. The dotted line is $E_{\max}$, a reference and
-not a bound. (b) The identifiability ratio, on a smaller grid; the transient is the one regime it
-passes.}
+not a bound. (b) The identifiability ratio, on a smaller grid; the fast recurrent regime is the
+one it passes and the transient is furthest outside.}
 \label{fig:regimes}
 \end{figure}
 
@@ -450,9 +450,9 @@ clamping is applied (\cref{app:alg}).
 Every system here is driven and training is not, so we test the one undriven candidate the
 literature offers: the edge of stability \citep{cohen2021gradient}. The perceptron of
 \cref{sec:grokking} reaches it, oscillating while the loss rises on half of all steps. Oscillation
-is not recurrence, however, and the diagnostics invert the classification there: they admit the
-runs that never return near a state they have left, and reject the minority that do
-(\cref{app:eos}).
+is not recurrence, however: three of the eight runs at the edge oscillate at that rate and never
+return near a state they have left. The diagnostics do not tell the two groups apart, rejecting
+all eight (\cref{app:eos}).
 
 \subsection{The delay lag}\label{sec:tau}
 
@@ -1320,9 +1320,10 @@ perceptron, $n^3+nm^2+m$         & no  & 15.41 & 1.51 & $<0.001$ & 1.00 & 2 \\
 
 \Cref{fig:map} places every training log of \cref{sec:grokking} in the plane of the two
 diagnostics, against the region in which every accurate case of \cref{sec:validity} fell. No
-run of either setting is in it: the regularised mini-batch runs are unstable in the embedding
-dimension, and the full-batch and zero-weight-decay runs are stable only because their series
-is monotone.
+run of either setting is in it, and none is close: every one of the seventeen is unstable in the
+embedding dimension, the mini-batch runs at $1.40$ to $1.59$ and the full-batch and
+zero-weight-decay runs at $1.39$ to $1.77$, against the $1.10$ the region allows. The two groups
+fail on the other axis in opposite directions, the full-batch series being monotone.
 
 \begin{figure}[H]
 \centering
@@ -1332,9 +1333,8 @@ is monotone.
 observed through the parameter norm, ten perceptron runs through the training loss. Colour is the
 regime of \cref{tab:classes} and marker shape the setting. The vertical axis is the identifiability
 ratio, near unity when the estimate does not depend on the embedding dimension; the horizontal axis
-is the trend-crossing count. Twelve runs coincide at two crossings with $\rho_{\mathrm{ident}}$
-near unity; those groups are drawn with a small offset either side of the true abscissa, which the
-grey tick marks, and labelled with their multiplicity. The shaded rectangle is where every accurate
+is the trend-crossing count. The twelve full-batch runs share an abscissa of two crossings and are
+told apart by their ratios. The shaded rectangle is where every accurate
 case of \cref{sec:validity} fell. It describes the calibration and is not a decision rule.}
 \label{fig:map}
 \end{figure}
@@ -1722,7 +1722,7 @@ $10\,000$, plotted at their centres. Colour is the regime of \cref{tab:classes}.
 windows, with the three generalisation steps marked on the axis. (b) The three generalising runs
 aligned on their own generalisation step, each point a change from the window before it and its bar
 the span it summarises, so nothing is localised to better than $\pm 20\,000$ steps. The grey band is
-the $\pm 1.16$-component floor of \cref{sec:nuisance}, the shaded column $\pm 5\,000$ steps of
+the $\pm 1.53$-component floor of \cref{sec:nuisance}, the shaded column $\pm 5\,000$ steps of
 $t_{\mathrm{gen}}$. (c) Every stride-to-stride change, one sub-row per run, against the same
 floor.}
 \label{fig:window}
