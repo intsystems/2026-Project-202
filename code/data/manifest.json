@@ -462,23 +462,23 @@
       "experiment": "grok.repr.measured",
       "git": {
         "branch": "main",
-        "dirty": true,
-        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
+        "dirty": false,
+        "sha": "029d4a4efbc2e8a054e954862b51d891e099286a"
       },
-      "produced_utc": "2026-08-14T12:00:56Z",
+      "produced_utc": "2026-08-14T12:26:08Z",
       "sha256": "45d0afb4a2f0a7861ff390ff5ce8fe3b47598c6e01086bcafac52bef15a63637"
     },
     "grok.repr.measured/repr_trajectory.csv": {
-      "bytes": 372,
+      "bytes": 786,
       "command": "python -m actdim run grok.repr.measured",
       "experiment": "grok.repr.measured",
       "git": {
         "branch": "main",
-        "dirty": true,
-        "sha": "efef0ff5a0a3d51393062a1cd95b64fdbe5befd8"
+        "dirty": false,
+        "sha": "029d4a4efbc2e8a054e954862b51d891e099286a"
       },
-      "produced_utc": "2026-08-14T12:00:56Z",
-      "sha256": "2e6cb3de4b6e8af22f6fbc2b1a9486e92d9b84bc33afb426c6fff75a328c0240"
+      "produced_utc": "2026-08-14T12:26:08Z",
+      "sha256": "2e70eb4ca2a50dabc60b03b06b57ee88122f8caaece6171c7b19f406031cf755"
     },
     "grok.repr/repr_analytic.csv": {
       "bytes": 2426,
