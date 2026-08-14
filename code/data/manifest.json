@@ -889,88 +889,124 @@
       "sha256": "dbb95c371a8d4a044b076c011b498b3f8092c198ee0633afe3581dcd53cf9b60"
     },
     "train.perceptron.eos/eos_lr1.5e+06_s1_sharp.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_lr1.5e+06_s1_sharp.csv",
-      "bytes": 22039,
-      "command": "python -m actdim run train.perceptron.eos",
-      "experiment": "train.perceptron.eos",
-      "sha256": "19758b33cda1713dcb33b595723e757d0c949682898efbf17ecb71a80153955f",
-      "source": "archived"
-    },
-    "train.perceptron.eos/eos_lr100000_s1_sharp.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_lr100000_s1_sharp.csv",
-      "bytes": 22278,
-      "command": "python -m actdim run train.perceptron.eos",
-      "experiment": "train.perceptron.eos",
-      "sha256": "3f8299d2f76a2ebf581a6b613720c948496b1d3145a67a7438933bbdc5fa916f",
-      "source": "archived"
-    },
-    "train.perceptron.eos/eos_lr1e+06_s1_sharp.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_lr1e+06_s1_sharp.csv",
-      "bytes": 21988,
-      "command": "python -m actdim run train.perceptron.eos",
-      "experiment": "train.perceptron.eos",
-      "sha256": "ba471b4b6cc2001302a14deb1bcb50cbd665b9c49a39bd0954914f455591d977",
-      "source": "archived"
-    },
-    "train.perceptron.eos/eos_lr2.5e+06_s1_sharp.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_lr2.5e+06_s1_sharp.csv",
-      "bytes": 21900,
-      "command": "python -m actdim run train.perceptron.eos",
-      "experiment": "train.perceptron.eos",
-      "sha256": "b0eb44881f0a7e635e873870672d9c4b92d8dcce5a45c4176e52c1a92f9dbc1f",
-      "source": "archived"
-    },
-    "train.perceptron.eos/eos_lr2.8e+06_s1_sharp.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_lr2.8e+06_s1_sharp.csv",
-      "bytes": 490,
-      "command": "python -m actdim run train.perceptron.eos",
-      "experiment": "train.perceptron.eos",
-      "sha256": "0bf29496c8c5049479669078ffa3d5d8db6cd1c310a63a13cc5c9a87637fbef6",
-      "source": "archived"
-    },
-    "train.perceptron.eos/eos_lr2e+06_s1_sharp.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_lr2e+06_s1_sharp.csv",
-      "bytes": 21841,
-      "command": "python -m actdim run train.perceptron.eos",
-      "experiment": "train.perceptron.eos",
-      "sha256": "7fe361d6177ed3befce6b7cb7a6ba051ac58111f1cc3a60f874ce28cbb7e3407",
-      "source": "archived"
-    },
-    "train.perceptron.eos/eos_lr2e+06_s1_train.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_lr2e+06_s1_train.csv",
-      "bytes": 2339943,
-      "command": "python -m actdim run train.perceptron.eos",
-      "experiment": "train.perceptron.eos",
-      "sha256": "1fb4b794267e18408934fc3bcf76eb3b63f6e224cd9d6fdf82a056c6dcece435",
-      "source": "archived"
-    },
-    "train.perceptron.eos/eos_lr300000_s1_sharp.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_lr300000_s1_sharp.csv",
-      "bytes": 22059,
-      "command": "python -m actdim run train.perceptron.eos",
-      "experiment": "train.perceptron.eos",
-      "sha256": "a98504a5271536a3971472bb2c374f38f39c99d6aa192a8bc8deb490a867d0c6",
-      "source": "archived"
-    },
-    "train.perceptron.eos/eos_lr3e+06_s1_sharp.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_lr3e+06_s1_sharp.csv",
-      "bytes": 489,
-      "command": "python -m actdim run train.perceptron.eos",
-      "experiment": "train.perceptron.eos",
-      "sha256": "cafa09e118ff487a1b9c08348567b6cc157c123850ae245c7d515e3922747392",
-      "source": "archived"
-    },
-    "train.perceptron.eos/eos_runs.csv": {
-      "bytes": 4824,
+      "bytes": 21770,
       "command": "python -m actdim run train.perceptron.eos",
       "experiment": "train.perceptron.eos",
       "git": {
         "branch": "main",
-        "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "dirty": false,
+        "sha": "f0afc492b112f63ca01e979adf7553b5107c130c"
       },
-      "produced_utc": "2026-08-13T19:26:34Z",
-      "sha256": "57e245663f151e5a63619720667ba51aa667eb480589c8df8f8927064e480cec"
+      "produced_utc": "2026-08-14T09:10:50Z",
+      "sha256": "8e3dd7c15b4aecdc9be2d413ec55d5450846903e827230fac313c7e700e47593"
+    },
+    "train.perceptron.eos/eos_lr100000_s1_sharp.csv": {
+      "bytes": 21977,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "git": {
+        "branch": "main",
+        "dirty": false,
+        "sha": "f0afc492b112f63ca01e979adf7553b5107c130c"
+      },
+      "produced_utc": "2026-08-14T09:10:50Z",
+      "sha256": "926382cf6eb9819a3f9390746ce146e0c2435b0542650e4ff3b22c0bb6ea8143"
+    },
+    "train.perceptron.eos/eos_lr1e+06_s1_sharp.csv": {
+      "bytes": 21691,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "git": {
+        "branch": "main",
+        "dirty": false,
+        "sha": "f0afc492b112f63ca01e979adf7553b5107c130c"
+      },
+      "produced_utc": "2026-08-14T09:10:50Z",
+      "sha256": "e88f7f1946611a8dbb442affd40b680d050d749a17516a344fa12ca5f14bd383"
+    },
+    "train.perceptron.eos/eos_lr2.5e+06_s1_sharp.csv": {
+      "bytes": 550,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "git": {
+        "branch": "main",
+        "dirty": false,
+        "sha": "f0afc492b112f63ca01e979adf7553b5107c130c"
+      },
+      "produced_utc": "2026-08-14T09:10:50Z",
+      "sha256": "d9130efe634edf75ebd4f9f3cbb44df09c718e3cfa815473abb754fbebd7dcdb"
+    },
+    "train.perceptron.eos/eos_lr2.8e+06_s1_sharp.csv": {
+      "bytes": 21641,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "git": {
+        "branch": "main",
+        "dirty": false,
+        "sha": "f0afc492b112f63ca01e979adf7553b5107c130c"
+      },
+      "produced_utc": "2026-08-14T09:10:50Z",
+      "sha256": "cbc289f3a58238f6f55b831643e2bd907955e88cc2684f5b48dcee09b6a25bac"
+    },
+    "train.perceptron.eos/eos_lr2e+06_s1_sharp.csv": {
+      "bytes": 21529,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "git": {
+        "branch": "main",
+        "dirty": false,
+        "sha": "f0afc492b112f63ca01e979adf7553b5107c130c"
+      },
+      "produced_utc": "2026-08-14T09:10:50Z",
+      "sha256": "47a100db945118b0ed59c0c56e0e979c36b609b5798eb3860a135999cdc3e9ad"
+    },
+    "train.perceptron.eos/eos_lr2e+06_s1_train.csv": {
+      "bytes": 2306754,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "git": {
+        "branch": "main",
+        "dirty": false,
+        "sha": "f0afc492b112f63ca01e979adf7553b5107c130c"
+      },
+      "produced_utc": "2026-08-14T09:10:50Z",
+      "sha256": "8ea0fbabd506ee6327e72ef3962d01a3a2a05bbe384dc85b13fed049c8f0e0ca"
+    },
+    "train.perceptron.eos/eos_lr300000_s1_sharp.csv": {
+      "bytes": 21730,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "git": {
+        "branch": "main",
+        "dirty": false,
+        "sha": "f0afc492b112f63ca01e979adf7553b5107c130c"
+      },
+      "produced_utc": "2026-08-14T09:10:50Z",
+      "sha256": "2c25938b39281bc3aaebc4f1088eb87e38825811cb0d1a36fe8f40137ce13f21"
+    },
+    "train.perceptron.eos/eos_lr3e+06_s1_sharp.csv": {
+      "bytes": 412,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "git": {
+        "branch": "main",
+        "dirty": false,
+        "sha": "f0afc492b112f63ca01e979adf7553b5107c130c"
+      },
+      "produced_utc": "2026-08-14T09:10:50Z",
+      "sha256": "2fb3b4931ccfe11cfa93678ca1a951c6f16122fac65acb03342ddb060d3ada75"
+    },
+    "train.perceptron.eos/eos_runs.csv": {
+      "bytes": 4757,
+      "command": "python -m actdim run train.perceptron.eos",
+      "experiment": "train.perceptron.eos",
+      "git": {
+        "branch": "main",
+        "dirty": false,
+        "sha": "f0afc492b112f63ca01e979adf7553b5107c130c"
+      },
+      "produced_utc": "2026-08-14T09:10:50Z",
+      "sha256": "096a146f9675edb88545ae9e96900e5bd0beb0d50cca22b4abdccf70cf3b8b34"
     },
     "train.perceptron.poly/g_p2_p97_train.csv": {
       "archived_path": "gromov_polynomials/results/g_p2_p97_train.csv",
