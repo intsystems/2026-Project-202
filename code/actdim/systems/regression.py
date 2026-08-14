@@ -136,11 +136,11 @@ def observe(weights: np.ndarray, gradients: np.ndarray, predictions: np.ndarray,
     return series
 
 
-def logistic_config(**overrides) -> RegressionConfig:
-    """The logistic arm's settings, which differ from the linear arm's in four places."""
-    settings = dict(link="logistic", burn=1500, eta=1.0, drive=LOGISTIC_DRIVE)
-    settings.update(overrides)
-    return RegressionConfig(**settings)
+#: The logistic arm's settings, which differ from the linear arm's in four places. They are
+#: registered with the id below rather than applied by the caller: the two arms share one
+#: config class, whose defaults are the linear ones, so a caller that constructs the class
+#: from the id gets the linear rung twice unless the id carries the difference.
+LOGISTIC_SETTINGS = dict(link="logistic", burn=1500, eta=1.0, drive=LOGISTIC_DRIVE)
 
 
 @register("regression.linear", "Online linear regression", RegressionConfig,
@@ -162,6 +162,7 @@ def simulate(config: RegressionConfig, seed: int = 0) -> Simulation:
 
 
 # The two arms are one construction under two links, so they are one function under two
-# ids rather than two near-identical modules.
+# ids rather than two near-identical modules. The link, and the three settings that go with
+# it, ride on the id.
 register("regression.logistic", "Online logistic regression", RegressionConfig,
-         paper="sec:ladder")(simulate)
+         paper="sec:ladder", defaults=LOGISTIC_SETTINGS)(simulate)

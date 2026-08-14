@@ -677,40 +677,40 @@
       "source": "archived"
     },
     "sys.logistic/heldout_raw.csv": {
-      "bytes": 126211,
+      "bytes": 147490,
       "command": "python -m actdim run sys.logistic",
       "experiment": "sys.logistic",
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "sha": "6c026c9ac385abc981a78189921f7750d07077ce"
       },
-      "produced_utc": "2026-08-13T18:01:33Z",
-      "sha256": "e7d2c3ffd7bf8633853ac86b6b02e39bd9a10fbde8b6863847be7a8fc3a7a974"
+      "produced_utc": "2026-08-14T06:19:32Z",
+      "sha256": "e2495a2cba3fa2ef1342e7ad58ad2e908cab821f718d8e1078fd2a3792fc7dfa"
     },
     "sys.logistic/heldout_summary.csv": {
-      "bytes": 10430,
+      "bytes": 12282,
       "command": "python -m actdim run sys.logistic",
       "experiment": "sys.logistic",
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "sha": "6c026c9ac385abc981a78189921f7750d07077ce"
       },
-      "produced_utc": "2026-08-13T18:01:33Z",
-      "sha256": "18f0439f0d3cba22992edc1f67e79bd337f059db0816afae07fbc16b10fffdff"
+      "produced_utc": "2026-08-14T06:19:32Z",
+      "sha256": "f3119ce2b1a90e53de3e3afe26b37373f01a1f0bc869ccf5dc7ace49d9bce5d2"
     },
     "sys.logistic/observer_ranking.csv": {
-      "bytes": 631,
+      "bytes": 736,
       "command": "python -m actdim run sys.logistic",
       "experiment": "sys.logistic",
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "sha": "6c026c9ac385abc981a78189921f7750d07077ce"
       },
-      "produced_utc": "2026-08-13T18:01:33Z",
-      "sha256": "f455d666bb755e21be864015e1ccd2039f90177857fd68ae9cd1d5825adb7e62"
+      "produced_utc": "2026-08-14T06:19:32Z",
+      "sha256": "c2d215c88ed7f913549ca109fae8799aff412232ece31d39ffea0c1e22ab4907"
     },
     "sys.matrix.k20/best_config.json": {
       "archived_path": "dimension_recovery/results/exp10_frobenius_k20/best_config.json",

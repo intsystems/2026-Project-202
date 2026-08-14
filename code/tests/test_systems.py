@@ -119,7 +119,7 @@ UNEVEN = {"digits_function"}
 @pytest.mark.parametrize("system_id", PORTED)
 def test_a_system_records_finite_scalar_series(system_id):
     entry = spec.get(system_id)
-    config = entry.config(k=2) if _accepts(entry.config, "k") else entry.config()
+    config = entry.configure(k=2) if _accepts(entry.config, "k") else entry.configure()
     result = entry.simulate(config, seed=0)
 
     assert result.series, f"{system_id} recorded no observers"
@@ -139,7 +139,7 @@ def test_a_system_excites_the_rank_it_claims(system_id):
     measured is requirement 1 unmet.
     """
     entry = spec.get(system_id)
-    config = entry.config(k=2) if _accepts(entry.config, "k") else entry.config()
+    config = entry.configure(k=2) if _accepts(entry.config, "k") else entry.configure()
     result = entry.simulate(config, seed=0)
     assert result.truth.active_dimension > 0
 
@@ -168,7 +168,7 @@ def test_the_digits_system_is_less_evenly_excited_than_published():
     entry = spec.get("digits_function")
     ratios = {}
     for k in (2, 4, 8):
-        result = entry.simulate(entry.config(k=k), seed=0)
+        result = entry.simulate(entry.configure(k=k), seed=0)
         ratios[k] = result.truth.measured["effective_rank"] / k
 
     assert all(0.80 < r < 0.92 for r in ratios.values()), (
@@ -181,11 +181,35 @@ def test_the_digits_system_is_less_evenly_excited_than_published():
 def test_two_seeds_of_one_system_differ(system_id):
     """With the drive corrected, a second seed is a second system, not a re-phasing."""
     entry = spec.get(system_id)
-    config = entry.config(k=2) if _accepts(entry.config, "k") else entry.config()
+    config = entry.configure(k=2) if _accepts(entry.config, "k") else entry.configure()
     first = entry.simulate(config, seed=0)
     second = entry.simulate(config, seed=1)
     name = next(iter(first.series))
     assert not np.allclose(first[name], second[name])
+
+
+def test_the_two_regression_arms_are_two_systems():
+    """The ladder's second and third rungs must not be one rung recorded twice.
+
+    They share a config class whose defaults are the linear arm's, so asking the catalogue
+    for the logistic id and constructing that class gives the linear system under the
+    logistic name. That is what `data/sys.logistic/heldout_raw.csv` held: every column but
+    the system name was identical to `sys.linear`'s, and the two rows of table 3 scored
+    0.79 and 0.79 because they were the same measurement.
+    """
+    linear = spec.get("regression.linear")
+    logistic = spec.get("regression.logistic")
+
+    assert logistic.configure().link == "logistic"
+    assert linear.configure().link == "identity"
+
+    left = linear.simulate(linear.configure(k=2), seed=0)
+    right = logistic.simulate(logistic.configure(k=2), seed=0)
+    shared = set(left.series) & set(right.series)
+    assert shared
+    assert all(not np.allclose(left[name], right[name]) for name in shared), (
+        "the logistic rung reproduces the linear one exactly")
+    assert "probability_fro" in right.series, "the sigmoid arm records no probability norm"
 
 
 def _accepts(config_type, field: str) -> bool:

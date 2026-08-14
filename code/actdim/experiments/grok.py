@@ -329,13 +329,35 @@ MATCHED_GRID: Tuple[Dict[str, Any], ...] = tuple(
     for max_e in (4, 6, 10) for tau in (1, 2, 4) for k in (5, 20)
     for theiler in ("autocorr", "embedding"))
 
-#: The headline cell, named by a rule applied without reference to any output: the delay
-#: span (max_E - 1) * tau must be at most a quarter of the window, and subject to that
-#: max_E is as large as it goes, at the frozen configuration's own k and Theiler rule. It
-#: is not the best cell -- max_E 4, tau 4, k 20 gives a deeper shallowest generalising
-#: fall -- and the article reports how many of the others agree with it.
-MATCHED_HEADLINE: Dict[str, Any] = {"max_E": 10, "tau": 1, "k_neighbors": 20,
-                                    "theiler": "autocorr"}
+def _matched_headline() -> Dict[str, Any]:
+    """The headline cell, named by a rule applied without reference to any output.
+
+    The delay span ``(max_E - 1) * tau`` must be at most a quarter of the window, and
+    subject to that ``max_E`` is as large as it goes, at the frozen configuration's own
+    neighbour count and Theiler rule. It is not the best cell, and the article reports how
+    many of the others agree with it.
+
+    The two settings the rule takes from the frozen configuration are read from it rather
+    than written out here. Recalibrating moved the frozen Theiler rule from ``autocorr`` to
+    ``embedding`` -- an arbitrary move, the two returning bit-identical values on the
+    calibration logs -- and a copy of the old name here would have left the headline cell
+    claiming to follow a rule it no longer followed.
+    """
+    from .. import frozen as frozen_mod
+    from ..analysis import logs
+
+    base = frozen_mod.eight_direction()
+    quarter = logs.MATCHED_WINDOW / 4.0
+    eligible = [c for c in MATCHED_GRID
+                if (c["max_E"] - 1) * c["tau"] <= quarter
+                and c["k_neighbors"] == base.k_neighbors
+                and c["theiler"] == base.theiler]
+    if not eligible:
+        raise ValueError("no cell of the matched grid satisfies the headline rule")
+    return max(eligible, key=lambda c: (c["max_E"], -c["tau"]))
+
+
+MATCHED_HEADLINE: Dict[str, Any] = _matched_headline()
 
 MATCHED_DETREND: Tuple[bool, ...] = (False, True)
 

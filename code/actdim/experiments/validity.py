@@ -431,15 +431,7 @@ def _silence_config(system_id: str, rank: int, record: int, silent: bool, extra=
             settings["eta"] = 0.0
         else:
             return None
-    if system_id == "regression.logistic":
-        # Two ladder ids share one configuration class and its default link is the linear
-        # one, so the link has to come from the id. Taking the class alone would measure
-        # the logistic rung as a second copy of the linear rung, at the linear rung's
-        # learning rate and drive amplitude.
-        from ..systems.regression import logistic_config
-
-        return logistic_config(**settings)
-    return entry.config(**settings)
+    return entry.configure(**settings)
 
 
 def _silence_cell(args) -> List[Dict[str, Any]]:

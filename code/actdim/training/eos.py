@@ -208,6 +208,32 @@ def analysable(record: Dict[str, Any]) -> bool:
     return record.get("diverged_at") is None and record.get("n_rows", 0) > 1
 
 
+#: The settings a resumed record has to agree with the request on. Not the whole config:
+#: the record also holds what the run *did* -- how many steps it survived, where it
+#: diverged -- and a diverging run legitimately stops short of its budget.
+_RESUME_FIELDS = ("max_steps", "sharp_every", "sharp_iters", "p", "width", "fraction",
+                  "task", "dtype", "lr", "seed")
+
+
+def _disagreements(record: Dict[str, Any], cfg: Any) -> str:
+    """Where a stored record and the requested configuration differ, as one phrase."""
+    wanted = {"max_steps": cfg.max_steps, "sharp_every": cfg.sharpness_every,
+              "sharp_iters": cfg.sharpness_iters, "p": cfg.p, "width": cfg.width,
+              "fraction": cfg.fraction, "task": cfg.task, "dtype": cfg.dtype,
+              "lr": cfg.lr, "seed": cfg.init_seed}
+    out = []
+    for field in _RESUME_FIELDS:
+        if field not in record:
+            continue
+        was, now = record[field], wanted[field]
+        if isinstance(now, float) or isinstance(was, float):
+            if was is None or abs(float(was) - float(now)) > 1e-9 * max(1.0, abs(float(now))):
+                out.append(f"{field} {was} -> {now}")
+        elif was != now:
+            out.append(f"{field} {was} -> {now}")
+    return ", ".join(out)
+
+
 def campaign(ctx: Any, lrs: Sequence[float] = DEFAULT_LRS,
              seeds: Sequence[int] = DEFAULT_SEEDS, steps: int = DEFAULT_STEPS,
              sharp_every: int = DEFAULT_SHARP_EVERY,
@@ -225,6 +251,12 @@ def campaign(ctx: Any, lrs: Sequence[float] = DEFAULT_LRS,
     campaign is hours long on a machine that can be reclaimed, and re-running the
     finished half of it to recover the summary would be the more expensive mistake. The
     record read back is the one the run wrote, never a rebuild from the current code.
+
+    A record is only reused when it was made at the settings being asked for. The run key
+    is the rate and the seed, so a ``--fast`` pass and the full campaign write the same
+    two keys; without this check the full campaign skipped them and the committed table
+    carried two 200-step rows among fourteen 30,000-step ones, reporting a rate at the
+    edge of stability as monotone because nothing had happened yet at step 200.
     """
     import json
 
@@ -244,10 +276,15 @@ def campaign(ctx: Any, lrs: Sequence[float] = DEFAULT_LRS,
                                      dtype=dtype), device=ctx.device)
             existing = ctx.store.existing(f"{cfg.key}_meta.json")
             if resume and existing is not None:
+                record = json.loads(existing.read_text(encoding="utf-8"))
+                stale = _disagreements(record, cfg)
+                if not stale:
+                    if verbose:
+                        print(f"[skip] {cfg.key} (already recorded)", flush=True)
+                    records.append(record)
+                    continue
                 if verbose:
-                    print(f"[skip] {cfg.key} (already recorded)", flush=True)
-                records.append(json.loads(existing.read_text(encoding="utf-8")))
-                continue
+                    print(f"[redo] {cfg.key} ({stale})", flush=True)
 
             if verbose:
                 print(f"==> {cfg.key}: {cfg.summary()}", flush=True)

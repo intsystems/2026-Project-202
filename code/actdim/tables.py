@@ -42,7 +42,7 @@ Twenty-one of the twenty-eight ``tabular`` blocks have at least one column deriv
                     that column's grid size and selection errors are unchecked.
 ``tab:geometry``    the frozen row only; the other two rows state a convention.
 ``tab:ladder``      error and rank correlation, one system per row, recomputed from
-                    ``heldout_summary.csv`` and cross-read against ``observer_ranking.csv``.
+                    ``heldout_raw.csv`` and cross-read against ``observer_ranking.csv``.
 ``tab:aggregation`` all three errors, each recomputed by its own stated recipe.
 ``tab:obs``         error, slope, and whether roughness orders the four withheld ranks.
 ``tab:k20``         every cell. Ported from the archived checker.
@@ -164,6 +164,12 @@ _THIN = ("\\,", "\\!", "\\;", "\\:", "\\/")
 _SPACES = ("\\quad", "\\qquad", "\\ ", "~", "\\hspace")
 
 _MISSING = ("---", "--", "\u2014", "\u2013")
+
+
+def _strip_rules(text: str) -> str:
+    for rule in _RULES:
+        text = re.sub(re.escape(rule) + r"(\([a-z]{1,2}\))?(\{[^}]*\})?", "", text)
+    return text
 
 
 class ParseError(RuntimeError):
@@ -323,7 +329,12 @@ def _parse_block(label: str, block: Sequence[Tuple[int, str]], line: int) -> Tab
     buffer: List[str] = []
     buffer_line = body[0][0]
     for number, text in body:
-        if not buffer:
+        # The line a row is reported on is the line its *content* starts on. A `\midrule`
+        # or an `\addlinespace` sitting alone above a row is buffered with it, and taking
+        # the line the buffer opened on would point every such row at the rule above it.
+        # Nothing downstream would notice: the row still parses, and only an edit made at
+        # the reported line lands in the wrong row.
+        if not any(_strip_rules(part).strip() for part in buffer):
             buffer_line = number
         while True:
             split = re.search(r"\\\\", text)
@@ -356,8 +367,7 @@ def _parse_row(text: str, line: int) -> Optional[Row]:
     stripped = text.strip()
     if not stripped:
         return None
-    for rule in _RULES:
-        stripped = re.sub(re.escape(rule) + r"(\([a-z]{1,2}\))?(\{[^}]*\})?", "", stripped)
+    stripped = _strip_rules(stripped)
     if not stripped.strip():
         return None
 
@@ -934,17 +944,36 @@ def check_alts(table: Table, data: Data) -> Iterable[Any]:
     printed = table.printed(table.find("MG"), 3)
     detail = ", ".join(f"{name} {held[name][0]:.3f}" for name in ALTS_STATISTICS[:4]
                        if held[name][0] is not None)
+    caption = _caption_of(table)
+    qualified = "all twenty" in caption and "withheld" in caption
     yield Claim(
         row="aggregation of the two halves",
-        statement=("both halves score the withheld ranks, which is the convention the "
+        statement=("the caption says which ranks each half scores" if qualified else
+                   "both halves score the withheld ranks, which is the convention the "
                    "appendix D preamble states and the caption does not qualify"),
-        holds=False,
+        holds=qualified,
         finding=(f"the eight-direction half scores the four withheld ranks "
                  f"{list(HELD_OUT_EIGHT)}; the twenty-direction half scores all twenty, "
                  f"the five selection ranks 2, 6, 10, 14, 18 included. Restricted to the "
                  f"ten ranks tab:k20 prints it gives {detail}, against a printed MG of "
                  f"{printed}"),
         source=source20)
+
+
+def _caption_of(table: Table) -> str:
+    """The caption of the float a table sits in, as plain text.
+
+    Several defects on record are captions that describe a different aggregation from the
+    one the columns were computed by, so the caption has to be readable from here.
+    """
+    source = article_path().read_text(encoding="utf-8").split("\n")
+    start = next((i for i in range(table.line, 0, -1)
+                  if "\\begin{table}" in source[i - 1]), None)
+    if start is None:
+        return ""
+    block = "\n".join(source[start - 1:table.line])
+    found = re.search(r"\\caption\{", block)
+    return _clean(_braced(block[found.end() - 1:])[0]) or "" if found else ""
 
 
 def check_k20(table: Table, data: Data) -> Iterable[Computed]:
@@ -975,23 +1004,32 @@ _LADDER_RANKING = (
 
 
 def _ladder_best(data: Data, experiment: str) -> Tuple[float, float, str]:
-    """The best observer's error and rank correlation, recomputed from the per-seed file.
+    """The best observer's error and rank correlation, recomputed from the per-cell file.
 
     ``observer_ranking.csv`` already holds this, but it is the file the article quotes, so
-    reading it alone would check the table against itself. The value is recomputed from
-    ``heldout_summary.csv``, which is one row per (observer, seed), and the ranking file is
-    read as well so that a disagreement between the two committed files is reported rather
-    than inherited.
+    reading it alone would check the table against itself. The value is recomputed here from
+    ``heldout_raw.csv``, which is one row per (rank, seed, observer): the estimate at a rank
+    is the median over the withheld seeds, the error is the mean over the withheld ranks of
+    the distance from the constructed truth, and the correlation is over the ranks. The
+    ranking file is read as well, so that a disagreement between the two committed files is
+    reported rather than inherited.
     """
-    summary_rel = experiment + "/heldout_summary.csv"
+    raw_rel = experiment + "/heldout_raw.csv"
     ranking_rel = experiment + "/observer_ranking.csv"
-    per_observer = data.frame(summary_rel).groupby("observer")[["mae", "rho"]].mean()
-    best = per_observer.sort_values("mae").iloc[0]
+    raw = data.frame(raw_rel)
+    scores: Dict[str, Tuple[float, Optional[float]]] = {}
+    for observer, group in raw.groupby("observer"):
+        cell = group.groupby("k", sort=True).agg(truth=("truth", "first"),
+                                                 estimate=("MG", "median"))
+        scores[str(observer)] = (float((cell.estimate - cell.truth).abs().mean()),
+                                 _spearman(cell.truth.values, cell.estimate.values))
+    name = min(scores, key=lambda o: scores[o][0])
+    mae, rho = scores[name]
     ranked = data.frame(ranking_rel).iloc[0]
-    source = f"{Data.name(summary_rel)} + {Data.name(ranking_rel)}"
-    if str(ranked.observer) != str(best.name):
-        source += f" (disagree: ranking names {ranked.observer}, summary names {best.name})"
-    return float(best.mae), float(best.rho), source
+    source = f"{Data.name(raw_rel)} + {Data.name(ranking_rel)}"
+    if str(ranked.observer) != name:
+        source += f" (disagree: ranking names {ranked.observer}, the cells name {name})"
+    return mae, rho, source
 
 
 def check_ladder(table: Table, data: Data) -> Iterable[Any]:
@@ -1028,26 +1066,38 @@ def check_ladder(table: Table, data: Data) -> Iterable[Any]:
     yield Computed(row, 4, rho, source)
 
     # Errata item 9. The caption says each side of the error is a median over that run's
-    # sliding windows "except the last row". The held-out files of the five constructed
-    # systems hold exactly one estimate per (rank, seed, observer) and carry no window
-    # index, so those rows have one window each as well.
-    single = []
+    # sliding windows. The archived files held one estimate per (rank, seed, observer) and
+    # no window index, so the claim was false of every constructed row; the regenerated
+    # ones record how many windows each estimate collapses, so it can be settled directly.
+    windows = {}
     for _, experiment in _LADDER_RANKING:
         raw = data.frame(experiment + "/heldout_raw.csv")
-        counts = raw.groupby(["cfg_id", "seed", "k", "observer"]).size()
-        if int(counts.max()) == 1:
-            single.append(experiment)
-    if single:
-        yield Claim(
-            row="one window or several",
-            statement=("each side of the error is a median over that run's sliding "
-                       "windows, except the last row"),
-            holds=False,
-            finding=(f"{len(single)} further row(s) also have one window per run: "
-                     f"{', '.join(single)}. Their held-out files hold one estimate per "
-                     f"(rank, seed, observer) and no window index. Only the two "
-                     f"parameter-subspace rows slide"),
-            source=", ".join(Data.name(e + "/heldout_raw.csv") for e in single))
+        windows[experiment] = sorted(int(v) for v in raw.n_windows.unique())
+    single = [e for e, counts in windows.items() if max(counts) == 1]
+    yield Claim(
+        row="one window or several",
+        statement="each side of the error is a median over that run's sliding windows",
+        holds=not single,
+        finding=("every constructed row slides: " + ", ".join(
+            f"{Data.name(e + '/heldout_raw.csv')} {counts}" for e, counts in windows.items())
+            if not single else
+            f"{len(single)} row(s) have one window per run: {', '.join(single)}"),
+        source=", ".join(Data.name(e + "/heldout_raw.csv") for e in windows))
+
+    # Requirement 1: a rank whose excitation was not confirmed is not a constructed truth,
+    # and a row that scores one is not reporting recovery.
+    for label, experiment in _LADDER_RANKING + (("image data, function subspace",
+                                                 "sys.digits.function"),):
+        raw = data.frame(experiment + "/heldout_raw.csv")
+        unverified = sorted(set(raw.loc[~raw.verified.astype(bool), "k"]))
+        if unverified:
+            yield Claim(
+                row=label,
+                statement="every rank in the row is a verified construction",
+                holds=False,
+                finding=(f"rank(s) {', '.join(str(int(k)) for k in unverified)} did not "
+                         f"pass the excitation check"),
+                source=Data.name(experiment + "/heldout_raw.csv"))
 
 
 # Article name -> the observer identifiers in the committed sweep.
@@ -1432,26 +1482,32 @@ def check_theiler(table: Table, data: Data) -> Iterable[Any]:
             yield Computed(row, column, value, Data.name(rel))
 
     truth_array = np.array(truths)
-    medians = []
+    # Both readings of the row label produce a number and only one of them is what the
+    # article prints, so the label decides which is compared and the claim records it.
+    label = table.rows[table.find("absolute error")].label()
+    by_median = "median" in _norm(label)
+    summarise = ((lambda s: float(np.median(np.abs(s - truth_array)))) if by_median
+                 else (lambda s: _mae(s, truth_array)))
+    alternatives = []
     for column, exclusion in enumerate(exclusions, start=2):
         series = np.array(estimates[exclusion])
-        # The row is labelled "median absolute error"; the value the article prints is the
-        # mean. The claim below reports that rather than leaving it in a comment.
-        yield Computed(table.find("absolute error"), column, _mae(series, truth_array),
-                       Data.name(rel), "the mean, not the median; see the claim below")
+        yield Computed(table.find("absolute error"), column, summarise(series),
+                       Data.name(rel))
         yield Computed(table.find("Spearman"), column, _spearman(series, truth_array),
                        Data.name(rel))
-        medians.append(float(np.median(np.abs(series - truth_array))))
+        other = (_mae(series, truth_array) if by_median
+                 else float(np.median(np.abs(series - truth_array))))
+        alternatives.append(other)
 
-    printed = [table.printed(table.find("absolute error"), c)
-               for c in range(2, 2 + len(exclusions))]
     yield Claim(
-        row="median absolute error",
-        statement="the row is the median absolute error",
-        holds=False,
-        finding=(f"the printed values {' / '.join(p or '---' for p in printed)} are the "
-                 f"mean absolute error; the median over the {len(truths)} ranks is "
-                 f"{' / '.join(f'{m:.2f}' for m in medians)}"),
+        row="absolute error",
+        statement=f"the row is the {label}",
+        holds=not by_median,
+        finding=("the row is read as the mean, which is what the article prints; the "
+                 f"median over the {len(truths)} ranks would be "
+                 f"{' / '.join(f'{m:.2f}' for m in alternatives)}" if not by_median else
+                 f"the printed values are the mean absolute error; the median over the "
+                 f"{len(truths)} ranks is {' / '.join(f'{m:.2f}' for m in alternatives)}"),
         source=Data.name(rel))
 
 
@@ -1548,18 +1604,38 @@ def check_runs(table: Table, data: Data) -> Iterable[Any]:
             yield Computed(row, 8, _nan_to_none(stone["final_val_acc"]), paper_file)
 
     # Errata item 11. The sentence under the table names the runs the sketch was attached
-    # to, and it names a different four from the campaign that ran.
-    perceptron_rows = [table.printed(r, 0) for r in table.body()
-                       if table.printed(r, 0) in perceptron_registry.INVENTORY]
-    top_four = tuple(perceptron_rows[:4])
+    # to, and it once named a different four from the campaign that ran. The names it gives
+    # are read out of the article rather than assumed, so that changing either side is
+    # reported instead of one of them being checked against a description of itself.
     sketched = tuple(perceptron_registry.SKETCHED)
+    named = _runs_named_below(table)
     yield Claim(
         row="which four carry the sketch",
-        statement=("the top four perceptron rows are repeated with the trajectory sketch "
-                   f"attached, which is {', '.join(top_four)}"),
-        holds=top_four == sketched,
+        statement=f"the sentence below the table names {', '.join(named) or 'no runs'}",
+        holds=set(named) == set(sketched),
         finding=f"the campaign that ran sketched {', '.join(sketched)}",
         source=data.note_code("actdim.training.runs_perceptron.SKETCHED"))
+
+
+def _runs_named_below(table: Table, lines: int = 12) -> Tuple[str, ...]:
+    """The ``\\texttt`` run names in the paragraph that follows a table.
+
+    Reads the article rather than the table, because the sentence under ``tab:runs`` is
+    the thing being checked and it is prose.
+    """
+    source = article_path().read_text(encoding="utf-8").split("\n")
+    start = next((i for i in range(table.line, len(source))
+                  if "\\end{table}" in source[i]), None)
+    if start is None:
+        return ()
+    block = "\n".join(source[start + 1:start + 1 + lines])
+    block = block.split("\n\n")[0] if "\n\n" in block else block
+    found = re.findall(r"\\texttt\{([^}]*)\}", block)
+    seen: List[str] = []
+    for name in (n.replace("\\_", "_") for n in found):
+        if name not in seen:
+            seen.append(name)
+    return tuple(seen)
 
 
 def _budget(printed: Optional[str], reach: Any) -> Optional[float]:
@@ -1579,11 +1655,28 @@ def _budget(printed: Optional[str], reach: Any) -> Optional[float]:
 _EOS_RATES = (1e5, 3e5, 1e6, 1.5e6, 2e6, 2.5e6, 2.8e6, 3e6)
 
 
-def check_eos(table: Table, data: Data) -> Iterable[Computed]:
+def check_eos(table: Table, data: Data) -> Iterable[Any]:
     runs = data.frame("train.perceptron.eos/eos_runs.csv")
     recurrence = data.frame("grok.eos/eos_recurrence.csv")
     run_file = Data.name("train.perceptron.eos/eos_runs.csv")
     recurrence_file = Data.name("grok.eos/eos_recurrence.csv")
+
+    # A run is comparable only at the campaign's budget. The run key is the rate and the
+    # seed, so a short pass writes the same key as the full one, and a record left behind
+    # by such a pass reports a rate at the edge of stability as monotone -- nothing has
+    # happened yet at step 200. Those rows are named rather than averaged in.
+    budget = int(runs.max_steps.max())
+    short = runs[runs.max_steps < budget]
+    if not short.empty:
+        yield Claim(
+            row="the campaign budget",
+            statement=f"every run is {budget:,} steps",
+            holds=False,
+            finding=("; ".join(f"{r.key} ran {int(r.max_steps):,}"
+                               for _, r in short.iterrows())
+                     + ". Those runs are left out of the comparison below"),
+            source=run_file)
+    runs = runs[runs.max_steps >= budget]
 
     body = table.body()
     for row, rate in zip(body, _EOS_RATES):
@@ -1709,18 +1802,38 @@ def check_ceiling(table: Table, data: Data) -> Iterable[Any]:
             source=Data.name(rel))
 
 
+#: Row label -> the column of ``ceiling_fits.csv`` holding that form's error. The log-log
+#: row is found by the ``log`` in its label rather than by one of its fitted constants: an
+#: anchor that is itself a fitted number stops matching the moment the fit is redone, and
+#: the table then goes unchecked with only a parse error to say so.
 _CEILING_FITS = (("embedding condition", "rmse_takens"),
                  ("finite-record bound", "rmse_er"),
                  ("pointwise minimum", "rmse_min"),
-                 ("5.52", "rmse_loglog"))
+                 ("log_10E", "rmse_loglog"))
 
 
-def check_ceilingfit(table: Table, data: Data) -> Iterable[Computed]:
+def check_ceilingfit(table: Table, data: Data) -> Iterable[Any]:
     rel = "valid.ceiling/ceiling_fits.csv"
     frame = data.frame(rel)
     record = frame[frame.iloc[:, 0] == "MG_plateau"].iloc[0]
     for label, column in _CEILING_FITS:
         yield Computed(table.find(label), 1, float(record[column]), Data.name(rel))
+
+    # The log-log row states its own coefficients, so they are compared as well as its error.
+    row = table.rows[table.find("log_10E")]
+    # The sign is written apart from the digits, so it is captured with them.
+    printed = [as_number(t.replace(" ", ""))
+               for t in re.findall(r"[-+]?\s*\d+\.\d+", row.label())]
+    fitted = [float(record["loglog_dE"]), float(record["loglog_dN"]),
+              float(record["loglog_const"])]
+    yield Claim(
+        row="the fitted log-log form",
+        statement=row.label(),
+        holds=(len(printed) == len(fitted)
+               and all(round_half_up(a, 2) == round_half_up(b, 2)
+                       for a, b in zip(printed, fitted))),
+        finding=("%.2f log_10 E_max + %.2f log_10 N %+.2f" % tuple(fitted)),
+        source=Data.name(rel))
 
 
 # ---------------------------------------------------------------- the registry
@@ -1747,8 +1860,8 @@ REGISTRY: Tuple[Registered, ...] = (
     )),
     Registered("tab:ladder", check_ladder, notes=(
         "truth, range and the protocol column are statements about the design",
-        "the error and the rank correlation are recomputed from heldout_summary.csv, one "
-        "row per (observer, seed); observer_ranking.csv is read as well so that a "
+        "the error and the rank correlation are recomputed from heldout_raw.csv, one row "
+        "per (rank, seed, observer); observer_ranking.csv is read as well so that a "
         "disagreement between the two committed files is reported rather than inherited",
     )),
     Registered("tab:aggregation", check_aggregation),
@@ -1796,8 +1909,8 @@ REGISTRY: Tuple[Registered, ...] = (
                "the first two columns are not in data/, and the grokking-step column "
                "repeats tab:runs, whose perceptron rows have no source either"),
     Registered("tab:theiler", check_theiler, notes=(
-        "the row's own label is checked as a claim, since both readings of it produce a "
-        "number and only one of them is what the article prints",
+        "the row's own label decides which summary is compared, and is reported as a "
+        "claim: both readings of it produce a number and only one is what is printed",
     )),
     Registered("tab:runs", check_runs, notes=(
         "the budget, the weight decay and the training fraction come from the run "
@@ -1859,6 +1972,18 @@ def compare(printed: Optional[str], computed: Any, tolerance: float = 0.0) -> Tu
         return (OK, "") if _norm(printed) == _norm(computed) else (MISMATCH, "")
     if printed is None:
         return MISMATCH, "the article prints a dash"
+
+    bound = re.match(r"^\s*([<>])\s*(.+)$", printed)
+    if bound is not None:
+        # A cell printed as "<0.001" states an inequality, and the inequality is what has
+        # to hold. Reading it as unreadable left the two smallest roughness values in
+        # tab:grok-diagnostics unchecked, which are the cells the claim beside them rests on.
+        limit = as_number(bound.group(2))
+        if limit is None:
+            return UNREADABLE, f"{printed!r} is not a bound this check can read"
+        if bound.group(1) == "<":
+            return (OK, "") if computed < limit else (MISMATCH, f"not below {limit:g}")
+        return (OK, "") if computed > limit else (MISMATCH, f"not above {limit:g}")
 
     target = as_number(printed)
     if target is None:

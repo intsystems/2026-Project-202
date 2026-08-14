@@ -242,9 +242,28 @@ def test_the_frozen_configurations_are_the_ones_the_article_states():
     assert (twenty.max_E, twenty.tau, twenty.window, twenty.stride) == (40, 16, 8000, 4000)
     for cfg in (eight, twenty):
         assert cfg.k_neighbors == 20
-        assert cfg.theiler == "autocorr"
+        # Which of the two rules the grid selected is not pinned: appendix C reports that
+        # they return bit-identical values on the calibration logs, so the argmin picks
+        # between two copies of one measurement and either name is the same setting. The
+        # eight-direction selection returned "autocorr" before the recalibration and
+        # "embedding" after it, with no cell of the grid changing value.
+        assert cfg.theiler in ("autocorr", "embedding")
         assert cfg.dither == 1e-9
         assert cfg.theiler_cap == 150
+
+
+def test_the_two_theiler_rules_agree_where_the_record_is_not_oversampled():
+    """What makes the eight-direction selection between them arbitrary, which the test above
+    relies on. The autocorrelation rule only widens the exclusion where the autocorrelation
+    time exceeds the embedding span, and appendix C reports one to three samples against a
+    span of seventy-six on these logs."""
+    eight = frozen.eight_direction()
+    span = (eight.max_E - 1) * eight.tau
+    rng = np.random.default_rng(0)
+    series = rng.standard_normal(8000)          # autocorrelation time of one sample
+    for rule in ("autocorr", "embedding"):
+        assert embedding.resolve_theiler(eight.replace(theiler=rule), series,
+                                         eight.tau) == min(span, eight.theiler_cap)
 
 
 def test_the_window_geometry_overrides_are_the_ones_appendix_c_tabulates():
@@ -260,8 +279,8 @@ def test_the_window_geometry_overrides_are_the_ones_appendix_c_tabulates():
 def test_the_stored_calibration_is_rebuilt_and_not_refitted():
     cal = frozen.calibration("c_norm")
     assert cal.fitted and cal.n_points > 10
-    assert cal.predict(1.0) == pytest.approx(1.999825430300377)   # clipped below the knots
-    assert cal.predict(1000.0) == pytest.approx(5.999848594168883)  # and above them
+    assert cal.predict(1.0) == pytest.approx(1.9999455188206496)   # clipped below the knots
+    assert cal.predict(1000.0) == pytest.approx(5.999806638694667)  # and above them
     values = cal.predict(np.array([2.0, 3.0, 4.0, np.nan]))
     assert np.all(np.diff(values[:3]) >= 0)
     assert np.isnan(values[3])

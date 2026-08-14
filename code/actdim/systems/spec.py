@@ -196,6 +196,20 @@ class SystemEntry:
     config: type
     simulate: Callable[..., Simulation]
     paper: str = ""
+    defaults: Dict[str, Any] = field(default_factory=dict)
+    """Settings the id fixes, over and above the config class's own defaults.
+
+    Two ladder rows can share a config class -- the two regressions do -- and then the class
+    alone does not say which row it is. Registering the difference here means every caller
+    that asks for a system by id gets that system: reading the class and constructing it
+    directly measured the logistic rung as a second copy of the linear one.
+    """
+
+    def configure(self, **settings: Any) -> Any:
+        """The config this id means, with the caller's settings on top."""
+        merged = dict(self.defaults)
+        merged.update(settings)
+        return self.config(**merged)
 
 
 SYSTEMS: Dict[str, SystemEntry] = {}
@@ -207,13 +221,15 @@ LADDER: Tuple[str, ...] = ("matrix", "regression.linear", "regression.logistic",
                            "decoder", "subspace", "digits_function", "digits_parameter")
 
 
-def register(id: str, title: str, config: type, paper: str = "") -> Callable:
+def register(id: str, title: str, config: type, paper: str = "",
+             defaults: Dict[str, Any] = None) -> Callable:
     """Register the decorated ``simulate`` under a stable id."""
 
     def decorate(fn: Callable[..., Simulation]) -> Callable[..., Simulation]:
         if id in SYSTEMS:
             raise ValueError(f"duplicate system id: {id}")
-        SYSTEMS[id] = SystemEntry(id=id, title=title, config=config, simulate=fn, paper=paper)
+        SYSTEMS[id] = SystemEntry(id=id, title=title, config=config, simulate=fn, paper=paper,
+                                  defaults=dict(defaults or {}))
         return fn
 
     return decorate

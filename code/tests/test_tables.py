@@ -19,8 +19,9 @@ from __future__ import annotations
 import pytest
 
 from actdim import tables
-from actdim.tables import (ARCHIVED, CLAIM, MISMATCH, OK, ROUNDING, Data, ParseError,
-                           as_number, audit, compare, decimals, format_report, read_tables)
+from actdim.tables import (ARCHIVED, CLAIM, MISMATCH, OK, REGENERATED, ROUNDING, Data,
+                           ParseError, as_number, audit, compare, decimals, format_report,
+                           read_tables)
 
 pytestmark = pytest.mark.skipif(not tables.article_path().is_file(),
                                 reason="../icomp_v2/report.tex is not present")
@@ -112,6 +113,37 @@ def test_a_cell_out_by_one_unit_in_the_last_place_is_reported_as_rounding():
     assert compare("5.47", 5.9)[0] == MISMATCH
 
 
+def test_a_cell_printed_as_a_bound_is_compared_as_one():
+    """`<0.001` states an inequality, and the inequality is what has to hold. Reading it as
+    unreadable left the two smallest roughness values of tab:grok-diagnostics unchecked."""
+    assert compare("<0.001", 0.0002)[0] == OK
+    assert compare("<0.001", 0.0021)[0] == MISMATCH
+    assert compare(">0.9", 0.95)[0] == OK
+    assert compare(">0.9", 0.5)[0] == MISMATCH
+
+
+def test_a_row_is_reported_at_the_line_its_content_starts_on():
+    """A rule on its own line is buffered with the row below it. Taking the line the buffer
+    opened on pointed every such row at the rule above, which nothing downstream notices --
+    the row still parses, and only an edit made at the reported line lands in the wrong
+    row."""
+    source = ("\\begin{tabular}{lr}\n"
+              "\\toprule\n"
+              "name & value \\\\\n"
+              "\\midrule\n"
+              "first & 1.00 \\\\\n"
+              "\\addlinespace\n"
+              "second & 2.00 \\\\\n"
+              "\\bottomrule\n"
+              "\\end{tabular}\n")
+    lines = source.split("\n")
+    table = tables._parse_block("tab:x", list(enumerate(lines, start=1)), 1)
+    for row in table.rows:
+        assert row.label() in lines[row.line - 1], (
+            f"row {row.label()!r} is reported at line {row.line}, "
+            f"which holds {lines[row.line - 1]!r}")
+
+
 def test_a_dash_and_a_missing_value_agree_only_with_each_other():
     assert compare(None, None)[0] == OK
     assert compare(None, 12.0)[0] == MISMATCH
@@ -162,9 +194,16 @@ def test_the_report_says_which_inputs_are_archived(report):
 
 
 def test_a_finding_carries_the_provenance_of_its_own_source(report):
-    finding = next(f for f in report.by_label("tab:k20").findings)
-    assert finding.source.startswith("data/")
-    assert finding.provenance == ARCHIVED
+    """One table checked against a regeneration and one against the archive, so that both
+    provenances are exercised. tab:k20 moved from the second group to the first when the
+    twenty-direction calibration was rerun; tab:ladder's matrix row has not been rerun."""
+    regenerated = next(f for f in report.by_label("tab:k20").findings)
+    assert regenerated.source.startswith("data/")
+    assert regenerated.provenance == REGENERATED
+
+    archived = next(f for f in report.by_label("tab:ladder").findings
+                    if "stationary_validation" in f.source)
+    assert archived.provenance == ARCHIVED
 
 
 def test_the_rows_carry_what_the_caller_needs(report):
@@ -175,7 +214,7 @@ def test_the_rows_carry_what_the_caller_needs(report):
                                                "skipped"}
     disagreeing = [row for row in rows if row["status"] in (MISMATCH, ROUNDING)]
     assert len(disagreeing) == len(report.mismatches)
-    assert sum(1 for row in rows if row["status"] == MISMATCH) == 4
+    assert sum(1 for row in rows if row["status"] == MISMATCH) == len(KNOWN)
 
 
 def test_the_computed_value_is_reported_at_full_precision(report):
@@ -186,10 +225,10 @@ def test_the_computed_value_is_reported_at_full_precision(report):
     was compared against, and the next edit to this row will be judged against it.
     """
     row = next(r for r in report.rows()
-               if r["table"] == "tab:ceiling" and r["column"] == "N = 4000"
+               if r["table"] == "tab:ceiling" and r["column"] == "max_E = 28"
                and r["row"] == "slope")
     assert row["printed"] == "0.29"
-    assert row["computed"].startswith("0.2865")
+    assert row["computed"].startswith("0.2872")
 
 
 def test_the_report_formats_and_names_the_disagreements(report):
@@ -202,13 +241,13 @@ def test_the_report_formats_and_names_the_disagreements(report):
 # -- the defects docs/errata.md already records --------------------------------
 
 
-def test_errata_3_the_two_halves_of_tab_alts_are_aggregated_differently(report):
-    """Every printed cell reproduces; the caption presenting them as one measurement at two
-    ranges does not. Restricted to the ten ranks tab:k20 prints, MG is 1.554 not 1.62."""
-    claims = [f for f in bad(report, "tab:alts") if f.kind == CLAIM]
-    assert len(claims) == 1
-    assert "1.554" in claims[0].computed
-    assert "all twenty" in claims[0].computed
+def test_errata_3_the_caption_of_tab_alts_now_states_the_asymmetry(report):
+    """Closed in the article, not in the data: the two halves are still aggregated by
+    different rules, and the caption now says so. The claim reads the caption, so a caption
+    that stopped saying it would fail here."""
+    claim = next(f for f in report.by_label("tab:alts").findings if f.kind == CLAIM)
+    assert claim.status == OK
+    assert "all twenty" in claim.computed and "withheld ranks" in claim.computed
 
 
 def test_errata_5_the_a_sum_sq_budget_now_prints_the_46000_that_ran(report):
@@ -229,17 +268,25 @@ def test_errata_6_tab_ladder_now_prints_its_correlations_in_the_seed_order(repor
                 if f.row == "oscillating matrix" and f.kind != CLAIM]
 
 
-def test_errata_9_five_rows_of_tab_ladder_have_one_window_and_not_several(report):
-    claim = next(f for f in bad(report, "tab:ladder") if f.kind == CLAIM)
-    assert "one window per run" in claim.computed
+def test_errata_9_every_constructed_row_of_tab_ladder_now_slides(report):
+    """Closed by the regeneration. The archived files held one estimate per (rank, seed,
+    observer) and no window index, so the caption's sliding-window recipe was false of every
+    constructed row; the rerun records seven windows behind each."""
+    claim = next(f for f in report.by_label("tab:ladder").findings
+                 if f.row == "one window or several")
+    assert claim.status == OK
+    assert "every constructed row slides" in claim.computed
     for system in ("sys.linear", "sys.logistic", "sys.decoder", "sys.subspace"):
         assert system in claim.computed
 
 
-def test_errata_11_the_sketched_four_are_not_the_top_four_rows(report):
-    claim = next(f for f in bad(report, "tab:runs") if f.kind == CLAIM)
+def test_errata_11_the_sentence_now_names_the_four_that_were_sketched(report):
+    """Closed in the article. The claim reads the run names out of the sentence below the
+    table rather than assuming which rows it means, so either side changing is reported."""
+    claim = next(f for f in report.by_label("tab:runs").findings if f.kind == CLAIM)
+    assert claim.status == OK
     assert "a_add, x_no_grok, g_p1, g_p1x" in claim.computed
-    assert "a_mul" in claim.printed          # what the article says instead
+    assert "a_mul" not in claim.printed
 
 
 def test_errata_12_is_named_as_unchecked_rather_than_passed(report):
@@ -267,8 +314,13 @@ def test_the_ceiling_scans_now_agree_on_the_cell_they_share(report):
 
 
 def test_the_theiler_error_row_is_the_mean_under_its_own_label(report):
-    claim = next(f for f in bad(report, "tab:theiler") if f.kind == CLAIM)
-    assert "mean absolute error" in claim.computed
+    """The label decides which summary is compared. It reads "mean absolute error", the row
+    is compared as a mean, and the median the other reading would give is reported beside
+    it, so relabelling the row without recomputing it would fail here."""
+    claim = next(f for f in report.by_label("tab:theiler").findings if f.kind == CLAIM)
+    assert claim.status == OK
+    assert "mean absolute error" in claim.printed
+    assert "the median over the 7 ranks would be" in claim.computed
 
 
 def test_the_ground_truth_cell_is_rounded_the_way_the_file_reads(report):
@@ -284,16 +336,21 @@ def test_the_ground_truth_cell_is_rounded_the_way_the_file_reads(report):
 #: being reported does too. Editing this set is the correct fix once the change has been
 #: recorded somewhere a reader will find it.
 #:
-#: Seven cells left this set when the article was corrected: the a_sum_sq budget, the
-#: ladder's correlation order, the ground-truth rounding, and the four ceiling-slope
-#: findings. What remains is four claims, none of them a number. Each is a statement the
-#: article makes *about* a table which the data does not support, and each needs an
-#: editorial decision rather than an edit to a cell.
+#: Three hundred and fifty-one cells were rewritten from the regenerated data and four
+#: claims were closed, three of them in the article and one by the rerun itself. What
+#: remains is two claims, and neither is an editorial matter: both name a defect in
+#: ``data/`` that only a rerun can fix.
+#:
+#: * ``tab:ladder`` -- the function-subspace system excites its three highest ranks to about
+#:   0.86 r against the 0.9 r requirement 1 asks. This is the drive regression of errata
+#:   item 31; the row is marked as failing requirement 1 until it is resolved.
+#: * ``tab:eos`` -- two of the sixteen edge-of-stability runs are 200-step records left by a
+#:   ``--fast`` pass, which the full campaign then skipped because the run key is the rate
+#:   and the seed. ``actdim.training.eos`` now refuses to resume a record made at other
+#:   settings; the two runs need thirty GPU-minutes to redo.
 KNOWN = {
-    ("tab:ladder", "one window or several", "claim"),
-    ("tab:alts", "aggregation of the two halves", "claim"),
-    ("tab:theiler", "median absolute error", "claim"),
-    ("tab:runs", "which four carry the sketch", "claim"),
+    ("tab:ladder", "image data, function subspace", "claim"),
+    ("tab:eos", "the campaign budget", "claim"),
 }
 
 

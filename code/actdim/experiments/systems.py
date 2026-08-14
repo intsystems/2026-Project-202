@@ -81,7 +81,7 @@ def _cell(args) -> Dict[str, Any]:
     entry = spec.get(system_id)
     field = _record_length_field(entry.config)
     length = FAST_RECORD if fast else RECORD
-    config = entry.config(**{"k": k, field: length})
+    config = entry.configure(**{"k": k, field: length})
     result = entry.simulate(config, seed=seed)
 
     base = frozen.twenty_direction() if wide else frozen.eight_direction()

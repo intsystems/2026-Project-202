@@ -206,16 +206,33 @@ def perceptron_sketched_long(ctx: Context) -> None:
     _summary(ctx, rows)
 
 
+#: What appendix Q and figure 12 read. The summary alone is not enough: panel (a) draws a
+#: sharpness trace per rate and panel (b) one step-by-step loss log, and while those stayed
+#: unpromoted the figure was drawn from the archived campaign while the table beside it came
+#: from the current one -- which disagreed about which runs diverged.
+def _eos_promotes() -> tuple:
+    from ..training.eos import DEFAULT_LRS
+
+    return (("eos_runs.csv",)
+            + tuple(f"eos_lr{lr:g}_s1_sharp.csv" for lr in DEFAULT_LRS)
+            + ("eos_lr2e+06_s1_train.csv",))
+
+
+_EOS_PROMOTES = _eos_promotes()
+
+
 @experiment(
     id="train.perceptron.eos",
     title="Full-batch descent at eight learning rates, logged every step",
     paper=("app:eos",),
     device=GPU,
     minutes=30,
-    promotes=("eos_runs.csv",),
+    promotes=_EOS_PROMOTES,
     tier=2,
     notes="Appendix Q. Sharpness by power iteration every hundred steps, seeded from a "
-          "stream that cannot move the trajectory.",
+          "stream that cannot move the trajectory. The seed-1 sharpness traces and the "
+          "one step-by-step loss log figure 12 draws are promoted beside the summary, so "
+          "that the figure and the table cannot come from different campaigns.",
 )
 def perceptron_eos(ctx: Context) -> None:
     from ..training import eos

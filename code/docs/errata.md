@@ -172,6 +172,37 @@ plumbing-check estimator with nothing in any output to say so.
 `data/`, resolution of a downstream input, and the "has this already run" test that decides
 what a campaign skips — and `tests/test_runtime.py` holds all three.
 
+## J. Two ladder ids shared one configuration class
+
+`regression.linear` and `regression.logistic` are one `simulate` under two ids, which is
+right, and they were registered with one config class, which was not: its defaults are the
+linear arm's, so any caller that asked the catalogue for the logistic id and constructed
+that class got the linear system under the logistic name. `sys.logistic` did exactly that.
+Its held-out file was identical to `sys.linear`'s in every column but the system name, and
+the two rows of `tab:ladder` read 0.79 and 0.79 because they were one measurement printed
+twice.
+
+`SystemEntry.defaults` now carries the settings an id fixes and `SystemEntry.configure`
+applies them, so the id and not the class decides what runs. The workaround in
+`experiments/validity.py`, which special-cased the logistic id in one place and left the
+other, is gone. `sys.logistic` has been rerun: the logistic rung scores 0.81 against the
+linear rung's 0.79, on seven observers rather than six.
+
+## K. A short pass and a full campaign wrote the same run keys
+
+`train.perceptron.eos` keys a run by its rate and its seed, and resumes from a stored
+record so that a campaign reclaimed midway does not repeat its finished half. A `--fast`
+pass writes 200-step records under two of those sixteen keys, and the full campaign then
+skipped them. The committed `eos_runs.csv` holds fourteen 30,000-step rows and two 200-step
+rows, and the two short ones report a rate at the edge of stability as monotone, nothing
+having happened yet at step 200.
+
+`actdim.training.eos.campaign` now compares a stored record against the settings being
+asked for and redoes it where they differ. `check_eos` excludes any run below the
+campaign's own budget and names it, so the two rows are visible in the audit rather than
+averaged into appendix Q. **Open**: the two runs need about thirty GPU-minutes to redo, and
+`tab:eos` prints one seed at $10^5$ and at $3 \times 10^6$ until they are.
+
 ## What this means for the article
 
 Items 3, 5, 6, 9, 11, 12, 13, 23, 32, 33, 34 and 35 are text or caption changes with no
