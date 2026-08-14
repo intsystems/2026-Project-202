@@ -1667,15 +1667,18 @@ def check_eos(table: Table, data: Data) -> Iterable[Any]:
     # happened yet at step 200. Those rows are named rather than averaged in.
     budget = int(runs.max_steps.max())
     short = runs[runs.max_steps < budget]
-    if not short.empty:
-        yield Claim(
-            row="the campaign budget",
-            statement=f"every run is {budget:,} steps",
-            holds=False,
-            finding=("; ".join(f"{r.key} ran {int(r.max_steps):,}"
-                               for _, r in short.iterrows())
-                     + ". Those runs are left out of the comparison below"),
-            source=run_file)
+    # Reported whether or not any run is short. A check that says nothing when it passes
+    # cannot be told from a check that was never made, and this one was added because the
+    # committed table had carried two 200-step rows among fourteen 30,000-step ones.
+    yield Claim(
+        row="the campaign budget",
+        statement=f"every run is {budget:,} steps",
+        holds=short.empty,
+        finding=(f"all {len(runs)} runs are" if short.empty else
+                 "; ".join(f"{r.key} ran {int(r.max_steps):,}"
+                           for _, r in short.iterrows())
+                 + ". Those runs are left out of the comparison below"),
+        source=run_file)
     runs = runs[runs.max_steps >= budget]
 
     body = table.body()

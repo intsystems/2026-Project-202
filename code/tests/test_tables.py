@@ -307,6 +307,18 @@ def test_errata_24_the_rescaling_control_reads_zero(report):
 # -- what the auditor found that the errata does not list ----------------------
 
 
+def test_the_edge_of_stability_campaign_is_whole(report):
+    """Two of the sixteen runs were 200-step records a `--fast` pass left behind, which
+    the full campaign then skipped: the run key is the rate and the seed, so both passes
+    write the same name. The check reports the budget whether or not it holds, because a
+    check that is silent when it passes cannot be told from one that was never made."""
+    claim = next(f for f in report.by_label("tab:eos").findings
+                 if f.row == "the campaign budget")
+    assert claim.status == OK
+    assert "30,000 steps" in claim.printed
+    assert "all 16 runs are" in claim.computed
+
+
 def test_the_ceiling_scans_now_agree_on_the_cell_they_share(report):
     """E_max = 20 at N = 8000 is one cell printed twice, once in each scan. It read 0.27
     against 0.24, and the file gives 0.2682; both now print the same value."""
@@ -336,21 +348,14 @@ def test_the_ground_truth_cell_is_rounded_the_way_the_file_reads(report):
 #: being reported does too. Editing this set is the correct fix once the change has been
 #: recorded somewhere a reader will find it.
 #:
-#: Three hundred and fifty-one cells were rewritten from the regenerated data and four
-#: claims were closed, three of them in the article and one by the rerun itself. What
-#: remains is two claims, and neither is an editorial matter: both name a defect in
-#: ``data/`` that only a rerun can fix.
-#:
-#: * ``tab:ladder`` -- the function-subspace system excites its three highest ranks to about
-#:   0.86 r against the 0.9 r requirement 1 asks. This is the drive regression of errata
-#:   item 31; the row is marked as failing requirement 1 until it is resolved.
-#: * ``tab:eos`` -- two of the sixteen edge-of-stability runs are 200-step records left by a
-#:   ``--fast`` pass, which the full campaign then skipped because the run key is the rate
-#:   and the seed. ``actdim.training.eos`` now refuses to resume a record made at other
-#:   settings; the two runs need thirty GPU-minutes to redo.
+#: Three hundred and fifty-one cells were rewritten from the regenerated data and five
+#: claims were closed, three of them in the article and two by re-running. What remains is
+#: one, and it is not an editorial matter: the function-subspace system excites its three
+#: highest ranks to about 0.86 r against the 0.9 r requirement 1 asks. That is the drive
+#: regression of errata item 31, and re-running reproduces it exactly, so the row is
+#: marked as failing requirement 1 until the construction is decided.
 KNOWN = {
     ("tab:ladder", "image data, function subspace", "claim"),
-    ("tab:eos", "the campaign budget", "claim"),
 }
 
 

@@ -2098,7 +2098,7 @@ five of them.}
 \toprule
 $\eta$ & stability ratio & rises & return & outcome \\
 \midrule
-$1 \times 10^{5}$   & $0.238$          & $0.000$          & $1.007$          & monotone \\
+$1 \times 10^{5}$   & $0.239$, $0.238$ & $0.000$          & $1.007$          & monotone \\
 $3 \times 10^{5}$   & $0.758$, $0.745$ & $0.000$          & $1.007$, $1.007$ & monotone \\
 $1 \times 10^{6}$   & $0.969$, $0.971$ & $0.495$, $0.490$ & $0.104$, $0.079$ & at the edge \\
 $1.5 \times 10^{6}$ & $0.974$, $0.970$ & $0.500$, $0.500$ & $1.012$, $1.011$ & at the edge \\
@@ -2111,7 +2111,7 @@ $3 \times 10^{6}$   & ---              & ---              & ---              & d
 \end{table}
 
 \paragraph{Oscillation is not recurrence.} The oscillation is real and not round-off: on the
-one run whose step-by-step log is kept, the largest single-step rise is $3.3$ times the loss
+one run whose step-by-step log is kept, the largest single-step rise is $3.1$ times the loss
 itself, against a float32 relative epsilon of $1.2 \times 10^{-7}$. It is nonetheless a different
 property from recurrence. Eight runs reach the edge, and all eight oscillate at a rise fraction
 of one step in two; only five of them return near states they have left, while three trace a
@@ -2143,8 +2143,9 @@ transient is in part a property of how often it was written.
 \caption{Whether full-batch descent reaches the edge of stability, and what the logging stride
 removes. (a) The stability ratio along training, seed $1$ of each rate; the seeds agree to within
 the linewidth. Rates below the dotted line descend monotonically and are drawn as transients; those
-that pin against it are at the edge. (b) Sixty consecutive steps at $\eta = 10^{6}$, against the
-same series at a stride of ten: the two-cycle is not blurred by that stride but removed by it. (c)
+that pin against it are at the edge. (b) Sixty consecutive steps at $\eta = 2 \times 10^{6}$,
+against the same series at a stride of ten: the two-cycle is not blurred by that stride but removed
+by it. (c)
 The fraction of steps on which the loss rises, for each edge-of-stability rate, against the logging
 stride.}
 \label{fig:eos}

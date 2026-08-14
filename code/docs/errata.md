@@ -199,9 +199,14 @@ having happened yet at step 200.
 
 `actdim.training.eos.campaign` now compares a stored record against the settings being
 asked for and redoes it where they differ. `check_eos` excludes any run below the
-campaign's own budget and names it, so the two rows are visible in the audit rather than
-averaged into appendix Q. **Open**: the two runs need about thirty GPU-minutes to redo, and
-`tab:eos` prints one seed at $10^5$ and at $3 \times 10^6$ until they are.
+campaign's own budget and reports the budget whether or not it holds.
+
+Closed. The two runs were redone at the full budget: `eos_lr100000_s1` is monotone at a
+tail ratio of 0.239 and generalises at 11,757, `eos_lr3e+06_s1` diverges. Neither reaches
+the edge of stability, so appendix Q's counts are unchanged — eight runs at the edge, five
+of them recurring — and the appendix's conclusion never rested on the two bad rows. The
+nine per-run traces figure 12 draws are promoted with the summary now, so the figure and
+the table beside it come from one campaign.
 
 ## What this means for the article
 
