@@ -205,40 +205,40 @@
       "sha256": "9789e6576f91e462065ea4ac96fce0b7c6a8393518aa9d84f18f5ba1672a8fbe"
     },
     "grok.eos/eos_diagnostics.csv": {
-      "bytes": 585719,
+      "bytes": 627847,
       "command": "python -m actdim run grok.eos",
       "experiment": "grok.eos",
       "git": {
         "branch": "main",
-        "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "dirty": false,
+        "sha": "68b36fce2ed7b5ee9748f43424ced462e9429574"
       },
-      "produced_utc": "2026-08-13T22:25:52Z",
-      "sha256": "4f0ddc4e4394ffc7a6b8aae8ac5c322eb65885ef82984a56280f470d3c27c16f"
+      "produced_utc": "2026-08-14T09:18:31Z",
+      "sha256": "44bf3b77a6f3723de1a48adb7e06d6e7967775361206fbfe4eda1bc5dfebda3f"
     },
     "grok.eos/eos_diagnostics_summary.csv": {
-      "bytes": 37919,
+      "bytes": 41356,
       "command": "python -m actdim run grok.eos",
       "experiment": "grok.eos",
       "git": {
         "branch": "main",
-        "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "dirty": false,
+        "sha": "68b36fce2ed7b5ee9748f43424ced462e9429574"
       },
-      "produced_utc": "2026-08-13T22:25:52Z",
-      "sha256": "cc6616a932eab6d3708263a2acc16efdb34831c85caeb3291a71e118b955e513"
+      "produced_utc": "2026-08-14T09:18:31Z",
+      "sha256": "42b1f87fc88b3d4de2baedfa9f8da4e16f99f0c9ebb1caf8f7b22e5436fc9407"
     },
     "grok.eos/eos_recurrence.csv": {
-      "bytes": 8014,
+      "bytes": 8353,
       "command": "python -m actdim run grok.eos",
       "experiment": "grok.eos",
       "git": {
         "branch": "main",
-        "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "dirty": false,
+        "sha": "68b36fce2ed7b5ee9748f43424ced462e9429574"
       },
-      "produced_utc": "2026-08-13T22:25:52Z",
-      "sha256": "f2517141142c92d5bca9cdabe627b26644f86a2bb52121d9d14be489fd2c1b7c"
+      "produced_utc": "2026-08-14T09:18:31Z",
+      "sha256": "b794982686497dd6de1fd825219213fa14eed4f3d38c9dd24227a01c228ebff0"
     },
     "grok.extended.outcomes/exp8_at_20k.csv": {
       "bytes": 492,
