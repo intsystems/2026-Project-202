@@ -1,0 +1,8 @@
+run,t_mem,t_gen,final_val_acc,n_params,rows
+grokpos_s0,1380,5070.0,,,
+lowdata15_s0,600,,,,
+lowdata15_s1,640,106080.0,,,
+lowdata15_s2,650,,,,
+lowdata20_s0,800,37940.0,,,
+wd0_s0,590,,,,
+wd0_s1,620,,,,

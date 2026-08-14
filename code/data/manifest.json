@@ -7,9 +7,9 @@
       "git": {
         "branch": "main",
         "dirty": false,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:02:52Z",
+      "produced_utc": "2026-08-13T16:53:30Z",
       "sha256": "1bf34371365f8a3ec659adc102b3fd9829b4835e3fd541441d253ef7f6d22b00"
     },
     "calib.e20/frozen_per_r.csv": {
@@ -19,9 +19,9 @@
       "git": {
         "branch": "main",
         "dirty": false,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:02:52Z",
+      "produced_utc": "2026-08-13T16:53:30Z",
       "sha256": "38fcb90169018be5d9de97f02dd308b57735af3f097e03affb44832172c1fc6e"
     },
     "calib.e20/heldout_qp_summary.csv": {
@@ -31,9 +31,9 @@
       "git": {
         "branch": "main",
         "dirty": false,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:02:52Z",
+      "produced_utc": "2026-08-13T16:53:30Z",
       "sha256": "2abb7b59e6bfa1d4ee4328f5a20aa774d9dc98465f4e2fe60d8a98e16eab6705"
     },
     "calib.e20/invariance_controls.csv": {
@@ -43,9 +43,9 @@
       "git": {
         "branch": "main",
         "dirty": false,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:02:52Z",
+      "produced_utc": "2026-08-13T16:53:30Z",
       "sha256": "2e942e5a90795b6e28c153ee927546ddc5c0910eeadb5f99bfa6ac40b8fec3e1"
     },
     "calib.e20/scores_frozen.csv": {
@@ -55,9 +55,9 @@
       "git": {
         "branch": "main",
         "dirty": false,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:02:52Z",
+      "produced_utc": "2026-08-13T16:53:30Z",
       "sha256": "c9e9921745fdda19793cfb96276f834db7595477aa7eacdf43bd94f03737ffeb"
     },
     "calib.e8/calibration_scores.csv": {
@@ -67,9 +67,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:20:06Z",
+      "produced_utc": "2026-08-13T17:10:43Z",
       "sha256": "ae37e9e22ff974dc0d17d4a9cd44acf83ba4da86a21cc81984ad3bf22d9ebb6e"
     },
     "calib.e8/config_ranking.csv": {
@@ -79,9 +79,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:20:06Z",
+      "produced_utc": "2026-08-13T17:10:43Z",
       "sha256": "2115fa48d46de80fea3719e72f6acca7b625b1e34bf92bf4fc9b5e629d86bf64"
     },
     "calib.e8/frozen_config.json": {
@@ -91,202 +91,394 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:20:06Z",
+      "produced_utc": "2026-08-13T17:10:43Z",
       "sha256": "18b5a8ee278a7f7d836a6ae63c3f883a7a8a1489027bcc8d8e3fa708295d18bd"
     },
     "check.sketch.cost/sketch_cost.json": {
-      "archived_path": "gromov_arithmetic/results/sketch_cost.json",
-      "bytes": 352,
+      "bytes": 427,
       "command": "python -m actdim run check.sketch.cost",
       "experiment": "check.sketch.cost",
-      "sha256": "12d5073e27e2a09772e3514c7989947247d00170d4d6f7c7dd3108aed7b9dc83",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:52:57Z",
+      "sha256": "272f8f150f5a92bb2cb7649075c6d5f6f4c0dcec98c6e81fec37771f863bd660"
+    },
+    "check.sketch.noninvasive/sketch_noninvasive.csv": {
+      "bytes": 361,
+      "command": "python -m actdim run check.sketch.noninvasive",
+      "experiment": "check.sketch.noninvasive",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:57:56Z",
+      "sha256": "cb41bd8c7d2295a1a96177a1b58bd6769cafdf640332747a42c9a15d721169b2"
+    },
+    "check.tables/table_audit.csv": {
+      "bytes": 89318,
+      "command": "python -m actdim run check.tables",
+      "experiment": "check.tables",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:57:56Z",
+      "sha256": "01e8e0eeafa04497547e8299cded54bad5dd052366d28a2c637cce68fed9e53a"
     },
     "grok.diagnostics.logs/real_logs_summary.csv": {
-      "archived_path": "active_dimension/results/e5_real_logs/real_logs_summary.csv",
-      "bytes": 4760,
+      "bytes": 4731,
       "command": "python -m actdim run grok.diagnostics.logs",
       "experiment": "grok.diagnostics.logs",
-      "sha256": "373d00f72a3ff753315c078f6c109bb64a552e82e3782a585688fe6947fd1b01",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:21Z",
+      "sha256": "9697dd439853d119ff338d51827502fa79d801d36d5102724040a0490ac4da2c"
     },
     "grok.diagnostics.logs/real_logs_windows.csv": {
-      "archived_path": "active_dimension/results/e5_real_logs/real_logs_windows.csv",
-      "bytes": 49748,
+      "bytes": 47468,
       "command": "python -m actdim run grok.diagnostics.logs",
       "experiment": "grok.diagnostics.logs",
-      "sha256": "8c4ae1c2c90f2bc7eb9327bc82d90446c763da279609235cfefe2423c5ac5c75",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:21Z",
+      "sha256": "f45c785b4c129795e5dc17e655ee11d23d66d0bc7e0ec080f33689063a7b7466"
     },
     "grok.diagnostics.perceptron/dimension_probe.csv": {
-      "archived_path": "gromov_arithmetic/results/arith/dimension_probe.csv",
-      "bytes": 6947,
+      "bytes": 7860,
       "command": "python -m actdim run grok.diagnostics.perceptron",
       "experiment": "grok.diagnostics.perceptron",
-      "sha256": "f91f1ee59f1f0ccd050334e35ef9b3dd1d742221b35f31c99aed006fde11c71a",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:26Z",
+      "sha256": "5bd5fa16295bfbce6c746b412b54585fe967dc9c866b663ae331b821bc0b2dd1"
     },
     "grok.diagnostics.perceptron/dimension_probe_poly.csv": {
-      "archived_path": "gromov_polynomials/results/dimension_probe.csv",
-      "bytes": 11756,
+      "bytes": 11874,
       "command": "python -m actdim run grok.diagnostics.perceptron",
       "experiment": "grok.diagnostics.perceptron",
-      "sha256": "00c6f7e45a53724cd26c11077d14b301b7e59b2d716e31e4c20e505dbe52d8a3",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:26Z",
+      "sha256": "ec536bfd92a6678edea2d9fb2f3c2fff5bd4462a30101743aef0aeddbeb5319f"
     },
     "grok.diagnostics.perceptron/dimension_probe_summary.csv": {
-      "archived_path": "gromov_arithmetic/results/arith/dimension_probe_summary.csv",
-      "bytes": 1127,
+      "bytes": 1126,
       "command": "python -m actdim run grok.diagnostics.perceptron",
       "experiment": "grok.diagnostics.perceptron",
-      "sha256": "5fbe05f7f610761e59c986798616e8cc1fd7f46c06fc5e0cbbc4d74a0524d77e",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:26Z",
+      "sha256": "aaab83969867d6f0ab0edf6f4402232cc261fab6603a516d76f7898829b56aca"
     },
     "grok.diagnostics.perceptron/dimension_probe_summary_poly.csv": {
-      "archived_path": "gromov_polynomials/results/dimension_probe_summary.csv",
-      "bytes": 1688,
+      "bytes": 1672,
       "command": "python -m actdim run grok.diagnostics.perceptron",
       "experiment": "grok.diagnostics.perceptron",
-      "sha256": "97801a878daa7470dd56eafae0cfdbb4290d4bef5cc0153846005e3e984c6088",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:26Z",
+      "sha256": "9789e6576f91e462065ea4ac96fce0b7c6a8393518aa9d84f18f5ba1672a8fbe"
     },
     "grok.eos/eos_diagnostics.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_diagnostics.csv",
-      "bytes": 557231,
+      "bytes": 585719,
       "command": "python -m actdim run grok.eos",
       "experiment": "grok.eos",
-      "sha256": "e616c36620a2800810a20039cadf898a6571a6002a802afc8e6622bf9256e123",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:52Z",
+      "sha256": "4f0ddc4e4394ffc7a6b8aae8ac5c322eb65885ef82984a56280f470d3c27c16f"
     },
     "grok.eos/eos_diagnostics_summary.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_diagnostics_summary.csv",
-      "bytes": 37852,
+      "bytes": 37919,
       "command": "python -m actdim run grok.eos",
       "experiment": "grok.eos",
-      "sha256": "df618eab0297b630017cd48f350b84d2200289c196b8990b60428257c949f209",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:52Z",
+      "sha256": "cc6616a932eab6d3708263a2acc16efdb34831c85caeb3291a71e118b955e513"
     },
     "grok.eos/eos_recurrence.csv": {
-      "archived_path": "gromov_arithmetic/results/eos/eos_recurrence.csv",
-      "bytes": 7612,
+      "bytes": 8014,
       "command": "python -m actdim run grok.eos",
       "experiment": "grok.eos",
-      "sha256": "415091f65e895133251674b6a080fcfe7ba5dc659290c168f777b635cd8c23a3",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:52Z",
+      "sha256": "f2517141142c92d5bca9cdabe627b26644f86a2bb52121d9d14be489fd2c1b7c"
     },
     "grok.extended.outcomes/exp8_at_20k.csv": {
-      "archived_path": "dimension_recovery/results/exp8_at_20k.csv",
-      "bytes": 516,
+      "bytes": 492,
       "command": "python -m actdim run grok.extended.outcomes",
       "experiment": "grok.extended.outcomes",
-      "sha256": "f92fe04505c8e9ef70b614ad2d765cb32558453a1b36749865d50dd8562f0367",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:53Z",
+      "sha256": "150a0dfa2ad7e74ddf9a4084ae40dc9e4433d4e65a15bbd1cfbb6d776a9eb798"
     },
     "grok.extended.outcomes/exp8_outcomes.csv": {
-      "archived_path": "dimension_recovery/results/exp8_outcomes.csv",
-      "bytes": 429,
+      "bytes": 396,
       "command": "python -m actdim run grok.extended.outcomes",
       "experiment": "grok.extended.outcomes",
-      "sha256": "0c67c9b6cca39da8588def1f0185d2af2dc2cb3768fa66baa39600bea10dd43c",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:53Z",
+      "sha256": "be6804d7ba2bb175f41653dcb1ce15a51c37de597260b2480908e63554dd06e4"
     },
     "grok.matched.surrogate/surrogate_seed_spread.csv": {
-      "archived_path": "active_dimension/results/e9_matched_window/surrogate_seed_spread.csv",
-      "bytes": 3118,
+      "bytes": 3091,
       "command": "python -m actdim run grok.matched.surrogate",
       "experiment": "grok.matched.surrogate",
-      "sha256": "9718b4b23d9576bdca8dcf5df25afd6e501fcaf3fec440d801fcb4ddb0357109",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:29Z",
+      "sha256": "5d1b545c06966ca390337eabc8c574a610267e7170f8b7b158d4af76ecb762f9"
     },
     "grok.matched.surrogate/surrogate_summary.csv": {
-      "archived_path": "active_dimension/results/e9_matched_window/surrogate_summary.csv",
-      "bytes": 17508,
+      "bytes": 17377,
       "command": "python -m actdim run grok.matched.surrogate",
       "experiment": "grok.matched.surrogate",
-      "sha256": "bae2250f51466a2def58cf81509fc60eabdad934ecd33d2b16abc8d73aced048",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:29Z",
+      "sha256": "723182fb59f1447d9d1f245b93c839433de747b7c823924f145d78167f01d9a3"
     },
     "grok.matched.surrogate/surrogates.csv": {
-      "archived_path": "active_dimension/results/e9_matched_window/surrogates.csv",
-      "bytes": 488786,
+      "bytes": 481650,
       "command": "python -m actdim run grok.matched.surrogate",
       "experiment": "grok.matched.surrogate",
-      "sha256": "8eeb0a1911194bffd3a738e779419304dbca86a0638451bce3ec0a929b63d130",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:29Z",
+      "sha256": "73ff32036b4c24446e4cb7c6a948016addb68d5121fc81000f365252c4227de2"
     },
-    "grok.matched.window/headline_trace.csv": {
-      "archived_path": "active_dimension/results/e9_matched_window/headline_trace.csv",
-      "bytes": 296739,
+    "grok.matched.window/grid_train_loss.csv": {
+      "bytes": 18384,
       "command": "python -m actdim run grok.matched.window",
       "experiment": "grok.matched.window",
-      "sha256": "a26b1acc87340a75959f45c5c4f028aaced29edb109c3cad4cf7f1cd5c505523",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:57Z",
+      "sha256": "3393d3bcc87bb9838959885dd584a98365d710195ac3ceb474efa032768934eb"
+    },
+    "grok.matched.window/grid_val_loss.csv": {
+      "bytes": 18165,
+      "command": "python -m actdim run grok.matched.window",
+      "experiment": "grok.matched.window",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:57Z",
+      "sha256": "140930307847280bcde2f4dcfaf3f63bda0951e6cf3989aeb3bf25539cf341a2"
+    },
+    "grok.matched.window/grid_weight_norm.csv": {
+      "bytes": 18214,
+      "command": "python -m actdim run grok.matched.window",
+      "experiment": "grok.matched.window",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:57Z",
+      "sha256": "5514a61521289e61f2299884901f0fc71b5d3556e2606b329b35d0f9a5f11728"
+    },
+    "grok.matched.window/headline_trace.csv": {
+      "bytes": 293979,
+      "command": "python -m actdim run grok.matched.window",
+      "experiment": "grok.matched.window",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:57Z",
+      "sha256": "3506cb333f170ed4bf0a391d62e43cd7d1ac3ac757a63b063e5285a5e870d53c"
     },
     "grok.prwindow/pr_vs_window.csv": {
-      "archived_path": "gromov_arithmetic/results/rank_fb_long/pr_vs_window.csv",
-      "bytes": 7699,
+      "bytes": 7712,
       "command": "python -m actdim run grok.prwindow",
       "experiment": "grok.prwindow",
-      "sha256": "bf5242d988afdf87ac80a524ad7fdce73e13d1537ca13789230fce1699455e7e",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T23:29:58Z",
+      "sha256": "2d9b2e88cded1a3e0cefdf6b25162228b2217a43972621bd34d8f27a6fbb5850"
     },
     "grok.rank.dip/mod_wd1_train.csv": {
-      "archived_path": "active_rank/results_fine/mod_wd1_train.csv",
-      "bytes": 156534,
+      "bytes": 156389,
       "command": "python -m actdim run grok.rank.dip",
       "experiment": "grok.rank.dip",
-      "sha256": "bce90501d7214c36cf6cec0581894eba76d8c3a9d9ef7ee05be0fe5389403a51",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:07Z",
+      "sha256": "981f6f9dd30d72537e3baafbc752b34cd21ac3528c7c7b6389806b2c9844ea9c"
     },
     "grok.rank.dip/rank_dip.csv": {
-      "archived_path": "active_rank/results_fine/rank_dip.csv",
-      "bytes": 2054,
+      "bytes": 2043,
       "command": "python -m actdim run grok.rank.dip",
       "experiment": "grok.rank.dip",
-      "sha256": "7c8a61b3298ef998d318ec1d65d1069d631fd77fc79a931aa84b9c559f38ccab",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:07Z",
+      "sha256": "735d3f0b8cfd5cd8f285065a04518857ac78a3bad6310f40fb3f5fab58c76702"
     },
     "grok.rank.dip/rank_dip_controls.csv": {
-      "archived_path": "active_rank/results_fine/rank_dip_controls.csv",
-      "bytes": 1020,
+      "bytes": 1015,
       "command": "python -m actdim run grok.rank.dip",
       "experiment": "grok.rank.dip",
-      "sha256": "b62eb06d2cb4257c031634c8900151f439252efe09a498875e7d95dfd4b3fad7",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:07Z",
+      "sha256": "b240fb060f81ea5159128b6b59f952e86bae2607a42317259beceac656bbfaab"
     },
     "grok.rank.dip/rank_dip_controls_aligned.csv": {
-      "archived_path": "active_rank/results_fine/rank_dip_controls_aligned.csv",
-      "bytes": 766,
+      "bytes": 843,
       "command": "python -m actdim run grok.rank.dip",
       "experiment": "grok.rank.dip",
-      "sha256": "cf4a828af879059ab1ffe5447c3c61138b4c39ea57bce78188b13557fe367f09",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:07Z",
+      "sha256": "c48c83977b11bfffbbef803ab87bf4a438872fff6548308688b5265432dfdd68"
     },
     "grok.rank.dip/rank_milestones.json": {
-      "archived_path": "active_rank/results_fine/rank_milestones.json",
-      "bytes": 910,
+      "bytes": 1561,
       "command": "python -m actdim run grok.rank.dip",
       "experiment": "grok.rank.dip",
-      "sha256": "1686565c846003e92db70e5aa3857acdb163f3e518d418a0bb29fbdcd18bbb0c",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:07Z",
+      "sha256": "39b00825fd0557c004f41c6d2096e795434e3b44ed4584852d413b17cbd60bc8"
     },
     "grok.rank.dip/rank_summary.csv": {
-      "archived_path": "active_rank/results_fine/rank_summary.csv",
-      "bytes": 310,
+      "bytes": 450,
       "command": "python -m actdim run grok.rank.dip",
       "experiment": "grok.rank.dip",
-      "sha256": "1110af8b4a2aa2aca4c211914f520efee5437647ecffd4f50dee24beaaa68dd5",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:07Z",
+      "sha256": "dc58e6375f715940cb7f7d78e427e935451ed1e690a059f2161ccb258edd48a5"
     },
     "grok.rank.dip/rank_windows.csv": {
-      "archived_path": "active_rank/results_fine/rank_windows.csv",
-      "bytes": 523499,
+      "bytes": 522827,
       "command": "python -m actdim run grok.rank.dip",
       "experiment": "grok.rank.dip",
-      "sha256": "9166ee4cb70d717045d88843dca7ca4e35c1b17a21544016b61c8e8c7f66549b",
-      "source": "archived"
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:50:07Z",
+      "sha256": "44261061ede31dbe38228311c496c21fb428423a18734e4c14c1d52e32d1e504"
+    },
+    "grok.repr/repr_analytic.csv": {
+      "bytes": 2396,
+      "command": "python -m actdim run grok.repr",
+      "experiment": "grok.repr",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:52:43Z",
+      "sha256": "36523844d0f0f378e5b585e98bdb328c6c61e48abaacf6c9680255959d5dad69"
+    },
+    "grok.repr/repr_decomposition.csv": {
+      "bytes": 2414,
+      "command": "python -m actdim run grok.repr",
+      "experiment": "grok.repr",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:52:43Z",
+      "sha256": "b900b9752b151f09c5a3aff120a35b36e45c9d3cba57cf00dbd7cdb47ed498d9"
+    },
+    "grok.repr/repr_reference.csv": {
+      "bytes": 1080,
+      "command": "python -m actdim run grok.repr",
+      "experiment": "grok.repr",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-14T00:52:43Z",
+      "sha256": "febdeef90fa9389d34bc26112ccb6ba6e5ab6d540e7312d8e0caf3b5738da09d"
     },
     "sys.decoder/calibration_raw.csv": {
       "archived_path": "dimension_recovery/results/exp13_frozen_nonlinear_decoder_k20/calibration_raw.csv",
@@ -303,9 +495,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:22:57Z",
+      "produced_utc": "2026-08-13T17:13:38Z",
       "sha256": "a1dd8d1a6a329de00588a023a8f564e0e98c21f4c4d2d7ce97382d51559499b9"
     },
     "sys.decoder/heldout_summary.csv": {
@@ -315,9 +507,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:22:57Z",
+      "produced_utc": "2026-08-13T17:13:38Z",
       "sha256": "b8afffc64fdd996d4a3d3062fad7f709b18e46f097883cacdce8dea0fbd28e98"
     },
     "sys.decoder/observer_ranking.csv": {
@@ -327,9 +519,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:22:57Z",
+      "produced_utc": "2026-08-13T17:13:38Z",
       "sha256": "b1c2b8f3789d3176fe8866409ae0ad3ce2e3908fa1b088ae03d619671951d8c6"
     },
     "sys.digits.function/calibration_raw.csv": {
@@ -347,9 +539,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:24:45Z",
+      "produced_utc": "2026-08-13T17:15:25Z",
       "sha256": "5e0a98ee1a4f3cf07ce5872c78453b89cd999969a782e8de739552ba0c8cf2ea"
     },
     "sys.digits.function/heldout_summary.csv": {
@@ -359,9 +551,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:24:45Z",
+      "produced_utc": "2026-08-13T17:15:25Z",
       "sha256": "431f2ac6c35e8a7c4573f611d605dc4dee7b44725cbdcf87163e9e955e325c2a"
     },
     "sys.digits.function/observer_ranking.csv": {
@@ -371,9 +563,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T09:24:45Z",
+      "produced_utc": "2026-08-13T17:15:25Z",
       "sha256": "9d28433d749ff05483897790cb2926d1b8ef22f774f8e18086560539829a77aa"
     },
     "sys.digits.function/rank_diagnostics.csv": {
@@ -391,9 +583,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:05:40Z",
+      "produced_utc": "2026-08-13T17:56:01Z",
       "sha256": "68eb7810eb87831c4d1a551b26b8e70eae1f32068284afe63beb7daf84217f0c"
     },
     "sys.digits.parameter/ground_truth_PR.csv": {
@@ -403,9 +595,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:05:40Z",
+      "produced_utc": "2026-08-13T17:56:01Z",
       "sha256": "260625e8d820be5b72eb4b27d90d2ee9986f8b2fa6e2e8717d9f15f1b88a48cc"
     },
     "sys.digits.parameter/observer_scores.csv": {
@@ -415,9 +607,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:05:40Z",
+      "produced_utc": "2026-08-13T17:56:01Z",
       "sha256": "723a7baf78dfa036869afc6beb65b193ee8f4897a74ee9acd8b540fba57ccd83"
     },
     "sys.digits.parameter/sweep_raw.csv": {
@@ -427,9 +619,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:05:40Z",
+      "produced_utc": "2026-08-13T17:56:01Z",
       "sha256": "f324fa4d8d16af8a6abc0f0600d05144abc8f6c94b4ef1f694475fcb33735c76"
     },
     "sys.linear/calibration_raw.csv": {
@@ -447,9 +639,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:08:18Z",
+      "produced_utc": "2026-08-13T17:58:46Z",
       "sha256": "5605b74ec8360d4bd82b32452a4108f9e612dafa35d6423cf958c8599b5a566b"
     },
     "sys.linear/heldout_summary.csv": {
@@ -459,9 +651,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:08:18Z",
+      "produced_utc": "2026-08-13T17:58:46Z",
       "sha256": "18f0439f0d3cba22992edc1f67e79bd337f059db0816afae07fbc16b10fffdff"
     },
     "sys.linear/observer_ranking.csv": {
@@ -471,9 +663,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:08:18Z",
+      "produced_utc": "2026-08-13T17:58:46Z",
       "sha256": "f455d666bb755e21be864015e1ccd2039f90177857fd68ae9cd1d5825adb7e62"
     },
     "sys.logistic/calibration_raw.csv": {
@@ -491,9 +683,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:10:59Z",
+      "produced_utc": "2026-08-13T18:01:33Z",
       "sha256": "e7d2c3ffd7bf8633853ac86b6b02e39bd9a10fbde8b6863847be7a8fc3a7a974"
     },
     "sys.logistic/heldout_summary.csv": {
@@ -503,9 +695,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:10:59Z",
+      "produced_utc": "2026-08-13T18:01:33Z",
       "sha256": "18f0439f0d3cba22992edc1f67e79bd337f059db0816afae07fbc16b10fffdff"
     },
     "sys.logistic/observer_ranking.csv": {
@@ -515,9 +707,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:10:59Z",
+      "produced_utc": "2026-08-13T18:01:33Z",
       "sha256": "f455d666bb755e21be864015e1ccd2039f90177857fd68ae9cd1d5825adb7e62"
     },
     "sys.matrix.k20/best_config.json": {
@@ -575,9 +767,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:13:19Z",
+      "produced_utc": "2026-08-13T18:03:57Z",
       "sha256": "6e82b77cd74d368fb904e14d9662e1dca7b5f65ed3821ae743c71d8f42436a1e"
     },
     "sys.matrix/heldout_summary.csv": {
@@ -587,9 +779,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:13:19Z",
+      "produced_utc": "2026-08-13T18:03:57Z",
       "sha256": "1546a46f1e6a7fc2b619cecf119b293786f3a868945cc6ff1f6644c62cb6fe24"
     },
     "sys.matrix/observer_ranking.csv": {
@@ -599,9 +791,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:13:19Z",
+      "produced_utc": "2026-08-13T18:03:57Z",
       "sha256": "5465d2b06987517d6e39d5f23ac7d934f5fec79a7e912a81cd49840182434cbe"
     },
     "sys.matrix/stationary_validation.csv": {
@@ -627,9 +819,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:14:00Z",
+      "produced_utc": "2026-08-13T18:04:35Z",
       "sha256": "6d2d8042e83a24587f74983b6e1170f815f314b9e5434dca217fc2a1364cf2ad"
     },
     "sys.subspace/calibration_raw.csv": {
@@ -655,9 +847,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:16:50Z",
+      "produced_utc": "2026-08-13T18:07:27Z",
       "sha256": "e0ca579575b697d376871809784d8a0f0e09e50eb8f86086d23b0db7662a1d03"
     },
     "sys.subspace/heldout_summary.csv": {
@@ -667,9 +859,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:16:50Z",
+      "produced_utc": "2026-08-13T18:07:27Z",
       "sha256": "c319b58e95b36e6b43f1a5c2a24f36bd4aba7bbbedc6aa1ee5096ed4d7b37cd7"
     },
     "sys.subspace/observer_ranking.csv": {
@@ -679,9 +871,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:16:50Z",
+      "produced_utc": "2026-08-13T18:07:27Z",
       "sha256": "85e61c1d0524794ab39de549450b565305e5c97bf6e93d2ce97c796c204a7f44"
     },
     "train.perceptron.arith/milestones.csv": {
@@ -691,9 +883,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T11:36:09Z",
+      "produced_utc": "2026-08-13T19:26:34Z",
       "sha256": "dbb95c371a8d4a044b076c011b498b3f8092c198ee0633afe3581dcd53cf9b60"
     },
     "train.perceptron.eos/eos_lr1.5e+06_s1_sharp.csv": {
@@ -775,9 +967,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T11:52:49Z",
+      "produced_utc": "2026-08-13T19:26:34Z",
       "sha256": "57e245663f151e5a63619720667ba51aa667eb480589c8df8f8927064e480cec"
     },
     "train.perceptron.poly/g_p2_p97_train.csv": {
@@ -788,6 +980,18 @@
       "sha256": "5d6d5693001838071fcba1fd6f4bf34bfe73e8b73b770653eeed09c184ec1c74",
       "source": "archived"
     },
+    "train.perceptron.poly/g_p2_train.csv": {
+      "bytes": 800309,
+      "command": "python -m actdim run train.perceptron.poly",
+      "experiment": "train.perceptron.poly",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T19:41:21Z",
+      "sha256": "7de54fb72a8610e1e00e382489bb31de9903bc440d45dba2a6b744a5007422d8"
+    },
     "train.perceptron.poly/g_p2x_p97_train.csv": {
       "archived_path": "gromov_polynomials/results/g_p2x_p97_train.csv",
       "bytes": 962328,
@@ -796,6 +1000,102 @@
       "sha256": "464a4f43fdca212eb5edb05bd5bf5cb411ce433a504c09333e9de320bd8af026",
       "source": "archived"
     },
+    "train.perceptron.poly/g_p2x_train.csv": {
+      "bytes": 958494,
+      "command": "python -m actdim run train.perceptron.poly",
+      "experiment": "train.perceptron.poly",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T19:41:21Z",
+      "sha256": "c7443f9e5ae16386b6b12bf00fd05e9b751dfaaa605ce9b4155fc70833a3b41a"
+    },
+    "train.perceptron.poly/milestones.csv": {
+      "bytes": 282,
+      "command": "python -m actdim run train.perceptron.poly",
+      "experiment": "train.perceptron.poly",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T19:41:21Z",
+      "sha256": "0d856b3fd97638a3103653efb423d332ac3bbe74b112dbbdf7fef8702f9919b1"
+    },
+    "train.perceptron.sketched.fb/milestones.csv": {
+      "bytes": 235,
+      "command": "python -m actdim run train.perceptron.sketched.fb",
+      "experiment": "train.perceptron.sketched.fb",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T19:53:34Z",
+      "sha256": "d68bab7c4de25e56bbb7db7e885d479ba9d3f04aa316523879163b8014ddf0fe"
+    },
+    "train.perceptron.sketched.long/milestones.csv": {
+      "bytes": 143,
+      "command": "python -m actdim run train.perceptron.sketched.long",
+      "experiment": "train.perceptron.sketched.long",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T20:00:41Z",
+      "sha256": "68cbaf7a108599d8aa4f5169e1004a5b59f55b3e8c40ff9040283b0a030ab479"
+    },
+    "train.perceptron.sketched.mb/milestones.csv": {
+      "bytes": 233,
+      "command": "python -m actdim run train.perceptron.sketched.mb",
+      "experiment": "train.perceptron.sketched.mb",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T20:11:29Z",
+      "sha256": "b47ef230e49af618c0a09d1f4d08ee81720c456ea41cf2977d8cdbaf7ccd04ec"
+    },
+    "train.transformer.extended/milestones.csv": {
+      "bytes": 199,
+      "command": "python -m actdim run train.transformer.extended",
+      "experiment": "train.transformer.extended",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T21:52:54Z",
+      "sha256": "45e3f0b12087292a386e08e0b41ff5e27681f0acea70cf8bc78078ff25b16040"
+    },
+    "train.transformer.p211/milestones.csv": {
+      "bytes": 62,
+      "command": "python -m actdim run train.transformer.p211",
+      "experiment": "train.transformer.p211",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:09:42Z",
+      "sha256": "fda4ea83c5f816a554235fd6da6e0dbeaa91ab0d01bb1e7299454c93ac1469c6"
+    },
+    "train.transformer.sketched/milestones.csv": {
+      "bytes": 176,
+      "command": "python -m actdim run train.transformer.sketched",
+      "experiment": "train.transformer.sketched",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+      },
+      "produced_utc": "2026-08-13T22:25:06Z",
+      "sha256": "19a4299b9d6892e82d5cf059f3af6636e221d61f0a346be3fe99b4347d0d95c8"
+    },
     "valid.anisotropy/aniso_raw.csv": {
       "bytes": 10200,
       "command": "python -m actdim run valid.anisotropy",
@@ -803,9 +1103,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:16:58Z",
+      "produced_utc": "2026-08-13T18:07:35Z",
       "sha256": "1c0708a6b1f1a423a61949e4bc566edd9277e2c95c5a4a4b30aaba9de81a875b"
     },
     "valid.anisotropy/aniso_summary.csv": {
@@ -815,9 +1115,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:16:58Z",
+      "produced_utc": "2026-08-13T18:07:35Z",
       "sha256": "e092223bb212c2380db2ac6242bb8248b7a83fe4c19026601298780dc7af08f1"
     },
     "valid.ceiling/ceiling_cells.csv": {
@@ -827,9 +1127,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:36:23Z",
+      "produced_utc": "2026-08-13T18:27:00Z",
       "sha256": "1670ba529d88d050e43a68c8ef400708e3ddf58b23a2b0e93bee4b677c2068a5"
     },
     "valid.ceiling/ceiling_fits.csv": {
@@ -839,9 +1139,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:36:23Z",
+      "produced_utc": "2026-08-13T18:27:00Z",
       "sha256": "015812d34246ed457ff1bc46e907418602cd410bc0b0e51e4f80daaeb7636772"
     },
     "valid.ceiling/ceiling_slopes.csv": {
@@ -851,9 +1151,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:36:23Z",
+      "produced_utc": "2026-08-13T18:27:00Z",
       "sha256": "4e4d133e4259e8fa8112c305e6d3b2d7d009581ea9d5e6aab4fb361613c0ec2f"
     },
     "valid.ceiling/ceiling_summary.csv": {
@@ -863,9 +1163,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:36:23Z",
+      "produced_utc": "2026-08-13T18:27:00Z",
       "sha256": "93e1be1abfb75b7b62e0523b6102f05bf298f60db6bb8b2da89f85b40aadcb46"
     },
     "valid.geometry/geometry_levels.csv": {
@@ -875,9 +1175,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:36:52Z",
+      "produced_utc": "2026-08-13T18:27:29Z",
       "sha256": "67554ebff1bce77efc75c7f6301939075f4c4be1df6e6b58a5cbc5454b3b9e8a"
     },
     "valid.geometry/geometry_switch_summary.csv": {
@@ -887,9 +1187,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:36:52Z",
+      "produced_utc": "2026-08-13T18:27:29Z",
       "sha256": "46be84406a968b440e336c7d4743d64b4db7cf81fc2650315fdfa5a869e5613a"
     },
     "valid.geometry/observer_warps.csv": {
@@ -899,9 +1199,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:36:52Z",
+      "produced_utc": "2026-08-13T18:27:29Z",
       "sha256": "16abb771b2a5474499087c12804825726f258185b324b8a76c312e10c8ebc45f"
     },
     "valid.geometry/verdict.json": {
@@ -911,58 +1211,10 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:36:52Z",
+      "produced_utc": "2026-08-13T18:27:29Z",
       "sha256": "3ca2b951c43d18db6806ffb80ffb511f368fa4b9b4c81fcb0080089468b71362"
-    },
-    "valid.geometry/geometry_levels.csv": {
-      "bytes": 7941,
-      "command": "python -m actdim run valid.geometry",
-      "experiment": "valid.geometry",
-      "git": {
-        "branch": "main",
-        "dirty": true,
-        "sha": "77b1149afd21e155609ab45247418cd1643197e5"
-      },
-      "produced_utc": "2026-08-13T06:27:47Z",
-      "sha256": "e0784db1ca1fe43d2e64f6360d47efa4d40cba89aa85ea8b95d17a5ab787d9e5"
-    },
-    "valid.geometry/geometry_switch_summary.csv": {
-      "bytes": 1585,
-      "command": "python -m actdim run valid.geometry",
-      "experiment": "valid.geometry",
-      "git": {
-        "branch": "main",
-        "dirty": true,
-        "sha": "77b1149afd21e155609ab45247418cd1643197e5"
-      },
-      "produced_utc": "2026-08-13T06:27:47Z",
-      "sha256": "20737023e5fca53f4a4c4240b0810244d666214fd6d927eecb3f90ce05cd89fa"
-    },
-    "valid.geometry/observer_warps.csv": {
-      "bytes": 16698,
-      "command": "python -m actdim run valid.geometry",
-      "experiment": "valid.geometry",
-      "git": {
-        "branch": "main",
-        "dirty": true,
-        "sha": "77b1149afd21e155609ab45247418cd1643197e5"
-      },
-      "produced_utc": "2026-08-13T06:27:47Z",
-      "sha256": "1812088367be5901d65e9dba316c02dcd94b6fcd0b79b0eb9806a834fece8bc1"
-    },
-    "valid.geometry/verdict.json": {
-      "bytes": 341,
-      "command": "python -m actdim run valid.geometry",
-      "experiment": "valid.geometry",
-      "git": {
-        "branch": "main",
-        "dirty": true,
-        "sha": "77b1149afd21e155609ab45247418cd1643197e5"
-      },
-      "produced_utc": "2026-08-13T06:27:47Z",
-      "sha256": "6948d0f964117e8847df491f2832c66db82a1e458cf2a1bc3aaae88585135f12"
     },
     "valid.nuisance/controls_raw.csv": {
       "bytes": 112741,
@@ -971,9 +1223,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:49:52Z",
+      "produced_utc": "2026-08-13T18:40:54Z",
       "sha256": "e69b3674d077df3a58179b3fa14880b6efb03f83111a2b96b9b60eb8318cd1db"
     },
     "valid.nuisance/controls_scored.csv": {
@@ -983,9 +1235,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T10:49:52Z",
+      "produced_utc": "2026-08-13T18:40:54Z",
       "sha256": "02cd2d79a768fef44705c7a58a70bd0cf9051ad32382b2f1cf49977eb8ab059b"
     },
     "valid.regime/atlas_raw.csv": {
@@ -995,9 +1247,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T11:02:24Z",
+      "produced_utc": "2026-08-13T18:52:46Z",
       "sha256": "0688dcb2766c1dec95186ecd35a969964bf46147cd82a8975a65ab4c8a3008a7"
     },
     "valid.regime/identifiability_ratio.csv": {
@@ -1007,9 +1259,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T11:02:24Z",
+      "produced_utc": "2026-08-13T18:52:46Z",
       "sha256": "8907f427ba0527e14502e23d09370a788fb5c53e0f543716b3593b992802d89b"
     },
     "valid.tau/tau_sensitivity.csv": {
@@ -1019,9 +1271,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T11:03:37Z",
+      "produced_utc": "2026-08-13T18:54:00Z",
       "sha256": "efeaba5a10127df3ff3fa35cc8624b1cc1161341e3262c8a2e629851fd69d7de"
     },
     "valid.theiler.cap/theiler_quick_raw.csv": {
@@ -1031,9 +1283,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T11:03:52Z",
+      "produced_utc": "2026-08-13T18:54:17Z",
       "sha256": "22b0241b50460d9d4f00b66918575b973c0b542f4af5ecf32377288c7d15acdc"
     },
     "valid.theiler.contrast/example_traces.csv": {
@@ -1043,9 +1295,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T11:09:58Z",
+      "produced_utc": "2026-08-13T19:00:35Z",
       "sha256": "c1e120b6833f7b2dcaf7abace6d2f85be095290a9c9c0baec9ff8a4be75838d3"
     },
     "valid.theiler.contrast/sweep_windows.csv": {
@@ -1055,9 +1307,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T11:09:58Z",
+      "produced_utc": "2026-08-13T19:00:35Z",
       "sha256": "bd006070bf6d31dc7caf02f522839b4c1774ffd874d4efda1177382e4747f15b"
     },
     "valid.transitions/transitions_raw.csv": {
@@ -1067,9 +1319,9 @@
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "1d8343b1026f8bc50d857789264cc5dd616ee3b3"
+        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
       },
-      "produced_utc": "2026-08-13T11:19:39Z",
+      "produced_utc": "2026-08-13T19:10:31Z",
       "sha256": "76caa86536f098a680ecfe94d935d3583232e3cfa3de6898c98a83f3a2c3a7c3"
     }
   },

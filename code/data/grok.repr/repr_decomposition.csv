@@ -1,0 +1,13 @@
+expression,learnable,name,p,verdict,exists,rows,cols,verified,certificate,searched,nodes,seconds,reasons
+(4 n1 + n2^2)^3,True,p1,97,exists,True,97,49,True,,,40001,18.219,"(g1, g2, h) verified on all p^2 entries; complete search undecided at 40000 nodes"
+(4 n1 + n2^2)^3 + n1 n2,False,p1x,97,none,False,97,97,False,"p distinct columns, rows have unequal value multisets",,40001,19.02,"multiset certificate: p distinct columns, rows have unequal value multisets; complete search undecided at 40000 nodes"
+(2 n1 + 3 n2)^4,True,p2,97,exists,True,97,97,True,,,40001,19.275,"(g1, g2, h) verified on all p^2 entries; complete search undecided at 40000 nodes"
+(2 n1 + 3 n2)^4 - n1^2,False,p2x,97,none,False,97,97,False,"p distinct columns, rows have unequal value multisets",,40001,18.975,"multiset certificate: p distinct columns, rows have unequal value multisets; complete search undecided at 40000 nodes"
+(5 n1^3 + 2 n2^4)^2,True,p3,97,exists,True,33,25,True,,,40001,8.417,"(g1, g2, h) verified on all p^2 entries; complete search undecided at 40000 nodes"
+(5 n1^3 + 2 n2^4)^2 - n2,False,p3x,97,none,False,33,97,False,"p distinct columns, rows have unequal value multisets",,40001,9.764,"multiset certificate: p distinct columns, rows have unequal value multisets; complete search undecided at 40000 nodes"
+(4 n1 + n2^2)^3,True,p1,23,exists,True,23,12,True,,True,21568,1.907,"(g1, g2, h) verified on all p^2 entries; complete search: exists"
+(4 n1 + n2^2)^3 + n1 n2,False,p1x,23,none,False,23,23,False,"p distinct columns, rows have unequal value multisets",False,29563,2.648,"multiset certificate: p distinct columns, rows have unequal value multisets; complete search: none"
+(2 n1 + 3 n2)^4,True,p2,23,exists,True,23,23,True,,True,9749,0.879,"(g1, g2, h) verified on all p^2 entries; complete search: exists"
+(2 n1 + 3 n2)^4 - n1^2,False,p2x,23,none,False,23,23,False,"p distinct columns, rows have unequal value multisets",False,29563,2.666,"multiset certificate: p distinct columns, rows have unequal value multisets; complete search: none"
+(5 n1^3 + 2 n2^4)^2,True,p3,23,exists,True,23,12,True,,True,5686,0.51,"(g1, g2, h) verified on all p^2 entries; complete search: exists"
+(5 n1^3 + 2 n2^4)^2 - n2,False,p3x,23,none,False,23,23,False,"p distinct columns, rows have unequal value multisets",False,29563,2.638,"multiset certificate: p distinct columns, rows have unequal value multisets; complete search: none"

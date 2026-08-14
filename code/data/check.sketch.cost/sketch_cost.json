@@ -1,15 +1,18 @@
 {
-  "steps": 1500,
+  "device": "cuda:0",
+  "fast": false,
+  "full_float32_MB": 87.882,
   "log_every": 10,
+  "model": "perceptron",
   "n_logged": 151,
   "n_params": 145500,
+  "overhead_frac": 0.05865876847603291,
+  "overhead_is_bound": false,
+  "repeats": 4,
+  "seconds_bare": 1.6981807202100754,
+  "seconds_probed": 1.797793909907341,
   "sketch_dim": 1024,
-  "seconds_bare": 41.7521694,
-  "seconds_probed": 40.4443969,
-  "overhead_frac": -0.03132226465818082,
   "sketched_float32_MB": 2.473984,
-  "full_float32_MB": 87.882,
-  "storage_ratio": 35.5224609375,
-  "device": "auto",
-  "repeats": 2
+  "steps": 1500,
+  "storage_ratio": 35.5224609375
 }

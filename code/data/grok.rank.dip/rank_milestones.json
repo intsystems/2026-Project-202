@@ -1,56 +1,86 @@
 [
- {
-  "run": "mod_wd0",
-  "n_rows": 2000,
-  "n_params": 226816,
-  "dim": 1024,
-  "t_mem": 630,
-  "t_gen": null,
-  "final_val_acc": 0.033203125
- },
- {
-  "run": "mod_wd1",
-  "n_rows": 2000,
-  "n_params": 226816,
-  "dim": 1024,
-  "t_mem": 1470,
-  "t_gen": 13700,
-  "final_val_acc": 1.0
- },
- {
-  "run": "mod_wd1_s43",
-  "n_rows": 2000,
-  "n_params": 226816,
-  "dim": 1024,
-  "t_mem": 1580,
-  "t_gen": 6660,
-  "final_val_acc": 1.0
- },
- {
-  "run": "mod_wd1_s44",
-  "n_rows": 2000,
-  "n_params": 226816,
-  "dim": 1024,
-  "t_mem": 1410,
-  "t_gen": 3680,
-  "final_val_acc": 1.0
- },
- {
-  "run": "s5_wd0",
-  "n_rows": 3000,
-  "n_params": 228608,
-  "dim": 1024,
-  "t_mem": 1015,
-  "t_gen": null,
-  "final_val_acc": 0.015625
- },
- {
-  "run": "s5_wd1",
-  "n_rows": 3000,
-  "n_params": 228608,
-  "dim": 1024,
-  "t_mem": 1280,
-  "t_gen": 6735,
-  "final_val_acc": 1.0
- }
+  {
+    "dim": 1024,
+    "final_val_acc": 0.033203125,
+    "geometry": "fine",
+    "n_params": 226816,
+    "n_rows": 2000,
+    "n_sketch": 2,
+    "n_windows": 195,
+    "run": "mod_wd0",
+    "stride": 10,
+    "t_gen": null,
+    "t_mem": 630,
+    "window": 60
+  },
+  {
+    "dim": 1024,
+    "final_val_acc": 1.0,
+    "geometry": "fine",
+    "n_params": 226816,
+    "n_rows": 2000,
+    "n_sketch": 2,
+    "n_windows": 195,
+    "run": "mod_wd1",
+    "stride": 10,
+    "t_gen": 13660,
+    "t_mem": 1470,
+    "window": 60
+  },
+  {
+    "dim": 1024,
+    "final_val_acc": 1.0,
+    "geometry": "fine",
+    "n_params": 226816,
+    "n_rows": 2000,
+    "n_sketch": 2,
+    "n_windows": 195,
+    "run": "mod_wd1_s43",
+    "stride": 10,
+    "t_gen": 6640,
+    "t_mem": 1580,
+    "window": 60
+  },
+  {
+    "dim": 1024,
+    "final_val_acc": 1.0,
+    "geometry": "fine",
+    "n_params": 226816,
+    "n_rows": 2000,
+    "n_sketch": 2,
+    "n_windows": 195,
+    "run": "mod_wd1_s44",
+    "stride": 10,
+    "t_gen": 3680,
+    "t_mem": 1410,
+    "window": 60
+  },
+  {
+    "dim": 1024,
+    "final_val_acc": 0.009765625,
+    "geometry": "fine",
+    "n_params": 228608,
+    "n_rows": 3000,
+    "n_sketch": 2,
+    "n_windows": 295,
+    "run": "s5_wd0",
+    "stride": 10,
+    "t_gen": null,
+    "t_mem": 1015,
+    "window": 60
+  },
+  {
+    "dim": 1024,
+    "final_val_acc": 1.0,
+    "geometry": "fine",
+    "n_params": 228608,
+    "n_rows": 3000,
+    "n_sketch": 2,
+    "n_windows": 295,
+    "run": "s5_wd1",
+    "stride": 10,
+    "t_gen": 6685,
+    "t_mem": 1280,
+    "window": 60
+  }
 ]

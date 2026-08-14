@@ -1,0 +1,7 @@
+run,t_mem,t_gen,final_val_acc,n_params,rows
+mod_wd1,1470,13660.0,,,
+mod_wd1_s43,1580,6640.0,,,
+mod_wd1_s44,1410,3680.0,,,
+mod_wd0,630,,,,
+s5_wd1,1280,6685.0,,,
+s5_wd0,1015,,,,

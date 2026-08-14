@@ -1,0 +1,7 @@
+comparison,column,rows,identical,largest_difference,first_difference_row,note
+bare against probed,step,2000,True,0.0,-1,
+bare against probed,train_loss,2000,True,0.0,-1,
+bare against probed,val_loss,2000,True,0.0,-1,
+bare against probed,train_acc,2000,True,0.0,-1,
+bare against probed,val_acc,2000,True,0.0,-1,
+bare against probed,weight_norm,2000,True,0.0,-1,

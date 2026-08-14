@@ -1,0 +1,5 @@
+run,t_memorise,t_grok,final_val_acc,final_train_acc,diverged_at,n_rows,batch
+a_add,9260,11750.0,1.0,1.0,,,512
+x_no_grok,9920,,0.009564293304994687,1.0,,,512
+g_p1,7490,12280.0,1.0,1.0,,,512
+g_p1x,10170,,0.012327311370882041,1.0,,,512
