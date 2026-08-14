@@ -148,12 +148,34 @@ def resolve_run(kind: str, run: str, allow_archive: bool = False) -> Source:
     from ..analysis.logs import log_candidates
 
     names = log_candidates(run) if pattern == "{run}_train.csv" else (filename,)
-    for candidate in names:
-        current = data_root() / experiment / candidate
-        if current.exists():
-            return Source(f"{kind}:{run}", experiment, current, False)
+    present = [c for c in names if (data_root() / experiment / c).exists()]
+    # Both names can be present at once, because promotion copies the archived log in
+    # under its own name beside the re-run's. The re-run is the one to draw: fig_pairs
+    # spent a campaign with panel (b) on the archived curves and panel (a) on the new
+    # summaries, and reported every input as coming from data/, which both did.
+    present.sort(key=lambda c: promoted_source(experiment, c) == ARCHIVED_SOURCE)
+    if present:
+        return Source(f"{kind}:{run}", experiment,
+                      data_root() / experiment / present[0], False)
     return _resolve(f"{kind}:{run}", experiment, filename,
                     f"{archive_dir}/{filename}", allow_archive)
+
+
+ARCHIVED_SOURCE = "archived"
+
+
+def promoted_source(experiment: str, filename: str) -> str:
+    """How one file under ``data/`` got there, per the manifest, or ``""`` if unrecorded."""
+    manifest = data_root() / "manifest.json"
+    if not manifest.exists():
+        return ""
+    try:
+        entries = json.loads(manifest.read_text(encoding="utf-8"))
+    except ValueError:
+        return ""
+    entries = entries.get("files", entries)
+    entry = entries.get(f"{experiment}/{filename}")
+    return str(entry.get("source", "")) if isinstance(entry, dict) else ""
 
 
 def _resolve(name: str, experiment: str, filename: str, archive_rel: Optional[str],
