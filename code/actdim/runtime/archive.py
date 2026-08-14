@@ -48,47 +48,34 @@ BASELINE: Dict[str, Dict[str, str]] = {
     # `observer_ranking.csv`. The port gives every system the same names.
     "sys.matrix": {
         "stationary_validation.csv": "dimension_recovery/results/exp9_frobenius_k10/stationary_validation.csv",
-        "calibration_grid.csv": "dimension_recovery/results/exp9_frobenius_k10/calibration_grid.csv",
-        "zigzag_segments.csv": "dimension_recovery/results/exp9_frobenius_k10/zigzag_segments.csv",
-        "best_config.json": "dimension_recovery/results/exp9_frobenius_k10/best_config.json",
     },
     "sys.matrix.k20": {
         "stationary_validation.csv": "dimension_recovery/results/exp10_frobenius_k20/stationary_validation.csv",
-        "calibration_grid.csv": "dimension_recovery/results/exp10_frobenius_k20/calibration_grid.csv",
-        "zigzag_segments.csv": "dimension_recovery/results/exp10_frobenius_k20/zigzag_segments.csv",
-        "best_config.json": "dimension_recovery/results/exp10_frobenius_k20/best_config.json",
     },
     "sys.linear": {
         "observer_ranking.csv": "dimension_recovery/results/exp11_online_regression_k20/observer_ranking.csv",
         "heldout_raw.csv": "dimension_recovery/results/exp11_online_regression_k20/heldout_raw.csv",
         "heldout_summary.csv": "dimension_recovery/results/exp11_online_regression_k20/heldout_summary.csv",
-        "calibration_raw.csv": "dimension_recovery/results/exp11_online_regression_k20/calibration_raw.csv",
     },
     "sys.logistic": {
         "observer_ranking.csv": "dimension_recovery/results/exp12_logistic_regression_k20/observer_ranking.csv",
         "heldout_raw.csv": "dimension_recovery/results/exp12_logistic_regression_k20/heldout_raw.csv",
         "heldout_summary.csv": "dimension_recovery/results/exp12_logistic_regression_k20/heldout_summary.csv",
-        "calibration_raw.csv": "dimension_recovery/results/exp12_logistic_regression_k20/calibration_raw.csv",
     },
     "sys.decoder": {
         "observer_ranking.csv": "dimension_recovery/results/exp13_frozen_nonlinear_decoder_k20/observer_ranking.csv",
         "heldout_raw.csv": "dimension_recovery/results/exp13_frozen_nonlinear_decoder_k20/heldout_raw.csv",
         "heldout_summary.csv": "dimension_recovery/results/exp13_frozen_nonlinear_decoder_k20/heldout_summary.csv",
-        "calibration_raw.csv": "dimension_recovery/results/exp13_frozen_nonlinear_decoder_k20/calibration_raw.csv",
     },
     "sys.subspace": {
         "observer_ranking.csv": "dimension_recovery/results/exp14_mlp_intrinsic_subspace_k20/observer_ranking.csv",
         "heldout_raw.csv": "dimension_recovery/results/exp14_mlp_intrinsic_subspace_k20/heldout_raw.csv",
         "heldout_summary.csv": "dimension_recovery/results/exp14_mlp_intrinsic_subspace_k20/heldout_summary.csv",
-        "calibration_raw.csv": "dimension_recovery/results/exp14_mlp_intrinsic_subspace_k20/calibration_raw.csv",
-        "functional_rank_check.csv": "dimension_recovery/results/exp14_mlp_intrinsic_subspace_k20/functional_rank_check.csv",
     },
     "sys.digits.function": {
         "observer_ranking.csv": "dimension_recovery/results/exp15_real_digits_functional_subspace_v3/observer_ranking.csv",
         "heldout_raw.csv": "dimension_recovery/results/exp15_real_digits_functional_subspace_v3/heldout_raw.csv",
         "heldout_summary.csv": "dimension_recovery/results/exp15_real_digits_functional_subspace_v3/heldout_summary.csv",
-        "calibration_raw.csv": "dimension_recovery/results/exp15_real_digits_functional_subspace_v3/calibration_raw.csv",
-        "rank_diagnostics.csv": "dimension_recovery/results/exp15_real_digits_functional_subspace_v3/rank_diagnostics.csv",
     },
     "sys.digits.parameter": {
         "sweep_raw.csv": "active_dimension/results/e2_rank_sweep/sweep_raw.csv",

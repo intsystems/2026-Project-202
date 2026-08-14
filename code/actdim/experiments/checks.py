@@ -16,6 +16,13 @@ not the runs.
                              is the width the published sketches were taken at and the only
                              width whose cost and probe size are the ones in use.
 
+``check.sketch.accuracy``    appendix I's first check: the compression is scored against
+                             the same statistic computed without it, on trajectories whose
+                             rank is known. The shortfall against the nominal rank at five
+                             and ten directions is present in the uncompressed column too,
+                             so the table separates the price of the sketch from the price
+                             of a sixty-sample participation ratio.
+
 ``check.sketch.cost``        appendix S's number: what the observer costs in time and in
                              storage. Three things about it are stated in the record rather
                              than left to the reader. The device is the resolved one, since
@@ -34,9 +41,9 @@ CPU and must not be quoted for the article.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Sequence, Tuple
 
-from ..runtime import GPU, Context, experiment
+from ..runtime import CPU, GPU, Context, experiment
 
 #: The width the published sketches were taken at: 1024 coordinates under two independent
 #: hash families, on a probe of 256 training examples. Appendix I quotes the disagreement
@@ -310,3 +317,70 @@ def sketch_cost(ctx: Context) -> None:
     if record["model"] != "transformer":
         print("  note: appendix S describes this ratio at the transformer's logging "
               "stride; the two architectures have different parameter counts.")
+
+
+#: The ranks appendix I tabulates, the window it uses, and the parameter count it runs at.
+#: Sixty samples is the window the direct measurement of section 7.1 uses on a run logged
+#: every ten steps, and 145,500 is the perceptron's parameter count, so the check is at the
+#: geometry the article's numbers were taken at rather than at a convenient one.
+SKETCH_RANKS: Tuple[int, ...] = (1, 2, 5, 10)
+SKETCH_SAMPLES = 60
+SKETCH_PARAMETERS = 145_500
+
+
+@experiment(
+    id="check.sketch.accuracy",
+    title="What the trajectory sketch costs in accuracy, against the uncompressed statistic",
+    paper=("app:sketch", "tab:sketch"),
+    device=CPU,
+    minutes=2,
+    promotes=("sketch_accuracy.csv",),
+    tier=4,
+    notes="Appendix I's first check. Synthetic trajectories of known rank in the "
+          "perceptron's parameter count, scored with and without the compression, so that "
+          "the price of the sketch is separated from the price of a sixty-sample "
+          "participation ratio.",
+)
+def sketch_accuracy(ctx: Context) -> None:
+    import numpy as np
+    import pandas as pd
+    import torch
+
+    from ..sketch.analysis import pr
+    from ..sketch.countsketch import CountSketch
+
+    ranks: Sequence[int] = SKETCH_RANKS
+    samples, dimension = SKETCH_SAMPLES, SKETCH_PARAMETERS
+    if ctx.fast:
+        ranks, dimension = ranks[:2], 5_000
+
+    ctx.config(ranks=list(ranks), samples=samples, parameters=dimension,
+               sketch_dim=1024, n_sketch=2)
+    ctx.declare_seeds("sketch_trajectory", "sketch_hashes")
+
+    rows: List[Dict[str, Any]] = []
+    for rank in ranks:
+        # A trajectory of exactly `rank` directions: an orthonormal basis of the ambient
+        # space carried by independent coefficients. Its participation ratio is the rank
+        # only in expectation, which is the point of measuring the uncompressed value too.
+        generator = ctx.rng(f"sketch_trajectory:{rank}")
+        basis = np.linalg.qr(generator.standard_normal((dimension, rank)))[0]
+        coefficients = generator.standard_normal((samples, rank))
+        trajectory = coefficients @ basis.T
+
+        sketch = CountSketch(dimension, dim=1024, n_sketch=2,
+                             seed=int(ctx.seed_for("sketch_hashes")))
+        compressed = np.stack([
+            sketch.apply(torch.from_numpy(row.astype(np.float32))).reshape(-1).numpy()
+            for row in trajectory])
+
+        plain, sketched = pr(trajectory), pr(compressed)
+        rows.append({"true_rank": rank, "samples": samples, "parameters": dimension,
+                     "pr_uncompressed": plain, "pr_sketched": sketched,
+                     "difference": sketched - plain})
+        print(f"    rank {rank:>2}: {plain:.4f} uncompressed, {sketched:.4f} sketched",
+              flush=True)
+
+    frame = pd.DataFrame(rows)
+    ctx.store.table("sketch_accuracy.csv", frame)
+    ctx.note("worst_difference", float(frame.difference.abs().max()))

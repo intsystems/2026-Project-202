@@ -1694,8 +1694,16 @@ def _exclusion_cells(window: np.ndarray, cfg, seed: int,
     # The two named settings are the configuration's own rule, with the cap the
     # implementation imposes and without it. Both come out of the configuration object;
     # neither is a module global a worker writes to.
+    # The frozen rule and the autocorrelation rule, the second with the cap lifted. The
+    # rule is named here rather than taken from the configuration: the eight-direction
+    # selection returned "embedding" when it was recalibrated, and the embedding span does
+    # not depend on the cap, so "the configuration's rule, uncapped" measured the frozen
+    # setting twice. It is the autocorrelation rule the appendix is about -- on a monotone
+    # decay its time is some 1600 samples against an embedding span of 76, and the whole
+    # question is what the estimate does when that exclusion is actually applied.
     named = {"frozen": resolve_theiler(cfg, z, tau),
-             "uncapped": resolve_theiler(cfg.replace(theiler_cap=UNCAPPED), z, tau)}
+             "uncapped": resolve_theiler(
+                 cfg.replace(theiler="autocorr", theiler_cap=UNCAPPED), z, tau)}
     wanted = [(str(label), int(named[label] if label in named else label))
               for label in exclusions]
     points = delay_embedding(z, cfg.max_E, tau)
@@ -1815,7 +1823,8 @@ def _contrast_cell(args) -> Dict[str, Any]:
     paper=("app:exclusion", "tab:exclusion", "fig:traces"),
     device=CPU,
     minutes=40,
-    promotes=("sweep_windows.csv", "example_traces.csv"),
+    promotes=("sweep_windows.csv", "example_traces.csv",
+              "exclusion_table.csv"),
     tier=1,
     notes="A two-by-two on the same points with the same estimator, changing only the "
           "Theiler exclusion, plus the sweep between the two ends. The cap is a field of "
@@ -1857,8 +1866,19 @@ def theiler_contrast(ctx: Context) -> None:
             {"sample": np.arange(length),
              **{name: values[:length] for name, values in traces.items()}}))
 
-    summary = (raw.groupby(["arm", "theiler_label"], sort=True)["MG"]
-               .median().unstack("arm"))
+    # The table appendix P prints, collapsed in a stated order rather than pooled: the
+    # median over a run's windows, then over the four observers, then over the three
+    # seeds and the four ranks. Pooling instead mixes the window spread into the observer
+    # median and moves the fast arm by six hundredths. The spread across cells is carried
+    # beside the median, because on the transient arm at the uncapped exclusion it is the
+    # finding: the estimate has no level there, only a range.
+    cells = (raw.groupby(["arm", "theiler_label", "r", "seed", "observer"],
+                         sort=True)["MG"].median())
+    table = (cells.groupby(level=[0, 1]).agg(["median", "min", "max", "size"])
+             .reset_index().rename(columns={"median": "MG", "size": "n_cells"}))
+    ctx.store.table("exclusion_table.csv", table)
+
+    summary = table.pivot(index="theiler_label", columns="arm", values="MG")
     ctx.note("MG_by_exclusion",
              {str(label): {arm: (None if not np.isfinite(value) else float(value))
                            for arm, value in row.items()}

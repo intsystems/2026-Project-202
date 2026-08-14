@@ -1019,37 +1019,6 @@ eight directions, not the factor of six that the selection split of \cref{app:co
 reports. That larger figure is computed on the ranks and seeds the configuration was chosen on
 and is a property of the selection, not a recovery result.
 
-\paragraph{Dependence on the observer.} We run the same torus through two scalar observers that
-differ only in how evenly they weight the modes. Neither statistic is preferable in general
-(\cref{tab:obsdep}). Under an observer that weights all modes equally the spectral participation
-ratio is the more accurate; under a
-generic observer with random weights --- the form a random projection of a network's parameters
-actually takes --- MG is. Both orderings are perfect in three of those four cells, so the
-statistics are separated by absolute recovery and not by rank agreement.
-
-The size of each advantage also depends on the delay lag, which a controlled experiment can choose
-and a training log cannot. Held at a lag common to both observers rather than at the one best for
-each, the direction of each advantage survives and its size does not.
-
-\begin{table}[H]
-\centering
-\caption{Whether MG or the spectral participation ratio recovers the active dimension more
-accurately, and how far the answer depends on the observer and on the delay lag. MG against the
-spectral participation ratio at $256$ bands, on one torus; each figure is the ratio of their
-errors, in favour of the statistic named in the second column. The first column of figures uses the
-lag best for that observer, which a training log cannot choose; the last two hold both observers at
-a common lag.}
-\label{tab:obsdep}
-\begin{tabular}{llrrr}
-\toprule
-observer & more accurate & at its best lag & $\tau = 4$ & $\tau = 1$ \\
-\midrule
-equal mode weights  & spectral $\PR$ & 3.4 & 6.6 & 3.4 \\
-random mode weights & MG             & 4.7 & 4.7 & 1.9 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 \section{Conditions of validity in detail}\label{app:validity}
 
 This appendix gives the three experiments \cref{sec:validity} summarises: the delay lag, the
@@ -1426,11 +1395,12 @@ its worst, which is the number the reader should use; it is smaller than every e
 
 Three checks stand behind the numbers. \emph{The sketch is accurate on synthetic trajectories of
 known rank.} \Cref{tab:sketch} passes such trajectories through it and compares against the same
-statistic computed on the uncompressed trajectory: the sketch is accurate to $0.04$ components
-throughout. The shortfall against the nominal rank at $5$ and $10$ is present without any
-compression, so it belongs to the participation ratio on a sixty-sample cloud and not to the
-sketch. Nothing above rank ten is tested, however; the plateaus in \cref{fig:dip} are higher than
-that.
+statistic computed on the uncompressed trajectory: the sketch is accurate to $0.11$ components
+throughout, and the error grows with the rank. The shortfall against the nominal rank at $5$ and
+$10$ is several times larger and is present without any
+compression, so most of it belongs to the participation ratio on a sixty-sample cloud and not to
+the sketch. Nothing above rank ten is tested, however; the plateaus in \cref{fig:dip} are higher
+than that.
 
 \emph{It agrees with exact arithmetic on a real run.} On the perceptron architecture, where the
 parameter count is small enough to allow it, the participation ratio computed on all $145\,500$ raw
@@ -1454,9 +1424,9 @@ participation ratio, and is not attributable to the sketch.}
 true rank & $\PR$, uncompressed & $\PR$, sketched & sketch $-$ uncompressed \\
 \midrule
  1 & 1.00 & 1.00 & $\phantom{-}0.00$ \\
- 2 & 1.99 & 1.98 & $-0.01$ \\
- 5 & 4.42 & 4.46 & $\phantom{-}0.04$ \\
-10 & 8.61 & 8.63 & $\phantom{-}0.02$ \\
+ 2 & 1.99 & 1.99 & $\phantom{-}0.00$ \\
+ 5 & 4.56 & 4.54 & $-0.02$ \\
+10 & 8.44 & 8.33 & $-0.11$ \\
 \bottomrule
 \end{tabular}
 \end{table}

@@ -46,8 +46,14 @@ def bad(report, label):
 
 
 def test_every_labelled_table_in_the_article_is_read(parsed):
-    """Twenty-nine ``tabular`` blocks, and none of them silently dropped."""
-    assert len(parsed) == 29
+    """Twenty-eight ``tabular`` blocks, and none of them silently dropped.
+
+    Twenty-nine until the observer-dependence table went: it compared MG with the spectral
+    participation ratio under two mode weightings on one synthetic torus, nothing under
+    data/ produced it, and tab:alts already settles that neither statistic is preferable
+    in general.
+    """
+    assert len(parsed) == 28
     assert all(label.startswith("tab:") for label in parsed)
 
 

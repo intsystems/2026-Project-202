@@ -1404,3 +1404,104 @@ def representation(ctx: Context) -> None:
         ctx.note("undecided", undecided)
     ctx.note("outside_the_class",
              sorted(table.loc[table["verdict"] == "none", "name"]) if len(table) else [])
+
+
+#: The eleven rows of appendix M's measured table, as (run key, the closed form it is read
+#: against). A run whose task has no closed form is read against nothing: appendix M
+#: declines to substitute another task's reference, so those rows print a dash.
+REPR_MEASURED: Tuple[Tuple[str, Optional[str]], ...] = (
+    ("a_add", "add"), ("a_sub", "sub"), ("a_sq_sum", "sq_sum"), ("a_mul", None),
+    ("g_p1", "p1"), ("g_p2", "p2"), ("g_p3", "p3"),
+    ("g_p1x", None), ("g_p2x", None), ("g_p3x", None), ("x_no_grok", None),
+)
+
+#: Which campaign promoted each run's weight snapshots.
+REPR_CAMPAIGN = {"g": "train.perceptron.poly"}
+
+#: The four points appendix M follows the order parameter through, as the milestone each
+#: is nearest. The snapshots are log-spaced, so a point is the first snapshot at or after
+#: the step it names and the step actually used is recorded beside it.
+REPR_POINTS: Tuple[Tuple[str, str], ...] = (
+    ("just after memorisation", "t_memorise"),
+    ("just before generalisation", "before_t_grok"),
+    ("validation accuracy first reaches 100%", "t_perfect"),
+    ("end of the budget", "last"),
+)
+
+
+@experiment(
+    id="grok.repr.measured",
+    title="The order parameter of the trained first layer, against its own closed form",
+    paper=("app:repr", "tab:ipr", "tab:ipr-trajectory"),
+    device=CPU,
+    minutes=3,
+    needs=("train.perceptron.arith", "train.perceptron.poly", "grok.repr"),
+    promotes=("repr_measured.csv", "repr_trajectory.csv"),
+    tier=3,
+    notes="Reads the weight snapshots the perceptron campaigns write and scores them with "
+          "the same Fourier inverse participation ratio grok.repr applies to the closed "
+          "form. No training: appendix M's measured column had no source under data/ "
+          "because nothing scored the trained weights.",
+)
+def representation_measured(ctx: Context) -> None:
+    import numpy as np
+    import pandas as pd
+
+    from ..analysis import representation as repr_
+    from ..training import runs_perceptron as registry
+
+    rows: List[Dict[str, Any]] = []
+    trajectory: List[Dict[str, Any]] = []
+    wanted = REPR_MEASURED[:2] if ctx.fast else REPR_MEASURED
+    ctx.config(runs=[key for key, _ in wanted],
+               statistic="Fourier inverse participation ratio of the first operand block")
+
+    for key, form in wanted:
+        config = registry.RUNS[key]
+        campaign = REPR_CAMPAIGN.get(key.split("_")[0], "train.perceptron.arith")
+        snapshots = np.load(ctx.input(campaign, f"{key}_snapshots.npz"))
+        steps = sorted(int(n.split("_")[1]) for n in snapshots.files
+                       if n.startswith("W1_"))
+        if not steps:
+            continue
+
+        measured = repr_.fourier_ipr(snapshots[f"W1_{steps[-1]}"][:, :config.p])
+        reference = (repr_.reference(form, config.p, width=config.width)["order_parameter"]
+                     if form else None)
+        rows.append({"run": key, "task": config.task, "p": config.p,
+                     "closed_form": form or "", "step": steps[-1],
+                     "order_parameter": measured,
+                     "own_reference": reference if reference is not None else np.nan})
+        print(f"    {key:<10} {measured:.3f}"
+              + (f" against {reference:.3f}" if reference is not None else ""), flush=True)
+
+        # The trajectory table follows one run, and follows it through the same snapshots.
+        if key != "a_add":
+            continue
+        log = pd.read_csv(ctx.input(campaign, f"{key}_train.csv"))
+        perfect = log.loc[log.val_acc >= 1.0, "step"]
+        marks = {
+            "t_memorise": registry.PAPER_MILESTONES[key]["memorise"],
+            "before_t_grok": registry.PAPER_MILESTONES[key]["generalise"],
+            "t_perfect": float(perfect.iloc[0]) if len(perfect) else np.nan,
+            "last": float(steps[-1]),
+        }
+        for label, mark in REPR_POINTS:
+            target = marks[mark]
+            if target is None or not np.isfinite(target):
+                continue
+            # "just before" takes the last snapshot strictly earlier; the others take the
+            # first at or after the step they name.
+            if mark == "before_t_grok":
+                at = max([s for s in steps if s < target], default=steps[0])
+            else:
+                at = min([s for s in steps if s >= target], default=steps[-1])
+            trajectory.append({
+                "run": key, "point": label, "milestone": mark,
+                "milestone_step": target, "snapshot_step": at,
+                "order_parameter": repr_.fourier_ipr(
+                    snapshots[f"W1_{at}"][:, :config.p])})
+
+    ctx.store.table("repr_measured.csv", pd.DataFrame(rows))
+    ctx.store.table("repr_trajectory.csv", pd.DataFrame(trajectory))
+    ctx.note("runs_scored", len(rows))

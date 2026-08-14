@@ -261,6 +261,13 @@ def _make_optimizer(model: torch.nn.Module, cfg: PerceptronConfig):
     raise KeyError(f"unknown optimizer {cfg.optimizer!r}")
 
 
+def _snapshot(parameter: Any) -> np.ndarray:
+    """One parameter tensor as an array that will not change when training continues."""
+    import torch
+
+    return np.array(parameter.detach().to(torch.float32).cpu().numpy(), copy=True)
+
+
 def _snapshot_steps(cfg: PerceptronConfig) -> set:
     if cfg.n_snapshots < 2:
         return set()
@@ -368,8 +375,13 @@ def train(cfg: PerceptronConfig, fn: Optional[Callable[..., np.ndarray]] = None,
                       flush=True)
 
         if step in snap_at:
-            run.snapshots[f"W1_{step}"] = model.W1.detach().to(torch.float32).cpu().numpy()
-            run.snapshots[f"W2_{step}"] = model.W2.detach().to(torch.float32).cpu().numpy()
+            # Copied, not viewed. `.to(dtype).cpu().numpy()` is a no-op chain when the
+            # model is already float32 on the CPU, and returns an array sharing memory
+            # with the live parameter: every snapshot then aliases the same buffer and all
+            # twenty-one come out equal to the final weights. The file has the right
+            # shape, the right keys and one array, which is why it went unnoticed.
+            run.snapshots[f"W1_{step}"] = _snapshot(model.W1)
+            run.snapshots[f"W2_{step}"] = _snapshot(model.W2)
 
         if step == cfg.max_steps:
             break

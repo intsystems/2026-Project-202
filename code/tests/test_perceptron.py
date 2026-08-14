@@ -17,6 +17,7 @@ from actdim.analysis import representation
 from actdim.models.perceptron import QuadraticPerceptron, n_parameters, weight_norm
 from actdim.runtime import build as build_context
 from actdim.runtime.determinism import LEGACY_OFFSETS, stream_seed
+from actdim.training.perceptron import PerceptronConfig, train
 from actdim.training import eos, runs_perceptron as reg
 from actdim.training.perceptron import (PerceptronConfig, SketchRecorder, build_dataset,
                                         grok_summary, label_function, sketch_cost,
@@ -446,3 +447,23 @@ def test_the_model_and_the_closed_form_share_one_forward_pass():
         model.W2.copy_(torch.as_tensor(w2))
     assert scored["acc"] == pytest.approx(1.0)
     assert weight_norm(model) == pytest.approx(scored["weight_norm"], rel=1e-9)
+
+
+def test_weight_snapshots_are_copies_and_not_views():
+    """`.to(dtype).cpu().numpy()` is a no-op chain on a float32 CPU model and hands back
+    an array sharing memory with the live parameter. Every snapshot then aliases one
+    buffer and all of them equal the final weights, in a file with the right shape, the
+    right keys and the right number of entries. `data/` carried such a file for a
+    campaign: twenty-one snapshots of g_p1, byte-identical, which is why appendix M's
+    trajectory table had no source that could have produced it.
+    """
+    cfg = PerceptronConfig(key="snap", task="add", p=13, width=16, fraction=0.5,
+                           optimizer="gd", lr=1e3, max_steps=8, log_every=8,
+                           n_snapshots=4, obs_every=0, progress_every=0, device="cpu")
+    run = train(cfg, verbose=False)
+
+    steps = sorted(int(n.split("_")[1]) for n in run.snapshots if n.startswith("W1_"))
+    assert len(steps) >= 3
+    first, last = run.snapshots[f"W1_{steps[0]}"], run.snapshots[f"W1_{steps[-1]}"]
+    assert not np.array_equal(first, last), "every snapshot holds the same weights"
+    assert not np.shares_memory(first, last)

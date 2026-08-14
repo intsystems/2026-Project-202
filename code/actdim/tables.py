@@ -1843,6 +1843,97 @@ _CEILING_FITS = (("embedding condition", "rmse_takens"),
                  ("log_10E", "rmse_loglog"))
 
 
+#: Article row label -> the run key that produced it. The labels are expressions, so the
+#: mapping cannot be derived from the text.
+_IPR_ROWS = (("n+m", "a_add"), ("n-m", "a_sub"), ("n^2+m^2", "a_sq_sum"),
+             ("n*m", "a_mul"), ("(4n_1+n_2^2)^3", "g_p1"), ("(2n_1+3n_2)^4", "g_p2"),
+             ("(5n_1^3+2n_2^4)^2", "g_p3"), ("(4n_1+n_2^2)^3+n_1n_2", "g_p1x"),
+             ("(2n_1+3n_2)^4-n_1^2", "g_p2x"), ("(5n_1^3+2n_2^4)^2-n_2", "g_p3x"),
+             ("n^3+nm^2+m", "x_no_grok"))
+
+
+def check_ipr(table: Table, data: Data) -> Iterable[Computed]:
+    rel = "grok.repr.measured/repr_measured.csv"
+    measured = data.frame(rel).set_index("run")
+    for label, run in _IPR_ROWS:
+        if run not in measured.index:
+            continue
+        record = measured.loc[run]
+        row = table.find(label)
+        yield Computed(row, 1, float(record.order_parameter), Data.name(rel))
+        yield Computed(row, 2, _nan_to_none(record.own_reference), Data.name(rel))
+        yield Computed(row, 3, _nan_to_none(record.get("t_grok")), Data.name(rel))
+
+
+def check_ipr_trajectory(table: Table, data: Data) -> Iterable[Any]:
+    rel = "grok.repr.measured/repr_trajectory.csv"
+    frame = data.frame(rel)
+    for _, record in frame.iterrows():
+        needle = _norm(str(record.point))[:18]
+        matches = [i for i in table.body() if needle in _norm(table.rows[i].label())]
+        if not matches:
+            continue
+        yield Computed(matches[0], 1, float(record.order_parameter), Data.name(rel),
+                       f"the snapshot at step {int(record.snapshot_step)}")
+
+    # The last row is the closed form, which grok.repr computes and this table quotes.
+    reference = data.frame("grok.repr/repr_reference.csv")
+    add = reference[reference.task == "add"]
+    if not add.empty:
+        yield Computed(table.find("analytic"), 1, float(add.iloc[0].order_parameter),
+                       Data.name("grok.repr/repr_reference.csv"))
+
+
+#: Article column heading -> the label the sweep stores it under.
+_EXCLUSION_COLUMNS = (("0", "0"), ("2", "2"), ("5", "5"), ("20", "20"),
+                      ("100", "100"), ("150", "150"), ("uncapped", "uncapped"))
+
+#: Article row label -> the arm of the sweep.
+_EXCLUSION_ROWS = (("recurrent, fast", "fast"), ("recurrent, slow", "slow"),
+                   ("transient", "transient"))
+
+
+def check_exclusion(table: Table, data: Data) -> Iterable[Any]:
+    rel = "valid.theiler.contrast/exclusion_table.csv"
+    frame = data.frame(rel)
+    frame["theiler_label"] = frame.theiler_label.astype(str)
+    for label, arm in _EXCLUSION_ROWS:
+        row = table.find(label)
+        part = frame[frame.arm == arm].set_index("theiler_label")
+        for column, key in enumerate(c for _, c in _EXCLUSION_COLUMNS):
+            if key not in part.index:
+                continue
+            record = part.loc[key]
+            printed = table.printed(row, column + 1)
+            # A cell printed as a range is compared as one: on the transient arm at the
+            # uncapped exclusion the estimate has no level, and the article says so by
+            # printing the span across cells rather than a median.
+            if printed and "--" in printed:
+                low, _, high = printed.partition("--")
+                yield Claim(
+                    row=f"{label}, {key}",
+                    statement=f"the estimate spans {printed}",
+                    holds=(round_half_up(float(record["min"]), 0) == as_number(low)
+                           and round_half_up(float(record["max"]), 0) == as_number(high)),
+                    finding=f"the cells span {record['min']:.4g} to {record['max']:.4g}",
+                    source=Data.name(rel))
+                continue
+            yield Computed(row, column + 1, float(record.MG), Data.name(rel))
+
+
+def check_sketch(table: Table, data: Data) -> Iterable[Computed]:
+    rel = "check.sketch.accuracy/sketch_accuracy.csv"
+    frame = data.frame(rel).set_index("true_rank")
+    for row in table.body():
+        rank = as_number(table.printed(row, 0))
+        if rank is None or int(rank) not in frame.index:
+            continue
+        record = frame.loc[int(rank)]
+        yield Computed(row, 1, float(record.pr_uncompressed), Data.name(rel))
+        yield Computed(row, 2, float(record.pr_sketched), Data.name(rel))
+        yield Computed(row, 3, float(record.difference), Data.name(rel))
+
+
 def check_ceilingfit(table: Table, data: Data) -> Iterable[Any]:
     rel = "valid.ceiling/ceiling_fits.csv"
     frame = data.frame(rel)
@@ -1905,8 +1996,6 @@ REGISTRY: Tuple[Registered, ...] = (
         "every printed cell reproduces; what fails is the claim above it, which is the "
         "shape errata item 3 has",
     )),
-    Registered("tab:obsdep", None,
-               "no file under data/ scores the two mode-weightings at several delay lags"),
     Registered("tab:tau", check_tau),
     Registered("tab:controls", check_controls, notes=(
         "the seven printed rows come from valid.nuisance/controls_scored.csv. "
@@ -1921,9 +2010,7 @@ REGISTRY: Tuple[Registered, ...] = (
         "is checked only for the transformer runs",
     )),
     Registered("tab:dip", check_dip),
-    Registered("tab:sketch", None,
-               "the per-rank sketched and uncompressed participation ratios were not "
-               "promoted; check.sketch.cost/sketch_cost.json records time and storage only"),
+    Registered("tab:sketch", check_sketch),
     Registered("tab:prwindow", check_prwindow, notes=(
         "the 600-step row is, by the caption, the earlier measurement rather than part of "
         "this sweep, and pr_vs_window.csv holds no window that short",
@@ -1934,11 +2021,14 @@ REGISTRY: Tuple[Registered, ...] = (
         "the floor is compared to the nearest step: the S_5 runs log every five steps, so "
         "their window centres fall on half-steps and the article prints +712 for 712.5",
     )),
-    Registered("tab:ipr-trajectory", None,
-               "the Fourier inverse participation ratio of the trajectory is not in data/"),
-    Registered("tab:ipr", None,
-               "the first two columns are not in data/, and the grokking-step column "
-               "repeats tab:runs, whose perceptron rows have no source either"),
+    Registered("tab:ipr-trajectory", check_ipr_trajectory, notes=(
+        "the snapshots are log-spaced, so each row is the nearest snapshot to the "
+        "milestone it names and grok.repr.measured records the step actually used",
+    )),
+    Registered("tab:ipr", check_ipr, notes=(
+        "the grokking-step column repeats tab:runs and is checked there, against the "
+        "milestones both perceptron campaigns promote",
+    )),
     Registered("tab:theiler", check_theiler, notes=(
         "the row's own label decides which summary is compared, and is reported as a "
         "claim: both readings of it produce a number and only one is what is printed",
@@ -1959,12 +2049,11 @@ REGISTRY: Tuple[Registered, ...] = (
         "milestones of both sketched campaigns, and neither train.perceptron.sketched.fb "
         "nor .mb has a milestones.csv under data/, so it is left unchecked here",
     )),
-    Registered("tab:exclusion", None,
-               "the recipe is not recoverable from the caption. Collapsing "
-               "valid.theiler.contrast/sweep_windows.csv over observers, seeds and windows "
-               "gives 5.43 / 2.07 / 1.20 in the first column against a printed "
-               "5.39 / 2.11 / 1.20, and collapsing in another order moves every cell "
-               "again without landing on the printed values"),
+    Registered("tab:exclusion", check_exclusion, notes=(
+        "the collapse is the experiment's, not this checker's: valid.theiler.contrast "
+        "promotes exclusion_table.csv, the median over a run's windows and then over "
+        "observers, seeds and ranks. Pooling instead moves the fast arm by six hundredths",
+    )),
     Registered("tab:eos", check_eos, notes=(
         "the outcome column is a judgement; the divergence it reports is checked through "
         "the dashes in the three numeric columns",
