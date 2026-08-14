@@ -996,6 +996,7 @@ def check_k20(table: Table, data: Data) -> Iterable[Computed]:
 
 
 _LADDER_RANKING = (
+    ("oscillating matrix", "sys.matrix"),
     ("online linear regression", "sys.linear"),
     ("logistic regression", "sys.logistic"),
     ("frozen nonlinear decoder", "sys.decoder"),
@@ -1033,14 +1034,9 @@ def _ladder_best(data: Data, experiment: str) -> Tuple[float, float, str]:
 
 
 def check_ladder(table: Table, data: Data) -> Iterable[Any]:
-    rel = "sys.matrix/stationary_validation.csv"
-    matrix = data.frame(rel)
-    held = matrix[matrix.split == "held_out"].groupby("seed")[["mae", "rho"]].first()
-    row = table.find("oscillating matrix")
-    yield Computed(row, 3, [float(v) for v in held.mae.values], Data.name(rel))
-    yield Computed(row, 4, [float(v) for v in held.rho.values], Data.name(rel),
-                   "seeds in the same order as the errors beside them")
-
+    # Every constructed row is scored the same way, the oscillating matrix included. It
+    # used to be read from an archived file written by the implementation that predates
+    # this package, which was the last number in the article no experiment here produced.
     for label, experiment in _LADDER_RANKING:
         mae, rho, source = _ladder_best(data, experiment)
         row = table.find(label)

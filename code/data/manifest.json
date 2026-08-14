@@ -720,14 +720,6 @@
       "produced_utc": "2026-08-13T18:03:57Z",
       "sha256": "5465d2b06987517d6e39d5f23ac7d934f5fec79a7e912a81cd49840182434cbe"
     },
-    "sys.matrix/stationary_validation.csv": {
-      "archived_path": "dimension_recovery/results/exp9_frobenius_k10/stationary_validation.csv",
-      "bytes": 4627,
-      "command": "python -m actdim run sys.matrix",
-      "experiment": "sys.matrix",
-      "sha256": "fda2c1d162e879a4d024bc25d89f02541d60ea1ee19f44e117dcc079dc1baff3",
-      "source": "archived"
-    },
     "sys.silence/silence.csv": {
       "bytes": 8674,
       "command": "python -m actdim run sys.silence",

@@ -47,10 +47,8 @@ BASELINE: Dict[str, Dict[str, str]] = {
     # `calibration_grid.csv`, where the later experiments write `heldout_raw.csv` and
     # `observer_ranking.csv`. The port gives every system the same names.
     "sys.matrix": {
-        "stationary_validation.csv": "dimension_recovery/results/exp9_frobenius_k10/stationary_validation.csv",
     },
     "sys.matrix.k20": {
-        "stationary_validation.csv": "dimension_recovery/results/exp10_frobenius_k20/stationary_validation.csv",
     },
     "sys.linear": {
         "observer_ranking.csv": "dimension_recovery/results/exp11_online_regression_k20/observer_ranking.csv",

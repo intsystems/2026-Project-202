@@ -191,25 +191,31 @@ def test_the_checked_tables_actually_compared_something(report):
             assert result.checked > 0, f"{result.label} is registered but compared nothing"
 
 
-def test_the_report_says_which_inputs_are_archived(report):
+def test_no_printed_number_rests_on_the_archived_tree(report):
     """A table checked against an archived file has been checked against the numbers the
-    article was written from, not against a regeneration, and that has to be visible."""
+    article was written from, not against a regeneration. There are none left: the last
+    was the oscillating-matrix row of tab:ladder, which is scored like every other
+    constructed row now. The distinction is still reported, so that seeding a file back in
+    from ../archived_code is visible rather than silent."""
     assert report.inputs
-    assert report.archived_inputs, "every promoted file is archived today"
-    assert all(report.inputs[name] == ARCHIVED for name in report.archived_inputs)
+    assert not report.archived_inputs, (
+        "an archived file is behind a printed number again: "
+        + ", ".join(report.archived_inputs))
+    assert all(source in (REGENERATED, "code") or source.startswith("code")
+               for source in report.inputs.values())
 
 
 def test_a_finding_carries_the_provenance_of_its_own_source(report):
-    """One table checked against a regeneration and one against the archive, so that both
-    provenances are exercised. tab:k20 moved from the second group to the first when the
-    twenty-direction calibration was rerun; tab:ladder's matrix row has not been rerun."""
-    regenerated = next(f for f in report.by_label("tab:k20").findings)
-    assert regenerated.source.startswith("data/")
-    assert regenerated.provenance == REGENERATED
+    """Two provenances are in use: a file under data/, and the run registry, which is code
+    and not a file. Both have to be reported for what they are, because a cell checked
+    against the registry is checked against a configuration and not a measurement."""
+    from_file = next(f for f in report.by_label("tab:k20").findings)
+    assert from_file.source.startswith("data/")
+    assert from_file.provenance == REGENERATED
 
-    archived = next(f for f in report.by_label("tab:ladder").findings
-                    if "stationary_validation" in f.source)
-    assert archived.provenance == ARCHIVED
+    from_code = next(f for f in report.by_label("tab:runs").findings
+                     if f.source.startswith("actdim."))
+    assert from_code.provenance == "code"
 
 
 def test_the_rows_carry_what_the_caller_needs(report):
