@@ -1595,9 +1595,16 @@ def check_runs(table: Table, data: Data) -> Iterable[Any]:
                 yield Computed(row, 5, _budget(table.printed(row, 5), reach.max()),
                                log_file, "the deepest analysis window in the record")
         elif run in perceptron_registry.PAPER_MILESTONES:
-            # No committed file records a perceptron run's milestones. What the registry
-            # holds is this table, transcribed, so the comparison catches the two drifting
-            # apart and is not evidence that either is right.
+            # Both training campaigns now promote what their runs reached, so these rows
+            # are compared against a measurement. Until they did, the only source was
+            # PAPER_MILESTONES -- this table transcribed -- which caught the two drifting
+            # apart and was not evidence that either was right. The registry copy is still
+            # compared, so that the transcription going stale is reported as well.
+            measured, source = _perceptron_milestones(data, run)
+            if measured is not None:
+                yield Computed(row, 6, _nan_to_none(measured["t_memorise"]), source)
+                yield Computed(row, 7, _nan_to_none(measured["t_grok"]), source)
+                yield Computed(row, 8, _nan_to_none(measured["final_val_acc"]), source)
             stone = perceptron_registry.PAPER_MILESTONES[run]
             yield Computed(row, 6, _nan_to_none(stone["memorise"]), paper_file)
             yield Computed(row, 7, _nan_to_none(stone["generalise"]), paper_file)
@@ -1615,6 +1622,27 @@ def check_runs(table: Table, data: Data) -> Iterable[Any]:
         holds=set(named) == set(sketched),
         finding=f"the campaign that ran sketched {', '.join(sketched)}",
         source=data.note_code("actdim.training.runs_perceptron.SKETCHED"))
+
+
+#: Where each perceptron run's milestones were promoted. The polynomial runs are keyed in
+#: the registry without the modulus and appear in the article with it, so both spellings
+#: are tried; ``log_candidates`` carries the same pair for the training logs.
+_PERCEPTRON_MILESTONES = ("train.perceptron.arith/milestones.csv",
+                          "train.perceptron.poly/milestones.csv")
+
+
+def _perceptron_milestones(data: Data, run: str) -> Tuple[Optional[Any], str]:
+    """What one perceptron run reached, from whichever campaign promoted it."""
+    names = [run] + ([run[:-len("_p97")]] if run.endswith("_p97") else [])
+    for rel in _PERCEPTRON_MILESTONES:
+        try:
+            frame = data.frame(rel)
+        except FileNotFoundError:
+            continue
+        found = frame[frame.run.isin(names)]
+        if not found.empty:
+            return found.iloc[0], Data.name(rel)
+    return None, ""
 
 
 def _runs_named_below(table: Table, lines: int = 12) -> Tuple[str, ...]:
@@ -1919,11 +1947,10 @@ REGISTRY: Tuple[Registered, ...] = (
         "the budget, the weight decay and the training fraction come from the run "
         "registry, which is code and not a file under data/. No committed file records a "
         "budget: the milestone files record what a run reached, not what it was given",
-        "no committed file records a perceptron run's milestones either. The registry's "
-        "PAPER_MILESTONES is this table transcribed, so the memorisation, generalisation "
-        "and final-accuracy columns of the thirteen perceptron rows are checked against a "
-        "copy of themselves. That catches the two drifting apart and is not evidence that "
-        "either is right; promoting the arithmetic training logs would make it one",
+        "the thirteen perceptron rows are compared against the milestones both training "
+        "experiments promote, and against the registry's PAPER_MILESTONES, which is this "
+        "table transcribed. Until the campaigns promoted anything the transcription was "
+        "the only source and the rows were checked against a copy of themselves",
         "the extended block's final accuracy is the value at the end of the budget, which "
         "no committed file records; exp8_outcomes.csv holds the maximum instead",
         "p211_wd0 has no log under data/, so only its configuration is checked",

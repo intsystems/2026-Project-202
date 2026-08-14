@@ -1799,13 +1799,13 @@ below the rule, whose grokking step reads ``none'', are the ones that never gene
 \toprule
 task & measured & own reference & grokking step \\
 \midrule
-$n+m$                     & 0.595 & 1.000 & $11\,950$ \\
-$n-m$                     & 0.582 & 1.000 & $11\,570$ \\
-$n^2+m^2$                 & 0.093 & 0.052 & $10\,380$ \\
-$n \cdot m$               & 0.073 & ---   & $11\,600$ \\
-$(4n_1+n_2^2)^3$          & 0.243 & 1.000 & $12\,560$ \\
-$(2n_1+3n_2)^4$           & 0.283 & 1.000 & $7\,750$ \\
-$(5n_1^3+2n_2^4)^2$       & 0.044 & 0.062 & $6\,430$ \\
+$n+m$                     & 0.595 & 1.000 & $11\,760$ \\
+$n-m$                     & 0.582 & 1.000 & $11\,540$ \\
+$n^2+m^2$                 & 0.093 & 0.052 & $10\,470$ \\
+$n \cdot m$               & 0.073 & ---   & $11\,560$ \\
+$(4n_1+n_2^2)^3$          & 0.243 & 1.000 & $12\,290$ \\
+$(2n_1+3n_2)^4$           & 0.283 & 1.000 & $7\,680$ \\
+$(5n_1^3+2n_2^4)^2$       & 0.044 & 0.062 & $6\,600$ \\
 \midrule
 $(4n_1+n_2^2)^3 + n_1n_2$ & 0.040 & ---   & none \\
 $(2n_1+3n_2)^4 - n_1^2$   & 0.043 & ---   & none \\
@@ -1951,19 +1951,19 @@ run & task & arch & wd & $\alpha$ & budget & mem. & gen. & final & used in \\
 \texttt{p211\_wd0}     & mod.\ add.\ $p{=}211$ & T & 0.0 & 0.16 & $200$k & $1\,800$ & ---        & 0.04 & \cref{sec:pairs} \\
 \midrule
 \multicolumn{10}{l}{\emph{Perceptron, $p = 97$, full batch, no regularisation}} \\
-\texttt{a\_add}     & $n+m$                        & P & 0 & 0.5 & $100$k & $9\,170$  & $11\,950$ & 1.00 & \cref{sec:pairs} \\
-\texttt{a\_mul}     & $n \cdot m$                  & P & 0 & 0.5 & $100$k & $9\,130$  & $11\,600$ & 1.00 & \cref{sec:grok-diagnostics} \\
-\texttt{a\_sub}     & $n-m$                        & P & 0 & 0.5 & $100$k & $9\,040$  & $11\,570$ & 1.00 & \cref{app:repr} \\
-\texttt{a\_sq\_sum}  & $n^2+m^2$                    & P & 0 & 0.5 & $100$k & $8\,360$  & $10\,380$ & 1.00 & \cref{app:repr} \\
-\texttt{a\_sum\_sq}  & $(n+m)^2$                    & P & 0 & 0.5 & $46$k  & $7\,280$  & $8\,150$  & 1.00 & \cref{app:repr} \\
-\texttt{x\_mix\_quad} & mixed quadratic              & P & 0 & 0.5 & $100$k & $9\,630$  & ---       & 0.01 & \cref{fig:map} \\
-\texttt{x\_no\_grok} & $n^3+nm^2+m$                 & P & 0 & 0.5 & $100$k & $9\,760$  & ---       & 0.01 & \cref{sec:pairs} \\
-\texttt{g\_p1}      & $(4n_1+n_2^2)^3$             & P & 0 & 0.5 & $100$k & $7\,410$  & $12\,560$ & 1.00 & \cref{sec:pairs} \\
-\texttt{g\_p1x}     & \quad $+\, n_1 n_2$          & P & 0 & 0.5 & $100$k & $10\,050$ & ---       & 0.01 & \cref{sec:pairs} \\
-\texttt{g\_p2}      & $(2n_1+3n_2)^4$              & P & 0 & 0.5 & $100$k & $6\,520$  & $7\,750$  & 1.00 & \cref{sec:pairs} \\
-\texttt{g\_p2x}     & \quad $-\, n_1^2$            & P & 0 & 0.5 & $100$k & $9\,780$  & ---       & 0.02 & \cref{sec:pairs} \\
-\texttt{g\_p3}      & $(5n_1^3+2n_2^4)^2$          & P & 0 & 0.5 & $100$k & $5\,880$  & $6\,430$  & 1.00 & \cref{sec:pairs} \\
-\texttt{g\_p3x}     & \quad $-\, n_2$              & P & 0 & 0.5 & $100$k & $9\,430$  & ---       & 0.73 & \cref{sec:pairs} \\
+\texttt{a\_add}     & $n+m$                        & P & 0 & 0.5 & $100$k & $9230$  & $11760$ & 1.00 & \cref{sec:pairs} \\
+\texttt{a\_mul}     & $n \cdot m$                  & P & 0 & 0.5 & $100$k & $9100$  & $11560$ & 1.00 & \cref{sec:grok-diagnostics} \\
+\texttt{a\_sub}     & $n-m$                        & P & 0 & 0.5 & $100$k & $9110$  & $11540$ & 1.00 & \cref{app:repr} \\
+\texttt{a\_sq\_sum}  & $n^2+m^2$                    & P & 0 & 0.5 & $100$k & $8440$  & $10470$ & 1.00 & \cref{app:repr} \\
+\texttt{a\_sum\_sq}  & $(n+m)^2$                    & P & 0 & 0.5 & $46$k  & $7350$  & $8190$  & 1.00 & \cref{app:repr} \\
+\texttt{x\_mix\_quad} & mixed quadratic              & P & 0 & 0.5 & $100$k & $9600$  & ---       & 0.01 & \cref{fig:map} \\
+\texttt{x\_no\_grok} & $n^3+nm^2+m$                 & P & 0 & 0.5 & $100$k & $9860$  & ---       & 0.01 & \cref{sec:pairs} \\
+\texttt{g\_p1}      & $(4n_1+n_2^2)^3$             & P & 0 & 0.5 & $100$k & $7470$  & $12290$ & 1.00 & \cref{sec:pairs} \\
+\texttt{g\_p1x}     & \quad $+\, n_1 n_2$          & P & 0 & 0.5 & $100$k & $10140$ & ---       & 0.01 & \cref{sec:pairs} \\
+\texttt{g\_p2}      & $(2n_1+3n_2)^4$              & P & 0 & 0.5 & $100$k & $6470$  & $7680$  & 1.00 & \cref{sec:pairs} \\
+\texttt{g\_p2x}     & \quad $-\, n_1^2$            & P & 0 & 0.5 & $100$k & $9730$  & ---       & 0.02 & \cref{sec:pairs} \\
+\texttt{g\_p3}      & $(5n_1^3+2n_2^4)^2$          & P & 0 & 0.5 & $100$k & $5970$  & $6600$  & 1.00 & \cref{sec:pairs} \\
+\texttt{g\_p3x}     & \quad $-\, n_2$              & P & 0 & 0.5 & $100$k & $9420$  & ---       & 0.74 & \cref{sec:pairs} \\
 \bottomrule
 \end{tabular}
 \end{table}

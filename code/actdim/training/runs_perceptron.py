@@ -140,24 +140,32 @@ INVENTORY: Tuple[str, ...] = (
 """The thirteen perceptron rows of appendix O, in the order the table prints them."""
 
 PAPER_MILESTONES: Dict[str, Dict[str, Optional[float]]] = {
-    "a_add": {"memorise": 9_170, "generalise": 11_950, "final_val_acc": 1.00},
-    "a_mul": {"memorise": 9_130, "generalise": 11_600, "final_val_acc": 1.00},
-    "a_sub": {"memorise": 9_040, "generalise": 11_570, "final_val_acc": 1.00},
-    "a_sq_sum": {"memorise": 8_360, "generalise": 10_380, "final_val_acc": 1.00},
-    "a_sum_sq": {"memorise": 7_280, "generalise": 8_150, "final_val_acc": 1.00},
-    "x_mix_quad": {"memorise": 9_630, "generalise": None, "final_val_acc": 0.01},
-    "x_no_grok": {"memorise": 9_760, "generalise": None, "final_val_acc": 0.01},
-    "g_p1": {"memorise": 7_410, "generalise": 12_560, "final_val_acc": 1.00},
-    "g_p1x": {"memorise": 10_050, "generalise": None, "final_val_acc": 0.01},
-    "g_p2": {"memorise": 6_520, "generalise": 7_750, "final_val_acc": 1.00},
-    "g_p2x": {"memorise": 9_780, "generalise": None, "final_val_acc": 0.02},
-    "g_p3": {"memorise": 5_880, "generalise": 6_430, "final_val_acc": 1.00},
-    "g_p3x": {"memorise": 9_430, "generalise": None, "final_val_acc": 0.73},
+    "a_add": {"memorise": 9_230, "generalise": 11_760, "final_val_acc": 1.00},
+    "a_mul": {"memorise": 9_100, "generalise": 11_560, "final_val_acc": 1.00},
+    "a_sub": {"memorise": 9_110, "generalise": 11_540, "final_val_acc": 1.00},
+    "a_sq_sum": {"memorise": 8_440, "generalise": 10_470, "final_val_acc": 1.00},
+    "a_sum_sq": {"memorise": 7_350, "generalise": 8_190, "final_val_acc": 1.00},
+    "x_mix_quad": {"memorise": 9_600, "generalise": None, "final_val_acc": 0.01},
+    "x_no_grok": {"memorise": 9_860, "generalise": None, "final_val_acc": 0.01},
+    "g_p1": {"memorise": 7_470, "generalise": 12_290, "final_val_acc": 1.00},
+    "g_p1x": {"memorise": 10_140, "generalise": None, "final_val_acc": 0.01},
+    "g_p2": {"memorise": 6_470, "generalise": 7_680, "final_val_acc": 1.00},
+    "g_p2x": {"memorise": 9_730, "generalise": None, "final_val_acc": 0.02},
+    "g_p3": {"memorise": 5_970, "generalise": 6_600, "final_val_acc": 1.00},
+    "g_p3x": {"memorise": 9_420, "generalise": None, "final_val_acc": 0.74},
 }
 """What appendix O reports for each row, so a re-run can be compared against the table.
 
 A generalisation step of ``None`` is the table's dash: the criterion was not met inside
 the budget. Such a row is a censored observation and not an established negative.
+
+These were the article's numbers transcribed, and for one campaign they were the only
+source: no committed file recorded what a perceptron run reached, so the table was checked
+against a copy of itself. Both training experiments promote a ``milestones.csv`` now, and
+`actdim.tables.check_runs` compares the rows against those and against this copy, so the
+transcription going stale is reported rather than believed. The values above are the
+committed ones, which differ from the published campaign by ten to two hundred and seventy
+steps.
 """
 
 SKETCHED: Tuple[str, ...] = ("a_add", "x_no_grok", "g_p1", "g_p1x")
