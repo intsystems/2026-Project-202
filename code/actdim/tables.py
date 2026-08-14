@@ -1858,19 +1858,26 @@ def check_ipr(table: Table, data: Data) -> Iterable[Computed]:
         row = table.find(label)
         yield Computed(row, 1, float(record.order_parameter), Data.name(rel))
         yield Computed(row, 2, _nan_to_none(record.own_reference), Data.name(rel))
-        yield Computed(row, 3, _nan_to_none(record.get("t_grok")), Data.name(rel))
+        # The third column repeats the grokking step of tab:runs, which is checked there
+        # against the milestones both perceptron campaigns promote. Reading it twice from
+        # two files would report one disagreement as two.
 
 
 def check_ipr_trajectory(table: Table, data: Data) -> Iterable[Any]:
+    """The order parameter at each snapshot, matched to the article by the step it prints.
+
+    The rows are steps rather than named points because the milestones fall between two
+    snapshots: the run memorises, generalises and reaches perfect validation accuracy
+    inside one gap of the log-spaced grid.
+    """
     rel = "grok.repr.measured/repr_trajectory.csv"
-    frame = data.frame(rel)
-    for _, record in frame.iterrows():
-        needle = _norm(str(record.point))[:18]
-        matches = [i for i in table.body() if needle in _norm(table.rows[i].label())]
-        if not matches:
+    frame = data.frame(rel).set_index("snapshot_step")
+    for row in table.body():
+        step = as_number(table.printed(row, 0))
+        if step is None or int(step) not in frame.index:
             continue
-        yield Computed(matches[0], 1, float(record.order_parameter), Data.name(rel),
-                       f"the snapshot at step {int(record.snapshot_step)}")
+        record = frame.loc[int(step)]
+        yield Computed(row, 1, float(record.order_parameter), Data.name(rel))
 
     # The last row is the closed form, which grok.repr computes and this table quotes.
     reference = data.frame("grok.repr/repr_reference.csv")

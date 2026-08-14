@@ -1418,15 +1418,17 @@ REPR_MEASURED: Tuple[Tuple[str, Optional[str]], ...] = (
 #: Which campaign promoted each run's weight snapshots.
 REPR_CAMPAIGN = {"g": "train.perceptron.poly"}
 
-#: The four points appendix M follows the order parameter through, as the milestone each
-#: is nearest. The snapshots are log-spaced, so a point is the first snapshot at or after
-#: the step it names and the step actually used is recorded beside it.
-REPR_POINTS: Tuple[Tuple[str, str], ...] = (
-    ("just after memorisation", "t_memorise"),
-    ("just before generalisation", "before_t_grok"),
-    ("validation accuracy first reaches 100%", "t_perfect"),
-    ("end of the budget", "last"),
-)
+#: The run appendix M follows the order parameter through, and the milestones marked on it.
+#:
+#: The curve is reported at the snapshots that exist and not at four named points. The
+#: snapshots are twenty-one log-spaced steps, and this run memorises at 9,230, generalises
+#: at 11,760 and first reaches perfect validation accuracy at 12,510 -- all three inside
+#: one gap, between the snapshots at 8,859 and 16,238. Asked for the nearest snapshot to
+#: each, the table put "just after memorisation" at 16,238 and "just before
+#: generalisation" at 8,859: two rows out of order in time, and two of the four on the
+#: same snapshot. What the run supports is the shape of the curve across the transition,
+#: which is what the appendix argues from.
+REPR_TRAJECTORY_RUN = "a_add"
 
 
 @experiment(
@@ -1475,32 +1477,29 @@ def representation_measured(ctx: Context) -> None:
         print(f"    {key:<10} {measured:.3f}"
               + (f" against {reference:.3f}" if reference is not None else ""), flush=True)
 
-        # The trajectory table follows one run, and follows it through the same snapshots.
-        if key != "a_add":
+        # The trajectory table follows one run through every snapshot it has.
+        if key != REPR_TRAJECTORY_RUN:
             continue
         log = pd.read_csv(ctx.input(campaign, f"{key}_train.csv"))
         perfect = log.loc[log.val_acc >= 1.0, "step"]
         marks = {
-            "t_memorise": registry.PAPER_MILESTONES[key]["memorise"],
-            "before_t_grok": registry.PAPER_MILESTONES[key]["generalise"],
-            "t_perfect": float(perfect.iloc[0]) if len(perfect) else np.nan,
-            "last": float(steps[-1]),
+            "memorises": float(registry.PAPER_MILESTONES[key]["memorise"]),
+            "generalises": float(registry.PAPER_MILESTONES[key]["generalise"]),
+            "reaches perfect validation accuracy":
+                float(perfect.iloc[0]) if len(perfect) else np.nan,
         }
-        for label, mark in REPR_POINTS:
-            target = marks[mark]
-            if target is None or not np.isfinite(target):
-                continue
-            # "just before" takes the last snapshot strictly earlier; the others take the
-            # first at or after the step they name.
-            if mark == "before_t_grok":
-                at = max([s for s in steps if s < target], default=steps[0])
-            else:
-                at = min([s for s in steps if s >= target], default=steps[-1])
+        for at in steps:
+            # A milestone belongs to the interval between two snapshots, so it is named on
+            # the snapshot that follows it and the step it happened at is carried along.
+            earlier = max([s for s in steps if s < at], default=-1)
+            passed = [name for name, step in marks.items()
+                      if np.isfinite(step) and earlier < step <= at]
             trajectory.append({
-                "run": key, "point": label, "milestone": mark,
-                "milestone_step": target, "snapshot_step": at,
+                "run": key, "snapshot_step": at,
                 "order_parameter": repr_.fourier_ipr(
-                    snapshots[f"W1_{at}"][:, :config.p])})
+                    snapshots[f"W1_{at}"][:, :config.p]),
+                "passed": "; ".join(passed),
+                "passed_at": min((marks[n] for n in passed), default=np.nan)})
 
     ctx.store.table("repr_measured.csv", pd.DataFrame(rows))
     ctx.store.table("repr_trajectory.csv", pd.DataFrame(trajectory))

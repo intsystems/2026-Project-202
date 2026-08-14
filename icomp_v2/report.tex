@@ -1754,13 +1754,13 @@ below the rule, whose grokking step reads ``none'', are the ones that never gene
 \toprule
 task & measured & own reference & grokking step \\
 \midrule
-$n+m$                     & 0.595 & 1.000 & $11\,760$ \\
-$n-m$                     & 0.582 & 1.000 & $11\,540$ \\
-$n^2+m^2$                 & 0.093 & 0.052 & $10\,470$ \\
-$n \cdot m$               & 0.073 & ---   & $11\,560$ \\
-$(4n_1+n_2^2)^3$          & 0.243 & 1.000 & $12\,290$ \\
-$(2n_1+3n_2)^4$           & 0.283 & 1.000 & $7\,680$ \\
-$(5n_1^3+2n_2^4)^2$       & 0.044 & 0.062 & $6\,600$ \\
+$n+m$                     & 0.599 & 1.000 & $11\,760$ \\
+$n-m$                     & 0.583 & 1.000 & $11\,540$ \\
+$n^2+m^2$                 & 0.080 & 0.052 & $10\,470$ \\
+$n \cdot m$               & 0.092 & ---   & $11\,560$ \\
+$(4n_1+n_2^2)^3$          & 0.253 & 1.000 & $12\,290$ \\
+$(2n_1+3n_2)^4$           & 0.281 & 1.000 & $7\,680$ \\
+$(5n_1^3+2n_2^4)^2$       & 0.043 & 0.062 & $6\,600$ \\
 \midrule
 $(4n_1+n_2^2)^3 + n_1n_2$ & 0.040 & ---   & none \\
 $(2n_1+3n_2)^4 - n_1^2$   & 0.043 & ---   & none \\
@@ -1966,29 +1966,31 @@ embedding stability the second.}
 \centering
 \caption{The estimate against the Theiler exclusion, median over observers, seeds and windows. The
 transient's estimand is $1$: at $W_T = 0$ the estimator returns it, and the exclusion removes
-it. The recurrent cases are unchanged under the same variation, and $28.96$ is not a level but the
-value a divergent quantity happens to take at the cap of $150$ the implementation imposes.}
+it. The recurrent cases are unchanged under the same variation. The last column lifts the cap of
+$150$ and applies the autocorrelation rule the exclusion is measured against, some $1\,600$
+samples here; the transient's $29.22$ beside it is not a level but the value a divergent quantity
+happens to take at the cap, and its cells at the uncapped setting span $100$ to $176$.}
 \label{tab:exclusion}
 \begin{tabular}{lrrrrrrr}
 \toprule
 $W_T$ & $0$ & $2$ & $5$ & $20$ & $100$ & $150$ & uncapped \\
 \midrule
-recurrent, fast    & $5.39$ & $5.42$ & $5.42$ & $5.42$ & $5.42$ & $5.41$ & $5.41$ \\
-recurrent, slow    & $2.11$ & $2.92$ & $3.23$ & $3.32$ & $3.33$ & $3.33$ & $3.33$ \\
-transient          & $1.20$ & $1.71$ & $2.38$ & $5.51$ & $20.83$ & $28.96$ & $39$--$172$ \\
+recurrent, fast    & $4.83$ & $4.82$ & $4.82$ & $4.82$ & $4.80$ & $4.80$ & $4.80$ \\
+recurrent, slow    & $2.06$ & $3.02$ & $3.22$ & $3.27$ & $3.27$ & $3.28$ & $3.27$ \\
+transient          & $1.20$ & $1.71$ & $2.38$ & $5.51$ & $20.50$ & $29.22$ & $173.19$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 Three things follow. \emph{The number at $W_T = 0$ is the right one.} On a uniformly sampled curve
 the $20$ nearest neighbours lie at offsets $\pm 1 \dots \pm 10$, for which \cref{eq:mg} returns
-$1.19928$ exactly; the transient case returns $1.1971 \pm 0.0010$ across all forty-eight cells. The
+$1.19928$ exactly; the transient case returns $1.1969 \pm 0.0011$ across all forty-eight cells. The
 excess over unity is the lattice bias of a deterministically sampled curve, not an error; the
 measured trajectory participation ratio of the same case is $1.02$ to $1.11$.
 
 \emph{The mechanism is the loss of near neighbours, not of neighbours.} The estimator fills its
 twenty slots at every exclusion; only their distance changes. Before any exclusion the
-median temporal separation of a point's twenty nearest neighbours is $2546$ samples on the fast
+median temporal separation of a point's twenty nearest neighbours is $2554$ samples on the fast
 case and $6$ on the transient, where the nearest neighbours in space simply \emph{are} the temporal
 ones. Excluding $150$ samples costs the fast case almost nothing, $138\,048$ close pairs
 surviving of $138\,761$, and costs the transient all $131\,849$ of its own. Its twenty retained
@@ -2005,10 +2007,11 @@ returns $2.36$ at every exclusion, correctly, because at $k = 20$ the neighbourh
 turns of the spiral and the two-dimensional sheet they lie on is all there is to see at that
 resolution. The asymmetry is general; the value is not.
 
-\paragraph{A recurrence-based diagnostic.} $\hat d_{MG}(W_T{=}150)/\hat d_{MG}(W_T{=}20)$ is $1.000$ on
-the fast case and $1.001$ on the slow, against $5.25$ on the transient, with no overlap over
-forty-eight cells per case (largest recurrent $1.012$, smallest transient $4.71$); the less expensive
-$\hat d_{MG}(100)/\hat d_{MG}(50)$ separates as cleanly. Unlike the trend-crossing count it tests
+\paragraph{A recurrence-based diagnostic.} $\hat d_{MG}(W_T{=}150)/\hat d_{MG}(W_T{=}20)$ is $1.00$ on
+the fast case and on the slow, against $5.30$ on the transient, with no overlap over
+forty-eight cells per case (largest recurrent $1.020$, smallest transient $5.008$); the less
+expensive $\hat d_{MG}(100)/\hat d_{MG}(50)$ separates in the same direction at a third of the
+margin. Unlike the trend-crossing count it tests
 recurrence in the reconstructed space rather than non-monotonicity of the series, which is the gap
 \cref{sec:diagnostics} leaves open and which \cref{app:eos} shows to matter on real runs. We
 report it rather than adopt it: it is calibrated on the same systems that produced the two
