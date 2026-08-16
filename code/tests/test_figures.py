@@ -31,13 +31,13 @@ pytestmark = pytest.mark.skipif(not sources.archive_root().is_dir(),
 
 @pytest.fixture(scope="module")
 def built(tmp_path_factory):
-    """All twelve, drawn once into a temporary directory."""
+    """All sixteen, drawn once into a temporary directory."""
     outdir = tmp_path_factory.mktemp("figures")
     return panels.build(outdir, allow_archive=True)
 
 
-def test_twelve_figures():
-    assert len(panels.NAMES) == 12
+def test_sixteen_figures():
+    assert len(panels.NAMES) == 16
     assert set(panels.NAMES) == set(panels.PANELS)
 
 
@@ -89,6 +89,12 @@ def test_save_refuses_a_figure_of_the_wrong_width(tmp_path):
 NO_ARCHIVE = {
     "controls_scored": "the nuisance sweep was rerun for this port; the archived tree "
                        "kept only the summary the article printed",
+    "curve_series": "valid.curves is new: the archived tree drew no figure from a log",
+    "curve_windows": "valid.curves is new: the archived tree drew no figure from a log",
+    "curve_shapes": "valid.curves is new: the archived tree drew no reconstruction",
+    "geometry_switch": "the switch trace was written by the archived run but never read; "
+                       "it reached data/ only when a figure was drawn from it",
+    "theiler_sweep": "the per-window sweep was reduced to a table in the archived tree",
 }
 
 

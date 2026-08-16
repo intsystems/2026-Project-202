@@ -53,7 +53,7 @@ def test_every_labelled_table_in_the_article_is_read(parsed):
     data/ produced it, and tab:alts already settles that neither statistic is preferable
     in general.
     """
-    assert len(parsed) == 28
+    assert len(parsed) == 23
     assert all(label.startswith("tab:") for label in parsed)
 
 
@@ -266,10 +266,10 @@ def test_errata_5_the_a_sum_sq_budget_now_prints_the_46000_that_ran(report):
     """Corrected in the article. The run was stopped at 46,000 steps and the budget column
     said 100k; it now says what ran, so the cell agrees and no finding is raised."""
     assert not [f for f in bad(report, "tab:runs")
-                if f.row == "a_sum_sq" and f.column == "budget"]
+                if f.row == "a_sum_sq" and f.column == "steps"]
     row = next(r for r in report.rows()
                if r["table"] == "tab:runs" and r["row"] == "a_sum_sq"
-               and r["column"] == "budget")
+               and r["column"] == "steps")
     assert row["status"] == OK and row["printed"] == "46k"
 
 

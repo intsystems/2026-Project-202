@@ -1104,6 +1104,42 @@
       "produced_utc": "2026-08-13T18:27:00Z",
       "sha256": "93e1be1abfb75b7b62e0523b6102f05bf298f60db6bb8b2da89f85b40aadcb46"
     },
+    "valid.curves/curve_series.csv": {
+      "bytes": 227436,
+      "command": "python -m actdim run valid.curves",
+      "experiment": "valid.curves",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "a55a443cb9a846295c9a8932cd7dc0c698822505"
+      },
+      "produced_utc": "2026-08-16T22:22:46Z",
+      "sha256": "ec54571f03062102ebd0b8c7df4b90582b5ad4d1e42e36ae6a8ad75746aa3be5"
+    },
+    "valid.curves/curve_shapes.csv": {
+      "bytes": 409479,
+      "command": "python -m actdim run valid.curves",
+      "experiment": "valid.curves",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "a55a443cb9a846295c9a8932cd7dc0c698822505"
+      },
+      "produced_utc": "2026-08-16T22:22:46Z",
+      "sha256": "a95535b2ffd4160ac25a7dab283e611fd7410923f05bca8a2093963c46e27200"
+    },
+    "valid.curves/curve_windows.csv": {
+      "bytes": 9139,
+      "command": "python -m actdim run valid.curves",
+      "experiment": "valid.curves",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "a55a443cb9a846295c9a8932cd7dc0c698822505"
+      },
+      "produced_utc": "2026-08-16T22:22:46Z",
+      "sha256": "4b704b2175f646b3fdfcea9ce462f539b936bde7cbbcd5d4e83464e240fe628e"
+    },
     "valid.geometry/geometry_levels.csv": {
       "bytes": 7941,
       "command": "python -m actdim run valid.geometry",
@@ -1127,6 +1163,18 @@
       },
       "produced_utc": "2026-08-13T18:27:29Z",
       "sha256": "46be84406a968b440e336c7d4743d64b4db7cf81fc2650315fdfa5a869e5613a"
+    },
+    "valid.geometry/geometry_switch_trace.csv": {
+      "bytes": 68784,
+      "command": "python -m actdim run valid.geometry",
+      "experiment": "valid.geometry",
+      "git": {
+        "branch": "main",
+        "dirty": true,
+        "sha": "77b1149afd21e155609ab45247418cd1643197e5"
+      },
+      "produced_utc": "2026-08-13T06:27:47Z",
+      "sha256": "7372ac981745e92820ce6d75ce5003bbcab97d379e73895b9142688ec9abc159"
     },
     "valid.geometry/observer_warps.csv": {
       "bytes": 16677,

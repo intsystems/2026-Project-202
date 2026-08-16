@@ -1,4 +1,4 @@
-"""The article's twelve figures.
+"""The article's sixteen figures.
 
 The drawing is the archived generator's and is meant to stay that way: a figure rebuilt
 here should be indistinguishable from the committed one wherever its data has not
@@ -208,13 +208,37 @@ def fig_dip(read: Reader):
 
     groks = ["mod_wd1", "mod_wd1_s43", "mod_wd1_s44", "s5_wd1"]
     ctrls = ["mod_wd0", "s5_wd0"]
-    panels = [("fn_PR_pos_det", "(a) function space", None),
-              ("PR_pos_det", "(b) parameter space", None),
-              ("move", "(c) displacement", "log"),
-              ("MG", "(d) scalar log", None)]
+    panels = [("fn_PR_pos_det", "(c) function space", None),
+              ("PR_pos_det", "(d) parameter space", None),
+              ("move", "(e) displacement", "log"),
+              ("MG", "(f) scalar log", None)]
 
-    fig, axes = plt.subplots(1, 4, figsize=(5.5, 1.56), sharex=True)
+    fig, flat = plt.subplots(2, 3, figsize=(5.5, 2.72), sharex=True)
+    curve_ax, log_ax = flat[0, 0], flat[0, 1]
+    axes = [flat[0, 2], flat[1, 0], flat[1, 1], flat[1, 2]]
     grid = np.arange(-5000, 5200, 100)
+
+    # The first two panels are the run itself: what a reader of the grokking literature
+    # recognises, and the scalar the estimator is given. Only mod_wd1 has its training
+    # curve in data/ -- the other five campaigns promoted milestones alone -- so these two
+    # are one run where the rest are the mean of four. Said in the caption.
+    curve = read.table("mod_wd1_train")
+    shift = curve.step.to_numpy() - meta["mod_wd1"]["t_gen"]
+    curve_ax.plot(shift, curve.train_acc.to_numpy(), "-", color=FAINT, lw=0.9)
+    curve_ax.plot(shift, curve.val_acc.to_numpy(), "-", color=STOCHASTIC, lw=1.1)
+    curve_ax.text(-4700, 0.91, "train", ha="left", va="center", **POINTER)
+    curve_ax.text(-4700, 0.20, "validation", ha="left", va="center", **POINTER)
+    curve_ax.set_ylim(-0.05, 1.05)
+    curve_ax.set_yticks([0, 0.5, 1.0])
+    curve_ax.set_ylabel("accuracy")
+    curve_ax.set_title("(a) the run", loc="left")
+
+    log_ax.plot(shift, curve.weight_norm.to_numpy(), "-", color=STOCHASTIC, lw=0.9)
+    log_ax.set_ylabel("parameter norm")
+    log_ax.set_title("(b) the log it reads", loc="left")
+
+    for ax in (curve_ax, log_ax):
+        ax.axvline(0, color=FAINT, lw=0.7, ls=(0, (2, 2.5)), zorder=0)
 
     for ax, (col, title, scale) in zip(axes, panels):
         stack, sdstack = [], []
@@ -249,12 +273,15 @@ def fig_dip(read: Reader):
         ax.axvline(0, color=FAINT, lw=0.7, ls=(0, (2, 2.5)), zorder=0)
         if scale:
             ax.set_yscale(scale)
+        ax.set_title(title, loc="left")
+
+    for ax in list(flat.ravel()):
         ax.set_xlim(-5000, 5000)
         ax.set_xticks([-5000, 0, 5000])
         ax.set_xticklabels(["$-5$k", "$t_{\\mathrm{gen}}$", "5k"])
-        ax.set_title(title, loc="left")
 
     axes[0].set_ylabel("participation ratio")
+    axes[1].set_ylabel("participation ratio")
     axes[2].set_ylabel("displacement")
     axes[3].set_ylabel("components")
 
@@ -265,11 +292,11 @@ def fig_dip(read: Reader):
         mpl.patches.Patch(facecolor=STOCHASTIC, alpha=0.55, lw=0,
                           label="hash-family spread"),
     ]
-    fig.tight_layout(rect=[0, 0.150, 1, 1], w_pad=0.9)
-    # one x label under four panels: placed against the measured axes box, because
+    fig.tight_layout(rect=[0, 0.105, 1, 1], w_pad=1.0, h_pad=0.9)
+    # one x label under six panels: placed against the measured axes box, because
     # supxlabel(y=...) and tight_layout(rect=...) do not know about each other and
     # leave a band of white between the ticks and the label
-    fig.text(0.5, min(a.get_position().y0 for a in axes) - 0.105,
+    fig.text(0.5, min(a.get_position().y0 for a in flat.ravel()) - 0.075,
              "steps since generalisation", ha="center", va="top")
     fig.legend(handles=handles, ncol=3, loc="lower center",
                bbox_to_anchor=(0.5, 0.005), handlelength=2.0,
@@ -986,6 +1013,177 @@ def fig_traces(read: Reader):
     return fig
 
 
+# ----------------------------------------------------------------- figure 13
+def fig_signal(read: Reader):
+    """Four logs that look alike, and the four levels the estimator reads off them."""
+    series = read.table("curve_series")
+    windows = read.table("curve_windows")
+    ranks = sorted(series.r.unique())
+    marks = ["o", "s", "^", "D"]
+
+    # 400 samples, not the whole record: the drive fills one octave of a period near
+    # sixteen samples, so ten thousand of them at an inch and a quarter wide is a block of
+    # ink. The point of the row is that the four look alike, which needs them legible.
+    span = 400
+
+    fig = plt.figure(figsize=(5.5, 2.60))
+    grid = fig.add_gridspec(2, 2 * len(ranks), height_ratios=[0.92, 1.0])
+
+    for column, rank in enumerate(ranks):
+        ax = fig.add_subplot(grid[0, 2 * column:2 * column + 2])
+        one = series[(series.r == rank) & (series["sample"] < span)]
+        ax.plot(one["sample"].to_numpy(), one.z.to_numpy(), "-", color=RECURRENT, lw=0.6)
+        ax.set_title(f"$r = {rank}$", pad=2.5)
+        ax.set_ylim(-3.0, 3.0)
+        ax.set_yticks([-2, 0, 2])
+        ax.set_xticks([0, 200, 400])
+        if column:
+            ax.set_yticklabels([])
+        else:
+            ax.set_ylabel("standardised")
+        ax.set_xlabel("sample", labelpad=1.5)
+
+    # The lower panels carry the same four series; only the quantity differs. The estimator
+    # separates the ranks and the roughness does not, which is the whole of the smoothness
+    # control and is otherwise a yes/no column in a table. Rank is the marker, because
+    # every one of these is the same regime and so the same colour.
+    ex = fig.add_subplot(grid[1, :len(ranks)])
+    rx = fig.add_subplot(grid[1, len(ranks):])
+    handles = []
+    for rank, mark in zip(ranks, marks):
+        one = windows[windows.r == rank].sort_values("centre")
+        x = one.centre.to_numpy() / 1000.0
+        for ax, column in ((ex, "MG"), (rx, "roughness")):
+            ax.plot(x, one[column].to_numpy(), "-", color=RECURRENT, lw=0.9,
+                    marker=mark, ms=2.6, markevery=5, mec="white", mew=0.3)
+        handles.append(Line2D([], [], color=RECURRENT, lw=0.9, marker=mark, ms=2.6,
+                              mec="white", mew=0.3, label=f"$r = {rank}$"))
+        ex.axhline(float(one.truth.iloc[0]), color=FAINT, lw=0.7, ls=(0, (2, 2.5)),
+                   zorder=0)
+
+    ex.set_ylabel("components")
+    rx.set_ylabel("roughness")
+    ex.set_title("(a) the estimate", loc="left", pad=2.5)
+    rx.set_title("(b) the roughness", loc="left", pad=2.5)
+    ex.set_ylim(0.0, max(ranks) + 1.2)
+    rx.set_ylim(*bounds(windows.roughness, pad=0.35))
+    for ax in (ex, rx):
+        ax.set_xlim(3.85, 6.15)
+        ax.set_xticks([4, 5, 6])
+        ax.set_xlabel("window centre ($10^3$)", labelpad=1.5)
+
+    fig.tight_layout(rect=[0, 0.115, 1, 1], h_pad=0.9, w_pad=1.4)
+    fig.legend(handles=handles, ncol=4, loc="lower center", bbox_to_anchor=(0.5, 0.005),
+               handlelength=1.8, columnspacing=1.6)
+    return fig
+
+
+# ----------------------------------------------------------------- figure 14
+def fig_switch(read: Reader):
+    """A known change of the number of phases, and what each statistic does about it."""
+    d = read.table("geometry_switch")
+    centres = np.sort(d.centre.unique())
+    truth = d.groupby("centre").truth.first().reindex(centres)
+
+    panels = [("MG", "(a) the estimate", "components"),
+              ("roughness", "(b) the roughness", "roughness"),
+              ("PRdelay", "(c) the linear $\mathrm{PR}$", "components")]
+
+    fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.72))
+    for ax, (column, title, ylabel) in zip(axes, panels):
+        stack = np.vstack([d[d.seed == s].sort_values("centre")[column].to_numpy()
+                           for s in sorted(d.seed.unique())])
+        middle = np.median(stack, axis=0)
+        x = centres / 1000.0
+        ax.fill_between(x, stack.min(axis=0), stack.max(axis=0), facecolor=RECURRENT,
+                        alpha=0.20, lw=0)
+        ax.plot(x, middle, "-", color=RECURRENT, lw=1.2, zorder=4)
+        ax.set_title(title, loc="left", pad=2.5)
+        ax.set_ylabel(ylabel)
+        ax.set_xlabel("window centre ($10^3$)", labelpad=1.5)
+        ax.set_xlim(x.min(), x.max())
+        ax.set_xticks([0, 10, 20, 30])
+    # The truth is a step, and the windows a ramp reaches into carry no truth at all, so
+    # the reference is drawn only where the schedule holds a level.
+    axes[0].plot(centres / 1000.0, truth.to_numpy(), color=GREY, lw=0.9,
+                 ls=(0, (3.5, 2)), zorder=5)
+    axes[0].text(centres[2] / 1000.0, 4.35, "phases", ha="left", va="bottom", **POINTER)
+    axes[0].set_ylim(0.0, 5.0)
+    axes[1].set_ylim(0.0, 0.18)
+    axes[2].set_ylim(*bounds(d.PRdelay, pad=0.18))
+
+    fig.tight_layout(w_pad=1.3)
+    return fig
+
+
+# ----------------------------------------------------------------- figure 15
+def fig_shapes(read: Reader):
+    """The object the neighbour search measures, in the plane of its first two coordinates."""
+    d = read.table("curve_shapes")
+    colour = {"qp": RECURRENT, "gd": TRANSIENT, "batch_proj": STOCHASTIC}
+    order = ["one phase", "two phases", "a transient", "mini-batch noise"]
+
+    fig, axes = plt.subplots(1, 4, figsize=(5.5, 1.60))
+    for ax, label in zip(axes, order):
+        one = d[d.label == label]
+        ax.plot(one.x.to_numpy(), one.y.to_numpy(), ".",
+                color=colour[one.arm.iloc[0]], ms=0.9, alpha=0.55, mec="none")
+        ax.set_title(label, pad=3.0)
+        ax.set_aspect("equal", adjustable="box")
+        span = 1.06 * max(np.abs(one.x).max(), np.abs(one.y).max())
+        ax.set_xlim(-span, span)
+        ax.set_ylim(-span, span)
+        ax.set_xticks([])
+        ax.set_yticks([])
+    axes[0].set_xlabel("$z_t$", labelpad=1.0)
+    axes[0].set_ylabel(r"$z_{t-\tau}$", labelpad=1.0)
+
+    fig.tight_layout(w_pad=0.7)
+    return fig
+
+
+# ----------------------------------------------------------------- figure 16
+def fig_exclusion(read: Reader):
+    """Why the exclusion decides the value on a transient and leaves a torus alone."""
+    d = read.table("theiler_sweep")
+    d = d[(d.observer == "w_fro") & (d.theiler_label != "uncapped")]
+    arms = [("fast", "recurrent, fast", RECURRENT, "-"),
+            ("slow", "recurrent, slow", RECURRENT, (0, (3.5, 2))),
+            ("transient", "transient", TRANSIENT, (0, (1, 1.6)))]
+
+    fig, (ax, bx) = plt.subplots(1, 2, figsize=(5.5, 1.78))
+    handles = []
+    for arm, label, colour, dash in arms:
+        one = (d[d.arm == arm].groupby("theiler_used")
+               .agg(MG=("MG", "median"), near=("frac_near_ref", "median"))
+               .sort_index())
+        x = one.index.to_numpy()
+        ax.plot(x, one.MG.to_numpy(), color=colour, ls=dash, lw=1.1)
+        bx.plot(x, one.near.to_numpy(), color=colour, ls=dash, lw=1.1)
+        handles.append(Line2D([], [], color=colour, ls=dash, lw=1.1, label=label))
+
+    for panel in (ax, bx):
+        panel.set_xscale("symlog", linthresh=1.0)
+        panel.set_xlim(0, 200)
+        panel.set_xticks([0, 1, 10, 100])
+        panel.set_xticklabels(["0", "1", "10", "100"])
+        panel.set_xlabel("Theiler exclusion (samples)", labelpad=1.5)
+    ax.set_yscale("log")
+    ax.set_yticks([1, 3, 10, 30])
+    ax.set_yticklabels(["1", "3", "10", "30"])
+    ax.set_ylim(0.9, 45)
+    ax.set_ylabel("components")
+    ax.set_title("(a) the estimate", loc="left", pad=2.5)
+    bx.set_ylabel("fraction")
+    bx.set_ylim(-0.04, 1.0)
+    bx.set_title("(b) neighbours that are returns", loc="left", pad=2.5)
+
+    fig.tight_layout(rect=[0, 0.135, 1, 1], w_pad=1.5)
+    fig.legend(handles=handles, ncol=3, loc="lower center", bbox_to_anchor=(0.5, 0.005),
+               handlelength=2.2, columnspacing=1.6)
+    return fig
+
+
 # ------------------------------------------------------------------ the build
 #
 # In the order the archived generator drew them, which is the order they appear in the
@@ -1004,6 +1202,10 @@ PANELS: Dict[str, Callable[[Reader], Any]] = {
     "fig_eos": fig_eos,
     "fig_ceiling": fig_ceiling,
     "fig_traces": fig_traces,
+    "fig_signal": fig_signal,
+    "fig_switch": fig_switch,
+    "fig_shapes": fig_shapes,
+    "fig_exclusion": fig_exclusion,
 }
 
 NAMES = tuple(PANELS)

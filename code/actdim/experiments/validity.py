@@ -1275,7 +1275,7 @@ def _geometry_verdict(segments, warps) -> Dict[str, Any]:
     device=CPU,
     minutes=2,
     promotes=("geometry_levels.csv", "geometry_switch_summary.csv", "observer_warps.csv",
-              "verdict.json"),
+              "geometry_switch_trace.csv", "verdict.json"),
     tier=1,
     notes="Every other null in section 6 is measured beside the estimate on data chosen "
           "for something else. Here the data is built so that the roughness cannot "

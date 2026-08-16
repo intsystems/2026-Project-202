@@ -66,6 +66,11 @@ SOURCES: Dict[str, Tuple[str, str]] = {
     "eos_runs":             ("train.perceptron.eos", "eos_runs.csv"),
     "eos_diagnostics":      ("grok.eos", "eos_diagnostics.csv"),
     "controls_scored":      ("valid.nuisance", "controls_scored.csv"),
+    "curve_series":         ("valid.curves", "curve_series.csv"),
+    "curve_windows":        ("valid.curves", "curve_windows.csv"),
+    "curve_shapes":         ("valid.curves", "curve_shapes.csv"),
+    "geometry_switch":      ("valid.geometry", "geometry_switch_trace.csv"),
+    "theiler_sweep":        ("valid.theiler.contrast", "sweep_windows.csv"),
 }
 
 # The same names under ``../archived_code/``, taken from the constants of

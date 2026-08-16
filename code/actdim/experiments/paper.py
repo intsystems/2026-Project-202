@@ -24,7 +24,7 @@ ARTICLE_FIGURES = repo_root().parent / "icomp_v2" / "figures"
 FIGURE_INPUTS = (
     "sys.digits.parameter",
     "valid.tau", "valid.anisotropy", "valid.ceiling", "valid.theiler.contrast",
-    "valid.nuisance",
+    "valid.nuisance", "valid.curves", "valid.geometry",
     "train.perceptron.eos", "train.perceptron.poly",
     "grok.diagnostics.logs", "grok.diagnostics.perceptron", "grok.eos",
     "grok.extended.outcomes", "grok.matched.window", "grok.prwindow", "grok.rank.dip",
@@ -33,10 +33,10 @@ FIGURE_INPUTS = (
 
 @experiment(
     id="paper.figures",
-    title="The twelve figures, into ../icomp_v2/figures/",
+    title="The sixteen figures, into ../icomp_v2/figures/",
     paper=("fig:regimes", "fig:dip", "fig:observers", "fig:tau", "fig:aniso", "fig:map",
            "fig:pairs", "fig:prwindow", "fig:window", "fig:eos", "fig:ceiling",
-           "fig:traces"),
+           "fig:traces", "fig:signal", "fig:switch", "fig:shapes", "fig:exclusion"),
     device=CPU,
     minutes=2,
     needs=FIGURE_INPUTS,

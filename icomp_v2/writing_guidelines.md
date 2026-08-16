@@ -296,6 +296,27 @@ The reader has the last two paragraphs and not all of those.
 ## Floats
 
 - **Measured values live in tables and figures**; the body tells the story.
+- **A figure earns its place by showing a claim the tables can only assert.** Four went in
+  because the paper proved everything in tables and a reader never once saw a log with the
+  estimate running beside it: the log at four ranks against the level read off it, a known
+  change of the number of phases tracked as it happens, the delay reconstruction itself,
+  and the neighbours a transient loses to the exclusion. None needed a new paragraph. Each
+  sits in the appendix that already argues its claim and is reached by a `\cref` added to a
+  sentence already there.
+- **Put the float after the complete paragraph, never inside it.** `\begin{figure}[H]` in
+  the middle of a paragraph splits it: the sentence after the float is set as a new
+  paragraph, half a page from the sentence it continues. Both new appendix figures had to
+  be moved.
+- **A new caption reintroduces every fault the prose was cleaned of.** Three of the four
+  captions written this round arrived carrying `what` clauses, an `is what`, and a bare
+  pair — in a document that had been at zero on all three for two rounds. *Run the scan
+  after adding a figure, not only after cutting one.*
+- **Deleting a float breaks things outside the document.** `actdim/tables.py` registers one
+  auditor per table label, and `tests/test_tables.py` asserts the article's table count and
+  the exact set of known disagreements. Removing three tables left five stale registry
+  entries and six failing tests, discovered a round later. Renaming a column does it too:
+  `budget` → `steps` orphaned an errata check. **Run `python -m pytest` after changing the
+  article's floats or column headings**, not just `pdflatex`.
 - **A caption must let the reader see what question the figure answers**, in words used elsewhere
   in the paper. The two worst offenders this round opened with "the two candidate estimands" and
   with a bare "label-matched pairs" — neither reconstructible from the caption alone. Say what is

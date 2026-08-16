@@ -521,9 +521,10 @@ it: every one of these runs is transient, and the raw loss curves already show t
 \caption{Simplification of the trajectory at generalisation. Three regularised seeds of modular
 addition and one $S_5$ composition, against the same two configurations trained without weight
 decay, aligned on the generalisation step of the run each matches. Thick line, the mean of the four
-generalising runs; band, the spread between the two hash families (\cref{app:sketch}). Panels
-(a)--(c) plot $\PR^{\mathrm{det}}$ over windows of $600$ steps, $300$ for $S_5$; (d) the estimate
-of \cref{sec:matched}.}
+generalising runs; band, the spread between the two hash families (\cref{app:sketch}). Panels (a)
+and (b) are the one run whose training curve is stored. Panels (c)--(e) plot $\PR^{\mathrm{det}}$
+and the displacement over windows of $600$ steps, $300$ for $S_5$; (f) the estimate of
+\cref{sec:matched} on the log of (b).}
 \label{fig:dip}
 \end{figure}
 
@@ -559,7 +560,7 @@ outcome (\cref{app:window}).
 
 On the parameter norm the estimate halves at the generalisation step in all four generalising runs,
 its minimum falling on the same side of the transition as the minimum of the direct measurement
-(\cref{fig:dip}d). That drop is among the largest any of the four ever shows, while the other two runs show nothing
+(\cref{fig:dip}f). That drop is among the largest any of the four ever shows, while the other two runs show nothing
 remarkable there; all but two of the usable grid cells separate the generalising runs from the
 other two (\cref{tab:matched}). The drop
 also survives a check on the shape of the log. We compare each run
@@ -692,9 +693,21 @@ with $f \in C^2(M, M)$ a diffeomorphism and $\phi \in C^2(M, \R)$, the delay map
 \end{theorem}
 
 An embedding is one-to-one and an immersion, so distances in $\R^E$ between reconstructed points
-are a faithful, though distorted, image of distances between states. \Cref{thm:takens} requires a
-manifold. The sets a training run occupies need not be manifolds, so the extension below is the
+are a faithful, though distorted, image of distances between states. The set they fill is the
+object the neighbour statistic below measures (\cref{fig:shapes}). \Cref{thm:takens} requires a
+manifold.
+
+The sets a training run occupies need not be manifolds, so the extension below is the
 version the paper relies on.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_shapes.pdf}
+\caption{The set the neighbour search measures, in the plane of the first two delay coordinates.
+One window of the image-data system of \cref{sec:digits} under each excitation, reconstructed at
+the frozen configuration. A single phase closes an orbit, two fill a surface, a converging run
+never returns, and mini-batch noise fills the space it is given.}
+\label{fig:shapes}
+\end{figure}
 
 \begin{theorem}[Fractal delay embedding prevalence; \citealp{sauer1991embedology}]\label{thm:sauer}
 Let $A \subset \R^{n}$ be compact with box-counting dimension $d$, invariant under a smooth
@@ -988,8 +1001,18 @@ components there, produced entirely by the drive. The other eleven observers are
 at zero learning rate, so no estimate is defined for them.
 
 For no scored observer does the roughness order the four withheld ranks; the best reaches a rank
-correlation of $0.8$. Smoothness alone therefore accounts for no
-observer's agreement with the truth.
+correlation of $0.8$. \Cref{fig:signal} shows the estimate and the roughness along one record.
+
+Smoothness alone therefore accounts for no observer's agreement with the truth.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_signal.pdf}
+\caption{The log the estimator is given, and the level it returns. The image-data system of
+\cref{sec:digits} at four ranks and a seed the configuration was not selected on, observed through
+the parameter norm. Above, four hundred samples of each log. (a) The estimate over sliding windows,
+with the measured effective rank dotted. (b) The roughness of the same windows.}
+\label{fig:signal}
+\end{figure}
 
 \begin{table}[H]
 \centering
@@ -1015,8 +1038,8 @@ spread across seeds         & 0.87 & 0.51 & 1.35 & 1.81 & 2.64 & 3.59 & 2.81 & 2
 \centering
 \caption{Whether any simpler statistic recovers the active dimension as well as the estimator does.
 All are computed on the image-data system of \cref{sec:digits}. The two ranges are not aggregated
-alike: at $r \le 8$ each statistic is scored on the withheld ranks alone, at $r \le 20$ on every
-rank, so only the comparison down a column is out of sample. Statistics marked $\dagger$ need a
+alike: at $r \le 8$ each statistic is scored on the withheld ranks alone, at $r \le 20$ on all
+twenty, the selection ranks included, so only the comparison down a column is out of sample. Statistics marked $\dagger$ need a
 neighbour search; the rest are one-line computations on the series or its spectrum.}
 \label{tab:alts}
 \begin{tabular}{lrrrr}
@@ -1677,8 +1700,8 @@ lattice bias of a deterministically sampled curve.
 \emph{The exclusion removes the near neighbours, not the neighbours.} The estimator fills its
 twenty slots at every exclusion; only the distances change. Before any exclusion the nearest
 neighbours of a point lie thousands of samples away under the fast quasiperiodic drive, but six
-samples away on the transient (\cref{fig:traces}). Excluding $150$ samples therefore costs the fast drive almost none
-of its close pairs and the transient all of them. The distances the transient retains are then
+samples away on the transient (\cref{fig:traces}). Excluding $150$ samples therefore costs the fast
+drive almost none of its close pairs and the transient all of them (\cref{fig:exclusion}). The distances the transient retains are then
 nearly equal, their log-ratio sum collapses, and the reciprocal in \cref{eq:mg} diverges. An
 exponential decay with no optimiser and no data
 behind it reproduces both ends.
@@ -1688,6 +1711,16 @@ $W_T = 0$ already returns $r$, because that case is not oversampled; it is the s
 exclusion repairs, its nearest neighbours lying some six hundred samples away. A transient also
 need not have dimension one: a decaying \emph{oscillation} returns $2.36$ at every exclusion, and
 correctly so.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_exclusion.pdf}
+\caption{Why the exclusion sets the value on a transient and leaves a torus alone. The excitations
+of \cref{tab:exclusion}, median over ranks, seeds and windows. In (b) a neighbour counts as a
+return when it is no further away than the nearest neighbours an unexcluded search finds, so a fall
+to zero leaves the estimator nothing but distant points.}
+\label{fig:exclusion}
+\end{figure}
 
 \paragraph{A recurrence-based diagnostic.} The ratio
 $\hat d_{MG}(W_T{=}150)/\hat d_{MG}(W_T{=}20)$ is unity under both recurrent drives and above five
@@ -1941,7 +1974,19 @@ sum of four sinusoids. In the first the four frequencies are rationally independ
 lies on a four-dimensional torus and $d_{\mathrm{act}} = 4$. In the second they are harmonics of one
 irrational base frequency, so a single phase fixes all four sinusoids at once, the path is a circle,
 and $d_{\mathrm{act}} = 1$. The base frequency of the second system is then set by bisection so
-that the two have the \emph{same} roughness, to a part in $10^{15}$.
+that the two have the \emph{same} roughness, to a part in $10^{15}$. A scheduled run passes between
+the two through ramped envelopes, leaving unscored every window a ramp reaches into
+(\cref{fig:switch}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_switch.pdf}
+\caption{A change in the number of independent phases, tracked as it happens. The harmonic control
+of this appendix, scheduled from four phases to one and back; median over eight seeds, band their
+range. Dashed in (a), the number of phases, drawn only where no ramp reaches into the window. The
+linear statistic of (c) moves in the opposite direction.}
+\label{fig:switch}
+\end{figure}
 
 \emph{The roughness changes and the number of components does not.} Five monotone observers
 $g(x) = x + a x^{p}$ are applied to one four-phase system. Each is invertible, so it may bend the

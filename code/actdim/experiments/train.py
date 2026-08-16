@@ -35,15 +35,44 @@ def _summary(ctx: Context, rows: List[dict], name: str = "milestones.csv") -> No
     ctx.store.table(name, pd.DataFrame(rows))
 
 
+#: Every transformer run's training curve, promoted beside the milestones it is summarised
+#: into. Only ``mod_wd1_train.csv`` used to reach ``data/``, and it got there through
+#: ``grok.rank.dip`` rather than through the campaign that trained it, so the accuracy and
+#: parameter-norm curves of the other eleven runs existed only in the untracked half. A
+#: figure that puts the estimate under the loss curve it was computed from needs the curve,
+#: and re-running a GPU campaign to recover a 900 KB CSV is not a repair anyone performs.
+def _curve_promotes(keys: Sequence[str]) -> tuple:
+    return ("milestones.csv",) + tuple(f"{key}_train.csv" for key in keys)
+
+
+def _sketched_promotes() -> tuple:
+    from ..training.runs import SKETCHED_RUNS
+
+    return _curve_promotes(SKETCHED_RUNS)
+
+
+def _extended_promotes() -> tuple:
+    from ..training.runs import EXTENDED_RUNS
+
+    return _curve_promotes(EXTENDED_RUNS)
+
+
+_SKETCHED_PROMOTES = _sketched_promotes()
+_EXTENDED_PROMOTES = _extended_promotes()
+
+
 @experiment(
     id="train.transformer.sketched",
     title="Six transformer runs with the trajectory sketch attached",
     paper=("app:runs", "sec:direct", "app:dip"),
     device=GPU,
     minutes=24,
-    promotes=("milestones.csv",),
+    promotes=_SKETCHED_PROMOTES,
     tier=2,
-    notes="The runs section 7.2 measures. Each writes a 60-95 MB sketch into runs/.",
+    notes="The runs section 7.2 measures. Each writes a 60-95 MB sketch into runs/. The "
+          "training curves are promoted too: figure 6 draws the estimate under the "
+          "validation accuracy of the run it was computed from, and only one of the six "
+          "curves used to reach data/.",
 )
 def transformer_sketched(ctx: Context) -> None:
     from ..training import runs as registry
@@ -61,10 +90,12 @@ def transformer_sketched(ctx: Context) -> None:
     paper=("app:runs", "sec:grok-diagnostics", "sec:pairs"),
     device=GPU,
     minutes=150,
-    promotes=("milestones.csv",),
+    promotes=_EXTENDED_PROMOTES,
     tier=2,
-    notes="The logs the two admissibility diagnostics are computed on. Produced in the "
-          "archived tree by a shell script, not by the planner that claims to plan them.",
+    notes="The logs the two diagnostics are computed on. Produced in the archived tree by "
+          "a shell script, not by the planner that claims to plan them. The training "
+          "curves are promoted beside the milestones, so the windowed estimate of "
+          "figure 8 can be drawn against the run it came from.",
 )
 def transformer_extended(ctx: Context) -> None:
     from ..training import runs as registry

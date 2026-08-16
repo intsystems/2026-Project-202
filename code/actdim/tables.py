@@ -47,11 +47,9 @@ Twenty-one of the twenty-eight ``tabular`` blocks have at least one column deriv
 ``tab:obs``         error, slope, and whether roughness orders the four withheld ranks.
 ``tab:k20``         every cell. Ported from the archived checker.
 ``tab:alts``        every cell, and the aggregation asymmetry below. Ported.
-``tab:tau``         span and the estimate at every lag and rank.
 ``tab:controls``    the shift and its percentage of a four-component change, and the
                     caption's two omissions against ``calib.e20/invariance_controls.csv``.
 ``tab:switch``      the three levels of each schedule.
-``tab:aniso``       effective rank, MG and the delay participation ratio.
 ``tab:gt``          the excited rank of every regime.
 ``tab:grok-diagnostics``  whether each run generalises, and its five diagnostics.
 ``tab:dip``         plateau, dip, depth, position and post-dip maximum.
@@ -61,7 +59,7 @@ Twenty-one of the twenty-eight ``tabular`` blocks have at least one column deriv
                     names a statistic no committed file records.
 ``tab:theiler``     truth and both exclusions, the two summary rows, and the label of the
                     error row.
-``tab:runs``        budget, weight decay and training fraction for all twenty-seven rows,
+``tab:runs``        steps, weight decay and training fraction for all twenty-seven rows,
                     from the run registry; memorisation, generalisation and final accuracy
                     for the six sketched rows against both the summary and the milestone
                     file, and memorisation and generalisation for the seven extended ones
@@ -74,7 +72,7 @@ Twenty-one of the twenty-eight ``tabular`` blocks have at least one column deriv
 What is not, and why
 --------------------
 
-``tab:classes``, ``tab:obsdef``  definitions. Nothing to recompute.
+``tab:obsdef``   a definition. Nothing to recompute.
 ``tab:geometry`` rows 2-3       a convention, stated rather than measured.
 ``tab:obsdep``   no file under ``data/`` scores the two mode-weightings at several lags.
 ``tab:sketch``   the per-rank sketched and uncompressed participation ratios were never
@@ -87,9 +85,6 @@ What is not, and why
                  cell again without landing on the printed values. Four of its cells would
                  match under two different orders and the rest under neither, so a guess
                  here would report noise rather than defects.
-``tab:ipr``, ``tab:ipr-trajectory``  the Fourier inverse participation ratio outputs are not
-                 in ``data/``. The grokking-step column of ``tab:ipr`` repeats ``tab:runs``,
-                 whose perceptron milestones have no measured source either.
 
 Two further gaps are inside tables that are otherwise checked. ``tab:runs``'s thirteen
 perceptron rows have no committed log, so their milestone columns are compared against the
@@ -1159,27 +1154,6 @@ def check_aggregation(table: Table, data: Data) -> Iterable[Computed]:
     yield Computed(table.find("median over seeds and observers"), 2, eight["MG"][0], source8)
 
 
-def check_tau(table: Table, data: Data) -> Iterable[Computed]:
-    rel = "valid.tau/tau_sensitivity.csv"
-    frame = data.frame(rel)
-    frame = frame[(frame.period == 400) & (frame.max_E == 20)]
-    ranks = [1, 2, 3, 4, 6, 8]
-    for row in table.body():
-        lag = as_number(table.printed(row, 0))
-        if lag is None:
-            continue
-        part = frame[frame.tau == str(int(lag))]
-        if part.empty:
-            continue
-        spans = part.span_periods.unique()
-        if len(spans) == 1:
-            yield Computed(row, 1, float(spans[0]), Data.name(rel))
-        medians = part.groupby("r").MG.median()
-        for column, rank in enumerate(ranks, start=2):
-            if rank in medians.index:
-                yield Computed(row, column, float(medians.loc[rank]), Data.name(rel))
-
-
 # Article name -> the control identifier in the nuisance sweep.
 _CONTROLS = (
     ("none (baseline)", "baseline"),
@@ -1251,23 +1225,6 @@ def check_switch(table: Table, data: Data) -> Iterable[Computed]:
         for column, field_name in enumerate(("level0", "level1", "level2"), start=1):
             yield Computed(row, column, float(part[field_name].median()), Data.name(rel),
                            "median over seeds and the two parameter norms")
-
-
-def check_aniso(table: Table, data: Data) -> Iterable[Computed]:
-    rel = "valid.anisotropy/aniso_summary.csv"
-    frame = data.frame(rel)
-    for row in table.body():
-        rank = as_number(table.printed(row, 0))
-        anisotropy = as_number(table.printed(row, 1))
-        if rank is None or anisotropy is None:
-            continue
-        part = frame[(frame.r == int(rank)) & (np.abs(frame.rho - anisotropy) < 1e-9)]
-        if part.empty:
-            continue
-        record = part.iloc[0]
-        yield Computed(row, 2, float(record.pr_pos), Data.name(rel))
-        yield Computed(row, 3, float(record.MG), Data.name(rel))
-        yield Computed(row, 4, float(record.PRdelay), Data.name(rel))
 
 
 _GROUND_TRUTH_ARMS = (("qp, eta=0", "qp_eta0"),)
@@ -1848,45 +1805,6 @@ _IPR_ROWS = (("n+m", "a_add"), ("n-m", "a_sub"), ("n^2+m^2", "a_sq_sum"),
              ("n^3+nm^2+m", "x_no_grok"))
 
 
-def check_ipr(table: Table, data: Data) -> Iterable[Computed]:
-    rel = "grok.repr.measured/repr_measured.csv"
-    measured = data.frame(rel).set_index("run")
-    for label, run in _IPR_ROWS:
-        if run not in measured.index:
-            continue
-        record = measured.loc[run]
-        row = table.find(label)
-        yield Computed(row, 1, float(record.order_parameter), Data.name(rel))
-        yield Computed(row, 2, _nan_to_none(record.own_reference), Data.name(rel))
-        # The third column repeats the grokking step of tab:runs, which is checked there
-        # against the milestones both perceptron campaigns promote. Reading it twice from
-        # two files would report one disagreement as two.
-
-
-def check_ipr_trajectory(table: Table, data: Data) -> Iterable[Any]:
-    """The order parameter at each snapshot, matched to the article by the step it prints.
-
-    The rows are steps rather than named points because the milestones fall between two
-    snapshots: the run memorises, generalises and reaches perfect validation accuracy
-    inside one gap of the log-spaced grid.
-    """
-    rel = "grok.repr.measured/repr_trajectory.csv"
-    frame = data.frame(rel).set_index("snapshot_step")
-    for row in table.body():
-        step = as_number(table.printed(row, 0))
-        if step is None or int(step) not in frame.index:
-            continue
-        record = frame.loc[int(step)]
-        yield Computed(row, 1, float(record.order_parameter), Data.name(rel))
-
-    # The last row is the closed form, which grok.repr computes and this table quotes.
-    reference = data.frame("grok.repr/repr_reference.csv")
-    add = reference[reference.task == "add"]
-    if not add.empty:
-        yield Computed(table.find("analytic"), 1, float(add.iloc[0].order_parameter),
-                       Data.name("grok.repr/repr_reference.csv"))
-
-
 #: Article column heading -> the label the sweep stores it under.
 _EXCLUSION_COLUMNS = (("0", "0"), ("2", "2"), ("5", "5"), ("20", "20"),
                       ("100", "100"), ("150", "150"), ("uncapped", "uncapped"))
@@ -1972,8 +1890,6 @@ class Registered:
 
 
 REGISTRY: Tuple[Registered, ...] = (
-    Registered("tab:classes", None,
-               "a definition: the three regimes and what the estimator returns in each"),
     Registered("tab:obsdef", None, "a definition: the twelve observers and their formulae"),
     Registered("tab:frozen", check_frozen, notes=(
         "the twenty-direction grid was never promoted, so that column's grid size and its "
@@ -1999,14 +1915,12 @@ REGISTRY: Tuple[Registered, ...] = (
         "every printed cell reproduces; what fails is the claim above it, which is the "
         "shape errata item 3 has",
     )),
-    Registered("tab:tau", check_tau),
     Registered("tab:controls", check_controls, notes=(
         "the seven printed rows come from valid.nuisance/controls_scored.csv. "
         "calib.e20/invariance_controls.csv is a different sweep, of two controls at twenty "
         "directions, and settles the caption's two omissions rather than any printed cell",
     )),
     Registered("tab:switch", check_switch),
-    Registered("tab:aniso", check_aniso),
     Registered("tab:gt", check_gt),
     Registered("tab:grok-diagnostics", check_grok_diagnostics, notes=(
         "the perceptron rows have no outcome record under data/, so the generalises column "
@@ -2023,16 +1937,6 @@ REGISTRY: Tuple[Registered, ...] = (
         "memorisation; no committed file records that ranking",
         "the floor is compared to the nearest step: the S_5 runs log every five steps, so "
         "their window centres fall on half-steps and the article prints +712 for 712.5",
-    )),
-    Registered("tab:ipr-trajectory", check_ipr_trajectory, notes=(
-        "the rows are snapshots and are matched by the step they print. They were named "
-        "points until the snapshots could be read: the run memorises, generalises and "
-        "reaches perfect validation accuracy inside one interval of the log-spaced grid, "
-        "so no snapshot separates the three and no row can name one of them",
-    )),
-    Registered("tab:ipr", check_ipr, notes=(
-        "the grokking-step column repeats tab:runs and is checked there, against the "
-        "milestones both perceptron campaigns promote",
     )),
     Registered("tab:theiler", check_theiler, notes=(
         "the row's own label decides which summary is compared, and is reported as a "
