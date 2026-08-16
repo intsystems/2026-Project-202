@@ -72,7 +72,7 @@ from .style import (BAND, FAINT, GREY, POINTER, RECURRENT, STOCHASTIC, TRANSIENT
 
 # ------------------------------------------------------------------ figure 1
 def fig_regimes(read: Reader):
-    """Recovery and admissibility on the image-data system of section 5.4."""
+    """Recovery, and whether it can be told without ground truth, on the image-data system."""
     d = read.table("sweep_raw")
     d = d[(~d.eta_zero) & (~d.observer.isin(["acc_probe", "loss_step"]))]
 
@@ -128,7 +128,7 @@ def fig_regimes(read: Reader):
     ax.minorticks_off()
     ax.set_xlabel("measured effective rank")
     ax.set_ylabel("estimated dimension")
-    ax.set_title("(a) what the estimator returns", loc="left")
+    ax.set_title("(a) the estimate against truth", loc="left")
 
     bx.axvspan(0.95, 1.10, color=BAND, alpha=0.08, lw=0, zorder=0)
     # Two sub-rows per arm, one per rank, because the rank is what connects this
@@ -165,8 +165,8 @@ def fig_regimes(read: Reader):
     bx.set_xlim(low, high)
     bx.set_xticks(np.arange(low, high + 1e-9, 0.2))
     bx.set_xlabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
-    bx.set_title("(b) admissibility", loc="left")
-    bx.text(1.025, 4.42, "admissible", color=BAND, fontsize=7.0, ha="center",
+    bx.set_title("(b) the diagnostic on the same cases", loc="left")
+    bx.text(1.025, 4.42, "accurate cases", color=BAND, fontsize=7.0, ha="center",
             va="bottom")
     bx.spines["left"].set_visible(False)
     bx.tick_params(axis="y", length=0)
@@ -279,7 +279,7 @@ def fig_dip(read: Reader):
 
 # ------------------------------------------------------------------ figure 3
 def fig_map(read: Reader):
-    """Where the training logs of section 7 fall in the admissibility plane."""
+    """Where the training logs of section 7 fall in the plane of the two diagnostics."""
     tr = read.table("real_logs_summary")
     tr = tr[tr.column == "weight_norm"]
     gr = pd.concat([read.table("probe_arith_summary"),
@@ -335,7 +335,7 @@ def fig_map(read: Reader):
     ax.set_yticks(np.arange(1.0, high + 1e-9, 0.2))
     ax.set_xlabel("trend crossings per window")
     ax.set_ylabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
-    ax.text(430, 1.025, "admissible", color=BAND, fontsize=7.0, ha="right",
+    ax.text(430, 1.025, "accurate cases", color=BAND, fontsize=7.0, ha="right",
             va="center")
 
     fig.tight_layout(rect=[0, 0.095, 1, 1])
