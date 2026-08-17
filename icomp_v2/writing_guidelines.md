@@ -240,8 +240,23 @@ systems they run on have $k = 10$ or $k = 20$ *available directions*. Do not alt
 ## Then: one claim, in order
 
 - **`, and` is the tell.** It marks a sentence that was already finished. The fix is to cut one of
-  the two things; if both survive, put a stop between them. Target under 1 per thousand words in the
-  body. Serial-comma lists are the legitimate use.
+  the two things; if both survive, put a stop between them. Serial-comma lists are the legitimate
+  use — and they are the *only* one.
+
+  **Count them yourself; the scanner sees a fifth of them.** Its clause-join check fires only when
+  a subject and a finite verb stand on both sides, so it reported 18 in a document that contained
+  **81**. The reader does not apply that test. Everything it missed was still the fault: the
+  afterthought (`returns $2.36$ at every exclusion, and correctly so`), the compound predicate
+  (`It measures the cost of that departure, and varies the exclusion`), the two-item caption title
+  (`the accuracy of each observer, and whether smoothness alone could produce it`). Enumerate every
+  `, and` in the file, decide each one, and expect roughly a quarter of them to be lists you keep.
+  This round: 81 → 22, all 22 lists.
+
+  Each has its own fix, and choosing by eye is the point: an afterthought is **cut**
+  (`and correctly so` → *correctly returns*); a compound predicate **loses the comma**; two clauses
+  take a **full stop**, or `so`/`yet`/`nor`/`;` where the relation is real
+  (`the record contains no returns, and in place of $1$ …` → *…, so in place of $1$ …*). A
+  document at zero `, and` clause-joins reads as one that decided, not one that ran a filter.
 - **A clause that only contrasts with what you just wrote is usually cuttable.** "the check was
   never carried out on them, not because they failed it" — the next sentences explain it.
 - **Do not cram.** Three ideas in one period is two too many.
