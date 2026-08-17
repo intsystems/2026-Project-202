@@ -257,6 +257,28 @@ systems they run on have $k = 10$ or $k = 20$ *available directions*. Do not alt
   take a **full stop**, or `so`/`yet`/`nor`/`;` where the relation is real
   (`the record contains no returns, and in place of $1$ …` → *…, so in place of $1$ …*). A
   document at zero `, and` clause-joins reads as one that decided, not one that ran a filter.
+
+- **Do not fix a monoculture by installing another one.** Driving `, and` to zero pushed `, so` to
+  **93** — one every 160 words, four in the abstract's single paragraph, three in one paragraph of
+  §7, and twice inside a single sentence (*"measures variation inside the window, so the collapse
+  is a collapse in that variation, so $d_{\mathrm{act}}$ may be unchanged"*). The reader feels the
+  repetition of the *repair* as sharply as the repetition of the fault.
+
+  The remedy is not a third connective but a different sentence. Reach for: a **colon** when the
+  second half delivers what the first promised (*"a run that has merely come to rest falls as far:
+  the sharpness and the reversal mark the transition"*); a **semicolon** for two balanced facts; a
+  **participle** for a consequence that is really a property (*"so that $d_{\mathrm{act}} = r$"* →
+  *"giving $d_{\mathrm{act}} = r$"*, *"so the delay lag keeps its meaning"* → *"leaving the delay
+  lag its meaning"*); **`therefore` inside the clause** rather than a connective in front of it;
+  and a plain **full stop**, which is right more often than it feels.
+
+  Check the shape, not the count: no two adjacent sentences on the same connective, none twice in
+  one sentence, none four times in a paragraph. 93 → 70 fixed every cluster; the survivors are
+  spread out and read as choices.
+
+- **Watch the inversions a rewrite leaves behind.** *"…; so are the four generalising runs"* is
+  correct and unreadable. Give an inversion its own sentence: *"So is the surrogate comparison, in
+  which each run is measured only against surrogates of itself."*
 - **A clause that only contrasts with what you just wrote is usually cuttable.** "the check was
   never carried out on them, not because they failed it" — the next sentences explain it.
 - **Do not cram.** Three ideas in one period is two too many.

@@ -78,8 +78,8 @@ Can and Cannot Measure}
 \begin{abstract}
 Over a stretch of training, the parameter trajectory of a neural network stays on a set far smaller
 than the parameter space. We call the dimension of that set the active dimension of the stretch.
-Measuring it requires storing the trajectory, whereas a run writes scalar logs at no cost, so we
-ask how much of it can be recovered from one such scalar. We reconstruct a state space from the
+Measuring it requires storing the trajectory, whereas a run writes scalar logs at no cost. We ask
+how much of it can be recovered from one such scalar. We reconstruct a state space from the
 scalar by delay coordinates and estimate the intrinsic dimension of that reconstruction by maximum
 likelihood on nearest-neighbour distances. The procedure returns a plausible number even when the
 trajectory never revisits any region of the parameter space, so most of the work is in establishing
@@ -89,7 +89,7 @@ identify the records on which the value may not be read as a dimension at all. T
 standard grokking settings, so we store the trajectory instead. Its effective rank
 collapses near the generalisation step in four regularised runs and then re-expands, the
 simplification that mechanistic accounts of grokking predict; a run that has merely come to rest
-falls as far, so the sharpness and the reversal mark the transition, not the depth.
+falls as far: the sharpness and the reversal mark the transition, not the depth.
 Re-run over a window as short as the transition, the estimate on an ordinary log falls at the same
 step in those four runs and in neither of the other two, by more than randomised series that
 preserve the shape of the log.
@@ -209,7 +209,7 @@ the box-counting dimension of $\gM_{\gW}$ at resolution $\varepsilon$,
 Here \emph{$\varepsilon$ stays finite}, whereas a box-counting dimension is ordinarily defined as a
 limit $\varepsilon \to 0$. It must stay finite because the estimator reaches $\gM_{\gW}$ only
 through distances between nearby samples. \emph{The window must also be long enough}: any path
-resembles a curve over a short stretch, so $d_{\mathrm{act}} = 1$ unless $\gW$ outlasts the return
+resembles a curve over a short stretch, giving $d_{\mathrm{act}} = 1$ unless $\gW$ outlasts the return
 time of the trajectory.
 
 The systems of \cref{sec:ladder} set $\vc_t = F(\varphi_1(t), \dots, \varphi_r(t))$, with
@@ -269,9 +269,9 @@ implemented.
 The \emph{roughness} $\operatorname{std}(\Delta x)/\operatorname{std}(x)$, the \emph{linear
 participation ratio} $\PR_{\mathrm{delay}}$ of \cref{eq:pr} on $\Cov\{\vy_t\}$ and the
 \emph{spectral participation ratio} on the power spectrum of $x$ accompany every estimate.
-Each can grow with $r$ for reasons that involve no geometry, so if one recovers
-the truth as well as the estimator does, the accuracy of the estimator is no evidence that a
-dimension has been measured.
+Each can grow with $r$ for reasons that involve no geometry. If one of them recovers the truth as
+well as the estimator does, the accuracy of the estimator is no evidence that a dimension has been
+measured.
 
 \subsection{Dynamical regimes}\label{sec:classes}
 
@@ -293,8 +293,8 @@ regime in which it does.
 
 \item \textbf{Deterministic and transient.} A converging run decays along a curve it never
 revisits, so the occupied set is that curve and $d_{\mathrm{act}} = 1$. The estimand exists, but the
-protocol misses it. The record contains no returns, so in place of $1$ the estimator reports
-about $29$ at every $r$, a value produced by the Theiler exclusion itself (\cref{sec:regime}). The
+protocol misses it. The record contains no returns: in place of $1$ the estimator reports about
+$29$ at every $r$, a value produced by the Theiler exclusion itself (\cref{sec:regime}). The
 effective rank does stay near unity here (\cref{tab:gt}), but only because the curve is nearly
 straight.
 
@@ -310,8 +310,8 @@ realisations.
 The series alone is enough to tell a transient from a stochastic drive. The \textbf{identifiability
 ratio} $\rho_{\mathrm{ident}} = \hat{d}_{\mathrm{MG}}(2E_{\max}) / \hat{d}_{\mathrm{MG}}(E_{\max})$
 compares the estimate at a doubled embedding dimension with the estimate at the working one. It
-stays near unity where a dimension can be measured and grows in the stochastic regime, in which the
-value returned is a property of the embedding space rather than of the data. A transient escapes
+stays near unity where a dimension can be measured. Under mini-batch noise the estimate follows the
+embedding dimension rather than the data; the ratio then grows. A transient escapes
 it: there the estimate is stable in the embedding dimension for reasons unconnected with any
 dimension. A transient is caught by the \textbf{trend-crossing count} instead, the number of sign
 changes of the residual of the window about its own least-squares line, which is near zero on a
@@ -329,7 +329,7 @@ effective rank of the recorded trajectory must then confirm that all $r$ are com
 
 \emph{Frozen configuration}: the estimator is chosen once, by a search over its own settings alone.
 Searching the settings of the system at the same time would select the data together with the
-method, so that the result would report how favourable a system the search had found.
+method: the result would then report how favourable a system the search had found.
 
 \emph{Withheld ranks}: ranks are held out as well as seeds, because the geometry of the excitation
 depends on $r$ and every seed at a given rank shares that geometry.
@@ -344,8 +344,8 @@ decoder and the perceptron in a $k$-subspace fail it.
 We evaluate the estimator on six systems of increasing realism: an oscillating diagonal matrix,
 online linear regression, logistic regression, a frozen nonlinear decoder, a perceptron confined to
 a $k$-dimensional subspace, and a linear head on a network trained on image data. In each, the
-path lies on an $r$-dimensional torus by construction, so
-that $d_{\mathrm{act}} = r$; the measured effective rank confirms that all $r$ phases are excited;
+path lies on an $r$-dimensional torus by construction, giving
+$d_{\mathrm{act}} = r$; the measured effective rank confirms that all $r$ phases are excited;
 the estimator receives one scalar series and nothing else. \Cref{tab:ladder} collects the outcome;
 the simplest and the most realistic are described below.
 
@@ -430,7 +430,7 @@ supplied.
 The Theiler exclusion is the reason the estimator errs most on a transient. With the exclusion
 removed, it returns at every rank, seed and observer the value maximum likelihood gives on a
 uniformly sampled curve, while the fast recurrent case is unchanged (\cref{app:exclusion}). The value
-near $29$ is a divergent quantity evaluated at the cap on the exclusion, so we leave it unclamped
+near $29$ is a divergent quantity evaluated at the cap on the exclusion; we leave it unclamped
 (\cref{app:alg}).
 
 Every system evaluated above is externally driven, whereas training is not, so the evaluation
@@ -537,8 +537,8 @@ falls within a few hundred steps of the transition. Both then re-expand (\cref{f
 progress, but it occurs at generalisation in seeds whose generalisation steps differ several-fold
 and in a second task. It might record a trajectory that has come to a halt, but the total
 displacement reaches its floor thousands of steps later and never recovers, whereas the effective
-rank does recover. One caveat stands. The effective rank measures variation inside the window, so
-the collapse is a collapse in that variation, so $d_{\mathrm{act}}$ itself may be unchanged.
+rank does recover. One caveat stands. The effective rank measures variation inside the window.
+What collapses is that variation, and $d_{\mathrm{act}}$ itself may be unchanged.
 
 \paragraph{The runs without weight decay.}\label{sec:nowd} The same two configurations trained
 without weight decay memorise and stay at chance accuracy. Within the transition window they
@@ -568,11 +568,11 @@ destroying its fine structure. The fraction of those series falling as steeply a
 smaller for every generalising run than for either of the other two (\cref{app:window}).
 
 The same event is thus recorded twice: once by storing the trajectory, once in a log a run writes
-anyway. The second record is the weaker. Its level cannot be read as a dimension, so only the
-change within a run is used. Its observer is the parameter norm, for which \cref{sec:nuisance}
+anyway. The second record is the weaker. Its level cannot be read as a dimension: only the change
+within a run is used. Its observer is the parameter norm, for which \cref{sec:nuisance}
 leaves a smoothness explanation open, so the comparison against randomised series carries the claim
 alone. The roughness of these windows also collapses by an order of magnitude where the estimate
-merely halves, so a simpler statistic registers the change more strongly.
+merely halves; a simpler statistic registers the change more strongly.
 
 \section{Conclusion}\label{sec:concl}
 
@@ -696,8 +696,8 @@ are a faithful, though distorted, image of distances between states. The set the
 object the neighbour statistic below measures (\cref{fig:shapes}). \Cref{thm:takens} requires a
 manifold.
 
-The sets a training run occupies need not be manifolds, so the extension below is the
-version the paper relies on.
+The sets a training run occupies need not be manifolds; the extension below is the version the
+paper relies on.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_shapes.pdf}
@@ -1086,7 +1086,7 @@ rank, so one reference line replaces six; the shaded column is three tenths to a
 
 \paragraph{Nuisance factors.} \Cref{tab:controls} varies factors that leave the active dimension at
 four. The row for rotated coordinates is scored on the fixed parameter projection
-alone, since the other eleven observers are invariant to a rotation by construction, so that row
+alone, since the other eleven observers are invariant to a rotation by construction; that row
 measures a property of the observer rather than of the estimator.
 
 \begin{table}[H]
@@ -1408,7 +1408,7 @@ comparison uses.
 A deterministic update makes the trajectory a smooth curve. Over a $600$-step window such a curve
 is straight to within the measurement precision, so the statistic reports the curvature of the
 trajectory at the scale the window sets, where there is almost none. The statistic has
-no range in which a collapse could appear, so its absence is not evidence that no collapse
+no range in which a collapse could appear. Its absence is therefore not evidence that no collapse
 occurred.
 
 Repeating the measurement at a range of window lengths settles the question. Two runs of $150\,000$ steps, a generalising one and its label-matched
@@ -1528,7 +1528,7 @@ not choose the best cell: a neighbouring cell separates the runs more sharply.
 \emph{The diagnostics do not survive the shortening.} The identifiability ratio needs an embedding
 of $2E_{\max}$, so at the headline cell the Theiler exclusion leaves too few usable points to
 compute one. Where the ratio can be computed at all, the two Theiler rules disagree about whether
-it passes, so it settles nothing.
+it passes; it settles nothing.
 
 \emph{Linear detrending removes the effect.} Repeating every cell on
 a linearly detrended window, the removal $\PR^{\mathrm{det}}$ performs coordinate by coordinate,
@@ -1551,8 +1551,8 @@ offered the estimator no local structure to respond to. The $S_5$ run is a weake
 thing.
 
 The $D$ and quantile columns of these two runs may not, then, be treated as informative dimensional
-negatives. The surrogate comparison is untouched by this, since there each run is compared only
-against surrogates of itself; so are the four generalising runs.
+negatives. The four generalising runs are untouched by this. So is the surrogate comparison, in
+which each run is measured only against surrogates of itself.
 
 \begin{table}[H]
 \centering
@@ -1610,7 +1610,7 @@ autocorrelation time exceeds $150$. That never happens on the constructed system
 autocorrelation time is a few samples, but it happens on five of the seven parameter-norm records
 of \cref{sec:grokking}. Those five were scored at $W_T = 150$ rather than at the value the rule
 asks for, in the direction that inflates the estimate. At the twenty-component configuration the
-span is $624$, so the cap binds unconditionally. It is why \cref{sec:digits} marks that result
+span is $624$ and the cap binds unconditionally. It is why \cref{sec:digits} marks that result
 exploratory.
 
 \Cref{tab:theiler} measures the cost of that departure, by re-scoring the stored trajectories at
@@ -1644,7 +1644,8 @@ $r$ & measured $\PR^{\mathrm{pos}}$ & MG at $W_T = 150$ & MG at $W_T = 624$ \\
 The ordering of the ranks, all that \cref{sec:digits} claims at this range, is
 nearly unaffected, a single inversion apart. The mean absolute error falls when the protocol is
 enforced, so the cap was not making the reported result look better than it is. The saturation
-above about six components is present at both settings, so it is not an artefact of the exclusion.
+above about six components is present at both settings and is therefore not an artefact of the
+exclusion.
 
 The same cap has a second effect, which the identifiability ratio inherits. The numerator of the
 ratio is computed at $2E_{\max}$ with $\tau$ held fixed, so its delay span exceeds the cap while
@@ -1883,8 +1884,8 @@ explanations were available: the embedding condition $E > 2d$ and the finite-rec
 $2\log_{10} N$ \citep{eckmann1992fundamental}. Each is insensitive to the variable the
 other names, so we sweep $E_{\max}$ at a fixed record length and the record length at fixed $E_{\max}$,
 over $r \in \{2 \dots 20\}$ and three seeds with everything else frozen (\cref{tab:ceiling}). Each
-record length is a \emph{prefix} of one longer record rather than a resampling of a fixed span, so
-the delay lag keeps its meaning in periods. Every trajectory is bit-identical to the published one
+record length is a \emph{prefix} of one longer record rather than a resampling of a fixed span,
+leaving the delay lag its meaning in periods. Every trajectory is bit-identical to the published one
 over their common prefix.
 
 \begin{table}[H]
@@ -1921,7 +1922,7 @@ ceiling follows neither variable. It never passes $11.2$, yet at a quarter of th
 of the study uses it still tracks to $8.3$, where $2\log_{10}N$ allows only $6.6$. A bound set by the
 record length cannot produce that, so \citet{eckmann1992fundamental} is not the explanation here.
 Nor is $E > 2d$ in the form we used it: the ceiling rises by a tenth of a component per unit of
-$E_{\max}$ rather than by a half, so $E_{\max}/2$ happens to be right near $E_{\max} = 14$ and is
+$E_{\max}$ rather than by a half: $E_{\max}/2$ happens to be right near $E_{\max} = 14$ and is
 wrong at both ends.
 
 Fitting the level at high rank separates the candidates (\cref{tab:ceilingfit}): neither hypothesis
@@ -1970,7 +1971,7 @@ from the estimate in both directions, each given its pass criterion before it wa
 \emph{The number of components changes and the roughness does not.} Both systems in this control are a
 sum of four sinusoids. In the first the four frequencies are rationally independent, so the path
 lies on a four-dimensional torus and $d_{\mathrm{act}} = 4$. In the second they are harmonics of one
-irrational base frequency, so a single phase fixes all four sinusoids at once, the path is a circle,
+irrational base frequency: a single phase fixes all four sinusoids at once, the path is a circle,
 and $d_{\mathrm{act}} = 1$. The base frequency of the second system is then set by bisection so
 that the two have the \emph{same} roughness, to a part in $10^{15}$. A scheduled run passes between
 the two through ramped envelopes, leaving unscored every window a ramp reaches into
@@ -2025,10 +2026,11 @@ surrogates in \cref{sec:matched} carries the claim instead.
 Two findings count against the estimator. The linear participation ratio reads higher on the circle
 than on the four-torus (\cref{tab:clocks}), so anyone treating it as a count of phases would order
 the two backwards. On the circle the estimate is also not geometric: every neighbour surviving the
-exclusion there is a sample from another pass around the circle. The local speed of the curve multiplies all of a
-point's neighbour distances alike, so speed cancels from the log-ratios of \cref{eq:mg}. The
+exclusion there is a sample from another pass around the circle. The local speed of the curve
+multiplies all of a point's neighbour distances alike; speed cancels from the log-ratios of
+\cref{eq:mg}. The
 residue depends on the arithmetic of the base frequency: two of the eight seeds drew a frequency
-whose multiples cluster into near-duplicates, so their estimate is reproducible from the fractional
+whose multiples cluster into near-duplicates; their estimate is reproducible from the fractional
 parts of those multiples alone, with no signal and no neighbour search.
 
 \section{Compute cost and code availability}\label{app:compute}
