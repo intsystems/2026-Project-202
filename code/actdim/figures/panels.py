@@ -231,11 +231,11 @@ def fig_dip(read: Reader):
     curve_ax.set_ylim(-0.05, 1.05)
     curve_ax.set_yticks([0, 0.5, 1.0])
     curve_ax.set_ylabel("accuracy")
-    curve_ax.set_title("(a) the run", loc="left")
+    curve_ax.set_title("(a) validation accuracy", loc="left")
 
     log_ax.plot(shift, curve.weight_norm.to_numpy(), "-", color=STOCHASTIC, lw=0.9)
     log_ax.set_ylabel("parameter norm")
-    log_ax.set_title("(b) the log it reads", loc="left")
+    log_ax.set_title("(b) the parameter norm", loc="left")
 
     for ax in (curve_ax, log_ax):
         ax.axvline(0, color=FAINT, lw=0.7, ls=(0, (2, 2.5)), zorder=0)

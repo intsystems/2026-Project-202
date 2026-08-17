@@ -102,14 +102,13 @@ parameters usually move within a far smaller set. Two open questions turn on tha
 Is an apparent simplification of training a real reduction in the number of degrees of freedom in
 use, or an artefact of a shrinking scale? Can a phase transition such as delayed generalisation be
 detected without instrumenting the run? Both are argued with whichever count of degrees of freedom
-is least expensive to compute. The counts in use disagree.
+is least expensive to compute. The counts in use disagree: the \emph{available} dimension of the
+subspace the parameters are confined to \citep{li2018measuring}, the \emph{functional} dimension of
+the map from that subspace to the outputs, and the \emph{effective rank} of the trajectory
+covariance.
 
-The \emph{available} dimension is the dimension $k$ of the subspace the parameters are confined to
-\citep{li2018measuring}. The \emph{functional} dimension is the rank of the map from that subspace
-to the outputs. The \emph{effective rank} of the trajectory covariance weights directions by the
-variance each carries, so anisotropy depresses it. The two questions above concern a fourth
-quantity: the number of independent components of the set the parameters occupy. We call it the
-\emph{active dimension} of that stretch (\cref{eq:act}). If $r$ independent quasiperiodic phases
+Our two questions concern a fourth quantity: the number of independent components of the set the
+parameters occupy. We call it the \emph{active dimension} of that stretch (\cref{eq:act}). If $r$ independent quasiperiodic phases
 drive the motion, the path lies on an $r$-dimensional torus and the active dimension is $r$.
 \Cref{sec:three} defines all four. \Cref{sec:digits} exhibits a change that moves the active
 dimension while the other three stay where they are.
@@ -369,7 +368,8 @@ recurrent, stochastic and transient regimes of \cref{sec:classes}.
 Twelve scalar observers are recorded (\cref{app:obs}). The estimator was frozen on four of them,
 on seeds and ranks reserved for that purpose. Every result below is therefore out of sample in
 rank, in seed, and for most observers in the observer too. In the deterministic recurrent regime the
-estimate recovers the active dimension to within about one component. Every observer orders the
+estimate recovers the active dimension to within about one component, though the error differs by a
+factor of five between the best observer and the worst (\cref{tab:obs}). Every observer orders the
 withheld ranks correctly (\cref{tab:ladder}). For none of the ten scored observers does the
 roughness of the log order those ranks, so the agreement cannot be explained by the logs merely
 becoming rougher as $r$ grows. At $k = 20$ the same system behaves alike at a lower ceiling
@@ -538,7 +538,7 @@ progress, but it occurs at generalisation in seeds whose generalisation steps di
 and in a second task. It might record a trajectory that has come to a halt, but the total
 displacement reaches its floor thousands of steps later and never recovers, whereas the effective
 rank does recover. One caveat stands. The effective rank measures variation inside the window.
-What collapses is that variation, and $d_{\mathrm{act}}$ itself may be unchanged.
+Only that variation collapses; $d_{\mathrm{act}}$ itself may be unchanged.
 
 \paragraph{The runs without weight decay.}\label{sec:nowd} The same two configurations trained
 without weight decay memorise and stay at chance accuracy. Within the transition window they
@@ -999,6 +999,11 @@ mini-batch loss fails the zero-learning-rate check: its estimate still climbs by
 components there, produced entirely by the drive. The other eleven observers are exactly constant
 at zero learning rate, so no estimate is defined for them.
 
+An aggregate over observers answers a different question from the best row of \cref{tab:obs}.
+Nothing in a training log says which observer is the accurate one, since that judgement needs the
+ground truth a log does not carry, so a reader can act only on the typical observer, not the
+best.
+
 For no scored observer does the roughness order the four withheld ranks; the best reaches a rank
 correlation of $0.8$. \Cref{fig:signal} shows the estimate and the roughness along one record.
 
@@ -1006,18 +1011,18 @@ Smoothness alone therefore accounts for no observer's agreement with the truth.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_signal.pdf}
-\caption{The log the estimator is given and the level it returns. The image-data system of
-\cref{sec:digits} at four ranks and a seed the configuration was not selected on, observed through
+\caption{Whether four logs that look alike separate when the estimator reads them. The image-data
+system of \cref{sec:digits} at four ranks and a seed the configuration was not selected on, through
 the parameter norm. Above, four hundred samples of each log. (a) The estimate over sliding windows,
-with the measured effective rank dotted. (b) The roughness of the same windows.}
+the measured effective rank dotted. (b) The roughness of the same windows.}
 \label{fig:signal}
 \end{figure}
 
 \begin{table}[H]
 \centering
-\caption{How far recovery extends at $k = 20$. Image
-data, median over three seeds and eight observers; the truth is the measured effective rank. The
-last row is the spread of MG across seeds at fixed rank.}
+\caption{How far recovery extends at $k = 20$. Image data, median over three seeds and over the
+eight observers recorded there, which reports the typical observer rather than the best one; the
+truth is the measured effective rank. The last row is the spread of MG across seeds at fixed rank.}
 \label{tab:k20}
 \setlength{\tabcolsep}{4.5pt}
 \begin{tabular}{lrrrrrrrrrr}
@@ -1667,10 +1672,11 @@ otherwise at the frozen configuration (\cref{tab:exclusion}).
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_traces.pdf}
-\caption{The three regimes as raw scalar logs, standardised to zero mean and unit variance as in
-\cref{alg:mg}. Left, the constrained head of \cref{sec:digits} under a fast quasiperiodic drive,
-whose path lies on a torus. Middle, the same system under plain gradient descent, which decays over
-its whole record. Right, a mini-batch transformer run observed through the parameter norm.}
+\caption{The three regimes as raw scalar logs. Each panel is the parameter norm, standardised to
+zero mean and unit variance as in \cref{alg:mg}. Left, the constrained head of \cref{sec:digits}
+under a fast quasiperiodic drive, whose path lies on a torus. Middle, the same system under plain
+gradient descent, which decays over its whole record. Right, a transformer grokking modular
+addition.}
 \label{fig:traces}
 \end{figure}
 
