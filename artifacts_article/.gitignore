@@ -1,0 +1,12 @@
+# What make_artifacts.py produces. Regenerate with:
+#   python make_artifacts.py
+#
+# The compiled PDF is tracked, so a reviewer's copy is in the history; the zip
+# and the build directory are not, both being derivable from it and large.
+build/
+.build-work/
+__pycache__/
+
+# Anchored, so it cannot also match the workshop's own
+# neurips_2026_artifacts_as_data.zip in style/, which is kept for provenance.
+/icomp_artifacts.zip
