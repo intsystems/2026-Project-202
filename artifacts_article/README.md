@@ -76,7 +76,7 @@ the main text against the limit.
 Where it stands today:
 
 ```
-35 pages, main text 9, 0 undefined, 0 duplicate, 0 overfull   <-- fits
+33 pages, main text 9, 0 undefined, 0 duplicate, 0 overfull   <-- fits
 ```
 
 Nine pages of main text against 8–12, so this edition needs no cut. A cut made

@@ -116,7 +116,7 @@ limit.
 Where it stands today:
 
 ```
-35 pages, main text 9, 0 undefined, 0 duplicate, 0 overfull   <-- 1 over
+33 pages, main text 9, 0 undefined, 0 duplicate, 0 overfull   <-- 1 over
 ```
 
 Nine pages of main text against a limit of eight. The converter reports the
