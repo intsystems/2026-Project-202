@@ -1096,7 +1096,7 @@ _OBSERVERS = (
     ("probe loss", ("loss_probe",)),
     ("function-space norm", ("fn_fro",)),
     ("margin", ("margin",)),
-    ("parameter norms (two)", ("c_norm", "w_fro")),
+    ("parameter, subspace norm", ("c_norm", "w_fro")),
     ("fixed parameter projection", ("c_proj1",)),
     ("gradient projection", ("g_proj",)),
     ("function-space projection", ("fn_proj1",)),
