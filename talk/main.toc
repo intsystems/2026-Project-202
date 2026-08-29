@@ -1,0 +1,9 @@
+\babel@toc {russian}{}\relax 
+\beamer@sectionintoc {1}{Постановка}{2}{0}{1}
+\beamer@sectionintoc {2}{Метод}{5}{0}{2}
+\beamer@sectionintoc {3}{Где оценка работает}{10}{0}{3}
+\beamer@sectionintoc {4}{Где оценка не работает}{13}{0}{4}
+\beamer@sectionintoc {5}{Grokking}{17}{0}{5}
+\beamer@sectionintoc {6}{Прямое измерение}{22}{0}{6}
+\beamer@sectionintoc {7}{Итоги}{26}{0}{7}
+\beamer@sectionintoc {8}{Резерв}{28}{1}{8}

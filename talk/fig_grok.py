@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 
 from slide_style import (FULL, RECURRENT, STOCHASTIC, TRANSIENT, GOOD, GREY,
                          FAINT, POINTER, ANNOT, BOX, DATA, context, rows,
-                         table, titles, key, save)
+                         table, titles, strip, save)
 
 GROKS = ["mod_wd1", "mod_wd1_s43", "mod_wd1_s44", "s5_wd1"]
 CTRLS = ["mod_wd0", "s5_wd0"]
@@ -28,12 +28,14 @@ CTRLS = ["mod_wd0", "s5_wd0"]
 MATCH = {"mod_wd0": "mod_wd1", "s5_wd0": "s5_wd1"}
 
 # Named runs appear in three figures; one table so the three cannot disagree.
-RUN_ROWS = [("mod_wd1", "mod. arith. s42", STOCHASTIC),
-            ("mod_wd1_s43", "mod. arith. s43", STOCHASTIC),
-            ("mod_wd1_s44", "mod. arith. s44", STOCHASTIC),
-            ("s5_wd1", "$S_5$ product", STOCHASTIC),
-            ("mod_wd0", "mod. arith., no WD", TRANSIENT),
-            ("s5_wd0", "$S_5$, no WD", TRANSIENT)]
+# A reviewer struck out "s42" and its family as jargon. A seed is an
+# implementation detail; what a listener needs is the task and which run of it.
+RUN_ROWS = [("mod_wd1", "modular arithmetic, run 1", STOCHASTIC),
+            ("mod_wd1_s43", "modular arithmetic, run 2", STOCHASTIC),
+            ("mod_wd1_s44", "modular arithmetic, run 3", STOCHASTIC),
+            ("s5_wd1", "product in $S_5$", STOCHASTIC),
+            ("mod_wd0", "mod. arith., no weight decay", TRANSIENT),
+            ("s5_wd0", "$S_5$, no weight decay", TRANSIENT)]
 
 
 def milestones():
@@ -55,13 +57,6 @@ def mean_over_runs(frame, runs, col, meta, grid, x="centre"):
         stack.append(np.interp(grid, shift, g[col].to_numpy(),
                                left=np.nan, right=np.nan))
     return np.nanmean(np.vstack(stack), axis=0)
-
-
-def strip(fig, ax, ncol, x=0.52):
-    """The shared one-row legend along the bottom of a figure."""
-    handles, labels = ax.get_legend_handles_labels()
-    fig.legend(handles, labels, loc="lower center", ncol=ncol,
-               bbox_to_anchor=(x, 0.0), handlelength=2.2, fontsize=10.0)
 
 
 def tgen_axis(slot):
@@ -117,17 +112,26 @@ def fig_switch():
         ax.set_ylabel("components")
         ax.set_xlim(x.min(), x.max())
         ax.tick_params(labelbottom=False)
-        ax.text(18.0, 3.28, "grey band: the switch itself", ha="center",
-                va="bottom", color=GREY, bbox=BOX, zorder=5, **ANNOT)
+        # The band used to be captioned "grey band: the switch itself", which a
+        # reviewer marked uninformative -- it named the shading without saying
+        # what happens in it. It is a legend entry now, and what happens is on
+        # the slide.
+        #
+        # It said "crossfade", and the next reviewer asked what a crossfade is:
+        # the word is the implementation's (switch_envelope in systems/clocks.py
+        # ramps one arm into the other linearly rather than stepping, so the
+        # record stays continuous), and it appeared nowhere else in the deck. The
+        # key now says what is in the record over that span, which is the thing a
+        # listener needs in order to read the band.
+        ax.axvspan(0, 0, color=FAINT, alpha=0.40, lw=0,
+                   label="signals mixed: truth undefined")
 
         sx.plot(x, g.rough, "-", color=TRANSIENT, lw=2.1, zorder=3)
         sx.set_ylim(0, 0.19)
         sx.set_yticks([0, 0.1])
         sx.set_ylabel("rough-\nness", fontsize=9.4, linespacing=1.15)
         sx.set_xlabel("training step, thousands")
-        sx.text(0.99, 0.56, "does not move at all", transform=sx.transAxes,
-                ha="right", va="bottom", color=TRANSIENT, bbox=BOX, zorder=5,
-                **ANNOT)
+
 
         h_, l_ = ax.get_legend_handles_labels()
         fig.legend(h_, l_, loc="upper center", ncol=2, fontsize=10.0,
@@ -154,10 +158,13 @@ def fig_signal():
     shift = curve.step.to_numpy() - meta["mod_wd1"]["t_gen"]
 
     H = 2.16
-    y0, hh = rows(H, bottom=0.52, top=0.26)
+    y0, hh = rows(H, bottom=0.70, top=0.26)   # bottom holds the legend row
     with context():
         fig = plt.figure(figsize=(FULL, H))
-        ax = fig.add_axes([0.072, y0, 0.222, hh])
+        # 0.086, not 0.072: "accuracy" set at 10.5 pt is 0.19 in of rotated
+        # label, and with the tick labels in front of it 0.43 in of margin left
+        # the last of it hanging off the page.
+        ax = fig.add_axes([0.086, y0, 0.222, hh])
         bx = fig.add_axes([0.408, y0, 0.222, hh])
         cx = fig.add_axes([0.766, y0, 0.206, hh])
 
@@ -178,20 +185,17 @@ def fig_signal():
             bx.plot(sh, g.MG, "-", color=STOCHASTIC, lw=0.9, alpha=0.30,
                     zorder=2)
         bx.plot(grid, mean_over_runs(h, GROKS, "MG", meta, grid), "-",
-                color=STOCHASTIC, lw=2.7, zorder=4)
+                color=STOCHASTIC, lw=2.7, zorder=4,
+                label="generalises (4 runs)")
         for run in CTRLS:
             sh, g = aligned(h, run, meta)
             bx.plot(sh, g.MG, color=TRANSIENT, lw=2.0, ls=(0, (4, 2.5)),
-                    zorder=3)
+                    zorder=3,
+                    label="no weight decay (2)" if run == CTRLS[0] else None)
         bx.set_ylim(1.1, 5.0)
         bx.set_yticks([2, 3, 4])
         bx.set_ylabel(r"$\hat d_{\mathrm{MG}}$")
-        # Two coloured words instead of a legend box: the box with its line
-        # samples was as tall as a quarter of the panel and pressed against the
-        # panel title. Rose and gold already mean these two things everywhere
-        # else in the deck, so the swatches were carrying nothing.
-        key(bx, [("generalises (4)", STOCHASTIC), ("no WD (2)", TRANSIENT)],
-            x=0.03, y=0.97, ha="left", dy=0.13)
+
         bx.set_xlabel(r"steps from $t_{\mathrm{gen}}$")
 
         for slot in (ax, bx):
@@ -215,14 +219,15 @@ def fig_signal():
         cx.set_ylim(-0.6, 5.7)
         cx.set_xlabel("fall of the estimate")
 
-        titles(fig, H, [(0.072, "(a) The run"),
+        strip(fig, bx, 2, x=0.34, fontsize=9.6)
+        titles(fig, H, [(0.086, "(a) The run"),
                         (0.395, "(b) Estimate on its log"),
                         (0.766, "(c) Depth, per run")], top=0.235)
     save(fig, "p_signal")
 
 
 def fig_sketch():
-    """Slide 15: what the compression costs, on trajectories of known rank."""
+    """Slide 22: the cost of the compression, on trajectories of known rank."""
     a = table("check.sketch.accuracy/sketch_accuracy.csv")
     cost = json.loads((DATA / "check.sketch.cost/sketch_cost.json").read_text())
 
@@ -315,28 +320,22 @@ def fig_dip():
                 ax.minorticks_off()
             titles(fig, H, [(x0, name)], top=0.235)
 
-        first, last = slots["PR_pos_det"], slots["move"]
+        first = slots["PR_pos_det"]
         first.set_ylabel("effective rank")
-        first.annotate("collapse", xy=(450, 1.8), xytext=(-4800, 13.0),
-                       color=STOCHASTIC, ha="left", bbox=BOX, zorder=5,
-                       arrowprops=dict(arrowstyle="->", lw=1.1,
-                                       color=STOCHASTIC, shrinkA=1, shrinkB=4,
-                                       connectionstyle="arc3,rad=-0.25"),
-                       **ANNOT)
-        first.annotate("and back", xy=(4600, 22.5), xytext=(1200, 33.0),
-                       color=STOCHASTIC, ha="left", bbox=BOX, zorder=5,
-                       arrowprops=dict(arrowstyle="->", lw=1.1,
-                                       color=STOCHASTIC, shrinkA=1, shrinkB=3),
-                       **ANNOT)
-        last.text(-4800, 0.13, "falls and never\ncomes back", ha="left",
-                  va="bottom", color=TRANSIENT, linespacing=1.3, bbox=BOX,
-                  zorder=5, **ANNOT)
         strip(fig, first, 2, x=0.53)
     save(fig, "p_dip")
 
 
 def fig_depth():
-    """Slide 17: depth alone does not separate the runs; timing and reversal do."""
+    """Slide 19a: depth alone does not separate the runs.
+
+    This used to share a figure with the timing panel. Once the runs were named
+    in words instead of by seed -- "modular arithmetic, run 1" rather than "s42",
+    which a reviewer struck out as jargon -- the row labels were 1.5 in wide and
+    no two-panel layout left room for both them and a scatter with a reference
+    line. The two panels are two slides now, which is also how the three
+    confounder panels were split earlier and for the same reason.
+    """
     stat = "PR_pos_det"
     par = table("grok.rank.dip/rank_dip.csv")
     par = par[par.stat == stat].set_index("run")
@@ -352,74 +351,80 @@ def fig_depth():
     depth.update({run: ctrl.loc[run, "depth"] for run in CTRLS})
     anywhere = {run: free.loc[run, "depth"] for run in CTRLS}
 
-    meta = milestones()
-    fn = table("grok.rank.dip/rank_dip.csv")
-    fn = fn[fn.stat == "fn_PR_pos_det"].set_index("run")
-
     H = 2.16
-    y0, hh = rows(H, bottom=0.52, top=0.26)
+    y0, hh = rows(H, bottom=0.70, top=0.22)   # bottom holds the legend row
     with context():
         fig = plt.figure(figsize=(FULL, H))
-        # The left margin is set by the row names, not by the panel: at 0.150
-        # the longest of them lost its first two letters.
-        ax = fig.add_axes([0.232, y0, 0.300, hh])
-        bx = fig.add_axes([0.660, y0, 0.312, hh])
+        # The left margin is set by the row names, which are words now.
+        ax = fig.add_axes([0.330, y0, 0.642, hh])
 
         for i, (run, label, c) in enumerate(RUN_ROWS):
             y = len(RUN_ROWS) - 1 - i
-            ax.barh(y, depth[run], height=0.64, color=c, alpha=0.75, lw=0)
+            ax.barh(y, depth[run], height=0.66, color=c, alpha=0.75, lw=0)
+            ax.text(depth[run] + 0.06, y, f"{depth[run]:.2f}", va="center",
+                    ha="left", fontsize=8.8, color=c)
             if run in anywhere:
                 ax.plot([anywhere[run]], [y], "|", color=c, ms=18, mew=2.6,
-                        zorder=4)
-        # The x range runs past the longest bar so this key has somewhere to sit
-        # that is not on top of the two short bars it explains.
-        ax.text(6.55, 0.45, "$|$ = deepest fall\nanywhere in the run",
-                ha="right", va="center", color=TRANSIENT, linespacing=1.3,
-                bbox=BOX, zorder=5, **ANNOT)
+                        zorder=4, ls="none",
+                        label=("deepest fall anywhere in that run"
+                               if run == CTRLS[0] else None))
         ax.axvline(1.0, color=GREY, lw=1.1)
         ax.set_yticks(range(len(RUN_ROWS)))
         ax.set_yticklabels([lab for _, lab, _ in RUN_ROWS][::-1], fontsize=9.0)
-        ax.set_xlim(0.9, 6.6)
+        ax.set_xlim(0.9, 5.9)
         ax.set_xticks([1, 2, 3, 4, 5])
-        ax.set_ylim(-0.55, 5.6)
-        ax.set_xlabel("how far the rank fell")
+        ax.set_ylim(-0.6, len(RUN_ROWS) - 0.4)
+        ax.set_xlabel("how far the effective rank fell at the transition")
+        # y = 0.02, not 0, because the tall bar glyph in the key overflows a
+        # legend box flush with the figure edge.
+        strip(fig, ax, 1, x=0.55, fontsize=9.6)
+    save(fig, "p_depth")
 
-        # (b) A collapse that merely followed training progress would sit at a
-        # fixed absolute step, so its offset from t_gen would fall along the
-        # dashed line as t_gen grows. It does not.
+
+def fig_timing():
+    """Slide 19b: the timing and the reversal are what separate the runs.
+
+    A collapse that merely followed training progress would sit at a fixed
+    absolute step, so its offset from t_gen would fall along the dashed line as
+    t_gen grows fourfold across these four runs. It does not: every minimum stays
+    within about 1.6k steps of its own run's transition.
+    """
+    meta = milestones()
+    d = table("grok.rank.dip/rank_dip.csv")
+    fn = d[d.stat == "fn_PR_pos_det"].set_index("run")
+    par = d[d.stat == "PR_pos_det"].set_index("run")
+
+    H = 2.16
+    y0, hh = rows(H, bottom=0.70, top=0.26)
+    with context():
+        fig = plt.figure(figsize=(FULL, H))
+        ax = fig.add_axes([0.235, y0, 0.520, hh])
+
         tg = np.array([meta[r]["t_gen"] for r in GROKS], dtype=float)
         span = np.linspace(3000, 15000, 50)
-        bx.plot(span / 1000, (tg.mean() - span) / 1000, color=GREY, lw=1.2,
-                ls=(0, (4, 3)), zorder=1)
-        # The label sits on the line it names, boxed, instead of pointing at it
-        # from a clear spot: every arrow that reached the line from anywhere
-        # clear had to cross the band and the markers first.
-        bx.text(9.8, -3.5, "a fixed absolute step\nwould lie on this line",
-                ha="center", va="center", color=GREY, linespacing=1.3,
-                bbox=BOX, zorder=5, **ANNOT)
-        bx.axhspan(-1.6, 1.6, color=STOCHASTIC, alpha=0.12, lw=0, zorder=0)
-        bx.plot(tg / 1000, [par.loc[r, "at"] / 1000 for r in GROKS], "o",
-                color=STOCHASTIC, ms=8.0, mec="white", mew=1.0, zorder=4)
-        bx.plot(tg / 1000, [fn.loc[r, "at"] / 1000 for r in GROKS], "^",
-                color=STOCHASTIC, mfc="none", mew=1.7, ms=8.0, zorder=4)
-        bx.axhline(0, color=GREY, lw=1.1)
-        bx.set_xlim(2.5, 15)
-        bx.set_ylim(-5.0, 3.4)
-        bx.set_xticks([4, 8, 12])
-        bx.set_yticks([-4, -2, 0, 2])
-        bx.set_xlabel(r"$t_{\mathrm{gen}}$ of the run, thousands")
-        bx.set_ylabel(r"minimum $-\ t_{\mathrm{gen}}$, k")
-        # No legend box: the panel already has to hold a scatter, a reference
-        # line and that line's label, and a two-entry box would not fit any of
-        # the three free corners. Marker fill is the distinction, so it is named
-        # in words above the band, where nothing else goes.
-        bx.text(14.8, 3.30, "filled: parameters\nhollow: functions",
-                ha="right", va="top", color=STOCHASTIC, linespacing=1.3,
-                **ANNOT)
-
-        titles(fig, H, [(0.232, "(a) Depth does not separate"),
-                        (0.660, "(b) Timing does")], top=0.235)
-    save(fig, "p_depth")
+        # Short keys, because three long ones came to 6.67 in on a 5.95 in
+        # figure: the first handle started off the left edge and the last label
+        # ran off the right one. What the grey line means is on the slide.
+        ax.plot(span / 1000, (tg.mean() - span) / 1000, color=GREY, lw=1.2,
+                ls=(0, (4, 3)), zorder=1, label="a fixed absolute step")
+        # The band is described on the slide; four legend entries needed two
+        # rows and the second row landed on the axis name.
+        ax.axhspan(-1.6, 1.6, color=STOCHASTIC, alpha=0.12, lw=0, zorder=0)
+        ax.plot(tg / 1000, [par.loc[r, "at"] / 1000 for r in GROKS], "o",
+                color=STOCHASTIC, ms=8.0, mec="white", mew=1.0, zorder=4,
+                ls="none", label="minimum, parameters")
+        ax.plot(tg / 1000, [fn.loc[r, "at"] / 1000 for r in GROKS], "^",
+                color=STOCHASTIC, mfc="none", mew=1.7, ms=8.0, zorder=4,
+                ls="none", label="minimum, function space")
+        ax.axhline(0, color=GREY, lw=1.1)
+        ax.set_xlim(2.5, 15)
+        ax.set_ylim(-5.0, 2.9)
+        ax.set_xticks([4, 8, 12])
+        ax.set_yticks([-4, -2, 0, 2])
+        ax.set_xlabel(r"$t_{\mathrm{gen}}$ of the run, thousands of steps")
+        ax.set_ylabel(r"minimum $-\ t_{\mathrm{gen}}$, k")
+        strip(fig, ax, 3, x=0.50, fontsize=9.2)
+    save(fig, "p_timing")
 
 
 if __name__ == "__main__":
@@ -428,3 +433,4 @@ if __name__ == "__main__":
     fig_sketch()
     fig_dip()
     fig_depth()
+    fig_timing()

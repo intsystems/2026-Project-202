@@ -1,4 +1,26 @@
-"""Slides 3 and 20: the pipeline, and the shapes the neighbour search sees."""
+"""Slides 4 and 22: the pipeline, and the shapes the neighbour search sees.
+
+`fig_pipeline` was rebuilt after a reviewer asked whether panels (a) and (b) were
+"correctly matched". They were not, and for a worse reason than he had in mind.
+
+``curve_series.csv`` is decimated by eight for drawing (``SERIES_STRIDE`` in
+experiments/curves.py: ten thousand points at 1.5 inches wide is ink, not a
+curve). The old panels (b) and (c) rebuilt the delay embedding *from that
+decimated series* with ``tau = 4``, so the lag they drew was 32 optimiser steps
+where the estimator's is 4. The picture was a delay plane of a different lag than
+the one every number in the deck was computed at.
+
+Panel (b) now reads ``curve_shapes.csv`` instead: the estimator's own
+reconstruction of the same record, with its own tau, written out by the
+experiment. Nothing is recomputed here, so nothing can disagree. Both panels are
+the qp arm at rank 1, seed 0, observer ``w_fro`` -- the one (arm, rank) pair that
+both tables hold, which is why the figure moved from rank 3 to rank 1.
+
+The cost is that the lag itself is no longer illustrable: a lag of four steps
+cannot be drawn on a series sampled every eighth step, and the raw record is not
+shipped. The delay vector is therefore written as a formula on the method slide,
+which is where a reviewer also asked for it.
+"""
 import sys
 sys.path.insert(0, "talk")
 
@@ -7,140 +29,155 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
 from slide_style import (FULL, RECURRENT, STOCHASTIC, TRANSIENT, GOOD, GREY,
-                         FAINT, ANNOT, BOX, context, rows, table, save)
+                         FAINT, ANNOT, BOX, context, rows, table, strip, save)
 
-TAU = 4            # the frozen delay lag
-THEILER = 76       # the exclusion used on this system
+# The frozen eight-direction configuration, from actdim.frozen.eight_direction().
+# Quoted rather than recomputed so the figure cannot drift from the estimator.
+TAU = 4          # delay lag, optimiser steps
+M_NEIGH = 20     # k_neighbors
+THEILER = 76     # (E - 1) * tau at E = 20, under the cap of 150
+WINDOW = 8000    # samples per window; the record is 10000
+SHAPE_THIN = 5   # curve_shapes keeps every fifth reconstructed point
 
 
 def fig_pipeline():
-    """One scalar -> delay coordinates -> a neighbour statistic.
-
-    The three panels are one sentence read left to right, and the sentence only
-    closes if the reader believes that panel (b) is built out of panel (a). One
-    moment of the log is therefore marked in rose in both: those two samples of
-    (a), a lag of 2 tau apart, are the two coordinates of that one dot in (b).
-    Without the mark the audience is asked to accept on faith that a squiggle
-    turns into a cloud.
-
-    What the panels cannot show is the arithmetic done on the ten distances, and
-    that arithmetic is the whole method, so it is written once along the bottom.
-    """
+    """One scalar log -> the estimator's delay plane -> the neighbour statistic."""
     ser = table("valid.curves/curve_series.csv")
-    z = ser[ser.r == 3].sort_values("sample").z.to_numpy()
+    g = ser[ser.r == 1].sort_values("sample")
+    step, z = g["sample"].to_numpy(), g.z.to_numpy()
+
+    shp = table("valid.curves/curve_shapes.csv")
+    p = shp[(shp.arm == "qp") & (shp.r == 1)]
+    px, py = p.x.to_numpy(), p.y.to_numpy()
 
     H = 2.16
-    y0, h = rows(H, bottom=0.64, top=0.26)
+    y0, h = rows(H, bottom=0.72, top=0.26)   # bottom holds the legend row too
     with context():
         # Explicit axes rather than subplots + tight_layout: two of these three
-        # panels must be square (a circle drawn on a stretched axis is an ellipse
-        # and misreads as anisotropy), and an equal-aspect axis makes
+        # panels must be square (a closed loop drawn on a stretched axis is an
+        # ellipse and misreads as anisotropy), and an equal-aspect axis makes
         # tight_layout place each title against the axes box rather than the
         # slot, so the last two collided.
         side = h * H / FULL                       # square in inches
         fig = plt.figure(figsize=(FULL, H))
-        ax = fig.add_axes([0.078, y0, 0.3390, h])
-        bx = fig.add_axes([0.4890, y0, side, h])
-        cx = fig.add_axes([0.7457, y0, side, h])
-        for slot, name in ((ax, "(a) One scalar log"),
+        ax = fig.add_axes([0.078, y0, 0.3294, h])
+        bx = fig.add_axes([0.4894, y0, side, h])
+        cx = fig.add_axes([0.7567, y0, side, h])
+        for slot, name in ((ax, "(a) The log, first 400 steps"),
                            (bx, "(b) Delay plane"),
                            (cx, "(c) Neighbours")):
             box = slot.get_position()
             fig.text(0.5 * (box.x0 + box.x1), (H - 0.225) / H, name,
                      ha="center", va="bottom", fontsize=10.2)
 
-        n = 64
-        ax.plot(np.arange(n), z[:n], "-", color=RECURRENT, lw=1.4, alpha=0.85)
-        ax.plot(np.arange(n), z[:n], ".", color=RECURRENT, ms=3.8, mew=0)
-        ax.set_xlabel("training step $t$")
+        # A zoom, and the title says so. The whole record at this width is a
+        # solid block of ink: at rank one the log turns over every few samples,
+        # and 10000 steps across 2 in resolves nothing.
+        cut = step <= 400
+        ax.plot(step[cut], z[cut], "-", color=RECURRENT, lw=1.5, alpha=0.9)
+        ax.plot(step[cut], z[cut], ".", color=RECURRENT, ms=3.4, mew=0)
+        ax.set_xlabel("optimiser step $t$")
         ax.set_ylabel("$x_t$")
-        ax.set_xticks([0, 20, 40, 60])
+        ax.set_xlim(0, 400)
+        ax.set_xticks([0, 200, 400])
         ax.set_yticks([-2, 0, 2])
-        ax.set_ylim(-2.8, 3.5)
+        ax.set_ylim(-2.6, 2.6)
 
-        mark = 40
-        used = (mark - 2 * TAU, mark)
-        ax.plot(list(used), z[list(used)], "o", color=STOCHASTIC, ms=6.8,
-                mec="white", mew=0.9, zorder=5)
-        ax.annotate("", xy=(used[1], z[used[1]]), xytext=(used[0], z[used[0]]),
-                    arrowprops=dict(arrowstyle="-", lw=1.3, color=STOCHASTIC,
-                                    ls=(0, (2, 1.6)), shrinkA=4, shrinkB=4))
-        ax.text(mark - TAU, 3.35, r"lag $2\tau$", color=STOCHASTIC,
-                ha="center", va="top", fontsize=10.5)
+        # (b) the estimator's own reconstruction, first two delay coordinates.
+        # The rows are in time order at a constant stride, so the Theiler
+        # exclusion is expressible in rows: 76 steps is 76 / 5 rows.
+        Y = np.column_stack([px, py])
+        i = int(0.37 * len(Y))
+        d = np.linalg.norm(Y - Y[i], axis=1)
+        near = np.abs(np.arange(len(Y)) - i) <= THEILER // SHAPE_THIN
+        order = np.argsort(np.where(~near, d, np.inf))[:M_NEIGH]
 
-        # delay plane, the whole record
-        bx.plot(z[: -2 * TAU], z[2 * TAU:], ".", color=RECURRENT, ms=1.5,
-                alpha=0.55, mew=0)
-        bx.plot([z[used[0]]], [z[used[1]]], "o", color=STOCHASTIC, ms=7.8,
-                mec="white", mew=1.0, zorder=5)
-        bx.annotate("those two samples,\none point here",
-                    xy=(z[used[0]], z[used[1]]), xytext=(-2.80, -2.85),
-                    color=STOCHASTIC, ha="left", va="bottom", linespacing=1.25,
-                    bbox=BOX, zorder=6,
-                    arrowprops=dict(arrowstyle="->", lw=1.0, color=STOCHASTIC,
-                                    shrinkA=2, shrinkB=5), **ANNOT)
-        bx.set_xlabel(r"$x_{t-2\tau}$")
-        bx.set_ylabel("$x_t$")
-        bx.set_xlim(-3.0, 3.0)
-        bx.set_ylim(-3.0, 3.0)
+        bx.plot(px, py, ".", color=RECURRENT, ms=1.6, alpha=0.55, mew=0)
+        # The excluded samples are shown here and not in (c): at rank one the
+        # loop's period is about 25 steps, so the 76 steps either side of the
+        # reference wrap the loop three times and land all over it. Exactly one
+        # of them falls inside (c)'s zoom, which would have made the key there a
+        # promise the panel could not keep -- and their being spread out is the
+        # recurrent regime's whole property.
+        bx.plot(Y[near, 0], Y[near, 1], ".", color=TRANSIENT, ms=4.6, mew=0,
+                zorder=4, ls="none", label=r"excluded: $|\Delta t| \leq W_T$")
+        bx.plot([Y[i, 0]], [Y[i, 1]], "o", color=STOCHASTIC, ms=6.5,
+                mec="white", mew=0.9, zorder=5, ls="none",
+                label="reference point")
+        bx.set_xlabel("$x_t$")
+        bx.set_ylabel(r"$x_{t-\tau}$")
+        lim = 1.12 * max(np.abs(px).max(), np.abs(py).max())
+        bx.set_xlim(-lim, lim)
+        bx.set_ylim(-lim, lim)
         bx.set_xticks([-2, 0, 2])
         bx.set_yticks([-2, 0, 2])
 
-        # the neighbour construction, on the same plane
-        Y = np.column_stack([z[2 * TAU:], z[TAU: -TAU], z[: -2 * TAU]])
-        i = 700
-        d = np.linalg.norm(Y - Y[i], axis=1)
-        t = np.arange(len(Y))
-        near_in_time = np.abs(t - i) <= THEILER
-        allowed = ~near_in_time
-        order = np.argsort(np.where(allowed, d, np.inf))[:10]
-
-        cx.plot(Y[allowed, 2], Y[allowed, 0], ".", color=FAINT, ms=1.8, mew=0)
-        cx.plot(Y[near_in_time, 2], Y[near_in_time, 0], ".", color=TRANSIENT,
-                ms=3.6, mew=0, zorder=3)
+        # (c) the same reference point, zoomed to its neighbourhood
+        cx.plot(Y[~near, 0], Y[~near, 1], ".", color=FAINT, ms=1.8, mew=0)
         rm = d[order].max()
-        cx.add_patch(Circle((Y[i, 2], Y[i, 0]), rm, fill=False, lw=1.2,
+        cx.add_patch(Circle((Y[i, 0], Y[i, 1]), rm, fill=False, lw=1.2,
                             ec=RECURRENT, ls=(0, (3, 2)), zorder=4))
         for j in order:
-            cx.plot([Y[i, 2], Y[j, 2]], [Y[i, 0], Y[j, 0]], "-",
-                    color=RECURRENT, lw=1.0, alpha=0.85, zorder=4)
-        cx.plot(Y[order, 2], Y[order, 0], "o", color=RECURRENT, ms=4.0,
-                mec="white", mew=0.7, zorder=5)
-        cx.plot([Y[i, 2]], [Y[i, 0]], "o", color=STOCHASTIC, ms=6.8,
-                mec="white", mew=0.9, zorder=6)
-        pad = 1.55 * rm
-        cx.set_xlim(Y[i, 2] - pad, Y[i, 2] + pad)
-        cx.set_ylim(Y[i, 0] - pad, Y[i, 0] + pad)
+            cx.plot([Y[i, 0], Y[j, 0]], [Y[i, 1], Y[j, 1]], "-",
+                    color=RECURRENT, lw=0.8, alpha=0.8, zorder=4)
+        cx.plot(Y[order, 0], Y[order, 1], "o", color=RECURRENT, ms=3.6,
+                mec="white", mew=0.5, zorder=5, ls="none",
+                label="the $m = 20$ nearest")
+        cx.plot([Y[i, 0]], [Y[i, 1]], "o", color=STOCHASTIC, ms=6.5,
+                mec="white", mew=0.9, zorder=7, ls="none")
+        pad = 1.5 * rm
+        cx.set_xlim(Y[i, 0] - pad, Y[i, 0] + pad)
+        cx.set_ylim(Y[i, 1] - pad, Y[i, 1] + pad)
         cx.set_xticks([])
         cx.set_yticks([])
-        cx.set_xlabel(r"$x_{t-2\tau}$, zoom of (b)")
-        cx.set_ylabel("$x_t$")
-        cx.annotate("$r_m$", xy=(Y[i, 2] - 0.68 * rm, Y[i, 0] + 0.68 * rm),
-                    xytext=(Y[i, 2] - 1.38 * rm, Y[i, 0] + 1.24 * rm),
+        # The power law as this panel's axis name: it is what the panel is for,
+        # and it costs no row of its own.
+        cx.set_xlabel(r"$m(r) \propto r^{\,d}$")
+        # A symbol with a leader, not a sentence: the radius has to be named
+        # somewhere and the formula under the panel uses it.
+        cx.annotate("$r_m$", xy=(Y[i, 0] - 0.68 * rm, Y[i, 1] + 0.68 * rm),
+                    xytext=(Y[i, 0] - 1.36 * rm, Y[i, 1] + 1.18 * rm),
                     color=RECURRENT, fontsize=11, ha="left", va="center",
                     arrowprops=dict(arrowstyle="->", lw=1.0, color=RECURRENT,
                                     shrinkA=1, shrinkB=1))
-        cx.text(0.02, 0.02, "gold: excluded\nby $W_T$",
-                transform=cx.transAxes, color=TRANSIENT, ha="left",
-                va="bottom", linespacing=1.25, bbox=BOX, zorder=7, **ANNOT)
 
-        fig.text(0.5, 0.030, r"$\hat d$ comes from how fast the neighbour "
-                 r"radius $r_m$ grows with $m$", ha="center", va="bottom",
-                 color=RECURRENT, **ANNOT)
+        h1, l1 = bx.get_legend_handles_labels()
+        h2, l2 = cx.get_legend_handles_labels()
+        fig.legend(h1 + h2, l1 + l2, loc="lower center", ncol=3,
+                   bbox_to_anchor=(0.52, 0.0), handlelength=1.6,
+                   fontsize=9.4, columnspacing=1.1, handletextpad=0.4)
     save(fig, "p_pipeline")
 
 
 def fig_shapes():
     """The set the neighbour search actually measures, one panel per regime."""
     s = table("valid.curves/curve_shapes.csv")
-    order = [("qp", 1, "one phase:\nclosed loop", r"$d_{\mathrm{act}} = 1$",
-              RECURRENT, True),
-             ("qp", 2, "two phases:\nfilled torus", r"$d_{\mathrm{act}} = 2$",
-              RECURRENT, True),
-             ("gd", 1, "transient:\ntraversed once", r"$d_{\mathrm{act}} = 1$",
-              TRANSIENT, False),
-             ("batch_proj", 5, "mini-batch noise:\nno structure",
-              r"$d_{\mathrm{act}}$ undefined", STOCHASTIC, False)]
+    # The middle row is the *estimand*, not "the truth": two of these four
+    # regimes have none. A non-recurrent transient samples no invariant
+    # occupation measure, so it has no A_R to recover -- the curve's own
+    # dimension of 1 is a different quantity and must not be written here as
+    # though it were d_act(R). A stationary mini-batch run may well have an
+    # occupation dimension, but it counts the directions batch noise excites, so
+    # "undefined" was also wrong. Both wordings follow
+    # icomp_v2/active_components_definition.md, sections 5, 11 and 13.
+    # The first two captions used to read "closed loop" and "filled torus", and
+    # they were measured out of the figure. In two delay coordinates the 2-torus
+    # is an annulus, and its transverse width here is 7.1 per cent of the radius
+    # against the loop's 5.1: the two panels differ by two per cent of a radius.
+    # "Filled torus" next to "closed loop" therefore promised a difference the
+    # pixels do not carry, and a listener comparing the panels would have been
+    # right to say they are the same ring. The captions now name what was driven,
+    # which is the thing that actually differs, and the panels make the honest
+    # point instead: at one and at two components the projection looks the same,
+    # which is why the number has to be estimated rather than seen.
+    order = [("qp", 1, "one phase\ndriven",
+              r"$d_{\mathrm{act}}(R) = 1$", RECURRENT, True),
+             ("qp", 2, "two phases\ndriven",
+              r"$d_{\mathrm{act}}(R) = 2$", RECURRENT, True),
+             ("gd", 1, "transient:\ntraversed once",
+              "no invariant measure", TRANSIENT, False),
+             ("batch_proj", 5, "batch noise\nalone",
+              "noise counted too", STOCHASTIC, False)]
     reported = [r"$\hat d_{\mathrm{MG}} = 1.2$", r"$\hat d_{\mathrm{MG}} = 2.2$",
                 r"$\hat d_{\mathrm{MG}} \approx 16$",
                 r"$\hat d_{\mathrm{MG}} \approx 15$"]
@@ -172,13 +209,13 @@ def fig_shapes():
             mid = 0.5 * (box.x0 + box.x1)
             fig.text(mid, 1.72 / H, name, ha="center", va="bottom",
                      fontsize=10.2, color=c, linespacing=1.25)
-            fig.text(mid, 0.205, truth, ha="center", va="bottom", fontsize=9.8,
+            fig.text(mid, 0.205, truth, ha="center", va="bottom", fontsize=9.0,
                      color=GREY)
             fig.text(mid, 0.100, rep, ha="center", va="bottom", fontsize=11,
                      color=GOOD if ok else STOCHASTIC,
                      fontweight="normal" if ok else "bold")
-        fig.text(0.5, 0.012, "grey: the truth.   Coloured: what the estimator "
-                 "returned.", ha="center", va="bottom", color=GREY,
+        fig.text(0.5, 0.012, "grey: the estimand.   Coloured: the "
+                 "estimate.", ha="center", va="bottom", color=GREY,
                  fontsize=9.6)
     save(fig, "p_shapes")
 

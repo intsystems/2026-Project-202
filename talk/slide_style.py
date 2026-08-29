@@ -145,9 +145,31 @@ def titles(fig, H, pairs, top=0.28):
     The titles say what the panel shows *and* how it came out. A neutral title
     plus a finding buried in an in-panel note makes the audience hunt for the
     point while the speaker has already moved on.
+
+    Set left-aligned at 11 pt, a title of 34 characters is 2.6 in wide, which is
+    more than the last panel of a three-panel figure has to the right edge -- and
+    a figure saved at a fixed size loses the overflow silently, which is how
+    slide 8 shipped reading "the slow drive stall". Each title is therefore
+    measured, and told about, both against the figure edge and against the title
+    after it.
     """
+    W = fig.get_size_inches()[0]
+    placed = []
     for x, name in pairs:
-        fig.text(x, (H - top) / H, name, ha="left", va="bottom", **PANEL)
+        t = fig.text(x, (H - top) / H, name, ha="left", va="bottom", **PANEL)
+        placed.append((name, t))
+    fig.canvas.draw()
+    spans = [(name, t.get_window_extent()
+              .transformed(fig.dpi_scale_trans.inverted()))
+             for name, t in placed]
+    for i, (name, box) in enumerate(spans):
+        limit = spans[i + 1][1].x0 - 0.06 if i + 1 < len(spans) else W
+        if box.x1 > limit + 1e-3:
+            what = "the next title" if i + 1 < len(spans) else "the figure edge"
+            print(f"  WARNING: panel title {name!r} ends at {box.x1:.2f} in, "
+                  f"past {what} at {limit:.2f} in -- it will be cut off or run "
+                  "into its neighbour; shorten it")
+    return [t for _, t in placed]
 
 
 def cols(n, left=0.075, right=0.028, gap=0.115):
@@ -164,6 +186,34 @@ def cols(n, left=0.075, right=0.028, gap=0.115):
     """
     w = (1.0 - left - right - (n - 1) * gap) / n
     return [(left + i * (w + gap), w) for i in range(n)]
+
+
+def strip(fig, ax, ncol, x=0.52, fontsize=10.0):
+    """The shared one-row legend along the bottom of a figure.
+
+    Every series a figure draws is named here rather than beside the curve. In-panel
+    prose was cut on review: a reviewer reading the deck could not tell which
+    words were data and which were commentary, and a label saying "MG and LB lie
+    on top of each other" is an argument, not a key. Legends hold keys; arguments
+    go under the slide.
+
+    ``ncol`` entries in one row can be wider than the figure, and nothing stops
+    them: a figure saved at a fixed size simply loses whatever hangs over the
+    edge, so on slide 8 the fourth key read "no drive at a". The width is
+    therefore measured against the figure and reported, because the failure is
+    invisible in the code and easy to miss in the render.
+    """
+    handles, labels = ax.get_legend_handles_labels()
+    leg = fig.legend(handles, labels, loc="lower center", ncol=ncol,
+                     bbox_to_anchor=(x, 0.0), handlelength=2.2,
+                     fontsize=fontsize)
+    fig.canvas.draw()
+    box = leg.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+    if box.x0 < -1e-3 or box.x1 > fig.get_size_inches()[0] + 1e-3:
+        print(f"  WARNING: legend spans {box.x0:.2f}..{box.x1:.2f} in of a "
+              f"{fig.get_size_inches()[0]:.2f} in figure -- a key will be cut "
+              "off; shorten a label or drop a column")
+    return leg
 
 
 def key(ax, entries, x=0.98, y=0.97, ha="right", va="top", dy=0.125,
@@ -186,6 +236,58 @@ def table(name: str):
     return pd.read_csv(DATA / name)
 
 
+#: How far a drawn thing may hang over the edge of the figure before it is worth
+#: a warning. Not zero: several figures set ``clip_on=False`` so a marker on the
+#: axis limit is drawn whole, and half a marker legitimately sits outside the
+#: axes -- but not outside the *figure*, and 0.03 in is under half of the largest
+#: marker in the deck.
+BLEED = 0.03
+
+
+def overflow(fig, stem: str):
+    """Report anything drawn outside the figure, which is silently cropped.
+
+    The figure is saved at a fixed size, so a label that does not fit is not
+    shrunk or complained about: it is cut. Three of these shipped before the
+    check existed -- a legend key reading "no drive at a", a panel title reading
+    "the slow drive stall", and a y label whose hat over the d fell off the left
+    edge, leaving the estimate looking like the truth. All three are one
+    question: does the tight bounding box fit inside the figure?
+    """
+    import matplotlib.text
+
+    fig.canvas.draw()
+    W, H = fig.get_size_inches()
+    # get_tightbbox already reports inches, unlike every other window extent in
+    # matplotlib. Transforming it again divides by the dpi and every overflow
+    # comes out a hundredth of an inch, which is to say the check passes always.
+    b = fig.get_tightbbox()
+    sides = [(side, over) for side, over in (("left", -b.x0), ("right", b.x1 - W),
+                                            ("bottom", -b.y0), ("top", b.y1 - H))
+             if over > BLEED]
+    if not sides:
+        return
+    inv = fig.dpi_scale_trans.inverted()
+    blame = []
+    for t in fig.findobj(matplotlib.text.Text):
+        if not t.get_text().strip() or not t.get_visible():
+            continue
+        e = t.get_window_extent().transformed(inv)
+        # Only text that is partly on the page. A tick whose value is outside
+        # the view limits keeps its Text object, parked well off the figure, and
+        # is not drawn; it is not what is being cropped.
+        if e.x1 < 0 or e.x0 > W or e.y1 < 0 or e.y0 > H:
+            continue
+        if e.x0 < -BLEED or e.x1 > W + BLEED or e.y0 < -BLEED or e.y1 > H + BLEED:
+            blame.append(t.get_text().replace("\n", " ")[:40])
+    for side, over in sides:
+        print(f"  WARNING: {stem} overflows the {side} edge by {over:.2f} in "
+              f"-- that much of some label is cropped")
+    if blame:
+        print("           the text out of bounds: "
+              + "; ".join(repr(b) for b in blame[:6]))
+
+
 def save(fig, stem: str):
     OUT.mkdir(parents=True, exist_ok=True)
     width = float(fig.get_size_inches()[0])
@@ -193,6 +295,7 @@ def save(fig, stem: str):
         raise ValueError(f"{stem}: width {width:.3f} in, need {FULL} in -- "
                          "otherwise LaTeX rescales the figure and the labels "
                          "stop being the size they were drawn at")
+    overflow(fig, stem)
     with context():
         for suffix in ("pdf", "png"):
             fig.savefig(OUT / f"{stem}.{suffix}")
