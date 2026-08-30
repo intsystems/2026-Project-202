@@ -1,7 +1,7 @@
 # icomp_v2
 
-Draft of the article *Counting the Active Degrees of Freedom of a Training Run: What a Single
-Scalar Log Can and Cannot Measure*.
+Draft of the article *Estimating Active Dimension of Training Dynamics from One Scalar Log,
+with an Application to Grokking*.
 
 The previous report, on delay-embedding preconditions and convergent cross mapping, is
 archived unchanged in [`../icomp_attempts/`](../icomp_attempts/). This draft does not build

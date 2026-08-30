@@ -364,6 +364,19 @@ The reader has the last two paragraphs and not all of those.
 
 ## Mechanics
 
+- **`pdflatex` passing does not mean the venue build passes.** A page break landing on a
+  hyperlink makes pdfTeX say `\pdfendlink ended up in different nesting level than
+  \pdfstartlink`. Plain `pdflatex` treats that as a warning and finishes; the venue
+  scripts run `latexmk ... -halt-on-error`, which stops on it, and the whole build dies
+  with `latexmk failed` and a log truncated mid-sentence. It cost an hour once, so:
+  **after editing anything on the first two pages, run `python make_newinml.py`, not only
+  `pdflatex`.**
+
+  Nothing is wrong with the text when this happens. It is knife-edge — one word anywhere
+  before the break moves it — so do not hunt for the offending link. Reword the nearest
+  sentence in a way you wanted anyway and rebuild. Bisect with the venue script if it is
+  not obvious which edit did it: revert one edit at a time and see which build succeeds.
+
 - **Nine pages excluding references.** Check where the heading falls:
   `pdftotext -layout -f 9 -l 9 report.pdf - | grep -c EFERENCES` should be 1. Grep for
   `EFERENCES`, not `REFERENCES`: the style sets the heading in small caps and `pdftotext` extracts
