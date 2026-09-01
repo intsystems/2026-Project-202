@@ -288,6 +288,80 @@ def overflow(fig, stem: str):
               + "; ".join(repr(b) for b in blame[:6]))
 
 
+
+def _boxes_overlap(a, b, slack=0.0):
+    """Overlap area in square inches of two bboxes, shrunk by ``slack`` a side."""
+    w = min(a.x1, b.x1) - max(a.x0, b.x0) - 2 * slack
+    h = min(a.y1, b.y1) - max(a.y0, b.y0) - 2 * slack
+    return w * h if w > 0 and h > 0 else 0.0
+
+
+def collisions(fig, stem: str):
+    """Report anything drawn on top of an axes it does not belong to.
+
+    The rule the deck now follows, after a reviewer went through every figure
+    with the same three words -- "легенда налезла", "всё залазит друг на друга",
+    "и тут тоже всё наехало":
+
+    * **No legend inside an axes.** A key that sits on the curves it names costs
+      the reader a second deciding which is data, and on a 2.3 x 1.2 in panel a
+      four-entry box covers a third of the plot. Legends go in a strip outside.
+    * **No axis furniture on a neighbour.** Tick labels and axis names of the
+      right panel legitimately hang left of their own axes -- but not into the
+      left panel's box.
+
+    Both are geometry, so both are checked rather than eyeballed. matplotlib
+    will not complain about either: it draws what it is told, on top of whatever
+    is already there.
+    """
+    import matplotlib.legend
+    import matplotlib.text
+
+    fig.canvas.draw()
+    inv = fig.dpi_scale_trans.inverted()
+    axes = [(a, a.get_window_extent().transformed(inv)) for a in fig.get_axes()]
+    if not axes:
+        return
+    bad = []
+
+    legends = list(fig.legends) + [a.get_legend() for a, _ in axes
+                                   if a.get_legend() is not None]
+    for leg in legends:
+        lb = leg.get_window_extent().transformed(inv)
+        for a, ab in axes:
+            over = _boxes_overlap(lb, ab)
+            if over > 0.01:
+                bad.append(f"a legend covers {over:.2f} sq in of an axes")
+                break
+
+    for owner, _ in axes:
+        parts = ([owner.xaxis.label, owner.yaxis.label, owner.title]
+                 + list(owner.get_xticklabels()) + list(owner.get_yticklabels()))
+        for t in parts:
+            if not t.get_text().strip() or not t.get_visible():
+                continue
+            tb = t.get_window_extent().transformed(inv)
+            for other, ob in axes:
+                if other is owner:
+                    continue
+                if _boxes_overlap(tb, ob, slack=0.01) > 0.0:
+                    bad.append(f"{t.get_text()[:28]!r} lies over a neighbouring "
+                               "panel")
+                    break
+
+    for t in fig.texts:
+        if not t.get_text().strip() or not t.get_visible():
+            continue
+        tb = t.get_window_extent().transformed(inv)
+        for a, ab in axes:
+            if _boxes_overlap(tb, ab, slack=0.01) > 0.0:
+                bad.append(f"{t.get_text()[:28]!r} lies over an axes")
+                break
+
+    for line in dict.fromkeys(bad):
+        print(f"  WARNING: {stem}: {line}")
+
+
 def save(fig, stem: str):
     OUT.mkdir(parents=True, exist_ok=True)
     width = float(fig.get_size_inches()[0])
@@ -296,6 +370,7 @@ def save(fig, stem: str):
                          "otherwise LaTeX rescales the figure and the labels "
                          "stop being the size they were drawn at")
     overflow(fig, stem)
+    collisions(fig, stem)
     with context():
         for suffix in ("pdf", "png"):
             fig.savefig(OUT / f"{stem}.{suffix}")

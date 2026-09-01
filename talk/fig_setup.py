@@ -90,7 +90,9 @@ def fig_conf_map():
     pc = pc[pc.column == "train_loss"]
 
     H = 2.16
-    y0, h = rows(H, bottom=0.70, top=0.22)
+    # Два ряда легенды: критерий зоны, написанный формулой, занимает почти весь
+    # ряд, и три семейства запусков рядом с ним не встают.
+    y0, h = rows(H, bottom=0.92, top=0.22)
     with context():
         fig = plt.figure(figsize=(FULL, H))
         ax = fig.add_axes([0.150, y0, 0.720, h])
@@ -99,7 +101,8 @@ def fig_conf_map():
                                    facecolor=RECURRENT, alpha=0.14,
                                    edgecolor=RECURRENT, lw=1.1,
                                    ls=(0, (3, 3)), zorder=0,
-                                   label="readable here"))
+                                   label=r"$\rho_{\mathrm{ident}} \leq 1.1$"
+                                         r" and $\geq 8$ crossings"))
         undecayed = tr.run.astype(str).str.startswith("wd0")
         # Every one of the ten full-batch runs crosses its own trend exactly
         # twice, so ten markers at x = 2 stacked into a striped block that read
@@ -128,10 +131,22 @@ def fig_conf_map():
         # Not the full definition: spelled out, the fraction is 2 in tall and the
         # panel is 1.4. It is defined on the slide before this one.
         ax.set_ylabel(r"$\rho_{\mathrm{ident}}$")
-        # Centred on the figure, not at 0.52: four keys in one row come to 5.88
-        # of the 5.95 in available, so the 0.02 the old anchor pushed them right
-        # was enough to cut the tail off the last one.
-        strip(fig, ax, 4, x=0.50, fontsize=9.0)
+        # Верхний ряд -- три семейства запусков, нижний -- критерий зоны.
+        # Раньше ключ зоны читался "readable here", что было названо
+        # неформальным; теперь он называет само условие, которое зону задаёт.
+        handles, labels = ax.get_legend_handles_labels()
+        band = [(h_, l_) for h_, l_ in zip(handles, labels) if "rho" in l_
+                or "\\rho" in l_]
+        runs = [(h_, l_) for h_, l_ in zip(handles, labels)
+                if (h_, l_) not in band]
+        fig.legend([h_ for h_, _ in runs], [l_ for _, l_ in runs],
+                   loc="lower center", ncol=3, fontsize=9.6,
+                   bbox_to_anchor=(0.52, 0.135), handlelength=1.8,
+                   columnspacing=1.4, handletextpad=0.4)
+        fig.legend([h_ for h_, _ in band], [l_ for _, l_ in band],
+                   loc="lower center", ncol=1, fontsize=9.6,
+                   bbox_to_anchor=(0.52, 0.005), handlelength=2.2,
+                   handletextpad=0.5)
     save(fig, "p_conf_map")
 
 
@@ -147,7 +162,9 @@ def fig_conf_fall():
         fig = plt.figure(figsize=(FULL, H))
         # 0.104, not 0.090: the y axis here is labelled to 100, and three digits
         # plus a hatted axis name need 0.62 in of margin, not 0.54.
-        ax = fig.add_axes([0.104, y0, 0.326, h])
+        # Панель (a) уже, чем половина: имена строк панели (b) длиннее её
+        # собственного левого поля и иначе ложатся на (a).
+        ax = fig.add_axes([0.104, y0, 0.286, h])
         bx = fig.add_axes([0.600, y0, 0.372, h])
 
         for i, (run, dash) in enumerate((("wd0_s0", "-"),
@@ -192,8 +209,8 @@ def fig_conf_fall():
                  "lowdata15_s1": "15 % data, run 2",
                  "lowdata20_s0": "20 % data",
                  "lowdata15_s0": "15 % data, run 1",
-                 "wd0_s0": "no wt. decay, run 1",
-                 "wd0_s1": "no wt. decay, run 2",
+                 "wd0_s0": "no decay, run 1",
+                 "wd0_s1": "no decay, run 2",
                  "lowdata15_s2": "15 % data, run 3"}
         for i, row in enumerate(order.itertuples()):
             y = len(order) - 1 - i

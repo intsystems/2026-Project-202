@@ -85,7 +85,9 @@ def fig_estimator():
     held = med.loc[HELD]
 
     H = 2.16
-    y0, h = rows(H, bottom=0.52, top=0.26)
+    # The bottom margin holds a legend strip now: the four keys used to sit in
+    # the top left corner of panel (a), on top of the curves they name.
+    y0, h = rows(H, bottom=0.70, top=0.26)
     with context():
         fig = plt.figure(figsize=(FULL, H))
         # The right panel carries words down its y axis, so it needs a wider gap.
@@ -117,10 +119,9 @@ def fig_estimator():
         # components have resolvable amplitudes (definition memo, sections 8
         # and 10). Declaring PR the ground truth is exactly what that memo
         # forbids.
-        ax.set_xlabel(r"$d_{\mathrm{act}}(R)$: phases driven")
+        ax.set_xlabel(r"$d_{\mathrm{act}}(R)$: phases forced")
         ax.set_ylabel(r"$\hat d_{\mathrm{MG}}(\mathcal{W})$")
-        ax.legend(loc="upper left", handletextpad=0.5, labelspacing=0.24,
-                  handlelength=2.0, bbox_to_anchor=(-0.02, 1.00), fontsize=9.4)
+
 
         # (b) every statistic we could compute on the same series, scored the
         # same way. Three of the six need no neighbour search at all, and one of
@@ -144,6 +145,7 @@ def fig_estimator():
         bx.set_ylim(-0.6, 6.4)
         bx.set_xlabel("mean absolute error, components")
 
+        strip(fig, ax, 4, fontsize=9.6)
         titles(fig, H, [(0.075, "(a) Three estimators, one log"),
                         (0.597, "(b) All six, scored alike")], top=0.235)
     save(fig, "p_estimator")
@@ -172,8 +174,8 @@ def fig_recovery():
     slide rather than being scored against a line they cannot meet.
     """
     d = digits()
-    series = [("qp", "fast drive", RECURRENT, "-", "o"),
-              ("qp_slow", "slow drive", RECURRENT, "--", "s")]
+    series = [("qp", "fast forcing", RECURRENT, "-", "o"),
+              ("qp_slow", "slow forcing", RECURRENT, "--", "s")]
 
     H = 2.16
     y0, h = rows(H, bottom=0.70, top=0.26)      # bottom holds the legend row
@@ -220,7 +222,7 @@ def fig_recovery():
         g = d[d.arm == "gd"]
         ax.plot([g.traj_PR.median()], [g.MG.median()], "D", color=TRANSIENT,
                 ms=7.8, mec="white", mew=0.9, zorder=5, clip_on=False,
-                label="no drive at all")
+                label="no forcing")
         ax.set_xscale("log")
         ax.set_yscale("log")
         ax.set_ylim(0.8, 24)
@@ -244,9 +246,9 @@ def fig_recovery():
             # check that all q components have resolvable amplitudes
             # (definition memo, sections 8 and 10). Declaring PR the ground
             # truth is exactly what that memo forbids.
-            slot.set_xlabel(r"$d_{\mathrm{act}}(R)$: phases driven")
+            slot.set_xlabel(r"$d_{\mathrm{act}}(R)$: phases forced")
 
-        titles(fig, H, [(xa, "(a) Fast drive tracks the truth"),
+        titles(fig, H, [(xa, "(a) Fast forcing tracks the truth"),
                         (xb, "(b) The miss, in components")], top=0.235)
         strip(fig, ax, 4, fontsize=9.6)
     save(fig, "p_recovery")
@@ -299,8 +301,8 @@ def fig_theiler():
     # Один словарь на всю колоду: те же три режима названы так же, как в
     # `fig_recovery`. "slow torus" было названо странным, и справедливо -- тор не
     # медленный, медленный привод.
-    arms = [("fast", "fast drive", RECURRENT, "-", "o"),
-            ("slow", "slow drive", RECURRENT, "--", "s"),
+    arms = [("fast", "fast forcing", RECURRENT, "-", "o"),
+            ("slow", "slow forcing", RECURRENT, "--", "s"),
             # Just "transient": beside two drives the word is unambiguous, and
             # the four keys plus "the path itself: dimension 1" do not fit the
             # figure with anything longer.
@@ -433,8 +435,8 @@ def fig_ident():
     coincidence to hide.
     """
     d = digits()
-    arms = [("qp", "fast drive", RECURRENT, "o"),
-            ("qp_slow", "slow drive", RECURRENT, "s"),
+    arms = [("qp", "fast forcing", RECURRENT, "o"),
+            ("qp_slow", "slow forcing", RECURRENT, "s"),
             ("mixed", r"drive $+\ 2.5\,\%$ noise", STOCHASTIC, "^"),
             ("noise", "rank-$r$ Gaussian forcing", STOCHASTIC, "v"),
             ("batch", "real mini-batch descent", STOCHASTIC, "P"),

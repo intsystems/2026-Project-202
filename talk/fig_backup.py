@@ -17,7 +17,9 @@ def fig_tau():
     d["span_periods"] = d.span_periods.astype(float)
 
     H = 2.16
-    y0, h = rows(H, bottom=0.52, top=0.26)
+    # Два ряда легенды под фигурой: семь ключей панели (a) и три ключа панели
+    # (b) в один ряд не помещаются, а внутри осей они лежали на кривых.
+    y0, h = rows(H, bottom=0.90, top=0.26)
     with context():
         fig = plt.figure(figsize=(FULL, H))
         ax = fig.add_axes([0.108, y0, 0.342, h])
@@ -37,7 +39,8 @@ def fig_tau():
             ax.plot(g.index, g.values / r, "-", marker=mk, color=hue,
                     ms=4.8, mec="white", mew=0.6, lw=1.6, label=f"$r={r}$")
         ax.axhline(1.0, color=GREY, lw=1.4, ls=(0, (4, 3)), zorder=1)
-        ax.axvspan(0.15, 0.45, color=GOOD, alpha=0.15, lw=0, zorder=0)
+        ax.axvspan(0.15, 0.45, color=GOOD, alpha=0.15, lw=0, zorder=0,
+                   label="the working range")
         ax.set_xscale("log")
         ax.set_yscale("log")
         ax.set_xlim(0.04, 1.9)
@@ -65,16 +68,17 @@ def fig_tau():
         bx.set_yticks([2, 3, 4, 5])
         bx.set_xlabel(r"decay $q$ of the phase amplitudes")
         bx.set_ylabel("components")
-        bx.legend(loc="lower right", bbox_to_anchor=(1.03, -0.04),
-                  fontsize=8.8, labelspacing=0.22, handlelength=1.8,
-                  handletextpad=0.4)
-
-        # The shaded band is named here rather than across the curves, and the
-        # six ranks are named by colour.
-        ax.legend(loc="lower right", fontsize=8.6, ncol=2, handletextpad=0.3,
-                  columnspacing=0.7, bbox_to_anchor=(1.04, -0.035),
-                  handlelength=1.6, labelspacing=0.20,
-                  title="shaded: the working range", title_fontsize=8.6)
+        # Оба ключа под фигурой, каждый своим рядом. Ранги названы одними
+        # числами с общим заголовком $r$: шесть ключей вида "$r=1$" в ряд с
+        # ключом полосы не помещаются, а шесть цифр помещаются.
+        ha_, la_ = ax.get_legend_handles_labels()
+        fig.legend(ha_, la_, loc="lower center", ncol=7, fontsize=9.2,
+                   bbox_to_anchor=(0.52, 0.135), handlelength=1.7,
+                   columnspacing=0.9, handletextpad=0.35)
+        hb_, lb_ = bx.get_legend_handles_labels()
+        fig.legend(hb_, lb_, loc="lower center", ncol=3, fontsize=9.2,
+                   bbox_to_anchor=(0.52, 0.0), handlelength=2.0,
+                   columnspacing=1.1, handletextpad=0.4)
 
         titles(fig, H, [(0.108, r"(a) Estimate against the lag $\tau$"),
                         (0.600, "(b) A dimension, not a rank")], top=0.235)
@@ -82,7 +86,26 @@ def fig_tau():
 
 
 def fig_surrogate():
-    """The surrogate comparison behind the matched-window claim."""
+    """The surrogate comparison behind the matched-window claim.
+
+    The grey bar used to run from ``surr_median.min()`` to ``surr_max.max()``:
+    its left end was a median and its right end was a maximum, two different
+    statistics as the two ends of one interval. Nothing can be read off such a
+    bar, and what it actually did was contradict the p values printed beside it.
+    A maximum over 195 draws is an extreme order statistic, so the observed value
+    lands below it almost by construction, and three of the four generalising
+    runs therefore sat *inside* the grey -- "nothing unusual" -- while their own
+    p said they were above 95 to 97 per cent of the surrogates.
+
+    The bar is now the 5th to 95th percentile of the pooled draws (39 surrogates
+    at each of five seeds, so 195), which is the null distribution the test is
+    against, and every circle now lands where its p value says it should: the
+    four generalising runs to the right of it, the two undecayed controls at its
+    left edge. The p column is unchanged -- it is the per-seed median that
+    tab:matched of the article reports.
+    """
+    raw = table("grok.matched.surrogate/surrogates.csv")
+    raw = raw[(raw.column == "weight_norm") & (raw.smooth == 201)]
     s = table("grok.matched.surrogate/surrogate_summary.csv")
     s = s[(s.column == "weight_norm") & (s.smooth == 201)]
     # "s42" and its family were struck out as jargon: a seed is an
@@ -94,9 +117,13 @@ def fig_surrogate():
              ("mod_wd0", "mod. arith., no weight decay", False),
              ("s5_wd0", "$S_5$, no weight decay", False)]
 
-    H = 2.12
-    # A deep bottom margin: the axis name is a two-level formula.
-    y0, h = rows(H, bottom=0.66, top=0.30)
+    H = 2.00
+    # A deep bottom margin: the axis name is a two-level formula. The top margin
+    # holds the legend row that replaced the prose caption. The whole figure is
+    # 0.12 in shorter than the deck's standard so the slide can carry a third
+    # line: the two controls have no generalisation step of their own, and a
+    # listener who notices that needs the answer on the slide.
+    y0, h = rows(H, bottom=0.66, top=0.34)
     with context():
         fig = plt.figure(figsize=(FULL, H))
         # The names down the left are the margin: the longest of them is 2.00 in
@@ -107,26 +134,38 @@ def fig_surrogate():
         ax = fig.add_axes([0.360, y0, 0.612, h])
 
         for i, (run, label, groks) in enumerate(order):
-            g = s[s.run == run]
+            g = raw[raw.run == run]
+            draws = g[g.kind == "surrogate"].depth.to_numpy(dtype=float)
+            draws = draws[np.isfinite(draws)]
+            lo, mid, hi = np.percentile(draws, [5, 50, 95])
+            observed = float(g[g.kind == "observed"].depth.iloc[0])
             y = len(order) - 1 - i
             c = STOCHASTIC if groks else TRANSIENT
-            ax.plot([g.surr_median.min(), g.surr_max.max()], [y, y], "-",
-                    color=GREY, lw=8.5, alpha=0.22, solid_capstyle="butt")
-            ax.plot(g.surr_median, np.full(len(g), y), "|", color=GREY, ms=12,
-                    mew=1.6)
-            ax.plot(g.observed.iloc[:1], [y], "o", color=c, ms=10.0,
-                    mec="white", mew=1.1, zorder=4)
-            ax.text(0.985, y, f"$p={g.p.median():g}$",
+            ax.plot([lo, hi], [y, y], "-", color=FAINT, lw=9.0, alpha=0.85,
+                    solid_capstyle="butt",
+                    label="surrogates, 5–95 %" if i == 0 else None)
+            # A darker tick, not a second shade of the same grey: the band and
+            # the median used to be two greys a reviewer could not tell apart.
+            ax.plot([mid], [y], "|", color=GREY, ms=13, mew=2.0, zorder=3,
+                    label="their median" if i == 0 else None)
+            ax.plot([observed], [y], "o", color=c, ms=10.0, mec="white",
+                    mew=1.1, zorder=4,
+                    label=("the run: generalises" if i == 0 else
+                           "no decay" if i == 4 else None))
+            ax.text(0.985, y, f"$p={s[s.run == run].p.median():g}$",
                     transform=ax.get_yaxis_transform(), va="center",
                     ha="right", fontsize=9.8, color=c)
         ax.axvline(1.0, color=GREY, lw=1.1)
         ax.set_yticks(range(len(order)))
         ax.set_yticklabels([lab for _, lab, _ in order][::-1], fontsize=10)
         ax.set_ylim(-0.6, 5.6)
-        ax.set_xlim(0.9, 15)
+        # The old limit of 15 was set by a maximum that is no longer drawn; the
+        # widest band now ends at 4.4, so the axis stops just past it and the
+        # whole figure is a factor of three less empty.
+        ax.set_xlim(0.93, 7.6)
         ax.set_xscale("log")
-        ax.set_xticks([1, 2, 5, 10])
-        ax.set_xticklabels(["1", "2", "5", "10"])
+        ax.set_xticks([1, 2, 3, 5])
+        ax.set_xticklabels(["1", "2", "3", "5"])
         ax.minorticks_off()
         # "How far the estimate fell (log scale)" was struck out as informal and
         # uninformative. The statistic has a definition -- logs.depth() in
@@ -137,9 +176,10 @@ def fig_surrogate():
                       r"\min_{[-1\mathrm{k},\,+2\mathrm{k}]}"
                       r"\hat d_{\mathrm{MG}}$,  steps from $t_{\mathrm{gen}}$",
                       fontsize=9.8)
-        ax.text(0.0, 1.07, "grey: surrogates of the same log;   circle: "
-                "the run", transform=ax.transAxes, ha="left", va="bottom",
-                color=GREY, **ANNOT)
+        h_, l_ = ax.get_legend_handles_labels()
+        fig.legend(h_, l_, loc="upper center", ncol=4, fontsize=9.4,
+                   bbox_to_anchor=(0.52, 0.995), handlelength=1.8,
+                   columnspacing=1.1, handletextpad=0.4)
     save(fig, "p_backup_surrogate")
 
 

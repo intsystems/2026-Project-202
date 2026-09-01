@@ -93,8 +93,9 @@ def fig_switch():
         for block in np.split(np.arange(len(g)), edges + 1):
             if not known[block[0]]:
                 for slot in (ax, sx):
-                    slot.axvspan(x[block].min(), x[block].max(), color=FAINT,
-                                 alpha=0.40, lw=0, zorder=0)
+                    slot.axvspan(x[block].min(), x[block].max(),
+                                 facecolor="none", edgecolor=STOCHASTIC,
+                                 hatch="////", lw=0.9, alpha=0.55, zorder=0)
                 continue
             # Thick enough to show as a halo around the estimate drawn over it:
             # at 3.4 pt the blue line hid it wherever the two agreed, which is
@@ -123,8 +124,9 @@ def fig_switch():
         # record stays continuous), and it appeared nowhere else in the deck. The
         # key now says what is in the record over that span, which is the thing a
         # listener needs in order to read the band.
-        ax.axvspan(0, 0, color=FAINT, alpha=0.40, lw=0,
-                   label="signals mixed: truth undefined")
+        ax.axvspan(0, 0, facecolor="none", edgecolor=STOCHASTIC,
+                   hatch="////", lw=0.9, alpha=0.55,
+                   label="signals mixed: no truth")
 
         sx.plot(x, g.rough, "-", color=TRANSIENT, lw=2.1, zorder=3)
         sx.set_ylim(0, 0.19)
@@ -134,8 +136,9 @@ def fig_switch():
 
 
         h_, l_ = ax.get_legend_handles_labels()
-        fig.legend(h_, l_, loc="upper center", ncol=2, fontsize=10.0,
-                   bbox_to_anchor=(0.53, 1.0), handlelength=2.4)
+        fig.legend(h_, l_, loc="upper center", ncol=3, fontsize=9.4,
+                   bbox_to_anchor=(0.52, 0.995), handlelength=2.0,
+                   columnspacing=1.0, handletextpad=0.4)
     save(fig, "p_switch")
 
 
@@ -232,7 +235,7 @@ def fig_sketch():
     cost = json.loads((DATA / "check.sketch.cost/sketch_cost.json").read_text())
 
     H = 2.16
-    y0, hh = rows(H, bottom=0.52, top=0.26)
+    y0, hh = rows(H, bottom=0.70, top=0.26)   # bottom holds the legend row
     with context():
         fig = plt.figure(figsize=(FULL, H))
         ax = fig.add_axes([0.075, y0, 0.335, hh])
@@ -250,8 +253,6 @@ def fig_sketch():
         ax.set_yticks([1, 5, 10])
         ax.set_xlabel("true rank of the trajectory")
         ax.set_ylabel("measured rank")
-        ax.legend(loc="upper left", labelspacing=0.25, handletextpad=0.4,
-                  bbox_to_anchor=(-0.02, 1.04))
         ax.text(10.7, 0.8, r"they agree to $\leq 0.11$", ha="right",
                 va="bottom", color=GOOD, **ANNOT)
 
@@ -276,6 +277,9 @@ def fig_sketch():
                 rf"  $+{100 * cost['overhead_frac']:.1f}\,\%$ time",
                 ha="left", va="center", color=RECURRENT, **ANNOT)
 
+        # The two marker styles of (a) named under the figure. In the axes the
+        # key sat on the diagonal it was meant to be compared against.
+        strip(fig, ax, 2, fontsize=9.6)
         titles(fig, H, [(0.075, "(a) Compression costs no accuracy"),
                         (0.625, "(b) And it is cheap")], top=0.235)
     save(fig, "p_sketch")

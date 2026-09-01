@@ -64,32 +64,32 @@
 \headcommand {\beamer@framepages {23}{23}}
 \headcommand {\slideentry {6}{0}{3}{24/24}{}{0}}
 \headcommand {\beamer@framepages {24}{24}}
-\headcommand {\slideentry {6}{0}{4}{25/25}{}{0}}
+\headcommand {\beamer@sectionpages {22}{24}}
+\headcommand {\beamer@subsectionpages {22}{24}}
+\headcommand {\sectionentry {7}{Итоги}{25}{Итоги}{0}}
+\headcommand {\slideentry {7}{0}{1}{25/25}{}{0}}
 \headcommand {\beamer@framepages {25}{25}}
-\headcommand {\beamer@sectionpages {22}{25}}
-\headcommand {\beamer@subsectionpages {22}{25}}
-\headcommand {\sectionentry {7}{Итоги}{26}{Итоги}{0}}
-\headcommand {\slideentry {7}{0}{1}{26/26}{}{0}}
+\headcommand {\slideentry {7}{0}{2}{26/26}{}{0}}
 \headcommand {\beamer@framepages {26}{26}}
-\headcommand {\slideentry {7}{0}{2}{27/27}{}{0}}
-\headcommand {\beamer@framepages {27}{27}}
-\headcommand {\gdef \insertmainframenumber {27}}
+\headcommand {\gdef \insertmainframenumber {26}}
 \headcommand {\partentry {{\cyrillictext \CYRP \cyrr \cyri \cyrl \cyro \cyrzh \cyre \cyrn \cyri \cyre }}{1}}
-\headcommand {\beamer@partpages {1}{27}}
-\headcommand {\beamer@sectionpages {26}{27}}
-\headcommand {\beamer@subsectionpages {26}{27}}
-\headcommand {\beamer@appendixpages {28}}
-\headcommand {\beamer@sectionpages {28}{27}}
-\headcommand {\beamer@subsectionpages {28}{27}}
-\headcommand {\sectionentry {8}{Резерв}{28}{Резерв}{1}}
-\headcommand {\slideentry {8}{0}{1}{28/28}{}{1}}
+\headcommand {\beamer@partpages {1}{26}}
+\headcommand {\beamer@sectionpages {25}{26}}
+\headcommand {\beamer@subsectionpages {25}{26}}
+\headcommand {\beamer@appendixpages {27}}
+\headcommand {\beamer@sectionpages {27}{26}}
+\headcommand {\beamer@subsectionpages {27}{26}}
+\headcommand {\sectionentry {8}{Резерв}{27}{Резерв}{1}}
+\headcommand {\slideentry {8}{0}{1}{27/27}{}{1}}
+\headcommand {\beamer@framepages {27}{27}}
+\headcommand {\slideentry {8}{0}{2}{28/28}{}{1}}
 \headcommand {\beamer@framepages {28}{28}}
-\headcommand {\slideentry {8}{0}{2}{29/29}{}{1}}
+\headcommand {\slideentry {8}{0}{3}{29/29}{}{1}}
 \headcommand {\beamer@framepages {29}{29}}
-\headcommand {\slideentry {8}{0}{3}{30/30}{}{1}}
+\headcommand {\slideentry {8}{0}{4}{30/30}{}{1}}
 \headcommand {\beamer@framepages {30}{30}}
-\headcommand {\beamer@partpages {28}{30}}
-\headcommand {\beamer@subsectionpages {28}{30}}
-\headcommand {\beamer@sectionpages {28}{30}}
+\headcommand {\beamer@partpages {27}{30}}
+\headcommand {\beamer@subsectionpages {27}{30}}
+\headcommand {\beamer@sectionpages {27}{30}}
 \headcommand {\beamer@documentpages {30}}
 \headcommand {\gdef \inserttotalframenumber {30}}
