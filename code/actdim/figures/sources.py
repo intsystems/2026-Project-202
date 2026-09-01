@@ -52,6 +52,7 @@ SOURCES: Dict[str, Tuple[str, str]] = {
     "tau_sensitivity":      ("valid.tau", "tau_sensitivity.csv"),
     "aniso_summary":        ("valid.anisotropy", "aniso_summary.csv"),
     "headline_trace":       ("grok.matched.window", "headline_trace.csv"),
+    "surrogate_depths":     ("grok.matched.surrogate", "surrogates.csv"),
     "ceiling_summary":      ("valid.ceiling", "ceiling_summary.csv"),
     "example_traces":       ("valid.theiler.contrast", "example_traces.csv"),
     "rank_windows":         ("grok.rank.dip", "rank_windows.csv"),

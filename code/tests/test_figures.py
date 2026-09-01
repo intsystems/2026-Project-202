@@ -31,13 +31,13 @@ pytestmark = pytest.mark.skipif(not sources.archive_root().is_dir(),
 
 @pytest.fixture(scope="module")
 def built(tmp_path_factory):
-    """All sixteen, drawn once into a temporary directory."""
+    """All seventeen, drawn once into a temporary directory."""
     outdir = tmp_path_factory.mktemp("figures")
     return panels.build(outdir, allow_archive=True)
 
 
-def test_sixteen_figures():
-    assert len(panels.NAMES) == 16
+def test_seventeen_figures():
+    assert len(panels.NAMES) == 17
     assert set(panels.NAMES) == set(panels.PANELS)
 
 
@@ -95,6 +95,8 @@ NO_ARCHIVE = {
     "geometry_switch": "the switch trace was written by the archived run but never read; "
                        "it reached data/ only when a figure was drawn from it",
     "theiler_sweep": "the per-window sweep was reduced to a table in the archived tree",
+    "surrogate_depths": "the archived tree kept the surrogate summary the article printed "
+                        "and not the draws behind it",
 }
 
 

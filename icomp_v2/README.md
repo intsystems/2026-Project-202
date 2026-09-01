@@ -10,12 +10,12 @@ on it and shares no text with it.
 ## Build
 
 ```bash
-(cd ../code && python -m actdim run paper.figures)   # regenerates figures/ from ../code/data/
+(cd ../code && python -m actdim run paper.figures --no-deps)   # figures/ from ../code/data/
 pdflatex report && bibtex report && pdflatex report && pdflatex report
 ```
 
 The figure generator moved into the code package. `../code/README.md` is the entry point,
-and `python -m actdim check.tables` recomputes every mechanical table cell and diffs it
+and `python -m actdim run check.tables --no-deps` recomputes every mechanical table cell and diffs it
 against the printed value.
 
 `report.pdf` is committed, so neither step is required to read it. The build is clean: no
@@ -26,12 +26,14 @@ the style file prints ``Anonymous authors / Paper under double-blind review'' an
 head reads ``Under review''. Uncomment `\icomparxivcopy` for a named preprint build and
 `\icompfinalcopy` for camera-ready.
 
-**Page budget.** ICOMP allows nine pages excluding references. The body ends on page 9 and the
-references begin on the same page, with about half a page of slack. Anything added to the body needs a
-matching cut. The appendices follow the references and are unconstrained, so new material goes
+**Page budget.** ICOMP allows nine pages excluding references, and the two NeurIPS workshop
+editions bracket the body at exactly eight: NewInML sets a ceiling of eight and Artifacts a floor.
+The body therefore ends on page 8 and the references begin on page 9, with no slack at all.
+Anything added to the body needs a matching cut, and so does anything removed.
+The appendices follow the references and are unconstrained, so new material goes
 there. There is no keywords line: the style file defines no such field.
 
-Figures are generated at the exact text width of the style file (5.5 in) with 8 pt type, so
+Figures are generated at the exact text width of the style file (5.5 in) with 9 pt type, so
 LaTeX does not rescale them. Do not include a figure wider than that, and read the design rules
 in the `../code/actdim/figures/panels.py` docstring before changing one — several of them exist because a review
 found the figure misrepresenting its own data.
@@ -40,19 +42,20 @@ found the figure misrepresenting its own data.
 
 The number of independent components of the set an optimiser recurrently visits over a window is
 a well-defined quantity, distinct from the number of directions it may move in, from the rank of
-the map to the model's outputs, and from the effective rank of its trajectory covariance. It is
-defined at a resolution, because over a finite window the orbit closure is a curve for every rank
-and a neighbour statistic sees the visited set at the scale of its own neighbourhoods. It can be
+the map to the model's outputs, and from the effective rank of its trajectory covariance. It is the
+local dimension of the occupation measure of a regime, and a finite record resolves it only
+between the radii its own neighbour distances span. It can be
 estimated from one scalar log by delay reconstruction followed by the pooled Levina-Bickel
 estimator. We evaluate that estimate on six systems whose component count is fixed by
-construction and then verified by measurement: recovery reaches a mean absolute error of 0.87
+construction and then verified by measurement: recovery reaches a mean absolute error of 0.90
 components up to eight active directions, and neither candidate explanation of the ceiling above
-which it fails survives the sweeps of appendix R. Two diagnostics, computable from the series without a ground
+which it fails survives the sweeps of appendix L. Two diagnostics, computable from the series without a ground
 truth, flag the two regimes in which the value cannot be read as a count. Applied to delayed
 generalisation they place both standard experimental settings outside that regime. Measured
-directly from the stored trajectory instead, the effective rank collapses by a median factor of
-seven near generalisation in four regularised runs and re-expands; the controls fall too, so what
-marks the transition is the timing and shape of the fall rather than its depth.
+directly from the stored trajectory instead, the detrended effective rank collapses near
+generalisation in four regularised runs, by a median factor of eight in function space and of under
+three in parameter space, and re-expands; the controls fall too, so the timing of the fall and its
+reversal mark the transition rather than its depth.
 
 ## Where the numbers come from
 
@@ -123,7 +126,7 @@ were too narrow to say anything useful.
 
 ## Figures
 
-Regenerate with `python -m actdim run paper.figures` from `../code/`. All are drawn at exactly
+Regenerate with `python -m actdim run paper.figures --no-deps` from `../code/`. All are drawn at exactly
 5.5 in, the text width of the style file, at 8 pt so that LaTeX never rescales them.
 
 | figure | what it shows | where |
@@ -211,7 +214,7 @@ quantitatively — the ceiling rises about 0.05 components per unit of E_max rat
 the file section 7.1 depended on, and `active_dimension/e10_surrogate.py` could not regenerate
 `surrogates.csv` in any process, because it seeded from `hash()` of a string and Python salts that
 per interpreter. Both were fixed before the port; the point is that neither was caught by reading
-the code. The check is now mechanical: `python -m actdim check.tables` recomputes every table cell
+the code. The check is now mechanical: `python -m actdim run check.tables --no-deps` recomputes every table cell
 from `../code/data/` and exits non-zero on a mismatch, and `python -m actdim verify` checks that
 tree against the checksums recorded when each file was produced.
 

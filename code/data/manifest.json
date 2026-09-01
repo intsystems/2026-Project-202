@@ -133,16 +133,16 @@
       "sha256": "cb41bd8c7d2295a1a96177a1b58bd6769cafdf640332747a42c9a15d721169b2"
     },
     "check.tables/table_audit.csv": {
-      "bytes": 89318,
+      "bytes": 92498,
       "command": "python -m actdim run check.tables",
       "experiment": "check.tables",
       "git": {
         "branch": "main",
         "dirty": true,
-        "sha": "4d552483ff418f165faf39bfa20cbc179827a149"
+        "sha": "6a16dd988014298af2135d236ad111cc2bc0e683"
       },
-      "produced_utc": "2026-08-14T00:57:56Z",
-      "sha256": "01e8e0eeafa04497547e8299cded54bad5dd052366d28a2c637cce68fed9e53a"
+      "produced_utc": "2026-09-01T14:42:13Z",
+      "sha256": "b194e67149d18bd4c2ee76e85e0073e3caa5353a0d85d4bc4bd4e6dda1179032"
     },
     "grok.diagnostics.logs/real_logs_summary.csv": {
       "bytes": 4731,

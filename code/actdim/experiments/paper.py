@@ -27,16 +27,18 @@ FIGURE_INPUTS = (
     "valid.nuisance", "valid.curves", "valid.geometry",
     "train.perceptron.eos", "train.perceptron.poly",
     "grok.diagnostics.logs", "grok.diagnostics.perceptron", "grok.eos",
-    "grok.extended.outcomes", "grok.matched.window", "grok.prwindow", "grok.rank.dip",
+    "grok.extended.outcomes", "grok.matched.window", "grok.matched.surrogate",
+    "grok.prwindow", "grok.rank.dip",
 )
 
 
 @experiment(
     id="paper.figures",
-    title="The sixteen figures, into ../icomp_v2/figures/",
+    title="The seventeen figures, into ../icomp_v2/figures/",
     paper=("fig:regimes", "fig:dip", "fig:observers", "fig:tau", "fig:aniso", "fig:map",
            "fig:pairs", "fig:prwindow", "fig:window", "fig:eos", "fig:ceiling",
-           "fig:traces", "fig:signal", "fig:switch", "fig:shapes", "fig:exclusion"),
+           "fig:traces", "fig:signal", "fig:switch", "fig:shapes", "fig:exclusion",
+           "fig:surrogate"),
     device=CPU,
     minutes=2,
     needs=FIGURE_INPUTS,

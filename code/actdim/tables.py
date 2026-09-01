@@ -1807,7 +1807,8 @@ _IPR_ROWS = (("n+m", "a_add"), ("n-m", "a_sub"), ("n^2+m^2", "a_sq_sum"),
 
 #: Article column heading -> the label the sweep stores it under.
 _EXCLUSION_COLUMNS = (("0", "0"), ("2", "2"), ("5", "5"), ("20", "20"),
-                      ("100", "100"), ("150", "150"), ("uncapped", "uncapped"))
+                      ("76", "frozen"), ("100", "100"), ("150", "150"),
+                      ("uncapped", "uncapped"))
 
 #: Article row label -> the arm of the sweep.
 _EXCLUSION_ROWS = (("recurrent, fast", "fast"), ("recurrent, slow", "slow"),

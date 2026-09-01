@@ -76,9 +76,9 @@ the main text against the limit.
 Where it stands today:
 
 ```
-33 pages, main text 9, 0 undefined, 0 duplicate, 0 overfull   <-- fits
+34 pages, main text 8, 0 undefined, 0 duplicate, 0 overfull   <-- fits
 ```
 
-Nine pages of main text against 8–12, so this edition needs no cut. A cut made
-in `report.tex` for another venue will shorten it, and the build will say so;
-below eight pages it would report the paper as short.
+Eight pages of main text against 8–12, so this edition sits on the floor and
+needs no cut. A cut made in `report.tex` for another venue would take it below
+eight, and the build would then report the paper as short.

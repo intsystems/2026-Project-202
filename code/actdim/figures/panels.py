@@ -1,4 +1,4 @@
-"""The article's sixteen figures.
+"""The article's seventeen figures.
 
 The drawing is the archived generator's and is meant to stay that way: a figure rebuilt
 here should be indistinguishable from the committed one wherever its data has not
@@ -127,7 +127,12 @@ def fig_regimes(read: Reader):
     ax.set_yticklabels(["1", "2", "4", "8", "16", "32"])
     ax.minorticks_off()
     ax.set_xlabel("measured effective rank")
-    ax.set_ylabel("estimated dimension")
+    # The paper's own symbol, not "estimated dimension". Two reasons: the phrase runs
+    # off the left edge at 1.66 in of panel height, and this panel plots the transient
+    # and mini-batch arms, where section 3.3 says the value is a statistic of the window
+    # and not a dimension at all. fig_tau keeps the phrase because every case in it is
+    # recurrent.
+    ax.set_ylabel(r"$\hat{d}_{\mathrm{MG}}$")
     ax.set_title("(a) the estimate against truth", loc="left")
 
     bx.axvspan(0.95, 1.10, color=BAND, alpha=0.08, lw=0, zorder=0)
@@ -165,7 +170,7 @@ def fig_regimes(read: Reader):
     bx.set_xlim(low, high)
     bx.set_xticks(np.arange(low, high + 1e-9, 0.2))
     bx.set_xlabel(r"identifiability ratio $\rho_{\mathrm{ident}}$")
-    bx.set_title("(b) the diagnostic on the same cases", loc="left")
+    bx.set_title("(b) the same cases", loc="left")
     bx.text(1.025, 4.42, "accurate cases", color=BAND, fontsize=7.0, ha="center",
             va="bottom")
     bx.spines["left"].set_visible(False)
@@ -206,22 +211,22 @@ def fig_dip(read: Reader):
     d = d.merge(e9[["run", "mid", "MG"]], on=["run", "mid"], how="left")
     assert d.MG.notna().sum() > 1000, "matched-window trace did not join onto the direct grid"
 
-    groks = ["mod_wd1", "mod_wd1_s43", "mod_wd1_s44", "s5_wd1"]
-    ctrls = ["mod_wd0", "s5_wd0"]
     panels = [("fn_PR_pos_det", "(c) function space", None),
               ("PR_pos_det", "(d) parameter space", None),
               ("move", "(e) displacement", "log"),
               ("MG", "(f) scalar log", None)]
+
+    groks = ["mod_wd1", "mod_wd1_s43", "mod_wd1_s44", "s5_wd1"]
+    ctrls = ["mod_wd0", "s5_wd0"]
 
     fig, flat = plt.subplots(2, 3, figsize=(5.5, 2.72), sharex=True)
     curve_ax, log_ax = flat[0, 0], flat[0, 1]
     axes = [flat[0, 2], flat[1, 0], flat[1, 1], flat[1, 2]]
     grid = np.arange(-5000, 5200, 100)
 
-    # The first two panels are the run itself: what a reader of the grokking literature
-    # recognises, and the scalar the estimator is given. Only mod_wd1 has its training
-    # curve in data/ -- the other five campaigns promoted milestones alone -- so these two
-    # are one run where the rest are the mean of four. Said in the caption.
+    # Panel (a) is the run itself, what a reader of the grokking literature recognises.
+    # Only mod_wd1 has its training curve in data/ -- the other five campaigns promoted
+    # milestones alone -- so it is one run where the rest are all six. Said in the caption.
     curve = read.table("mod_wd1_train")
     shift = curve.step.to_numpy() - meta["mod_wd1"]["t_gen"]
     curve_ax.plot(shift, curve.train_acc.to_numpy(), "-", color=FAINT, lw=0.9)
@@ -233,7 +238,22 @@ def fig_dip(read: Reader):
     curve_ax.set_ylabel("accuracy")
     curve_ax.set_title("(a) validation accuracy", loc="left")
 
-    log_ax.plot(shift, curve.weight_norm.to_numpy(), "-", color=STOCHASTIC, lw=0.9)
+    # The scalar the estimator is given, for every run rather than one. Weight decay
+    # separates the two groups and moves the observer with them, which is the confound
+    # the Limitations paragraph names and which nothing else in the article shows.
+    for run in groks:
+        g = d[d.run == run].sort_values("centre")
+        log_ax.plot(g.centre.to_numpy() - meta[run]["t_gen"], g.pnorm.to_numpy(),
+                    "-", color=STOCHASTIC, lw=0.7, alpha=0.8)
+    for run, ls in zip(ctrls, ["--", (0, (1, 1.6))]):
+        g = d[d.run == run].sort_values("centre")
+        ref = meta["mod_wd1" if run.startswith("mod") else "s5_wd1"]["t_gen"]
+        log_ax.plot(g.centre.to_numpy() - ref, g.pnorm.to_numpy(),
+                    linestyle=ls, color=TRANSIENT, lw=1.0)
+    log_ax.set_yscale("log")
+    log_ax.set_yticks([30, 50, 100])
+    log_ax.set_yticklabels(["30", "50", "100"])
+    log_ax.minorticks_off()
     log_ax.set_ylabel("parameter norm")
     log_ax.set_title("(b) the parameter norm", loc="left")
 
@@ -584,7 +604,7 @@ def fig_window(read: Reader):
     cx.set_xlim(-0.2, 7.0)
     cx.set_xticks([0, 2, 4, 6])
     cx.set_xlabel("$|\\Delta|$ per stride")
-    cx.set_title("(c) specificity", loc="left")
+    cx.set_title("(c) all changes", loc="left")
     cx.spines["left"].set_visible(False)
     cx.tick_params(axis="y", length=0)
     cx.text(1.45, 1.52, "floor", ha="left", va="top", **POINTER)
@@ -1087,7 +1107,7 @@ def fig_switch(read: Reader):
 
     panels = [("MG", "(a) the estimate", "components"),
               ("roughness", "(b) the roughness", "roughness"),
-              ("PRdelay", "(c) the linear $\mathrm{PR}$", "components")]
+              ("PRdelay", r"(c) the linear $\mathrm{PR}$", "components")]
 
     fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.72))
     for ax, (column, title, ylabel) in zip(axes, panels):
@@ -1184,6 +1204,67 @@ def fig_exclusion(read: Reader):
     return fig
 
 
+# ----------------------------------------------------------------- figure 17
+def fig_surrogate(read: Reader):
+    """Each run's fall against the null distribution built from that run alone.
+
+    The band is the 5th to 95th percentile of the pooled draws, which is the null the
+    test is against. It is not a median-to-maximum interval: a maximum over 195 draws
+    is an extreme order statistic, so an observation lands below it almost by
+    construction and the picture would then contradict the p values beside it.
+    """
+    raw = read.table("surrogate_depths")
+    raw = raw[(raw.column == "weight_norm") & (raw.smooth == 201)]
+
+    order = [("mod_wd1", "modular, seed 42", True),
+             ("mod_wd1_s43", "modular, seed 43", True),
+             ("mod_wd1_s44", "modular, seed 44", True),
+             ("s5_wd1", "$S_5$ composition", True),
+             ("mod_wd0", "modular, no decay", False),
+             ("s5_wd0", "$S_5$, no decay", False)]
+
+    fig, ax = plt.subplots(figsize=(5.5, 1.48))
+    for i, (run, label, grok) in enumerate(order):
+        g = raw[raw.run == run]
+        draws = g[g.kind == "surrogate"].depth.to_numpy(dtype=float)
+        draws = draws[np.isfinite(draws)]
+        low, mid, high = np.percentile(draws, [5, 50, 95])
+        observed = float(g[g.kind == "observed"].depth.iloc[0])
+        y = len(order) - 1 - i
+        colour = STOCHASTIC if grok else TRANSIENT
+        ax.plot([low, high], [y, y], "-", color=FAINT, lw=6.0, alpha=0.9,
+                solid_capstyle="butt", zorder=2)
+        ax.plot([mid], [y], "|", color=GREY, ms=8, mew=1.2, zorder=3)
+        ax.plot([observed], [y], "o", color=colour, ms=4.6, mec="white", mew=0.7,
+                zorder=4)
+
+    ax.axvline(1.0, color="#AAAAAA", lw=0.5, zorder=1)
+    ax.set_xscale("log")
+    ax.set_xlim(0.93, 5.4)
+    ax.set_xticks([1, 2, 3, 5])
+    ax.set_xticklabels(["1", "2", "3", "5"])
+    ax.minorticks_off()
+    ax.set_yticks(range(len(order)))
+    ax.set_yticklabels([label for _, label, _ in order][::-1])
+    ax.set_ylim(-0.6, len(order) - 0.4)
+    ax.set_xlabel("$D$, the fall of the estimate")
+    ax.spines["left"].set_visible(False)
+    ax.tick_params(axis="y", length=0)
+
+    handles = [Line2D([], [], color=FAINT, lw=6.0, label="surrogates, 5–95 %"),
+               Line2D([], [], color=GREY, marker="|", ms=8, mew=1.2, ls="none",
+                      label="their median"),
+               Line2D([], [], color=STOCHASTIC, marker="o", ms=4.6, mec="white",
+                      mew=0.7, ls="none", label="the run: generalises"),
+               Line2D([], [], color=TRANSIENT, marker="o", ms=4.6, mec="white",
+                      mew=0.7, ls="none", label="no weight decay")]
+    fig.tight_layout(rect=[0, 0.135, 1, 1.02])
+    fig.legend(handles=handles, ncol=4, loc="lower center",
+               bbox_to_anchor=(0.5, 0.005), handlelength=1.5,
+               handletextpad=0.4, columnspacing=1.0)
+    return fig
+
+
 # ------------------------------------------------------------------ the build
 #
 # In the order the archived generator drew them, which is the order they appear in the
@@ -1206,6 +1287,7 @@ PANELS: Dict[str, Callable[[Reader], Any]] = {
     "fig_switch": fig_switch,
     "fig_shapes": fig_shapes,
     "fig_exclusion": fig_exclusion,
+    "fig_surrogate": fig_surrogate,
 }
 
 NAMES = tuple(PANELS)

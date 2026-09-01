@@ -116,9 +116,9 @@ limit.
 Where it stands today:
 
 ```
-33 pages, main text 9, 0 undefined, 0 duplicate, 0 overfull   <-- 1 over
+34 pages, main text 8, 0 undefined, 0 duplicate, 0 overfull   <-- fits
 ```
 
-Nine pages of main text against a limit of eight. The converter reports the
-number and does not attempt the cut; the cut belongs in `report.tex`, where
-both editions of the paper will pick it up.
+Eight pages of main text against a limit of eight, so the body is at the
+ceiling and has no slack. Anything added to it needs a matching cut, and the
+cut belongs in `report.tex`, where both editions of the paper pick it up.
