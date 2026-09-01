@@ -1014,7 +1014,7 @@ def fig_traces(read: Reader):
         ("transient", z(syn["transient"].to_numpy()), np.arange(len(syn)),
          TRANSIENT, "deterministic, transient", "sample"),
         ("stochastic", z(real["weight_norm"].to_numpy()),
-         real["step"].to_numpy() / 1000.0, STOCHASTIC, "stochastically driven",
+         real["step"].to_numpy() / 1000.0, STOCHASTIC, "stochastically forced",
          "step ($10^3$)"),
     ]
 

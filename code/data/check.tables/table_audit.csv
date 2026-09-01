@@ -144,10 +144,10 @@ tab:controls,cell,none (baseline),|Delta MG|,0.39,0.3855532081316597,data/valid.
 tab:controls,cell,none (baseline),as % of a real four-component change,10,9.638830203291493,data/valid.nuisance/controls_scored.csv,regenerated,ok,as a percentage of a four-component change
 tab:controls,cell,learning rate halved,|Delta MG|,0.37,0.370880665763506,data/valid.nuisance/controls_scored.csv,regenerated,ok,
 tab:controls,cell,learning rate halved,as % of a real four-component change,9,9.27201664408765,data/valid.nuisance/controls_scored.csv,regenerated,ok,as a percentage of a four-component change
-tab:controls,cell,drive band up one octave,|Delta MG|,0.50,0.5049945416459081,data/valid.nuisance/controls_scored.csv,regenerated,ok,
-tab:controls,cell,drive band up one octave,as % of a real four-component change,13,12.624863541147702,data/valid.nuisance/controls_scored.csv,regenerated,ok,as a percentage of a four-component change
-tab:controls,cell,drive band down one octave,|Delta MG|,0.78,0.7847035421753916,data/valid.nuisance/controls_scored.csv,regenerated,ok,
-tab:controls,cell,drive band down one octave,as % of a real four-component change,20,19.617588554384792,data/valid.nuisance/controls_scored.csv,regenerated,ok,as a percentage of a four-component change
+tab:controls,cell,forcing band up one octave,|Delta MG|,0.50,0.5049945416459081,data/valid.nuisance/controls_scored.csv,regenerated,ok,
+tab:controls,cell,forcing band up one octave,as % of a real four-component change,13,12.624863541147702,data/valid.nuisance/controls_scored.csv,regenerated,ok,as a percentage of a four-component change
+tab:controls,cell,forcing band down one octave,|Delta MG|,0.78,0.7847035421753916,data/valid.nuisance/controls_scored.csv,regenerated,ok,
+tab:controls,cell,forcing band down one octave,as % of a real four-component change,20,19.617588554384792,data/valid.nuisance/controls_scored.csv,regenerated,ok,as a percentage of a four-component change
 tab:controls,cell,coordinates rotated,|Delta MG|,0.28,0.2785253785185446,data/valid.nuisance/controls_scored.csv,regenerated,ok,
 tab:controls,cell,coordinates rotated,as % of a real four-component change,7,6.963134462963614,data/valid.nuisance/controls_scored.csv,regenerated,ok,as a percentage of a four-component change
 tab:controls,cell,observer gain ramped 10x,|Delta MG|,1.53,1.5272198839849254,data/valid.nuisance/controls_scored.csv,regenerated,ok,
@@ -736,6 +736,9 @@ tab:ceiling,claim,"slope, the shared cell",claim,"the two scans meet at E_max = 
 tab:ceilingfit,cell,"E_max/2, the embedding condition",root-mean-square error,8.73,8.728470530778132,data/valid.ceiling/ceiling_fits.csv,regenerated,ok,
 tab:ceilingfit,cell,"2log_10N, the finite-record bound",root-mean-square error,3.68,3.677125334420407,data/valid.ceiling/ceiling_fits.csv,regenerated,ok,
 tab:ceilingfit,cell,the pointwise minimum of the two,root-mean-square error,3.70,3.6959349831992574,data/valid.ceiling/ceiling_fits.csv,regenerated,ok,
+tab:ceilingfit,cell,0.56 E_max/2,root-mean-square error,3.41,3.4126377547267066,data/valid.ceiling/ceiling_fits.csv,regenerated,ok,
+tab:ceilingfit,cell,1.36 * 2log_10N,root-mean-square error,2.45,2.446513123746176,data/valid.ceiling/ceiling_fits.csv,regenerated,ok,
+tab:ceilingfit,cell,"the pointwise minimum, each scaled",root-mean-square error,1.08,1.0837803978166387,data/valid.ceiling/ceiling_fits.csv,regenerated,ok,
 tab:ceilingfit,cell,8.61log_10E_max + 0.90log_10N - 5.31,root-mean-square error,0.19,0.1890859717560723,data/valid.ceiling/ceiling_fits.csv,regenerated,ok,
 tab:ceilingfit,claim,the fitted log-log form,claim,8.61log_10E_max + 0.90log_10N - 5.31,8.61 log_10 E_max + 0.90 log_10 N -5.31,data/valid.ceiling/ceiling_fits.csv,regenerated,ok,
 tab:clocks,cell,four independent phases,d_act,4,4.0,data/valid.geometry/geometry_levels.csv,regenerated,ok,
