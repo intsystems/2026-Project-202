@@ -1,4 +1,4 @@
-"""The article's seventeen figures.
+"""The article's nineteen figures.
 
 The drawing is the archived generator's and is meant to stay that way: a figure rebuilt
 here should be indistinguishable from the committed one wherever its data has not
@@ -64,13 +64,140 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.lines import Line2D
+from matplotlib.patches import Circle, Patch
 
+from ..estimator.embedding import resolve_theiler
+from ..frozen import eight_direction
 from .sources import Reader
-from .style import (BAND, FAINT, GREY, POINTER, RECURRENT, STOCHASTIC, TRANSIENT,
-                    bounds, context, save)
+from .style import (BAND, FAINT, GREY, INK, POINTER, RECURRENT, STOCHASTIC,
+                    TRANSIENT, WIDTH, bounds, context, save)
 
 
-# ------------------------------------------------------------------ figure 1
+# ----------------------------------------------------------------- figure 1
+def fig_method(read: Reader):
+    """The three steps of the estimator on one recurrent log of known active dimension."""
+    # Read off the estimator rather than written down here, so that a picture of the method
+    # cannot drift from the method. Under theiler="embedding" the rule uses the
+    # configuration alone, so the empty series it is handed is never looked at.
+    cfg = eight_direction()
+    tau = int(cfg.tau)
+    exclusion = resolve_theiler(cfg, np.empty(0, dtype=float), tau)
+
+    series = read.table("curve_series")
+    log = series[(series.r == 1) & (series["sample"] <= 400)].sort_values("sample")
+
+    # The estimator's own reconstruction of the same record, written out by the experiment
+    # at the lag every number in the paper was computed at. Rebuilding it here from the
+    # decimated series would draw a delay plane of some other lag.
+    cloud = read.table("curve_shapes")
+    cloud = cloud[(cloud.arm == "qp") & (cloud.r == 1)]
+    points = np.column_stack([cloud.x.to_numpy(), cloud.y.to_numpy()])
+    # One window's reconstruction, thinned to about 1400 rows in time order at a constant
+    # stride, so the exclusion converts into a number of rows.
+    thin = max(1, round((cfg.window - (cfg.max_E - 1) * tau) / len(points)))
+
+    centre = int(0.37 * len(points))
+    distance = np.linalg.norm(points - points[centre], axis=1)
+    excluded = np.abs(np.arange(len(points)) - centre) <= exclusion // thin
+    nearest = np.argsort(np.where(excluded, np.inf, distance))[:cfg.k_neighbors]
+    radius = float(distance[nearest].max())
+
+    # Placed by hand rather than by tight_layout: two of the three panels must be square,
+    # or a closed loop drawn on a stretched axis becomes an ellipse and reads as
+    # anisotropy, and tight_layout sets a title against an equal-aspect axes box rather
+    # than against the slot, which puts the three titles on three different lines.
+    height, foot, head = 1.68, 0.58, 0.18
+    y0, h = foot / height, (height - foot - head) / height
+    side = (height - foot - head) / WIDTH        # a square, in fractions of the width
+
+    fig = plt.figure(figsize=(WIDTH, height))
+    ax = fig.add_axes([0.072, y0, 0.312, h])
+    bx = fig.add_axes([0.497, y0, side, h])
+    cx = fig.add_axes([0.769, y0, side, h])
+    for slot, name in ((ax, "(a) the log, first 400 steps"),
+                       (bx, "(b) the delay plane"), (cx, "(c) one neighbourhood")):
+        box = slot.get_position()
+        fig.text(0.5 * (box.x0 + box.x1), (height - head + 0.025) / height, name,
+                 ha="center", va="bottom", fontsize=9, color=INK)
+
+    # A zoom, and the title of the panel it is drawn in says the whole record is longer.
+    # At rank one the log turns over every few samples, so ten thousand of them across an
+    # inch and a half resolve nothing at all.
+    ax.plot(log["sample"].to_numpy(), log.z.to_numpy(), "-", color=RECURRENT, lw=0.8)
+    ax.set_xlabel("optimiser step $t$", labelpad=1.5)
+    ax.set_ylabel("$x_t$")
+    ax.set_xlim(0, 400)
+    ax.set_xticks([0, 200, 400])
+    ax.set_ylim(-2.8, 2.8)
+    ax.set_yticks([-2, 0, 2])
+
+    # The cloud is the data and carries the regime's colour; the exclusion is a mark on
+    # it and carries the neutral one. Drawn the other way round, as it was at first, the
+    # loop reads as though every sample on it had been excluded.
+    bx.plot(points[:, 0], points[:, 1], ".", color=RECURRENT, ms=1.1, mew=0, alpha=0.45,
+            zorder=2)
+    # The excluded samples belong in (b) and not in (c): the record wraps the loop many
+    # times over, so the seventy-six steps either side of the reference land all over it --
+    # thirty-one points whose largest angular gap around the loop is 26 degrees -- and only
+    # one of them falls inside (c)'s zoom. Their being spread out is the recurrent regime's
+    # whole property. How many steps one turn takes is deliberately not claimed: both files
+    # this figure reads are decimated above the rate the log turns over at, so a period
+    # measured from either is an alias.
+    bx.plot(points[excluded, 0], points[excluded, 1], ".", color=GREY, ms=3.6, mew=0,
+            ls="none", zorder=4)
+    bx.plot([points[centre, 0]], [points[centre, 1]], "o", mfc="white", mec=RECURRENT,
+            mew=1.3, ms=5.4, ls="none", zorder=5)
+    bx.set_xlabel("$x_t$", labelpad=1.5)
+    bx.set_ylabel(r"$x_{t-\tau}$")
+    span = 1.12 * np.abs(points).max()
+    bx.set_xlim(-span, span)
+    bx.set_ylim(-span, span)
+    bx.set_xticks([-2, 0, 2])
+    bx.set_yticks([-2, 0, 2])
+
+    cx.plot(points[~excluded, 0], points[~excluded, 1], ".", color=FAINT, ms=1.3, mew=0,
+            zorder=2)
+    cx.add_patch(Circle(tuple(points[centre]), radius, fill=False, lw=0.8, ec=RECURRENT,
+                        ls=(0, (3, 2)), zorder=4))
+    for j in nearest:
+        cx.plot([points[centre, 0], points[j, 0]], [points[centre, 1], points[j, 1]], "-",
+                color=RECURRENT, lw=0.5, alpha=0.8, zorder=4)
+    cx.plot(points[nearest, 0], points[nearest, 1], ".", color=RECURRENT, ms=3.4, mew=0,
+            ls="none", zorder=5)
+    cx.plot([points[centre, 0]], [points[centre, 1]], "o", mfc="white", mec=RECURRENT,
+            mew=1.3, ms=5.4, ls="none", zorder=6)
+    pad = 1.5 * radius
+    cx.set_xlim(points[centre, 0] - pad, points[centre, 0] + pad)
+    cx.set_ylim(points[centre, 1] - pad, points[centre, 1] + pad)
+    cx.set_xticks([])
+    cx.set_yticks([])
+    # The power law as the panel's axis name: it is what the panel is for and it costs no
+    # row of its own. The radius has to be named somewhere, and this is the one pointer.
+    cx.set_xlabel(r"$m(r) \propto r^{\,d}$", labelpad=1.5)
+    cx.annotate(r"$r_m$", xy=(points[centre, 0] - 0.70 * radius,
+                              points[centre, 1] + 0.70 * radius),
+                xytext=(points[centre, 0] - 1.34 * radius,
+                        points[centre, 1] + 1.16 * radius),
+                ha="left", va="center", zorder=7,
+                arrowprops=dict(arrowstyle="->", lw=0.6, color=GREY, shrinkA=1, shrinkB=1),
+                **POINTER)
+
+    # Built by hand rather than collected from the axes: a key drawn at the marker size
+    # the panel uses is a dot two pixels across, which names nothing.
+    handles = [Line2D([], [], color=RECURRENT, marker=".", ms=6, mew=0, alpha=0.45,
+                      ls="none", label="the reconstruction"),
+               Line2D([], [], color=GREY, marker=".", ms=8, mew=0, ls="none",
+                      label=r"excluded: $|\Delta t| \leq W_T$"),
+               Line2D([], [], mfc="white", mec=RECURRENT, mew=1.3, marker="o", ms=5.4,
+                      ls="none", label="reference point"),
+               Line2D([], [], color=RECURRENT, marker=".", ms=8, mew=0, ls="none",
+                      label=r"its $m$ nearest")]
+    fig.legend(handles=handles, ncol=4, loc="lower center", bbox_to_anchor=(0.5, 0.005),
+               handlelength=0.8, handletextpad=0.35, columnspacing=1.1)
+    return fig
+
+
+# ----------------------------------------------------------------- figure 2
 def fig_regimes(read: Reader):
     """Recovery, and whether it can be told without ground truth, on the image-data system."""
     d = read.table("sweep_raw")
@@ -188,7 +315,7 @@ def fig_regimes(read: Reader):
     return fig
 
 
-# ------------------------------------------------------------------ figure 2
+# ----------------------------------------------------------------- figure 3
 def fig_dip(read: Reader):
     """The trajectory-rank collapse at generalisation, aligned on t_gen.
 
@@ -211,8 +338,8 @@ def fig_dip(read: Reader):
     d = d.merge(e9[["run", "mid", "MG"]], on=["run", "mid"], how="left")
     assert d.MG.notna().sum() > 1000, "matched-window trace did not join onto the direct grid"
 
-    panels = [("fn_PR_pos_det", "(c) function space", None),
-              ("PR_pos_det", "(d) parameter space", None),
+    panels = [("fn_PR_pos_det", "(c) functions", None),
+              ("PR_pos_det", "(d) parameters", None),
               ("move", "(e) displacement", "log"),
               ("MG", "(f) scalar log", None)]
 
@@ -235,8 +362,7 @@ def fig_dip(read: Reader):
     curve_ax.text(-4700, 0.20, "validation", ha="left", va="center", **POINTER)
     curve_ax.set_ylim(-0.05, 1.05)
     curve_ax.set_yticks([0, 0.5, 1.0])
-    curve_ax.set_ylabel("accuracy")
-    curve_ax.set_title("(a) validation accuracy", loc="left")
+    curve_ax.set_title("(a) accuracy", loc="left")
 
     # The scalar the estimator is given, for every run rather than one. Weight decay
     # separates the two groups and moves the observer with them, which is the confound
@@ -254,8 +380,8 @@ def fig_dip(read: Reader):
     log_ax.set_yticks([30, 50, 100])
     log_ax.set_yticklabels(["30", "50", "100"])
     log_ax.minorticks_off()
-    log_ax.set_ylabel("parameter norm")
-    log_ax.set_title("(b) the parameter norm", loc="left")
+    log_ax.set_ylabel("norm")
+    log_ax.set_title("(b) the observer", loc="left")
 
     for ax in (curve_ax, log_ax):
         ax.axvline(0, color=FAINT, lw=0.7, ls=(0, (2, 2.5)), zorder=0)
@@ -300,9 +426,10 @@ def fig_dip(read: Reader):
         ax.set_xticks([-5000, 0, 5000])
         ax.set_xticklabels(["$-5$k", "$t_{\\mathrm{gen}}$", "5k"])
 
-    axes[0].set_ylabel("participation ratio")
-    axes[1].set_ylabel("participation ratio")
-    axes[2].set_ylabel("displacement")
+    axes[0].set_ylabel(r"$\mathrm{PR}^{\mathrm{det}}$")
+    axes[1].set_ylabel(r"$\mathrm{PR}^{\mathrm{det}}$")
+    # (e) is named by its title alone: "displacement" beside "(d) parameters" is the
+    # collision this pass exists to remove.
     axes[3].set_ylabel("components")
 
     handles = [
@@ -324,7 +451,7 @@ def fig_dip(read: Reader):
     return fig
 
 
-# ------------------------------------------------------------------ figure 3
+# ----------------------------------------------------------------- figure 4
 def fig_map(read: Reader):
     """Where the training logs of section 7 fall in the plane of the two diagnostics."""
     tr = read.table("real_logs_summary")
@@ -394,7 +521,7 @@ def fig_map(read: Reader):
     return fig
 
 
-# ------------------------------------------------------------------ figure 4
+# ----------------------------------------------------------------- figure 5
 def fig_pairs(read: Reader):
     """The label-matched pairs, and the training loss that explains them.
 
@@ -475,7 +602,7 @@ def fig_pairs(read: Reader):
     return fig
 
 
-# ------------------------------------------------------------------ figure 5
+# ----------------------------------------------------------------- figure 6
 def fig_window(read: Reader):
     """The windowed log estimate against t_gen: the change test of section 7.1.
 
@@ -629,7 +756,7 @@ def fig_window(read: Reader):
     return fig
 
 
-# ------------------------------------------------------------------ figure 6
+# ----------------------------------------------------------------- figure 7
 def fig_aniso(read: Reader):
     """Anisotropy: the estimate follows the count, not the participation ratio.
 
@@ -679,7 +806,7 @@ def fig_aniso(read: Reader):
     return fig
 
 
-# ------------------------------------------------------------------ figure 7
+# ----------------------------------------------------------------- figure 8
 def fig_tau(read: Reader):
     """The delay-lag sweep: the usable span is about four tenths of a period.
 
@@ -744,7 +871,7 @@ def fig_tau(read: Reader):
     return fig
 
 
-# ------------------------------------------------------------------ figure 8
+# ----------------------------------------------------------------- figure 9
 def fig_observers(read: Reader):
     """Which scalar log should you keep? Per-observer error on the recurrent arm.
 
@@ -808,7 +935,7 @@ def fig_observers(read: Reader):
     return fig
 
 
-# ------------------------------------------------------------------ figure 9
+# ---------------------------------------------------------------- figure 10
 def fig_prwindow(read: Reader):
     """The full-batch participation ratio against window length.
 
@@ -858,7 +985,7 @@ def fig_prwindow(read: Reader):
     return fig
 
 
-# ----------------------------------------------------------------- figure 10
+# ---------------------------------------------------------------- figure 11
 def fig_eos(read: Reader):
     """Full-batch descent at the edge of stability, and what the logging stride hides."""
     runs = read.table("eos_runs").sort_values(["lr", "seed"])
@@ -946,7 +1073,7 @@ def fig_eos(read: Reader):
     return fig
 
 
-# ----------------------------------------------------------------- figure 11
+# ---------------------------------------------------------------- figure 12
 def fig_ceiling(read: Reader):
     """The tracking ceiling against each hypothesis's knob, and against its prediction."""
     d = read.table("ceiling_summary")
@@ -995,7 +1122,7 @@ def fig_ceiling(read: Reader):
     return fig
 
 
-# ----------------------------------------------------------------- figure 12
+# ---------------------------------------------------------------- figure 13
 def fig_traces(read: Reader):
     """One raw scalar log per regime -- what the estimator is actually reading."""
     syn = read.table("example_traces")
@@ -1014,7 +1141,7 @@ def fig_traces(read: Reader):
         ("transient", z(syn["transient"].to_numpy()), np.arange(len(syn)),
          TRANSIENT, "deterministic, transient", "sample"),
         ("stochastic", z(real["weight_norm"].to_numpy()),
-         real["step"].to_numpy() / 1000.0, STOCHASTIC, "stochastically driven",
+         real["step"].to_numpy() / 1000.0, STOCHASTIC, "stochastically forced",
          "step ($10^3$)"),
     ]
 
@@ -1033,7 +1160,7 @@ def fig_traces(read: Reader):
     return fig
 
 
-# ----------------------------------------------------------------- figure 13
+# ---------------------------------------------------------------- figure 14
 def fig_signal(read: Reader):
     """Four logs that look alike, and the four levels the estimator reads off them."""
     series = read.table("curve_series")
@@ -1098,45 +1225,65 @@ def fig_signal(read: Reader):
     return fig
 
 
-# ----------------------------------------------------------------- figure 14
+# ---------------------------------------------------------------- figure 15
 def fig_switch(read: Reader):
-    """A known change of the number of phases, and what each statistic does about it."""
+    """A known change in the number of phases at matched roughness, tracked as it happens."""
     d = read.table("geometry_switch")
     centres = np.sort(d.centre.unique())
-    truth = d.groupby("centre").truth.first().reindex(centres)
+    x = centres / 1000.0
+    truth = d.groupby("centre").truth.first().reindex(centres).to_numpy(dtype=float)
 
-    panels = [("MG", "(a) the estimate", "components"),
-              ("roughness", "(b) the roughness", "roughness"),
-              ("PRdelay", r"(c) the linear $\mathrm{PR}$", "components")]
-
-    fig, axes = plt.subplots(1, 3, figsize=(5.5, 1.72))
-    for ax, (column, title, ylabel) in zip(axes, panels):
+    fig, (ax, rx) = plt.subplots(2, 1, figsize=(WIDTH, 1.86), sharex=True,
+                                 gridspec_kw={"height_ratios": [2.6, 1.0]})
+    # Named above each row rather than beside it: a row of a two-row figure is shorter than
+    # either word set on end, and both ran off the canvas.
+    for slot, column, ylabel in ((ax, "MG", "(a) the estimate, in components"),
+                                 (rx, "roughness", "(b) the roughness")):
         stack = np.vstack([d[d.seed == s].sort_values("centre")[column].to_numpy()
                            for s in sorted(d.seed.unique())])
-        middle = np.median(stack, axis=0)
-        x = centres / 1000.0
-        ax.fill_between(x, stack.min(axis=0), stack.max(axis=0), facecolor=RECURRENT,
-                        alpha=0.20, lw=0)
-        ax.plot(x, middle, "-", color=RECURRENT, lw=1.2, zorder=4)
-        ax.set_title(title, loc="left", pad=2.5)
-        ax.set_ylabel(ylabel)
-        ax.set_xlabel("window centre ($10^3$)", labelpad=1.5)
-        ax.set_xlim(x.min(), x.max())
-        ax.set_xticks([0, 10, 20, 30])
-    # The truth is a step, and the windows a ramp reaches into carry no truth at all, so
-    # the reference is drawn only where the schedule holds a level.
-    axes[0].plot(centres / 1000.0, truth.to_numpy(), color=GREY, lw=0.9,
-                 ls=(0, (3.5, 2)), zorder=5)
-    axes[0].text(centres[2] / 1000.0, 4.35, "phases", ha="left", va="bottom", **POINTER)
-    axes[0].set_ylim(0.0, 5.0)
-    axes[1].set_ylim(0.0, 0.18)
-    axes[2].set_ylim(*bounds(d.PRdelay, pad=0.18))
+        slot.fill_between(x, stack.min(axis=0), stack.max(axis=0), facecolor=RECURRENT,
+                          alpha=0.20, lw=0, zorder=3)
+        slot.plot(x, np.median(stack, axis=0), "-", color=RECURRENT, lw=1.3, zorder=4)
+        slot.set_title(ylabel, loc="left", pad=2.5)
 
-    fig.tight_layout(w_pad=1.3)
+    # The truth is a level the schedule holds, drawn as a band behind the estimate and only
+    # where it exists. Over a ramp there are two systems inside one window and no number
+    # the estimate could be right or wrong about, so those windows are struck out instead:
+    # the old panel drew the estimate through them beside an unbroken reference.
+    ax.plot(x, truth, "-", color=GREY, lw=5.5, alpha=0.42, solid_capstyle="butt", zorder=2)
+    half = 0.5 * float(np.diff(x).min())
+    missing = np.isnan(truth)
+    edges = np.flatnonzero(np.diff(np.r_[0, missing.astype(int), 0]))
+    for lo, hi in zip(edges[::2], edges[1::2]):
+        for slot in (ax, rx):
+            slot.axvspan(x[lo] - half, x[hi - 1] + half, facecolor="none", edgecolor=FAINT,
+                         hatch="////", lw=0.0, zorder=1)
+
+    ax.set_ylim(0.0, 5.2)
+    ax.set_yticks([0, 2, 4])
+    # From zero, so that the flat trace is read against the fourfold change above it rather
+    # than against its own noise: over every window of every seed the roughness lies
+    # between 0.085 and 0.094.
+    rx.set_ylim(0.0, 0.16)
+    rx.set_yticks([0.0, 0.1])
+    rx.set_xticks([10, 20, 30])
+    rx.set_xlabel("window centre ($10^3$ optimiser steps)", labelpad=1.5)
+    # Last, and on the shared axis: an axvspan added after a set_xlim brings the frame back
+    # to the origin, which left a third of this one empty.
+    rx.set_xlim(x.min(), x.max())
+
+    handles = [Line2D([], [], color=GREY, lw=5.5, alpha=0.42, label="phases forced"),
+               Line2D([], [], color=RECURRENT, lw=1.3,
+                      label=r"$\hat{d}_{\mathrm{MG}}$, median of eight seeds"),
+               Patch(facecolor="none", edgecolor=FAINT, hatch="////",
+                     label="a ramp reaches in: no truth")]
+    fig.tight_layout(rect=[0, 0.155, 1, 1.03], h_pad=0.4)
+    fig.legend(handles=handles, ncol=3, loc="lower center", bbox_to_anchor=(0.5, 0.005),
+               handlelength=1.5, handletextpad=0.45, columnspacing=1.2)
     return fig
 
 
-# ----------------------------------------------------------------- figure 15
+# ---------------------------------------------------------------- figure 16
 def fig_shapes(read: Reader):
     """The object the neighbour search measures, in the plane of its first two coordinates."""
     d = read.table("curve_shapes")
@@ -1162,7 +1309,7 @@ def fig_shapes(read: Reader):
     return fig
 
 
-# ----------------------------------------------------------------- figure 16
+# ---------------------------------------------------------------- figure 17
 def fig_exclusion(read: Reader):
     """Why the exclusion decides the value on a transient and leaves a torus alone."""
     d = read.table("theiler_sweep")
@@ -1204,7 +1351,7 @@ def fig_exclusion(read: Reader):
     return fig
 
 
-# ----------------------------------------------------------------- figure 17
+# ---------------------------------------------------------------- figure 18
 def fig_surrogate(read: Reader):
     """Each run's fall against the null distribution built from that run alone.
 
@@ -1265,12 +1412,71 @@ def fig_surrogate(read: Reader):
     return fig
 
 
+# ---------------------------------------------------------------- figure 19
+def fig_timing(read: Reader):
+    """When the collapse falls, against each run's own transition and against a fixed step."""
+    d = read.table("rank_dip")
+    meta = {m["run"]: m for m in read.object("rank_milestones")}
+    runs = ["mod_wd1", "mod_wd1_s43", "mod_wd1_s44", "s5_wd1"]
+    search = 4.0        # the dip is the minimum within +-4000 steps of t_gen: appendix G.2
+
+    tgen = np.array([float(meta[run]["t_gen"]) for run in runs]) / 1000.0
+    spaces = [("PR_pos_det", "in the parameters", "o", dict(mec="white", mew=0.7)),
+              ("fn_PR_pos_det", "in function space", "^", dict(mfc="none", mew=1.2))]
+    offsets = {}
+    for stat, _, _, _ in spaces:
+        one = d[d.stat == stat].set_index("run")
+        offsets[stat] = np.array([float(one.loc[run, "at"]) for run in runs]) / 1000.0
+
+    fig, ax = plt.subplots(figsize=(WIDTH, 1.98))
+
+    # What the measurement could have reported at all: the minimum is searched in a window
+    # of +-4000 steps about each run's own transition, so nothing outside this band could
+    # have been found however the runs behaved. Drawn, because the fixed-step line below
+    # leaves it and a reader is owed the reason no point follows it out.
+    for sign in (-1, 1):
+        ax.axhline(sign * search, color=GREY, lw=0.7, ls=(0, (1.5, 2.5)), zorder=1)
+    ax.text(14.7, search - 0.3, "limit of the search", ha="right", va="top", **POINTER)
+
+    # The one fixed absolute step that fits these eight minima best. A collapse happening at
+    # a fixed step would put every minimum on this line; the four transitions span 9980
+    # steps against a search window of 8000, so no fixed step can even keep all four inside
+    # the band, and none of the eight is more than 1.6k from its own transition.
+    fixed = float(np.mean([tgen + offsets[stat] for stat, _, _, _ in spaces]))
+    grid = np.linspace(2.6, 14.9, 2)
+    ax.plot(grid, fixed - grid, "--", color=GREY, lw=1.0, dashes=(4, 3), zorder=2,
+            label="one fixed absolute step")
+    ax.axhline(0.0, color=GREY, lw=0.6, zorder=1)
+
+    for stat, label, mark, style in spaces:
+        ax.plot(tgen, offsets[stat], mark, color=STOCHASTIC, ms=5.2, ls="none", zorder=4,
+                label=label, **style)
+
+    ax.set_xlim(2.6, 14.9)
+    ax.set_ylim(-6.0, 5.4)
+    # The units go on the tick labels: spelled out in the axis name, "minimum minus
+    # t_gen, thousands of steps" is longer at 9 pt than the axes are tall, and an appendix
+    # figure cannot grow to hold it.
+    ax.set_xticks([4, 8, 12])
+    ax.set_xticklabels(["4k", "8k", "12k"])
+    ax.set_yticks([-4, 0, 4])
+    ax.set_yticklabels(["$-4$k", "0", "$+4$k"])
+    ax.set_xlabel("$t_{\\mathrm{gen}}$ of the run", labelpad=1.5)
+    ax.set_ylabel("minimum $-\\ t_{\\mathrm{gen}}$")
+
+    fig.tight_layout(rect=[0, 0.125, 1, 1.02])
+    fig.legend(ncol=3, loc="lower center", bbox_to_anchor=(0.5, 0.005), handlelength=1.6,
+               handletextpad=0.45, columnspacing=1.3)
+    return fig
+
+
 # ------------------------------------------------------------------ the build
 #
 # In the order the archived generator drew them, which is the order they appear in the
 # article.
 
 PANELS: Dict[str, Callable[[Reader], Any]] = {
+    "fig_method": fig_method,
     "fig_regimes": fig_regimes,
     "fig_dip": fig_dip,
     "fig_map": fig_map,
@@ -1288,6 +1494,7 @@ PANELS: Dict[str, Callable[[Reader], Any]] = {
     "fig_shapes": fig_shapes,
     "fig_exclusion": fig_exclusion,
     "fig_surrogate": fig_surrogate,
+    "fig_timing": fig_timing,
 }
 
 NAMES = tuple(PANELS)
@@ -1306,7 +1513,7 @@ def draw(name: str, read: Reader):
 
 
 def build(outdir: Path, names: Sequence[str] = (), allow_archive: bool = False) -> Dict[str, Any]:
-    """Draw the requested figures into ``outdir``, all twelve by default.
+    """Draw the requested figures into ``outdir``, all nineteen by default.
 
     Returns what was drawn and where each input came from, so that the caller can record
     it and can see at once whether anything was built from the archived tree.

@@ -1158,8 +1158,8 @@ def check_aggregation(table: Table, data: Data) -> Iterable[Computed]:
 _CONTROLS = (
     ("none (baseline)", "baseline"),
     ("learning rate halved", "lr_step"),
-    ("drive band up one octave", "freq_double"),
-    ("drive band down one octave", "freq_half"),
+    ("forcing band up one octave", "freq_double"),
+    ("forcing band down one octave", "freq_half"),
     ("coordinates rotated", "rotate"),
     ("observer gain ramped", "obs_scale"),
     ("state amplitude ramped", "amp_ramp"),
@@ -1792,7 +1792,10 @@ def check_ceiling(table: Table, data: Data) -> Iterable[Any]:
 #: the table then goes unchecked with only a parse error to say so.
 _CEILING_FITS = (("embedding condition", "rmse_takens"),
                  ("finite-record bound", "rmse_er"),
-                 ("pointwise minimum", "rmse_min"),
+                 ("pointwise minimum of the two", "rmse_min"),
+                 ("0.56", "rmse_takens_fit"),
+                 ("1.36", "rmse_er_fit"),
+                 ("pointwise minimum, each scaled", "rmse_min_fit"),
                  ("log_10E", "rmse_loglog"))
 
 
@@ -1861,7 +1864,8 @@ def check_ceilingfit(table: Table, data: Data) -> Iterable[Any]:
     frame = data.frame(rel)
     record = frame[frame.iloc[:, 0] == "MG_plateau"].iloc[0]
     for label, column in _CEILING_FITS:
-        yield Computed(table.find(label), 1, float(record[column]), Data.name(rel))
+        # Column 2: the table now prints the free-parameter count in column 1.
+        yield Computed(table.find(label), 2, float(record[column]), Data.name(rel))
 
     # The log-log row states its own coefficients, so they are compared as well as its error.
     row = table.rows[table.find("log_10E")]

@@ -34,11 +34,11 @@ FIGURE_INPUTS = (
 
 @experiment(
     id="paper.figures",
-    title="The seventeen figures, into ../icomp_v2/figures/",
-    paper=("fig:regimes", "fig:dip", "fig:observers", "fig:tau", "fig:aniso", "fig:map",
-           "fig:pairs", "fig:prwindow", "fig:window", "fig:eos", "fig:ceiling",
-           "fig:traces", "fig:signal", "fig:switch", "fig:shapes", "fig:exclusion",
-           "fig:surrogate"),
+    title="The nineteen figures, into ../icomp_v2/figures/",
+    paper=("fig:method", "fig:regimes", "fig:dip", "fig:observers", "fig:tau",
+           "fig:aniso", "fig:map", "fig:pairs", "fig:prwindow", "fig:window", "fig:eos",
+           "fig:ceiling", "fig:traces", "fig:signal", "fig:switch", "fig:shapes",
+           "fig:exclusion", "fig:surrogate", "fig:timing"),
     device=CPU,
     minutes=2,
     needs=FIGURE_INPUTS,

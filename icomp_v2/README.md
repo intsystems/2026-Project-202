@@ -26,10 +26,12 @@ the style file prints ``Anonymous authors / Paper under double-blind review'' an
 head reads ``Under review''. Uncomment `\icomparxivcopy` for a named preprint build and
 `\icompfinalcopy` for camera-ready.
 
-**Page budget.** ICOMP allows nine pages excluding references, and the two NeurIPS workshop
-editions bracket the body at exactly eight: NewInML sets a ceiling of eight and Artifacts a floor.
-The body therefore ends on page 8 and the references begin on page 9, with no slack at all.
-Anything added to the body needs a matching cut, and so does anything removed.
+**Page budget.** The body runs to nine pages: ICOMP allows nine excluding references and
+the Artifacts edition eight to twelve, and it is nine that binds. NewInML's ceiling of eight
+was what held the body to eight pages until that workshop's deadline passed on 29 August
+2026; `make_newinml.py` still measures against it and reports the build one over. Restoring
+an eight-page body means taking about eighteen lines out, which at this point means cutting
+an argument rather than a restatement.
 The appendices follow the references and are unconstrained, so new material goes
 there. There is no keywords line: the style file defines no such field.
 
