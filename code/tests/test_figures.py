@@ -31,13 +31,13 @@ pytestmark = pytest.mark.skipif(not sources.archive_root().is_dir(),
 
 @pytest.fixture(scope="module")
 def built(tmp_path_factory):
-    """All seventeen, drawn once into a temporary directory."""
+    """All nineteen, drawn once into a temporary directory."""
     outdir = tmp_path_factory.mktemp("figures")
     return panels.build(outdir, allow_archive=True)
 
 
-def test_seventeen_figures():
-    assert len(panels.NAMES) == 17
+def test_nineteen_figures():
+    assert len(panels.NAMES) == 19
     assert set(panels.NAMES) == set(panels.PANELS)
 
 

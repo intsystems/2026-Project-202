@@ -116,9 +116,12 @@ limit.
 Where it stands today:
 
 ```
-34 pages, main text 8, 0 undefined, 0 duplicate, 0 overfull   <-- fits
+34 pages, main text 9, 0 undefined, 0 duplicate, 0 overfull   <-- 1 over
 ```
 
-Eight pages of main text against a limit of eight, so the body is at the
-ceiling and has no slack. Anything added to it needs a matching cut, and the
-cut belongs in `report.tex`, where both editions of the paper pick it up.
+Nine pages of main text against a limit of eight, and deliberately so: this
+workshop's deadline passed on 29 August 2026, and the body was then budgeted at
+nine to hold two figures the eight-page body could not (`fig:method` and
+`fig:switch`). The Artifacts edition, whose limit is 8--12, still fits. Should
+this edition be wanted again, the cut belongs in `report.tex`, where both
+editions pick it up, and it is about eighteen lines.
