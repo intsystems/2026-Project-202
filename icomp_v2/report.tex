@@ -87,15 +87,14 @@ intrinsic dimension by maximum likelihood on nearest-neighbour distances. The pr
 plausible number on any record, including one in which nothing recurs, so it estimates the
 active dimension only under conditions we establish separately. On the one of six constructed systems that meets every
 requirement we fixed in advance it is accurate to about one component, up to a ceiling near eight;
-all six systems are externally forced and training is not. Statistics
-computed from the log identify the records on which the value is not a dimension at all. They
-reject both standard grokking settings, so we store the trajectory
-instead. Its detrended effective rank
-collapses at generalisation in the four runs trained with weight decay, then re-expands, the
-simplification that mechanistic accounts of grokking predict. A run that merely stops moving can
-collapse as deeply. Only the timing of the collapse and its reversal mark the transition. Re-run over a window matched to the transition, the estimate on an ordinary log falls
-at the same step in those four runs and in neither of the other two, more steeply than all but a
-few per cent of randomised surrogates of each run.
+The remaining constructions expose failure modes under transience, stochastic forcing and poor
+delay choices. All validation systems are externally forced; the training runs are not. The
+diagnostics therefore reject the scalar estimate as a dimension in both grokking settings. We
+instead analyse saved trajectory sketches. The detrended covariance participation ratio falls near
+generalisation in four regularised runs and later recovers. A memorising run can fall as far. The
+timing of the fall and its reversal separates the generalising runs in this sample. A matched
+short-window analysis of the parameter norm shows the same event, but its level is not dimensional
+and the effect is weaker than the corresponding change in roughness.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -127,12 +126,16 @@ value fixed by its spectral exponent \citep{osborne1989finite, theiler1991some};
 transient yields a large value. Establishing which case a training log falls in is the substance of
 the problem.
 
-\paragraph{Contributions.} We evaluate the estimate on six constructed systems of increasing
-realism, one of which meets every requirement fixed in advance (\cref{sec:ladder}); we establish
-the conditions its value depends on, two of them computable from the series alone
-(\cref{sec:validity}); and we apply it to grokking, where both published settings fall outside the
-regime the estimate needs and the result comes from the stored trajectory instead
-(\cref{sec:grokking}).
+\paragraph{Contributions.} This paper makes three contributions. First, it defines active dimension
+as a local dimension of the occupation measure of a recurrent training regime and separates it from
+available dimension, functional dimension and trajectory effective rank. Second, it tests scalar-log
+recovery on six constructed systems under a frozen, held-out protocol. One learned-system benchmark
+passes every prespecified check; the other systems expose failure modes caused by transient motion,
+stochastic forcing, unequal excitation and poor delay choices. Third, it applies the same diagnostics
+to two grokking settings. The scalar estimate is not dimensional there. Saved trajectory sketches
+instead reveal a reversible, regularisation-associated drop in detrended covariance participation
+ratio near generalisation in four runs, while matched short-window logs provide a transition-
+correlated signal with no dimensional interpretation.
 
 \section{Related work}\label{sec:related}
 
@@ -408,7 +411,7 @@ divergent quantity evaluated at the exclusion the configuration asks for. Removi
 value maximum likelihood gives on a uniformly sampled curve, at every rank, seed and observer, and
 leaves the fast recurrent case unchanged (\cref{app:exclusion}).
 
-Every system above is externally forced and training is not, so the evaluation is conditional.
+Every validation system above is externally forced. Training is not. The evaluation therefore establishes a conditional result.
 Full-batch descent does reach the edge of stability \citep{cohen2021gradient}, where an unforced
 run might still recur, but oscillation is not recurrence and the diagnostics reject every run at
 the edge (\cref{app:eos}).
@@ -1315,12 +1318,10 @@ of its own run's transition, in both spaces (\cref{fig:timing}).
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig_timing.pdf}
-\caption{The collapse tracks each run's own transition and not a fixed step. The minimum of
+\caption{The collapse follows each run's own transition. The minimum of
 the detrended participation ratio in each of the four generalising runs, against that run's
-generalisation step; the two $S_5$ and modular runs near $6.7$k nearly coincide. Dashed, the
-offsets a collapse at one fixed absolute step would give, that step fitted to these eight
-minima. Dotted, the $\pm 4\,000$ steps the search covers, beyond which no minimum could have
-been reported.}
+generalisation step. The two $S_5$ and modular runs near $6.7$k nearly coincide. Dotted, the
+$\pm 4\,000$ steps searched around each transition.}
 \label{fig:timing}
 \end{figure}
 

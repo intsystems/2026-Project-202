@@ -1167,6 +1167,10 @@ def fig_signal(read: Reader):
     windows = read.table("curve_windows")
     ranks = sorted(series.r.unique())
     marks = ["o", "s", "^", "D"]
+    # The four curves belong to one dynamical regime, but they represent different
+    # ranks. Give the ranks distinct, colour-blind-safe hues as well as markers; the
+    # marker remains the primary encoding in print and in monochrome copies.
+    rank_colours = ["#332288", "#117733", "#44AA99", "#CC6677"]
 
     # 400 samples, not the whole record: the drive fills one octave of a period near
     # sixteen samples, so ten thousand of them at an inch and a quarter wide is a block of
@@ -1179,7 +1183,8 @@ def fig_signal(read: Reader):
     for column, rank in enumerate(ranks):
         ax = fig.add_subplot(grid[0, 2 * column:2 * column + 2])
         one = series[(series.r == rank) & (series["sample"] < span)]
-        ax.plot(one["sample"].to_numpy(), one.z.to_numpy(), "-", color=RECURRENT, lw=0.6)
+        ax.plot(one["sample"].to_numpy(), one.z.to_numpy(), "-",
+                color=rank_colours[column], lw=0.6)
         ax.set_title(f"$r = {rank}$", pad=2.5)
         ax.set_ylim(-3.0, 3.0)
         ax.set_yticks([-2, 0, 2])
@@ -1197,13 +1202,13 @@ def fig_signal(read: Reader):
     ex = fig.add_subplot(grid[1, :len(ranks)])
     rx = fig.add_subplot(grid[1, len(ranks):])
     handles = []
-    for rank, mark in zip(ranks, marks):
+    for rank, mark, colour in zip(ranks, marks, rank_colours):
         one = windows[windows.r == rank].sort_values("centre")
         x = one.centre.to_numpy() / 1000.0
         for ax, column in ((ex, "MG"), (rx, "roughness")):
-            ax.plot(x, one[column].to_numpy(), "-", color=RECURRENT, lw=0.9,
+            ax.plot(x, one[column].to_numpy(), "-", color=colour, lw=0.9,
                     marker=mark, ms=2.6, markevery=5, mec="white", mew=0.3)
-        handles.append(Line2D([], [], color=RECURRENT, lw=0.9, marker=mark, ms=2.6,
+        handles.append(Line2D([], [], color=colour, lw=0.9, marker=mark, ms=2.6,
                               mec="white", mew=0.3, label=f"$r = {rank}$"))
         ex.axhline(float(one.truth.iloc[0]), color=FAINT, lw=0.7, ls=(0, (2, 2.5)),
                    zorder=0)
@@ -1438,14 +1443,6 @@ def fig_timing(read: Reader):
         ax.axhline(sign * search, color=GREY, lw=0.7, ls=(0, (1.5, 2.5)), zorder=1)
     ax.text(14.7, search - 0.3, "limit of the search", ha="right", va="top", **POINTER)
 
-    # The one fixed absolute step that fits these eight minima best. A collapse happening at
-    # a fixed step would put every minimum on this line; the four transitions span 9980
-    # steps against a search window of 8000, so no fixed step can even keep all four inside
-    # the band, and none of the eight is more than 1.6k from its own transition.
-    fixed = float(np.mean([tgen + offsets[stat] for stat, _, _, _ in spaces]))
-    grid = np.linspace(2.6, 14.9, 2)
-    ax.plot(grid, fixed - grid, "--", color=GREY, lw=1.0, dashes=(4, 3), zorder=2,
-            label="one fixed absolute step")
     ax.axhline(0.0, color=GREY, lw=0.6, zorder=1)
 
     for stat, label, mark, style in spaces:
@@ -1461,8 +1458,8 @@ def fig_timing(read: Reader):
     ax.set_xticklabels(["4k", "8k", "12k"])
     ax.set_yticks([-4, 0, 4])
     ax.set_yticklabels(["$-4$k", "0", "$+4$k"])
-    ax.set_xlabel("$t_{\\mathrm{gen}}$ of the run", labelpad=1.5)
-    ax.set_ylabel("minimum $-\\ t_{\\mathrm{gen}}$")
+    ax.set_xlabel("generalisation step of the run", labelpad=1.5)
+    ax.set_ylabel("minimum offset (k)")
 
     fig.tight_layout(rect=[0, 0.125, 1, 1.02])
     fig.legend(ncol=3, loc="lower center", bbox_to_anchor=(0.5, 0.005), handlelength=1.6,
