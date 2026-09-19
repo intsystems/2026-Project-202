@@ -1,0 +1,167 @@
+﻿% !TeX program = pdflatex
+% Based on ../poster/main.tex: A1 portrait, tikzposter, two columns, blue on white.
+% Scientific source: ../../artifacts_article/icomp_artifacts.pdf (19 Sep 2026).
+\documentclass[17pt,a1paper,portrait,margin=15mm,colspace=10mm,blockverticalspace=5mm]{tikzposter}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx,booktabs,array,tabularx,ragged2e}
+\usepackage[hidelinks]{hyperref}
+\usepackage{qrcode}
+\tikzposterlatexaffectionproofoff
+\usetheme{Default}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{Blue}{HTML}{004488}
+\definecolor{Ink}{HTML}{172B40}
+\definecolor{Rose}{HTML}{BB5566}
+\definecolor{Gold}{HTML}{997700}
+\definecolor{Muted}{HTML}{52606D}
+\definecolorstyle{AcademicStyle}{}{
+ \colorlet{backgroundcolor}{white}\colorlet{framecolor}{white}
+ \colorlet{titlefgcolor}{Blue}\colorlet{titlebgcolor}{white}
+ \colorlet{blocktitlebgcolor}{Blue}\colorlet{blocktitlefgcolor}{Blue}
+ \colorlet{blockbodybgcolor}{white}\colorlet{blockbodyfgcolor}{Ink}
+}
+\usecolorstyle{AcademicStyle}
+\defineblockstyle{PosterMinimal}{
+ titlewidthscale=1,bodywidthscale=1,titleleft,
+ titleoffsetx=0pt,titleoffsety=0pt,bodyoffsetx=0pt,bodyoffsety=0pt,
+ bodyverticalshift=0pt,roundedcorners=0,linewidth=1.2pt,
+ titleinnersep=3mm,bodyinnersep=3mm
+}{
+ \ifBlockHasTitle
+ \draw[color=Blue,line width=1.2pt] (blocktitle.south west)--(blocktitle.south east);
+ \fi
+}
+\useblockstyle{PosterMinimal}
+\newcommand{\pblock}[2]{\block{\fontsize{26}{30}\selectfont #1}{\fontsize{20}{25}\selectfont\RaggedRight\setlength{\parskip}{7pt}#2}}
+\newcommand{\pcaption}[1]{{\fontsize{16}{20}\selectfont\color{Muted}#1\par}}
+\newcommand{\plot}[1]{\par\vspace{2mm}\centerline{\includegraphics[width=\linewidth]{figures/#1.pdf}}\vspace{1mm}}
+\newcommand{\emphline}[1]{{\color{Blue}\bfseries #1}}
+\newcommand{\dact}{d_{\mathrm{act}}}
+\newcommand{\dmg}{\hat d_{\mathrm{MG}}}
+\DeclareMathOperator{\PR}{PR}
+\newenvironment{posteritems}{\begin{itemize}\setlength{\itemsep}{3pt}\setlength{\parsep}{0pt}\setlength{\topsep}{3pt}}{\end{itemize}}
+\title{Estimating Active Dimension of Training Dynamics}
+\author{Nikolay Karlov}
+\institute{Moscow Institute of Physics and Technology}
+\settitle{
+ {\fontsize{19}{23}\selectfont\bfseries\color{Blue} ASCOMP\enspace /\enspace ICOMP 2026\hfill MIPT\par}
+ \vspace{6mm}
+ {\fontsize{48}{55}\selectfont\bfseries\color{Blue}Estimating Active Dimension\\of Training Dynamics from One Scalar Log\par}
+ \vspace{3mm}
+ {\fontsize{27}{33}\selectfont\color{Ink}with an Application to Grokking\par}
+ \vspace{5mm}
+ {\fontsize{21}{27}\selectfont\color{Ink}\textbf{Nikolay Karlov}\quad Moscow Institute of Physics and Technology\par}
+}
+\begin{document}
+\maketitle[width=564mm,innersep=3mm,titletotopverticalspace=0mm,titletoblockverticalspace=5mm]
+\block[bodyinnersep=4mm]{}{
+ \colorbox{Blue!7}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{\fontsize{23}{29}\selectfont\color{Blue}\textbf{One log can reveal low-dimensional recurrent dynamics.}\par
+ \fontsize{21}{27}\selectfont\color{Ink}On the grokking runs studied here, it gives a transition signal; stored trajectories reveal a reversible change in covariance effective rank.}}
+}
+\begin{columns}
+\column{0.5}
+\pblock{01\quad Define the quantity}{
+Can a scalar training log reveal how many independent components a recurrent parameter trajectory explores?
+
+\textbf{Active dimension} is the local dimension of the occupation measure $\mu_R$ of a regime $R$:
+\[
+ \dact(R)=\lim_{\varepsilon\downarrow0}
+ \frac{\log\mu_R(B(c,\varepsilon))}{\log\varepsilon}
+ \quad\text{for $\mu_R$-almost every $c$.}
+\]
+Here $c$ denotes parameter coordinates and $B(c,\varepsilon)$ a ball of radius $\varepsilon$. We assume the measure has the same local dimension almost everywhere. On a smooth occupied manifold with positive density, this counts local coordinates. Finite data resolve only finite scales.
+
+{\fontsize{18}{22}\selectfont\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.28\linewidth}X@{}}
+\toprule
+Available & Directions allowed by the parameter subspace.\\
+Functional & Rank of the output Jacobian on a fixed probe set.\\
+Active & Dimension of the recurrent occupation measure.\\
+Effective rank & Spread of trajectory variance across directions.\\
+\bottomrule
+\end{tabularx}}
+}
+\pblock{02\quad Reconstruct, then count neighbours}{
+\plot{fig_method}
+\pcaption{One scalar record, its delay reconstruction, and a neighbourhood. The loop is visited repeatedly.}
+\[
+ y_t=(x_t,x_{t-\tau},\ldots,x_{t-(E-1)\tau})\in\mathbb R^E,
+\]
+\[
+ \dmg^{-1}=\frac{1}{N(m-1)}\sum_{i=1}^{N}\sum_{j=1}^{m-1}
+ \log\frac{r_m^{(i)}}{r_j^{(i)}}.
+\]
+Pool the nearest-neighbour likelihood over $N$ delay vectors, each with $m$ neighbours, before inversion. $r_j^{(i)}$ is the $j$th neighbour distance; the \textbf{Theiler exclusion} requires time separation greater than $W_T$.
+
+\emphline{A dimensional interpretation needs} a valid delay embedding, one regime per window, enough returns after exclusion, and a stable scaling range.
+}
+\pblock{03\quad Controlled recovery has a ceiling}{
+A linear head on a frozen image network is forced by $r$ independent quasiperiodic phases. This supplies known active dimension. Settings are frozen before testing held-out ranks and seeds.
+\plot{fig_regimes}
+\pcaption{Left: recovery by regime; markers are medians over seeds and observers, bands are interquartile ranges. Right: stability under doubled embedding, at $r=2$ (open) and $r=6$ (filled).}
+\begin{posteritems}
+\item \textcolor{Blue}{\textbf{Recurrent:}} about one-component error up to roughly eight components at the main configuration.
+\item \textcolor{Rose}{\textbf{Stochastic:}} noise shifts the value and makes it depend on embedding settings.
+\item \textcolor{Gold}{\textbf{Transient:}} temporal exclusion can produce a large spurious value.
+\end{posteritems}
+\pcaption{Only one learned-system benchmark passes every prescribed check. All validation systems are externally forced.}
+}
+\column{0.5}
+\pblock{04\quad Grokking logs fail the dimension check}{
+\textbf{Grokking} is delayed generalisation after memorisation. We examine a mini-batch transformer and an unregularised full-batch perceptron.
+\plot{fig_map}
+\pcaption{Each point is a log. The blue band records accurate controlled cases; it is not a validated decision boundary.}
+The \textbf{identifiability ratio}
+\[
+ \rho_{\mathrm{ident}}=\frac{\dmg(2E_{\max})}{\dmg(E_{\max})}
+\]
+tests sensitivity to embedding dimension. Trend crossings measure non-monotonicity of the log.
+
+\emphline{All evaluated grokking logs lie outside the reference region.} Their scalar levels are not interpreted as active dimension. These diagnostics test neither recurrence itself nor the scaling range.
+}
+\pblock{05\quad The trajectory rank falls and recovers}{
+We record parameter and probe-logit trajectories through 1024-dimensional CountSketch projections. In each window, detrended covariance eigenvalues $\lambda_i$ give
+\[
+ \PR^{\mathrm{det}}=\frac{(\sum_i\lambda_i)^2}{\sum_i\lambda_i^2}.
+\]
+\plot{fig_dip}
+\pcaption{Four regularised runs (rose): three modular-addition seeds and one $S_5$ task. Two runs without weight decay (gold) are aligned to paired transition times. Thick rose curves average four runs; shading is hash-family spread, not uncertainty across runs.}
+\begin{posteritems}
+\item Covariance effective rank falls near generalisation and later re-expands in parameter and function space.
+\item A window matched to the transition gives a correlated drop in the parameter-norm log estimate.
+\end{posteritems}
+\emphline{Effective rank can fall while active dimension stays fixed.} The scalar drop describes a transition retrospectively; it does not establish early prediction.
+}
+\end{columns}
+\pblock{06\quad Scope of the evidence}{
+\begin{minipage}[t]{0.485\linewidth}
+\begin{posteritems}
+\item Recovery depends on the lag, observer and window. The tested resolution ceiling is low.
+\item The grokking comparison has four regularised runs against two without weight decay. Regularisation and outcome are confounded.
+\end{posteritems}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.485\linewidth}
+\begin{posteritems}
+\item One memorising run falls just as deeply elsewhere. Depth alone does not distinguish generalisation.
+\item The scalar effect disappears after linear detrending; roughness changes more strongly. The trajectory result does not reproduce in the full-batch setting.
+\end{posteritems}
+\end{minipage}\par\vspace{2mm}
+\emphline{Interpret the geometry only after checking the regime.} For these grokking runs, the evidence supports a reversible redistribution of trajectory variance.
+}
+\block[bodyinnersep=3mm]{}{
+\color{Blue}\rule{\linewidth}{1pt}\par\vspace{2mm}
+\begin{minipage}[c]{0.80\linewidth}
+{\fontsize{16}{20}\selectfont\color{Ink}
+\textbf{Method references:} Takens (1981); Sauer et al. (1991); Levina \& Bickel (2004); MacKay \& Ghahramani (2005).\par
+\vspace{2mm}\textbf{Contact:} \href{mailto:karlov.na@phystech.edu}{karlov.na@phystech.edu}\quad\textbf{Paper \& code:} intsystems/2026-Project-202}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.16\linewidth}\centering
+\qrcode[height=22mm]{https://github.com/intsystems/2026-Project-202}\par
+{\fontsize{14}{17}\selectfont\color{Muted}Paper \& code}
+\end{minipage}
+}
+\end{document}
