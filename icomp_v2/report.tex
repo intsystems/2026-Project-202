@@ -233,6 +233,46 @@ rank} means $\PR^{\mathrm{pos}}$.
 
 The effective rank is not the active dimension: it falls below $r$ wherever the $r$ directions do
 not carry comparable variance, while $d_{\mathrm{act}}(R)$ stays at $r$ (\cref{sec:aniso}).
+\Cref{tab:quantity-guide} summarises the quantities and their interpretation; the dynamical
+regimes are listed in \cref{sec:classes}.
+
+\begin{table}[t]
+\centering
+\caption{A guide to the quantities used to describe training. The final column gives the
+limits of their interpretation.}
+\label{tab:quantity-guide}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.18\linewidth}
+                  >{\raggedright\arraybackslash}p{0.25\linewidth}
+                  >{\raggedright\arraybackslash}p{0.24\linewidth}
+                  >{\raggedright\arraybackslash}p{\dimexpr0.33\linewidth-24pt\relax}@{}}
+\toprule
+Quantity & Meaning & Required data & Interpretation limit \\
+\midrule
+Available dimension $k$
+& Number of parameter directions allowed by the subspace.
+& The subspace parameterisation.
+& Does not specify how many directions the trajectory explores. \\
+\addlinespace
+Functional dimension
+& Rank of the output Jacobian at a given parameter state.
+& The Jacobian on a fixed probe set.
+& A lower rank need not imply a lower dimension of the parameter trajectory. \\
+\addlinespace
+Active dimension $d_{\mathrm{act}}(R)$
+& Local dimension of the regime's occupation measure (\cref{eq:act}).
+& A sampled recurrent trajectory; a suitable scalar log under the conditions of \cref{sec:classes}.
+& A smaller scalar estimate alone does not establish a fall in this dimension. \\
+\addlinespace
+Effective rank $\PR^{\mathrm{pos}}$, $\PR^{\mathrm{det}}$
+& Effective number of directions carrying the trajectory variance (\cref{eq:pr}).
+& A trajectory window; detrended within the window for $\PR^{\mathrm{det}}$.
+& Can fall through unequal variances while active dimension stays fixed. \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Observation model and estimator}\label{sec:estimator}
 
