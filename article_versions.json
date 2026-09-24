@@ -1,0 +1,22 @@
+{
+  "generated_utc": "2026-09-24T17:19:07.857604+00:00",
+  "source": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\icomp_v2\\report.tex",
+  "source_sha256": "90e01ea625160c86de040859a8cc6e2b7b0241d4a25a2298a1a5d94b5b2bf828",
+  "modes": [
+    "black",
+    "blue"
+  ],
+  "editions": [
+    "icomp",
+    "artifacts",
+    "aistats"
+  ],
+  "outputs": {
+    "icomp_black": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\icomp_v2\\report.pdf",
+    "artifacts_black": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\artifacts_article\\icomp_artifacts.pdf",
+    "aistats_black": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\aistats_article\\aistats2027.pdf",
+    "icomp_blue": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\icomp_v2\\report_blue.pdf",
+    "artifacts_blue": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\artifacts_article\\icomp_artifacts_blue.pdf",
+    "aistats_blue": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\aistats_article\\aistats2027_blue.pdf"
+  }
+}

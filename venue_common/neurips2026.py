@@ -53,6 +53,10 @@ SOURCE_MAIN = SOURCE_DIR / "report.tex"
 
 JOBNAME = "main"
 
+# The source article carries \cl{...} and the claude environment permanently.
+# A blue build only defines the switch; it never rewrites the source.
+CLAUDE_SWITCH = r"\def\claudedraft{}"
+
 # The old venue's style file, and what neurips_2026 loads for itself.  Any
 # \usepackage naming one of these is dropped; a line naming some of these and
 # some others is rewritten to keep the others.
@@ -436,7 +440,8 @@ def mark_end_of_main_text(body: str) -> str:
 # --------------------------------------------------------------------------
 
 def build_document(venue: dict, track: dict, mode: str, main: Path,
-                   authors: Path, script: str) -> tuple[str, str, dict]:
+                   authors: Path, script: str,
+                   claude: str = "black") -> tuple[str, str, dict]:
     text = flatten(main)
     preamble, body = split_document(text)
     preamble, pstats = convert_preamble(preamble)
@@ -457,6 +462,7 @@ def build_document(venue: dict, track: dict, mode: str, main: Path,
                       trackarg=trackarg),
         CLASS_HEADER.format(option=option, why=track["why"],
                             workshoptitle=venue["workshoptitle"]),
+        CLAUDE_SWITCH if claude == "blue" else "% Claude markup: ordinary black text",
         preamble,
         "",
         LINK_FIXES,
@@ -659,6 +665,9 @@ def main(venue: dict, here: Path, script: str, argv: list[str] | None = None) ->
     ap.add_argument("--mode", choices=["anon", "final"], default="anon",
                     help="anon: blind submission (default). "
                          "final: camera-ready, author names shown.")
+    ap.add_argument("--claude", choices=["black", "blue"], default="black",
+                    help="black: ordinary submission text (default); blue: "
+                         "review build with marked AI-assisted text in blue.")
     ap.add_argument("--workshop-title", default=venue["workshoptitle"],
                     help="name printed in the first-page footer "
                          f"(default: {venue['workshoptitle']})")
@@ -688,7 +697,7 @@ def main(venue: dict, here: Path, script: str, argv: list[str] | None = None) ->
 
     print(f"reading  {main_tex}")
     doc, title, stats = build_document(venue, track, args.mode, main_tex,
-                                       authors, script)
+                                       authors, script, args.claude)
     sanity_check(doc, args.mode)
 
     if build.exists():
@@ -714,11 +723,13 @@ def main(venue: dict, here: Path, script: str, argv: list[str] | None = None) ->
               "above hyperref")
 
     if not args.no_compile:
+        output_slug = slug + ("_blue" if args.claude == "blue" else "")
         pdf = compile_pdf(build, here / ".build-work",
-                          here / f"{slug}.pdf", track, args.keep_work)
+                          here / f"{output_slug}.pdf", track, args.keep_work)
         print(f"  preview        : {pdf}")
     if not args.no_zip:
-        archive = pack_zip(build, here / f"{slug}.zip")
+        output_slug = slug + ("_blue" if args.claude == "blue" else "")
+        archive = pack_zip(build, here / f"{output_slug}.zip")
         print(f"  zip            : {archive} "
               f"({archive.stat().st_size / 1e6:.1f} MB)")
 
@@ -740,5 +751,8 @@ def main(venue: dict, here: Path, script: str, argv: list[str] | None = None) ->
 
     for note in venue.get("notes", []):
         print(f"\n{note}")
-    print(f"\nSubmit {here / (slug + '.pdf')} to {venue['submit']}")
+    output_slug = slug + ("_blue" if args.claude == "blue" else "")
+    print(f"  claude markup  : {args.claude}"
+          + (" (review build)" if args.claude == "blue" else ""))
+    print(f"\nSubmit {here / (output_slug + '.pdf')} to {venue['submit']}")
     return 0

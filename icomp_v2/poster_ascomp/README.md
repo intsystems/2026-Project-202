@@ -27,7 +27,9 @@ The included figures are `fig_method.pdf` (delay reconstruction), `fig_regimes.p
 
 The text distinguishes conditional active-dimension recovery from covariance effective rank in grokking; it does not claim early prediction or an active-dimension collapse. Limitations include the forced validation setting, low resolution ceiling, window dependence, regularisation/outcome confounding and the full-batch non-replication. Figure shading is identified as hash-family spread rather than uncertainty across runs.
 
-Author/contact: Nikolay Karlov, MIPT, karlov.na@phystech.edu. The QR code points to the project repository.
+Authors/contact: Nikolay Karlov (MIPT) and Alexey Kravatskiy (AIRI); contact: karlov.na@phystech.edu. The QR code points to the project repository.
+
+Section headings identify the mathematical quantities, estimation method, regime comparison, grokking diagnostics and limitations. The quantity table gives formal definitions of available dimension, functional Jacobian rank, active dimension and covariance participation ratio, with assumptions and notation taken from the article. Updated 20 September 2026.
 
 ## Checks
 

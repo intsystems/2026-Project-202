@@ -1,4 +1,4 @@
-﻿% !TeX program = pdflatex
+% !TeX program = pdflatex
 % Based on ../poster/main.tex: A1 portrait, tikzposter, two columns, blue on white.
 % Scientific source: ../../artifacts_article/icomp_artifacts.pdf (19 Sep 2026).
 \documentclass[17pt,a1paper,portrait,margin=15mm,colspace=10mm,blockverticalspace=5mm]{tikzposter}
@@ -45,16 +45,18 @@
 \DeclareMathOperator{\PR}{PR}
 \newenvironment{posteritems}{\begin{itemize}\setlength{\itemsep}{3pt}\setlength{\parsep}{0pt}\setlength{\topsep}{3pt}}{\end{itemize}}
 \title{Estimating Active Dimension of Training Dynamics}
-\author{Nikolay Karlov}
-\institute{Moscow Institute of Physics and Technology}
+\author{Nikolay Karlov\textsuperscript{1}, Alexey Kravatskiy\textsuperscript{2}}
+\institute{\textsuperscript{1}Moscow Institute of Physics and Technology \quad \textsuperscript{2}AIRI}
 \settitle{
- {\fontsize{19}{23}\selectfont\bfseries\color{Blue} ASCOMP\enspace /\enspace ICOMP 2026\hfill MIPT\par}
+ {\fontsize{19}{23}\selectfont\bfseries\color{Blue} ASCOMP\enspace /\enspace ICOMP 2026\hfill MIPT\enspace /\enspace AIRI\par}
  \vspace{6mm}
  {\fontsize{48}{55}\selectfont\bfseries\color{Blue}Estimating Active Dimension\\of Training Dynamics from One Scalar Log\par}
  \vspace{3mm}
  {\fontsize{27}{33}\selectfont\color{Ink}with an Application to Grokking\par}
  \vspace{5mm}
- {\fontsize{21}{27}\selectfont\color{Ink}\textbf{Nikolay Karlov}\quad Moscow Institute of Physics and Technology\par}
+ {\fontsize{21}{27}\selectfont\color{Ink}\textbf{Nikolay Karlov\textsuperscript{1}\quad Alexey Kravatskiy\textsuperscript{2}}\par}
+ \vspace{2mm}
+ {\fontsize{19}{23}\selectfont\color{Ink}\textsuperscript{1}Moscow Institute of Physics and Technology\qquad\textsuperscript{2}AIRI\par}
 }
 \begin{document}
 \maketitle[width=564mm,innersep=3mm,titletotopverticalspace=0mm,titletoblockverticalspace=5mm]
@@ -64,28 +66,26 @@
 }
 \begin{columns}
 \column{0.5}
-\pblock{01\quad Define the quantity}{
-Can a scalar training log reveal how many independent components a recurrent parameter trajectory explores?
+\pblock{01\quad Dimensions and covariance effective rank}{
+Let $\theta=\theta_0+V^{\top}c$, where $V\in\mathbb R^{k\times P}$, $VV^{\top}=I_k$ and $c\in\mathbb R^k$. Let $f(c)$ be the outputs on a fixed probe set.
 
-\textbf{Active dimension} is the local dimension of the occupation measure $\mu_R$ of a regime $R$:
-\[
- \dact(R)=\lim_{\varepsilon\downarrow0}
- \frac{\log\mu_R(B(c,\varepsilon))}{\log\varepsilon}
- \quad\text{for $\mu_R$-almost every $c$.}
-\]
-Here $c$ denotes parameter coordinates and $B(c,\varepsilon)$ a ball of radius $\varepsilon$. We assume the measure has the same local dimension almost everywhere. On a smooth occupied manifold with positive density, this counts local coordinates. Finite data resolve only finite scales.
+Let $\mu_R$ be the occupation measure induced by an ergodic invariant measure of regime $R$, assumed exactly dimensional. Write $C_{\mathcal W}=\operatorname{Cov}_{t\in\mathcal W}(c_t)$ for a trajectory window $\mathcal W$.
 
-{\fontsize{18}{22}\selectfont\renewcommand{\arraystretch}{1.15}
-\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.28\linewidth}X@{}}
+{\fontsize{18}{23}\selectfont\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\RaggedRight\arraybackslash}p{0.31\linewidth}X@{}}
 \toprule
-Available & Directions allowed by the parameter subspace.\\
-Functional & Rank of the output Jacobian on a fixed probe set.\\
-Active & Dimension of the recurrent occupation measure.\\
-Effective rank & Spread of trajectory variance across directions.\\
+Quantity & \textbf{Definition}\\
+\midrule
+Available dimension & $d_{\mathrm{avail}}=\dim\operatorname{im}(V^{\top})=k$.\\
+Functional dimension & $d_{\mathrm{func}}(c)=\operatorname{rank}\!\left(\dfrac{\partial f(c)}{\partial c}\right)$.\\
+Active dimension & $\dact(R)=\displaystyle\lim_{\varepsilon\downarrow0}\dfrac{\log\mu_R(B(c,\varepsilon))}{\log\varepsilon}$, $\mu_R$-a.e.\\
+Covariance effective rank & $\PR^{\mathrm{pos}}=\dfrac{(\operatorname{tr}C_{\mathcal W})^2}{\operatorname{tr}(C_{\mathcal W}^2)}$, \quad $C_{\mathcal W}\ne0$.\\
 \bottomrule
 \end{tabularx}}
+\pcaption{$B(c,\varepsilon)$ is a Euclidean ball. For $\PR^{\mathrm{det}}$, replace $c_t$ by its residual about the window's least-squares line. Finite samples resolve finite-scale exponents, not the limit defining $\dact$.}
+
 }
-\pblock{02\quad Reconstruct, then count neighbours}{
+\pblock{02\quad Delay embedding and dimension estimation}{
 \plot{fig_method}
 \pcaption{One scalar record, its delay reconstruction, and a neighbourhood. The loop is visited repeatedly.}
 \[
@@ -99,7 +99,7 @@ Pool the nearest-neighbour likelihood over $N$ delay vectors, each with $m$ neig
 
 \emphline{A dimensional interpretation needs} a valid delay embedding, one regime per window, enough returns after exclusion, and a stable scaling range.
 }
-\pblock{03\quad Controlled recovery has a ceiling}{
+\pblock{03\quad Recovery accuracy across dynamical regimes}{
 A linear head on a frozen image network is forced by $r$ independent quasiperiodic phases. This supplies known active dimension. Settings are frozen before testing held-out ranks and seeds.
 \plot{fig_regimes}
 \pcaption{Left: recovery by regime; markers are medians over seeds and observers, bands are interquartile ranges. Right: stability under doubled embedding, at $r=2$ (open) and $r=6$ (filled).}
@@ -111,7 +111,7 @@ A linear head on a frozen image network is forced by $r$ independent quasiperiod
 \pcaption{Only one learned-system benchmark passes every prescribed check. All validation systems are externally forced.}
 }
 \column{0.5}
-\pblock{04\quad Grokking logs fail the dimension check}{
+\pblock{04\quad Scalar-log diagnostics in grokking}{
 \textbf{Grokking} is delayed generalisation after memorisation. We examine a mini-batch transformer and an unregularised full-batch perceptron.
 \plot{fig_map}
 \pcaption{Each point is a log. The blue band records accurate controlled cases; it is not a validated decision boundary.}
@@ -123,7 +123,7 @@ tests sensitivity to embedding dimension. Trend crossings measure non-monotonici
 
 \emphline{All evaluated grokking logs lie outside the reference region.} Their scalar levels are not interpreted as active dimension. These diagnostics test neither recurrence itself nor the scaling range.
 }
-\pblock{05\quad The trajectory rank falls and recovers}{
+\pblock{05\quad Covariance effective rank near generalisation}{
 We record parameter and probe-logit trajectories through 1024-dimensional CountSketch projections. In each window, detrended covariance eigenvalues $\lambda_i$ give
 \[
  \PR^{\mathrm{det}}=\frac{(\sum_i\lambda_i)^2}{\sum_i\lambda_i^2}.
@@ -137,7 +137,7 @@ We record parameter and probe-logit trajectories through 1024-dimensional CountS
 \emphline{Effective rank can fall while active dimension stays fixed.} The scalar drop describes a transition retrospectively; it does not establish early prediction.
 }
 \end{columns}
-\pblock{06\quad Scope of the evidence}{
+\pblock{06\quad Estimation limits and experimental confounders}{
 \begin{minipage}[t]{0.485\linewidth}
 \begin{posteritems}
 \item Recovery depends on the lag, observer and window. The tested resolution ceiling is low.
@@ -165,3 +165,4 @@ We record parameter and probe-logit trajectories through 1024-dimensional CountS
 \end{minipage}
 }
 \end{document}
+

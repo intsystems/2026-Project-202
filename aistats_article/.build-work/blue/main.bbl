@@ -1,0 +1,350 @@
+\begin{thebibliography}{48}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Aghajanyan et~al.(2021)Aghajanyan, Gupta, and
+  Zettlemoyer]{aghajanyan2021intrinsic}
+Armen Aghajanyan, Sonal Gupta, and Luke Zettlemoyer.
+\newblock Intrinsic dimensionality explains the effectiveness of language model
+  fine-tuning.
+\newblock In \emph{Annual Meeting of the Association for Computational
+  Linguistics (ACL)}, pages 7319--7328, 2021.
+
+\bibitem[Ansuini et~al.(2019)Ansuini, Laio, Macke, and
+  Zoccolan]{ansuini2019intrinsic}
+Alessio Ansuini, Alessandro Laio, Jakob~H. Macke, and Davide Zoccolan.
+\newblock Intrinsic dimension of data representations in deep neural networks.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2019.
+
+\bibitem[Barak et~al.(2022)Barak, Edelman, Goel, Kakade, Malach, and
+  Zhang]{barak2022hidden}
+Boaz Barak, Benjamin~L. Edelman, Surbhi Goel, Sham Kakade, Eran Malach, and
+  Cyril Zhang.
+\newblock Hidden progress in deep learning: {SGD} learns parities near the
+  computational limit.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2022.
+
+\bibitem[Broomhead and King(1986)]{broomhead1986extracting}
+David~S Broomhead and Gregory~P King.
+\newblock Extracting qualitative dynamics from experimental data.
+\newblock \emph{Physica D: Nonlinear Phenomena}, 20\penalty0 (2-3):\penalty0
+  217--236, 1986.
+
+\bibitem[Camastra and Staiano(2016)]{camastra2016intrinsic}
+Francesco Camastra and Antonino Staiano.
+\newblock Intrinsic dimension estimation: Advances and open problems.
+\newblock \emph{Information Sciences}, 328:\penalty0 26--41, 2016.
+\newblock \doi{10.1016/j.ins.2015.08.029}.
+
+\bibitem[Cao(1997)]{cao1997practical}
+Liangyue Cao.
+\newblock Practical method for determining the minimum embedding dimension of a
+  scalar time series.
+\newblock \emph{Physica D: Nonlinear Phenomena}, 110\penalty0 (1-2):\penalty0
+  43--50, 1997.
+\newblock \doi{10.1016/S0167-2789(97)00118-8}.
+
+\bibitem[Casdagli et~al.(1991)Casdagli, Eubank, Farmer, and
+  Gibson]{casdagli1991state}
+Martin Casdagli, Stephen Eubank, J.~Doyne Farmer, and John Gibson.
+\newblock State space reconstruction in the presence of noise.
+\newblock \emph{Physica D: Nonlinear Phenomena}, 51\penalty0 (1-3):\penalty0
+  52--98, 1991.
+\newblock \doi{10.1016/0167-2789(91)90222-U}.
+
+\bibitem[Charikar et~al.(2002)Charikar, Chen, and
+  Farach-Colton]{charikar2002finding}
+Moses Charikar, Kevin Chen, and Martin Farach-Colton.
+\newblock Finding frequent items in data streams.
+\newblock In \emph{International Colloquium on Automata, Languages, and
+  Programming}, pages 693--703, 2002.
+
+\bibitem[Cohen et~al.(2021)Cohen, Kaur, Li, Kolter, and
+  Talwalkar]{cohen2021gradient}
+Jeremy~M Cohen, Simran Kaur, Yuanzhi Li, J~Zico Kolter, and Ameet Talwalkar.
+\newblock Gradient descent on neural networks typically occurs at the edge of
+  stability.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2021.
+\newblock URL \url{https://openreview.net/forum?id=jh-rTtvkGeM}.
+
+\bibitem[Doshi et~al.(2024)Doshi, He, Das, and Gromov]{doshi2024grokking}
+Darshil Doshi, Tianyu He, Aritra Das, and Andrey Gromov.
+\newblock Grokking modular polynomials.
+\newblock \emph{arXiv preprint arXiv:2406.03495}, 2024.
+
+\bibitem[Eckmann and Ruelle(1992)]{eckmann1992fundamental}
+Jean-Pierre Eckmann and David Ruelle.
+\newblock Fundamental limitations for estimating dimensions and lyapunov
+  exponents in dynamical systems.
+\newblock \emph{Physica D: Nonlinear Phenomena}, 56\penalty0 (2-3):\penalty0
+  185--187, 1992.
+\newblock \doi{10.1016/0167-2789(92)90023-G}.
+
+\bibitem[Facco et~al.(2017)Facco, d'Errico, Rodriguez, and
+  Laio]{facco2017estimating}
+Elena Facco, Maria d'Errico, Alex Rodriguez, and Alessandro Laio.
+\newblock Estimating the intrinsic dimension of datasets by a minimal
+  neighborhood information.
+\newblock \emph{Scientific Reports}, 7\penalty0 (1):\penalty0 12140, 2017.
+
+\bibitem[Fraser and Swinney(1986)]{fraser1986independent}
+Andrew~M Fraser and Harry~L Swinney.
+\newblock Independent coordinates for strange attractors from mutual
+  information.
+\newblock \emph{Physical review A}, 33\penalty0 (2):\penalty0 1134, 1986.
+\newblock \doi{10.1103/PhysRevA.33.1134}.
+
+\bibitem[Gao et~al.(2017)Gao, Trautmann, Yu, Santhanam, Ryu, Shenoy, and
+  Ganguli]{gao2017theory}
+Peiran Gao, Eric Trautmann, Byron~M. Yu, Gopal Santhanam, Stephen Ryu, Krishna
+  Shenoy, and Surya Ganguli.
+\newblock A theory of multineuronal dimensionality, dynamics and measurement.
+\newblock \emph{bioRxiv 214262}, 2017.
+\newblock \doi{10.1101/214262}.
+
+\bibitem[Grassberger and Procaccia(1983)]{grassberger1983measuring}
+Peter Grassberger and Itamar Procaccia.
+\newblock Measuring the strangeness of strange attractors.
+\newblock \emph{Physica D: Nonlinear Phenomena}, 9\penalty0 (1-2):\penalty0
+  189--208, 1983.
+
+\bibitem[Gromov(2023)]{gromov2023grokking}
+Andrey Gromov.
+\newblock Grokking modular arithmetic.
+\newblock \emph{arXiv preprint arXiv:2301.02679}, 2023.
+
+\bibitem[Gur-Ari et~al.(2018)Gur-Ari, Roberts, and Dyer]{gurari2018gradient}
+Guy Gur-Ari, Daniel~A. Roberts, and Ethan Dyer.
+\newblock Gradient descent happens in a tiny subspace.
+\newblock \emph{arXiv preprint arXiv:1812.04754}, 2018.
+
+\bibitem[Kantz and Schreiber(2004)]{kantz2004nonlinear}
+Holger Kantz and Thomas Schreiber.
+\newblock \emph{Nonlinear Time Series Analysis}.
+\newblock Cambridge university press, 2004.
+
+\bibitem[Kennel et~al.(1992)Kennel, Brown, and
+  Abarbanel]{kennel1992determining}
+Matthew~B Kennel, Reggie Brown, and Henry~DI Abarbanel.
+\newblock Determining embedding dimension for phase-space reconstruction using
+  a geometrical construction.
+\newblock \emph{Physical review A}, 45\penalty0 (6):\penalty0 3403, 1992.
+\newblock \doi{10.1103/PhysRevA.45.3403}.
+
+\bibitem[Kumar et~al.(2024)Kumar, Bordelon, Gershman, and
+  Pehlevan]{kumar2024grokking}
+Tanishq Kumar, Blake Bordelon, Samuel~J. Gershman, and Cengiz Pehlevan.
+\newblock Grokking as the transition from lazy to rich training dynamics.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2024.
+\newblock URL \url{https://openreview.net/forum?id=vt5mnLVIVo}.
+
+\bibitem[Levina and Bickel(2004)]{levina2004maximum}
+Elizaveta Levina and Peter~J. Bickel.
+\newblock Maximum likelihood estimation of intrinsic dimension.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, volume~17, 2004.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper/2004/file/74934548253bcab8490ebd74afecebb5-Paper.pdf}.
+
+\bibitem[Li et~al.(2018)Li, Farkhoor, Liu, and Yosinski]{li2018measuring}
+Chunyuan Li, Heerad Farkhoor, Rosanne Liu, and Jason Yosinski.
+\newblock Measuring the intrinsic dimension of objective landscapes.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2018.
+\newblock URL \url{https://openreview.net/forum?id=ryup8-WCW}.
+
+\bibitem[Liu et~al.(2022)Liu, Kitouni, Nolte, Michaud, Tegmark, and
+  Williams]{liu2022towards}
+Ziming Liu, Ouail Kitouni, Niklas Nolte, Eric~J. Michaud, Max Tegmark, and Mike
+  Williams.
+\newblock Towards understanding grokking: An effective theory of representation
+  learning.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2022.
+
+\bibitem[Liu et~al.(2023)Liu, Michaud, and Tegmark]{liu2022omnigrok}
+Ziming Liu, Eric~J. Michaud, and Max Tegmark.
+\newblock Omnigrok: Grokking beyond algorithmic data.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2023.
+\newblock URL \url{https://openreview.net/forum?id=zDiHoIWa0q1}.
+
+\bibitem[MacKay and Ghahramani(2005)]{mackay2005comments}
+David J~C MacKay and Zoubin Ghahramani.
+\newblock Comments on `maximum likelihood estimation of intrinsic dimension' by
+  e. levina and p. bickel, 2005.
+\newblock URL \url{http://www.inference.org.uk/mackay/dimension/}.
+\newblock Unpublished note.
+
+\bibitem[McCandlish et~al.(2018)McCandlish, Kaplan, Amodei, and {OpenAI Dota
+  Team}]{mccandlish2018empirical}
+Sam McCandlish, Jared Kaplan, Dario Amodei, and {OpenAI Dota Team}.
+\newblock An empirical model of large-batch training.
+\newblock \emph{arXiv preprint arXiv:1812.06162}, 2018.
+
+\bibitem[Merrill et~al.(2023)Merrill, Tsilivis, and Shukla]{merrill2023tale}
+William Merrill, Nikolaos Tsilivis, and Aman Shukla.
+\newblock A tale of two circuits: grokking as competition of sparse and dense
+  subnetworks.
+\newblock \emph{arXiv preprint arXiv:2303.11873}, 2023.
+
+\bibitem[Nanda et~al.(2023)Nanda, Chan, Lieberum, Smith, and
+  Steinhardt]{nanda2023progress}
+Neel Nanda, Lawrence Chan, Tom Lieberum, Jess Smith, and Jacob Steinhardt.
+\newblock Progress measures for grokking via mechanistic interpretability.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2023.
+
+\bibitem[Notsawo~Jr. et~al.(2023)Notsawo~Jr., Zhou, Pezeshki, Rish, and
+  Dumas]{notsawo2023predicting}
+Pascal~Tikeng Notsawo~Jr., Hattie Zhou, Mohammad Pezeshki, Irina Rish, and
+  Guillaume Dumas.
+\newblock Predicting grokking long before it happens: A look into the loss
+  landscape of models which grok.
+\newblock \emph{arXiv preprint arXiv:2306.13253}, 2023.
+
+\bibitem[Osborne and Provenzale(1989)]{osborne1989finite}
+A.~R. Osborne and A.~Provenzale.
+\newblock Finite correlation dimension for stochastic systems with power-law
+  spectra.
+\newblock \emph{Physica D: Nonlinear Phenomena}, 35\penalty0 (3):\penalty0
+  357--381, 1989.
+
+\bibitem[Pope et~al.(2021)Pope, Zhu, Abdelkader, Goldblum, and
+  Goldstein]{pope2021intrinsic}
+Phil Pope, Chen Zhu, Ahmed Abdelkader, Micah Goldblum, and Tom Goldstein.
+\newblock The intrinsic dimension of images and its impact on learning.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2021.
+\newblock URL \url{https://openreview.net/forum?id=XJk19XzGq2J}.
+
+\bibitem[Power et~al.(2022)Power, Burda, Edwards, Babuschkin, and
+  Misra]{power2022grokking}
+Alethea Power, Yuri Burda, Harri Edwards, Igor Babuschkin, and Vedant Misra.
+\newblock Grokking: Generalization beyond overfitting on small algorithmic
+  datasets.
+\newblock \emph{arXiv preprint arXiv:2201.02177}, 2022.
+
+\bibitem[Provenzale et~al.(1992)Provenzale, Smith, Vio, and
+  Murante]{provenzale1992distinguishing}
+A.~Provenzale, L.~A. Smith, R.~Vio, and G.~Murante.
+\newblock Distinguishing between low-dimensional dynamics and randomness in
+  measured time series.
+\newblock \emph{Physica D: Nonlinear Phenomena}, 58\penalty0 (1-4):\penalty0
+  31--49, 1992.
+
+\bibitem[Roy and Vetterli(2007)]{roy2007effective}
+Olivier Roy and Martin Vetterli.
+\newblock The effective rank: a measure of effective dimensionality.
+\newblock In \emph{European Signal Processing Conference (EUSIPCO)}, pages
+  606--610, 2007.
+
+\bibitem[Sagun et~al.(2017)Sagun, Evci, G{\"u}ney, Dauphin, and
+  Bottou]{sagun2018empirical}
+Levent Sagun, Utku Evci, V.~U{\u{g}}ur G{\"u}ney, Yann Dauphin, and L{\'e}on
+  Bottou.
+\newblock Empirical analysis of the {H}essian of over-parametrized neural
+  networks.
+\newblock \emph{arXiv preprint arXiv:1706.04454}, 2017.
+
+\bibitem[Sauer et~al.(1991)Sauer, Yorke, and Casdagli]{sauer1991embedology}
+Tim Sauer, James~A. Yorke, and Martin Casdagli.
+\newblock Embedology.
+\newblock \emph{Journal of Statistical Physics}, 65\penalty0 (3-4):\penalty0
+  579--616, 1991.
+
+\bibitem[Schreiber and Schmitz(1996)]{schreiber1996improved}
+Thomas Schreiber and Andreas Schmitz.
+\newblock Improved surrogate data for nonlinearity tests.
+\newblock \emph{Physical Review Letters}, 77\penalty0 (4):\penalty0 635--638,
+  1996.
+
+\bibitem[Stark(1999)]{stark1999delay}
+Jaroslav Stark.
+\newblock Delay embeddings for forced systems. {I.} {D}eterministic forcing.
+\newblock \emph{Journal of Nonlinear Science}, 9\penalty0 (3):\penalty0
+  255--332, 1999.
+\newblock \doi{10.1007/s003329900072}.
+
+\bibitem[Stark et~al.(2003)Stark, Broomhead, Davies, and Huke]{stark2003delay}
+Jaroslav Stark, David~S Broomhead, ME~Davies, and J~Huke.
+\newblock Delay embeddings for forced systems. {II.} {S}tochastic forcing.
+\newblock \emph{Journal of Nonlinear Science}, 13\penalty0 (6):\penalty0
+  519--577, 2003.
+\newblock \doi{10.1007/s00332-003-0534-4}.
+
+\bibitem[Sugihara and May(1990)]{sugihara1990nonlinear}
+George Sugihara and Robert~M May.
+\newblock Nonlinear forecasting as a way of distinguishing chaos from
+  measurement error in time series.
+\newblock \emph{Nature}, 344\penalty0 (6268):\penalty0 734--741, 1990.
+\newblock \doi{10.1038/344734a0}.
+
+\bibitem[Sugihara et~al.(2012)Sugihara, May, Ye, Hsieh, Deyle, Fogarty, and
+  Munch]{sugihara2012detecting}
+George Sugihara, Robert May, Hao Ye, Chih-hao Hsieh, Ethan Deyle, Michael
+  Fogarty, and Stephan Munch.
+\newblock Detecting causality in complex ecosystems.
+\newblock \emph{Science}, 338\penalty0 (6106):\penalty0 496--500, 2012.
+\newblock \doi{10.1126/science.1227079}.
+
+\bibitem[Takens(1981)]{takens1981detecting}
+Floris Takens.
+\newblock Detecting strange attractors in turbulence.
+\newblock In \emph{Dynamical systems and turbulence, Warwick 1980}, pages
+  366--381. Springer, 1981.
+\newblock \doi{10.1007/BFb0091924}.
+
+\bibitem[Theiler(1986)]{theiler1986spurious}
+James Theiler.
+\newblock Spurious dimension from correlation algorithms applied to limited
+  time-series data.
+\newblock \emph{Physical Review A}, 34\penalty0 (3):\penalty0 2427--2432, 1986.
+
+\bibitem[Theiler(1991)]{theiler1991some}
+James Theiler.
+\newblock Some comments on the correlation dimension of $1/f^\alpha$ noise.
+\newblock \emph{Physics Letters A}, 155\penalty0 (8-9):\penalty0 480--493,
+  1991.
+
+\bibitem[Theiler et~al.(1992)Theiler, Eubank, Longtin, Galdrikian, and
+  Farmer]{theiler1992testing}
+James Theiler, Stephen Eubank, Andr{\'e} Longtin, Bryan Galdrikian, and
+  J.~Doyne Farmer.
+\newblock Testing for nonlinearity in time series: the method of surrogate
+  data.
+\newblock \emph{Physica D: Nonlinear Phenomena}, 58\penalty0 (1-4):\penalty0
+  77--94, 1992.
+
+\bibitem[Thilak et~al.(2022)Thilak, Littwin, Zhai, Saremi, Paiss, and
+  Susskind]{thilak2022slingshot}
+Vimal Thilak, Etai Littwin, Shuangfei Zhai, Omid Saremi, Roni Paiss, and
+  Joshua~M Susskind.
+\newblock The slingshot mechanism: An empirical study of adaptive optimizers
+  and the loss landscape.
+\newblock \emph{arXiv preprint arXiv:2206.04817}, 2022.
+\newblock URL \url{https://arxiv.org/abs/2206.04817}.
+
+\bibitem[Varma et~al.(2023)Varma, Shah, Kenton, Kram{\'a}r, and
+  Kumar]{varma2023explaining}
+Vikrant Varma, Rohin Shah, Zachary Kenton, J{\'a}nos Kram{\'a}r, and Ramana
+  Kumar.
+\newblock Explaining grokking through circuit efficiency.
+\newblock \emph{arXiv preprint arXiv:2309.02390}, 2023.
+
+\bibitem[Weinberger et~al.(2009)Weinberger, Dasgupta, Langford, Smola, and
+  Attenberg]{weinberger2009feature}
+Kilian Weinberger, Anirban Dasgupta, John Langford, Alex Smola, and Josh
+  Attenberg.
+\newblock Feature hashing for large scale multitask learning.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, pages
+  1113--1120, 2009.
+
+\end{thebibliography}

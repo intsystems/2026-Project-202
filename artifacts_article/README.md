@@ -1,16 +1,24 @@
 # Neural Network Artifacts as a New Data Modality @ NeurIPS 2026 edition
 
-`make_artifacts.py` puts `icomp_v2/report.tex` on the NeurIPS 2026 workshop
+`make_artifacts.py` puts the synchronized content represented by
+`icomp_v2/report.tex` on the NeurIPS 2026 workshop
 template. It reads the article where it lies and writes nothing back to it.
+
+The reference snapshot used for the current synchronization is
+`reference/icomp_artifacts.pdf`.
 
 ```sh
 cd artifacts_article
 python make_artifacts.py                # full paper (default)
 python make_artifacts.py --mode final   # camera-ready, author names shown
+python make_artifacts.py --claude blue  # review copy: marked text in blue
 ```
 
 Each run writes `build/full/`, a compiled `icomp_artifacts.pdf`, and an
 `icomp_artifacts.zip` that compiles on its own in an empty directory.
+
+The source article keeps `\cl{...}` for a marked phrase and
+`\begin{claude}...\end{claude}` for a marked block. The current article has no marked text and therefore remains black. Wrap every new AI-written or AI-edited phrase or block in one of these commands. `--claude blue` defines `\claudedraft` without editing the source and writes `icomp_artifacts_blue.pdf` plus the corresponding source archive for review.
 
 **Edit `report.tex`, rerun that one line, and this edition follows.**
 

@@ -14,6 +14,7 @@
             urlcolor=linkblue, filecolor=linkblue]{hyperref}
 \usepackage{url}
 \usepackage{array}
+\usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{microtype}
 \usepackage{graphicx}
@@ -24,6 +25,19 @@
 \usepackage{algpseudocode}
 \usepackage{multirow}
 \usepackage{enumitem}
+
+% --- AI drafting markup ----------------------------------------------------
+% The source keeps the markup in the text.  Ordinary builds print marked text
+% in black; a review build defines \claudedraft before loading this file and
+% prints it in blue.  Use \cl{...} for a phrase and the claude environment for
+% a paragraph or a larger block.
+\ifdefined\claudedraft
+  \definecolor{claudecolor}{RGB}{25,90,160}
+\else
+  \definecolor{claudecolor}{RGB}{0,0,0}
+\fi
+\newcommand{\cl}[1]{\textcolor{claudecolor}{#1}}
+\newenvironment{claude}{\color{claudecolor}}{}
 
 \input{math_commands.tex}
 
@@ -126,16 +140,37 @@ value fixed by its spectral exponent \citep{osborne1989finite, theiler1991some};
 transient yields a large value. Establishing which case a training log falls in is the substance of
 the problem.
 
-\paragraph{Contributions.} This paper makes three contributions. First, it defines active dimension
-as a local dimension of the occupation measure of a recurrent training regime and separates it from
-available dimension, functional dimension and trajectory effective rank. Second, it tests scalar-log
-recovery on six constructed systems under a frozen, held-out protocol. One learned-system benchmark
-passes every prespecified check; the other systems expose failure modes caused by transient motion,
-stochastic forcing, unequal excitation and poor delay choices. Third, it applies the same diagnostics
-to two grokking settings. The scalar estimate is not dimensional there. Saved trajectory sketches
-instead reveal a reversible, regularisation-associated drop in detrended covariance participation
-ratio near generalisation in four runs, while matched short-window logs provide a transition-
-correlated signal with no dimensional interpretation.
+\begin{claude}
+\paragraph{Contributions.} We make three contributions.
+\begin{enumerate}[leftmargin=1.2em, itemsep=2pt, topsep=3pt, parsep=0pt]
+\item \textbf{An estimator of active dimension from scalar logs.} We reconstruct delay coordinates
+from one scalar training log and apply a pooled nearest-neighbour estimator, together with diagnostics
+for recurrence and identifiability. The protocol is computationally light and avoids storing the
+full parameter trajectory. Under the delay-embedding conditions of
+\cref{thm:takens,thm:sauer,thm:stark}, a generic scalar observation preserves the relevant state
+geometry in delay coordinates, including fibre by fibre for forced systems. The contribution is this
+calibrated scalar-log protocol: it distinguishes changes in active components from changes in scale,
+anisotropy, roughness, or failed recurrence, without claiming novelty for delay embeddings or
+intrinsic-dimension estimators individually. A single mini-batch trajectory can cross forcing fibres,
+so we identify such cases as outside the dimensional interpretation.
+
+\item \textbf{Controlled validation with independent ground truth.} We test the procedure on six
+constructed systems spanning analytic oscillators, optimisation dynamics, and a learned image-data
+system. Under a frozen held-out protocol, the estimate recovers the ground-truth rank to about one
+component in the admissible deterministic recurrent regime and orders withheld ranks correctly. The
+remaining systems expose failure under transience, stochastic forcing, unequal excitation, or
+insufficient delay coordinates, and show why covariance effective rank and log roughness are not
+substitutes for active dimension.
+
+\item \textbf{Application to grokking with an explicit validity check.} In two grokking settings,
+the scalar logs fail the recurrence and identifiability tests, so their apparent dimension estimates
+are not interpreted as active dimension. Stored trajectory sketches nevertheless detect local
+simplification in grokking-type systems, including $\mathrm{WD}=0$ controls: the detrended covariance
+participation ratio drops and then recovers. The drop aligns with generalisation in regularised runs,
+whereas a $\mathrm{WD}=0$ control can show it elsewhere in training; the signal therefore detects
+simplification but does not by itself identify generalisation or prove a change in active dimension.
+\end{enumerate}
+\end{claude}
 
 \section{Related work}\label{sec:related}
 
@@ -178,7 +213,42 @@ dynamical quantity whose ground truth is measured independently.
 
 \section{Problem statement}\label{sec:problem}
 
+\begin{claude}
+\subsection{The estimation problem}\label{sec:problem-formulation}
+
+Training can appear to simplify: after a long period of memorisation, a network may begin to
+generalise while its parameter trajectory occupies fewer effective directions. The problem is to
+decide whether this apparent simplification reflects a genuine reduction in the number of
+independent components explored by the training dynamics, rather than a change in scale, unequal
+excitation of existing directions, transient motion, or stochastic forcing. The usual available
+dimension, functional dimension, and covariance effective rank answer related but different
+questions; none is, by itself, the local dimension of the recurrent regime visited by the optimiser.
+
+\paragraph{Problem statement.} Let $R$ be a stretch of training with a fixed update rule and
+optimiser state $\vs_t$. We observe only a scalar log $x_t = \phi(\vs_t)$; the full state trajectory
+may be unavailable or too expensive to store. Given a finite window of $x_t$, we seek an estimator
+that (i) estimates the number of independent components of the regime's occupation measure, and
+(ii) identifies when the available log and window do not support that interpretation. Formally, the
+target is the active dimension $d_{\mathrm{act}}(R)$ defined in \cref{eq:act}; the estimator should
+approximate this target in a recurrent regime and report its output as a dimension only when the
+validity conditions hold.
+
+\paragraph{Target and estimator.} Equation~\cref{eq:act} defines the quantity we want to measure:
+the local scaling exponent of the regime's occupation measure. We estimate this exponent from a
+finite record by reconstructing the state with delay coordinates and applying the pooled
+nearest-neighbour maximum-likelihood estimator of Levina and Bickel, written explicitly in
+\cref{eq:mg}. Thus equation~\cref{eq:act} is the target definition, while \cref{eq:mg} is the
+finite-sample estimator. The delay-embedding results of Takens, Sauer, and Stark explain why this
+can be done from a scalar observation: under their genericity and recurrence conditions, the delay
+map preserves the relevant state geometry (for a forced system, fibre by fibre), so neighbour
+distances in the reconstructed log can carry information about the target dimension. These theorems
+do not certify every training log: in particular, a stochastic mini-batch trajectory can cross
+different forcing fibres. The estimator therefore operates together with explicit identifiability
+and regime diagnostics, and returns a statistic without a dimensional interpretation when those
+conditions fail.
+
 \subsection{The active dimension}\label{sec:three}
+\end{claude}
 
 Let $\vs_t = (\vtheta_t, \vu_t)$ be the optimiser state at step $t$: the parameter vector
 $\vtheta_t \in \R^P$ and whatever the optimiser carries beside it. Where the parameters are
@@ -466,68 +536,71 @@ an order of magnitude, through the truth only where the window covers a few tent
 supplies and a training log does not, so from the grokking logs we take changes and never a
 level (\cref{sec:grokking}).
 
+
+\begin{claude}
+\subsection{Window-size limits}\label{sec:window-limits}
+
+We distinguish the delay span from the local window. $W$ is the number of samples pooled into one
+estimate; $S=(E_{\max}-1)\tau$ is the span of one delay vector; $P$ is the recurrent period; and
+$N$ is the full record. Thus $S/P$ selects the delay $\tau$, whereas $W$ selects locality. The
+implementation rejects $W<E_{\max}\tau+20$; a valid estimate also needs independent returns and
+a window contained in one regime. The working choices are summarised in \cref{tab:window-main};
+the complete sweeps are in Appendices D, H and L.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Working window sizes. The values are empirical choices for the corresponding analysis;
+$W$ does not determine the delay span $S$.}
+\label{tab:window-main}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.25\linewidth}
+>{\raggedright\arraybackslash}p{.18\linewidth}X@{}}
+\toprule
+analysis & local window $W$ & interpretation \\
+\midrule
+controlled recurrent systems & $8000$ samples & dimensional level, only if recurrence and identifiability diagnostics pass; choose $\tau$ so $S/P\simeq0.2$--$0.4$ when $P$ is known \\
+\addlinespace
+training logs, coarse diagnostic & $\simeq4000$ samples & diagnostic only; the level is not an active dimension \\
+\addlinespace
+training logs, transition comparison & $60$ samples & change statistic only; resolves transitions of hundreds of steps \\
+\addlinespace
+stored full-batch trajectory & $600$ published; $10^4$--$3\times10^4$ sweep & $600$ is the local measurement; longer windows reveal drift or a feature but do not separate runs \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\end{claude}
+
+\begin{claude}
+\paragraph{The reference band.}\label{sec:diagnostics-validated} The band used below is empirical,
+based on the accurate validation cases, and is not calibrated beyond them.
+\end{claude}
+
+\begin{claude}
 \subsection{Nuisance factors and nulls}\label{sec:nuisance}
 
-At $r = 4$ we vary factors that leave $r$ unchanged over five seeds and twelve observers, against
-the shift a real change of four components produces (\cref{tab:controls}). A ramped observer gain
-moves the estimate by a component and a half, so a run whose parameter norm grows steadily will
-drift by that much at fixed $r$: the confound that matters most in \cref{sec:grokking}. Shifting
-the forcing band by an octave changes the roughness sharply while moving the estimate by about
-half as much.
+Controls in \cref{app:clocks} show that observer gain can shift the estimate at fixed truth,
+whereas phase changes can occur at fixed roughness; a falling scalar estimate is therefore not
+sufficient evidence of a dimensional change.
+\end{claude}
 
-Roughness and the estimate still move together there, so a control holds one fixed while the other
-changes. Two sums of four sinusoids are built with the same roughness to a part in $10^{15}$, the
-first on a four-torus and the second, its frequencies harmonics of one irrational base, on a
-circle; a schedule passes between them and back. The estimate follows the number of phases and the
-roughness never moves (\cref{fig:switch}); under five invertible maps of the four-phase system the
-roughness rises by four fifths and the estimate by a tenth of a component (\cref{app:clocks}).
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/fig_switch.pdf}
-\caption{The estimate follows a change in the number of phases that leaves the roughness
-fixed. The harmonic control of \cref{app:clocks}, scheduled from four phases to one and back;
-median over eight seeds, band their range. Grey, the number of phases, drawn only over windows
-holding one system; a window a ramp reaches into holds two and has no active dimension. The
-roughness stays between $0.085$ and $0.094$.}
-\label{fig:switch}
-\end{figure}
-
-\paragraph{The effective rank.}\label{sec:aniso} Every construction in \cref{sec:ladder} forces
-its $r$ phases at equal amplitude, so the effective rank and the active dimension agree there and
-no experiment can say which of them the estimator reports. Forcing phase $l$ at amplitude
-$q^{l}$ keeps the path on
-an $r$-dimensional torus while the effective rank falls: the estimate stays closer to $r$,
-registering only the phases it can resolve (\cref{fig:aniso}).
-
-\paragraph{The reference band.}\label{sec:diagnostics-validated} The band drawn in
-\cref{sec:grokking} is where the identifiability ratio fell on the accurate cases of
-\cref{fig:regimes}; it records those cases and is not calibrated to hold beyond them.
+\begin{claude}
+\paragraph{The effective rank.}\label{sec:aniso} Unequal phase amplitudes lower effective rank
+while the active dimension stays fixed; the estimate follows only the phases it resolves
+(\cref{fig:aniso}).
+\end{claude}
 
 \section{Application to grokking}\label{sec:grokking}
 
-We apply the procedure to the two grokking settings of \cref{sec:related}: a transformer on
-mini-batches, which places it in the stochastic regime of \cref{sec:classes}, and a full-batch
-perceptron (\cref{app:runs} lists every run).
-
 \subsection{The diagnostics reject both settings}\label{sec:grok-diagnostics}
 
-We run the frozen configuration of \cref{sec:digits} on these logs, shortening the window and
-stride to fit the records and changing nothing else (\cref{tab:grok-diagnostics}, \cref{fig:map}).
-The regularised transformer runs are unstable in the embedding dimension, their estimates ranging
-from four to thirteen components across configurations. The perceptron
-runs and the transformer runs without weight decay carry the signature of a transient instead: two
-trend crossings in a whole record, at a ratio still far outside the band. Those undecayed runs are
-trained on mini-batches, so the regime label does not decide the outcome. The level is therefore
-not a dimension in either setting. A change within a run could still be
-one, since a fixed configuration adds the same offset to every window of that run; this window
-cannot show it, spanning tens of thousands of optimiser steps against a transition a few hundred
-steps wide.
-
-\paragraph{Label-matched pairs.}\label{sec:pairs} The perceptron targets come in pairs whose members
-fit the training set alike, only one of each representable by the architecture. The estimate
-separates them, but these runs are all transient and the raw loss curves separate them too
-(\cref{app:pairs,app:fb}).
+\begin{claude}
+We run the frozen configuration on these logs, shortening the window and stride to fit
+(\cref{tab:grok-diagnostics}, \cref{fig:map}). Transformer estimates are unstable (four to
+thirteen components), while the perceptron and no-decay runs look transient: their trend-crossing
+ratios remain outside the valid band. The level is therefore not a dimension in either setting;
+the coarse window smears a transition of a few hundred steps across tens of thousands.
+\end{claude}
 
 \subsection{The trajectory simplifies at generalisation}\label{sec:direct}
 
@@ -544,71 +617,46 @@ displacement, over windows of $600$ steps ($300$ for $S_5$), and (f) the estimat
 \label{fig:dip}
 \end{figure}
 
-The effective rank is defined whether or not the path returns on itself, so a stored trajectory
-allows a measurement that a log does not. We store the trajectory of a transformer trained to
-grok, compressed at every logged step by a random projection of the
-parameters and the probe logits (\cref{app:sketch}). Near generalisation the detrended
-effective rank collapses in both spaces, reaching near unity in parameter space. In each space the minimum
-falls after the transition and within two thousand steps of it. Both then re-expand (\cref{fig:dip},
-\cref{tab:dip}). The collapse might follow training
-progress, but it occurs at generalisation in seeds whose generalisation steps differ by a
-factor of four and in a second task (\cref{fig:timing}). It might record a trajectory that has come to a halt, but the
-displacement reaches its floor thousands of steps later and never recovers. The effective rank measures variation inside the window, so only that
-variation collapses and $d_{\mathrm{act}}(R)$ may be unchanged.
+A stored trajectory permits a measurement that a scalar log does not. We compress the parameters
+and probe logits by random projections (\cref{app:sketch}). Near generalisation, detrended effective
+rank collapses in both spaces, reaches near unity in parameter space, and then re-expands
+(\cref{fig:dip},\cref{tab:dip}). The timing repeats across seeds with a fourfold spread in
+transition time and on a second task (\cref{fig:timing}); it is not explained by the later floor
+in displacement. Because effective rank measures variation inside the window, this collapse alone
+need not imply a change in $d_{\mathrm{act}}(R)$.
 
-\paragraph{The runs without weight decay.}\label{sec:nowd} The same two configurations trained
-without weight decay memorise and stay at chance accuracy. Within the transition window they
-decline much less than the generalising runs, but somewhere in training one of them declines just
-as far (\cref{tab:dip}), so depth does not separate the generalising runs from the memorising ones.
-The timing of the decline does, as does whether it reverses.
+\begin{claude}
+\paragraph{The runs without weight decay and matched pairs.}\label{sec:nowd}\label{sec:pairs}
+No-decay runs memorise and stay at chance; one later dips as far as a generalising run
+(\cref{tab:dip}). Timing and reversal separate the pairs; details are in \cref{app:pairs,app:fb}.
+\end{claude}
 
 \subsection{The log estimate falls where the trajectory does}\label{sec:matched}
 
-The test \cref{sec:grok-diagnostics} could not perform becomes possible once the window is set in
-units of the transition. A window that short need not lie inside one regime, so the fall below is a
-signal that tracks the transition and not a measurement of \cref{eq:act}. We re-run the estimator on the same logs at the window length and midpoints the direct
-measurement uses, so both are sampled at the same instants. The frozen configuration does not fit a window that short, so we
-report every cell of a grid and take as headline the cell named by a rule blind to the outcome
-(\cref{app:window}).
-
-On the parameter norm the estimate halves at the generalisation step in all four generalising runs
-(\cref{fig:dip}f). That drop lies above the eighty-ninth percentile of the same statistic at every other window of
-each generalising run, while the other two show nothing remarkable there; all but two of the usable
-grid cells separate the generalising runs from the other two (\cref{tab:matched,app:window}). We
-also compare each run against randomised series built from it that keep its slow shape and its
-fluctuation spectrum while destroying its fine structure. The fraction of those falling as steeply
-as the run itself is smaller for every generalising run than for either of the other two
-(\cref{app:window}).
-
-The same event is thus recorded twice: once by storing the trajectory, once in a log a run writes
-anyway. The second record is the weaker, its observer the parameter norm, for which
-\cref{sec:nuisance} leaves a smoothness explanation open on a training log; the comparison against
-randomised series carries the claim alone, the roughness of these windows falling by a far larger
-factor than the estimate, which merely halves.
+A transition-scale window makes the comparison possible, but it need not lie in one regime, so
+its fall is a change statistic rather than a measurement of \cref{eq:act}. We rerun the estimator
+on the same windows as the trajectory measurement, using a grid chosen without the outcome
+(\cref{app:window}). On the parameter norm the estimate halves at generalisation in all four
+positive runs; $24/26$ usable cells separate them from the two controls, and surrogate tests retain
+the effect (\cref{tab:matched,app:window}). The log therefore records the same event as the stored
+trajectory, but more weakly: on a training log, observer smoothness remains an alternative
+explanation.
 
 \section{Conclusion}\label{sec:concl}
 
-In a deterministic recurrent system with a matched delay lag, one scalar log of a suitable observer
-counts the active components of the regime, to within about one component and up to about eight. Outside that regime it does not: a transient supplies no returns;
-mini-batch noise contributes directions of its own. The estimator is usable only alongside the
-identifiability ratio and the trend-crossing count, which place both grokking settings outside that
-regime. Our result there comes from the stored trajectory, whose detrended effective rank
-collapses at generalisation and then re-expands. A memorising run can fall as deeply; only the
-timing of the fall and its reversal separate the generalising runs from the memorising ones.
-\paragraph{Limitations.} Every system in the evaluation is externally forced and training is not.
-The measurement needs a recurrent regime and a lag matched to a period no log reveals. Above about eight components it is only ordinal. We never check that the neighbour
-radii span a range over which the exponent is constant: they are whatever the twenty nearest
-neighbours give, and on a transient all twenty fall within thirteen per cent of one another. The
-collapse comes from four runs against two, distinguished by weight decay, which also drives the
-parameter norm; it marks the transition only once the transition has happened. It does not
-reproduce in the full-batch setting. The drop at the matched window is close to the drop a ramped
-gain alone produces, and a decline of the estimate is not by itself specific to generalisation
-(\cref{app:falls}). The modular run without weight decay has almost no range on that log, so its
-unremarkable value there records the observer and is not a negative result. On a circle the
-estimate is not geometric: two of eight seeds reproduce it from the base frequency alone
-(\cref{app:clocks}). The edge-of-stability evidence comes from
-one task
-(\cref{app:config,app:fb,app:window,app:eos}).
+In a deterministic recurrent system with a matched lag, a suitable scalar log counts active
+components to about one component, up to a ceiling near eight. Outside that regime, transience and
+mini-batch noise invalidate the dimensional interpretation; the diagnostics reject both grokking
+settings. Their stored trajectory nevertheless shows a detrended-rank collapse and recovery near
+generalisation, with timing and reversal separating four positive runs from two controls.
+\begin{claude}
+\paragraph{Limitations.} Validation is externally forced, whereas training is not; recurrence and a
+period-matched lag are required, and the estimator is ordinal above about eight components. The
+neighbour-scale power law is unchecked, while the grokking signal is affected by weight decay,
+observer smoothness, and the limited four-versus-two comparison; it does not reproduce in the
+full-batch setting (\cref{app:falls,app:clocks}). Edge-of-stability evidence comes from one task
+(\cref{app:eos}).
+\end{claude}
 
 \bibliographystyle{icomp2026_conference}
 \bibliography{references}
@@ -1943,8 +1991,7 @@ stops.
 
 \section{Two controls separating the estimator from roughness}\label{app:clocks}
 
-\emph{The number of components changes and the roughness does not
-(\cref{fig:switch}).} Both systems are a sum of four sinusoids. In the first the four
+\emph{The number of components changes and the roughness does not.} Both systems are a sum of four sinusoids. In the first the four
 frequencies are rationally independent,
 so the path lies on a four-dimensional torus and $d_{\mathrm{act}} = 4$. In the second they
 are harmonics of one irrational base frequency: a single phase fixes all four sinusoids at

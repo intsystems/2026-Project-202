@@ -21,6 +21,19 @@ against the printed value.
 `report.pdf` is committed, so neither step is required to read it. The build is clean: no
 undefined references, no citation warnings, no overfull boxes.
 
+## AI drafting markup
+
+The source uses `\cl{...}` for a marked phrase and `\begin{claude}...\end{claude}` for a marked block. The current article is unmarked and remains black. Wrap every new AI-written or AI-edited phrase or block in one of these commands; the ordinary ICOMP build prints it in black, while the blue review build highlights it.
+
+The NeurIPS Artifacts build supports a blue review copy:
+
+```bash
+cd ../artifacts_article
+python make_artifacts.py --claude blue
+```
+
+This writes `icomp_artifacts_blue.pdf` and `icomp_artifacts_blue.zip`; it defines `\claudedraft` in the generated build and does not modify `report.tex`.
+
 The submission is **anonymous**: neither `\icompfinalcopy` nor `\icomparxivcopy` is set, so
 the style file prints ``Anonymous authors / Paper under double-blind review'' and the running
 head reads ``Under review''. Uncomment `\icomparxivcopy` for a named preprint build and
