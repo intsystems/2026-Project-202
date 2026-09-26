@@ -1,0 +1,13 @@
+{
+  "families": [
+    "matrix_factorization_damped",
+    "matrix_factorization_recurrent",
+    "teacher_student"
+  ],
+  "n_rows": 216,
+  "outputs": [
+    "raw_scores.csv",
+    "automatic_lag_selection.csv",
+    "summary.csv"
+  ]
+}

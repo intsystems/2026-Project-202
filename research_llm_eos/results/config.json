@@ -1,0 +1,12 @@
+{
+  "steps": 1600,
+  "seeds": [
+    0,
+    1
+  ],
+  "modes": [
+    "constant_lr",
+    "lr_switch"
+  ],
+  "outdir": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\research_llm_eos\\results"
+}

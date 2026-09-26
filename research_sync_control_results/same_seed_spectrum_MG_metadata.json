@@ -1,0 +1,27 @@
+{
+  "seed": 474,
+  "n": 64,
+  "steps": 8192,
+  "dt": 0.03,
+  "gains": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.8,
+    1.0,
+    1.3,
+    1.8
+  ],
+  "fixed_across_sweep": [
+    "omega",
+    "initial phases",
+    "scalar sensor",
+    "graph"
+  ],
+  "spectrum": "full tangent-space Lyapunov spectrum with QR reorthogonalization",
+  "scalar_method": "MG/LB on the same fixed scalar projection"
+}

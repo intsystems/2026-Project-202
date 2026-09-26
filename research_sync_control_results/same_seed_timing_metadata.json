@@ -1,0 +1,10 @@
+{
+  "seed": 474,
+  "n": 64,
+  "steps_generated": 8192,
+  "window_analyzed": 4096,
+  "fixed_across_gains": true,
+  "timing": "analysis only; one trajectory generated and reused per gain",
+  "MG_repeats": 7,
+  "Lyapunov_repeats": 5
+}

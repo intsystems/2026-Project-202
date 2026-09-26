@@ -1,0 +1,44 @@
+{
+  "eta": 1.0,
+  "E": 16,
+  "doubled_E": 32,
+  "k": 10,
+  "tau": 1,
+  "theiler": 100,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "dimension": 32,
+  "samples": 256,
+  "spectral_primes": [
+    2,
+    3,
+    5,
+    7,
+    11,
+    13
+  ],
+  "frequency_denominator": 32,
+  "reference": "independent irrational HB phases; not target matrix rank",
+  "switch_step": 8192,
+  "switch_beta_suppressed": 0.98,
+  "switch_kept_modes": 2,
+  "seconds": 225.99658389994875,
+  "script_sha256": "88f0668a80337fc0dc01c1ee1858ecd966e4b4b9bb6413215afead3965cbb6a2",
+  "stationary_steps": 12288,
+  "stationary_windows": [
+    2048,
+    8192
+  ],
+  "training_log_columns": [
+    "step",
+    "loss",
+    "probe_error",
+    "parameter_norm",
+    "momentum_norm",
+    "test_loss"
+  ],
+  "seed_scope": "dense coordinates and test probe; identical scalar loss dynamics"
+}

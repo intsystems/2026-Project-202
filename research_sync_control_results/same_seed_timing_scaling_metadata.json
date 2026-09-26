@@ -1,0 +1,7 @@
+{
+  "seed_base": 474,
+  "gain": 0.5,
+  "window": 2048,
+  "same_window_and_analysis": true,
+  "note": "small-N crossover is reported; no universal speedup is assumed"
+}

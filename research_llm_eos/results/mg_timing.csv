@@ -1,0 +1,17 @@
+mode,seed,signal,transform,mg_seconds,n_windows
+constant_lr,0,grad_norm,log,0.11607099999673665,12
+constant_lr,0,grad_norm,raw,0.13429199997335672,12
+constant_lr,0,probe_loss,log,0.14337279996834695,12
+constant_lr,0,probe_loss,raw,0.9110046999994665,12
+constant_lr,1,grad_norm,log,0.1207092001568526,12
+constant_lr,1,grad_norm,raw,0.11779089993797243,12
+constant_lr,1,probe_loss,log,0.13925799983553588,12
+constant_lr,1,probe_loss,raw,0.1430699999909848,12
+lr_switch,0,grad_norm,log,0.12775940005667508,12
+lr_switch,0,grad_norm,raw,0.13092020014300942,12
+lr_switch,0,probe_loss,log,0.13635939988307655,12
+lr_switch,0,probe_loss,raw,0.14946570014581084,12
+lr_switch,1,grad_norm,log,0.12612249981611967,12
+lr_switch,1,grad_norm,raw,0.12653520004823804,12
+lr_switch,1,probe_loss,log,0.13074380019679666,12
+lr_switch,1,probe_loss,raw,0.12720849993638694,12

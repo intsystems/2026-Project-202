@@ -1,0 +1,22 @@
+{
+  "arm": "gd",
+  "mode": "constant",
+  "seed": 0,
+  "lr": 0.03,
+  "steps": 1024,
+  "switch": null,
+  "batch": 16,
+  "context": 64,
+  "width": 64,
+  "layers": 2,
+  "gd_fixed_batch": 128,
+  "parameters": 107840,
+  "vocab": 65,
+  "dataset": "Tiny Shakespeare",
+  "sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "device": "cpu",
+  "torch": "2.10.0+cpu",
+  "threads": 4,
+  "platform": "Windows-10-10.0.18363-SP0",
+  "hessian_objective": "full fixed training set"
+}

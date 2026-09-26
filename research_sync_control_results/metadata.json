@@ -1,0 +1,19 @@
+{
+  "system": "N=32 heterogeneous first-order oscillator network",
+  "objective": "learn a distributed coupling gain to synchronize phases",
+  "sensor": "one fixed scalar aggregate a^T sin(theta)+b^T cos(theta)",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "learned_gains": [
+    1.8396653000998893,
+    1.7459894891201007,
+    1.8141799353516015
+  ],
+  "dt": 0.03,
+  "steps": 18000,
+  "window": 8192,
+  "delay": 20
+}

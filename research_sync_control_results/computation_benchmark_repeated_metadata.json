@@ -1,0 +1,17 @@
+{
+  "system": "dense complete-graph heterogeneous phase oscillator network",
+  "sizes": [
+    32,
+    64,
+    96,
+    128
+  ],
+  "steps": 1536,
+  "repeats": 5,
+  "timing": "analysis only; trajectories are generated once and reused",
+  "methods": [
+    "scalar MG/LB",
+    "largest Lyapunov exponent",
+    "full Lyapunov spectrum"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "arm": "adam",
+  "mode": "switch",
+  "seed": 1,
+  "lr": 0.003,
+  "steps": 3072,
+  "switch": 1536,
+  "batch": 16,
+  "context": 64,
+  "width": 64,
+  "layers": 2,
+  "parameters": 107840,
+  "vocab": 65,
+  "dataset": "Tiny Shakespeare",
+  "sha256": "86c4e6aa9db7c042ec79f339dcb96d42b0075e16b8fc2e86bf0ca57e2dc565ed",
+  "device": "cpu",
+  "torch": "2.10.0+cpu",
+  "threads": 4,
+  "platform": "Windows-10-10.0.18363-SP0",
+  "hessian_objective": "fixed validation probe"
+}
