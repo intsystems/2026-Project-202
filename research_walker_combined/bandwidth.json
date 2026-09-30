@@ -1,0 +1,27 @@
+{
+  "sigma2": 38.477382693753626,
+  "source": "research_walker_phase/seed260_lambda0/validation.csv",
+  "source_sha256": "4b01f4936df69c9e82507695458ad45a246ab002cfdc3a6c28460dba71e17230",
+  "rows": [
+    {
+      "reset": 73001,
+      "tracking_error2": 35.670131771384376
+    },
+    {
+      "reset": 73002,
+      "tracking_error2": 38.477382693753626
+    },
+    {
+      "reset": 73003,
+      "tracking_error2": 38.05290873758391
+    },
+    {
+      "reset": 73004,
+      "tracking_error2": 39.44717604899986
+    },
+    {
+      "reset": 73005,
+      "tracking_error2": 39.42799374415574
+    }
+  ]
+}

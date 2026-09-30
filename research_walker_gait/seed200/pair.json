@@ -1,0 +1,16 @@
+{
+  "seed": 200,
+  "horizon": 4194304,
+  "early": 655360,
+  "late": 4194304,
+  "final_eligible": false,
+  "eligible_checkpoints": [
+    655360,
+    786432,
+    917504,
+    1048576,
+    1572864
+  ],
+  "common_resets": [],
+  "usable": false
+}

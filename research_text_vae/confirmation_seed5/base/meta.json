@@ -1,0 +1,9 @@
+{
+  "seed": 5,
+  "arm": "base",
+  "beta": 0.01,
+  "steps": 3072,
+  "switch": 1024,
+  "parameters": 276016,
+  "seconds": 369.80706720007583
+}

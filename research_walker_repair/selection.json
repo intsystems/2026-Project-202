@@ -1,0 +1,31 @@
+{
+  "pilot_label": "seed210",
+  "horizon": 1048576,
+  "confirmation_seeds": [
+    211,
+    212,
+    213,
+    214,
+    215
+  ],
+  "conservative": false,
+  "tau": 8,
+  "anchors": [
+    0,
+    1024
+  ],
+  "pilot_validation_periods": [
+    152.0,
+    151.0,
+    151.0,
+    77.0,
+    77.0,
+    152.0,
+    76.0,
+    152.0,
+    76.0,
+    152.0
+  ],
+  "selected_without_MG": true,
+  "protocol_sha256": "8d953f4d756f642219c8d06adf822883d66d84598a97bf04ec2676ac73763881"
+}

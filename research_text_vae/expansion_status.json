@@ -1,0 +1,51 @@
+[
+  {
+    "seed": 3,
+    "status": "complete",
+    "seconds": 597.9605038000736,
+    "independent_event": true,
+    "primary_MG_paired": 0.5267668988618027
+  },
+  {
+    "seed": 4,
+    "status": "complete",
+    "seconds": 597.9832673000637,
+    "independent_event": true,
+    "primary_MG_paired": 0.5174594671736953
+  },
+  {
+    "seed": 5,
+    "status": "complete",
+    "seconds": 597.9451617000159,
+    "independent_event": true,
+    "primary_MG_paired": 0.5422893402213523
+  },
+  {
+    "seed": 6,
+    "status": "complete",
+    "seconds": 480.2586325998418,
+    "independent_event": true,
+    "primary_MG_paired": 0.43016387494338715
+  },
+  {
+    "seed": 7,
+    "status": "complete",
+    "seconds": 468.45339030004106,
+    "independent_event": true,
+    "primary_MG_paired": 0.5347869248758804
+  },
+  {
+    "seed": 8,
+    "status": "complete",
+    "seconds": 480.2194665998686,
+    "independent_event": true,
+    "primary_MG_paired": 0.4954708176758503
+  },
+  {
+    "seed": 9,
+    "status": "complete",
+    "seconds": 303.72252289997414,
+    "independent_event": true,
+    "primary_MG_paired": 0.49567489069583515
+  }
+]

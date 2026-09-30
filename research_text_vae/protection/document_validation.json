@@ -1,0 +1,14 @@
+[
+  {
+    "file": "research_text_vae/report_ru.pdf",
+    "pages": 4,
+    "word_boxes_within_page": 1838,
+    "passed": true
+  },
+  {
+    "file": "research_text_vae/protection/report_ru.pdf",
+    "pages": 2,
+    "word_boxes_within_page": 1031,
+    "passed": true
+  }
+]

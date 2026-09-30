@@ -1,0 +1,12 @@
+{
+  "seed": 0,
+  "mode": "encoder5",
+  "steps": 3072,
+  "switch": 1024,
+  "seconds": 394.3465452999808,
+  "extra_encoder_updates": 10240,
+  "outer_stream_sha256": "3996c02636e6900450aca860dd06849587d66a7d375593306339d43bc752f4ea",
+  "outer_stream_matches_original": true,
+  "frozen_decoder_update_audited": true,
+  "source_checkpoint_sha256": "60dfc7557008520be918a318b8ad63bb13b7d1d98ab908f8357a5f807c4bbe37"
+}

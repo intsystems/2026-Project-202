@@ -1,0 +1,17 @@
+{
+  "seed": 0,
+  "arm": "base",
+  "steps": 6144,
+  "switch": 3072,
+  "every": 256,
+  "n_eval": 10000,
+  "batch": 64,
+  "lr": 0.0002,
+  "training_seconds": 192.64123309985735,
+  "evaluation_seconds": 77.07759190001525,
+  "total_seconds": 271.5836529999506,
+  "first_step": 0,
+  "g_parameters": 238339,
+  "d_parameters": 37537,
+  "source_checkpoint": null
+}

@@ -1,0 +1,8 @@
+{
+  "samples": 8192,
+  "neurons": 256,
+  "dtype": "float64",
+  "scalar_record_bytes": 65536,
+  "full_record_bytes": 16777216,
+  "warning": "record storage only, not estimator peak memory"
+}

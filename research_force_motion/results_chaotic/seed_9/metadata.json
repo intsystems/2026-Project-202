@@ -1,0 +1,19 @@
+{
+  "seed": 9,
+  "n": 256,
+  "gain": 1.5,
+  "dt": 0.1,
+  "period": 31.41592653589793,
+  "training_steps": 40000,
+  "checkpoints": [
+    0,
+    2000,
+    8000,
+    20000,
+    40000
+  ],
+  "total_seconds": 12.477756000123918,
+  "platform": "Windows-10-10.0.18363-SP0",
+  "numpy": "2.4.3",
+  "threads": 1
+}

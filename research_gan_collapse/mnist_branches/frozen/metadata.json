@@ -1,0 +1,19 @@
+{
+  "seed": 0,
+  "arm": "frozen",
+  "steps": 16384,
+  "switch": 12288,
+  "every": 256,
+  "n_eval": 10000,
+  "channels": 1,
+  "batch": 64,
+  "lr": 0.0002,
+  "training_seconds": 61.99372869706713,
+  "evaluation_seconds": 14.272147299954668,
+  "total_seconds": 78.11499789985828,
+  "first_step": 12288,
+  "g_parameters": 237313,
+  "d_parameters": 36513,
+  "source_checkpoint": "C:\\Users\\karlo\\notebooks\\grokking_prediction_original\\2026-Project-202\\research_gan_collapse\\mnist_pilot\\base_long\\checkpoint_12288.pt",
+  "actual_torch_threads": 4
+}

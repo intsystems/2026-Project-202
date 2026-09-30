@@ -1,0 +1,55 @@
+{
+  "paired_prefix_identical": true,
+  "PR_matches_eigen_formula": true,
+  "PR_scale_rotation_invariance": true,
+  "unseen_test_n": 9900,
+  "validation_n": 100,
+  "torch_threads": 1,
+  "threadpools": [
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "C:\\Users\\karlo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\numpy.libs\\libscipy_openblas64_-4bb64bb73b19ae7523581172b5c4a821.dll",
+      "version": "0.3.31.dev",
+      "threading_layer": "pthreads",
+      "architecture": "Haswell"
+    },
+    {
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "num_threads": 1,
+      "prefix": "libiomp",
+      "filepath": "C:\\Users\\karlo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\torch\\lib\\libiomp5md.dll",
+      "version": null
+    },
+    {
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "num_threads": 1,
+      "prefix": "libiomp",
+      "filepath": "C:\\Users\\karlo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\torch\\lib\\libiompstubs5md.dll",
+      "version": null
+    },
+    {
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "num_threads": 1,
+      "prefix": "vcomp",
+      "filepath": "C:\\Users\\karlo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\sklearn\\.libs\\vcomp140.dll",
+      "version": null
+    },
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "C:\\Users\\karlo\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\scipy.libs\\libscipy_openblas-64eda39e79589aedb16f58e5547eb599.dll",
+      "version": "0.3.30",
+      "threading_layer": "pthreads",
+      "architecture": "Haswell"
+    }
+  ],
+  "evaluation_note": "9900 images excluded from fixed probe and gradients; aggregate test accuracy was logged earlier, so not a blind final test"
+}

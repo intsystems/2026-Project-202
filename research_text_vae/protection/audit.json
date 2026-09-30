@@ -1,0 +1,82 @@
+{
+  "all_passed": true,
+  "branches": [
+    {
+      "seed": 0,
+      "mode": "encoder5",
+      "final_reference_recomputed": true,
+      "retention_valid": false,
+      "passed": true
+    },
+    {
+      "seed": 0,
+      "mode": "freebits",
+      "final_reference_recomputed": true,
+      "retention_valid": true,
+      "passed": true
+    },
+    {
+      "seed": 1,
+      "mode": "freebits",
+      "final_reference_recomputed": true,
+      "retention_valid": true,
+      "passed": true
+    },
+    {
+      "seed": 2,
+      "mode": "freebits",
+      "final_reference_recomputed": true,
+      "retention_valid": true,
+      "passed": true
+    },
+    {
+      "seed": 3,
+      "mode": "freebits",
+      "final_reference_recomputed": true,
+      "retention_valid": true,
+      "passed": true
+    },
+    {
+      "seed": 4,
+      "mode": "freebits",
+      "final_reference_recomputed": true,
+      "retention_valid": true,
+      "passed": true
+    },
+    {
+      "seed": 5,
+      "mode": "freebits",
+      "final_reference_recomputed": true,
+      "retention_valid": true,
+      "passed": true
+    },
+    {
+      "seed": 6,
+      "mode": "freebits",
+      "final_reference_recomputed": true,
+      "retention_valid": true,
+      "passed": true
+    },
+    {
+      "seed": 7,
+      "mode": "freebits",
+      "final_reference_recomputed": true,
+      "retention_valid": true,
+      "passed": true
+    },
+    {
+      "seed": 8,
+      "mode": "freebits",
+      "final_reference_recomputed": true,
+      "retention_valid": true,
+      "passed": true
+    },
+    {
+      "seed": 9,
+      "mode": "freebits",
+      "final_reference_recomputed": true,
+      "retention_valid": true,
+      "passed": true
+    }
+  ]
+}

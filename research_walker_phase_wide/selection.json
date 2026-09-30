@@ -1,0 +1,14 @@
+{
+  "selected_coef": 3,
+  "pilot": {
+    "healthy": 5,
+    "common": 5,
+    "reward_ratio": 0.98759059954068,
+    "ratios": {
+      "recurrence": 0.7823747367699062,
+      "D_strobe": 0.7580130083579074,
+      "tracking_error2": 0.9967601028464477
+    }
+  },
+  "protocol_sha256": "ac023b7aadb513ab5db1a115a187aed29da28dbcfd2c24de159f066a3127c77c"
+}

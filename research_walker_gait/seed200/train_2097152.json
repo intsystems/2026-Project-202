@@ -1,0 +1,17 @@
+{
+  "seed": 200,
+  "steps": 2097152,
+  "resume": 0,
+  "seconds": 1973.7045435998589,
+  "versions": {
+    "gymnasium": "1.2.3",
+    "mujoco": "3.14.0",
+    "stable_baselines3": "2.7.1",
+    "torch": "2.10.0+cpu"
+  },
+  "python": "3.13.12",
+  "threads": 1,
+  "device": "cpu",
+  "protocol_sha256": "5a7fd56e8b876dab9854543836c2c8163d9813551de7b57a89180810e55b10e0",
+  "checkpoint_note": "Intermediate callback saves before corresponding PPO update; final saved after update."
+}

@@ -1,0 +1,10 @@
+{
+  "source": "research_walker_repair\\seed210\\step0000000\\reset41001\\trajectory.npz",
+  "source_sha256": "02b8d58d6095a8af56f11253c912732e1483c617060b89c53c7e75de65163d82",
+  "period": 152,
+  "start": 881,
+  "closure_norm": 0.06521116986856483,
+  "sigma2": 0.11677915117125777,
+  "dt": 0.008,
+  "calibration_reward": 4.388867075522853
+}

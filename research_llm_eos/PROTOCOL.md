@@ -46,3 +46,12 @@ A transient dip caused by a window straddling the LR change is not sufficient
 evidence of a sustained dimension decrease. Scalar MG and Hessian/PR are different
 quantities; no equality, replacement of Hessian, or exact dimension is presumed.
 No article claims will be added until results support them.
+
+Independent reference added after the pilot: every 16 optimizer steps we save the
+complete logit vector on a fixed four-sequence probe batch.  The reference script
+computes the participation ratio and the rank needed for 90% and 99% of the
+trajectory variance from these full vectors.  MG never receives these vectors; it
+only receives a scalar log.  This is an expensive function-space reference for the
+operational claim that the observed scalar signal tracks a reduction in the
+dimension of the model's input-output trajectory.  It is not a universal guarantee
+about hidden-state or parameter-space dimension.

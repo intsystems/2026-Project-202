@@ -1,0 +1,14 @@
+{
+  "reset": 51006,
+  "complete": false,
+  "terminated": true,
+  "steps": 379,
+  "n_analysis": 0,
+  "eligible": false,
+  "mean_speed": null,
+  "knee_std": null,
+  "peaks": 0,
+  "mean_reward": null,
+  "acquisition_seconds": 0.15541610005311668,
+  "dt": 0.008
+}

@@ -1,0 +1,23 @@
+{
+  "seed": 214,
+  "conservative": false,
+  "additional_steps": 1048576,
+  "original_steps": 655360,
+  "seconds": 559.3764205998741,
+  "learning_rate_initial": 3e-05,
+  "learning_rate_final": 3e-06,
+  "clip": 0.1,
+  "target_kl": 0.01,
+  "normalization_frozen": true,
+  "training_episode_limit": 5000,
+  "parameter_delta_norm": 0.8632259368896484,
+  "parameter_relative_delta": 0.03432886675000191,
+  "protocol_sha256": "8d953f4d756f642219c8d06adf822883d66d84598a97bf04ec2676ac73763881",
+  "versions": {
+    "gymnasium": "1.2.3",
+    "mujoco": "3.14.0",
+    "stable_baselines3": "2.7.1",
+    "torch": "2.10.0+cpu"
+  },
+  "python": "3.13.12"
+}

@@ -1,0 +1,11 @@
+{
+  "seeds": [
+    7,
+    9,
+    15,
+    16,
+    18
+  ],
+  "criterion": "whole and tail top exponent > .01; first five, seeds 6..30",
+  "MG_used": false
+}

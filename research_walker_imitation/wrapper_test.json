@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "steps_checked": 74,
+  "zero_wrapper_identical": true,
+  "all_physics_identical": true,
+  "post_step_reward_checked": true,
+  "max_penalty_error": 0.0
+}

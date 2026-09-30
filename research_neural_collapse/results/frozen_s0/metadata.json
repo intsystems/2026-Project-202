@@ -1,0 +1,48 @@
+{
+  "seed": 0,
+  "arm": "frozen",
+  "steps": 4096,
+  "lr": 0.03,
+  "batch": 64,
+  "train_n": 2000,
+  "test_n": 1000,
+  "probe_n": 100,
+  "reference_every": 128,
+  "parameters": 78032,
+  "trainable_parameters": 640,
+  "torch": "2.10.0+cpu",
+  "numpy": "2.4.3",
+  "device": "cpu",
+  "threads": 8,
+  "platform": "Windows-10-10.0.18363-SP0",
+  "split_seed": 20260929,
+  "augmentation": false,
+  "momentum": 0.9,
+  "weight_decay": 0.0005,
+  "feature_dimension": 64,
+  "normalization_mean": [
+    0.4914,
+    0.4822,
+    0.4465
+  ],
+  "normalization_std": [
+    0.247,
+    0.2435,
+    0.2616
+  ],
+  "constant_lr": true,
+  "wall_seconds": 171.1623470999766,
+  "train_seconds": 38.85377379832789,
+  "joint_probe_seconds": 116.66433220007457,
+  "one_probe_forward_repeats": [
+    0.017275199992582202,
+    0.012436999939382076,
+    0.013201799942180514,
+    0.01311250007711351,
+    0.012545299949124455,
+    0.012441999977454543,
+    0.013146399985998869
+  ],
+  "one_probe_forward_seconds": 0.01311250007711351,
+  "completed_steps": 4096
+}

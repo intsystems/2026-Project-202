@@ -1,0 +1,23 @@
+{
+  "reset": 51002,
+  "anchors": [
+    0,
+    1024
+  ],
+  "period": 76,
+  "horizon": 600,
+  "epsilon": 0.001,
+  "phase_radius": 75,
+  "terminal_steps": 150,
+  "probes": 68,
+  "seconds": 13.288495700107887,
+  "cpu_seconds": 13.234375,
+  "zero_replay_max_error": 0.0,
+  "inference_mode": "single_observation_as_nominal",
+  "initial_action_response_max": 0.008582353591918945,
+  "falls": 0,
+  "nearly_tangent": 0,
+  "assessable": 68,
+  "median_amplification": 201.86477944734736,
+  "fraction_amplifying_above2": 1.0
+}

@@ -1,0 +1,17 @@
+{
+  "reset": 62006,
+  "complete": false,
+  "terminated": true,
+  "steps": 1465,
+  "n_analysis": 953,
+  "eligible": false,
+  "mean_speed": 3.681042840281687,
+  "knee_std": 0.23295803676263602,
+  "peaks": 14,
+  "mean_reward": 4.675448370655021,
+  "acquisition_seconds": 1.2941032000817358,
+  "dt": 0.008,
+  "padded_reward": 1.0878179436607018,
+  "J1": 0.02039802260696888,
+  "J2": 0.02165732905268669
+}

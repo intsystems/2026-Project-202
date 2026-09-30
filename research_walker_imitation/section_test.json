@@ -1,0 +1,24 @@
+{
+  "periodic": {
+    "D_section": 4.103305711467382e-32,
+    "section_count": 30,
+    "section_eligible": true,
+    "orbit_distance2": 0.0,
+    "orbit_loss": 0.0
+  },
+  "shifted": {
+    "D_section": 4.103305711467382e-32,
+    "section_count": 30,
+    "section_eligible": true,
+    "orbit_distance2": 0.0,
+    "orbit_loss": 0.0
+  },
+  "perturbed": {
+    "D_section": 0.0022884183263798016,
+    "section_count": 30,
+    "section_eligible": true,
+    "orbit_distance2": 0.0358978163306104,
+    "orbit_loss": 0.14115505243600182
+  },
+  "passed": true
+}

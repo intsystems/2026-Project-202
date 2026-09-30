@@ -172,3 +172,13 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Experiment data: too large for GitHub, kept locally (see backup-before-push-2026-09-30)
+*.npy
+*.npz
+*.pt
+*.zip
+
+# Downloaded public datasets
+research_gan_collapse/data/
+research_text_vae/data/

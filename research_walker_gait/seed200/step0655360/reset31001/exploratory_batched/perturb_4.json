@@ -1,0 +1,22 @@
+{
+  "reset": 31001,
+  "anchors": [
+    0,
+    512,
+    1024,
+    1536
+  ],
+  "period": 151,
+  "horizon": 604,
+  "epsilon": 0.001,
+  "probes": 136,
+  "seconds": 21.02030700002797,
+  "cpu_seconds": 21.015625,
+  "zero_replay_max_error": 0.0,
+  "initial_action_response_max": 0.00933825969696045,
+  "falls": 0,
+  "nearly_tangent": 0,
+  "assessable": 136,
+  "median_amplification": 290.30489058959506,
+  "fraction_amplifying_above2": 1.0
+}

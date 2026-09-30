@@ -1,0 +1,57 @@
+{
+  "walking": 1,
+  "total": 10,
+  "rows": [
+    {
+      "reset": 51001,
+      "steps": 176,
+      "walking": false
+    },
+    {
+      "reset": 51002,
+      "steps": 270,
+      "walking": false
+    },
+    {
+      "reset": 51003,
+      "steps": 157,
+      "walking": false
+    },
+    {
+      "reset": 51004,
+      "steps": 127,
+      "walking": false
+    },
+    {
+      "reset": 51005,
+      "steps": 181,
+      "walking": false
+    },
+    {
+      "reset": 51006,
+      "steps": 379,
+      "walking": false
+    },
+    {
+      "reset": 51007,
+      "steps": 165,
+      "walking": false
+    },
+    {
+      "reset": 51008,
+      "steps": 2059,
+      "walking": false
+    },
+    {
+      "reset": 51009,
+      "steps": 2250,
+      "walking": false
+    },
+    {
+      "reset": 51010,
+      "steps": 4608,
+      "walking": true
+    }
+  ],
+  "purpose": "Descriptive evaluation on the same held-out resets, not used for selection or a causal ablation"
+}

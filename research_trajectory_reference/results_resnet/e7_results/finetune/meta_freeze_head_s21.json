@@ -1,0 +1,31 @@
+{
+ "scenario": "finetune",
+ "arms": [
+  "base",
+  "freeze_head",
+  "lr100",
+  "prune80",
+  "batch_up",
+  "lr10",
+  "prune95"
+ ],
+ "seeds": [
+  20,
+  21,
+  22
+ ],
+ "steps": 10000,
+ "event": 4000,
+ "batch": 128,
+ "lr": 0.02,
+ "data": "/content/data",
+ "out": "/content/drive/MyDrive/e7_results",
+ "device": "cuda",
+ "verbose": true,
+ "arm": "freeze_head",
+ "seed": 21,
+ "P": 11181642,
+ "test_acc": 0.8777,
+ "train_s": 176.03349309599798,
+ "final_loss": 0.054922327664680776
+}

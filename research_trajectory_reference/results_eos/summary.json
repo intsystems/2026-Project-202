@@ -1,0 +1,371 @@
+{
+ "diverged": [],
+ "sweep_table": [
+  {
+   "eta0": 0.05,
+   "n_unstable": 1.0,
+   "n_unstable_97": 0.0,
+   "traj_PR": 1.048,
+   "MG": 5.371,
+   "MG_surr": 5.469,
+   "rel": 0.988,
+   "ident": 1.71,
+   "crossings": 2.0,
+   "rises": 0.0,
+   "spec_entropy": 0.096,
+   "lag1": 1.0,
+   "loss_level": 0.075
+  },
+  {
+   "eta0": 0.1,
+   "n_unstable": 5.0,
+   "n_unstable_97": 3.0,
+   "traj_PR": 3.887,
+   "MG": 3.319,
+   "MG_surr": 3.672,
+   "rel": 0.881,
+   "ident": 1.364,
+   "crossings": 13.0,
+   "rises": 0.397,
+   "spec_entropy": 0.377,
+   "lag1": 0.998,
+   "loss_level": 0.046
+  },
+  {
+   "eta0": 0.15,
+   "n_unstable": 5.5,
+   "n_unstable_97": 4.0,
+   "traj_PR": 4.755,
+   "MG": 3.012,
+   "MG_surr": 3.746,
+   "rel": 0.83,
+   "ident": 1.307,
+   "crossings": 15.0,
+   "rises": 0.425,
+   "spec_entropy": 0.387,
+   "lag1": 0.998,
+   "loss_level": 0.034
+  },
+  {
+   "eta0": 0.2,
+   "n_unstable": 6.0,
+   "n_unstable_97": 5.0,
+   "traj_PR": 6.033,
+   "MG": 3.034,
+   "MG_surr": 3.718,
+   "rel": 0.747,
+   "ident": 1.353,
+   "crossings": 16.0,
+   "rises": 0.449,
+   "spec_entropy": 0.418,
+   "lag1": 0.998,
+   "loss_level": 0.027
+  },
+  {
+   "eta0": 0.25,
+   "n_unstable": 7.0,
+   "n_unstable_97": 6.0,
+   "traj_PR": 7.989,
+   "MG": 2.789,
+   "MG_surr": 3.295,
+   "rel": 0.87,
+   "ident": 1.288,
+   "crossings": 19.0,
+   "rises": 0.46,
+   "spec_entropy": 0.434,
+   "lag1": 0.997,
+   "loss_level": 0.024
+  },
+  {
+   "eta0": 0.3,
+   "n_unstable": 15.0,
+   "n_unstable_97": 7.0,
+   "traj_PR": 9.276,
+   "MG": 2.722,
+   "MG_surr": 3.475,
+   "rel": 0.811,
+   "ident": 1.308,
+   "crossings": 20.0,
+   "rises": 0.456,
+   "spec_entropy": 0.459,
+   "lag1": 0.997,
+   "loss_level": 0.022
+  },
+  {
+   "eta0": 0.4,
+   "n_unstable": 22.0,
+   "n_unstable_97": 10.0,
+   "traj_PR": 11.186,
+   "MG": 2.738,
+   "MG_surr": 3.34,
+   "rel": 0.842,
+   "ident": 1.288,
+   "crossings": 22.0,
+   "rises": 0.458,
+   "spec_entropy": 0.446,
+   "lag1": 0.997,
+   "loss_level": 0.021
+  }
+ ],
+ "sweep_rank_corr": {
+  "n_unstable": {
+   "MG": -0.8271070140001254,
+   "MG_surr": -0.6305917853168869,
+   "crossings": 0.9010299097065464,
+   "rises": 0.8214465826260172,
+   "spec_entropy": 0.8212031230096418,
+   "lag1": -0.7959007330504267
+  },
+  "n_unstable_97": {
+   "MG": -0.8193950218409911,
+   "MG_surr": -0.6295110962076119,
+   "crossings": 0.9127963383894282,
+   "rises": 0.7936320779905536,
+   "spec_entropy": 0.8160067584839643,
+   "lag1": -0.7770417298781556
+  },
+  "traj_PR": {
+   "MG": -0.7943977591036415,
+   "MG_surr": -0.6145658263305324,
+   "crossings": 0.9181956178533003,
+   "rises": 0.8177488866893929,
+   "spec_entropy": 0.8904761904761905,
+   "lag1": -0.8218487394957985
+  }
+ },
+ "sweep_window_corr": {
+  "n_unstable": {
+   "MG": -0.733116886532494,
+   "MG_surr": -0.4734894729725287,
+   "crossings": 0.6697408457384891,
+   "rises": 0.7163890370721652,
+   "spec_entropy": 0.5177284493749652,
+   "lag1": -0.5455848960218025
+  },
+  "traj_PR": {
+   "MG": -0.7421505955184711,
+   "MG_surr": -0.5789122956059485,
+   "crossings": 0.40819201423364254,
+   "rises": 0.6666375044060857,
+   "spec_entropy": 0.2767541719938093,
+   "lag1": -0.26642070688378977
+  }
+ },
+ "within_run_rho": {
+  "MG": [
+   -0.5315540694532028,
+   35
+  ],
+  "MG_surr": [
+   -0.3186026921395933,
+   35
+  ],
+  "crossings": [
+   0.01429609163333589,
+   35
+  ],
+  "rises": [
+   0.3102233250922857,
+   34
+  ],
+  "spec_entropy": [
+   -0.33573829642805386,
+   35
+  ],
+  "lag1": [
+   0.336980395985308,
+   35
+  ]
+ },
+ "within_run_rho_trajPR": {
+  "MG": [
+   -0.657142857142857,
+   35
+  ],
+  "MG_surr": [
+   -0.5642857142857142,
+   35
+  ],
+  "crossings": [
+   -0.7048311814666258,
+   35
+  ],
+  "rises": [
+   0.3083707197604179,
+   34
+  ],
+  "spec_entropy": [
+   -0.7035714285714285,
+   35
+  ],
+  "lag1": [
+   0.7785714285714285,
+   35
+  ]
+ },
+ "smoothing": {
+  "MG_smooth/MG": 0.9919416819593215,
+  "MG_surr_smooth/MG_surr": 1.0164321295961434,
+  "crossings_smooth/crossings": 1.0,
+  "spec_entropy_smooth/spec_entropy": 0.9685174355241625,
+  "rises_smooth/rises": 1.004396645021645,
+  "rank_corr_n_unstable_MG_smooth": -0.9127134333621371,
+  "rank_corr_n_unstable_crossings_smooth": 0.8610152086844688
+ },
+ "switch_ratio": [
+  {
+   "eta0": 0.05,
+   "eta1": 0.05,
+   "n_unstable": Infinity,
+   "traj_PR": 2.214,
+   "MG": 0.907,
+   "MG_surr": 0.849,
+   "rel": 1.021,
+   "crossings": 2.5,
+   "rises": Infinity,
+   "spec_entropy": 4.051,
+   "MG_smooth": 0.928,
+   "crossings_smooth": 2.5
+  },
+  {
+   "eta0": 0.1,
+   "eta1": 0.1,
+   "n_unstable": 1.0,
+   "traj_PR": 1.599,
+   "MG": 0.886,
+   "MG_surr": 1.021,
+   "rel": 0.924,
+   "crossings": 0.786,
+   "rises": 1.021,
+   "spec_entropy": 0.82,
+   "MG_smooth": 0.92,
+   "crossings_smooth": 0.769
+  },
+  {
+   "eta0": 0.2,
+   "eta1": 0.05,
+   "n_unstable": 0.0,
+   "traj_PR": 0.341,
+   "MG": 1.791,
+   "MG_surr": 1.386,
+   "rel": 1.314,
+   "crossings": 0.087,
+   "rises": 0.0,
+   "spec_entropy": 0.116,
+   "MG_smooth": 1.839,
+   "crossings_smooth": 0.087
+  },
+  {
+   "eta0": 0.2,
+   "eta1": 0.2,
+   "n_unstable": 1.0,
+   "traj_PR": 1.923,
+   "MG": 0.961,
+   "MG_surr": 0.894,
+   "rel": 1.045,
+   "crossings": 0.55,
+   "rises": 1.062,
+   "spec_entropy": 0.852,
+   "MG_smooth": 0.984,
+   "crossings_smooth": 0.542
+  },
+  {
+   "eta0": 0.3,
+   "eta1": 0.05,
+   "n_unstable": 0.0,
+   "traj_PR": 0.241,
+   "MG": 1.835,
+   "MG_surr": 1.441,
+   "rel": 1.277,
+   "crossings": 0.069,
+   "rises": 0.0,
+   "spec_entropy": 0.106,
+   "MG_smooth": 1.929,
+   "crossings_smooth": 0.074
+  },
+  {
+   "eta0": 0.3,
+   "eta1": 0.1,
+   "n_unstable": 0.0,
+   "traj_PR": 0.241,
+   "MG": 1.832,
+   "MG_surr": 1.471,
+   "rel": 1.249,
+   "crossings": 0.069,
+   "rises": 0.0,
+   "spec_entropy": 0.106,
+   "MG_smooth": 1.925,
+   "crossings_smooth": 0.074
+  },
+  {
+   "eta0": 0.3,
+   "eta1": 0.3,
+   "n_unstable": 1.857,
+   "traj_PR": 2.4,
+   "MG": 0.917,
+   "MG_surr": 0.884,
+   "rel": 0.981,
+   "crossings": 0.571,
+   "rises": 1.02,
+   "spec_entropy": 0.869,
+   "MG_smooth": 0.927,
+   "crossings_smooth": 0.645
+  }
+ ],
+ "switch_diff_nunst": [
+  {
+   "eta0": 0.05,
+   "eta1": 0.05,
+   "n_unstable": 1.0
+  },
+  {
+   "eta0": 0.1,
+   "eta1": 0.1,
+   "n_unstable": 0.0
+  },
+  {
+   "eta0": 0.2,
+   "eta1": 0.05,
+   "n_unstable": -6.0
+  },
+  {
+   "eta0": 0.2,
+   "eta1": 0.2,
+   "n_unstable": 0.0
+  },
+  {
+   "eta0": 0.3,
+   "eta1": 0.05,
+   "n_unstable": -7.0
+  },
+  {
+   "eta0": 0.3,
+   "eta1": 0.1,
+   "n_unstable": -7.0
+  },
+  {
+   "eta0": 0.3,
+   "eta1": 0.3,
+   "n_unstable": 6.0
+  }
+ ],
+ "switch_sign_agreement": {
+  "MG": 0.11428571428571428,
+  "MG_surr": 0.2,
+  "crossings": 0.5142857142857142,
+  "spec_entropy": 0.5428571428571428,
+  "MG_smooth": 0.14285714285714285,
+  "crossings_smooth": 0.5142857142857142
+ },
+ "cost": {
+  "t_MG_window_ms": 6.73970009665935,
+  "t_trajPR_window_ms": 295.24434998165816,
+  "t_lanczos_checkpoint_ms": 93.15560001414265,
+  "hvp_per_checkpoint": 63.0,
+  "t_train_run_s": 7.590830791625194,
+  "t_lanczos_run_s": 3.1654618999455124,
+  "traj_MB": 273.74267578125,
+  "log_KB": 31.25,
+  "P": 8970
+ }
+}

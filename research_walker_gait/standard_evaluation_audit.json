@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "reset": 31001,
+      "steps": 151,
+      "action_difference": 0.0,
+      "terminal_height": 0.785894239590307,
+      "terminal_angle": 0.7316056185576728
+    },
+    {
+      "reset": 31002,
+      "steps": 122,
+      "action_difference": 0.0,
+      "terminal_height": 0.7989491338674753,
+      "terminal_angle": 0.7085467012259331
+    },
+    {
+      "reset": 31003,
+      "steps": 132,
+      "action_difference": 0.0,
+      "terminal_height": 0.7913140085311066,
+      "terminal_angle": 0.7425502561571576
+    }
+  ]
+}

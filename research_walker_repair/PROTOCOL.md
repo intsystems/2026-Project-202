@@ -1,0 +1,29 @@
+# Walker2d repair and new measurement protocol
+
+This is a new experiment. The failed seed200 run and report in research_walker_gait remain unchanged. No MG has been evaluated on those trajectories.
+
+## Training repair, chosen before new runs
+
+Warm start from seed200/step0655360, the FIRST previously eligible walking snapshot. This is continued learning, not new independent initializations. Retain policy, critic and Adam optimizer state. Each continuation gets new training environment/action RNG seeds. Copy the anchor and its normalization into this experiment for reproducibility.
+
+Pilot seed210: 1,048,576 additional transitions. PPO eight environments, rollout512 per environment, batch256, five epochs, clip.1, target_kl.01, learning rate linear3e-5 to3e-6. Gamma.99, GAE.95, entropy coefficient0, value coefficient.5, gradient clip.5, separate64x64 tanh actor/critic unchanged. Training episode time limit5000, replacing old1000. Freeze BOTH observation/reward normalization statistics from the anchor; still normalize observations/rewards. Deterministic evaluation uses frozen statistics and unnormalized rewards. No manual change to action means or log standard deviations. Save every131072 transitions AFTER updates; log KL, clipping, losses and noise scale. One CPU thread/worker, at most five independent workers; no GPU requirement.
+
+This is a combined stabilization change, not a causal ablation assigning effects to one hyperparameter. If pilot fails the gate, one second pilot seed210B restarts the same anchor with LR3e-6 to3e-7, clip.05, target_kl.005 and otherwise identical budget. Both pilots remain reported. No searching by MG or regularity. No claim of a theorem guaranteeing PPO convergence.
+
+Validation initial states41001..41005 at each snapshot; held-out test51001..51010 only after training settings and horizon are fixed. Gate: each of the last three validation snapshots must have >=4/5 complete healthy4608-step trajectories, speed>=.5m/s. Their median unnormalized mean step reward must be >=90% of the corresponding anchor median. Report reward slope rather than declaring mathematical convergence. Scalar eligibility (knee std>=.05, at least8 peaks) is distinct from walking success; lack of knee excitation must not be called failed learning. Last three checkpoints are not chosen by best return.
+
+If a pilot passes, freeze its settings, horizon, measurement lag and run ALL five continuation seeds211..215 from the same anchor. No replacements; no changing configurations after their outcomes. Shared initialization is disclosed: these are stochastic fine-tuning repetitions, not five independently learned gaits. If both pilots fail, report training repair failure and stop expensive confirmation. Validation-selected configuration can overfit; held-out resets and continuation seeds address this partially.
+
+## Motion and independent references
+
+Same measurement code and physical definitions as prior protocol: frozen policy, 512 burn-in plus4096 analyzed steps, dt.008, unhealthy termination retained and evaluation time limit removed. Scalar right knee qpos4, secondary left knee qpos7. Physical17D state qpos[1:]+qvel; positions scaled1, velocities5. R=min lag20..250 normalized squared recurrence error; P is minimizing lag; D=normalized full-state variance at right-knee peaks (distance20, prominence.15, parabolic peak interpolation). Preserve cheap same-sensor entropy, normalized autocorrelation score, period CV and std. No equality of these quantities with active dimension is asserted.
+
+Primary test compares shared anchor (additional step0) to FINAL1,048,576 for all ten test resets. Compare common scalar-eligible resets; require>=8/10 to classify a continuation's MG result as broadly assessable. Report EVERY failure and all walking outcomes separately. Independently confirmed regularity improvement: median paired ratios late/early of BOTH R,D<=.75, with early median R>=.02,D>=.01. These are operational criteria; absence of an event does not prove absence of every type of simplification. No pairing chosen by best metric.
+
+MG window2048, E20, k20, stride512, dither/default floors unchanged. Tau once=ceil(median validation P across all common eligible pilot anchor/final records /19), clipped1..12. Freeze before any MG. Theiler39*tau, E40 diagnostic separately. Sensitivity W1024/4096, half/double tau, and left-knee W2048. No tuning to MG agreement. Failed/degenerate windows remain; all five primary windows must be finite and nondegenerate for a trace comparison.
+
+## Expensive reference and costs
+
+Use corrected single-observation closed-loop perturbation implementation from prior experiment. For cost control, fixed anchors0,1024, all17 scaled directions with both signs, eps.001:68 continuations per trace, four independently estimated periods each, phase-adjusted distance. Evaluate on FIRST common eligible held-out reset for pilot and EVERY continuation, anchor and final. This subsample is chosen by eligibility alone, not R/D/MG direction, and does not represent all10 resets. Share/cache the identical anchor computation rather than pretending these are new independent measurements. Exact zero-perturbation replay must pass. Preserve falls, nearly tangent directions, raw curves. This is finite-horizon amplification, not Lyapunov spectrum.
+
+Serial warmed timing on first assessable confirmation pair: MG, cheap scalar alternatives, full-state R/D, common acquisition, and perturbation continuations. Include cheap baselines; cheaper than perturbations does not imply equivalent diagnostic power. Report parameter change and validation behavior so unchanged copied policies cannot be passed off as successful learning. Russian concise report with setup, actual outcomes, limitations, figure(s), sensitivity, time, code/data archive. Do not change main manuscript.

@@ -1,0 +1,62 @@
+{
+  "outcome": "pilot_feasibility_failure",
+  "pilot": 200,
+  "transitions": 4194304,
+  "pair": {
+    "seed": 200,
+    "horizon": 4194304,
+    "early": 655360,
+    "late": 4194304,
+    "final_eligible": false,
+    "eligible_checkpoints": [
+      655360,
+      786432,
+      917504,
+      1048576,
+      1572864
+    ],
+    "common_resets": [],
+    "usable": false
+  },
+  "eligible_checkpoints": [
+    655360,
+    786432,
+    917504,
+    1048576,
+    1572864
+  ],
+  "final_eligible_resets": 0,
+  "final_survival_steps": [
+    151,
+    122,
+    132
+  ],
+  "final_complete_resets": 0,
+  "final_failure_reasons": [
+    {
+      "reset": 31001,
+      "reasons": [
+        "\u043f\u0440\u0435\u0440\u044b\u0432\u0430\u043d\u0438\u0435 \u043f\u043e \u0437\u0434\u043e\u0440\u043e\u0432\u044c\u044e",
+        "\u043c\u0435\u043d\u044c\u0448\u0435 \u0432\u043e\u0441\u044c\u043c\u0438 \u043f\u0438\u043a\u043e\u0432"
+      ]
+    },
+    {
+      "reset": 31002,
+      "reasons": [
+        "\u043f\u0440\u0435\u0440\u044b\u0432\u0430\u043d\u0438\u0435 \u043f\u043e \u0437\u0434\u043e\u0440\u043e\u0432\u044c\u044e",
+        "\u043c\u0435\u043d\u044c\u0448\u0435 \u0432\u043e\u0441\u044c\u043c\u0438 \u043f\u0438\u043a\u043e\u0432"
+      ]
+    },
+    {
+      "reset": 31003,
+      "reasons": [
+        "\u043f\u0440\u0435\u0440\u044b\u0432\u0430\u043d\u0438\u0435 \u043f\u043e \u0437\u0434\u043e\u0440\u043e\u0432\u044c\u044e",
+        "\u043c\u0435\u043d\u044c\u0448\u0435 \u0432\u043e\u0441\u044c\u043c\u0438 \u043f\u0438\u043a\u043e\u0432"
+      ]
+    }
+  ],
+  "training_seconds": 3924.4143725999165,
+  "MG_computed": false,
+  "confirmation_seeds_run": 0,
+  "zero_replay_error": 0.0
+}

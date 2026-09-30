@@ -1,0 +1,8 @@
+T1    s1: learned True fid 1.000 n_zero 1 lyap1 +0.0000 peaks 1 PR 1.59 MG n0/n1/n2 1.10/1.10/1.10  train 1361s MG 19s
+T2    s1: learned True fid 1.000 n_zero 2 lyap1 +0.0004 peaks 2 PR 3.01 MG n0/n1/n2 2.88/2.91/3.16  train 1351s MG 21s
+T3    s1: learned True fid 0.999 n_zero 3 lyap1 +0.0004 peaks 3 PR 4.29 MG n0/n1/n2 5.46/4.96/6.63  train 1134s MG 18s
+T4    s1: learned True fid 0.972 n_zero 4 lyap1 +0.0011 peaks 4 PR 5.73 MG n0/n1/n2 5.43/7.36/5.70  train 1053s MG 21s
+H2    s1: learned True fid 1.000 n_zero 3 lyap1 +0.0000 peaks 2 PR 2.92 MG n0/n1/n2 1.15/1.15/1.15  train 1096s MG 12s
+H4    s1: learned True fid 1.000 n_zero 1 lyap1 -0.0002 peaks 4 PR 5.25 MG n0/n1/n2 1.15/1.15/1.15  train 1199s MG 8s
+M4    s1: learned True fid 1.000 n_zero 2 lyap1 -0.0001 peaks 4 PR 5.53 MG n0/n1/n2 3.69/3.28/3.16  train 1207s MG 23s
+chaos s1: learned False fid nan n_zero 12 lyap1 +0.0424 peaks nan PR 10.81 MG n0/n1/n2 19.49/17.64/27.29  train 0s MG 37s

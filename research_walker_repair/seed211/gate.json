@@ -1,0 +1,29 @@
+{
+  "label": "seed211",
+  "baseline_reward": 4.414328451486195,
+  "checks": [
+    {
+      "step": 786432,
+      "walking": 4,
+      "median_reward": 4.722605858554445,
+      "ratio": 1.0698356296900517,
+      "pass_check": true
+    },
+    {
+      "step": 917504,
+      "walking": 5,
+      "median_reward": 4.653321593335743,
+      "ratio": 1.0541403170326133,
+      "pass_check": true
+    },
+    {
+      "step": 1048576,
+      "walking": 5,
+      "median_reward": 4.749877757792339,
+      "ratio": 1.0760136700279228,
+      "pass_check": true
+    }
+  ],
+  "passed": true,
+  "reward_relative_range": 0.021873352995309504
+}

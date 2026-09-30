@@ -1,0 +1,32 @@
+{
+  "reset": 61001,
+  "complete": true,
+  "terminated": false,
+  "steps": 4608,
+  "n_analysis": 4096,
+  "eligible": true,
+  "mean_speed": 3.587877558897123,
+  "knee_std": 0.19164082159188095,
+  "peaks": 61,
+  "mean_reward": 4.5832669392240355,
+  "acquisition_seconds": 6.985578899970278,
+  "dt": 0.008,
+  "padded_reward": 4.5832669392240355,
+  "J1": 0.015803935006260872,
+  "J2": 0.01419085543602705,
+  "state_seconds": 0.10024189995601773,
+  "cheap": {
+    "std": 0.19164082159188095,
+    "entropy": 0.5278813602555386,
+    "autocorr": 0.5843544503356092,
+    "peak_count": 61,
+    "period_cv": 0.375590187372829
+  },
+  "cheap_seconds": 0.013942399993538857,
+  "recurrence": 0.49233442740718536,
+  "section_dispersion": 0.2393828462327331,
+  "period": 74,
+  "period_boundary": false,
+  "state_variance": 19.08162107218218,
+  "peak_count": 61
+}

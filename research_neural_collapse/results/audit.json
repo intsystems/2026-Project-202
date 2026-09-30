@@ -1,0 +1,36 @@
+{
+  "simplex_zero_test": {
+    "nc1": 0.0,
+    "nc1_trace": 0.0,
+    "nc2": 2.558335459435604e-16,
+    "mean_norm_cv": 1.1702778228589004e-16,
+    "nc3": 4.163336342344337e-17
+  },
+  "scale_rotation_invariance": true,
+  "runs": [
+    {
+      "run": "frozen_s0",
+      "rows": 4096,
+      "full_state_max_change": 0.0,
+      "geometry_recomputed": true
+    },
+    {
+      "run": "train_s0",
+      "rows": 4096,
+      "full_state_max_change": 3.354511022567749,
+      "geometry_recomputed": true
+    },
+    {
+      "run": "train_s1",
+      "rows": 4096,
+      "full_state_max_change": 4.515216827392578,
+      "geometry_recomputed": true
+    },
+    {
+      "run": "train_s2",
+      "rows": 4096,
+      "full_state_max_change": 3.9623332023620605,
+      "geometry_recomputed": true
+    }
+  ]
+}

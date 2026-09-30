@@ -1,0 +1,45 @@
+# Walker2d learned gait: prospective protocol, 2026-09-29
+
+Question: does scalar MG track increasing regularity of an already functioning learned gait, and how does its measurement cost compare with independent full-state and perturbation diagnostics? No assumption that a learned gait necessarily simplifies. Policy is trained; MG measures robot motion with frozen snapshots, NOT optimizer-loss dynamics. This is a simulator experiment, not a physical robot or LLM result.
+
+## Fixed training before any MG
+
+Gymnasium1.2.3 Walker2d-v5, MuJoCo3.14.0, Stable-Baselines3 PPO2.7.1; CPU, one Torch thread per worker. Default Walker2d dynamics/reward/health criteria, action6, observation17, dt=.008s; training TimeLimit1000. PPO: eight DummyVecEnv copies, n_steps256, batch64, ten epochs, learning rate.0003, gamma.99, GAE.95, clip.2, entropy0, value coefficient.5, max gradient norm.5; separate actor/critic MLP64x64 tanh, default orthogonal initialization and Gaussian log_std0. VecNormalize: observation/reward normalization, clip_obs10, clip_reward10, gamma.99; frozen statistics for evaluation, original unnormalized reward reported.
+
+Pilot seed200. Train2,097,152 transitions, save policy/normalization every131,072 transitions including initial and final. If the final checkpoint and at least one earlier checkpoint are not eligible walking snapshots (definition below), extend pilot once to4,194,304 with the same settings; keep all failures. No other controller/hyperparameter search. Training restart for an extension retains model, optimizer and normalization but resets simulator episodes; disclose if used. Choose2M/4M solely by walking eligibility, before MG. Then freeze training horizon and scalar lag and run ALL five fresh confirmation seeds201--205, with no replacements or exclusions by outcome. These seeds share the task, not independent physical environments. At most two training workers concurrently. Existing other tasks are not changed.
+
+## Snapshot evaluation and eligibility
+
+Freeze deterministic policy and observation normalization. Three predeclared reset seeds31001,31002,31003 per snapshot. Remove evaluation time limit by using unwrapped environment, while preserving unhealthy termination. Record512 burn-in steps plus4096 analysis steps (36.864s total) if healthy throughout. No control/reference signal supplied; policy responds only to current observation.
+
+Primary sensor is right knee position, joint leg_joint, qpos index4; chosen before runs. Secondary same-type robustness sensor left knee index7 is retained, not substituted if primary fails. Save qpos9, qvel9, reward and displacement, plus full MuJoCo integration state at analysis anchors0,512,1024,1536 for exact perturbation restart.
+
+A reset is eligible if all4608 steps complete without unhealthy termination, mean forward speed during analysis>=.5 m/s, right-knee standard deviation>=.05rad, and at least8 right-knee peaks (distance20 samples, prominence.15rad) exist. A snapshot needs at least2/3 eligible resets. Per seed, select the EARLIEST eligible saved snapshot and the final snapshot; require distinct snapshots and at least two common eligible reset seeds for the primary paired comparison. Report all checkpoints/seeds, including failed training, missing pairs and late falls. No choice by recurrence score, stability, MG or favorable effect.
+
+## Independent state regularity
+
+Translation-reduced physical state has17 coordinates: qpos[1:] and all qvel. Fixed scaling: positions/angles by1, velocities by5; absolute horizontal position excluded. For each eligible trace, normalize squared distances by total temporal state variance. Full-state recurrence error R is min over integer lags20..250 of mean squared state difference at that lag divided by twice total state variance. Period P is the smallest minimizing lag (physical window .16..2s). Full curve retained; boundary minima flagged.
+
+Section dispersion D uses right-knee peaks only to mark corresponding gait phases, then measures variance of the FULL17-dimensional state there divided by total state variance. Peak time is refined by three-point parabolic interpolation and state is linearly interpolated at that time. At least8 peaks required. Same-scalar cheap alternatives: knee spectral entropy, std, best autocorrelation over20..250, and coefficient of variation of interpeak intervals. They are not exact dimension measures.
+
+Primary reference-confirmed simplification for a seed: median paired late/early ratios for BOTH R and D<=.75, with early median R>=.02 and D>=.01 (avoid calling negligible changes of an already periodic gait a substantial simplification). No theorem is inferred from these thresholds. Retain continuous ratios, all resets and all non-events. Stability probes below are separate supporting evidence, not a hidden criterion for selecting favorable pairs. Faster/healthier locomotion alone is not evidence of simplification.
+
+## Scalar MG, frozen after pilot eligibility but before looking at MG
+
+Use unchanged code/actdim estimator. Primary W2048, E20, k20, stride512, tau=ceil(median pilot full-state P /19), clipped to1..12. Pilot median uses common eligible resets of earliest and final snapshots. This one-time lag calibration uses only independent motion period, not MG, then freezes tau for every confirmation checkpoint. It is not an oracle using each test trajectory's full state. Theiler39*tau (cap same). E40 is a saved identifiability diagnostic. Sensitivity W1024/4096 at the same tau and W2048 at max(1,tau//2) and2*tau. Retain failures/nonfinite/degenerate windows; never replace primary after results. Primary per-trace value is median of all finite, nondegenerate primary windows; all primary windows must be valid for a confirmatory comparison, otherwise flag unassessable. No filtering by change direction.
+
+If no pilot pair exists after4M, report feasibility failure; do not fabricate a lag or launch an expensive confirmation of missing walking. Otherwise run all five confirmations regardless of pilot MG direction. For reference-confirmed seeds, ask whether MG decreases; also report stable/non-event seeds and false reductions. Small n and overlap prevent treating windows/resets as independent trained policies.
+
+## Closed-loop perturbation reference
+
+For each selected early/final trace, use analysis anchors0,512,1024,1536. Restore mjSTATE_INTEGRATION (including warm-start variables), perturb each of the17 scaled physical coordinates separately with both signs, magnitude1e-3 in normalized units. This is136 continuations per trace. Evolve the perturbed policy+simulator for four independently estimated periods, H=4P; unhealthy termination is a recorded failure. The policy recomputes actions from perturbed observations at every step (not a replay of nominal actions).
+
+Compare the perturbed trajectory to the unperturbed FULL-state trajectory, allowing a phase shift up to half a period. Distance is the minimum to piecewise-linear segments of the nominal state curve in that phase neighborhood. Normalize by initial transverse distance; cases below.1 times perturbation magnitude are flagged as nearly tangent and retained as unassessable. Report median final-period distance amplification, fraction amplifying by>2, and falls. No Lyapunov-exponent/full-spectrum claim: these are finite-amplitude, finite-horizon, phase-adjusted recovery measurements in a hybrid contact system.
+
+First audit exact zero-perturbation replay and action feedback. Save individual responses, not only favorable medians. Computational feasibility rule fixed beforehand: if the full136-probe evaluation exceeds60 CPU seconds per trace on the pilot, use a uniformly spaced subset of two anchors (0,1024), retaining all34 signed directions per anchor for BOTH pilot and confirmation, and disclose this resource reduction before seeing MG. Otherwise retain all four. No adjustment based on diagnostic direction.
+
+## Costs, communication and deliverables
+
+Trajectory generation (policy inference+physics) is common to scalar/state diagnostics and charged separately, not claimed as an MG saving. Joint angle is already in the observation: no additional model forward to acquire it. Time MG, cheap same-channel features, full-state recurrence/section and perturbation reference separately on the same selected traces in a serial warmed benchmark after training. Include both marginal diagnostic costs and common acquisition where relevant. Cheap full-state/one-channel competitors cannot be omitted in favor of an expensive reference. More expensive perturbation diagnostics measure a different property; lower MG cost does not establish equal diagnostic power.
+
+Report setup, all training outcomes, selected pairs, raw and normalized metrics, independently confirmed simplification or its absence, sensor/window sensitivity, timing, and limitations in concise Russian PDF+Markdown. Save code, checkpoints, traces, individual perturbations, protocol, audit and manifest archive. Do not modify the main manuscript or reinterpret a failed result as success.

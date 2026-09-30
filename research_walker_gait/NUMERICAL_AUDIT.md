@@ -1,0 +1,5 @@
+# Pilot implementation correction before scalar analysis or confirmation
+
+The first exploratory perturbation calculation batched34 perturbed observations through the actor, while the nominal trajectory used single-observation inference. A dedicated zero-perturbation test found that those tiny floating-point action differences amplified to a maximum scaled-state error12.102 over604 steps of the early pilot gait. Single-observation replay of the saved integration state was exact.
+
+This does not provide a valid controlled perturbation comparison: numerical realization changed along with the intervention. The original batched pilot files are retained in the trace's `exploratory_batched/` subdirectory and are not used for reference selection or conclusions. All accepted perturbations are recomputed with single-observation actor inference, identical to nominal rollout. The zero-replay audit now covers the full4P horizon, not only its first512 steps. Finite-horizon amplification is reported as such, never as a Lyapunov spectrum or asymptotic theorem. The predeclared CPU resource cap applies to the corrected implementation.

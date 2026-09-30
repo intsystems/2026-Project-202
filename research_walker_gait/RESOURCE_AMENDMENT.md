@@ -1,0 +1,5 @@
+# Execution-only amendment, before pilot MG or confirmation training
+
+2026-09-29. The machine has12 physical cores /16 logical processors; the inspected Python process list currently contains only this pilot. The pilot runs at approximately1070 environment transitions/s with one Torch/BLAS thread. Keeping five independent confirmation runs in two serial waves would unnecessarily prolong the experiment.
+
+Increase the maximum number of concurrent confirmation workers from2 to5, each still one Torch/BLAS thread. This changes scheduling only: task, seeds, policy/optimizer, training horizon, checkpoint grid, eligibility, independent diagnostics, scalar selection and reporting rules are unchanged. If competing work is present at launch, use fewer workers. No decision uses MG or a favorable outcome. The original PROTOCOL.md remains unchanged; selection.json records this amendment and the execution limit. Benchmark comparisons are performed serially after training and never use parallel training throughput as diagnostic speed evidence.

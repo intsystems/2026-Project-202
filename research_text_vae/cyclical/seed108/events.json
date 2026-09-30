@@ -1,0 +1,627 @@
+{
+  "suitable": true,
+  "MI0": 5.479653358459473,
+  "response0": 0.6599630117416382,
+  "events": [
+    {
+      "id": 0,
+      "step": 2112,
+      "state": "low",
+      "direction": "loss",
+      "MI": 1.7442893981933594,
+      "shuffle_symkl": 0.2536128461360931,
+      "scored": true
+    },
+    {
+      "id": 1,
+      "step": 3200,
+      "state": "high",
+      "direction": "recovery",
+      "MI": 4.853277683258057,
+      "shuffle_symkl": 0.5658096671104431,
+      "scored": true
+    },
+    {
+      "id": 2,
+      "step": 4544,
+      "state": "low",
+      "direction": "loss",
+      "MI": 1.9342681169509888,
+      "shuffle_symkl": 0.3273464441299438,
+      "scored": true
+    },
+    {
+      "id": 3,
+      "step": 5248,
+      "state": "high",
+      "direction": "recovery",
+      "MI": 4.9399733543396,
+      "shuffle_symkl": 0.6542321443557739,
+      "scored": true
+    }
+  ],
+  "trace": [
+    {
+      "step": 1024,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1088,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1152,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1216,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1280,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1344,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1408,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1472,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1536,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1600,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1664,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1728,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1792,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1856,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1920,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 1984,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 2048,
+      "raw_condition": "low",
+      "confirmed_state": "high",
+      "pending": 1
+    },
+    {
+      "step": 2112,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2176,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2240,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2304,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2368,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2432,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2496,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2560,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2624,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2688,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2752,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2816,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2880,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 2944,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 3008,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 3072,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 3136,
+      "raw_condition": "high",
+      "confirmed_state": "low",
+      "pending": 1
+    },
+    {
+      "step": 3200,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3264,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3328,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3392,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3456,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3520,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3584,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3648,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3712,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3776,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3840,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3904,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 3968,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 4032,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 4096,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 4160,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 4224,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 4288,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 4352,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 4416,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 4480,
+      "raw_condition": "low",
+      "confirmed_state": "high",
+      "pending": 1
+    },
+    {
+      "step": 4544,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 4608,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 4672,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 4736,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 4800,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 4864,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 4928,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 4992,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 5056,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 5120,
+      "raw_condition": "low",
+      "confirmed_state": "low",
+      "pending": 0
+    },
+    {
+      "step": 5184,
+      "raw_condition": "high",
+      "confirmed_state": "low",
+      "pending": 1
+    },
+    {
+      "step": 5248,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5312,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5376,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5440,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5504,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5568,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5632,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5696,
+      "raw_condition": "high",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5760,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5824,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5888,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 5952,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6016,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6080,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6144,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6208,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6272,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6336,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6400,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6464,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6528,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6592,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6656,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6720,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6784,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6848,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6912,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 6976,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 7040,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 7104,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    },
+    {
+      "step": 7168,
+      "raw_condition": "ambiguous",
+      "confirmed_state": "high",
+      "pending": 0
+    }
+  ]
+}

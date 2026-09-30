@@ -1,0 +1,14 @@
+{
+  "reset": 31002,
+  "complete": false,
+  "terminated": true,
+  "steps": 755,
+  "n_analysis": 243,
+  "eligible": false,
+  "mean_speed": 4.370760267124394,
+  "knee_std": 0.08656536524321379,
+  "peaks": 2,
+  "mean_reward": 5.3624762700098225,
+  "acquisition_seconds": 0.22651659999974072,
+  "dt": 0.008
+}

@@ -1,0 +1,20 @@
+{
+  "reset": 74001,
+  "anchors": [
+    0,
+    1024
+  ],
+  "epsilon": 0.001,
+  "horizon": 600,
+  "terminal_steps": 150,
+  "one_cycle_steps": 152,
+  "probes": 68,
+  "zero_replay_error": 0.0,
+  "seconds": 16.395954200066626,
+  "falls": 0,
+  "median_amplification": 1857.2116067490583,
+  "spectral_radius": [
+    298.7134040742788,
+    51.73641487654069
+  ]
+}

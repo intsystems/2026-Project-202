@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "shared_initialization": true,
+  "seeds": [
+    {
+      "label": "seed210",
+      "passed": true,
+      "actor_delta": 0.4083528387615553,
+      "final_sha256": "c41b4a13c79c2165e148a864de24c9faf1465835025bca927fb034df60adb357",
+      "common_test_resets": 10
+    },
+    {
+      "label": "seed211",
+      "passed": true,
+      "actor_delta": 0.40656702599803,
+      "final_sha256": "592eb25d63d2eba640de95c21f0c68487e9dcee68e38310a5e81203f812eca52",
+      "common_test_resets": 10
+    },
+    {
+      "label": "seed212",
+      "passed": true,
+      "actor_delta": 0.3979963455989714,
+      "final_sha256": "4b512e8ce8ee80cb5c45eb977ad97805a01bd3bbe5a6569b14c8b55b3ca53198",
+      "common_test_resets": 8
+    },
+    {
+      "label": "seed213",
+      "passed": true,
+      "actor_delta": 0.41582485469960534,
+      "final_sha256": "508c44c94175842d938456606722b56f91cfed54a45363decaefb6ed33c86b15",
+      "common_test_resets": 9
+    },
+    {
+      "label": "seed214",
+      "passed": true,
+      "actor_delta": 0.3923366860148403,
+      "final_sha256": "b552917e3e18b8942ae2e18a43deadc06971c01bd96a06420f4a374f47bb644c",
+      "common_test_resets": 10
+    },
+    {
+      "label": "seed215",
+      "passed": true,
+      "actor_delta": 0.3993301146172674,
+      "final_sha256": "005000d7166416efb576c5de2d390b26ba2be23f4c029b46002a6c150c3e681c",
+      "common_test_resets": 10
+    }
+  ]
+}

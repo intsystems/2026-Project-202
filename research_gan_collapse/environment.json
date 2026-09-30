@@ -1,0 +1,17 @@
+{
+  "python": "3.13.12 (tags/v3.13.12:1cbe481, Feb  3 2026, 18:22:25) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.18363-SP0",
+  "packages": {
+    "numpy": "2.4.3",
+    "scipy": "1.17.1",
+    "pandas": "3.0.1",
+    "torch": "2.10.0",
+    "torchvision": "0.25.0",
+    "scikit-learn": "1.8.0",
+    "matplotlib": "3.10.8",
+    "threadpoolctl": "3.6.0"
+  },
+  "gpu_used": false,
+  "training_threads_recorded": 4,
+  "matched_benchmark_threads_recorded": 1
+}

@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "runs": [
+    "seed260_lambda0",
+    "seed260_lambda3",
+    "seed271_lambda0",
+    "seed271_lambda3",
+    "seed272_lambda0",
+    "seed272_lambda3",
+    "seed273_lambda0",
+    "seed273_lambda3",
+    "seed274_lambda0",
+    "seed274_lambda3",
+    "seed275_lambda0",
+    "seed275_lambda3",
+    "seed240_lambda0",
+    "seed240_lambda1",
+    "seed240_lambda3"
+  ],
+  "total_final_tests": 150,
+  "shared_initialization_verified": true,
+  "frozen_norm_verified": true,
+  "raw_metrics_recomputed": true,
+  "zero_replay_verified": true
+}

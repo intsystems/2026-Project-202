@@ -1,0 +1,49 @@
+{
+  "selected_coef": null,
+  "pilots": [
+    {
+      "coef": 1,
+      "passed": false,
+      "healthy": 3,
+      "common": 3,
+      "reward_ratio": 0.5931846022383315,
+      "ratios": {
+        "recurrence": 2.764446991088256,
+        "D_section": 12.361694247097217,
+        "section_dispersion": 1.1595423818654316,
+        "orbit_distance2": 0.9769812166089006
+      },
+      "last3_healthy": [
+        4,
+        5,
+        3
+      ]
+    },
+    {
+      "coef": 3,
+      "passed": false,
+      "healthy": 4,
+      "common": 4,
+      "reward_ratio": 0.7831431726695206,
+      "ratios": {
+        "recurrence": 1.2076932141889838,
+        "D_section": 0.7749007300938697,
+        "section_dispersion": 0.8961121118834625,
+        "orbit_distance2": 0.7648326838087798
+      },
+      "last3_healthy": [
+        2,
+        5,
+        4
+      ]
+    }
+  ],
+  "confirmation_seeds": [
+    241,
+    242,
+    243,
+    244,
+    245
+  ],
+  "protocol_sha256": "2dc13f5cc5ad5bc0e6eda370fe613a76673ba26cf5d4aa11553ec86df4140c24"
+}

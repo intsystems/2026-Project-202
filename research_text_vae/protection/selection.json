@@ -1,0 +1,39 @@
+{
+  "mode": "freebits",
+  "reference_passed": true,
+  "selection_did_not_use_MG": true,
+  "encoder5_failed": true,
+  "pilot_reference": {
+    "seed": 0,
+    "protection_valid": true,
+    "reference": {
+      "MI": {
+        "before": 5.47974157333374,
+        "regularized": 0.26381516456604,
+        "protected": 3.8529579639434814,
+        "retained_fraction": 0.7031276771688042,
+        "versus_regularized": 14.60476303658042
+      },
+      "shuffle_symkl": {
+        "before": 0.5688217282295227,
+        "regularized": 0.014777485281229,
+        "protected": 0.5677530169487,
+        "retained_fraction": 0.9981211841464827,
+        "versus_regularized": 38.42013753651877
+      }
+    }
+  },
+  "confirmation_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "date": "2026-09-29",
+  "note": "Selected after reference-only pilot assessment; no protected MG inspected."
+}

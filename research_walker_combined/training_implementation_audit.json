@@ -1,0 +1,6 @@
+{
+  "lambda0_bitwise_identical": true,
+  "regularization_changes_parameters": 0.0007267184555530548,
+  "auxiliary_loss": 0.1728764208033681,
+  "steps": 8192
+}

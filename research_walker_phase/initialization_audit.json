@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "actor_max_error": 2.384185791015625e-07,
+  "critic_max_error": 0.0,
+  "optimizer_reset_both_arms": true
+}

@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "wrapper_steps": 76,
+  "periodic_section": {
+    "D_strobe": 3.710426097924076e-09,
+    "section_count": 26,
+    "section_eligible": true
+  },
+  "drifting_section": {
+    "D_strobe": 0.07170668699745968,
+    "section_count": 26,
+    "section_eligible": true
+  }
+}

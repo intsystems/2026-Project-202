@@ -1,0 +1,136 @@
+{
+  "available": true,
+  "seed": "seed211",
+  "reset": 51001,
+  "operations": [
+    {
+      "stage": "early",
+      "operation": "MG_five_windows",
+      "median": 1.8511853001546115,
+      "min": 1.7769116999115795,
+      "max": 1.9105059998109937,
+      "repeats": 9
+    },
+    {
+      "stage": "early",
+      "operation": "cheap_scalar_all",
+      "median": 0.00540350005030632,
+      "min": 0.0022557000629603863,
+      "max": 0.00663729989901185,
+      "repeats": 9
+    },
+    {
+      "stage": "early",
+      "operation": "closed_loop_perturbations",
+      "median": 24.668890699977055,
+      "min": 24.668890699977055,
+      "max": 24.668890699977055,
+      "repeats": 1
+    },
+    {
+      "stage": "early",
+      "operation": "common_motion_acquisition",
+      "median": 2.828499900177121,
+      "min": 2.76965510006994,
+      "max": 2.8797289000358433,
+      "repeats": 3
+    },
+    {
+      "stage": "early",
+      "operation": "full_state_regularities",
+      "median": 0.03509010002017021,
+      "min": 0.03442670009098947,
+      "max": 0.03903160011395812,
+      "repeats": 9
+    },
+    {
+      "stage": "late",
+      "operation": "MG_five_windows",
+      "median": 1.8102284001652151,
+      "min": 1.765592799987644,
+      "max": 1.8529795999638736,
+      "repeats": 9
+    },
+    {
+      "stage": "late",
+      "operation": "cheap_scalar_all",
+      "median": 0.005369599908590317,
+      "min": 0.005151699995622039,
+      "max": 0.007032399997115135,
+      "repeats": 9
+    },
+    {
+      "stage": "late",
+      "operation": "closed_loop_perturbations",
+      "median": 12.363259900128469,
+      "min": 12.363259900128469,
+      "max": 12.363259900128469,
+      "repeats": 1
+    },
+    {
+      "stage": "late",
+      "operation": "common_motion_acquisition",
+      "median": 2.813863900024444,
+      "min": 2.7981207999400795,
+      "max": 2.911124999867752,
+      "repeats": 3
+    },
+    {
+      "stage": "late",
+      "operation": "full_state_regularities",
+      "median": 0.03397460002452135,
+      "min": 0.033389699878171086,
+      "max": 0.03500319994054735,
+      "repeats": 9
+    },
+    {
+      "stage": "early",
+      "operation": "cheap_scalar_five_windows",
+      "median": 0.00829989998601377,
+      "min": 0.007695700041949749,
+      "max": 0.008624600013718009,
+      "repeats": 9
+    },
+    {
+      "stage": "early",
+      "operation": "full_state_five_windows",
+      "median": 0.050317700020968914,
+      "min": 0.0478602999355644,
+      "max": 0.05141220008954406,
+      "repeats": 9
+    },
+    {
+      "stage": "late",
+      "operation": "cheap_scalar_five_windows",
+      "median": 0.008252499857917428,
+      "min": 0.007772400043904781,
+      "max": 0.009128799894824624,
+      "repeats": 9
+    },
+    {
+      "stage": "late",
+      "operation": "full_state_five_windows",
+      "median": 0.05029050004668534,
+      "min": 0.04901920002885163,
+      "max": 0.05161800002679229,
+      "repeats": 9
+    }
+  ],
+  "perturbation_work": [
+    {
+      "stage": "early",
+      "period": 151,
+      "probes": 68,
+      "horizon": 604
+    },
+    {
+      "stage": "late",
+      "period": 76,
+      "probes": 68,
+      "horizon": 304
+    }
+  ],
+  "threads": 1,
+  "caveat": "Serial warmed CPU component timings. Same common nominal acquisition; perturbations measure a different property. One full perturbation repetition per trace, nine cheap-operation repetitions, three trajectory repetitions.",
+  "aligned_window_supplement": "Same five windows of length2048, stride512 for cheap features and full-state R/D. Original full-record timings retained. No training/selection change."
+}

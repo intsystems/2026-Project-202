@@ -1,0 +1,69 @@
+{
+  "outcome": "inconclusive for collapse detection; no confirmed collapse event",
+  "training_seeds": [
+    0
+  ],
+  "stacked_quality_gate_passed": false,
+  "mnist_quality_gate_passed": false,
+  "strict_event_observed": false,
+  "frozen_primary_MG_ratio": 1.27409618304567,
+  "data": [
+    {
+      "arm": "base",
+      "coverage": 10,
+      "effective_modes": 9.643202251399982,
+      "valid_fraction": 0.6312,
+      "mg_pre": 8.357497780513214,
+      "mg_post": 8.39877860029379,
+      "mg_ratio": 1.0049393755002638,
+      "ident": 1.4365050876717869
+    },
+    {
+      "arm": "g_fast",
+      "coverage": 10,
+      "effective_modes": 9.587808596471456,
+      "valid_fraction": 0.6186,
+      "mg_pre": 8.357497780513214,
+      "mg_post": 9.52851241486181,
+      "mg_ratio": 1.1401154586099917,
+      "ident": 1.421006431339523
+    },
+    {
+      "arm": "d_slow",
+      "coverage": 10,
+      "effective_modes": 9.573144917673556,
+      "valid_fraction": 0.6382,
+      "mg_pre": 8.357497780513214,
+      "mg_post": 12.791388439087966,
+      "mg_ratio": 1.5305284877147138,
+      "ident": 1.51879612844459
+    },
+    {
+      "arm": "frozen",
+      "coverage": 10,
+      "effective_modes": 9.62799389714442,
+      "valid_fraction": 0.6289,
+      "mg_pre": 8.357497780513214,
+      "mg_post": 10.648256021964544,
+      "mg_ratio": 1.27409618304567,
+      "ident": 1.4910217911496453
+    }
+  ],
+  "benchmark_medians": {
+    "repeat": 2.0,
+    "small_seconds": 0.1310773999430239,
+    "full_seconds": 2.53767709992826,
+    "MG": 8.94806178235439,
+    "MG40": 12.85393627515356,
+    "ident": 1.4365050876717869,
+    "degenerate": 0.0,
+    "mg_seconds": 0.0104963998310267,
+    "checks_seconds": 0.023045599926263,
+    "mean": 0.8899420939269476,
+    "std": 0.1638385814011255,
+    "entropy": 0.7926817287435204,
+    "acf1": -0.7456583783865209,
+    "crossings": 0.7651663405088063,
+    "cheap_seconds": 0.0002809998113662
+  }
+}

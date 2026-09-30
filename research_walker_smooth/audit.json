@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "shared_initial_policy": true,
+  "normalization_frozen": true,
+  "distinct_final_policies": 10,
+  "confirmed_runs": [
+    {
+      "label": "seed221_lambda0",
+      "heldout": 10,
+      "complete": 10
+    },
+    {
+      "label": "seed221_lambda1",
+      "heldout": 10,
+      "complete": 8
+    },
+    {
+      "label": "seed222_lambda0",
+      "heldout": 10,
+      "complete": 7
+    },
+    {
+      "label": "seed222_lambda1",
+      "heldout": 10,
+      "complete": 8
+    },
+    {
+      "label": "seed223_lambda0",
+      "heldout": 10,
+      "complete": 10
+    },
+    {
+      "label": "seed223_lambda1",
+      "heldout": 10,
+      "complete": 10
+    },
+    {
+      "label": "seed224_lambda0",
+      "heldout": 10,
+      "complete": 8
+    },
+    {
+      "label": "seed224_lambda1",
+      "heldout": 10,
+      "complete": 10
+    },
+    {
+      "label": "seed225_lambda0",
+      "heldout": 10,
+      "complete": 9
+    },
+    {
+      "label": "seed225_lambda1",
+      "heldout": 10,
+      "complete": 10
+    }
+  ],
+  "fixed_horizon_probe_records": 17,
+  "training_implementation": {
+    "lambda0_bitwise_identical": true,
+    "regularization_changes_parameters": 0.0007577836513519287,
+    "auxiliary_loss": 0.18265937492251397,
+    "steps": 8192
+  }
+}

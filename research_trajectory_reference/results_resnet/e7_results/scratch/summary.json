@@ -1,0 +1,85 @@
+{
+ "table": [
+  {
+   "arm": "base",
+   "MG change %": -1.6,
+   "min %": -1.857,
+   "max %": -0.739,
+   "update PR change %": -5.893,
+   "update size change %": -18.474,
+   "n": 3
+  },
+  {
+   "arm": "batch_up",
+   "MG change %": 1.841,
+   "min %": 1.753,
+   "max %": 2.665,
+   "update PR change %": -24.107,
+   "update size change %": -94.824,
+   "n": 3
+  },
+  {
+   "arm": "freeze_head",
+   "MG change %": -27.643,
+   "min %": -31.512,
+   "max %": -27.018,
+   "update PR change %": -91.35,
+   "update size change %": -92.816,
+   "n": 3
+  },
+  {
+   "arm": "lr10",
+   "MG change %": 2.524,
+   "min %": 2.428,
+   "max %": 3.351,
+   "update PR change %": -35.493,
+   "update size change %": -99.041,
+   "n": 3
+  },
+  {
+   "arm": "lr100",
+   "MG change %": 2.403,
+   "min %": 2.305,
+   "max %": 3.248,
+   "update PR change %": -25.777,
+   "update size change %": -99.671,
+   "n": 3
+  },
+  {
+   "arm": "prune80",
+   "MG change %": 1.842,
+   "min %": 1.743,
+   "max %": 2.657,
+   "update PR change %": -40.543,
+   "update size change %": -94.17,
+   "n": 3
+  },
+  {
+   "arm": "prune95",
+   "MG change %": -1.794,
+   "min %": -1.877,
+   "max %": -1.058,
+   "update PR change %": -3.473,
+   "update size change %": -21.276,
+   "n": 3
+  },
+  {
+   "arm": "scale",
+   "MG change %": -1.6,
+   "min %": -1.857,
+   "max %": -0.739,
+   "update PR change %": -5.893,
+   "update size change %": -18.474,
+   "n": 3
+  },
+  {
+   "arm": "smooth",
+   "MG change %": -1.406,
+   "min %": -1.705,
+   "max %": -0.66,
+   "update PR change %": -5.893,
+   "update size change %": -18.474,
+   "n": 3
+  }
+ ]
+}

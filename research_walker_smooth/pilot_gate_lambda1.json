@@ -1,0 +1,17 @@
+{
+  "coef": 1,
+  "healthy_last3": [
+    5,
+    4,
+    5
+  ],
+  "control_healthy_last3": [
+    5,
+    5,
+    5
+  ],
+  "reward_ratio": 1.012394386786891,
+  "J1_ratio": 0.21500922469728004,
+  "passes_health": true,
+  "passes_smooth": true
+}

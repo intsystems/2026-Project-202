@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "pdf_pages": 3,
+  "training_runs": 6,
+  "checkpoints": 54,
+  "evaluations": 390,
+  "MG_traces": 117,
+  "heldout_walks": 47,
+  "confirmation_gate_passes": 4,
+  "independent_simplification_events": 0,
+  "short_window_sign_changes": 3
+}

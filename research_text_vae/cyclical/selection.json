@@ -1,0 +1,387 @@
+{
+  "pilot": 100,
+  "confirmation_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109
+  ],
+  "settings": {
+    "6": {
+      "MG": {
+        "threshold": 0.2,
+        "pilot": {
+          "budget": 6,
+          "method": "MG",
+          "threshold": 0.2,
+          "checks": 6,
+          "events": 4,
+          "hits": 3,
+          "misses": 1,
+          "recall": 0.75,
+          "unproductive": 3,
+          "mean_delay": 106.66666666666667,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 2,
+          "recovery_events": 2,
+          "recovery_hits": 1
+        }
+      },
+      "std": {
+        "threshold": 0.7,
+        "pilot": {
+          "budget": 6,
+          "method": "std",
+          "threshold": 0.7,
+          "checks": 6,
+          "events": 4,
+          "hits": 2,
+          "misses": 2,
+          "recall": 0.5,
+          "unproductive": 4,
+          "mean_delay": 0.0,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 0,
+          "recovery_events": 2,
+          "recovery_hits": 2
+        }
+      },
+      "entropy": {
+        "threshold": 0.5,
+        "pilot": {
+          "budget": 6,
+          "method": "entropy",
+          "threshold": 0.5,
+          "checks": 6,
+          "events": 4,
+          "hits": 3,
+          "misses": 1,
+          "recall": 0.75,
+          "unproductive": 3,
+          "mean_delay": 234.66666666666666,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 2,
+          "recovery_events": 2,
+          "recovery_hits": 1
+        }
+      },
+      "KL": {
+        "threshold": 3.0,
+        "pilot": {
+          "budget": 6,
+          "method": "KL",
+          "threshold": 3.0,
+          "checks": 1,
+          "events": 4,
+          "hits": 1,
+          "misses": 3,
+          "recall": 0.25,
+          "unproductive": 0,
+          "mean_delay": 448.0,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 1,
+          "recovery_events": 2,
+          "recovery_hits": 0
+        }
+      },
+      "beta": {
+        "threshold": 1.5,
+        "pilot": {
+          "budget": 6,
+          "method": "beta",
+          "threshold": 1.5,
+          "checks": 6,
+          "events": 4,
+          "hits": 2,
+          "misses": 2,
+          "recall": 0.5,
+          "unproductive": 4,
+          "mean_delay": 160.0,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 0,
+          "recovery_events": 2,
+          "recovery_hits": 2
+        }
+      }
+    },
+    "12": {
+      "MG": {
+        "threshold": 0.2,
+        "pilot": {
+          "budget": 12,
+          "method": "MG",
+          "threshold": 0.2,
+          "checks": 7,
+          "events": 4,
+          "hits": 3,
+          "misses": 1,
+          "recall": 0.75,
+          "unproductive": 4,
+          "mean_delay": 106.66666666666667,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 2,
+          "recovery_events": 2,
+          "recovery_hits": 1
+        }
+      },
+      "std": {
+        "threshold": 0.3,
+        "pilot": {
+          "budget": 12,
+          "method": "std",
+          "threshold": 0.3,
+          "checks": 12,
+          "events": 4,
+          "hits": 3,
+          "misses": 1,
+          "recall": 0.75,
+          "unproductive": 9,
+          "mean_delay": 256.0,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 2,
+          "recovery_events": 2,
+          "recovery_hits": 1
+        }
+      },
+      "entropy": {
+        "threshold": 0.5,
+        "pilot": {
+          "budget": 12,
+          "method": "entropy",
+          "threshold": 0.5,
+          "checks": 7,
+          "events": 4,
+          "hits": 3,
+          "misses": 1,
+          "recall": 0.75,
+          "unproductive": 4,
+          "mean_delay": 234.66666666666666,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 2,
+          "recovery_events": 2,
+          "recovery_hits": 1
+        }
+      },
+      "KL": {
+        "threshold": 0.15,
+        "pilot": {
+          "budget": 12,
+          "method": "KL",
+          "threshold": 0.15,
+          "checks": 12,
+          "events": 4,
+          "hits": 2,
+          "misses": 2,
+          "recall": 0.5,
+          "unproductive": 10,
+          "mean_delay": 0.0,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 1,
+          "recovery_events": 2,
+          "recovery_hits": 1
+        }
+      },
+      "beta": {
+        "threshold": 1.5,
+        "pilot": {
+          "budget": 12,
+          "method": "beta",
+          "threshold": 1.5,
+          "checks": 6,
+          "events": 4,
+          "hits": 2,
+          "misses": 2,
+          "recall": 0.5,
+          "unproductive": 4,
+          "mean_delay": 160.0,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 0,
+          "recovery_events": 2,
+          "recovery_hits": 2
+        }
+      }
+    },
+    "24": {
+      "MG": {
+        "threshold": 0.1,
+        "pilot": {
+          "budget": 24,
+          "method": "MG",
+          "threshold": 0.1,
+          "checks": 23,
+          "events": 4,
+          "hits": 4,
+          "misses": 0,
+          "recall": 1.0,
+          "unproductive": 19,
+          "mean_delay": 112.0,
+          "censored_events": 1,
+          "censored_hits": 1,
+          "loss_events": 2,
+          "loss_hits": 2,
+          "recovery_events": 2,
+          "recovery_hits": 2
+        }
+      },
+      "std": {
+        "threshold": 0.3,
+        "pilot": {
+          "budget": 24,
+          "method": "std",
+          "threshold": 0.3,
+          "checks": 17,
+          "events": 4,
+          "hits": 4,
+          "misses": 0,
+          "recall": 1.0,
+          "unproductive": 13,
+          "mean_delay": 208.0,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 2,
+          "recovery_events": 2,
+          "recovery_hits": 2
+        }
+      },
+      "entropy": {
+        "threshold": 0.3,
+        "pilot": {
+          "budget": 24,
+          "method": "entropy",
+          "threshold": 0.3,
+          "checks": 22,
+          "events": 4,
+          "hits": 4,
+          "misses": 0,
+          "recall": 1.0,
+          "unproductive": 18,
+          "mean_delay": 128.0,
+          "censored_events": 1,
+          "censored_hits": 1,
+          "loss_events": 2,
+          "loss_hits": 2,
+          "recovery_events": 2,
+          "recovery_hits": 2
+        }
+      },
+      "KL": {
+        "threshold": 0.1,
+        "pilot": {
+          "budget": 24,
+          "method": "KL",
+          "threshold": 0.1,
+          "checks": 24,
+          "events": 4,
+          "hits": 4,
+          "misses": 0,
+          "recall": 1.0,
+          "unproductive": 20,
+          "mean_delay": 16.0,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 2,
+          "recovery_events": 2,
+          "recovery_hits": 2
+        }
+      },
+      "beta": {
+        "threshold": 0.2,
+        "pilot": {
+          "budget": 24,
+          "method": "beta",
+          "threshold": 0.2,
+          "checks": 21,
+          "events": 4,
+          "hits": 3,
+          "misses": 1,
+          "recall": 0.75,
+          "unproductive": 18,
+          "mean_delay": 21.333333333333332,
+          "censored_events": 1,
+          "censored_hits": 0,
+          "loss_events": 2,
+          "loss_hits": 1,
+          "recovery_events": 2,
+          "recovery_hits": 2
+        }
+      }
+    }
+  },
+  "protocol_sha256": "be85e2dec722838eafa2ad6e5b12df05479ed5f0e327449d2cd00e8c7dd87da3",
+  "feature_sha256": "5d26b21f9398a57d38b4a555496f08b7d1a284599d3b44e5ee811b91c0698c94",
+  "reference_sha256": "be15837331bf33aaa975e52ed9b56c6201758819c509d1c86e780bea3d8fc1c6",
+  "pilot_events": [
+    {
+      "id": 0,
+      "step": 2048,
+      "state": "low",
+      "direction": "loss",
+      "MI": 1.6203278303146362,
+      "shuffle_symkl": 0.2375240325927734,
+      "scored": true
+    },
+    {
+      "id": 1,
+      "step": 3264,
+      "state": "high",
+      "direction": "recovery",
+      "MI": 4.20733118057251,
+      "shuffle_symkl": 0.5718861222267151,
+      "scored": true
+    },
+    {
+      "id": 2,
+      "step": 4224,
+      "state": "low",
+      "direction": "loss",
+      "MI": 1.739163160324097,
+      "shuffle_symkl": 0.2711454927921295,
+      "scored": true
+    },
+    {
+      "id": 3,
+      "step": 5248,
+      "state": "high",
+      "direction": "recovery",
+      "MI": 4.7703857421875,
+      "shuffle_symkl": 0.6043237447738647,
+      "scored": true
+    },
+    {
+      "id": 4,
+      "step": 6784,
+      "state": "low",
+      "direction": "loss",
+      "MI": 1.7657337188720703,
+      "shuffle_symkl": 0.3057518899440765,
+      "scored": false
+    }
+  ]
+}

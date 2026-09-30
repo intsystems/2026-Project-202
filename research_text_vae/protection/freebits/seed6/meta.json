@@ -1,0 +1,12 @@
+{
+  "seed": 6,
+  "mode": "freebits",
+  "steps": 3072,
+  "switch": 1024,
+  "seconds": 157.027732900111,
+  "extra_encoder_updates": 0,
+  "outer_stream_sha256": "a35155f5a7977eb089ac742ceba92e60fd14fdb775af5bbcba41b776c2dad6c9",
+  "outer_stream_matches_original": true,
+  "frozen_decoder_update_audited": false,
+  "source_checkpoint_sha256": "8d3c2ad90989f145e2fca00474787a85b648b9b5c04cb6620458df7127e16afd"
+}

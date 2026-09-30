@@ -1,0 +1,103 @@
+{
+  "planned_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "all_complete": true,
+  "unique_final_checkpoint_files": 20,
+  "corpus_sha256": {
+    "train": "fcea919f6cf83f35d4d00c6cbf08040d13d4155226340912e2fef9c9c4102cbf",
+    "valid": "c9fe6985fe0d4ccb578183407d7668fc6066c20700cb4cf87d8ff1cc34df1bf2"
+  },
+  "training_code_sha256": "8d38dffd614218e0ccc972955ca7350985f06c586fb59f477acc8a3280b067b9",
+  "per_seed": [
+    {
+      "seed": 0,
+      "rows_per_arm": 3072,
+      "reference_checkpoints": 25,
+      "q_recomputed": 0.4868018573742119,
+      "independent_event_recomputed": true,
+      "passed": true
+    },
+    {
+      "seed": 1,
+      "rows_per_arm": 3072,
+      "reference_checkpoints": 25,
+      "q_recomputed": 0.5990795228924739,
+      "independent_event_recomputed": true,
+      "passed": true
+    },
+    {
+      "seed": 2,
+      "rows_per_arm": 3072,
+      "reference_checkpoints": 25,
+      "q_recomputed": 0.47958767750606696,
+      "independent_event_recomputed": true,
+      "passed": true
+    },
+    {
+      "seed": 3,
+      "rows_per_arm": 3072,
+      "reference_checkpoints": 25,
+      "q_recomputed": 0.5267668988618027,
+      "independent_event_recomputed": true,
+      "passed": true
+    },
+    {
+      "seed": 4,
+      "rows_per_arm": 3072,
+      "reference_checkpoints": 25,
+      "q_recomputed": 0.5174594671736953,
+      "independent_event_recomputed": true,
+      "passed": true
+    },
+    {
+      "seed": 5,
+      "rows_per_arm": 3072,
+      "reference_checkpoints": 25,
+      "q_recomputed": 0.5422893402213524,
+      "independent_event_recomputed": true,
+      "passed": true
+    },
+    {
+      "seed": 6,
+      "rows_per_arm": 3072,
+      "reference_checkpoints": 25,
+      "q_recomputed": 0.43016387494338715,
+      "independent_event_recomputed": true,
+      "passed": true
+    },
+    {
+      "seed": 7,
+      "rows_per_arm": 3072,
+      "reference_checkpoints": 25,
+      "q_recomputed": 0.5347869248758804,
+      "independent_event_recomputed": true,
+      "passed": true
+    },
+    {
+      "seed": 8,
+      "rows_per_arm": 3072,
+      "reference_checkpoints": 25,
+      "q_recomputed": 0.4954708176758503,
+      "independent_event_recomputed": true,
+      "passed": true
+    },
+    {
+      "seed": 9,
+      "rows_per_arm": 3072,
+      "reference_checkpoints": 25,
+      "q_recomputed": 0.49567489069583515,
+      "independent_event_recomputed": true,
+      "passed": true
+    }
+  ]
+}

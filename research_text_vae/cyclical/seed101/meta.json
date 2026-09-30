@@ -1,0 +1,12 @@
+{
+  "seed": 101,
+  "steps": 7168,
+  "parameters": 276016,
+  "initial_sha256": "4d237bcc8895f50141dd95dad56f5800226998ebb4b0a4368d869a518d47b0fd",
+  "stream_sha256": "79f602a67bab3585a6f8664bf95cb14097ddd280bfaa171686116a6c81b7fa26",
+  "seconds": 245.17636579996906,
+  "threads": 2,
+  "device": "cpu",
+  "schedule": "1024 beta=.01; 3x2048, first1024 linear 0..1, then1",
+  "protocol_sha256": "be85e2dec722838eafa2ad6e5b12df05479ed5f0e327449d2cd00e8c7dd87da3"
+}

@@ -1,0 +1,12 @@
+{
+  "seed": 0,
+  "lr": 1.0,
+  "batch": 0,
+  "momentum": 0.0,
+  "arm": "base",
+  "steps": 4096,
+  "switch": 2048,
+  "P": 15018,
+  "seconds": 13.172247800044715,
+  "torch_threads": 2
+}

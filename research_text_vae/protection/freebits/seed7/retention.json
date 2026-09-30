@@ -1,0 +1,20 @@
+{
+  "seed": 7,
+  "protection_valid": true,
+  "reference": {
+    "MI": {
+      "before": 5.520186901092529,
+      "regularized": 0.5837578177452087,
+      "protected": 3.947551965713501,
+      "retained_fraction": 0.7151120127712016,
+      "versus_regularized": 6.762311091543237
+    },
+    "shuffle_symkl": {
+      "before": 0.6870782375335693,
+      "regularized": 0.04831213504076,
+      "protected": 0.620254397392273,
+      "retained_fraction": 0.9027420219549138,
+      "versus_regularized": 12.838480370800763
+    }
+  }
+}

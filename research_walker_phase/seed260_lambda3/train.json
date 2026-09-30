@@ -1,0 +1,9 @@
+{
+  "seed": 260,
+  "coef": 3.0,
+  "steps": 1048576,
+  "seconds": 236.9712889001239,
+  "parameter_delta": 1.3670693635940552,
+  "protocol_sha256": "ae0dbe7a002d4b2f5c3fd8647c9a98deaabfba099920827e2b65d28b54fb1325",
+  "reference_sha256": "0717faf8472831f802f1a684d5741923584a920f1f1b6b8555bc6ca0af499ffc"
+}

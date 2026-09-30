@@ -1,0 +1,32 @@
+[
+  {
+    "threads": 2,
+    "batch": 64,
+    "update_seconds": 0.03578343331658592
+  },
+  {
+    "threads": 2,
+    "batch": 128,
+    "update_seconds": 0.07598293332072596
+  },
+  {
+    "threads": 4,
+    "batch": 64,
+    "update_seconds": 0.029138983343727887
+  },
+  {
+    "threads": 4,
+    "batch": 128,
+    "update_seconds": 0.052666149994668864
+  },
+  {
+    "threads": 8,
+    "batch": 64,
+    "update_seconds": 0.02464024998092403
+  },
+  {
+    "threads": 8,
+    "batch": 128,
+    "update_seconds": 0.06785023332728694
+  }
+]

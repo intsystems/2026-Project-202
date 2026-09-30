@@ -1,0 +1,19 @@
+{
+  "seed": 0,
+  "arm": "base",
+  "steps": 6144,
+  "switch": 3072,
+  "every": 256,
+  "n_eval": 10000,
+  "channels": 1,
+  "batch": 64,
+  "lr": 0.0002,
+  "training_seconds": 126.47307451395318,
+  "evaluation_seconds": 22.315935600316152,
+  "total_seconds": 150.17893920000643,
+  "first_step": 0,
+  "g_parameters": 237313,
+  "d_parameters": 36513,
+  "source_checkpoint": null,
+  "actual_torch_threads": 4
+}

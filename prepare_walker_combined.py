@@ -1,0 +1,31 @@
+from pathlib import Path
+import shutil
+R=Path(__file__).resolve().parent;H=R/'research_walker_combined';S=R/'research_walker_phase_wide'
+H.mkdir(exist_ok=True)
+for name in ['environment.py','motion.py','features.py','probes.py','whole_cycle.py','build_report.py','requirements.txt','reference.npz','reference.json','bandwidth.json']:
+    assert not (H/name).exists(),name
+    shutil.copy2(S/name,H/name)
+shutil.copytree(S/'anchor',H/'anchor')
+shutil.copy2(R/'research_walker_smooth/smooth_ppo.py',H/'smooth_ppo.py')
+text=(S/'train.py').read_text(encoding='utf-8')
+text=text.replace('from stable_baselines3 import PPO','from smooth_ppo import SmoothPPO')
+text=text.replace('def train(seed,coef):','def train(seed,coef,smooth):')
+text=text.replace("f'seed{seed}_lambda{coef:g}'","f'seed{seed}_track{coef:g}_smooth{smooth:g}'")
+text=text.replace('model=PPO.load','model=SmoothPPO.load')
+text=text.replace('model.set_random_seed(seed);','model.smooth_coef=smooth;model.pair_rng=np.random.default_rng(seed+100000)\n    model.set_random_seed(seed);')
+text=text.replace('result=dict(seed=seed,coef=coef,','result=dict(seed=seed,coef=coef,smooth=smooth,')
+text=text.replace("a=p.parse_args();torch.set_num_threads", "p.add_argument('--smooth',type=float,required=True);a=p.parse_args();torch.set_num_threads")
+text=text.replace('train(a.seed,a.coef)','train(a.seed,a.coef,a.smooth)')
+(H/'train.py').write_text(text,encoding='utf-8')
+text=(S/'evaluate.py').read_text(encoding='utf-8')
+text=text.replace('from environment import RHO','from environment import RHO\nfrom whole_cycle import metric as whole_cycle')
+text=text.replace('range(75001,75006)', 'range(77001,77006)').replace('range(76001,76011)','range(78001,78011)')
+text=text.replace("m.update(D_strobe=None,section_count=0,section_eligible=False)","m.update(D_strobe=None,section_count=0,section_eligible=False,C_cycle=None,mean_curve_drift=None)")
+text=text.replace("r,sec=strobe(np.load(p/'trajectory.npz'));m.update(r);", "data=np.load(p/'trajectory.npz');r,sec=strobe(data);m.update(r);m.update(whole_cycle(data));")
+(H/'evaluate.py').write_text(text,encoding='utf-8')
+text=(R/'research_walker_smooth/validate_training.py').read_text(encoding='utf-8')
+text=text.replace('from train import H,ANCHOR','from train import H,ANCHOR\nfrom environment import PhaseWalker\nimport gymnasium as gym')
+text=text.replace("make_vec_env('Walker2d-v5',n_envs=8,seed=219,env_kwargs=dict(max_episode_steps=5000))","make_vec_env(lambda: gym.wrappers.TimeLimit(PhaseWalker(3),max_episode_steps=5000),n_envs=8,seed=279)")
+text=text.replace('m.ep_info_buffer.clear()','m.ep_info_buffer.clear() if m.ep_info_buffer is not None else None')
+(H/'validate_training.py').write_text(text,encoding='utf-8')
+print(H)

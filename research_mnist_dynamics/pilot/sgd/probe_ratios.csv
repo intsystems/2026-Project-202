@@ -1,0 +1,13 @@
+run,signal,preprocess,MG
+base,projection,detrended,0.9859332961833284
+base,projection,raw,0.9062485463913063
+base,test_probe,detrended,0.7911124371516476
+base,test_probe,raw,0.8359194005544943
+base,train_probe,detrended,0.7532207437352529
+base,train_probe,raw,0.8284325904660795
+drop,projection,detrended,0.9210736346498434
+drop,projection,raw,1.0282173633842189
+drop,test_probe,detrended,0.7146565818157322
+drop,test_probe,raw,0.7474099908086612
+drop,train_probe,detrended,0.8168772368719961
+drop,train_probe,raw,0.7975256021794785

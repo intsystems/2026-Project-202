@@ -136,12 +136,14 @@ def run(args, seed, mode, lr):
     meta = dict(arm=args.arm, mode=mode, seed=seed, lr=lr, steps=args.steps,
                 switch=args.steps//2 if mode=='switch' else None, batch=batch, context=context,
                 width=args.width, layers=args.layers, gd_fixed_batch=args.gd_fixed_batch,
+                snapshot_every=args.snapshot_every, reference_batch=args.reference_batch,
                 parameters=sum(p.numel() for p in model.parameters()),
                 vocab=len(vocab), dataset='Tiny Shakespeare', sha256=digest, device=str(device),
                 torch=torch.__version__, threads=torch.get_num_threads(), platform=platform.platform(),
                 hessian_objective='full fixed training set' if args.arm=='gd' else 'fixed validation probe')
     (out/'config.json').write_text(json.dumps(meta,indent=2))
     rows, diag = [], []
+    reference_logits, reference_steps = [], []
     train_sec = probe_sec = norm_sec = 0.
     wall = stamp(device)
     for step in range(args.steps):
@@ -184,10 +186,23 @@ def run(args, seed, mode, lr):
         t = stamp(device)
         opt.step()
         train_sec += stamp(device)-t
+
+        # Independent reference signal: retain the full function-space state on a
+        # fixed probe subset.  MG never sees these vectors; it only receives scalar
+        # logs in analyze_v2.py.  The SVD of the resulting trajectory is used as a
+        # direct effective-rank reference in reference_spectrum.py.
+        if (step + 1) % args.snapshot_every == 0 or step == args.steps - 1:
+            with torch.no_grad():
+                model.eval()
+                ref_logits = model(probe[0][:args.reference_batch])
+                reference_logits.append(ref_logits.detach().float().cpu().numpy().reshape(-1))
+                reference_steps.append(step)
     meta.update(train_seconds=train_sec,probe_seconds=probe_sec,norm_seconds=norm_sec,
                 wall_seconds=stamp(device)-wall,completed_steps=len(rows))
     pd.DataFrame(rows).to_csv(out/'trace.csv',index=False)
     pd.DataFrame(diag).to_csv(out/'diagnostics.csv',index=False)
+    np.save(out/'reference_logits.npy', np.asarray(reference_logits, dtype=np.float32))
+    np.save(out/'reference_steps.npy', np.asarray(reference_steps, dtype=np.int64))
     torch.save(model.state_dict(), out/'final.pt')
     (out/'metadata.json').write_text(json.dumps(meta,indent=2))
     print('Complete',key,meta['wall_seconds'],flush=True)
@@ -231,6 +246,10 @@ def main():
     p.add_argument('--layers',type=int,default=2)
     p.add_argument('--gd-fixed-batch',type=int,default=128)
     p.add_argument('--out',type=Path,default=HERE/'v2')
+    p.add_argument('--snapshot-every',type=int,default=16,
+                   help='steps between full function-space reference snapshots')
+    p.add_argument('--reference-batch',type=int,default=4,
+                   help='number of fixed probe sequences used by the reference')
     p.add_argument('--validate',action='store_true')
     a=p.parse_args()
     torch.set_num_threads(a.threads)

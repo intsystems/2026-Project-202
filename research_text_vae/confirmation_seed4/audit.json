@@ -1,0 +1,22 @@
+{
+  "reference_null": {
+    "KL": 0.0,
+    "MI": 0.0,
+    "shuffle_symkl": 0.0,
+    "shuffle_nll_gap": 0.0,
+    "nll": 4.464137077331543,
+    "active_units": 0,
+    "kl_seconds": 0.027179700089618564,
+    "mi_seconds": 0.08271700004115701,
+    "ablation_seconds": 0.5943032000213861,
+    "reference_seconds": 0.6498553999699652
+  },
+  "all_MI_within_empirical_upper_bound": true,
+  "paired_prefix_and_branch_equal": true,
+  "train_sentences": 6000,
+  "validation_sentences": 256,
+  "vocabulary": 2000,
+  "mean_train_tokens": 17.53783416748047,
+  "validation_unk_fraction": 0.18371886014938354,
+  "smoothed_training_unigram_validation_nll": 5.266472816467285
+}

@@ -1,0 +1,5 @@
+{
+  "reason": "Actor batch size differed from nominal. Zero-batch replay diverged.",
+  "zero_batch_max_error": 12.102204396139339,
+  "excluded_from_results": true
+}
