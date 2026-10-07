@@ -1,0 +1,1 @@
+{"setup": "T7_bf16", "seed": 802, "event": "wd", "t_e": 4400, "t_r": null, "P": 55050, "test_acc": 0.909500002861023, "wall_s": 121.9853473000112, "wd_factor": 100.0, "cfg": {"width": 64, "dataset": "mnist", "loss": "ce", "reduction": "mean", "micro": 64, "accum": 1, "lr": 0.02, "wd": 0.0005, "bf16": true, "restart": false, "log": "norm"}}

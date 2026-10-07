@@ -1,0 +1,205 @@
+\claude{
+\section{Geometric interpretation and numerical implementation}\label{app:theory}
+\subsection{What follows from an embedding}
+The dimension interpretation has two steps. First, delay-embedding theorems give conditions under which a generic scalar observable can reconstruct the state of a deterministic system. Second, a local dimension estimator approximates the geometry of that reconstruction from finite data. The reconstruction theorem alone does not guarantee accurate estimation; the estimator alone does not establish an embedding.
+
+\begin{proposition}[Bi-Lipschitz invariance]
+Let $\mu$ have local dimension $d$ at $s$, and let $F$ be bi-Lipschitz on its support, with constants $0<c\le C<\infty$. Then the pushforward $F_\#\mu$ has local dimension $d$ at $F(s)$.
+\end{proposition}
+\begin{proof}
+For sufficiently small $\epsilon$, the inverse image of $B(F(s),\epsilon)$ is bounded on the support between $B(s,\epsilon/C)$ and $B(s,\epsilon/c)$. Their probabilities bound the pushforward probability. The logarithms of $c$ and $C$ contribute vanishing constants after division by $\log\epsilon$, so both bounds have the same limiting exponent $d$.
+\end{proof}
+This elementary property states the geometric assumption behind our interpretation. A smooth embedding of a compact smooth manifold provides the needed local regularity. For a fractal support, an injective map alone need not provide the required control of distances. The forced-system results of \citet{stark1999delay,stark2003delay} impose additional conditions and include fibre-wise formulations. Their application to a stochastic optimizer would require checking those conditions; it does not follow from observing a scalar training log.
+
+\subsection{Affine invariance and its implementation boundary}
+\begin{proposition}[Affine invariance of the ideal scalar estimate]
+For a finite nonconstant record, fixed delay and neighbor settings, and no numerical dither, Eq.~\eqref{eq:mg} is unchanged by replacing every observation with $ax_t+b$, for any $a\ne0$, provided the estimate is defined.
+\end{proposition}
+\begin{proof}
+After centering and dividing by standard deviation, the transformed series is the original standardized series multiplied by $\operatorname{sign}(a)$. All pairwise Euclidean distances of its delay vectors are identical. Temporal exclusions and admissible neighbors therefore remain unchanged, as do all distance ratios and their pooled estimate.
+\end{proof}
+The implemented code adds Gaussian dither of scale $10^{-9}$ after standardization, floors distances at $10^{-8}$ and local log-ratio sums at $10^{-5}$, and records the fractions affected by these floors. Positive affine changes preserve the standardized input in exact arithmetic and preserve a run with the same dither. A negative rescaling preserves the distribution under symmetric dither, but need not give exactly equal values with the same realized dither. Finite precision and almost-constant records require separate checks. The proposition concerns a whole-window affine transformation: a scale change within a window is a different time series.
+
+\subsection{Pooling and dependence}
+The numerator $n(k-1)-1$ is the bias correction used by the existing implementation. Its Gamma-model motivation assumes idealized independent local statistics. Neighbor reuse and serial dependence mean that this correction is not a general finite-sample unbiasedness guarantee for the records in this paper. We use the same implementation throughout, preserve degeneracy flags, and do not clip large estimates to $E$. The Theiler exclusion removes temporally adjacent candidates but does not make the remaining observations independent.
+
+\section{Configurations and reproducibility}\label{app:settings}
+Tables and figures are generated from saved CSV/JSON experimental outputs. The accompanying source bundle records file hashes and maps numerical claims to their sources. We specify the observable, estimator settings, and calibration/test split for each task. All tasks use the same estimator; window length and lag are chosen for the relevant timescale.
+
+\begin{table*}[t]
+\centering\small
+\caption{\claude{Primary configurations. An exclusion of ``span'' is $(E-1)\tau$. The adaptive generator lag is one quarter of the autocorrelation time, capped so the delay span occupies at most one eighth of the window; its exclusion is capped at 320. Alternative settings are reported as sensitivity checks, not substituted for the primary results.}}
+\begin{tabular}{lllllll}
+\toprule
+Experiment & Observable & $W$ & $E$ & $\tau$ & $k$ & Theiler exclusion \\
+\midrule
+Driven digits head & fixed state-based observers & 8,000 & 20 & 4 & 20 & at least span; cap 150 \\
+Known-mode regression & training loss / fixed probe & 2,048; 8,192 & 16 & 1 & 10 & 100 \\
+Learned generator E9 & activity of neuron zero & 8,192 & 20 & adaptive & 20 & autocorrelation; cap 320 \\
+CNN / ResNet-18 & parameter norm & 1,000 & 20 & 1 & 20 & span \\
+VAE & fixed-probe reconstruction NLL & 512 & 20 & 1 & 20 & 39 \\
+Walker2d & joint / control scalar & 2,048 & 20 & 8 & 20 & 312 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\paragraph{Selecting a window.}
+A window must leave enough admissible neighbors after delay reconstruction and temporal exclusion. Meeting the software minimum is necessary but does not guarantee an accurate estimate. For dimension estimation, the window should contain repeated visits within one regime. The lag must also expose the phase structure: increasing record length cannot compensate for delay vectors that cover only a nearly linear segment. For detection, longer windows stabilize estimates but blur transitions. We report detection delay to make this tradeoff explicit.
+
+\paragraph{Units of replication.}
+The CNN interventions share seeds and pre-intervention histories; rescaling and smoothing are transformations of control logs. Generator tasks reuse initialization seeds. The VAE branches share initial trajectories, data, and probes. The Walker continuations share a learned starting policy. We present counts and paired contrasts at these levels; we do not treat overlapping windows or transformed logs as independent draws from a population. The VAE intervals are percentile bootstrap intervals over nine paired confirmation seeds, using 20,000 resamples and bootstrap seed 20260929. They measure initialization/batch variation conditional on the selected data and observable.
+
+\section{Controlled systems and MLP-based recovery}\label{app:controlled}
+\subsection{Analytic and driven-learning validation}
+The controlled suite includes an analytic matrix with independent oscillatory entries and learning systems with time-dependent targets or forcing: online regression, logistic regression, a frozen nonlinear decoder, and an MLP in a parameter subspace. To distinguish input variation from learned motion, we set the learning rate to zero and check whether each observable still changes. Several early loss and gradient observables continue varying. Their dimension estimates can recover the forcing structure, but cannot be attributed solely to changing parameters. The digits-head experiment below addresses this ambiguity with state-based observables that become constant when learning stops.
+
+\begin{table}[h]
+\centering\small
+\caption{\claude{Controlled validation with each experiment's reference. Mean absolute error (MAE) averages rank--seed--observable combinations. The driven-target MLP signal still varies with frozen parameters; its error describes the driven signal, not parameter motion alone.}}
+\begin{tabular}{lrr}
+\toprule
+Construction & Range & MAE \\
+\midrule
+Analytic oscillating matrix & 1--8 & 0.27 \\
+Driven-target MLP subspace & 1--20 & 0.92 \\
+Digits head, covariance reference & 1--8 & 0.90 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In the digits experiment, we train and freeze an MLP feature extractor, then train a linear head in a fixed affine parameter subspace. The cross-entropy loss assigns weights to twelve fixed data groups. Quasiperiodic modulation of selected group weights drives the recurrent motion. Calibration uses seeds 90--92 and ranks 2,4,6; evaluation uses seeds 0--3 and held-out ranks 1,3,5,8. The selected settings are $E=20$, $\tau=4$, $k=20$, and an 8,000-point window. This configuration lies on the boundary of the search grid and is held fixed for evaluation; the search does not establish a global optimum.
+
+All usable state-based observables order the held-out ranks correctly. The mean error against measured covariance effective rank is 0.90 across individual records; aggregating by rank before computing the error gives 0.382. We report the former because these aggregations answer different questions. Errors by observable are 0.60 for fixed-probe loss, 0.41 for parameter norm, 0.34 for a fixed parameter projection, and 1.81 for gradient norm. Instantaneous mini-batch loss continues varying with frozen parameters, while quantized probe accuracy is degenerate; neither supports the parameter-dimension interpretation. The controlled phases define the intended structure, and the covariance reference checks which directions are measurably excited.
+
+\subsection{Dense regression with endogenous modes}
+The data matrix has 256 rows and 32 columns, full column rank, and Hessian $H=X^\top X/256$. Orthogonal rotations make the data and learned weights dense. Eigenvalues are grouped into $r$ repeated values, with a single excited direction within each group. For heavy-ball momentum one and step size one, the error in group $j$ obeys
+\[
+q_{j,t+1}=2\cos(\omega_j)q_{j,t}-q_{j,t-1},
+\qquad \lambda_j=2(1-\cos\omega_j).
+\]
+The selected irrational frequencies produce $r$ independent phases. All 32 original coordinates move. Three seeds vary bases, teacher directions, and probes, but the normalized training-loss dynamics are identical up to rounding for a fixed spectrum. These are coordinate/observer checks rather than three independent loss processes.
+
+\begin{table}[h]
+\centering\small
+\caption{\claude{Known-mode regression: median scalar MG. Settings are fixed across $r$. A longer record does not uniformly reduce bias.}}
+\input{tables/known_modes.tex}
+\end{table}
+
+Selective damping sets momentum to 0.98 in two of four groups at step 8,192. The comparison uses disjoint 8,192-point windows before damping and after the transition, with the latter starting at 12,288. Loss-based MG changes from 4.97 to 2.56, and the median probe estimate from 4.15 to 2.63. With ordinary momentum 0.99 on all groups, learning converges and late losses reach rounding scale. Standardization can then produce spurious high estimates; the absolute pre-standardization scale must be checked.
+
+\subsection{Learned autonomous generators}
+The 1,000-unit generator evolves as
+\[
+\begin{aligned}
+\boldsymbol h_{t+1}&=0.9\boldsymbol h_t+
+0.1(J\tanh\boldsymbol h_t+U\boldsymbol z_t),\\
+\boldsymbol z_t&=A^\top\tanh\boldsymbol h_t.
+\end{aligned}
+\]
+Here $\boldsymbol h_t$ is the network state, $J$ the recurrent matrix with gain 1.2, $U$ the output-feedback matrix, and $A$ the readout trained by FORCE/RLS for 100,000 simulation steps. Frequencies are proportional to $1,\sqrt2,\sqrt3,\sqrt5$ for T1--T4; H2/H4 use integer harmonics, and M4 uses $1,2,\sqrt2,2\sqrt2$. All seven tasks use seeds 1--5. After training, we discard 5,000 burn-in steps and record 32,768 autonomous samples. The reported MG value is the median over four disjoint 8,192-point windows on neuron zero. Neurons one and two provide fixed robustness checks.
+
+The Lyapunov reference uses twelve tangent vectors and a near-zero threshold of $-0.02$ chosen in advance. Its count agrees with the task phase count in 31/35 cases. H2 has weakly contracting directions near the threshold and is overcounted in four seeds. Thus even this reference has finite-time ambiguity. MG has finite-resolution error as well: one periodic H2 record gives 0.73, T2 has median 2.84, and T3/T4 overlap. The reliable comparison is the distinction between phase structures, especially in the harmonic controls; exact recovery across $d=1$--$4$ is not established.
+
+For the separate 256-unit motion experiment, gain is 1.5 and FORCE learns a figure-eight target for 40,000 simulation steps. Each frozen checkpoint is evaluated after 2,000 burn-in steps over 8,192 recorded states. The chaotic-start cohort consists of the first five eligible seeds among sequential candidates 6--30, selected by a positive pretraining Lyapunov criterion; thirteen candidates were examined, yielding seeds 7,9,15,16,18. No MG value enters selection. The unselected initial seeds 1--5 are retained separately because some start nonchaotic. This is conditional evidence for learning from chaos, not an estimate of how often random networks become chaotic or learn a stable cycle.
+
+\section{Applied training protocols and full comparisons}\label{app:applied}
+\subsection{CNN and ResNet interventions}
+The small CNN has three convolutional layers and 80 ReLU channels in total, no normalization, and 14,666 parameters. It uses 10,000 CIFAR-10 images, SGD step 0.02, momentum 0.9, weight decay $5\cdot10^{-4}$, and batches of 64 sampled with replacement. The graded study runs 10,000 updates with an intervention at update 4,000. The before/after summaries use windows lying within the designated pre/post intervals, excluding the immediate mixed transition.
+
+The learning-rate interventions divide the step size by 3, 10, or 100. Freezing leaves the later layers, only the head, or only its bias trainable. Pruning masks 50\%, 80\%, or 95\% of weights. Some interventions rebuild SGD for the remaining trainable parameters, which also changes optimizer state. Their measured effect therefore includes that change and cannot be attributed to parameter count alone. Increased-batch controls multiply batch size by four. Rescaling and smoothing transform the base log without retraining.
+
+\begin{table*}[t]
+\centering\small
+\caption{\claude{CNN interventions at all tested strengths, on four held-out seeds. Changes are medians of paired record ratios. Update covariance and the fraction of moving parameters provide independent comparisons. Stronger pruning does not always produce a larger MG decline.}}
+\input{tables/cnn_graded.tex}
+\end{table*}
+
+Detector calibration searches $M\in\{2,3,4\}$ and $B\in\{3,4,6\}$. For each pair, its drop threshold is the smallest giving no alarms on calibration nulls, plus a margin of 0.02. The selected pair maximizes calibration event detection, with shorter delay as a tie breaker. Companion-statistic directions are chosen on calibration data as well. The rule is frozen for the new graded seeds and for ResNet. The selected MG threshold is 0.0882988401. The primary 27/28 count covers seven strong intervention types on four seeds; weak types are reported separately. The 16 controls comprise base, increased batch, rescaled base, and smoothed base on the same four seeds. Thus these counts describe a matched benchmark rather than independent Bernoulli trials.
+
+ResNet-18 runs use the full CIFAR-10 training set, new seeds 20--22, and scratch/pretrained settings. SGD uses momentum 0.9, weight decay $5\cdot10^{-4}$, initial step 0.02, and batch 128 without augmentation; the pretrained setting uses $64\times64$ images and ImageNet normalization. MG and the rule transfer unchanged. A 1,024-coordinate CountSketch of updates provides a tractable covariance reference. The head-only intervention succeeds in both settings; learning-rate and pruning detection does not. The six freezing records and 24 controls reuse three seeds and two initial-model settings.
+
+\subsection{ReLU-death stress test}
+A separate experiment uses six new seeds 30--35 and abrupt learning-rate shocks, with doses chosen on a pilot using activation death and accuracy, not MG. A channel is counted as dead if it is zero on all 500 diagnostic images. An event requires an increase of at least 0.05 in the fraction of dead channels. There are 42 training runs, augmented by rescaled and smoothed base logs. Twenty-three runs meet the death criterion; two catastrophic whole-network failures are excluded from the prescribed eligible-event score and remain reported separately. This gives 21 eligible events and 31 non-event records.
+
+\begin{table}[h]
+\centering\small
+\caption{\claude{Boundary case: the transferred detector on ReLU death. Rules are fixed before the confirmation results.}}
+\begin{tabular}{lrr}
+\toprule
+Statistic & Detected / 21 & Alarms / 31 \\
+\midrule
+MG & 12 & 12 \\
+Trend crossings & 19 & 7 \\
+Loss stagnation & 21 & 8 \\
+Detrended std. & 21 & 25 \\
+Lag-one correlation & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+MG changes are nonmonotone in channel death: moderate loss of channels and catastrophic disruption can move the estimate in opposite directions. The CNN success therefore concerns the tested sustained training interventions and is not a generic failure detector.
+
+\subsection{Text VAE and preservation control}
+We select 6,000 training and 256 validation sentences with seed 20260929. Each has 8--24 words before the end-of-sentence token. A 2,000-token vocabulary is built from the training data. Shared embeddings have dimension 48, both GRUs have hidden size 64, and the diagonal Gaussian latent code has dimension 16. The code enters the decoder's initial state and every decoding step. Training uses teacher forcing, Adam with learning rate 0.001, batch size 32, gradient-norm clipping at five, and no dropout. The loss sums reconstruction NLL within each sentence, adds $\beta$ times the KL term, and averages over sentences. Since the encoder observes the sentence, this reconstruction score differs from marginal generative likelihood and ordinary language-model perplexity.
+
+The branches share weights, Adam state, and batch/noise generators at update 1,024. Before every optimizer update, we evaluate 16 fixed validation sentences with fixed Gaussian noise (seed 829). Early MG is the median of five windows ending at updates 512--1,024; late MG is the median of nine windows ending at 2,048--3,072. Both use stride 128.
+
+Independent references are measured every 128 steps. The empirical-mixture mutual information (MI) estimate uses four fixed draws from each of 256 posteriors and is bounded above by $\log256$ nats. The code-response score is the symmetric KL divergence between decoder token distributions with matched and cyclically shuffled posteriors, using matched noise and teacher forcing. We record information loss when both references fall below half their control values, provided their early values were nontrivial.
+
+The preservation branch uses free bits: at $\beta=1$, it floors the batch-averaged KL of each latent coordinate at 0.5 nats before summing. We select this intervention on pilot seed zero using only the independent references. An earlier pilot with five extra encoder updates fails to preserve information and is retained as a negative result. Preservation requires both late references to retain at least half their early values and exceed the suppressed branch by at least a factor of two. All nine test seeds pass. This is a third continuation of each shared initialization, so the comparisons remain paired.
+
+\begin{table}[h]
+\centering\small
+\caption{\claude{Text VAE: late medians across nine confirmation seeds. MI and code response are independent of the MG calculation.}}
+\input{tables/vae.tex}
+\end{table}
+
+The suppression result is consistent across all nine seeds at lag one for window lengths 256, 512, and 1,024. At lag four, seven of nine seeds agree. The 1,024-point configuration has only one early window. Using ordinary mini-batch loss instead of the fixed probe gives the expected direction on only four seeds. Standard deviation and spectral entropy of the fixed probe decline on all nine. These comparisons show that a stable probe is important for detecting the information change in this experiment.
+
+\subsection{Cyclic-VAE monitoring}
+Fresh seeds 100--109 use the same architecture/data. Seed 100 calibrates thresholds; seeds 101--109 confirm them. After 1,024 steps at $\beta=0.01$, three 2,048-step cycles linearly raise $\beta$ from zero to one in their first halves, hold it at one in their second halves, and reset. Total length is 7,168 updates. Training is independent of monitor requests. References every 64 steps define loss when both normalized quantities are at most 0.5, and recovery when both are at least 0.65, each on two consecutive checks. The event time is the second check. There are 41 events with a complete 512-step detection horizon and two late events scored separately.
+
+The monitor requests a reference when the absolute log change of its feature from the previous request exceeds its pilot-selected threshold, respecting a 128-step refractory period and a budget of 6,12,or 24 extra checks. Every method also receives one initial check. For each budget, thresholds are selected from the same fourteen-value grid on the pilot. Decisions use no future values. Periodic checks use evenly spaced grid points with no favorable phase selection.
+
+\begin{table}[h]
+\centering\small
+\caption{\claude{Cyclic VAE: detected events out of 41 at all tested budgets. Primary budget is 12.}}
+\input{tables/cyclic.tex}
+\end{table}
+
+At budget 12, MG makes 9.44 requests on average. Matching a periodic schedule to the exact request count per seed yields 34 detections, compared with MG's 28; this post-hoc comparison uses request counts but no event times. Against the main periodic comparator, MG's mean per-seed recall is lower by 24.4 percentage points, with bootstrap interval $[-36.7,-10.0]$. At budget six, MG detects 18 events versus 12 for periodic checks, although a rule based on the known training schedule also detects 18. MG is therefore competitive at the smaller budget but does not improve monitoring overall in this test.
+
+\section{Additional learning settings}\label{app:additional}
+\paragraph{MNIST.}
+A 15,018-parameter tanh MLP is trained on a fixed balanced 2,040-image subset after downsampling to $14\times14$. SGD uses momentum 0.9, batch 64, and no weight decay. At step 2,048 of 4,096, one paired branch reduces the learning rate from 0.1 to 0.01. A fixed 100-image loss probe is selected on the pilot. Detrended covariance rank declines more than the control on all five new seeds; MG does so on four of five, with median contrast only 4.8\%. The larger-window sensitivity is more favorable but does not replace the primary result.
+
+\paragraph{Grokking.}
+The original modular-arithmetic studies include regularized mini-batch and unregularized full-batch settings. Random projections of parameter and logit trajectories support detrended covariance analysis. A sharp collapse and later recovery aligns with generalization in four positive regularized runs, with two controls; a memorizing zero-weight-decay run can show simplification elsewhere. The short-window parameter-norm analysis reports a coincident decline after matching temporal bandwidth. Its 24/26 usable cells vary analysis settings on the same runs. The signal is not a unique indicator of generalization, and scalar roughness is an alternative explanation in this setting. We retain this as a complementary example rather than the sole applied validation.
+
+\paragraph{Walker2d.}
+PPO policies control six actuators in Walker2d-v5. Fixed-policy evaluations use a 512-step warm-up and 4,096 recorded steps. In phase-conditioned variants, the observation is augmented by sine/cosine phase and the reward is changed to encourage an intended periodic behavior. Subsequent comparisons use a common initial locomotion checkpoint with separate fine-tuning seeds, not independently trained starting skills. Scalar joint and action logs are analyzed alongside full-state return errors, inter-cycle variation, and responses to injected perturbations.
+
+Moderate action-smoothing penalties give the most reproducible scalar result: two five-seed series show lower aggregate control-log MG. In the final five-seed comparison, penalty strengths 0.25 and 1 give median MG/control ratios 0.801 and 0.604, with a decline on every seed. Normalized increments also decline in four and five seeds and are cheaper. In the stricter full-gait experiment, only two of five pairs meet the joint improvement criterion, and only one pair has lower MG under every prescribed reconstruction. Thus a simpler command signal is not sufficient evidence of a simpler or more stable whole-body gait. Timing advantages below concern repeated perturbation probes, not these elementary scalar competitors.
+
+\section{Timing protocols and information requirements}\label{app:cost}
+Timing separates simulation/training, recording an observable, analysis of an existing record, and extra diagnostic interventions. The comparisons are local implementation benchmarks with the listed configurations. They do not establish a universal complexity ordering among all algorithms for the same scientific question.
+
+\paragraph{CNN.}
+The saved graded result reports median MG processing of 9.49\,ms per 1,000-point window. A float32 scalar record of 10,000 updates takes 39.06\,KiB; the corresponding 14,666-dimensional trajectory takes 559.46\,MiB. Parameter-norm acquisition is an $O(P)$ reduction, not zero-cost logging. CountSketch update references in ResNet use 1,024 stored coordinates per update and require computing the sketch. A streaming reference would change the storage comparison.
+
+\paragraph{FORCE.}
+The 256-unit endpoint benchmark replays fixed-checkpoint autonomous trajectories. Median MG times before/after training are 0.835/0.598\,s; full-spectrum times are 12.006/11.551\,s. With both $E=20$ and $E=40$ calculations, scalar analysis takes 2.233/1.213\,s. Scalar recording costs 0.102/0.166\,s, including rollout; this is separate from analysis. The largest exponent costs 0.198/0.153\,s and elementary scalar baselines 0.0009/0.0015\,s. The full spectrum supplies information that a single exponent or scalar score does not, and MG does not recover the exponents themselves.
+
+In the 1,000-unit E9 generator, analysis of four 8,192-point windows takes 8--23\,s across learned-task medians. The twelve-vector Lyapunov calculation takes 41--66\,s; full-state PCA is about 0.2\,s. The advantage over PCA is its input requirement, not time. The difference from the CNN's millisecond windows is material and follows from record/configuration and implementation costs.
+
+\paragraph{Coupled oscillators.}
+A separate benchmark evaluates dense phase networks of 32,64,96,128 oscillators at two coupling levels using a shared saved 1,536-point trajectory for each comparison. Scalar analysis computes MG and LB together; the full spectrum integrates all tangent directions with QR steps. Medians use five scalar and three spectrum repetitions. At size 128, scalar times are 0.061/0.049\,s and full-spectrum times 1.309/1.124\,s. Scalar storage is 128 times smaller. At size 32, the full spectrum is faster. An additional same-seed 64-unit comparison with 4,096-point scalar windows also favors the spectrum (roughly 1.0--1.4\,s versus 1.6--2.2\,s), so the short-window speedup is not universal. The same-seed coupling sweep shows a collective contraction of the spectrum and MG approaching one after synchronization; finite-time exponent thresholds are not exact dimension labels. This is a dynamical-system benchmark, not neural-network training.
+
+\paragraph{VAE.}
+The cyclic benchmark uses one warmed process, two PyTorch threads, one estimator thread, and forty interleaved repetitions. Median costs are 7.134\,ms per fixed probe, 12.890\,ms per MG window, and 209.323\,ms per combined reference. Cost totals multiply component medians by the actual operation counts, including 7,168 probe acquisitions and 105 feature calculations. They are estimates of deployment cost, not separately timed complete monitoring runs. Other jobs may share the machine. At budget 12, acquisition alone costs 51.14\,s, leading to the 54.68\,s MG total. Cheap statistics using the same probe incur the same acquisition cost. Periodic checks require no such probe stream.
+
+\paragraph{Walker2d.}
+In two fixed-horizon comparisons, MG of an existing scalar is approximately 21--25 times cheaper than repeated perturbed simulations; including the doubled-embedding check reduces this to about 10--11 times. These probes answer questions about stability that MG alone cannot answer. On the final scalar benchmark, MG costs 369\,ms per window, versus 0.103\,ms for spectral entropy, 3.782\,ms for a scalar return statistic, and 0.048\,ms for normalized increments. The data-saving property is shared by all four scalar methods.
+
+\section{How the experiments support the method}
+The controlled tests connect MG to known phase structure and identify its finite-resolution limits. The applied tests ask a separate question: does the same estimator detect a change confirmed by an independent measurement? Its value for that task depends on reliable detection, false alarms, and cost, rather than exact integer recovery. We report comparisons where MG adds information or saves computation, alongside cases where a simpler statistic is sufficient or better. The resulting evidence supports the specified observables and tasks; a new application requires the same kind of validation.
+}

@@ -1,0 +1,11 @@
+{
+  "frozen_hashes_match": true,
+  "n_forecasts": 160,
+  "same_decisions": 160,
+  "same_errors": true,
+  "tree_block_distance_checks": 12,
+  "full_query_exact_checks": 12,
+  "affine_checks": 12,
+  "constant_and_nonfinite_rejected": true,
+  "scope": "Agreement on these records, not guaranteed for arbitrary systems."
+}

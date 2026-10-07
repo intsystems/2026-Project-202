@@ -1,0 +1,13 @@
+branch,method,seconds,measurements
+smooth,MG_E20_3windows,1.0100094998488203,6
+smooth,MG_E20_E40_3windows,2.207137499935925,6
+smooth,acquisition_4096,2.7667812501313165,6
+smooth,cheap_scalar_3windows,0.01332920009735965,6
+smooth,full_state_RD_3windows,0.0648815500317141,6
+smooth,perturb_68_fixed600,24.94532584992703,2
+phase_wide,MG20,0.6362660001032054,6
+phase_wide,MG20+40,1.3301425500540063,6
+phase_wide,acquisition,1.4050317000364885,6
+phase_wide,cheap_scalar,0.0043318499810992995,6
+phase_wide,full_state,0.0431799498619511,6
+phase_wide,probes68,13.669753900030628,2

@@ -1,0 +1,147 @@
+\relax 
+\providecommand \babel@aux [2]{\global \let \babel@toc \@gobbletwo }
+\@nameuse{bbl@beforestart}
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{takens1981detecting,sauer1991embedology,stark1999delay,stark2003delay}
+\citation{mackay2005comments}
+\citation{levina2004maximum}
+\babel@aux{english}{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:intro}{{1}{1}{Introduction}{section.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Contributions.}{1}{section*.1}\protected@file@percent }
+\citation{facco2017estimating,ansuini2019intrinsic,pope2021intrinsic}
+\citation{li2018measuring,aghajanyan2021intrinsic}
+\citation{gao2017theory}
+\citation{gurari2018gradient,cohen2021gradient}
+\citation{schreiber1996improved}
+\citation{takens1981detecting,sauer1991embedology}
+\citation{stark1999delay,stark2003delay}
+\@writefile{toc}{\contentsline {paragraph}{Relation to existing measurements.}{2}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Estimating complexity from a scalar time series}{2}{section.2}\protected@file@percent }
+\newlabel{sec:method}{{2}{2}{Estimating complexity from a scalar time series}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Problem statement}{2}{subsection.2.1}\protected@file@percent }
+\newlabel{eq:active}{{1}{2}{Problem statement}{equation.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}The geometric information in delayed observations}{2}{subsection.2.2}\protected@file@percent }
+\newlabel{eq:delay}{{2}{2}{The geometric information in delayed observations}{equation.2}{}}
+\citation{theiler1986spurious}
+\citation{pedregosa2011scikit}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Computing MG}{3}{subsection.2.3}\protected@file@percent }
+\newlabel{eq:mg}{{3}{3}{Computing MG}{equation.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Scale invariance.}{3}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Windowing and interpretation.}{3}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Controlled experiments: recovering component structure}{3}{section.3}\protected@file@percent }
+\newlabel{sec:controlled}{{3}{3}{Controlled experiments: recovering component structure}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Analytic oscillators and controlled learning}{3}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Known phases.}{3}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Learning on MLP features.}{3}{section*.6}\protected@file@percent }
+\citation{sussillo2009generating}
+\citation{krizhevsky2009learning}
+\@writefile{toc}{\contentsline {paragraph}{Endogenous oscillations in a regression problem.}{4}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Learned generators distinguish phases from harmonics}{4}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:generator}{{3.2}{4}{Learned generators distinguish phases from harmonics}{subsection.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Learning a cycle from chaotic activity}{4}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:force}{{3.3}{4}{Learning a cycle from chaotic activity}{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Applied experiments: monitoring learned simplification}{4}{section.4}\protected@file@percent }
+\newlabel{sec:applied}{{4}{4}{Applied experiments: monitoring learned simplification}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}CNN training: detecting restrictions on parameter updates}{4}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:cnn}{{4.1}{4}{CNN training: detecting restrictions on parameter updates}{subsection.4.1}{}}
+\citation{he2016deep}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \begingroup \color  {claudecolor}MG detects component structure from scalar records. Left: regression with a known number of modes and fixed estimator settings across ranks. Center: learned generators with four output spectral lines but one (H4), two (M4), or four (T4) independent target phases; each dot is a seed. MG separates these tasks. Right: their full-state covariance participation ratios are similar. The comparison shows sensitivity to phase structure, which differs from the spread of variance measured by participation ratio.\endgroup }}{5}{figure.1}\protected@file@percent }
+\newlabel{fig:components}{{1}{5}{\claude {MG detects component structure from scalar records. Left: regression with a known number of modes and fixed estimator settings across ranks. Center: learned generators with four output spectral lines but one (H4), two (M4), or four (T4) independent target phases; each dot is a seed. MG separates these tasks. Right: their full-state covariance participation ratios are similar. The comparison shows sensitivity to phase structure, which differs from the spread of variance measured by participation ratio.}}{figure.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{MG adds information beyond simple scalar statistics.}{5}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Detecting changes using only past observations.}{5}{section*.9}\protected@file@percent }
+\newlabel{eq:detector}{{4}{5}{Detecting changes using only past observations}{equation.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Transferring the detector to ResNet-18}{5}{subsection.4.2}\protected@file@percent }
+\citation{marcus1993building}
+\citation{bowman2016generating}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \begingroup \color  {claudecolor}MG tracks changes across learning tasks. Left: CNN estimates after an intervention divided by those before it, on four held-out seeds. Bars show medians; the dashed line means no change. Center: the same comparison for ResNet-18 trained from scratch or pretrained weights, with all seeds shown. Right: late MG in the suppressed and free-bits VAE branches relative to their shared low-regularization control, across nine test seeds. Independent update and information measurements validate the changes.\endgroup }}{6}{figure.2}\protected@file@percent }
+\newlabel{fig:applications}{{2}{6}{\claude {MG tracks changes across learning tasks. Left: CNN estimates after an intervention divided by those before it, on four held-out seeds. Bars show medians; the dashed line means no change. Center: the same comparison for ResNet-18 trained from scratch or pretrained weights, with all seeds shown. Right: late MG in the suppressed and free-bits VAE branches relative to their shared low-regularization control, across nine test seeds. Independent update and information measurements validate the changes.}}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces \begingroup \color  {claudecolor}MG detects most strong CNN interventions with no control alarms. All methods are calibrated on the same earlier seeds and evaluated on four new seeds. ``Alarms'' counts control records with an alarm. Delay is measured only for detected events.\endgroup }}{6}{table.1}\protected@file@percent }
+\newlabel{tab:detectors}{{1}{6}{\claude {MG detects most strong CNN interventions with no control alarms. All methods are calibrated on the same earlier seeds and evaluated on four new seeds. ``Alarms'' counts control records with an alarm. Delay is measured only for detected events.}}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Text VAE: tracking information loss and preservation}{6}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:vae}{{4.3}{6}{Text VAE: tracking information loss and preservation}{subsection.4.3}{}}
+\citation{schulman2017proximal,todorov2012mujoco}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Grokking and learned control}{7}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Grokking.}{7}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Learned locomotion.}{7}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Computational savings and conditions of use}{7}{section.5}\protected@file@percent }
+\newlabel{sec:cost}{{5}{7}{Computational savings and conditions of use}{section.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Analysis from a compact record.}{7}{section*.12}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces \begingroup \color  {claudecolor}Time to analyze an available record. The FORCE reference is the full Lyapunov spectrum; the VAE reference combines latent-information and code-shuffling measurements. FORCE ranges cover before and after training. Compare methods within a row: tasks use different records and configurations. Scalar acquisition is excluded.\endgroup }}{7}{table.2}\protected@file@percent }
+\newlabel{tab:cost}{{2}{7}{\claude {Time to analyze an available record. The FORCE reference is the full Lyapunov spectrum; the VAE reference combines latent-information and code-shuffling measurements. FORCE ranges cover before and after training. Compare methods within a row: tasks use different records and configurations. Scalar acquisition is excluded.}}{table.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Savings relative to full Lyapunov spectra.}{7}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{When logging costs dominate.}{7}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Where the method adds value.}{8}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Choosing a useful observable.}{8}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{8}{section.6}\protected@file@percent }
+\newlabel{LastMainPage}{{}{8}{}{section.6}{}}
+\bibstyle{plainnat}
+\bibdata{references}
+\bibcite{aghajanyan2021intrinsic}{{1}{2021}{{Aghajanyan et~al.}}{{Aghajanyan, Gupta, and Zettlemoyer}}}
+\bibcite{ansuini2019intrinsic}{{2}{2019}{{Ansuini et~al.}}{{Ansuini, Laio, Macke, and Zoccolan}}}
+\bibcite{bowman2016generating}{{3}{2016}{{Bowman et~al.}}{{Bowman, Vilnis, Vinyals, Dai, Jozefowicz, and Bengio}}}
+\bibcite{cohen2021gradient}{{4}{2021}{{Cohen et~al.}}{{Cohen, Kaur, Li, Kolter, and Talwalkar}}}
+\bibcite{facco2017estimating}{{5}{2017}{{Facco et~al.}}{{Facco, d'Errico, Rodriguez, and Laio}}}
+\bibcite{gao2017theory}{{6}{2017}{{Gao et~al.}}{{Gao, Trautmann, Yu, Santhanam, Ryu, Shenoy, and Ganguli}}}
+\bibcite{gurari2018gradient}{{7}{2018}{{Gur-Ari et~al.}}{{Gur-Ari, Roberts, and Dyer}}}
+\bibcite{he2016deep}{{8}{2016}{{He et~al.}}{{He, Zhang, Ren, and Sun}}}
+\bibcite{krizhevsky2009learning}{{9}{2009}{{Krizhevsky}}{{}}}
+\bibcite{levina2004maximum}{{10}{2004}{{Levina and Bickel}}{{}}}
+\bibcite{li2018measuring}{{11}{2018}{{Li et~al.}}{{Li, Farkhoor, Liu, and Yosinski}}}
+\bibcite{mackay2005comments}{{12}{2005}{{MacKay and Ghahramani}}{{}}}
+\bibcite{marcus1993building}{{13}{1993}{{Marcus et~al.}}{{Marcus, Santorini, and Marcinkiewicz}}}
+\bibcite{pedregosa2011scikit}{{14}{2011}{{Pedregosa et~al.}}{{}}}
+\bibcite{pope2021intrinsic}{{15}{2021}{{Pope et~al.}}{{Pope, Zhu, Abdelkader, Goldblum, and Goldstein}}}
+\bibcite{sauer1991embedology}{{16}{1991}{{Sauer et~al.}}{{Sauer, Yorke, and Casdagli}}}
+\bibcite{schreiber1996improved}{{17}{1996}{{Schreiber and Schmitz}}{{}}}
+\bibcite{schulman2017proximal}{{18}{2017}{{Schulman et~al.}}{{Schulman, Wolski, Dhariwal, Radford, and Klimov}}}
+\bibcite{stark1999delay}{{19}{1999}{{Stark}}{{}}}
+\bibcite{stark2003delay}{{20}{2003}{{Stark et~al.}}{{Stark, Broomhead, Davies, and Huke}}}
+\bibcite{sussillo2009generating}{{21}{2009}{{Sussillo and Abbott}}{{}}}
+\bibcite{takens1981detecting}{{22}{1981}{{Takens}}{{}}}
+\bibcite{theiler1986spurious}{{23}{1986}{{Theiler}}{{}}}
+\bibcite{todorov2012mujoco}{{24}{2012}{{Todorov et~al.}}{{Todorov, Erez, and Tassa}}}
+\citation{stark1999delay,stark2003delay}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Geometric interpretation and numerical implementation}{12}{section.A}\protected@file@percent }
+\newlabel{app:theory}{{A}{12}{Geometric interpretation and numerical implementation}{section.A}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}What follows from an embedding}{12}{subsection.A.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Affine invariance and its implementation boundary}{12}{subsection.A.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Pooling and dependence}{12}{subsection.A.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B}Configurations and reproducibility}{12}{section.B}\protected@file@percent }
+\newlabel{app:settings}{{B}{12}{Configurations and reproducibility}{section.B}{}}
+\@writefile{toc}{\contentsline {paragraph}{Selecting a window.}{12}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Units of replication.}{12}{section*.21}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces \begingroup \color  {claudecolor}Primary configurations. An exclusion of ``span'' is $(E-1)\tau $. The adaptive generator lag is one quarter of the autocorrelation time, capped so the delay span occupies at most one eighth of the window; its exclusion is capped at 320. Alternative settings are reported as sensitivity checks, not substituted for the primary results.\endgroup }}{13}{table.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {C}Controlled systems and MLP-based recovery}{13}{section.C}\protected@file@percent }
+\newlabel{app:controlled}{{C}{13}{Controlled systems and MLP-based recovery}{section.C}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Analytic and driven-learning validation}{13}{subsection.C.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces \begingroup \color  {claudecolor}Controlled validation with each experiment's reference. Mean absolute error (MAE) averages rank--seed--observable combinations. The driven-target MLP signal still varies with frozen parameters; its error describes the driven signal, not parameter motion alone.\endgroup }}{13}{table.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}Dense regression with endogenous modes}{13}{subsection.C.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces \begingroup \color  {claudecolor}Known-mode regression: median scalar MG. Settings are fixed across $r$. A longer record does not uniformly reduce bias.\endgroup }}{14}{table.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Learned autonomous generators}{14}{subsection.C.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {D}Applied training protocols and full comparisons}{14}{section.D}\protected@file@percent }
+\newlabel{app:applied}{{D}{14}{Applied training protocols and full comparisons}{section.D}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.1}CNN and ResNet interventions}{14}{subsection.D.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces \begingroup \color  {claudecolor}CNN interventions at all tested strengths, on four held-out seeds. Changes are medians of paired record ratios. Update covariance and the fraction of moving parameters provide independent comparisons. Stronger pruning does not always produce a larger MG decline.\endgroup }}{15}{table.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.2}ReLU-death stress test}{15}{subsection.D.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces \begingroup \color  {claudecolor}Boundary case: the transferred detector on ReLU death. Rules are fixed before the confirmation results.\endgroup }}{15}{table.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.3}Text VAE and preservation control}{15}{subsection.D.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces \begingroup \color  {claudecolor}Text VAE: late medians across nine confirmation seeds. MI and code response are independent of the MG calculation.\endgroup }}{16}{table.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.4}Cyclic-VAE monitoring}{16}{subsection.D.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces \begingroup \color  {claudecolor}Cyclic VAE: detected events out of 41 at all tested budgets. Primary budget is 12.\endgroup }}{16}{table.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {E}Additional learning settings}{16}{section.E}\protected@file@percent }
+\newlabel{app:additional}{{E}{16}{Additional learning settings}{section.E}{}}
+\@writefile{toc}{\contentsline {paragraph}{MNIST.}{16}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Grokking.}{16}{section*.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Walker2d.}{16}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {F}Timing protocols and information requirements}{17}{section.F}\protected@file@percent }
+\newlabel{app:cost}{{F}{17}{Timing protocols and information requirements}{section.F}{}}
+\@writefile{toc}{\contentsline {paragraph}{CNN.}{17}{section*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{FORCE.}{17}{section*.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Coupled oscillators.}{17}{section*.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{VAE.}{17}{section*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Walker2d.}{17}{section*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {G}How the experiments support the method}{18}{section.G}\protected@file@percent }
+\gdef \@abspage@last{18}

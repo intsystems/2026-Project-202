@@ -1,0 +1,1 @@
+{"setup": "T2_width16", "seed": 302, "event": null, "t_e": null, "t_r": null, "P": 1863690, "test_acc": 0.9821000099182129, "wall_s": 439.4004878999549, "wd_factor": 100.0, "cfg": {"width": 1024, "dataset": "mnist", "loss": "ce", "reduction": "mean", "micro": 64, "accum": 1, "lr": 0.02, "wd": 0.0005, "bf16": false, "restart": false, "log": "norm"}}

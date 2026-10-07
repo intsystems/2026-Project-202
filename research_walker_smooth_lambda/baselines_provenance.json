@@ -1,0 +1,11 @@
+{
+  "platform": "Windows-10-10.0.18363-SP0",
+  "python": "3.13.12 (tags/v3.13.12:1cbe481, Feb  3 2026, 18:22:25) [MSC v.1944 64 bit (AMD64)]",
+  "threads": 1,
+  "protocol_sha256": "913ed623df83db53e6ca5fdd111c7dc4ce9c09d7910a138ba796a4587010876a",
+  "source": "seed231_lambda0/step1048576/reset62001/trajectory.npz",
+  "window": 2048,
+  "repeats": 7,
+  "io_excluded": true,
+  "secondary_analysis": true
+}

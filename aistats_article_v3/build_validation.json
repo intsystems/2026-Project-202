@@ -1,0 +1,16 @@
+{
+  "aistats2027": {
+    "main_text_pages": 8,
+    "issues": [],
+    "pdf_pages": 32
+  },
+  "aistats2027_blue": {
+    "main_text_pages": 8,
+    "issues": [],
+    "pdf_pages": 32
+  },
+  "verified_blue_text_blocks": {
+    "aistats2027": 0,
+    "aistats2027_blue": 3440
+  }
+}

@@ -1,0 +1,122 @@
+{
+ "MG": {
+  "stat": "MG",
+  "M": 2,
+  "B": 3,
+  "delta": 0.08829884007532394,
+  "sign": 1,
+  "cal_hit": 1.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 1500.0
+ },
+ "crossings": {
+  "stat": "crossings",
+  "M": 2,
+  "B": 4,
+  "delta": 0.6628571428571428,
+  "sign": 1,
+  "cal_hit": 0.9166666666666666,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 1000.0
+ },
+ "lag1": {
+  "stat": "lag1",
+  "M": 2,
+  "B": 3,
+  "delta": 0.023881403876642376,
+  "sign": 1,
+  "cal_hit": 0.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": null
+ },
+ "det_std": {
+  "stat": "det_std",
+  "M": 2,
+  "B": 3,
+  "delta": 0.3054394770224109,
+  "sign": -1,
+  "cal_hit": 1.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 500.0
+ },
+ "spectral_entropy": {
+  "stat": "spectral_entropy",
+  "M": 2,
+  "B": 3,
+  "delta": 0.045547796241716995,
+  "sign": -1,
+  "cal_hit": 0.75,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 1500.0
+ },
+ "perm_entropy": {
+  "stat": "perm_entropy",
+  "M": 2,
+  "B": 6,
+  "delta": 0.33903774446171364,
+  "sign": -1,
+  "cal_hit": 1.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 1500.0
+ },
+ "self_repeat": {
+  "stat": "self_repeat",
+  "M": 2,
+  "B": 3,
+  "delta": 0.09728600679574083,
+  "sign": -1,
+  "cal_hit": 1.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 500.0
+ },
+ "roughness": {
+  "stat": "roughness",
+  "M": 2,
+  "B": 3,
+  "delta": 0.13523324547869905,
+  "sign": -1,
+  "cal_hit": 1.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 500.0
+ },
+ "recurrence_rate": {
+  "stat": "recurrence_rate",
+  "M": 2,
+  "B": 3,
+  "delta": 0.12498255137650259,
+  "sign": -1,
+  "cal_hit": 1.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 500.0
+ },
+ "corr_dim": {
+  "stat": "corr_dim",
+  "M": 2,
+  "B": 3,
+  "delta": 0.0461596416002079,
+  "sign": 1,
+  "cal_hit": 1.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 500.0
+ },
+ "twonn": {
+  "stat": "twonn",
+  "M": 4,
+  "B": 3,
+  "delta": 0.14477581584793484,
+  "sign": -1,
+  "cal_hit": 0.6666666666666666,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 2500.0
+ },
+ "linear_pr": {
+  "stat": "linear_pr",
+  "M": 2,
+  "B": 3,
+  "delta": 0.020043776022975007,
+  "sign": -1,
+  "cal_hit": 0.3333333333333333,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 500.0
+ }
+}

@@ -1,0 +1,23 @@
+{
+  "checks": {
+    "full_candidate_coverage": true,
+    "selection_independent_of_test_rewards": true,
+    "incomplete_confirmation_features_missing": true,
+    "all_falls_retained": true,
+    "saved_target_batch_replay": true
+  },
+  "platform": "Windows-10-10.0.18363-SP0",
+  "python": "3.13.12",
+  "torch": "2.10.0+cpu",
+  "threads": 1,
+  "cpu": "Intel Core i5-12500H",
+  "timing_repetitions": 3,
+  "feature_timing_repetitions": 7,
+  "paired_confirmation_seeds": [
+    232,
+    233,
+    234,
+    235
+  ],
+  "archive_contains_training": false
+}

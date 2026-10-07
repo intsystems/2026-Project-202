@@ -1,0 +1,54 @@
+{
+  "MG": {
+    "kind": "threshold",
+    "feature": "MG",
+    "sign": -1,
+    "threshold": -1.0825062619230923
+  },
+  "entropy": {
+    "kind": "threshold",
+    "feature": "entropy",
+    "sign": 1,
+    "threshold": 0.25916022576413883
+  },
+  "increments": {
+    "kind": "threshold",
+    "feature": "increments",
+    "sign": 1,
+    "threshold": 0.00045995999056452
+  },
+  "recurrence": {
+    "kind": "threshold",
+    "feature": "recurrence",
+    "sign": 1,
+    "threshold": 0.00014465605795657005
+  },
+  "output_error": {
+    "kind": "threshold",
+    "feature": "output_error",
+    "sign": 1,
+    "threshold": 0.0769798574295943
+  },
+  "training_error": {
+    "kind": "threshold",
+    "feature": "training_error",
+    "sign": -1,
+    "threshold": -0.0004320930328165
+  },
+  "periodic1": {
+    "kind": "periodic",
+    "every": 1
+  },
+  "periodic2": {
+    "kind": "periodic",
+    "every": 2
+  },
+  "periodic3": {
+    "kind": "periodic",
+    "every": 3
+  },
+  "fixed_pilot": {
+    "kind": "fixed",
+    "first": 4000
+  }
+}

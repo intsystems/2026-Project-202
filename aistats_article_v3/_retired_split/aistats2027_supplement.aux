@@ -1,0 +1,108 @@
+\relax 
+\providecommand \babel@aux [2]{\global \let \babel@toc \@gobbletwo }
+\@nameuse{bbl@beforestart}
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\babel@aux{english}{}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Theory, implementation, and experimental details}{1}{section.A}\protected@file@percent }
+\newlabel{app:theory}{{A}{1}{Theory, implementation, and experimental details}{section.A}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Dimension preservation under delay reconstruction}{1}{subsection.A.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Recurrent, transient, and stochastic regimes}{1}{subsection.A.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \begingroup \color  {claudecolor}Regime diagnostics from the synthetic study. The left panel compares MG with an independently measured effective rank; the right panel separates recurrent and non-recurrent records using identifiability. The shaded region marks the fixed regime in which the component interpretation is supported.\endgroup }}{1}{figure.1}\protected@file@percent }
+\newlabel{fig:regimes}{{1}{1}{\claude {Regime diagnostics from the synthetic study. The left panel compares MG with an independently measured effective rank; the right panel separates recurrent and non-recurrent records using identifiability. The shaded region marks the fixed regime in which the component interpretation is supported.}}{figure.1}{}}
+\citation{stark1999delay,stark2003delay}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \begingroup \color  {claudecolor}Delay reconstructions of four cases. A recurrent one-phase signal closes a loop; two phases fill a higher-dimensional set; a transient follows a path without returning; stochastic forcing fills the available region. These pictures explain why recurrence and identifiability are required before reading MG as active dimension.\endgroup }}{2}{figure.2}\protected@file@percent }
+\newlabel{fig:shapes}{{2}{2}{\claude {Delay reconstructions of four cases. A recurrent one-phase signal closes a loop; two phases fill a higher-dimensional set; a transient follows a path without returning; stochastic forcing fills the available region. These pictures explain why recurrence and identifiability are required before reading MG as active dimension.}}{figure.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \begingroup \color  {claudecolor}The same scalar-log viewpoint across regimes: recurrent forcing, a transient optimization path, and a stochastically forced training record. The estimator is applied to all three, while the interpretation changes with the regime.\endgroup }}{2}{figure.3}\protected@file@percent }
+\newlabel{fig:traces}{{3}{2}{\claude {The same scalar-log viewpoint across regimes: recurrent forcing, a transient optimization path, and a stochastically forced training record. The estimator is applied to all three, while the interpretation changes with the regime.}}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Pooled estimator: implementation steps}{2}{subsection.A.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces \begingroup \color  {claudecolor}Primary configurations. An exclusion of ``span'' is $(E-1)\tau $. The adaptive generator lag is one quarter of the autocorrelation time, capped so the delay span occupies at most one eighth of the window; its exclusion is capped at 320. Alternative settings are reported as sensitivity checks, not substituted for the primary results.\endgroup }}{3}{table.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Affine invariance and its implementation boundary}{3}{subsection.A.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.5}Pooling and dependence}{3}{subsection.A.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B}Configurations and reproducibility}{3}{section.B}\protected@file@percent }
+\newlabel{app:settings}{{B}{3}{Configurations and reproducibility}{section.B}{}}
+\@writefile{toc}{\contentsline {paragraph}{Exact adaptive rules.}{3}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Window length and recurrence requirements.}{4}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Units of replication.}{4}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {C}Development systems and MLP-based recovery}{4}{section.C}\protected@file@percent }
+\newlabel{app:controlled}{{C}{4}{Development systems and MLP-based recovery}{section.C}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Analytic and driven-learning evaluation}{4}{subsection.C.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces \begingroup \color  {claudecolor}Controlled validation with each experiment's reference. Mean absolute error (MAE) averages rank--seed--observable combinations. The driven-target MLP signal still varies with frozen parameters; its error describes the driven signal, not parameter motion alone.\endgroup }}{4}{table.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}Dense regression with endogenous modes}{5}{subsection.C.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces \begingroup \color  {claudecolor}Known-mode regression: median scalar MG. Settings are fixed across $r$. A longer record does not uniformly reduce bias.\endgroup }}{5}{table.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces \begingroup \color  {claudecolor}Three-seed variation in the selective-damping regression experiment.\endgroup }}{5}{table.4}\protected@file@percent }
+\newlabel{tab:regression_variation}{{4}{5}{\claude {Three-seed variation in the selective-damping regression experiment.}}{table.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Learned autonomous generators}{5}{subsection.C.3}\protected@file@percent }
+\citation{bandt2002permutation}
+\citation{richman2000physiological}
+\citation{page1954continuous}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Applied training procedures and full comparisons}{6}{section.D}\protected@file@percent }
+\newlabel{app:applied}{{D}{6}{Applied training procedures and full comparisons}{section.D}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.1}CNN and ResNet interventions}{6}{subsection.D.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces \begingroup \color  {claudecolor}CNN interventions at all tested strengths, on four held-out seeds. Changes are medians of paired record ratios. Update covariance and the fraction of moving parameters provide independent comparisons. Stronger pruning does not always produce a larger MG decline.\endgroup }}{7}{table.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.2}Natural scalar baselines}{7}{subsection.D.2}\protected@file@percent }
+\newlabel{app:baselines}{{D.2}{7}{Natural scalar baselines}{subsection.D.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces \begingroup \color  {claudecolor}Natural scalar features on the held-out CNN benchmark. Each detector is fixed on the earlier seeds. Successful detections cover seven strong intervention types across four seeds; false positives cover four reference types across four seeds.\endgroup }}{7}{table.6}\protected@file@percent }
+\newlabel{tab:extra_baselines}{{6}{7}{\claude {Natural scalar features on the held-out CNN benchmark. Each detector is fixed on the earlier seeds. Successful detections cover seven strong intervention types across four seeds; false positives cover four reference types across four seeds.}}{table.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces \begingroup \color  {claudecolor}False positives by type for the block detector. The reference records share the four held-out seeds; the table therefore describes this matched benchmark rather than independent false-positive probabilities.\endgroup }}{7}{table.7}\protected@file@percent }
+\newlabel{tab:baseline_references}{{7}{7}{\claude {False positives by type for the block detector. The reference records share the four held-out seeds; the table therefore describes this matched benchmark rather than independent false-positive probabilities.}}{table.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces \begingroup \color  {claudecolor}Selected detector parameters. The block sign is listed; all selected CUSUM signs are recorded in \texttt  {new\_results/rules.json}. Full-precision values in that file define the implemented thresholds.\endgroup }}{8}{table.8}\protected@file@percent }
+\newlabel{tab:baseline_rules}{{8}{8}{\claude {Selected detector parameters. The block sign is listed; all selected CUSUM signs are recorded in \texttt {new\_results/rules.json}. Full-precision values in that file define the implemented thresholds.}}{table.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces \begingroup \color  {claudecolor}Past-only CUSUM on the held-out CNN records. Thresholds are selected on development records; the table reports strong-event detections, reference false positives, and median delay.\endgroup }}{8}{table.9}\protected@file@percent }
+\newlabel{tab:cusum}{{9}{8}{\claude {Past-only CUSUM on the held-out CNN records. Thresholds are selected on development records; the table reports strong-event detections, reference false positives, and median delay.}}{table.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces \begingroup \color  {claudecolor}Post-hoc horizon sensitivity with thresholds and first detections unchanged. Entries are detections within the specified number of updates; FP uses each complete reference record and is independent of the event horizon.\endgroup }}{9}{table.10}\protected@file@percent }
+\newlabel{tab:horizons}{{10}{9}{\claude {Post-hoc horizon sensitivity with thresholds and first detections unchanged. Entries are detections within the specified number of updates; FP uses each complete reference record and is independent of the event horizon.}}{table.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.3}ReLU-death stress test}{9}{subsection.D.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces \begingroup \color  {claudecolor}Boundary case: the transferred detector on ReLU death. Rules are fixed before the confirmation results.\endgroup }}{9}{table.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.4}Text VAE and preservation reference}{9}{subsection.D.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces \begingroup \color  {claudecolor}Text VAE: late medians across nine confirmation seeds. MI and code response are independent of the MG calculation.\endgroup }}{10}{table.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.5}Cyclic-VAE monitoring}{10}{subsection.D.5}\protected@file@percent }
+\citation{antognini2018pca}
+\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces \begingroup \color  {claudecolor}Cyclic VAE: detected events out of 41 at all tested budgets. Primary budget is 12.\endgroup }}{11}{table.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {E}Additional learning settings}{11}{section.E}\protected@file@percent }
+\newlabel{app:additional}{{E}{11}{Additional learning settings}{section.E}{}}
+\@writefile{toc}{\contentsline {paragraph}{MNIST.}{11}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Grokking.}{11}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Walker2d.}{11}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {E.1}Selecting policies for actuator shifts}{12}{subsection.E.1}\protected@file@percent }
+\newlabel{app:rl_selection}{{E.1}{12}{Selecting policies for actuator shifts}{subsection.E.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces \begingroup \color  {claudecolor}Policy selection under hidden actuator shifts: mean over four fine-tuning seeds. Completion is over all 120 selected target episodes. Random denotes expected uniform choice among eligible policies; the oracle uses target returns.\endgroup }}{12}{table.14}\protected@file@percent }
+\newlabel{tab:rl_selection}{{14}{12}{\claude {Policy selection under hidden actuator shifts: mean over four fine-tuning seeds. Completion is over all 120 selected target episodes. Random denotes expected uniform choice among eligible policies; the oracle uses target returns.}}{table.14}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {F}Timing procedures and information requirements}{13}{section.F}\protected@file@percent }
+\newlabel{app:cost}{{F}{13}{Timing procedures and information requirements}{section.F}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.1}Computing infrastructure and provenance}{13}{subsection.F.1}\protected@file@percent }
+\newlabel{app:hardware}{{F.1}{13}{Computing infrastructure and provenance}{subsection.F.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.2}Benchmark-specific timing and storage}{13}{subsection.F.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{CNN.}{13}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{FORCE.}{13}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Coupled oscillators.}{14}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{VAE.}{14}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Walker2d.}{14}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {G}How the experiments support the method}{14}{section.G}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {H}Forecast selection and sampled-query estimation}{14}{section.H}\protected@file@percent }
+\newlabel{app:forecast_utility}{{H}{14}{Forecast selection and sampled-query estimation}{section.H}{}}
+\@writefile{toc}{\contentsline {paragraph}{Training and observable.}{14}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Eight candidate forecasts.}{14}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Selector training and search history.}{15}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Competitors and information access.}{15}{section*.15}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {15}{\ignorespaces \begingroup \color  {claudecolor}Mean NMSE for all forecast selectors. Columns use distinct seed cohorts; lower is better. Earlier MG was fit during the initial generator screen. The second cohort supports the query-budget comparison.\endgroup }}{15}{table.15}\protected@file@percent }
+\newlabel{tab:forecast_all}{{15}{15}{\claude {Mean NMSE for all forecast selectors. Columns use distinct seed cohorts; lower is better. Earlier MG was fit during the initial generator screen. The second cohort supports the query-budget comparison.}}{table.15}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \begingroup \color  {claudecolor}Forecast selection: quality and cost. Left: each new seed group averaged over eight tasks; lower NMSE is better. Right: medians over seven timing repetitions for each of 12 matched inputs; black bars are medians over inputs.\endgroup }}{16}{figure.4}\protected@file@percent }
+\newlabel{fig:forecast_utility}{{4}{16}{\claude {Forecast selection: quality and cost. Left: each new seed group averaged over eight tasks; lower NMSE is better. Right: medians over seven timing repetitions for each of 12 matched inputs; black bars are medians over inputs.}}{figure.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Sampled-query MG.}{16}{section*.16}\protected@file@percent }
+\newlabel{eq:querymg}{{1}{16}{Sampled-query MG}{equation.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Paired runtime procedure.}{16}{section*.17}\protected@file@percent }
+\bibstyle{plainnat}
+\bibdata{references}
+\bibcite{antognini2018pca}{{1}{2018}{{Antognini and Sohl-Dickstein}}{{}}}
+\bibcite{bandt2002permutation}{{2}{2002}{{Bandt and Pompe}}{{}}}
+\bibcite{page1954continuous}{{3}{1954}{{Page}}{{}}}
+\bibcite{richman2000physiological}{{4}{2000}{{Richman and Moorman}}{{}}}
+\bibcite{stark1999delay}{{5}{1999}{{Stark}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Training interventions: benefits and baseline comparisons}{17}{section.I}\protected@file@percent }
+\newlabel{app:intervention_utility}{{I}{17}{Training interventions: benefits and baseline comparisons}{section.I}{}}
+\bibcite{stark2003delay}{{6}{2003}{{Stark et~al.}}{{Stark, Broomhead, Davies, and Huke}}}
+\@writefile{lot}{\contentsline {table}{\numberline {16}{\ignorespaces \begingroup \color  {claudecolor}Eight-seed intervention results, including strong simple comparisons. MAC ratio is an approximate matrix-arithmetic budget relative to uninterrupted dense training; it excludes logging, monitoring, nonlinearities, optimizer work, and memory overhead and is not a wall-time speedup.\endgroup }}{18}{table.16}\protected@file@percent }
+\newlabel{tab:intervention_utility}{{16}{18}{\claude {Eight-seed intervention results, including strong simple comparisons. MAC ratio is an approximate matrix-arithmetic budget relative to uninterrupted dense training; it excludes logging, monitoring, nonlinearities, optimizer work, and memory overhead and is not a wall-time speedup.}}{table.16}{}}
+\gdef \@abspage@last{18}

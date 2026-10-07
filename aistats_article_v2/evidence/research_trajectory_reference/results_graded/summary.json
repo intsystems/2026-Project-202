@@ -1,0 +1,198 @@
+{
+ "table": [
+  {
+   "index": "no event",
+   "MG before": 4.306,
+   "MG after": 4.323,
+   "change %": 0.407,
+   "min %": -8.657,
+   "max %": 3.33,
+   "update PR change %": 40.311,
+   "moving params after": 1.0,
+   "update size change %": 21.313
+  },
+  {
+   "index": "batch x4 (less noise)",
+   "MG before": 4.306,
+   "MG after": 4.853,
+   "change %": 12.805,
+   "min %": 8.273,
+   "max %": 13.85,
+   "update PR change %": -7.323,
+   "moving params after": 1.0,
+   "update size change %": -3.143
+  },
+  {
+   "index": "log x10",
+   "MG before": 4.306,
+   "MG after": 4.323,
+   "change %": 0.407,
+   "min %": -8.657,
+   "max %": 3.33,
+   "update PR change %": 40.311,
+   "moving params after": 1.0,
+   "update size change %": 21.313
+  },
+  {
+   "index": "log smoothed",
+   "MG before": 4.306,
+   "MG after": 4.436,
+   "change %": 3.345,
+   "min %": -5.074,
+   "max %": 4.148,
+   "update PR change %": 40.311,
+   "moving params after": 1.0,
+   "update size change %": 21.313
+  },
+  {
+   "index": "lr / 3",
+   "MG before": 4.306,
+   "MG after": 4.346,
+   "change %": 0.936,
+   "min %": -6.763,
+   "max %": 4.183,
+   "update PR change %": -5.411,
+   "moving params after": 1.0,
+   "update size change %": -51.085
+  },
+  {
+   "index": "lr / 10",
+   "MG before": 4.306,
+   "MG after": 3.95,
+   "change %": -8.273,
+   "min %": -12.061,
+   "max %": -2.298,
+   "update PR change %": -21.562,
+   "moving params after": 1.0,
+   "update size change %": -85.525
+  },
+  {
+   "index": "lr / 100",
+   "MG before": 4.306,
+   "MG after": 3.845,
+   "change %": -11.54,
+   "min %": -14.381,
+   "max %": -7.303,
+   "update PR change %": -20.918,
+   "moving params after": 1.0,
+   "update size change %": -98.852
+  },
+  {
+   "index": "freeze conv1-2 (65% move)",
+   "MG before": 4.306,
+   "MG after": 4.271,
+   "change %": -1.751,
+   "min %": -3.877,
+   "max %": 2.185,
+   "update PR change %": -13.646,
+   "moving params after": 0.653,
+   "update size change %": -30.866
+  },
+  {
+   "index": "train head only (2.2%)",
+   "MG before": 4.306,
+   "MG after": 3.508,
+   "change %": -18.531,
+   "min %": -24.078,
+   "max %": -11.178,
+   "update PR change %": -43.482,
+   "moving params after": 0.023,
+   "update size change %": -94.553
+  },
+  {
+   "index": "train head bias only (0.07%)",
+   "MG before": 4.306,
+   "MG after": 3.584,
+   "change %": -16.74,
+   "min %": -23.697,
+   "max %": -14.955,
+   "update PR change %": -68.408,
+   "moving params after": 0.001,
+   "update size change %": -99.829
+  },
+  {
+   "index": "prune 50%",
+   "MG before": 4.306,
+   "MG after": 3.798,
+   "change %": -12.714,
+   "min %": -14.539,
+   "max %": -3.908,
+   "update PR change %": 14.694,
+   "moving params after": 0.503,
+   "update size change %": -23.406
+  },
+  {
+   "index": "prune 80%",
+   "MG before": 4.306,
+   "MG after": 3.593,
+   "change %": -17.484,
+   "min %": -20.708,
+   "max %": -12.295,
+   "update PR change %": -10.273,
+   "moving params after": 0.205,
+   "update size change %": -58.113
+  },
+  {
+   "index": "prune 95%",
+   "MG before": 4.306,
+   "MG after": 3.794,
+   "change %": -11.538,
+   "min %": -16.057,
+   "max %": -9.515,
+   "update PR change %": -45.328,
+   "moving params after": 0.055,
+   "update size change %": -81.985
+  }
+ ],
+ "P1_every_event_median_below_every_control_median": false,
+ "P2_strongest_dose_below_every_control_run": {
+  "lr": false,
+  "freeze": true,
+  "prune": true
+ },
+ "P3_dose_spearman": {
+  "lr": -0.8278373543847156,
+  "freeze": -0.680009255387445,
+  "prune": -0.02956561979945413
+ },
+ "P4": {
+  "scale_minus_base": 0.0,
+  "smooth_minus_base": 0.029380637415151956,
+  "batch_up_minus_base": 0.12398174908836035
+ },
+ "auc_events_vs_base_batchup": {
+  "MG": 0.9305555555555556,
+  "MG_surr": 0.6770833333333334,
+  "crossings": 0.5572916666666666,
+  "lag1": 0.4791666666666667,
+  "det_std": 0.5659722222222222,
+  "MG_batch_loss": 0.1909722222222222
+ },
+ "auc_strongest_vs_all_controls": {
+  "MG": 0.9895833333333334,
+  "crossings": 0.5234375,
+  "lag1": 0.4791666666666667,
+  "det_std": 0.6666666666666666
+ },
+ "spearman_MG_vs_updatePR_ratio_all_runs": 0.5855825269106729,
+ "rel_level_median": 0.7751022032088246,
+ "cost": {
+  "t_MG_window_ms": 9.49064991436895,
+  "P": 14666,
+  "log_KB": 39.0625,
+  "traj_MB": 559.4635009765625
+ },
+ "test_acc": {
+  "base": 0.626,
+  "batch_up": 0.646,
+  "freeze12": 0.635,
+  "freeze_bias": 0.62,
+  "freeze_head": 0.632,
+  "lr10": 0.65,
+  "lr100": 0.64,
+  "lr3": 0.651,
+  "prune50": 0.619,
+  "prune80": 0.617,
+  "prune95": 0.502
+ }
+}

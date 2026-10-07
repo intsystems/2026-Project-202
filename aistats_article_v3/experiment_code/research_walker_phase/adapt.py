@@ -1,0 +1,20 @@
+"""Generate pinned local measurement/training helpers from already audited versions."""
+from pathlib import Path
+H=Path(__file__).resolve().parent
+s=(H/'motion.py').read_text()
+s=s.replace('def make_env():return gym.make(\'Walker2d-v5\').unwrapped',"from environment import PhaseWalker,RHO\ndef make_env():return PhaseWalker(coef=0)")
+s=s.replace('env.data','env.unwrapped.data').replace('env.model','env.unwrapped.model').replace('dt=env.dt','dt=env.unwrapped.dt')
+s=s.replace('actions=[];saved=[]','actions=[];phases=[];anchor_phases=[];tracking=[];saved=[]')
+s=s.replace("qpos.append(env.unwrapped.data.qpos.copy());qvel.append(env.unwrapped.data.qvel.copy())","qpos.append(env.unwrapped.data.qpos.copy());qvel.append(env.unwrapped.data.qvel.copy());phases.append(env.phase)")
+s=s.replace('saved.append(state);anchor_ids.append(step-BURN)','saved.append(state);anchor_ids.append(step-BURN);anchor_phases.append(env.phase)')
+s=s.replace("rewards.append(reward);velocities.append(info['x_velocity'])","rewards.append(reward);velocities.append(info['x_velocity']);tracking.append(info['tracking_error2'])")
+s=s.replace("result['padded_reward']=", "result['tracking_error2']=float(np.mean(tracking)) if tracking else None\n    result['padded_reward']=")
+s=s.replace('actions=np.array(actions),','actions=np.array(actions),phase=np.array(phases),anchor_phases=np.array(anchor_phases),tracking=np.array(tracking),')
+(H/'motion.py').write_text(s)
+s=(H.parent/'research_walker_imitation/train.py').read_text();start=s.index('class OrbitReward');end=s.index('def save(')
+s=s[:start]+s[end:];s=s.replace('from reference import Orbit','from environment import PhaseWalker');s=s.replace("ANCHOR=H.parent/'research_walker_repair/anchor'","ANCHOR=H/'anchor'")
+s=s.replace("raw=make_vec_env('Walker2d-v5',n_envs=8,seed=seed,env_kwargs=dict(max_episode_steps=5000),wrapper_class=OrbitReward,wrapper_kwargs=dict(coef=coef),monitor_dir=str(out/'monitor'))", "raw=make_vec_env(lambda: gym.wrappers.TimeLimit(PhaseWalker(coef=coef),max_episode_steps=5000),n_envs=8,seed=seed,monitor_dir=str(out/'monitor'))")
+s=s.replace('recent_original_return','recent_training_return')
+s=s.replace('model.ep_info_buffer.clear();save(model,env,out,0)', 'save(model,env,out,0)')
+(H/'train.py').write_text(s)
+print('ADAPTED')

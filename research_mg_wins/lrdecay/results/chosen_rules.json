@@ -1,0 +1,132 @@
+{
+ "fixed_step": {
+  "f": 0.9375
+ },
+ "pflug_chee_toulis": {
+  "tmin": 0.125,
+  "start": "zero"
+ },
+ "sasa": {
+  "tmin": 0.5,
+  "mode": "equiv",
+  "z": 1.96,
+  "delta": 0.75
+ },
+ "pesme_distance": {
+  "tmin": 0.5,
+  "q": 2.0,
+  "th": 1.25
+ },
+ "plateau_train_loss": {
+  "tmin": 0.5,
+  "patience": 3,
+  "thr": 0.03
+ },
+ "plateau_val_loss": {
+  "tmin": 0.5,
+  "patience": 10,
+  "thr": 0.03
+ },
+ "MG": {
+  "type": "stable",
+  "tmin": 0.5,
+  "M": 4,
+  "B": 4,
+  "eps": 0.02,
+  "log": "batch_loss"
+ },
+ "MG_tau4": {
+  "type": "rel",
+  "tmin": 0.5,
+  "sign": -1,
+  "M": 4,
+  "B": 4,
+  "delta": 0.02,
+  "log": "param_norm"
+ },
+ "self_repeat": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 4,
+  "B": 4,
+  "eps": 0.01,
+  "log": "batch_loss"
+ },
+ "spectral_entropy": {
+  "type": "level",
+  "tmin": 0.5,
+  "sign": 1,
+  "q": 0.7,
+  "log": "batch_loss"
+ },
+ "roughness": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 4,
+  "B": 4,
+  "eps": 0.02,
+  "log": "batch_loss"
+ },
+ "perm_entropy": {
+  "type": "level",
+  "tmin": 0.5,
+  "sign": -1,
+  "q": 0.2,
+  "log": "batch_loss"
+ },
+ "recurrence_rate": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 4,
+  "B": 4,
+  "eps": 0.02,
+  "log": "param_norm"
+ },
+ "corr_dim": {
+  "type": "level",
+  "tmin": 0.5,
+  "sign": 1,
+  "q": 0.7,
+  "log": "batch_loss"
+ },
+ "twonn": {
+  "type": "stable",
+  "tmin": 0.5,
+  "M": 4,
+  "B": 4,
+  "eps": 0.02,
+  "log": "batch_loss"
+ },
+ "linear_pr": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 2,
+  "B": 4,
+  "eps": 0.01,
+  "log": "batch_loss"
+ },
+ "crossings": {
+  "type": "rel",
+  "tmin": 0.5,
+  "sign": 1,
+  "M": 2,
+  "B": 4,
+  "delta": 0.2,
+  "log": "param_norm"
+ },
+ "lag1": {
+  "type": "level",
+  "tmin": 0.5,
+  "sign": 1,
+  "q": 0.6,
+  "log": "batch_loss"
+ },
+ "det_std": {
+  "type": "stable",
+  "tmin": 0.5,
+  "M": 2,
+  "B": 4,
+  "eps": 0.1,
+  "log": "batch_loss"
+ }
+}

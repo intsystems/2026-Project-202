@@ -1,0 +1,9 @@
+{
+  "fixed_delay": 1.0,
+  "fixed_checkpoint": [
+    0.25,
+    1048576
+  ],
+  "protocol_sha256": "c0b1260d9e7790549f9fbb1806d29bbd896bd587e4bd958002fbefcd058341d4",
+  "interpretation": "New deployment evaluation of historical checkpoints, not causal curriculum or new training."
+}

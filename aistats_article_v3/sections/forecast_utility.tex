@@ -1,0 +1,12 @@
+\claude{
+\subsection{Forecast model selection from single-neuron recordings}\label{sec:forecast_utility}
+Can a scalar record identify a suitable forecasting model without fitting every candidate to held-out data? We train a selector that uses MG from 2,048 observations of one neuron to choose among eight forecasters. The selected model predicts the next 32 observations. Candidates include persistence, mean and cycle forecasts, linear regression, nearest-neighbor prediction and a nonlinear feature model. We fit the selector on 18 initialization seeds and freeze it for evaluation. Networks that miss their training targets remain included; the task is to predict the activity they actually produce (\appref{app:forecast_utility}).
+
+MG has lower mean NMSE than TwoNN and Levina--Bickel selection; the difference from held-out search is unresolved (Table~\ref{tab:forecast_all}). A query subsample preserves every full-MG choice on further runs at lower cost (Table~\ref{tab:forecast_utility}). Selectors using held-out forecast errors can be more accurate. The saving concerns selection from an available record.
+\begin{table}[t]
+\centering\small
+\caption{\claude{Forecast selection on 20 new seeds, eight tasks per seed. NMSE uses prefix variance. Time includes selection and the chosen fit on 12 matched inputs; a dash means not benchmarked. Acquisition and offline selector training are excluded.}}
+\label{tab:forecast_utility}
+\input{tables/forecast_utility.tex}
+\end{table}
+}

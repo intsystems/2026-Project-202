@@ -1,0 +1,322 @@
+[
+  {
+    "path": "FINAL_CAMPAIGN_ru.md",
+    "sha256": "a9525337f680debb540da0a08e99c1df941db19ac01755404c05ff3f7e86195a"
+  },
+  {
+    "path": "games\\analyse.py",
+    "sha256": "2edd76400b996c46568bc0a19a8a0273d97a388369ff79a0677458e9544170d3"
+  },
+  {
+    "path": "games\\diag.py",
+    "sha256": "f9985be7371148f9b1721f7a8a2c32f49db587326a7ac63914b7c4a4d77b1b1f"
+  },
+  {
+    "path": "games\\main.py",
+    "sha256": "3ffd41e6b37ffc029f3d4c65b1bf0654d08f3525169d583e149dca80a4eb18c8"
+  },
+  {
+    "path": "games\\pilot.py",
+    "sha256": "a164453ec69747e3943986e2cce75bda2852f2ab4018068b592221feac5b9e78"
+  },
+  {
+    "path": "games\\REPORT_ru.md",
+    "sha256": "d147dd212bad4681fafbbb2ee6238fb06c785e0a22de1bbcc91f62520710563d"
+  },
+  {
+    "path": "games\\sim.py",
+    "sha256": "5a7d79707b86e92a9f385743f5f05f7eb3f8c321c87972138f83f429fd2821c1"
+  },
+  {
+    "path": "games\\stats.py",
+    "sha256": "45c7ec610c5a5568ff6206057a43841ba46dc580243897dab24d4d4c95f9a6cd"
+  },
+  {
+    "path": "lrdecay\\analyse.py",
+    "sha256": "e25fbfc65978f273d1adf61aae71448fb192e50383380557184f57769e5edb77"
+  },
+  {
+    "path": "lrdecay\\analyse_anneal.py",
+    "sha256": "04f1daef3516ef9125dfdd050f1806590d92b1eef1454cdd50f6d1a16e29cfa2"
+  },
+  {
+    "path": "lrdecay\\anneal.py",
+    "sha256": "f41ec1d8baf4a90aa035b9303cbfd9b323207845ded1eb5dd3b5d7bcc153d4dc"
+  },
+  {
+    "path": "lrdecay\\figures.py",
+    "sha256": "d09c3617ed3a03c39ad355d4074ea86a29d36a8106cace8feb94037127cf4acb"
+  },
+  {
+    "path": "lrdecay\\gen_report.py",
+    "sha256": "b7ff6f7ec98253ff1b50b206356c2fa6722a747be3e52dbe36efbd0cba9144fa"
+  },
+  {
+    "path": "lrdecay\\lrrun.py",
+    "sha256": "0cb5e72c41dd033568750822f1c2dbc66fd6f321d75626531fab4938150c9fb5"
+  },
+  {
+    "path": "lrdecay\\main.py",
+    "sha256": "3949040771cae067d72954c424dc88fe9b89b7959685130545740f6c27ec5cfe"
+  },
+  {
+    "path": "lrdecay\\make_tables.py",
+    "sha256": "94b27addb08b36eb94ed0b0bbad4fdfeea31cdc25dd87b5827299d01d925c9e3"
+  },
+  {
+    "path": "lrdecay\\pilot.py",
+    "sha256": "6870cfe7e2bbe5767a2dc67deb01ae13a1ace00da3b49afa46e5745e93ee34f5"
+  },
+  {
+    "path": "lrdecay\\REPORT_ru.md",
+    "sha256": "29046310400c00037ffaa48d80544997f709a4850ea6811b82efad0135f62e62"
+  },
+  {
+    "path": "lrdecay\\rules.py",
+    "sha256": "1efb056896a72b297b5fdbe706e164912270b1ef6945f25486bbab60f43d3536"
+  },
+  {
+    "path": "lrdecay\\stats.py",
+    "sha256": "3897aaf4b82522fa126c7edc5c99b4de67dad6f9eca361659564ba24c2e0ea21"
+  },
+  {
+    "path": "lrdecay\\timing.py",
+    "sha256": "882b4553491ad32fd8613bfd9ab1b78cc8d66636c3301503348b350b89310f74"
+  },
+  {
+    "path": "plasticity\\cl_analyse.py",
+    "sha256": "31e721d6b472bd87952ff524ee8ae504dd9bed01dc26890b6367587343686247"
+  },
+  {
+    "path": "plasticity\\cl_s1.py",
+    "sha256": "8e7820c9528768f43cb80e7eb15d431b7b0fe3735cac929dc0fc421d03d396cc"
+  },
+  {
+    "path": "plasticity\\confirm_prep.py",
+    "sha256": "4ebf425701cf44d3cfa0ddfe293474b7b2b5f38b325298074f86e9261b08a418"
+  },
+  {
+    "path": "plasticity\\eval_s1.py",
+    "sha256": "4c51cb9a1353cd261105ebd5808fc0793b92b4474ad0b9ae630de1a83d193d79"
+  },
+  {
+    "path": "plasticity\\fig_s1.py",
+    "sha256": "94a2ee4012fae459de6bcec75f5aff0fd31752de0e0912dcf1a8602ca36c0ba7"
+  },
+  {
+    "path": "plasticity\\fig_test.py",
+    "sha256": "db2d1487197f47cb185a6e73cf838c29c50e27584ce79ff41ee05eef65ca92f7"
+  },
+  {
+    "path": "plasticity\\pilot.py",
+    "sha256": "55fc1fa6c9e45eec78e8e6dea56348fd8ead26b28ba51356e22b7ae857858351"
+  },
+  {
+    "path": "plasticity\\pilot_show.py",
+    "sha256": "34a9d75848c4ce60e329809a700de0ab8b2967c85f1f19059c143d9972a267ae"
+  },
+  {
+    "path": "plasticity\\pl_common.py",
+    "sha256": "94aecc4f833aa5cd5c603818ca47df2cf7c59f2be36695ca0294d798f3778aef"
+  },
+  {
+    "path": "plasticity\\rel_auc.py",
+    "sha256": "df1d0457839f73d480c0e6b8302e054d693464348ff4eeb7de6b095156ee3611"
+  },
+  {
+    "path": "plasticity\\REPORT_ru.md",
+    "sha256": "6e0007ceeb50f54d1c7c2714763b8bfefac9a408a64f0604694327574095b884"
+  },
+  {
+    "path": "plasticity\\run_s1.py",
+    "sha256": "c375858bf913245d725a3d1ca8fe31068475763ccf123aeabaff26e3684ef76e"
+  },
+  {
+    "path": "plasticity\\slot_table.py",
+    "sha256": "8c0e6d737e674006f4693a47bb1c425bbe308f3805bef2a14b3ea136c235043e"
+  },
+  {
+    "path": "plasticity\\snr_table.py",
+    "sha256": "fa055bac8be736f7095f4b8df8e51a2cfb29fd5dba7153ae4a8250e32d9a1ac9"
+  },
+  {
+    "path": "spikes\\analyse.py",
+    "sha256": "690c6bab0c8e0029d1c2af02a5f2821216b9774626cc780f038e8aca024ffc1e"
+  },
+  {
+    "path": "spikes\\features.py",
+    "sha256": "a5dbebdbf341399ce5f8bb48a61caafec5a29db4ba40b0dde13a50c949e4af82"
+  },
+  {
+    "path": "spikes\\figures.py",
+    "sha256": "e09d00ca1ecff9e3b80acf20de2174abc5bf8dbe694011b56df1b675405452f0"
+  },
+  {
+    "path": "spikes\\intervene.py",
+    "sha256": "48c6ee1ee5ba5826a5b92735db980b113d192e919752b4b7617c04136d438edd"
+  },
+  {
+    "path": "spikes\\pilot.py",
+    "sha256": "dcea88444dc72c980d5a8ff4da106c26f5b881bbdd2c57b1477e7d36547ec992"
+  },
+  {
+    "path": "spikes\\pilot2.py",
+    "sha256": "4eb44ac29330c9c33ede3220ebf5e12eb8da4e442eb27c8178c9cd8f11b92b55"
+  },
+  {
+    "path": "spikes\\pilot3.py",
+    "sha256": "d1e1d425f25383c98512fd9377ec7465fb71632b35659c0efab930a48998f1e0"
+  },
+  {
+    "path": "spikes\\pilot4.py",
+    "sha256": "da8262e14d75f23db84ae54807bf5140af3335dd63a270706d2298e4716270c2"
+  },
+  {
+    "path": "spikes\\pilot_look.py",
+    "sha256": "59db4621810f8e2e377a0ba73dbafddbb8a79b831b405662c5f479853cf61c5d"
+  },
+  {
+    "path": "spikes\\REPORT_ru.md",
+    "sha256": "e619aa31d345348a1233c500ba4c9010bede96ed571843272700f39253ecf0da"
+  },
+  {
+    "path": "spikes\\results_test.csv",
+    "sha256": "5101211eeecb76e4bc99816c108866147e85a635e2cc1746cddd9ce9d180d695"
+  },
+  {
+    "path": "spikes\\spikes_main.py",
+    "sha256": "0ff45cd563e5e22409046613f21532ab49cdd1de34d66a55e4cf10c36bc31dcf"
+  },
+  {
+    "path": "spikes\\spk_common.py",
+    "sha256": "c0a43a0382e4ebb0aeeebf8a57aba951379c6ba9713f53285757dfc34995148b"
+  },
+  {
+    "path": "spikes\\truth.py",
+    "sha256": "7b24a87694744ed682b636a73823561823002e2b159418e7d901c7ab30e509d3"
+  },
+  {
+    "path": "ssl\\analyze.py",
+    "sha256": "c723a25454db6b55d44735e9228dea27afe023f421593485fb8b19fbbc18e06b"
+  },
+  {
+    "path": "ssl\\configs.py",
+    "sha256": "9b41680ebc1ec3b0a820efdccc68bb899a72cb2ba5a19c24392ebd7044755ddf"
+  },
+  {
+    "path": "ssl\\confirm.py",
+    "sha256": "f2e99842e04dab7cd41084eadfb60df076d55e51e6a6ba3b819d74e55c45246b"
+  },
+  {
+    "path": "ssl\\features.py",
+    "sha256": "b20768d64c747c1424725e32ec983b0eef7604b17dfd9cf12f21c1a1e9735a6d"
+  },
+  {
+    "path": "ssl\\make_figs.py",
+    "sha256": "4dd26d2107d93f5ebbc8dada2692ad9a16453474a5cd8edee8e55b9e0a9f50fc"
+  },
+  {
+    "path": "ssl\\recomputed_per_seed.csv",
+    "sha256": "e6f226612f0e6dc69d18f55a8b9dacbfacd2cbd1cd048e60c74aa763e4fccd75"
+  },
+  {
+    "path": "ssl\\REPORT_ru.md",
+    "sha256": "67911b72b639b823239490283c84cd43785c0ab9d7e1aa494d1510b43b7383f2"
+  },
+  {
+    "path": "ssl\\run_grid.py",
+    "sha256": "9cc1ad573eda235503708bc7c98a0fbeddc51c040c4755ab9e05d18fd4cecb9f"
+  },
+  {
+    "path": "ssl\\ssl_core.py",
+    "sha256": "1c79b45a7c2f28558d6192d6f8af0767b3675772bf9b8683764cde91aac82f6a"
+  },
+  {
+    "path": "ssl\\ssl_main.py",
+    "sha256": "2af0108f9794870858cf8377bd1f32dda3121e3092e12b02660fe47485f57aaa"
+  },
+  {
+    "path": "transfer\\pilot_look.py",
+    "sha256": "b40c2df20bb5a9d114fa07115abbbdebc191c8bc14621684a37353addd39e3f0"
+  },
+  {
+    "path": "transfer\\REPORT_ru.md",
+    "sha256": "1f64d1c40c916a0f79707c289cc6188d6f7e68e7787a37d9b90e9875f778f7c0"
+  },
+  {
+    "path": "transfer\\tr_analyse.py",
+    "sha256": "5738596f36e863ea408a0fbb76188cc625c68ac0315f6141e6944303644c0978"
+  },
+  {
+    "path": "transfer\\tr_common.py",
+    "sha256": "a0fc3726d5ce8cce9e3dfe803302c7ee0deab600dc19227c0e1c6b86ea70a210"
+  },
+  {
+    "path": "transfer\\tr_figure.py",
+    "sha256": "f0ed339aa94513d0d59cf9166d1ad472c048433af9767b7c22fadff57c61d387"
+  },
+  {
+    "path": "transfer\\tr_main.py",
+    "sha256": "0bfc0aa4d319a10cbb817f1fd06e1d8542df4d5865d344e7076412865d08d7dd"
+  },
+  {
+    "path": "transfer\\tr_monitors.py",
+    "sha256": "e8f4a4658c7b45aacc77025a3b7b7e972038d39dfeb2791effb2253ea25a5878"
+  },
+  {
+    "path": "transfer\\tr_pilot.py",
+    "sha256": "6727cbb736ad8b60de69336235c2920e56a1ff17231e194588e80622e49ac0f3"
+  },
+  {
+    "path": "transfer\\tr_secondary.py",
+    "sha256": "65355430257e21447c7c4c0e347c7877ae6d723feecec92e266ce94377b8bf0b"
+  },
+  {
+    "path": "transfer\\results\\table_overall.csv",
+    "sha256": "72b764e646ba1f8d1bfabb313abdecbdee902e6e8c6c5423ffc5ce5a6f8699d4"
+  },
+  {
+    "path": "ssl\\results_confirm\\confirm_final.csv",
+    "sha256": "2204f17929dfc2e388681ea9ef5d24cc6d69bbe187192e1ab335ed93d066d8d3"
+  },
+  {
+    "path": "ssl\\results_confirm\\T1_confirm.csv",
+    "sha256": "b0f5088b92b0185e2b0dfcb0b808c62cba0b788dcb26659a45ad48d0c88ca681"
+  },
+  {
+    "path": "ssl\\results_main\\costs_ms.json",
+    "sha256": "7f324824597e8090f4f90bc52b2896d88c68342046a1e33c4fe5f0494f7f01c7"
+  },
+  {
+    "path": "ssl\\results_main\\T1_config_ranking.csv",
+    "sha256": "83c8d3f41c102a6c4e37f467f10fee179318d484a6b0d0c178c5183f120d612a"
+  },
+  {
+    "path": "ssl\\results_main\\T2_bad_run_auc.csv",
+    "sha256": "a6811ccf0a90295d81cfe9adced4e8066ea9a219f2dd15cc30ce31830e6610b0"
+  },
+  {
+    "path": "ssl\\results_main\\T3_early_warning_auc.csv",
+    "sha256": "4b712a04e373543958d6ef2def0d231a5c59b3508929baa88f5ee5bf398e05f3"
+  },
+  {
+    "path": "ssl\\results_main\\T4_checkpoint_regret.csv",
+    "sha256": "0c539117bfa2b2dca7a7a44e8cdc9acd7781ee8ffdeb38b94a999831136c7776"
+  },
+  {
+    "path": "ssl\\results_main\\test_final.csv",
+    "sha256": "c95d600ee533035413dc34595a2d43d8641d363c21187da963668ad76bab8e75"
+  },
+  {
+    "path": "plasticity\\results\\closed_loop_summary.csv",
+    "sha256": "acdcbefc1135373cbb2d32ad343ce4b64c77a979500e3a057ea40f35c6fab3d1"
+  },
+  {
+    "path": "lrdecay\\results\\test_table.csv",
+    "sha256": "275d79ddf1adfb10bfbd565720fc77d614368a71c0a0ca917a038d619fc08d38"
+  },
+  {
+    "path": "games\\results\\results.csv",
+    "sha256": "783b7f45c0bef06db68aab509617d3276c85550cbc1f005890e126c55f99b3b3"
+  }
+]

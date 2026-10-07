@@ -1,0 +1,21 @@
+{
+  "run_accuracy_json_matches": 145,
+  "saved_MG_window_matches": 145,
+  "kernel_checks": [
+    {
+      "run": "ss_base_s20",
+      "MG_recomputed": 14.637774190353936,
+      "MG_saved": 14.637774190353936
+    },
+    {
+      "run": "vic_novar_s21",
+      "MG_recomputed": 13.897058045183439,
+      "MG_saved": 13.89705804518344
+    },
+    {
+      "run": "clr_t0.1_s20",
+      "MG_recomputed": 14.607469852075248,
+      "MG_saved": 14.607469852075248
+    }
+  ]
+}

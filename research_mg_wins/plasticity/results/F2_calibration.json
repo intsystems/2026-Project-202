@@ -1,0 +1,1053 @@
+{
+ "monitors": [
+  {
+   "monitor": "acc_mean",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.8595625
+   ],
+   "cal_util": 0.848121826171875,
+   "cal_resets": 20.75
+  },
+  {
+   "monitor": "loss_mean",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    0.46797770261764526
+   ],
+   "cal_util": 0.8473972167968751,
+   "cal_resets": 21.5
+  },
+  {
+   "monitor": "gnorm_mean",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    1.8696349143981936
+   ],
+   "cal_util": 0.8478525390625001,
+   "cal_resets": 28.0
+  },
+  {
+   "monitor": "pnorm_end",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    20.992261314392092
+   ],
+   "cal_util": 0.850607177734375,
+   "cal_resets": 15.25
+  },
+  {
+   "monitor": "dormant_0.0",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.017578125
+   ],
+   "cal_util": 0.8539989013671875,
+   "cal_resets": 18.875
+  },
+  {
+   "monitor": "dormant_0.025",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.044824218750000006
+   ],
+   "cal_util": 0.849177001953125,
+   "cal_resets": 21.125
+  },
+  {
+   "monitor": "dormant_0.1",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.169921875
+   ],
+   "cal_util": 0.8486440429687501,
+   "cal_resets": 10.6875
+  },
+  {
+   "monitor": "srank",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    225.0
+   ],
+   "cal_util": 0.850292724609375,
+   "cal_resets": 25.5
+  },
+  {
+   "monitor": "erank",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    81.56839523315433
+   ],
+   "cal_util": 0.8511732177734376,
+   "cal_resets": 23.9375
+  },
+  {
+   "monitor": "MG|pnorm|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    4.690761131000256
+   ],
+   "cal_util": 0.853161376953125,
+   "cal_resets": 23.875
+  },
+  {
+   "monitor": "MG_t4|pnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    5.105788071865392
+   ],
+   "cal_util": 0.8518071289062499,
+   "cal_resets": 13.6875
+  },
+  {
+   "monitor": "spectral_entropy|pnorm|within",
+   "rule": [
+    "REL",
+    1,
+    2,
+    1,
+    0.02
+   ],
+   "cal_util": 0.846068115234375,
+   "cal_resets": 9.25
+  },
+  {
+   "monitor": "self_repeat|pnorm|within",
+   "rule": [
+    "REL",
+    1,
+    2,
+    1,
+    0.005
+   ],
+   "cal_util": 0.847281494140625,
+   "cal_resets": 9.6875
+  },
+  {
+   "monitor": "roughness|pnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    0.00878062597274221
+   ],
+   "cal_util": 0.8473889160156249,
+   "cal_resets": 20.0
+  },
+  {
+   "monitor": "perm_entropy|pnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    0.3849756687720761
+   ],
+   "cal_util": 0.8491986083984374,
+   "cal_resets": 29.625
+  },
+  {
+   "monitor": "recurrence_rate|pnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    4,
+    0.0009534595430127311
+   ],
+   "cal_util": 0.844677734375,
+   "cal_resets": 9.0
+  },
+  {
+   "monitor": "corr_dim|pnorm|within",
+   "rule": [
+    "REL",
+    1,
+    2,
+    1,
+    0.005
+   ],
+   "cal_util": 0.8461987304687499,
+   "cal_resets": 7.75
+  },
+  {
+   "monitor": "twonn|pnorm|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    19.953464888387064
+   ],
+   "cal_util": 0.8484572753906249,
+   "cal_resets": 19.625
+  },
+  {
+   "monitor": "linear_pr|pnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    4,
+    1.0040337158595587
+   ],
+   "cal_util": 0.844677734375,
+   "cal_resets": 9.0
+  },
+  {
+   "monitor": "crossings|pnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    4,
+    7.35000000000008
+   ],
+   "cal_util": 0.8483247070312501,
+   "cal_resets": 7.75
+  },
+  {
+   "monitor": "lag1|pnorm|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    4,
+    0.9965098412244302
+   ],
+   "cal_util": 0.8452686767578125,
+   "cal_resets": 6.6875
+  },
+  {
+   "monitor": "det_std|pnorm|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.007179165876286814
+   ],
+   "cal_util": 0.8492801513671875,
+   "cal_resets": 29.625
+  },
+  {
+   "monitor": "MG|loss|within",
+   "rule": [
+    "REL",
+    1,
+    2,
+    1,
+    0.005
+   ],
+   "cal_util": 0.8478294677734375,
+   "cal_resets": 8.375
+  },
+  {
+   "monitor": "MG_t4|loss|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    4,
+    10.207244511588108
+   ],
+   "cal_util": 0.844677734375,
+   "cal_resets": 9.0
+  },
+  {
+   "monitor": "spectral_entropy|loss|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    4,
+    0.7342681624739226
+   ],
+   "cal_util": 0.8474248046875,
+   "cal_resets": 6.4375
+  },
+  {
+   "monitor": "self_repeat|loss|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.3515623855450542
+   ],
+   "cal_util": 0.8453046875,
+   "cal_resets": 25.4375
+  },
+  {
+   "monitor": "roughness|loss|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    4,
+    0.5876202146103283
+   ],
+   "cal_util": 0.8453841552734376,
+   "cal_resets": 6.6875
+  },
+  {
+   "monitor": "perm_entropy|loss|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    4,
+    0.9658251446216053
+   ],
+   "cal_util": 0.8455172119140626,
+   "cal_resets": 6.25
+  },
+  {
+   "monitor": "recurrence_rate|loss|within",
+   "rule": [
+    "REL",
+    1,
+    2,
+    1,
+    0.005
+   ],
+   "cal_util": 0.7737252197265625,
+   "cal_resets": 0.0
+  },
+  {
+   "monitor": "corr_dim|loss|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    4,
+    10.10960372379725
+   ],
+   "cal_util": 0.844677734375,
+   "cal_resets": 9.0
+  },
+  {
+   "monitor": "twonn|loss|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    16.741515704796676
+   ],
+   "cal_util": 0.8449390869140626,
+   "cal_resets": 24.0
+  },
+  {
+   "monitor": "linear_pr|loss|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    4,
+    2.614042248562723
+   ],
+   "cal_util": 0.8462974853515626,
+   "cal_resets": 8.3125
+  },
+  {
+   "monitor": "crossings|loss|within",
+   "rule": [
+    "REL",
+    1,
+    2,
+    1,
+    0.01
+   ],
+   "cal_util": 0.8468927001953124,
+   "cal_resets": 8.4375
+  },
+  {
+   "monitor": "lag1|loss|within",
+   "rule": [
+    "REL",
+    -1,
+    2,
+    2,
+    0.005
+   ],
+   "cal_util": 0.8470793457031249,
+   "cal_resets": 7.125
+  },
+  {
+   "monitor": "det_std|loss|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.6162373101512457
+   ],
+   "cal_util": 0.8478525390625001,
+   "cal_resets": 28.0
+  },
+  {
+   "monitor": "MG|gnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    12.547080368934694
+   ],
+   "cal_util": 0.845529052734375,
+   "cal_resets": 14.3125
+  },
+  {
+   "monitor": "MG_t4|gnorm|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    9.971586083285466
+   ],
+   "cal_util": 0.8504399414062499,
+   "cal_resets": 21.6875
+  },
+  {
+   "monitor": "spectral_entropy|gnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    0.8627071232658305
+   ],
+   "cal_util": 0.8458372802734375,
+   "cal_resets": 27.6875
+  },
+  {
+   "monitor": "self_repeat|gnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    2,
+    0.6633837008672123
+   ],
+   "cal_util": 0.8447227783203124,
+   "cal_resets": 14.0
+  },
+  {
+   "monitor": "roughness|gnorm|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    1.0675503193724971
+   ],
+   "cal_util": 0.8462314453124999,
+   "cal_resets": 32.0
+  },
+  {
+   "monitor": "perm_entropy|gnorm|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.9683706451718265
+   ],
+   "cal_util": 0.8477327880859375,
+   "cal_resets": 13.6875
+  },
+  {
+   "monitor": "recurrence_rate|gnorm|within",
+   "rule": [
+    "REL",
+    1,
+    2,
+    1,
+    0.005
+   ],
+   "cal_util": 0.7737252197265625,
+   "cal_resets": 0.0
+  },
+  {
+   "monitor": "corr_dim|gnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    2,
+    10.09897218745135
+   ],
+   "cal_util": 0.8467822265624999,
+   "cal_resets": 8.9375
+  },
+  {
+   "monitor": "twonn|gnorm|within",
+   "rule": [
+    "REL",
+    1,
+    2,
+    1,
+    0.005
+   ],
+   "cal_util": 0.84719287109375,
+   "cal_resets": 10.75
+  },
+  {
+   "monitor": "linear_pr|gnorm|within",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    10.542030256586237
+   ],
+   "cal_util": 0.8483792724609374,
+   "cal_resets": 21.4375
+  },
+  {
+   "monitor": "crossings|gnorm|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    169.0
+   ],
+   "cal_util": 0.8474493408203124,
+   "cal_resets": 26.125
+  },
+  {
+   "monitor": "lag1|gnorm|within",
+   "rule": [
+    "REL",
+    1,
+    2,
+    1,
+    0.2
+   ],
+   "cal_util": 0.846466064453125,
+   "cal_resets": 7.375
+  },
+  {
+   "monitor": "det_std|gnorm|within",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.3148653358930196
+   ],
+   "cal_util": 0.8488997802734376,
+   "cal_resets": 26.6875
+  },
+  {
+   "monitor": "MG|pnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    4.5598138518817395
+   ],
+   "cal_util": 0.8473345947265625,
+   "cal_resets": 11.75
+  },
+  {
+   "monitor": "MG_t4|pnorm|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    5.13119317126152
+   ],
+   "cal_util": 0.8486754150390624,
+   "cal_resets": 7.625
+  },
+  {
+   "monitor": "spectral_entropy|pnorm|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    0.2622968535049863
+   ],
+   "cal_util": 0.8471385498046876,
+   "cal_resets": 12.5
+  },
+  {
+   "monitor": "self_repeat|pnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.00275705648100144
+   ],
+   "cal_util": 0.846418212890625,
+   "cal_resets": 10.5
+  },
+  {
+   "monitor": "roughness|pnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.002701983553494875
+   ],
+   "cal_util": 0.8469345703125001,
+   "cal_resets": 12.25
+  },
+  {
+   "monitor": "perm_entropy|pnorm|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    0.4154479329678875
+   ],
+   "cal_util": 0.847240234375,
+   "cal_resets": 9.8125
+  },
+  {
+   "monitor": "recurrence_rate|pnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.03157973870773034
+   ],
+   "cal_util": 0.8506201171875,
+   "cal_resets": 9.25
+  },
+  {
+   "monitor": "corr_dim|pnorm|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    1.987095484416808
+   ],
+   "cal_util": 0.84923681640625,
+   "cal_resets": 10.125
+  },
+  {
+   "monitor": "twonn|pnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    19.44363152160109
+   ],
+   "cal_util": 0.8464163818359375,
+   "cal_resets": 12.75
+  },
+  {
+   "monitor": "linear_pr|pnorm|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    1.0010832130511642
+   ],
+   "cal_util": 0.8461405029296875,
+   "cal_resets": 13.0
+  },
+  {
+   "monitor": "crossings|pnorm|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    8.0
+   ],
+   "cal_util": 0.847989501953125,
+   "cal_resets": 9.9375
+  },
+  {
+   "monitor": "lag1|pnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    2,
+    0.9980561080046987
+   ],
+   "cal_util": 0.847029296875,
+   "cal_resets": 7.375
+  },
+  {
+   "monitor": "det_std|pnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.003828730210582692
+   ],
+   "cal_util": 0.84714990234375,
+   "cal_resets": 9.75
+  },
+  {
+   "monitor": "MG|loss|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    12.302447493938995
+   ],
+   "cal_util": 0.8477598876953125,
+   "cal_resets": 11.25
+  },
+  {
+   "monitor": "MG_t4|loss|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    9.679040932805107
+   ],
+   "cal_util": 0.8465013427734376,
+   "cal_resets": 12.75
+  },
+  {
+   "monitor": "spectral_entropy|loss|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    0.7266166088309558
+   ],
+   "cal_util": 0.847907958984375,
+   "cal_resets": 7.875
+  },
+  {
+   "monitor": "self_repeat|loss|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    0.7508477333640435
+   ],
+   "cal_util": 0.8476932373046875,
+   "cal_resets": 7.5625
+  },
+  {
+   "monitor": "roughness|loss|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    0.7348076299273318
+   ],
+   "cal_util": 0.8486805419921875,
+   "cal_resets": 8.0
+  },
+  {
+   "monitor": "perm_entropy|loss|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    0.9880214439304609
+   ],
+   "cal_util": 0.8474854736328123,
+   "cal_resets": 11.0625
+  },
+  {
+   "monitor": "recurrence_rate|loss|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.0
+   ],
+   "cal_util": 0.7806712646484375,
+   "cal_resets": 0.125
+  },
+  {
+   "monitor": "corr_dim|loss|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    9.234368749493882
+   ],
+   "cal_util": 0.8473399658203125,
+   "cal_resets": 12.5
+  },
+  {
+   "monitor": "twonn|loss|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    14.606984587855733
+   ],
+   "cal_util": 0.8472926025390626,
+   "cal_resets": 8.3125
+  },
+  {
+   "monitor": "linear_pr|loss|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    3.5327155886449613
+   ],
+   "cal_util": 0.8484230957031251,
+   "cal_resets": 8.75
+  },
+  {
+   "monitor": "crossings|loss|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    324.6500000000001
+   ],
+   "cal_util": 0.8481566162109374,
+   "cal_resets": 12.0
+  },
+  {
+   "monitor": "lag1|loss|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.6893383924069503
+   ],
+   "cal_util": 0.8499826660156251,
+   "cal_resets": 10.625
+  },
+  {
+   "monitor": "det_std|loss|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.7352878296485746
+   ],
+   "cal_util": 0.847467529296875,
+   "cal_resets": 12.0
+  },
+  {
+   "monitor": "MG|gnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    12.83302895844941
+   ],
+   "cal_util": 0.8461405029296875,
+   "cal_resets": 13.0
+  },
+  {
+   "monitor": "MG_t4|gnorm|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    12.676496114312116
+   ],
+   "cal_util": 0.8464163818359375,
+   "cal_resets": 12.75
+  },
+  {
+   "monitor": "spectral_entropy|gnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.7616869760593038
+   ],
+   "cal_util": 0.8461405029296875,
+   "cal_resets": 13.0
+  },
+  {
+   "monitor": "self_repeat|gnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.7568777612481019
+   ],
+   "cal_util": 0.847086181640625,
+   "cal_resets": 10.75
+  },
+  {
+   "monitor": "roughness|gnorm|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    1.2374183148263924
+   ],
+   "cal_util": 0.8461405029296875,
+   "cal_resets": 13.0
+  },
+  {
+   "monitor": "perm_entropy|gnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.9837737432105491
+   ],
+   "cal_util": 0.8473264160156249,
+   "cal_resets": 10.0625
+  },
+  {
+   "monitor": "recurrence_rate|gnorm|span",
+   "rule": [
+    "REL",
+    1,
+    2,
+    1,
+    0.005
+   ],
+   "cal_util": 0.7737252197265625,
+   "cal_resets": 0.0
+  },
+  {
+   "monitor": "corr_dim|gnorm|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    10.402750168405309
+   ],
+   "cal_util": 0.8467010498046875,
+   "cal_resets": 12.5
+  },
+  {
+   "monitor": "twonn|gnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    15.204641091452173
+   ],
+   "cal_util": 0.846564208984375,
+   "cal_resets": 9.8125
+  },
+  {
+   "monitor": "linear_pr|gnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    5.029731578702321
+   ],
+   "cal_util": 0.8461405029296875,
+   "cal_resets": 13.0
+  },
+  {
+   "monitor": "crossings|gnorm|span",
+   "rule": [
+    "ABS",
+    1,
+    0,
+    1,
+    438.0
+   ],
+   "cal_util": 0.846763916015625,
+   "cal_resets": 11.5
+  },
+  {
+   "monitor": "lag1|gnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.3093282449092393
+   ],
+   "cal_util": 0.8474118652343751,
+   "cal_resets": 12.0
+  },
+  {
+   "monitor": "det_std|gnorm|span",
+   "rule": [
+    "ABS",
+    -1,
+    0,
+    1,
+    0.27826430985828327
+   ],
+   "cal_util": 0.8461405029296875,
+   "cal_resets": 13.0
+  }
+ ],
+ "fixed": {
+  "I": 3,
+  "cal_util": 0.8461405029296875,
+  "cal_resets": 13.0
+ }
+}

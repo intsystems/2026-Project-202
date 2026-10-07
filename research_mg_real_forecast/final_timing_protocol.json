@@ -1,0 +1,14 @@
+{
+  "seeds": [
+    651,
+    665,
+    680
+  ],
+  "replicates": 5,
+  "threads": 1,
+  "excludes_disk": true,
+  "includes_selected_forecaster_fit": true,
+  "validation_fits": 33,
+  "MG_fits": 1,
+  "meta_selector_training_excluded": true
+}

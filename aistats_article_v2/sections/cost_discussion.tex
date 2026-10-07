@@ -1,0 +1,39 @@
+\claude{
+\section{Computational savings and conditions of use}\label{sec:cost}
+\paragraph{Analysis from a compact record.}
+The main computational advantage is the input: MG processes one scalar per step. Once that log is available, it needs no weights, activations, or Jacobian products. Its storage and nearest-neighbor calculations depend on $W$, $E$, and the temporal exclusion, not on the network's parameter count. Obtaining the log has a separate cost: a parameter norm requires an $O(P)$ reduction over $P$ parameters, and a fixed-probe loss requires a forward pass. We therefore report acquisition and analysis separately.
+
+\begin{table}[t]
+\centering\small
+\caption{\claude{Time to analyze an available record. The FORCE reference is the full Lyapunov spectrum; the VAE reference combines latent-information and code-shuffling measurements. FORCE ranges cover before and after training. Compare methods within a row: tasks use different records and configurations. Scalar acquisition is excluded.}}
+\label{tab:cost}
+\begin{tabular}{lrr}
+\toprule
+Setting & MG & Reference \\
+\midrule
+CNN, 1,000-point window & 9.5\,ms & --- \\
+FORCE, 256 units & 0.60--0.84\,s & 11.55--12.01\,s \\
+VAE, 512-point window & 12.89\,ms & 209.32\,ms \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For the CNN, the scalar record occupies about 39\,KiB, compared with 559\,MiB for the stored float32 parameter trajectory. Each 1,000-point window takes about 9.5\,ms to process (Table~\ref{tab:cost}). This makes repeated analysis inexpensive in the tested implementation. A streaming covariance calculation or trajectory sketch would reduce the reference's storage requirement; the comparison is with the saved full trajectory.
+
+\paragraph{Savings relative to full Lyapunov spectra.}
+In the 256-unit recurrent network, both MG and the full spectrum detect the learned transition from chaos toward a cycle. MG takes 0.60--0.84\,s, compared with 11.55--12.01\,s for the spectrum: a 14--19-fold speed advantage. Including an additional MG calculation at doubled embedding dimension retains a 5--10-fold advantage. A separate 128-oscillator benchmark gives a 22--23-fold advantage over a dense full-spectrum calculation on a 1,536-point record.
+
+These savings depend on the required information and window length. The largest Lyapunov exponent and elementary scalar statistics are faster than MG in the recurrent-network benchmark, but do not provide the full spectrum. MG does not recover individual exponents either. Longer scalar windows can also reverse the timing comparison; Appendix~\ref{app:cost} reports these cases.
+
+\paragraph{When logging costs dominate.}
+For the VAE, an MG calculation is 16.2 times faster than the combined information and code-shuffling reference. Yet repeatedly evaluating the fixed probe dominates the total cost. At the primary cyclic-monitoring budget, the estimated total is 54.68\,s for MG-triggered checks versus 2.72\,s for periodic checks. Reusing an already available probe record reduces the MG total to 3.54\,s. Thus a cheap estimator does not guarantee cheaper monitoring: its practical benefit depends on whether the informative scalar is already logged or must be acquired specifically for analysis.
+
+\paragraph{Where the method adds value.}
+The experiments establish three complementary benefits. MG distinguishes phase structure that peak counts and covariance summaries miss; detects strong CNN interventions with fewer false alarms than standard deviation or trend crossings; and reduces analysis cost relative to full Lyapunov spectra in the specified benchmarks. The first benefit connects to the theory. The latter two make it useful for monitoring even where an exact component count is unavailable.
+
+\paragraph{Choosing a useful observable.}
+The observable must reflect the change of interest. Mini-batch noise can hide a change, while drift or numerical noise can dominate slow or nearly constant records. Transfer also depends on the event: in a separate ReLU-death test, the CNN-calibrated MG detector finds 12/21 eligible events with 12/31 control alarms, compared with 19/21 and 7/31 for trend crossings. In the tested edge-of-stability setting, MG does not track the count of near-threshold Hessian modes. These results define a practical validation step: check each new observable against an independent reference and a simple scalar baseline before relying on its alarms.
+
+\section{Conclusion}
+We developed and evaluated a method for monitoring simplification from scalar logs. Delay-embedding theory motivates its active-component interpretation, and controlled experiments test that interpretation against known phase structure. Applied experiments show that the same estimator detects restrictions on training, tracks latent information loss and preservation, and responds to changes in learned behavior. Its advantages are access to temporal geometry from one scalar, a favorable detection--false-alarm balance on the CNN benchmark, and measured savings relative to costly full-state analyses. Together, these results make MG a useful addition to training diagnostics when the observable is validated for the change being monitored.
+}

@@ -1,0 +1,36 @@
+{
+  "ssl_records": 145,
+  "ssl_seeds": [
+    10,
+    11,
+    12,
+    20,
+    21
+  ],
+  "all_ranking_and_regret_values_recomputed": true,
+  "MG_rho": 0.7124874959890446,
+  "MG_regret_pp": 0.40799999999999725,
+  "spike_hits": "22/23",
+  "bootstrap_unit": "configurations, shared draw across seeds; pointwise, not multiplicity-adjusted",
+  "timing_caveat": "MG analysis excludes per-step gradient-norm reduction; RankMe timer includes two SVDs",
+  "costs_ms": {
+    "MG": 30.831441103866084,
+    "MG_t4k50": 58.244104661416735,
+    "spectral_entropy": 0.16073503492973204,
+    "self_repeat": 2.0403236688178437,
+    "roughness": 0.07040877214728539,
+    "perm_entropy": 0.283818675863411,
+    "recurrence_rate": 257.3091334074029,
+    "corr_dim": 264.82573635993396,
+    "twonn": 27.512165047854523,
+    "linear_pr": 0.5217134343973531,
+    "simple": 0.4503441653213894,
+    "mean": 0.010373903133360476,
+    "rel_std": 0.031187034533198408,
+    "rel_change": 0.019625931062960365,
+    "rankme_with_embed_per_eval": 132.3275120419991,
+    "lidar_per_eval": 181.14299262594062,
+    "alpha_per_eval": 89.44560461606588,
+    "train_ms_per_step": 50.78586054571326
+  }
+}

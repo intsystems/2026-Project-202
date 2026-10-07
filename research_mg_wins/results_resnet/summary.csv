@@ -1,0 +1,13 @@
+stat,freeze_head,other_events,false_alarms,early
+MG,6/6,0/24,0/24,0
+crossings,0/6,0/24,0/24,0
+lag1,0/6,6/24,0/24,0
+det_std,4/6,16/24,24/24,10
+spectral_entropy,6/6,0/24,0/24,0
+perm_entropy,6/6,0/24,0/24,0
+self_repeat,6/6,24/24,6/24,0
+roughness,1/6,4/24,24/24,25
+recurrence_rate,6/6,24/24,6/24,0
+corr_dim,6/6,12/24,6/24,0
+twonn,2/6,17/24,6/24,0
+linear_pr,0/6,0/24,0/24,0

@@ -1,0 +1,1 @@
+{"setup": "T4_focal", "seed": 502, "event": "wd", "t_e": 4100, "t_r": null, "P": 55050, "test_acc": 0.8823000192642212, "wall_s": 56.942743099993095, "wd_factor": 100.0, "cfg": {"width": 64, "dataset": "mnist", "loss": "focal", "reduction": "mean", "micro": 64, "accum": 1, "lr": 0.02, "wd": 0.0005, "bf16": false, "restart": false, "log": "norm"}}

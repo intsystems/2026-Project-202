@@ -1,0 +1,255 @@
+\relax 
+\providecommand \babel@aux [2]{\global \let \babel@toc \@gobbletwo }
+\@nameuse{bbl@beforestart}
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{takens1981detecting,sauer1991embedology,stark1999delay,stark2003delay}
+\citation{mackay2005comments,levina2004maximum}
+\babel@aux{english}{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:intro}{{1}{1}{Introduction}{section.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Contributions.}{1}{section*.1}\protected@file@percent }
+\citation{facco2017estimating,ansuini2019intrinsic,pope2021intrinsic}
+\citation{simsekli2020hausdorff,camuto2021fractal,birdal2021intrinsic,tan2024limitations}
+\citation{antognini2018pca}
+\citation{redman2024equivalent}
+\citation{gao2017theory,cohen2021gradient,liu2022omnigrok,yunis2024rank,humayun2024deep}
+\citation{takens1981detecting,sauer1991embedology}
+\citation{stark1999delay,stark2003delay}
+\citation{theiler1986spurious}
+\@writefile{toc}{\contentsline {paragraph}{Related work.}{2}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Detecting simplification in neural network dynamics}{2}{section.2}\protected@file@percent }
+\newlabel{sec:method}{{2}{2}{Detecting simplification in neural network dynamics}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Problem statement}{2}{subsection.2.1}\protected@file@percent }
+\newlabel{eq:active}{{1}{2}{Problem statement}{equation.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Delay reconstruction and dynamical-systems theory}{2}{subsection.2.2}\protected@file@percent }
+\newlabel{eq:delay}{{2}{2}{Delay reconstruction and dynamical-systems theory}{equation.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Pooled local-dimension estimation}{2}{subsection.2.3}\protected@file@percent }
+\newlabel{eq:mg}{{3}{2}{Pooled local-dimension estimation}{equation.3}{}}
+\citation{pedregosa2011scikit}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \begingroup \color  {claudecolor}Scalar samples, delay vectors, and neighbor distances. An illustrative periodic signal (a) produces the two-coordinate reconstruction (b). Panel (c) enlarges a neighborhood: blue dots are admissible vectors, gray crosses are temporally excluded, the open circle is the query, and orange dots are its $k$ nearest neighbors. The radius ratios enter Eq.~\eqref  {eq:mg}.\endgroup }}{3}{figure.1}\protected@file@percent }
+\newlabel{fig:method_geometry}{{1}{3}{\claude {Scalar samples, delay vectors, and neighbor distances. An illustrative periodic signal (a) produces the two-coordinate reconstruction (b). Panel (c) enlarges a neighborhood: blue dots are admissible vectors, gray crosses are temporally excluded, the open circle is the query, and orange dots are its $k$ nearest neighbors. The radius ratios enter Eq.~\eqref {eq:mg}.}}{figure.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Invariance to affine rescaling.}{3}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Window length and temporal resolution.}{3}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Measurement and interpretation pipeline}{3}{subsection.2.4}\protected@file@percent }
+\newlabel{sec:mg_conditions}{{2.4}{3}{Measurement and interpretation pipeline}{subsection.2.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Recovering component structure in synthetic experiments}{3}{section.3}\protected@file@percent }
+\newlabel{sec:controlled}{{3}{3}{Recovering component structure in synthetic experiments}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Analytic oscillators and learning}{3}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Oscillatory signals with known dimension.}{3}{section*.5}\protected@file@percent }
+\citation{sussillo2009generating}
+\@writefile{toc}{\contentsline {paragraph}{Classifier training on fixed MLP features.}{4}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Endogenous oscillations in a regression problem.}{4}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Learned generators distinguish phases from harmonics}{4}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:generator}{{3.2}{4}{Learned generators distinguish phases from harmonics}{subsection.3.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces \begingroup \color  {claudecolor}Learned generator results: medians over five seeds. Phases denotes target dimension; MG uses neuron zero and PR uses the full state. For each seed, MG is the median over four 8,192-sample windows.\endgroup }}{4}{table.1}\protected@file@percent }
+\newlabel{tab:generator_phases}{{1}{4}{\claude {Learned generator results: medians over five seeds. Phases denotes target dimension; MG uses neuron zero and PR uses the full state. For each seed, MG is the median over four 8,192-sample windows.}}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}FORCE training from chaos to periodic output}{4}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:force}{{3.3}{4}{FORCE training from chaos to periodic output}{subsection.3.3}{}}
+\citation{krizhevsky2009learning}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \begingroup \color  {claudecolor}Phase structure recovered from scalar records. Left: regression with known modes; the dashed line is the target dimension. Center and right: generators with four output spectral lines and one (H4, blue), two (M4, orange), or four (T4, green) target phases. Dots represent seeds and black bars indicate medians. Single-neuron MG separates these phase structures despite similar full-state covariance participation ratios (PR).\endgroup }}{5}{figure.2}\protected@file@percent }
+\newlabel{fig:components}{{2}{5}{\claude {Phase structure recovered from scalar records. Left: regression with known modes; the dashed line is the target dimension. Center and right: generators with four output spectral lines and one (H4, blue), two (M4, orange), or four (T4, green) target phases. Dots represent seeds and black bars indicate medians. Single-neuron MG separates these phase structures despite similar full-state covariance participation ratios (PR).}}{figure.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Monitoring and selection in learned systems}{5}{section.4}\protected@file@percent }
+\newlabel{sec:applied}{{4}{5}{Monitoring and selection in learned systems}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Detecting restrictions on CNN parameter updates}{5}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:cnn}{{4.1}{5}{Detecting restrictions on CNN parameter updates}{subsection.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Causal detection of training interventions.}{5}{section*.8}\protected@file@percent }
+\newlabel{eq:detector}{{4}{5}{Causal detection of training interventions}{equation.4}{}}
+\citation{he2016deep}
+\citation{marcus1993building}
+\citation{bowman2016generating}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \begingroup \color  {claudecolor}MG under training interventions and latent-information suppression. Left: post/pre-intervention ratios on four CNN seeds; vertical marks indicate medians. Center: corresponding ResNet-18 ratios for scratch and pretrained initialization. Right: late VAE estimates relative to the shared low-regularization reference run, for suppression and free-bits branches on nine seeds. Points represent seeds; dashed lines indicate a ratio of one. Independent update and information measurements provide the references.\endgroup }}{6}{figure.3}\protected@file@percent }
+\newlabel{fig:applications}{{3}{6}{\claude {MG under training interventions and latent-information suppression. Left: post/pre-intervention ratios on four CNN seeds; vertical marks indicate medians. Center: corresponding ResNet-18 ratios for scratch and pretrained initialization. Right: late VAE estimates relative to the shared low-regularization reference run, for suppression and free-bits branches on nine seeds. Points represent seeds; dashed lines indicate a ratio of one. Independent update and information measurements provide the references.}}{figure.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces \begingroup \color  {claudecolor}All scalar features with the same fixed block detector. Hits use a 5,000-update horizon. False positives are reference records with any threshold crossing; delay is the median over detected events. Four held-out seeds are shared across interventions and reference runs.\endgroup }}{6}{table.2}\protected@file@percent }
+\newlabel{tab:detectors}{{2}{6}{\claude {All scalar features with the same fixed block detector. Hits use a 5,000-update horizon. False positives are reference records with any threshold crossing; delay is the median over detected events. Four held-out seeds are shared across interventions and reference runs.}}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Transferring the detector to ResNet-18}{6}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Tracking latent information in a text VAE}{6}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:vae}{{4.3}{6}{Tracking latent information in a text VAE}{subsection.4.3}{}}
+\citation{schulman2017proximal,todorov2012mujoco}
+\citation{chen2021simsiam}
+\citation{garrido2023rankme}
+\citation{garrido2023rankme,agrawal2022alphareq,thilak2024lidar}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Detecting changes during grokking}{7}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Selecting Walker2d policies under actuator shifts}{7}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Selecting SSL configurations from gradient logs}{7}{subsection.4.6}\protected@file@percent }
+\newlabel{sec:ssl}{{4.6}{7}{Selecting SSL configurations from gradient logs}{subsection.4.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Warning of loss spikes in transformer training}{7}{subsection.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Forecast model selection from single-neuron recordings}{7}{subsection.4.8}\protected@file@percent }
+\newlabel{sec:forecast_utility}{{4.8}{7}{Forecast model selection from single-neuron recordings}{subsection.4.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces \begingroup \color  {claudecolor}Forecast selection on 20 new seeds, eight tasks per seed. NMSE uses prefix variance. Time includes selection and the chosen fit on 12 matched inputs; a dash means not benchmarked. Acquisition and offline selector training are excluded.\endgroup }}{8}{table.3}\protected@file@percent }
+\newlabel{tab:forecast_utility}{{3}{8}{\claude {Forecast selection on 20 new seeds, eight tasks per seed. NMSE uses prefix variance. Time includes selection and the chosen fit on 12 matched inputs; a dash means not benchmarked. Acquisition and offline selector training are excluded.}}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces \begingroup \color  {claudecolor}Analysis time, excluding scalar acquisition. References: full Lyapunov spectrum (FORCE; pre/post-training medians) and information/code-shuffling measurements (VAE). Comparisons are within rows; Appendix~\ref {app:cost} documents hardware and timing procedures.\endgroup }}{8}{table.4}\protected@file@percent }
+\newlabel{tab:cost}{{4}{8}{\claude {Analysis time, excluding scalar acquisition. References: full Lyapunov spectrum (FORCE; pre/post-training medians) and information/code-shuffling measurements (VAE). Comparisons are within rows; \appref {app:cost} documents hardware and timing procedures.}}{table.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Computational cost and measurement requirements}{8}{section.5}\protected@file@percent }
+\newlabel{sec:cost}{{5}{8}{Computational cost and measurement requirements}{section.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Comparison with full-state diagnostics.}{8}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Cost of obtaining the scalar.}{8}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Observable sensitivity and detector transfer.}{8}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{8}{section.6}\protected@file@percent }
+\newlabel{LastMainPage}{{}{8}{}{section.6}{}}
+\bibstyle{plainnat}
+\bibdata{references,campaign_references}
+\bibcite{agrawal2022alphareq}{{1}{2022}{{Agrawal et~al.}}{{Agrawal, Mondal, Ghosh, and Richards}}}
+\bibcite{ansuini2019intrinsic}{{2}{2019}{{Ansuini et~al.}}{{Ansuini, Laio, Macke, and Zoccolan}}}
+\bibcite{antognini2018pca}{{3}{2018}{{Antognini and Sohl-Dickstein}}{{}}}
+\bibcite{bandt2002permutation}{{4}{2002}{{Bandt and Pompe}}{{}}}
+\bibcite{bardes2022vicreg}{{5}{2022}{{Bardes et~al.}}{{Bardes, Ponce, and LeCun}}}
+\bibcite{birdal2021intrinsic}{{6}{2021}{{Birdal et~al.}}{{Birdal, Lou, Guibas, and Simsekli}}}
+\bibcite{bowman2016generating}{{7}{2016}{{Bowman et~al.}}{{Bowman, Vilnis, Vinyals, Dai, Jozefowicz, and Bengio}}}
+\bibcite{camuto2021fractal}{{8}{2021}{{Camuto et~al.}}{{Camuto, Deligiannidis, Erdogdu, Gurbuzbalaban, Simsekli, and Zhu}}}
+\bibcite{chen2020simclr}{{9}{2020}{{Chen et~al.}}{{Chen, Kornblith, Norouzi, and Hinton}}}
+\bibcite{chen2021simsiam}{{10}{2021}{{Chen and He}}{{}}}
+\bibcite{cohen2021gradient}{{11}{2021}{{Cohen et~al.}}{{Cohen, Kaur, Li, Kolter, and Talwalkar}}}
+\bibcite{facco2017estimating}{{12}{2017}{{Facco et~al.}}{{Facco, d'Errico, Rodriguez, and Laio}}}
+\bibcite{gao2017theory}{{13}{2017}{{Gao et~al.}}{{Gao, Trautmann, Yu, Santhanam, Ryu, Shenoy, and Ganguli}}}
+\bibcite{garrido2023rankme}{{14}{2023}{{Garrido et~al.}}{{Garrido, Balestriero, Najman, and LeCun}}}
+\bibcite{grill2020byol}{{15}{2020}{{Grill et~al.}}{{Grill, Strub, Altch{\'e}, Tallec, Richemond, Buchatskaya, Doersch, Avila~Pires, Guo, Gheshlaghi~Azar, Piot, Kavukcuoglu, Munos, and Valko}}}
+\bibcite{he2016deep}{{16}{2016}{{He et~al.}}{{He, Zhang, Ren, and Sun}}}
+\bibcite{humayun2024deep}{{17}{2024}{{Humayun et~al.}}{{Humayun, Balestriero, and Baraniuk}}}
+\bibcite{krizhevsky2009learning}{{18}{2009}{{Krizhevsky}}{{}}}
+\bibcite{levina2004maximum}{{19}{2004}{{Levina and Bickel}}{{}}}
+\bibcite{liu2022omnigrok}{{20}{2023}{{Liu et~al.}}{{Liu, Michaud, and Tegmark}}}
+\bibcite{mackay2005comments}{{21}{2005}{{MacKay and Ghahramani}}{{}}}
+\bibcite{marcus1993building}{{22}{1993}{{Marcus et~al.}}{{Marcus, Santorini, and Marcinkiewicz}}}
+\bibcite{page1954continuous}{{23}{1954}{{Page}}{{}}}
+\bibcite{pedregosa2011scikit}{{24}{2011}{{Pedregosa et~al.}}{{}}}
+\bibcite{pope2021intrinsic}{{25}{2021}{{Pope et~al.}}{{Pope, Zhu, Abdelkader, Goldblum, and Goldstein}}}
+\bibcite{redman2024equivalent}{{26}{2024}{{Redman et~al.}}{{Redman, Bello-Rivas, Fonoberova, Mohr, Kevrekidis, and Mezic}}}
+\bibcite{richman2000physiological}{{27}{2000}{{Richman and Moorman}}{{}}}
+\bibcite{sauer1991embedology}{{28}{1991}{{Sauer et~al.}}{{Sauer, Yorke, and Casdagli}}}
+\bibcite{schulman2017proximal}{{29}{2017}{{Schulman et~al.}}{{Schulman, Wolski, Dhariwal, Radford, and Klimov}}}
+\bibcite{simsekli2020hausdorff}{{30}{2020}{{Simsekli et~al.}}{{Simsekli, Sener, Deligiannidis, and Erdogdu}}}
+\bibcite{stark1999delay}{{31}{1999}{{Stark}}{{}}}
+\bibcite{stark2003delay}{{32}{2003}{{Stark et~al.}}{{Stark, Broomhead, Davies, and Huke}}}
+\bibcite{sussillo2009generating}{{33}{2009}{{Sussillo and Abbott}}{{}}}
+\bibcite{takens1981detecting}{{34}{1981}{{Takens}}{{}}}
+\bibcite{tan2024limitations}{{35}{2024}{{Tan et~al.}}{{Tan, Garcia-Redondo, Wang, Bronstein, and Monod}}}
+\bibcite{theiler1986spurious}{{36}{1986}{{Theiler}}{{}}}
+\bibcite{thilak2022slingshot}{{37}{2022}{{Thilak et~al.}}{{Thilak, Littwin, Zhai, Saremi, Paiss, and Susskind}}}
+\bibcite{thilak2024lidar}{{38}{2024}{{Thilak et~al.}}{{Thilak, Huang, Saremi, Dinh, Goh, Nakkiran, Susskind, and Littwin}}}
+\bibcite{todorov2012mujoco}{{39}{2012}{{Todorov et~al.}}{{Todorov, Erez, and Tassa}}}
+\bibcite{yunis2024rank}{{40}{2024}{{Yunis et~al.}}{{Yunis, Patel, Wheeler, Savarese, Vardi, Livescu, Maire, and Walter}}}
+\citation{stark1999delay,stark2003delay}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Theory, implementation, and experimental details}{12}{section.A}\protected@file@percent }
+\newlabel{app:theory}{{A}{12}{Theory, implementation, and experimental details}{section.A}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Dimension preservation under delay reconstruction}{12}{subsection.A.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Recurrent, transient, and stochastic regimes}{12}{subsection.A.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \begingroup \color  {claudecolor}Regime diagnostics from the synthetic study. The left panel compares MG with an independently measured effective rank; the right panel separates recurrent and non-recurrent records using identifiability. The shaded region marks the tested regime in which the component interpretation is supported.\endgroup }}{12}{figure.4}\protected@file@percent }
+\newlabel{fig:regimes}{{4}{12}{\claude {Regime diagnostics from the synthetic study. The left panel compares MG with an independently measured effective rank; the right panel separates recurrent and non-recurrent records using identifiability. The shaded region marks the tested regime in which the component interpretation is supported.}}{figure.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \begingroup \color  {claudecolor}Delay reconstructions of four cases. A recurrent one-phase signal closes a loop; two phases fill a higher-dimensional set; a transient follows a path without returning; stochastic forcing fills the available region. These pictures explain why recurrence and identifiability are required before reading MG as active dimension.\endgroup }}{13}{figure.5}\protected@file@percent }
+\newlabel{fig:shapes}{{5}{13}{\claude {Delay reconstructions of four cases. A recurrent one-phase signal closes a loop; two phases fill a higher-dimensional set; a transient follows a path without returning; stochastic forcing fills the available region. These pictures explain why recurrence and identifiability are required before reading MG as active dimension.}}{figure.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \begingroup \color  {claudecolor}The same scalar-log viewpoint across regimes: recurrent forcing, a transient optimization path, and a stochastically forced training record. The estimator is applied to all three, while the interpretation changes with the regime.\endgroup }}{13}{figure.6}\protected@file@percent }
+\newlabel{fig:traces}{{6}{13}{\claude {The same scalar-log viewpoint across regimes: recurrent forcing, a transient optimization path, and a stochastically forced training record. The estimator is applied to all three, while the interpretation changes with the regime.}}{figure.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Computing the pooled estimator}{13}{subsection.A.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Affine invariance and its implementation boundary}{13}{subsection.A.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces \begingroup \color  {claudecolor}Primary configurations. An exclusion of ``span'' is $(E-1)\tau $. The adaptive generator lag is one quarter of the autocorrelation time, capped so the delay span occupies at most one eighth of the window; its exclusion is capped at 320. Alternative settings are reported as sensitivity checks, not substituted for the primary results.\endgroup }}{14}{table.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.5}Pooling and dependence}{14}{subsection.A.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B}Configurations and reproducibility}{14}{section.B}\protected@file@percent }
+\newlabel{app:settings}{{B}{14}{Configurations and reproducibility}{section.B}{}}
+\@writefile{toc}{\contentsline {paragraph}{Exact adaptive rules.}{14}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Window length and recurrence requirements.}{15}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Units of replication.}{15}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {C}Development systems and MLP-based recovery}{15}{section.C}\protected@file@percent }
+\newlabel{app:controlled}{{C}{15}{Development systems and MLP-based recovery}{section.C}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Analytic and driven-learning evaluation}{15}{subsection.C.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces \begingroup \color  {claudecolor}Synthetic results against the specified references. Mean absolute error (MAE) averages rank--seed--observable combinations. The driven-target MLP signal still varies with frozen parameters; its error describes the driven signal, not parameter motion alone.\endgroup }}{15}{table.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}Dense regression with endogenous modes}{16}{subsection.C.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces \begingroup \color  {claudecolor}Known-mode regression: median scalar MG. Settings are fixed across $r$. A longer record does not uniformly reduce bias.\endgroup }}{16}{table.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces \begingroup \color  {claudecolor}Three-seed variation in the selective-damping regression experiment.\endgroup }}{16}{table.8}\protected@file@percent }
+\newlabel{tab:regression_variation}{{8}{16}{\claude {Three-seed variation in the selective-damping regression experiment.}}{table.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Learned autonomous generators}{16}{subsection.C.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces \begingroup \color  {claudecolor}CNN interventions at all tested strengths, on four held-out seeds. Changes are medians of paired record ratios. Update covariance and the fraction of moving parameters provide independent comparisons. Stronger pruning does not always produce a larger MG decline.\endgroup }}{17}{table.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {D}Applied training procedures and full comparisons}{17}{section.D}\protected@file@percent }
+\newlabel{app:applied}{{D}{17}{Applied training procedures and full comparisons}{section.D}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.1}CNN and ResNet interventions}{17}{subsection.D.1}\protected@file@percent }
+\citation{bandt2002permutation}
+\citation{richman2000physiological}
+\citation{page1954continuous}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.2}Natural scalar baselines}{18}{subsection.D.2}\protected@file@percent }
+\newlabel{app:baselines}{{D.2}{18}{Natural scalar baselines}{subsection.D.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces \begingroup \color  {claudecolor}Natural scalar features on the held-out CNN benchmark. Each detector is fixed on the earlier seeds. Successful detections cover seven strong intervention types across four seeds; false positives cover four reference types across four seeds.\endgroup }}{18}{table.10}\protected@file@percent }
+\newlabel{tab:extra_baselines}{{10}{18}{\claude {Natural scalar features on the held-out CNN benchmark. Each detector is fixed on the earlier seeds. Successful detections cover seven strong intervention types across four seeds; false positives cover four reference types across four seeds.}}{table.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces \begingroup \color  {claudecolor}False positives by type for the block detector. The reference records share the four held-out seeds; the table therefore describes this matched benchmark rather than independent false-positive probabilities.\endgroup }}{18}{table.11}\protected@file@percent }
+\newlabel{tab:baseline_references}{{11}{18}{\claude {False positives by type for the block detector. The reference records share the four held-out seeds; the table therefore describes this matched benchmark rather than independent false-positive probabilities.}}{table.11}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces \begingroup \color  {claudecolor}Selected detector parameters. The block sign is listed; all selected CUSUM signs are recorded in \texttt  {new\_results/rules.json}. Full-precision values in that file define the implemented thresholds.\endgroup }}{19}{table.12}\protected@file@percent }
+\newlabel{tab:baseline_rules}{{12}{19}{\claude {Selected detector parameters. The block sign is listed; all selected CUSUM signs are recorded in \texttt {new\_results/rules.json}. Full-precision values in that file define the implemented thresholds.}}{table.12}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces \begingroup \color  {claudecolor}Past-only CUSUM on the held-out CNN records. Thresholds are selected on development records; the table reports strong-event detections, reference false positives, and median delay.\endgroup }}{19}{table.13}\protected@file@percent }
+\newlabel{tab:cusum}{{13}{19}{\claude {Past-only CUSUM on the held-out CNN records. Thresholds are selected on development records; the table reports strong-event detections, reference false positives, and median delay.}}{table.13}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces \begingroup \color  {claudecolor}Post-hoc horizon sensitivity with thresholds and first detections unchanged. Entries are detections within the specified number of updates; FP uses each complete reference record and is independent of the event horizon.\endgroup }}{20}{table.14}\protected@file@percent }
+\newlabel{tab:horizons}{{14}{20}{\claude {Post-hoc horizon sensitivity with thresholds and first detections unchanged. Entries are detections within the specified number of updates; FP uses each complete reference record and is independent of the event horizon.}}{table.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.3}ReLU-death stress test}{20}{subsection.D.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {15}{\ignorespaces \begingroup \color  {claudecolor}Boundary case: the transferred detector on ReLU death. Rules are fixed before the confirmation results.\endgroup }}{20}{table.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.4}Text VAE and preservation reference}{20}{subsection.D.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {16}{\ignorespaces \begingroup \color  {claudecolor}Text VAE: late medians across nine confirmation seeds. MI and code response are independent of the MG calculation.\endgroup }}{21}{table.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.5}Cyclic-VAE monitoring}{21}{subsection.D.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {17}{\ignorespaces \begingroup \color  {claudecolor}Cyclic VAE: detected events out of 41 at all tested budgets. Primary budget is 12.\endgroup }}{21}{table.17}\protected@file@percent }
+\citation{antognini2018pca}
+\@writefile{toc}{\contentsline {section}{\numberline {E}Additional learning settings}{22}{section.E}\protected@file@percent }
+\newlabel{app:additional}{{E}{22}{Additional learning settings}{section.E}{}}
+\@writefile{toc}{\contentsline {paragraph}{MNIST.}{22}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Grokking.}{22}{section*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Walker2d.}{22}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {E.1}Selecting policies for actuator shifts}{23}{subsection.E.1}\protected@file@percent }
+\newlabel{app:rl_selection}{{E.1}{23}{Selecting policies for actuator shifts}{subsection.E.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {18}{\ignorespaces \begingroup \color  {claudecolor}Policy selection under hidden actuator shifts: mean over four fine-tuning seeds. Completion is over all 120 selected target episodes. Random denotes expected uniform choice among eligible policies; the oracle uses target returns.\endgroup }}{23}{table.18}\protected@file@percent }
+\newlabel{tab:rl_selection}{{18}{23}{\claude {Policy selection under hidden actuator shifts: mean over four fine-tuning seeds. Completion is over all 120 selected target episodes. Random denotes expected uniform choice among eligible policies; the oracle uses target returns.}}{table.18}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {F}Timing procedures and information requirements}{24}{section.F}\protected@file@percent }
+\newlabel{app:cost}{{F}{24}{Timing procedures and information requirements}{section.F}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.1}Computing infrastructure and provenance}{24}{subsection.F.1}\protected@file@percent }
+\newlabel{app:hardware}{{F.1}{24}{Computing infrastructure and provenance}{subsection.F.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {F.2}Benchmark-specific timing and storage}{24}{subsection.F.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{CNN.}{24}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{FORCE.}{24}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Coupled oscillators.}{24}{section*.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{VAE.}{25}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Walker2d.}{25}{section*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {G}Forecast selection and sampled-query estimation}{25}{section.G}\protected@file@percent }
+\newlabel{app:forecast_utility}{{G}{25}{Forecast selection and sampled-query estimation}{section.G}{}}
+\@writefile{toc}{\contentsline {paragraph}{Training and observable.}{25}{section*.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Eight candidate forecasts.}{25}{section*.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Selector training and search history.}{25}{section*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Competitors and information access.}{26}{section*.29}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {19}{\ignorespaces \begingroup \color  {claudecolor}Mean NMSE for all forecast selectors. Columns use distinct sets of test seeds; lower is better. Earlier MG was fit during the initial generator screen. The second set supports the query-budget comparison.\endgroup }}{26}{table.19}\protected@file@percent }
+\newlabel{tab:forecast_all}{{19}{26}{\claude {Mean NMSE for all forecast selectors. Columns use distinct sets of test seeds; lower is better. Earlier MG was fit during the initial generator screen. The second set supports the query-budget comparison.}}{table.19}{}}
+\@writefile{toc}{\contentsline {paragraph}{Sampled-query MG.}{26}{section*.30}\protected@file@percent }
+\newlabel{eq:querymg}{{5}{26}{Sampled-query MG}{equation.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces \begingroup \color  {claudecolor}Forecast selection: quality and cost. Left: each new seed group averaged over eight tasks; lower NMSE is better. Right: medians over seven timing repetitions for each of 12 matched inputs; black bars are medians over inputs.\endgroup }}{27}{figure.7}\protected@file@percent }
+\newlabel{fig:forecast_utility}{{7}{27}{\claude {Forecast selection: quality and cost. Left: each new seed group averaged over eight tasks; lower NMSE is better. Right: medians over seven timing repetitions for each of 12 matched inputs; black bars are medians over inputs.}}{figure.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{Paired runtime procedure.}{27}{section*.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {H}Comparing intervention rules}{27}{section.H}\protected@file@percent }
+\newlabel{app:intervention_utility}{{H}{27}{Comparing intervention rules}{section.H}{}}
+\citation{chen2021simsiam,grill2020byol,bardes2022vicreg,chen2020simclr}
+\@writefile{lot}{\contentsline {table}{\numberline {20}{\ignorespaces \begingroup \color  {claudecolor}Eight-seed intervention results, including strong simple comparisons. MAC ratio is an approximate matrix-arithmetic budget relative to uninterrupted dense training; it excludes logging, monitoring, nonlinearities, optimizer work, and memory overhead and is not a wall-time speedup.\endgroup }}{28}{table.20}\protected@file@percent }
+\newlabel{tab:intervention_utility}{{20}{28}{\claude {Eight-seed intervention results, including strong simple comparisons. MAC ratio is an approximate matrix-arithmetic budget relative to uninterrupted dense training; it excludes logging, monitoring, nonlinearities, optimizer work, and memory overhead and is not a wall-time speedup.}}{table.20}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Further tests of practical decisions}{28}{section.I}\protected@file@percent }
+\newlabel{app:campaign}{{I}{28}{Further tests of practical decisions}{section.I}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {I.1}Self-supervised representation selection}{28}{subsection.I.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Task and architecture.}{28}{section*.32}\protected@file@percent }
+\citation{garrido2023rankme}
+\citation{agrawal2022alphareq}
+\citation{thilak2024lidar}
+\@writefile{lot}{\contentsline {table}{\numberline {21}{\ignorespaces Scope of the additional studies. Values are from the final saved comparisons. Each row uses its own metric and evaluation population.}}{29}{table.21}\protected@file@percent }
+\newlabel{tab:campaign_scope}{{21}{29}{Scope of the additional studies. Values are from the final saved comparisons. Each row uses its own metric and evaluation population}{table.21}{}}
+\@writefile{toc}{\contentsline {paragraph}{Independent evaluation and information access.}{29}{section*.33}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Representation proxies and scalar comparisons.}{29}{section*.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Results and uncertainty.}{29}{section*.35}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {22}{\ignorespaces SSL configuration ranking. Spearman correlations are computed across 29 configurations within each seed and then averaged. Regret is the gap between the chosen and best probe accuracy, averaged over five seeds and expressed in percentage points. The two confirmation seeds are shown separately.}}{30}{table.22}\protected@file@percent }
+\newlabel{tab:ssl_campaign}{{22}{30}{SSL configuration ranking. Spearman correlations are computed across 29 configurations within each seed and then averaged. Regret is the gap between the chosen and best probe accuracy, averaged over five seeds and expressed in percentage points. The two confirmation seeds are shown separately}{table.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces SSL ranking on individual seeds. Circles are the initial test seeds; triangles are the two later seeds. Horizontal bars show five-seed means. MG retains useful ranking on seeds 20--21, while embedding spread has the higher pooled mean.}}{30}{figure.8}\protected@file@percent }
+\newlabel{fig:ssl_campaign}{{8}{30}{SSL ranking on individual seeds. Circles are the initial test seeds; triangles are the two later seeds. Horizontal bars show five-seed means. MG retains useful ranking on seeds 20--21, while embedding spread has the higher pooled mean}{figure.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {23}{\ignorespaces Archived 95\% pointwise configuration-bootstrap intervals for mean $\rho _{\rm  MG}-\rho _{\rm  comparison}$. Seed uncertainty and multiple comparisons are not accounted for by these intervals.}}{30}{table.23}\protected@file@percent }
+\newlabel{tab:ssl_intervals}{{23}{30}{Archived 95\% pointwise configuration-bootstrap intervals for mean $\rho _{\rm MG}-\rho _{\rm comparison}$. Seed uncertainty and multiple comparisons are not accounted for by these intervals}{table.23}{}}
+\citation{thilak2022slingshot}
+\@writefile{lot}{\contentsline {table}{\numberline {24}{\ignorespaces All frozen SSL selectors over the five evaluated seeds. Score signs and logs were chosen only on development runs. The secondary MG setting uses $\tau =4,k=50$.}}{31}{table.24}\protected@file@percent }
+\newlabel{tab:ssl_all}{{24}{31}{All frozen SSL selectors over the five evaluated seeds. Score signs and logs were chosen only on development runs. The secondary MG setting uses $\tau =4,k=50$}{table.24}{}}
+\@writefile{toc}{\contentsline {paragraph}{Failure detection, checkpoint selection, and cost.}{31}{section*.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {I.2}Warning of slingshot loss spikes}{31}{subsection.I.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Model, event, and decision.}{31}{section*.37}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {25}{\ignorespaces Spike warnings on the held-out transformer runs. Hits are events warned within 500 steps; FP/10k counts merged false warnings per scored training steps. AUROC uses the frozen score and future-onset label at evaluation times.}}{32}{table.25}\protected@file@percent }
+\newlabel{tab:spikes_campaign}{{25}{32}{Spike warnings on the held-out transformer runs. Hits are events warned within 500 steps; FP/10k counts merged false warnings per scored training steps. AUROC uses the frozen score and future-onset label at evaluation times}{table.25}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {I.3}Reset rules, learning-rate schedules and transfer}{32}{subsection.I.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Plasticity and resets.}{32}{section*.38}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Learning-rate decisions.}{32}{section*.39}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Games and detector transfer.}{32}{section*.40}\protected@file@percent }
+\gdef \@abspage@last{32}

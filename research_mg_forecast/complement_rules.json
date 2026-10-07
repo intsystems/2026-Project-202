@@ -1,0 +1,7 @@
+{
+  "tree_MG": "|--- MG <= 1.17\n|   |--- value: [0.61]\n|--- MG >  1.17\n|   |--- MG <= 5.26\n|   |   |--- value: [-0.13]\n|   |--- MG >  5.26\n|   |   |--- value: [0.24]\n",
+  "tree_recurrence": "|--- recurrence <= 0.08\n|   |--- value: [0.44]\n|--- recurrence >  0.08\n|   |--- recurrence <= 0.46\n|   |   |--- value: [-0.14]\n|   |--- recurrence >  0.46\n|   |   |--- value: [0.23]\n",
+  "tree_MG_recurrence": "|--- MG <= 1.17\n|   |--- value: [0.61]\n|--- MG >  1.17\n|   |--- MG <= 5.26\n|   |   |--- value: [-0.13]\n|   |--- MG >  5.26\n|   |   |--- value: [0.24]\n",
+  "tree_cheap": "|--- increments <= 0.00\n|   |--- recurrence <= 0.19\n|   |   |--- value: [0.28]\n|   |--- recurrence >  0.19\n|   |   |--- value: [-0.23]\n|--- increments >  0.00\n|   |--- entropy <= 0.24\n|   |   |--- value: [0.49]\n|   |--- entropy >  0.24\n|   |   |--- value: [0.28]\n",
+  "tree_cheap_MG": "|--- MG <= 1.17\n|   |--- value: [0.61]\n|--- MG >  1.17\n|   |--- entropy <= 0.29\n|   |   |--- value: [-0.14]\n|   |--- entropy >  0.29\n|   |   |--- value: [0.35]\n"
+}

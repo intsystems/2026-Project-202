@@ -1,0 +1,14 @@
+{
+ "monitor": "MG|loss|within",
+ "rule": [
+  "REL",
+  1,
+  2,
+  1,
+  0.005
+ ],
+ "cal_util": 0.8478294677734375,
+ "cal_resets": 8.375,
+ "test_util": 0.8530982421875001,
+ "test_resets": 8.833333333333334
+}

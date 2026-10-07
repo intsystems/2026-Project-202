@@ -1,0 +1,1 @@
+{"setup": "T1_width4", "seed": 202, "event": "freeze", "t_e": 4900, "t_r": null, "P": 269322, "test_acc": 0.9825000166893005, "wall_s": 92.25468959996942, "wd_factor": 100.0, "cfg": {"width": 256, "dataset": "mnist", "loss": "ce", "reduction": "mean", "micro": 64, "accum": 1, "lr": 0.02, "wd": 0.0005, "bf16": false, "restart": false, "log": "norm"}}

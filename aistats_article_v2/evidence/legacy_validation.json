@@ -1,0 +1,14 @@
+{
+  "source": "aistats_article/aistats2027.tex",
+  "sha256": "dadc2fec71371fc32d537cb8d6d8b4d8b8fa7a4a7cd039c68c8ed7ef866490ea",
+  "analytic_matrix_mae": 0.27,
+  "driven_MLP_mae": 0.92,
+  "digits_covariance_reference_mae": 0.9,
+  "aggregation_note": "The head reference is measured covariance effective rank, not exact phase count.",
+  "observer_mae": {
+    "probe_loss": 0.6,
+    "parameter_norm": 0.41,
+    "parameter_projection": 0.34,
+    "gradient_norm": 1.81
+  }
+}

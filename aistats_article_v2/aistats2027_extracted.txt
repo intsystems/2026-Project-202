@@ -1,0 +1,1106 @@
+   Active Dimension as a Lightweight Measure of the Complexity of
+    Neural Network Training Dynamics from Scalar Training Logs
+
+
+
+                                             Anonymous Author
+                                             Anonymous Institution
+
+
+                     Abstract                            1    INTRODUCTION
+
+                                                         A scalar training log records more than whether a loss or
+                                                         parameter norm rises or falls. Its fluctuations can reflect
+    Neural network training can restrict parame-         several interacting degrees of freedom. As learning
+    ter motion, reduce information stored in a rep-      progresses, some of these may disappear or become
+    resentation, or produce more regular behavior.       coordinated. Detecting that change from the log would
+    Tracking these changes through full network          help monitor training without storing every parameter
+    states can be expensive. We propose a method         vector or repeatedly analyzing the full network state.
+    for detecting such simplification from a single
+    scalar time series. The method combines de-          We develop a method for detecting such changes from
+    lay reconstruction, a pooled nearest-neighbor        one scalar time series. The starting point is delay-
+    dimension estimator, and a calibrated change         embedding theory: under suitable assumptions, a vec-
+    detector. Delay-embedding theory motivates           tor of delayed observations preserves the geometry of
+    its interpretation in terms of active compo-         the underlying dynamics (Takens, 1981; Sauer et al.,
+    nents. Controlled experiments test this inter-       1991; Stark, 1999; Stark et al., 2003). A dimension
+    pretation: in trained recurrent generators, one      estimator applied to these vectors can then measure
+    neuron’s activity distinguishes independent          how many independent local coordinates the dynam-
+    phases from harmonics that spectral peak             ics require. We use the pooled MacKay–Ghahramani
+    counts cannot separate. In applied tasks, we         (MG) form (MacKay and Ghahramani, 2005) of the
+    validate changes in the estimate against inde-       Levina–Bickel estimator (Levina and Bickel, 2004).
+    pendent measurements. A detector calibrated          Our hypothesis is that this geometric information re-
+    on a small CNN identifies 27 of 28 strong            mains useful when the exact dimension interpretation
+    training interventions with no alarms in 16          is unavailable. Restricting parameter updates, sup-
+    control records; the same threshold detects          pressing a latent information pathway, or learning a
+    backbone freezing in ResNet-18. In a text            more regular behavior may each reduce the complexity
+    VAE, the estimate tracks both latent informa-        of a scalar record. We test these forms of simplification
+    tion loss and its partial preservation across        against independent measurements. For stochastic or
+    nine seeds. Analysis takes 9.5 ms per CNN log        transient training, the question is whether changes in
+    window and is 14–19 times faster than a full         MG track the specified outcome reliably. An exact
+    Lyapunov spectrum in a recurrent-network             component count is not required for this monitoring
+    benchmark. These results establish a low-cost        task.
+    diagnostic of several forms of learned simpli-
+    fication, with a component interpretation in         Contributions.
+    suitable recurrent regimes.
+                                                         1. A method for monitoring simplification from
+                                                            scalar logs. We combine MG with a specified
+                                                            observation and windowing procedure, numerical
+                                                            checks, and a change detector that uses only past
+                                                            data. Once the log is available, analysis depends
+                                                            on the window and embedding size, not the model’s
+Preliminary work. Under review by AISTATS 2027. Do          parameter count.
+not distribute.
+                                  Manuscript under review by AISTATS 2027
+
+
+2. Controlled tests of the active-component in-             and optimizer variables. When evaluating a trained
+   terpretation. We test recovery in analytic oscilla-      recurrent generator, the weights are fixed and st is
+   tors and learning problems, including an MLP-based       the evolving network activity. These are two different
+   task. In trained recurrent generators, MG from one       trajectories to which we apply the same estimator.
+   neuron separates independent phases from harmon-
+                                                            We consider two tasks. In a recurrent regime with
+   ics even when spectral peak counts and covariance
+                                                            a well-defined dimension, we estimate the number of
+   ranks are similar.
+                                                            active components from a finite window of xt . In
+3. Independent validation in applied learning               nonstationary training, we test whether changes in the
+   tasks. MG detects 27/28 strong CNN interventions         estimate track simplification measured independently
+   with no control alarms, transfers to backbone freez-     of MG.
+   ing in ResNet-18, and tracks both information loss
+                                                            For the first task, let µ be an ergodic occupation mea-
+   and preservation in a text VAE. We compare it with
+                                                            sure: µ(B(s, ϵ)) describes the fraction of time spent
+   simple scalar statistics using the same records and
+                                                            within distance ϵ of state s. We define active dimension
+   calibration procedure.
+                                                            by
+4. Measured savings in analysis and storage. We                                         log µ(B(s, ϵ))
+                                                                            dact = lim                 ,          (1)
+   separate the cost of obtaining a log from processing                             ϵ↓0      log ϵ
+   it. A CNN window takes 9.5 ms to analyze; in a
+                                                            when the limit exists and has the same value almost
+   learned recurrent system, MG is 14–19 times faster
+                                                            everywhere. On a smooth d-dimensional manifold with
+   than the full Lyapunov spectrum while detecting
+                                                            positive regular density, dact = d. An oscillator with r
+   the same transition.
+                                                            independent phases has r active components even if its
+The methodological contribution is the combination of       output contains many harmonics. Thus a component is
+scalar observation, calibrated estimation, and change       an independent coordinate of the dynamics, not simply
+detection for learning dynamics. Delay embeddings and       a peak in the signal’s spectrum.
+local dimension estimators are established tools. We        For the second task, we hold the observable and esti-
+show how to use them for this task, test their interpre-    mator settings fixed across windows. Each experiment
+tation, and measure their benefit against independent       defines its reference before examining MG: restricted
+references and competing diagnostics.                       parameter updates, reduced latent information, or more
+                                                            regular learned behavior. These are measurable forms
+Relation to existing measurements. Intrinsic-               of simplification, but they need not share a single dimen-
+dimension methods usually analyze clouds of data            sion or improve predictive performance. For example,
+points or representations (Facco et al., 2017; Ansuini      losing useful latent information is simplification that
+et al., 2019; Pope et al., 2021). Subspace-training meth-   a monitoring method should detect even though it is
+ods study how many parameter directions suffice to          undesirable.
+learn a task (Li et al., 2018; Aghajanyan et al., 2021).
+We instead analyze the temporal structure of a scalar       2.2   The geometric information in delayed
+record. Covariance participation ratio measures how               observations
+variance is distributed across directions (Gao et al.,
+2017), while Hessian spectra describe local curvature       A single observation can mix several components. De-
+(Gur-Ari et al., 2018; Cohen et al., 2021). Both provide    layed observations can separate them by recording how
+useful independent comparisons. Since simple scalar         the signal changes over time. We form the vector
+statistics also avoid full-state storage, we compare MG
+with roughness, autocorrelation, spectral entropy, and                   yt = (xt , xt+τ , . . . , xt+(E−1)τ )    (2)
+surrogate records (Schreiber and Schmitz, 1996) to test
+what its geometric analysis adds.                           with E coordinates separated by lag τ . The Takens
+                                                            and Sauer results give conditions under which generic
+                                                            smooth observations distinguish the states of a de-
+2     ESTIMATING COMPLEXITY                                 terministic system (Takens, 1981; Sauer et al., 1991).
+      FROM A SCALAR TIME SERIES                             Stark’s extensions address forced systems under addi-
+                                                            tional assumptions (Stark, 1999; Stark et al., 2003).
+2.1   Problem statement                                     These results explain why a scalar record can retain
+                                                            information about the underlying dynamics. They do
+Given one scalar observation per step, we want to de-
+                                                            not prescribe a finite-sample window or guarantee re-
+tect when the underlying dynamics become simpler.
+                                                            construction for every SGD trajectory.
+Let st be the system state and xt = ϕ(st ) the observa-
+tion. During optimization, st includes the parameters       The condition needed for our dimension interpretation
+                                    Manuscript under review by AISTATS 2027
+
+
+is precise. If the delay map is bi-Lipschitz on the sam-    records, hold them fixed during evaluation, and report
+pled support, it changes distances by at most fixed         detection delay. Appendix B lists the configurations.
+factors. Those factors disappear in the limit in Eq. (1),
+                                                            Where measured, we report sensitivity to doubling the
+so the local dimension is preserved. Appendix A gives
+                                                            embedding dimension, ρE = dbMG (2E)/dbMG (E), the
+the statement and proof. We therefore estimate di-
+                                                            frequency of numerical-floor corrections, and compan-
+mension from the delay vectors in controlled recurrent
+                                                            ion scalar statistics. For nearly constant records, we
+systems, and test their usefulness as a relative complex-
+                                                            also check the amplitude before standardization. These
+ity measure in applied training.
+                                                            checks expose sensitivity to the reconstruction and nu-
+                                                            merical noise. They do not establish recurrence or a
+2.3   Computing MG                                          local scaling law. Without those properties, we inter-
+Within a window of W scalar samples, we subtract the        pret MG through its agreement with the independent
+mean, divide by the standard deviation, and form the        task-specific reference.
+delay vectors. We then find their nearest neighbors,
+excluding vectors too close in time through a Theiler       3     CONTROLLED EXPERIMENTS:
+exclusion T (Theiler, 1986). This prevents adjacent               RECOVERING COMPONENT
+samples from dominating the neighborhoods. Let k                  STRUCTURE
+be the number of retained neighbors, rij the distance
+from vector i to its jth admissible neighbor, and n the
+                                                            We first test whether MG reflects the component struc-
+number of valid query vectors. We compute
+                                                            ture that motivates the method. Analytic signals pro-
+                         n(k − 1) − 1                       vide known dimensions; controlled learning problems
+             dbMG =   n k−1
+                                                 .   (3)    test the effect of parameter updates; trained generators
+                      X X
+                                log(rik /rij )              test whether a single neuron reveals the phase structure
+                      i=1 j=1                               of a learned task. Section 4 then evaluates monitoring
+                                                            in applied learning problems.
+The distance ratios measure how quickly neighborhoods
+fill as their radius grows; faster growth corresponds to
+higher local dimension. Equation (3) pools this infor-      3.1   Analytic oscillators and controlled
+mation across query vectors. The subtraction of one               learning
+is a finite-sample correction under the local likelihood
+                                                            Known phases. In the analytic baseline, r diagonal
+model, which assumes approximately uniform density
+                                                            entries of a matrix oscillate at rationally independent
+at the neighborhood scale. Serial dependence, uneven
+                                                            frequencies. The trajectory therefore has r independent
+excitation, and short records can still introduce bias.
+                                                            phases. MG computed from a scalar observation tracks
+We retain these effects in the reported estimates rather
+                                                            this count over r = 1–8, with mean absolute error 0.27.
+than clipping values to E.
+                                                            This establishes recovery against a known geometric
+                                                            target before introducing learning.
+Scale invariance. For fixed delay and neighbor set-
+tings, the ideal estimator is invariant to xt 7→ axt + b,
+                                                            Learning on MLP features. A multilayer percep-
+a≠ 0. Standardization removes the offset and ampli-
+                                                            tron (MLP) with tanh activations is trained on hand-
+tude scale, and the distance ratios remain unchanged.
+                                                            written digits (Pedregosa et al., 2011). We freeze its
+Thus MG can distinguish a change in temporal struc-
+                                                            features and train a linear classifier in a fixed parameter
+ture from a uniform change in amplitude. Appendix A
+                                                            subspace. Quasiperiodic changes in the loss weights of
+proves this property and describes the effects of the
+                                                            data groups provide a controlled source of recurrent
+small numerical noise added in the implementation.
+                                                            motion. We select estimator settings on separate seeds
+The invariance applies to a whole window; a scale
+                                                            and ranks, then evaluate ranks 1, 3, 5, 8 on new seeds.
+change within that window can alter its temporal struc-
+ture.                                                       Every usable observable orders the held-out ranks cor-
+                                                            rectly with these fixed settings. Parameter norm and
+Windowing and interpretation. The delay span                fixed-probe loss stop varying when the learning rate is
+S = (E − 1)τ determines the time interval represented       zero, confirming that their variation requires learning.
+by each vector. The window length W determines how          The mean absolute error against the independently
+much data enter an estimate and how precisely a tran-       measured covariance reference is 0.90 across rank–seed–
+sition can be located. Estimating dimension requires        observable combinations. This reference checks the
+repeated visits within one regime. Monitoring requires      excitation of parameter directions; it is not an exact
+a window short enough to distinguish the regimes before     active-dimension label. The result supports accurate
+and after a change. We choose settings on calibration       ordering in a controlled learning task without retuning
+                                  Manuscript under review by AISTATS 2027
+
+
+the estimator for each rank. Appendix C gives errors         The upward bias at higher phase counts limits absolute
+for individual observables and distinguishes this task       recovery at this record length. The reproducible result
+from earlier driven-target tests.                            is discrimination of phase structure from one neuron,
+                                                             including the harmonic comparisons on all five seeds.
+Endogenous oscillations in a regression prob-
+lem. We next test whether MG detects fewer modes             3.3   Learning a cycle from chaotic activity
+when all parameters remain trainable. We train all
+32 weights of a dense linear regressor using full-batch      In a separate FORCE experiment, a 256-unit network
+heavy-ball updates. Repeated Hessian eigenvalues form        learns to produce a figure-eight trajectory from ini-
+r groups; momentum one produces r independent os-            tially chaotic activity. The target has two outputs
+cillatory modes with a fixed target. Selective damping       but one fundamental phase. We select five chaotic
+reduces four modes to two without changing the data          initializations using a pretraining Lyapunov criterion,
+or trainable parameter count. MG of the training loss        without inspecting MG, and evaluate the network at
+falls from 4.97 to 2.56. Multiplying the original loss       saved checkpoints.
+by 0.01 leaves MG unchanged. The estimate therefore          Single-neuron MG falls from 3.56–5.07 before training
+responds to the removal of modes in this experiment,         to 1.08–1.13 afterward in all five networks. The decline
+while remaining insensitive to uniform rescaling. This       persists across three neurons and the tested window
+is a controlled oscillatory optimizer: without damping,      and lag settings. Independently, the full Lyapunov
+it oscillates around the solution rather than converging.    spectrum loses its clearly positive exponents. Four
+                                                             networks meet the stricter stable-cycle criterion; the
+3.2   Learned generators distinguish phases                  fifth has weak contraction transverse to the cycle.
+      from harmonics
+                                                             Both analyses identify simplification of the learned ac-
+The next test asks whether one neuron’s activity reveals     tivity. MG does so from one neuron, while the spectrum
+the component structure learned by a recurrent net-          uses the full state and tangent dynamics. Section 5
+work. A 1,000-unit rate network is trained by FORCE          compares their computational costs. Here the mea-
+with recursive least squares (Sussillo and Abbott, 2009)     sured trajectory is network activity at fixed weights,
+to generate one to four sinusoidal outputs. Feeding the      not the sequence of weight updates.
+outputs back into the network makes the learned read-
+out affect its dynamics. At evaluation, the weights are      4     APPLIED EXPERIMENTS:
+fixed and the network runs without the target signal.              MONITORING LEARNED
+We train seven tasks on each of five seeds: one to four            SIMPLIFICATION
+independent frequencies (T1–T4), two or four harmon-
+ics of one frequency (H2, H4), and two independent           We evaluate three practical uses: detecting restrictions
+frequencies with their harmonics (M4). Their target          on parameter updates, tracking information loss in a
+phase counts are 1, 2, 3, 4, 1, 1, 2, respectively. All 35   representation, and measuring changes in learned be-
+networks meet the output-fidelity criterion. A Lya-          havior. Each experiment defines simplification through
+punov analysis checks the learned dynamics indepen-          an independent reference. The test is whether MG
+dently. We choose MG settings on the target signals          detects that change from a scalar record, even when
+before analyzing the networks and use neuron zero as         its absolute value has no established dimension inter-
+the primary observable.                                      pretation.
+The harmonic controls demonstrate the benefit of geo-
+metric analysis (Figure 1). H4 has four spectral lines       4.1   CNN training: detecting restrictions on
+but median MG is 1.15, close to the single-phase T1                parameter updates
+task. For every seed, MG is lower for H2 than T2 and
+                                                             We train a 14,666-parameter convolutional neural net-
+increases from H4 to M4 to T4. The latter three tasks
+                                                             work (CNN) on 10,000 CIFAR-10 images (Krizhevsky,
+have identical spectral peak counts and similar full-
+                                                             2009) for 10,000 SGD updates. At update 4,000, we
+state covariance participation ratios: 5.27, 5.71, and
+                                                             reduce the learning rate, freeze layers, or prune weights.
+5.76. Their MG values are 1.15, 3.58, and 5.93. A sin-
+                                                             Controls continue unchanged, increase the batch size,
+gle neuron’s temporal record thus distinguishes phase
+                                                             or transform the observed log by rescaling or smoothing
+structures that these two summaries do not separate.
+                                                             without altering training. MG receives only the norm
+Across T1–T4, median MG is 1.15, 2.84, 5.90, and 5.93.       of all parameters, which requires no extra network for-
+It separates one- and two-phase tasks from the higher-       ward pass. Settings are W = 1, 000, stride 500, E = 20,
+dimensional tasks, but does not resolve T3 from T4.          τ = 1, and k = 20.
+                                           Manuscript under review by AISTATS 2027
+
+
+                    Controlled regression                     One-neuron MG                         Full-state covariance PR
+                                                  8                                          8
+                    Loss MG
+            6       Target
+                                                  6                                          6
+ Estimate
+
+
+
+
+            4                                     4                                          4
+
+
+                                                  2                                          2
+            2
+
+                                                  0                                          0
+                1     2           4           6          H4           M4             T4             H4           M4             T4
+                       Independent modes              1 phase      2 phases       4 phases       1 phase      2 phases       4 phases
+                                                           Four output spectral lines                 Four output spectral lines
+
+
+Figure 1: MG detects component structure from scalar records. Left: regression with a known number of modes
+and fixed estimator settings across ranks. Center: learned generators with four output spectral lines but one
+(H4), two (M4), or four (T4) independent target phases; each dot is a seed. MG separates these tasks. Right:
+their full-state covariance participation ratios are similar. The comparison shows sensitivity to phase structure,
+which differs from the spread of variance measured by participation ratio.
+
+
+We calibrate on seeds 0–3 and test interventions of                    and a direction of change fixed before evaluation.
+different strengths on new seeds 10–13. Independent
+measurements record the covariance participation ra-                   Detecting changes using only past observations.
+tio of updates, the fraction of parameters that move,                  For window estimates mj , we compare the median
+and update magnitude. Freezing and pruning impose                      over the latest M windows with the median over the
+known restrictions on trainable or nonzero parame-                     preceding B windows:
+ters. Learning-rate reduction changes the dynamics,
+but need not reduce invariant dimension; we assess its                                median(mj−M +1 , . . . , mj )
+                                                                             Dj =                                     − 1.          (4)
+effect through the measured updates.                                                median(mj−M −B+1 , . . . , mj−M )
+MG falls after strong restrictions on training. Freezing               Calibration selects M = 2, B = 3, and an alarm thresh-
+all but the classification head reduces it by a median                 old of Dj < −0.0883, a drop of 8.83%. Only completed
+18.5%, while update participation ratio falls by 43.5%.                windows enter the rule. We count the first threshold
+Strong freezing and pruning produce median MG de-                      crossing as an alarm and score it as a detection if it
+clines of approximately 12–19%; control medians range                  occurs within 5,000 updates after the intervention. An
+from near zero to increases of 13%. Across intervention                earlier alarm is false. Competing statistics use the same
+strengths, MG ratios and update participation-ratio                    calibration procedure.
+changes have Spearman correlation 0.59. They measure
+different aspects of the change: after 50% pruning, MG                MG detects 27/28 strong interventions with no alarms
+falls while update participation ratio rises.                         in 16 control records and median delay 1,000 updates
+                                                                      (Table 1). Standard deviation detects all 28 but raises
+                                                                      alarms in 10/16 controls; trend crossings detect 15/28
+MG adds information beyond simple scalar
+                                                                      with 5/16 control alarms. MG therefore combines high
+statistics. MG separates the graded interventions
+                                                                      detection with fewer false alarms on this benchmark.
+from unchanged-training and increased-batch controls
+                                                                      Weak interventions are less reliably detected. The
+with area under the ROC curve (AUC) 0.93. Trend
+                                                                      records share four seeds, so these counts are not inde-
+crossings, lag-one autocorrelation, and detrended stan-
+                                                                      pendent trials. We evaluate detection here; whether
+dard deviation achieve 0.48–0.57 on the same compari-
+                                                                      acting on an alarm improves training requires a sepa-
+son. Comparing only the strongest intervention doses
+                                                                      rate test.
+against all specified controls gives MG an AUC of 0.99.
+As a further check, we apply MG to surrogate records                   4.2    Transferring the detector to ResNet-18
+generated by iterative amplitude-adjusted Fourier
+transforms (IAAFT). These preserve the marginal dis-                   We transfer the parameter-norm observable, MG set-
+tribution and approximately the spectrum, but yield                    tings, and alarm threshold to ResNet-18 (He et al.,
+AUC 0.68. The stronger separation in the original                      2016), without recalibration. Training uses the full
+records suggests that these properties alone do not ex-                CIFAR-10 training set, either from scratch or from
+plain the result. All comparisons use the same records                 ImageNet-pretrained weights, with three new seeds in
+                                         Manuscript under review by AISTATS 2027
+
+
+                      CNN: new seeds                                            ResNet: frozen rule                                      VAE: paired branches
+                                                                      1.05                                                                             Suppressed
+       Control                                                                                                                 1.0
+                                                                                                                                                       Free bits
+                                                                      1.00
+                                                                                                                               0.9
+      Batch x4                                                        0.95
+
+
+
+
+                                                  After / before MG
+
+
+
+
+                                                                                                             MG / control MG
+                                                                                                                               0.8
+       LR / 10                                                        0.90
+
+                                                                      0.85                                                     0.7
+      LR / 100
+                                                                      0.80                                                     0.6
+  Head only                                                           0.75                                                     0.5
+                                                                                  scratch
+ Prune 80%                                                            0.70
+                                                                                  finetune                                     0.4
+
+                    0.8      0.9      1.0   1.1                              Base Batch Head    LR   Prune                           1      3      5      7        9
+                          After / before MG                                                                                                Confirmation seed
+
+
+Figure 2: MG tracks changes across learning tasks. Left: CNN estimates after an intervention divided by those
+before it, on four held-out seeds. Bars show medians; the dashed line means no change. Center: the same
+comparison for ResNet-18 trained from scratch or pretrained weights, with all seeds shown. Right: late MG in
+the suppressed and free-bits VAE branches relative to their shared low-regularization control, across nine test
+seeds. Independent update and information measurements validate the changes.
+
+
+                                                                                        through a 16-dimensional Gaussian latent code. Its en-
+Table 1: MG detects most strong CNN interventions
+                                                                                        coder and decoder use gated recurrent units (Bowman
+with no control alarms. All methods are calibrated on
+                                                                                        et al., 2016); the model has 276,016 parameters and
+the same earlier seeds and evaluated on four new seeds.
+                                                                                        trains on 6,000 sentences. This task tests whether MG
+“Alarms” counts control records with an alarm. Delay
+                                                                                        can reveal when the decoder stops using information
+is measured only for detected events.
+                                                                                        in the code.
+        Statistic                Detected Alarms Delay
+                                                                                        After 1,024 shared updates with Kullback–Leibler (KL)
+        MG                          27/28     0/16 1,000
+        Trend crossings             15/28     5/16 1,000                                regularization weight β = 0.01, we split training into
+        Lag-one correlation          0/28     0/16    —                                 three branches: keep that weight, raise it to one, or
+        Detrended std.              28/28    10/16   500                                use β = 1 with a free-bits objective. Free bits reduces
+                                                                                        pressure to suppress low-KL latent coordinates. All
+                                                                                        branches train until update 3,072.
+each setting. Freezing the backbone while continu-                                     MG uses the reconstruction negative log-likelihood
+ing to train the head reduces MG by a median 27.6%                                     (NLL) per token on 16 fixed validation sentences, with
+and 30.8%, respectively. The detector identifies all six                               fixed latent sampling noise. It has no access to KL
+freezing events with no alarms in 24 control records.                                  or the independent references. On a larger set of 256
+This transfers a detector from about 15 thousand to                                    validation sentences, the references estimate latent mu-
+11 million parameters for a concrete training change.                                  tual information and the decoder’s response to shuffling
+The global parameter norm is informative for back-                                     codes between sentences. A joint decline means that
+bone freezing, but the same detector misses the tested                                 less information is retained and used through the latent
+learning-rate reductions and pruning interventions in                                  code.
+ResNet-18. Separately explored layer norms and ran-                                     The information-loss criterion is met on all nine
+dom projections introduce false alarms. Thus transfer                                   test seeds. MG declines more strongly in the high-
+succeeds for the freezing task, while other interven-                                   regularization branch than in its control on every seed:
+tions require further validation of the observable and                                  their median late MG ratio is 0.517, with a 95% seed-
+detector.                                                                               bootstrap interval [0.480, 0.542]. Free bits partially
+                                                                                        preserves both information and decoder dependence.
+4.3     Text VAE: tracking information loss and                                         MG is then higher than in the suppressed branch on
+        preservation                                                                    all nine seeds, with median ratio 1.286 [1.179, 1.418].
+                                                                                        The preservation control is informative because the two
+A text variational autoencoder (VAE) learns to recon-                                   branches use the same external KL weight but retain
+struct Penn Treebank sentences (Marcus et al., 1993)
+                                 Manuscript under review by AISTATS 2027
+
+
+different amounts of information. MG distinguishes
+                                                            Table 2: Time to analyze an available record. The
+these outcomes from reconstruction logs alone.
+                                                            FORCE reference is the full Lyapunov spectrum; the
+This result validates MG as a signal of latent informa-     VAE reference combines latent-information and code-
+tion loss and partial preservation. Standard deviation      shuffling measurements. FORCE ranges cover before
+and spectral entropy also detect the loss on all nine       and after training. Compare methods within a row:
+seeds. In a separate cyclic-VAE test, using MG to           tasks use different records and configurations. Scalar
+schedule expensive reference checks finds 28/41 tran-       acquisition is excluded.
+sitions at the primary budget, compared with 38/41            Setting                           MG      Reference
+for periodic checks. Association with information loss
+                                                              CNN, 1,000-point window     9.5 ms            —
+therefore does not by itself imply better scheduling.         FORCE, 256 units        0.60–0.84 s 11.55–12.01 s
+The CNN benchmark provides the clearest detection             VAE, 512-point window     12.89 ms     209.32 ms
+advantage over simple scalar statistics.
+
+4.4   Grokking and learned control                          rameter count. Obtaining the log has a separate cost: a
+                                                            parameter norm requires an O(P ) reduction over P pa-
+Grokking. In modular-arithmetic training, scalar            rameters, and a fixed-probe loss requires a forward pass.
+parameter-norm MG falls near generalization in all four     We therefore report acquisition and analysis separately.
+positive runs when its temporal resolution is matched
+to that of the trajectory analysis. Independently, saved    For the CNN, the scalar record occupies about 39 KiB,
+trajectory sketches show a sharp, reversible collapse of    compared with 559 MiB for the stored float32 parameter
+detrended covariance participation ratio. Across set-       trajectory. Each 1,000-point window takes about 9.5 ms
+tings applied to these same runs, 24/26 usable compar-      to process (Table 2). This makes repeated analysis
+isons distinguish the positive runs from two controls.      inexpensive in the tested implementation. A streaming
+These comparisons are not independent repetitions.          covariance calculation or trajectory sketch would reduce
+Roughness changes are stronger, a memorizing control        the reference’s storage requirement; the comparison is
+also simplifies, and the full-batch setting does not re-    with the saved full trajectory.
+produce the same scalar result. The evidence supports
+sensitivity to a training transition, without making an     Savings relative to full Lyapunov spectra. In the
+MG decline a unique indicator of generalization.            256-unit recurrent network, both MG and the full spec-
+                                                            trum detect the learned transition from chaos toward
+Learned locomotion. We also analyze behavior                a cycle. MG takes 0.60–0.84 s, compared with 11.55–
+learned by proximal policy optimization (PPO) in            12.01 s for the spectrum: a 14–19-fold speed advantage.
+Walker2d (Schulman et al., 2017; Todorov et al., 2012).     Including an additional MG calculation at doubled em-
+At fixed policy checkpoints, we compute MG from a           bedding dimension retains a 5–10-fold advantage. A
+scalar joint or control signal. Two series of five fine-    separate 128-oscillator benchmark gives a 22–23-fold
+tuning seeds show lower control-log MG under moder-         advantage over a dense full-spectrum calculation on a
+ate action smoothing. In the final comparison, median       1,536-point record.
+ratios to the control are 0.801 and 0.604 for two penalty   These savings depend on the required information and
+strengths, with a decline on every seed. This extends       window length. The largest Lyapunov exponent and
+the scalar analysis from training logs to learned be-       elementary scalar statistics are faster than MG in the
+havior. Full-state repeatability and perturbation tests     recurrent-network benchmark, but do not provide the
+show that simpler control signals do not consistently       full spectrum. MG does not recover individual expo-
+imply a simpler full-body gait. Simple increment and        nents either. Longer scalar windows can also reverse
+return statistics remain competitive; Appendix E gives      the timing comparison; Appendix F reports these cases.
+the comparisons and shared-initial-policy design.
+                                                            When logging costs dominate. For the VAE, an
+5     COMPUTATIONAL SAVINGS                                 MG calculation is 16.2 times faster than the combined
+      AND CONDITIONS OF USE                                 information and code-shuffling reference. Yet repeat-
+                                                            edly evaluating the fixed probe dominates the total cost.
+Analysis from a compact record. The main com-               At the primary cyclic-monitoring budget, the estimated
+putational advantage is the input: MG processes one         total is 54.68 s for MG-triggered checks versus 2.72 s
+scalar per step. Once that log is available, it needs no    for periodic checks. Reusing an already available probe
+weights, activations, or Jacobian products. Its storage     record reduces the MG total to 3.54 s. Thus a cheap
+and nearest-neighbor calculations depend on W , E,          estimator does not guarantee cheaper monitoring: its
+and the temporal exclusion, not on the network’s pa-        practical benefit depends on whether the informative
+                                  Manuscript under review by AISTATS 2027
+
+
+scalar is already logged or must be acquired specifically
+for analysis.
+
+Where the method adds value. The experiments
+establish three complementary benefits. MG distin-
+guishes phase structure that peak counts and covariance
+summaries miss; detects strong CNN interventions with
+fewer false alarms than standard deviation or trend
+crossings; and reduces analysis cost relative to full Lya-
+punov spectra in the specified benchmarks. The first
+benefit connects to the theory. The latter two make it
+useful for monitoring even where an exact component
+count is unavailable.
+
+Choosing a useful observable. The observable
+must reflect the change of interest. Mini-batch noise
+can hide a change, while drift or numerical noise can
+dominate slow or nearly constant records. Transfer
+also depends on the event: in a separate ReLU-death
+test, the CNN-calibrated MG detector finds 12/21 eli-
+gible events with 12/31 control alarms, compared with
+19/21 and 7/31 for trend crossings. In the tested edge-
+of-stability setting, MG does not track the count of
+near-threshold Hessian modes. These results define a
+practical validation step: check each new observable
+against an independent reference and a simple scalar
+baseline before relying on its alarms.
+
+6   CONCLUSION
+
+We developed and evaluated a method for monitor-
+ing simplification from scalar logs. Delay-embedding
+theory motivates its active-component interpretation,
+and controlled experiments test that interpretation
+against known phase structure. Applied experiments
+show that the same estimator detects restrictions on
+training, tracks latent information loss and preserva-
+tion, and responds to changes in learned behavior. Its
+advantages are access to temporal geometry from one
+scalar, a favorable detection–false-alarm balance on
+the CNN benchmark, and measured savings relative to
+costly full-state analyses. Together, these results make
+MG a useful addition to training diagnostics when the
+observable is validated for the change being monitored.
+                                  Manuscript under review by AISTATS 2027
+
+
+AI USE STATEMENT                                             Alex Krizhevsky. Learning multiple layers of features
+                                                               from tiny images. Technical report, University of
+The authors formulated the central research questions,         Toronto, 2009.
+hypotheses, and scientific claims. Generative AI tools       Elizaveta Levina and Peter J. Bickel. Maximum
+assisted with experimental design, implementation, de-         likelihood estimation of intrinsic dimension. In
+bugging, analysis, figures, and reports, as well as draft-     Advances in Neural Information Processing Sys-
+ing, translation, and editing. The authors checked all         tems (NeurIPS), volume 17, 2004. URL https:
+reported results, read the complete manuscript, and            //proceedings.neurips.cc/paper/2004/file/
+further revised the text. They take responsibility for         74934548253bcab8490ebd74afecebb5-Paper.pdf.
+the final text, claims, code, and experimental results.
+                                                             Chunyuan Li, Heerad Farkhoor, Rosanne Liu, and
+                                                              Jason Yosinski. Measuring the intrinsic dimension
+                                                              of objective landscapes. In International Conference
+REFERENCES                                                    on Learning Representations (ICLR), 2018. URL
+                                                              https://openreview.net/forum?id=ryup8-WCW.
+Armen Aghajanyan, Sonal Gupta, and Luke Zettle-
+  moyer. Intrinsic dimensionality explains the effec-        David J C MacKay and Zoubin Ghahramani.
+  tiveness of language model fine-tuning. In Annual           Comments on ‘maximum likelihood estimation
+ Meeting of the Association for Computational Lin-            of intrinsic dimension’ by e. levina and p.
+ guistics (ACL), pages 7319–7328, 2021.                       bickel, 2005. URL http://www.inference.org.uk/
+                                                              mackay/dimension/. Unpublished note.
+Alessio Ansuini, Alessandro Laio, Jakob H. Macke, and
+                                                             Mitchell P. Marcus, Beatrice Santorini, and Mary Ann
+  Davide Zoccolan. Intrinsic dimension of data repre-
+                                                              Marcinkiewicz. Building a large annotated corpus of
+  sentations in deep neural networks. In Advances in
+                                                              english: The penn treebank. Computational Linguis-
+  Neural Information Processing Systems (NeurIPS),
+                                                              tics, 19(2):313–330, 1993.
+  2019.
+                                                             Fabian Pedregosa et al. Scikit-learn: Machine learning
+Samuel R. Bowman, Luke Vilnis, Oriol Vinyals, An-              in python. Journal of Machine Learning Research,
+  drew M. Dai, Rafal Jozefowicz, and Samy Bengio.              12:2825–2830, 2011.
+  Generating sentences from a continuous space. In
+                                                             Phil Pope, Chen Zhu, Ahmed Abdelkader, Micah Gold-
+  Proceedings of the 20th SIGNLL Conference on Com-
+                                                               blum, and Tom Goldstein. The intrinsic dimension of
+  putational Natural Language Learning, pages 10–21,
+                                                               images and its impact on learning. In International
+  2016. doi: 10.18653/v1/K16-1002.
+                                                              Conference on Learning Representations (ICLR),
+Jeremy M Cohen, Simran Kaur, Yuanzhi Li, J Zico                2021. URL https://openreview.net/forum?id=
+  Kolter, and Ameet Talwalkar. Gradient descent                XJk19XzGq2J.
+  on neural networks typically occurs at the edge of         Tim Sauer, James A. Yorke, and Martin Casdagli. Em-
+  stability. In International Conference on Learn-             bedology. Journal of Statistical Physics, 65(3-4):
+  ing Representations (ICLR), 2021. URL https:                 579–616, 1991.
+  //openreview.net/forum?id=jh-rTtvkGeM.
+                                                             Thomas Schreiber and Andreas Schmitz. Improved
+Elena Facco, Maria d’Errico, Alex Rodriguez, and              surrogate data for nonlinearity tests. Physical Review
+  Alessandro Laio. Estimating the intrinsic dimension         Letters, 77(4):635–638, 1996.
+  of datasets by a minimal neighborhood information.
+                                                             John Schulman, Filip Wolski, Prafulla Dhariwal, Alec
+  Scientific Reports, 7(1):12140, 2017.
+                                                               Radford, and Oleg Klimov. Proximal policy opti-
+Peiran Gao, Eric Trautmann, Byron M. Yu, Gopal San-            mization algorithms, 2017.
+  thanam, Stephen Ryu, Krishna Shenoy, and Surya             Jaroslav Stark. Delay embeddings for forced systems. I.
+  Ganguli. A theory of multineuronal dimensionality,           Deterministic forcing. Journal of Nonlinear Science,
+  dynamics and measurement. bioRxiv 214262, 2017.              9(3):255–332, 1999. doi: 10.1007/s003329900072.
+  doi: 10.1101/214262.
+                                                             Jaroslav Stark, David S Broomhead, ME Davies, and
+Guy Gur-Ari, Daniel A. Roberts, and Ethan Dyer.                J Huke. Delay embeddings for forced systems. II.
+ Gradient descent happens in a tiny subspace. arXiv            Stochastic forcing. Journal of Nonlinear Science, 13
+ preprint arXiv:1812.04754, 2018.                              (6):519–577, 2003. doi: 10.1007/s00332-003-0534-4.
+Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian            David Sussillo and L. F. Abbott. Generating coherent
+ Sun. Deep residual learning for image recognition.            patterns of activity from chaotic neural networks.
+ In Proceedings of the IEEE Conference on Computer            Neuron, 63(4):544–557, 2009. doi: 10.1016/j.neuron.
+ Vision and Pattern Recognition, pages 770–778, 2016.         2009.07.018.
+                                 Manuscript under review by AISTATS 2027
+
+
+Floris Takens. Detecting strange attractors in turbu-
+  lence. In Dynamical systems and turbulence, War-
+  wick 1980, pages 366–381. Springer, 1981. doi:
+  10.1007/BFb0091924.
+James Theiler. Spurious dimension from correlation al-
+  gorithms applied to limited time-series data. Physical
+  Review A, 34(3):2427–2432, 1986.
+Emanuel Todorov, Tom Erez, and Yuval Tassa. Mu-
+ JoCo: A physics engine for model-based control. In
+ IEEE/RSJ International Conference on Intelligent
+ Robots and Systems, pages 5026–5033, 2012.
+                               Manuscript under review by AISTATS 2027
+
+
+PAPER CHECKLIST                                                  multiple times). [Yes] All figures show individ-
+                                                                 ual records or seeds; ratios, medians, counts
+1. For all models and algorithms presented, check if             and the VAE bootstrap are defined explicitly.
+   you include:                                              (d) A description of the computing infrastructure
+                                                                 used. (e.g., type of GPUs, internal cluster, or
+   (a) A clear description of the mathematical set-
+                                                                 cloud provider). [No] CPU/thread settings
+       ting, assumptions, algorithm, and/or model.
+                                                                 are specified for the main timing comparisons,
+       [Yes] Sections 2–4 and the appendices.
+                                                                 but a complete hardware inventory for every
+   (b) An analysis of the properties and complex-                legacy run is not available in this manuscript.
+       ity (time, space, sample size) of any algo-
+       rithm. [Yes] Scale invariance, window require-     4. If you are using existing assets (e.g., code, data,
+       ments, storage and empirical cost are dis-            models) or curating/releasing new assets, check if
+       cussed; no universal sample-complexity bound          you include:
+       is claimed.
+                                                             (a) Citations of the creator If your work uses exist-
+   (c) (Optional) Anonymized source code, with                   ing assets. [Yes] Dataset/model and method-
+       specification of all dependencies, including              ological sources are cited in the text and asset
+       external libraries. [No] The manuscript                   notes.
+       bundle contains figure/table reconstruction
+                                                             (b) The license information of the assets, if appli-
+       scripts and numerical evidence; a complete
+                                                                 cable. [No] A consolidated license inventory
+       anonymized training-software release is sepa-
+                                                                 is not included in this version.
+       rate.
+                                                             (c) New assets either in the supplemental mate-
+2. For any theoretical claim, check if you include:              rial or as a URL, if applicable. [Yes] Numer-
+                                                                 ical evidence and manuscript-reconstruction
+   (a) Statements of the full set of assumptions of              scripts are provided with the source bundle.
+       all theoretical results. [Yes] The propositions       (d) Information about consent from data
+       state their assumptions. Embedding results                providers/curators. [Not Applicable] No
+       are cited as motivation and are not claimed               newly collected participant data are used.
+       to hold for every training record.
+                                                             (e) Discussion of sensible content if applicable,
+   (b) Complete proofs of all theoretical results.               e.g., personally identifiable information or of-
+       [Yes] Appendix A proves the two elementary                fensive content. [Not Applicable] No new tex-
+       propositions stated here; established embed-              tual or image dataset is released; the bundled
+       ding theorems are cited.                                  evidence is numerical.
+   (c) Clear explanations of any assumptions. [Yes]
+       Sections 2 and A distinguish geometric inter-      5. If you used crowdsourcing or conducted research
+       pretation from empirical monitoring.                  with human subjects, check if you include:
+                                                             (a) The full text of instructions given to partici-
+3. For all figures and tables that present empirical             pants and screenshots. [Not Applicable]
+   results, check if you include:
+                                                             (b) Descriptions of potential participant risks,
+   (a) The code, data, and instructions needed to re-            with links to Institutional Review Board (IRB)
+       produce the main experimental results (either             approvals if applicable. [Not Applicable]
+       in the supplemental material or as a URL).            (c) The estimated hourly wage paid to partici-
+       [Yes] The source bundle includes saved nu-                pants and the total amount spent on partici-
+       merical outputs and scripts to reproduce the              pant compensation. [Not Applicable]
+       plotted and tabulated results. It does not
+       include all weights or raw corpora needed to
+       repeat every training run.
+   (b) All the training details (e.g., data splits, hy-
+       perparameters, how they were chosen). [Yes]
+       Experiment-specific descriptions and calibra-
+       tion splits are in the appendices and accom-
+       panying protocols.
+   (c) A clear definition of the specific measure or
+       statistics and error bars (e.g., with respect to
+       the random seed after running experiments
+                                  Manuscript under review by AISTATS 2027
+
+
+A     GEOMETRIC INTERPRETATION                               The implemented code adds Gaussian dither of scale
+      AND NUMERICAL                                          10−9 after standardization, floors distances at 10−8 and
+      IMPLEMENTATION                                         local log-ratio sums at 10−5 , and records the fractions
+                                                             affected by these floors. Positive affine changes pre-
+                                                             serve the standardized input in exact arithmetic and
+A.1    What follows from an embedding
+                                                             preserve a run with the same dither. A negative rescal-
+The dimension interpretation has two steps. First,           ing preserves the distribution under symmetric dither,
+delay-embedding theorems give conditions under which         but need not give exactly equal values with the same
+a generic scalar observable can reconstruct the state of a   realized dither. Finite precision and almost-constant
+deterministic system. Second, a local dimension estima-      records require separate checks. The proposition con-
+tor approximates the geometry of that reconstruction         cerns a whole-window affine transformation: a scale
+from finite data. The reconstruction theorem alone           change within a window is a different time series.
+does not guarantee accurate estimation; the estimator
+alone does not establish an embedding.                       A.3    Pooling and dependence
+Proposition 1 (Bi-Lipschitz invariance). Let µ have          The numerator n(k − 1) − 1 is the bias correction used
+local dimension d at s, and let F be bi-Lipschitz on         by the existing implementation. Its Gamma-model mo-
+its support, with constants 0 < c ≤ C < ∞. Then the          tivation assumes idealized independent local statistics.
+pushforward F# µ has local dimension d at F (s).             Neighbor reuse and serial dependence mean that this
+                                                             correction is not a general finite-sample unbiasedness
+Proof. For sufficiently small ϵ, the inverse image           guarantee for the records in this paper. We use the
+of B(F (s), ϵ) is bounded on the support between             same implementation throughout, preserve degeneracy
+B(s, ϵ/C) and B(s, ϵ/c). Their probabilities bound           flags, and do not clip large estimates to E. The Theiler
+the pushforward probability. The logarithms of c and         exclusion removes temporally adjacent candidates but
+C contribute vanishing constants after division by log ϵ,    does not make the remaining observations independent.
+so both bounds have the same limiting exponent d.
+                                                             B     CONFIGURATIONS AND
+This elementary property states the geometric assump-
+                                                                   REPRODUCIBILITY
+tion behind our interpretation. A smooth embedding
+of a compact smooth manifold provides the needed             Tables and figures are generated from saved CSV/JSON
+local regularity. For a fractal support, an injective map    experimental outputs. The accompanying source bun-
+alone need not provide the required control of distances.    dle records file hashes and maps numerical claims to
+The forced-system results of Stark (1999); Stark et al.      their sources. We specify the observable, estimator
+(2003) impose additional conditions and include fibre-       settings, and calibration/test split for each task. All
+wise formulations. Their application to a stochastic         tasks use the same estimator; window length and lag
+optimizer would require checking those conditions; it        are chosen for the relevant timescale.
+does not follow from observing a scalar training log.
+                                                             Selecting a window. A window must leave enough
+                                                             admissible neighbors after delay reconstruction and
+A.2    Affine invariance and its implementation              temporal exclusion. Meeting the software minimum is
+       boundary                                              necessary but does not guarantee an accurate estimate.
+                                                             For dimension estimation, the window should contain
+Proposition 2 (Affine invariance of the ideal scalar
+                                                             repeated visits within one regime. The lag must also
+estimate). For a finite nonconstant record, fixed delay
+                                                             expose the phase structure: increasing record length
+and neighbor settings, and no numerical dither, Eq. (3)
+                                                             cannot compensate for delay vectors that cover only a
+is unchanged by replacing every observation with axt +b,
+                                                             nearly linear segment. For detection, longer windows
+for any a ̸= 0, provided the estimate is defined.
+                                                             stabilize estimates but blur transitions. We report
+                                                             detection delay to make this tradeoff explicit.
+Proof. After centering and dividing by standard devia-
+tion, the transformed series is the original standardized    Units of replication. The CNN interventions share
+series multiplied by sign(a). All pairwise Euclidean         seeds and pre-intervention histories; rescaling and
+distances of its delay vectors are identical. Temporal       smoothing are transformations of control logs. Genera-
+exclusions and admissible neighbors therefore remain         tor tasks reuse initialization seeds. The VAE branches
+unchanged, as do all distance ratios and their pooled        share initial trajectories, data, and probes. The Walker
+estimate.                                                    continuations share a learned starting policy. We
+                                   Manuscript under review by AISTATS 2027
+
+
+Table 3: Primary configurations. An exclusion of “span” is (E − 1)τ . The adaptive generator lag is one quarter of
+the autocorrelation time, capped so the delay span occupies at most one eighth of the window; its exclusion is
+capped at 320. Alternative settings are reported as sensitivity checks, not substituted for the primary results.
+    Experiment               Observable                     W            E τ           k    Theiler exclusion
+    Driven digits head    fixed state-based observers    8,000        20 4        20 at least span; cap 150
+    Known-mode regression training loss / fixed probe    2,048; 8,192 16 1        10 100
+    Learned generator E9  activity of neuron zero        8,192        20 adaptive 20 autocorrelation; cap 320
+    CNN / ResNet-18       parameter norm                 1,000        20 1        20 span
+    VAE                   fixed-probe reconstruction NLL 512          20 1        20 39
+    Walker2d              joint / control scalar         2,048        20 8        20 312
+
+
+present counts and paired contrasts at these levels;        odic modulation of selected group weights drives the
+we do not treat overlapping windows or transformed          recurrent motion. Calibration uses seeds 90–92 and
+logs as independent draws from a population. The            ranks 2,4,6; evaluation uses seeds 0–3 and held-out
+VAE intervals are percentile bootstrap intervals over       ranks 1,3,5,8. The selected settings are E = 20, τ = 4,
+nine paired confirmation seeds, using 20,000 resamples      k = 20, and an 8,000-point window. This configuration
+and bootstrap seed 20260929. They measure initializa-       lies on the boundary of the search grid and is held fixed
+tion/batch variation conditional on the selected data       for evaluation; the search does not establish a global
+and observable.                                             optimum.
+                                                            All usable state-based observables order the held-out
+C     CONTROLLED SYSTEMS AND                                ranks correctly. The mean error against measured co-
+      MLP-BASED RECOVERY                                    variance effective rank is 0.90 across individual records;
+                                                            aggregating by rank before computing the error gives
+C.1    Analytic and driven-learning validation              0.382. We report the former because these aggrega-
+                                                            tions answer different questions. Errors by observable
+The controlled suite includes an analytic matrix with       are 0.60 for fixed-probe loss, 0.41 for parameter norm,
+independent oscillatory entries and learning systems        0.34 for a fixed parameter projection, and 1.81 for gra-
+with time-dependent targets or forcing: online regres-      dient norm. Instantaneous mini-batch loss continues
+sion, logistic regression, a frozen nonlinear decoder,      varying with frozen parameters, while quantized probe
+and an MLP in a parameter subspace. To distinguish          accuracy is degenerate; neither supports the parameter-
+input variation from learned motion, we set the learn-      dimension interpretation. The controlled phases define
+ing rate to zero and check whether each observable still    the intended structure, and the covariance reference
+changes. Several early loss and gradient observables        checks which directions are measurably excited.
+continue varying. Their dimension estimates can re-
+cover the forcing structure, but cannot be attributed       C.2    Dense regression with endogenous modes
+solely to changing parameters. The digits-head experi-
+ment below addresses this ambiguity with state-based        The data matrix has 256 rows and 32 columns, full
+observables that become constant when learning stops.       column rank, and Hessian H = X ⊤ X/256. Orthogonal
+                                                            rotations make the data and learned weights dense.
+                                                            Eigenvalues are grouped into r repeated values, with a
+Table 4: Controlled validation with each experiment’s       single excited direction within each group. For heavy-
+reference. Mean absolute error (MAE) averages rank–         ball momentum one and step size one, the error in
+seed–observable combinations. The driven-target MLP         group j obeys
+signal still varies with frozen parameters; its error de-
+scribes the driven signal, not parameter motion alone.      qj,t+1 = 2 cos(ωj )qj,t − qj,t−1 ,     λj = 2(1 − cos ωj ).
+      Construction                        Range MAE
+                                                            The selected irrational frequencies produce r indepen-
+      Analytic oscillating matrix           1–8   0.27
+      Driven-target MLP subspace           1–20   0.92      dent phases. All 32 original coordinates move. Three
+      Digits head, covariance reference     1–8   0.90      seeds vary bases, teacher directions, and probes, but
+                                                            the normalized training-loss dynamics are identical up
+                                                            to rounding for a fixed spectrum. These are coordi-
+In the digits experiment, we train and freeze an MLP
+                                                            nate/observer checks rather than three independent
+feature extractor, then train a linear head in a fixed
+                                                            loss processes.
+affine parameter subspace. The cross-entropy loss as-
+signs weights to twelve fixed data groups. Quasiperi-       Selective damping sets momentum to 0.98 in two of
+                                        Manuscript under review by AISTATS 2027
+
+
+                                                             a positive pretraining Lyapunov criterion; thirteen can-
+Table 5: Known-mode regression: median scalar MG.
+                                                             didates were examined, yielding seeds 7,9,15,16,18. No
+Settings are fixed across r. A longer record does not
+                                                             MG value enters selection. The unselected initial seeds
+uniformly reduce bias.
+                                                             1–5 are retained separately because some start non-
+        r Loss, 2,048 Loss, 8,192 Probe, 8,192               chaotic. This is conditional evidence for learning from
+        1         0.90           1.12          1.01          chaos, not an estimate of how often random networks
+        2         2.39           2.57          2.55          become chaotic or learn a stable cycle.
+        4         3.71           4.99          4.11
+        6         5.88           7.00          4.98
+                                                             D     APPLIED TRAINING
+four groups at step 8,192. The comparison uses dis-                PROTOCOLS AND FULL
+joint 8,192-point windows before damping and after                 COMPARISONS
+the transition, with the latter starting at 12,288. Loss-
+based MG changes from 4.97 to 2.56, and the median           D.1    CNN and ResNet interventions
+probe estimate from 4.15 to 2.63. With ordinary mo-
+mentum 0.99 on all groups, learning converges and            The small CNN has three convolutional layers and 80
+late losses reach rounding scale. Standardization can        ReLU channels in total, no normalization, and 14,666
+then produce spurious high estimates; the absolute           parameters. It uses 10,000 CIFAR-10 images, SGD step
+pre-standardization scale must be checked.                   0.02, momentum 0.9, weight decay 5·10−4 , and batches
+                                                             of 64 sampled with replacement. The graded study
+C.3    Learned autonomous generators                         runs 10,000 updates with an intervention at update
+                                                             4,000. The before/after summaries use windows lying
+The 1,000-unit generator evolves as                          within the designated pre/post intervals, excluding the
+                                                             immediate mixed transition.
+         ht+1 = 0.9ht + 0.1(J tanh ht + U z t ),
+            z t = A⊤ tanh ht .                               The learning-rate interventions divide the step size by
+                                                             3, 10, or 100. Freezing leaves the later layers, only
+Here ht is the network state, J the recurrent matrix         the head, or only its bias trainable. Pruning masks
+with gain 1.2, U the output-feedback matrix, and A the       50%, 80%, or 95% of weights. Some interventions
+readout trained by FORCE/RLS for 100,000√simulation
+                                               √ √           rebuild SGD for the remaining trainable parameters,
+steps. Frequencies are proportional to 1, 2, 3, 5            which also changes optimizer state. Their measured
+     √ √H2/H4 use integer harmonics, and M4 uses
+for T1–T4;                                                   effect therefore includes that change and cannot be
+1, 2, 2, 2 2. All seven tasks use seeds 1–5. After           attributed to parameter count alone. Increased-batch
+training, we discard 5,000 burn-in steps and record          controls multiply batch size by four. Rescaling and
+32,768 autonomous samples. The reported MG value             smoothing transform the base log without retraining.
+is the median over four disjoint 8,192-point windows
+                                                             Detector calibration searches M ∈ {2, 3, 4} and B ∈
+on neuron zero. Neurons one and two provide fixed
+                                                             {3, 4, 6}. For each pair, its drop threshold is the small-
+robustness checks.
+                                                             est giving no alarms on calibration nulls, plus a mar-
+The Lyapunov reference uses twelve tangent vectors           gin of 0.02. The selected pair maximizes calibration
+and a near-zero threshold of −0.02 chosen in advance.        event detection, with shorter delay as a tie breaker.
+Its count agrees with the task phase count in 31/35          Companion-statistic directions are chosen on calibra-
+cases. H2 has weakly contracting directions near the         tion data as well. The rule is frozen for the new graded
+threshold and is overcounted in four seeds. Thus even        seeds and for ResNet. The selected MG threshold is
+this reference has finite-time ambiguity. MG has finite-     0.0882988401. The primary 27/28 count covers seven
+resolution error as well: one periodic H2 record gives       strong intervention types on four seeds; weak types are
+0.73, T2 has median 2.84, and T3/T4 overlap. The             reported separately. The 16 controls comprise base, in-
+reliable comparison is the distinction between phase         creased batch, rescaled base, and smoothed base on the
+structures, especially in the harmonic controls; exact       same four seeds. Thus these counts describe a matched
+recovery across d = 1–4 is not established.                  benchmark rather than independent Bernoulli trials.
+For the separate 256-unit motion experiment, gain is         ResNet-18 runs use the full CIFAR-10 training set, new
+1.5 and FORCE learns a figure-eight target for 40,000        seeds 20–22, and scratch/pretrained settings. SGD
+simulation steps. Each frozen checkpoint is evaluated        uses momentum 0.9, weight decay 5 · 10−4 , initial step
+after 2,000 burn-in steps over 8,192 recorded states.        0.02, and batch 128 without augmentation; the pre-
+The chaotic-start cohort consists of the first five eligi-   trained setting uses 64 × 64 images and ImageNet nor-
+ble seeds among sequential candidates 6–30, selected by      malization. MG and the rule transfer unchanged. A
+                                    Manuscript under review by AISTATS 2027
+
+
+Table 6: CNN interventions at all tested strengths, on four held-out seeds. Changes are medians of paired record
+ratios. Update covariance and the fraction of moving parameters provide independent comparisons. Stronger
+pruning does not always produce a larger MG decline.
+        Intervention                    MG before MG after MG change Update PR change Moving parameters
+        No intervention                      4.31        4.32     +0.4%              +40.3%             100.00%
+        Batch ×4                             4.31        4.85    +12.8%                -7.3%            100.00%
+        Log ×10                              4.31        4.32     +0.4%              +40.3%             100.00%
+        Smoothed log                         4.31        4.44     +3.3%              +40.3%             100.00%
+        Step / 3                             4.31        4.35     +0.9%                -5.4%            100.00%
+        Step / 10                            4.31        3.95      -8.3%              -21.6%            100.00%
+        Step / 100                           4.31        3.85     -11.5%              -20.9%            100.00%
+        Freeze first two convolutions        4.31        4.27      -1.8%              -13.6%             65.31%
+        Train head only                      4.31        3.51     -18.5%              -43.5%              2.25%
+        Train head bias only                 4.31        3.58     -16.7%              -68.4%              0.07%
+        Prune 50%                            4.31        3.80     -12.7%             +14.7%              50.30%
+        Prune 80%                            4.31        3.59     -17.5%              -10.3%             20.48%
+        Prune 95%                            4.31        3.79     -11.5%              -45.3%              5.55%
+
+
+1,024-coordinate CountSketch of updates provides a              D.3    Text VAE and preservation control
+tractable covariance reference. The head-only inter-
+vention succeeds in both settings; learning-rate and
+                                                                We select 6,000 training and 256 validation sentences
+pruning detection does not. The six freezing records
+                                                                with seed 20260929. Each has 8–24 words before the
+and 24 controls reuse three seeds and two initial-model
+                                                                end-of-sentence token. A 2,000-token vocabulary is
+settings.
+                                                                built from the training data. Shared embeddings have
+                                                                dimension 48, both GRUs have hidden size 64, and
+D.2     ReLU-death stress test                                  the diagonal Gaussian latent code has dimension 16.
+                                                                The code enters the decoder’s initial state and every
+A separate experiment uses six new seeds 30–35 and              decoding step. Training uses teacher forcing, Adam
+abrupt learning-rate shocks, with doses chosen on a             with learning rate 0.001, batch size 32, gradient-norm
+pilot using activation death and accuracy, not MG.              clipping at five, and no dropout. The loss sums re-
+A channel is counted as dead if it is zero on all 500           construction NLL within each sentence, adds β times
+diagnostic images. An event requires an increase of at          the KL term, and averages over sentences. Since the
+least 0.05 in the fraction of dead channels. There are          encoder observes the sentence, this reconstruction score
+42 training runs, augmented by rescaled and smoothed            differs from marginal generative likelihood and ordinary
+base logs. Twenty-three runs meet the death criterion;          language-model perplexity.
+two catastrophic whole-network failures are excluded
+from the prescribed eligible-event score and remain             The branches share weights, Adam state, and
+reported separately. This gives 21 eligible events and          batch/noise generators at update 1,024. Before ev-
+31 non-event records.                                           ery optimizer update, we evaluate 16 fixed validation
+                                                                sentences with fixed Gaussian noise (seed 829). Early
+                                                                MG is the median of five windows ending at updates
+Table 7: Boundary case: the transferred detector on             512–1,024; late MG is the median of nine windows
+ReLU death. Rules are fixed before the confirmation             ending at 2,048–3,072. Both use stride 128.
+results.
+      Statistic             Detected / 21 Alarms / 31           Independent references are measured every 128 steps.
+                                                                The empirical-mixture mutual information (MI) es-
+      MG                                12          12
+      Trend crossings                   19           7          timate uses four fixed draws from each of 256 pos-
+      Loss stagnation                   21           8          teriors and is bounded above by log 256 nats. The
+      Detrended std.                    21          25          code-response score is the symmetric KL divergence
+      Lag-one correlation                0           0          between decoder token distributions with matched and
+                                                                cyclically shuffled posteriors, using matched noise and
+                                                                teacher forcing. We record information loss when both
+MG changes are nonmonotone in channel death: mod-
+                                                                references fall below half their control values, provided
+erate loss of channels and catastrophic disruption can
+                                                                their early values were nontrivial.
+move the estimate in opposite directions. The CNN
+success therefore concerns the tested sustained training        The preservation branch uses free bits: at β = 1, it
+interventions and is not a generic failure detector.            floors the batch-averaged KL of each latent coordinate
+                                 Manuscript under review by AISTATS 2027
+
+
+at 0.5 nats before summing. We select this intervention
+                                                            Table 9: Cyclic VAE: detected events out of 41 at all
+on pilot seed zero using only the independent references.
+                                                            tested budgets. Primary budget is 12.
+An earlier pilot with five extra encoder updates fails
+to preserve information and is retained as a negative             Method               B = 6 B = 12 B = 24
+result. Preservation requires both late references to             MG                      18      28       36
+retain at least half their early values and exceed the            Standard deviation      13      20       38
+                                                                  Spectral entropy        17      28       35
+suppressed branch by at least a factor of two. All nine
+                                                                  Training KL              8      13       31
+test seeds pass. This is a third continuation of each             Schedule                18      18       26
+shared initialization, so the comparisons remain paired.          Periodic                12      38       40
+
+
+Table 8: Text VAE: late medians across nine confirma-
+                                                            per seed yields 34 detections, compared with MG’s 28;
+tion seeds. MI and code response are independent of
+                                                            this post-hoc comparison uses request counts but no
+the MG calculation.
+                                                            event times. Against the main periodic comparator,
+      Branch               MI Code response    MG
+                                                            MG’s mean per-seed recall is lower by 24.4 percentage
+      Low regularization 5.545         2.087 8.129          points, with bootstrap interval [−36.7, −10.0]. At bud-
+      Suppressed code    0.327         0.021 4.172
+      Free bits          3.934         0.599 5.491
+                                                            get six, MG detects 18 events versus 12 for periodic
+                                                            checks, although a rule based on the known training
+                                                            schedule also detects 18. MG is therefore competitive
+The suppression result is consistent across all nine        at the smaller budget but does not improve monitoring
+seeds at lag one for window lengths 256, 512, and 1,024.    overall in this test.
+At lag four, seven of nine seeds agree. The 1,024-
+point configuration has only one early window. Using
+ordinary mini-batch loss instead of the fixed probe gives   E    ADDITIONAL LEARNING
+the expected direction on only four seeds. Standard              SETTINGS
+deviation and spectral entropy of the fixed probe decline
+on all nine. These comparisons show that a stable probe     MNIST. A 15,018-parameter tanh MLP is trained on
+is important for detecting the information change in        a fixed balanced 2,040-image subset after downsampling
+this experiment.                                            to 14 × 14. SGD uses momentum 0.9, batch 64, and no
+                                                            weight decay. At step 2,048 of 4,096, one paired branch
+D.4     Cyclic-VAE monitoring                               reduces the learning rate from 0.1 to 0.01. A fixed 100-
+                                                            image loss probe is selected on the pilot. Detrended
+Fresh seeds 100–109 use the same architecture/data.         covariance rank declines more than the control on all
+Seed 100 calibrates thresholds; seeds 101–109 confirm       five new seeds; MG does so on four of five, with median
+them. After 1,024 steps at β = 0.01, three 2,048-step       contrast only 4.8%. The larger-window sensitivity is
+cycles linearly raise β from zero to one in their first     more favorable but does not replace the primary result.
+halves, hold it at one in their second halves, and reset.
+Total length is 7,168 updates. Training is independent      Grokking. The original modular-arithmetic studies
+of monitor requests. References every 64 steps define       include regularized mini-batch and unregularized full-
+loss when both normalized quantities are at most 0.5,       batch settings. Random projections of parameter and
+and recovery when both are at least 0.65, each on two       logit trajectories support detrended covariance analysis.
+consecutive checks. The event time is the second check.     A sharp collapse and later recovery aligns with gen-
+There are 41 events with a complete 512-step detection      eralization in four positive regularized runs, with two
+horizon and two late events scored separately.              controls; a memorizing zero-weight-decay run can show
+                                                            simplification elsewhere. The short-window parameter-
+The monitor requests a reference when the absolute
+                                                            norm analysis reports a coincident decline after match-
+log change of its feature from the previous request
+                                                            ing temporal bandwidth. Its 24/26 usable cells vary
+exceeds its pilot-selected threshold, respecting a 128-
+                                                            analysis settings on the same runs. The signal is not a
+step refractory period and a budget of 6,12,or 24 extra
+                                                            unique indicator of generalization, and scalar roughness
+checks. Every method also receives one initial check.
+                                                            is an alternative explanation in this setting. We retain
+For each budget, thresholds are selected from the same
+                                                            this as a complementary example rather than the sole
+fourteen-value grid on the pilot. Decisions use no future
+                                                            applied validation.
+values. Periodic checks use evenly spaced grid points
+with no favorable phase selection.
+                                                            Walker2d. PPO policies control six actuators in
+At budget 12, MG makes 9.44 requests on average.            Walker2d-v5. Fixed-policy evaluations use a 512-
+Matching a periodic schedule to the exact request count     step warm-up and 4,096 recorded steps. In phase-
+                                  Manuscript under review by AISTATS 2027
+
+
+conditioned variants, the observation is augmented by        score does not, and MG does not recover the exponents
+sine/cosine phase and the reward is changed to encour-       themselves.
+age an intended periodic behavior. Subsequent compar-
+                                                             In the 1,000-unit E9 generator, analysis of four 8,192-
+isons use a common initial locomotion checkpoint with
+                                                             point windows takes 8–23 s across learned-task medians.
+separate fine-tuning seeds, not independently trained
+                                                             The twelve-vector Lyapunov calculation takes 41–66 s;
+starting skills. Scalar joint and action logs are analyzed
+                                                             full-state PCA is about 0.2 s. The advantage over PCA
+alongside full-state return errors, inter-cycle variation,
+                                                             is its input requirement, not time. The difference from
+and responses to injected perturbations.
+                                                             the CNN’s millisecond windows is material and follows
+Moderate action-smoothing penalties give the most            from record/configuration and implementation costs.
+reproducible scalar result: two five-seed series show
+lower aggregate control-log MG. In the final five-seed       Coupled oscillators. A separate benchmark evalu-
+comparison, penalty strengths 0.25 and 1 give median         ates dense phase networks of 32,64,96,128 oscillators at
+MG/control ratios 0.801 and 0.604, with a decline on         two coupling levels using a shared saved 1,536-point tra-
+every seed. Normalized increments also decline in four       jectory for each comparison. Scalar analysis computes
+and five seeds and are cheaper. In the stricter full-        MG and LB together; the full spectrum integrates all
+gait experiment, only two of five pairs meet the joint       tangent directions with QR steps. Medians use five
+improvement criterion, and only one pair has lower MG        scalar and three spectrum repetitions. At size 128,
+under every prescribed reconstruction. Thus a simpler        scalar times are 0.061/0.049 s and full-spectrum times
+command signal is not sufficient evidence of a simpler       1.309/1.124 s. Scalar storage is 128 times smaller. At
+or more stable whole-body gait. Timing advantages            size 32, the full spectrum is faster. An additional same-
+below concern repeated perturbation probes, not these        seed 64-unit comparison with 4,096-point scalar win-
+elementary scalar competitors.                               dows also favors the spectrum (roughly 1.0–1.4 s versus
+                                                             1.6–2.2 s), so the short-window speedup is not universal.
+F    TIMING PROTOCOLS AND                                    The same-seed coupling sweep shows a collective con-
+                                                             traction of the spectrum and MG approaching one after
+     INFORMATION                                             synchronization; finite-time exponent thresholds are
+     REQUIREMENTS                                            not exact dimension labels. This is a dynamical-system
+                                                             benchmark, not neural-network training.
+Timing separates simulation/training, recording an ob-
+servable, analysis of an existing record, and extra diag-    VAE. The cyclic benchmark uses one warmed pro-
+nostic interventions. The comparisons are local imple-       cess, two PyTorch threads, one estimator thread,
+mentation benchmarks with the listed configurations.         and forty interleaved repetitions. Median costs are
+They do not establish a universal complexity ordering        7.134 ms per fixed probe, 12.890 ms per MG window,
+among all algorithms for the same scientific question.       and 209.323 ms per combined reference. Cost totals
+                                                             multiply component medians by the actual operation
+CNN. The saved graded result reports median MG               counts, including 7,168 probe acquisitions and 105 fea-
+processing of 9.49 ms per 1,000-point window. A              ture calculations. They are estimates of deployment
+float32 scalar record of 10,000 updates takes 39.06 KiB;     cost, not separately timed complete monitoring runs.
+the corresponding 14,666-dimensional trajectory takes        Other jobs may share the machine. At budget 12, ac-
+559.46 MiB. Parameter-norm acquisition is an O(P )           quisition alone costs 51.14 s, leading to the 54.68 s MG
+reduction, not zero-cost logging. CountSketch update         total. Cheap statistics using the same probe incur the
+references in ResNet use 1,024 stored coordinates per        same acquisition cost. Periodic checks require no such
+update and require computing the sketch. A streaming         probe stream.
+reference would change the storage comparison.
+                                                             Walker2d. In two fixed-horizon comparisons, MG of
+FORCE. The 256-unit endpoint benchmark replays               an existing scalar is approximately 21–25 times cheaper
+fixed-checkpoint autonomous trajectories. Median             than repeated perturbed simulations; including the
+MG times before/after training are 0.835/0.598 s; full-      doubled-embedding check reduces this to about 10–
+spectrum times are 12.006/11.551 s. With both E =            11 times. These probes answer questions about sta-
+20 and E = 40 calculations, scalar analysis takes            bility that MG alone cannot answer. On the final
+2.233/1.213 s. Scalar recording costs 0.102/0.166 s, in-     scalar benchmark, MG costs 369 ms per window, ver-
+cluding rollout; this is separate from analysis. The         sus 0.103 ms for spectral entropy, 3.782 ms for a scalar
+largest exponent costs 0.198/0.153 s and elementary          return statistic, and 0.048 ms for normalized increments.
+scalar baselines 0.0009/0.0015 s. The full spectrum          The data-saving property is shared by all four scalar
+supplies information that a single exponent or scalar        methods.
+                                  Manuscript under review by AISTATS 2027
+
+
+G    HOW THE EXPERIMENTS
+     SUPPORT THE METHOD
+
+The controlled tests connect MG to known phase struc-
+ture and identify its finite-resolution limits. The ap-
+plied tests ask a separate question: does the same
+estimator detect a change confirmed by an independent
+measurement? Its value for that task depends on reli-
+able detection, false alarms, and cost, rather than exact
+integer recovery. We report comparisons where MG
+adds information or saves computation, alongside cases
+where a simpler statistic is sufficient or better. The
+resulting evidence supports the specified observables
+and tasks; a new application requires the same kind of
+validation.
+

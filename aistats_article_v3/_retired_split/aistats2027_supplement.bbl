@@ -1,0 +1,50 @@
+\begin{thebibliography}{6}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Antognini and Sohl-Dickstein(2018)]{antognini2018pca}
+Joseph~M. Antognini and Jascha Sohl-Dickstein.
+\newblock {PCA} of high dimensional random walks with comparison to neural
+  network training.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, volume~31, 2018.
+
+\bibitem[Bandt and Pompe(2002)]{bandt2002permutation}
+Christoph Bandt and Bernd Pompe.
+\newblock Permutation entropy: a natural complexity measure for time series.
+\newblock \emph{Physical Review Letters}, 88\penalty0 (17):\penalty0 174102,
+  2002.
+\newblock \doi{10.1103/PhysRevLett.88.174102}.
+
+\bibitem[Page(1954)]{page1954continuous}
+E.~S. Page.
+\newblock Continuous inspection schemes.
+\newblock \emph{Biometrika}, 41\penalty0 (1--2):\penalty0 100--115, 1954.
+\newblock \doi{10.1093/biomet/41.1-2.100}.
+
+\bibitem[Richman and Moorman(2000)]{richman2000physiological}
+Joshua~S. Richman and J.~R. Moorman.
+\newblock Physiological time-series analysis using approximate entropy and
+  sample entropy.
+\newblock \emph{American Journal of Physiology--Heart and Circulatory
+  Physiology}, 278\penalty0 (6):\penalty0 H2039--H2049, 2000.
+\newblock \doi{10.1152/ajpheart.2000.278.6.H2039}.
+
+\bibitem[Stark(1999)]{stark1999delay}
+Jaroslav Stark.
+\newblock Delay embeddings for forced systems. {I.} {D}eterministic forcing.
+\newblock \emph{Journal of Nonlinear Science}, 9\penalty0 (3):\penalty0
+  255--332, 1999.
+\newblock \doi{10.1007/s003329900072}.
+
+\bibitem[Stark et~al.(2003)Stark, Broomhead, Davies, and Huke]{stark2003delay}
+Jaroslav Stark, David~S Broomhead, ME~Davies, and J~Huke.
+\newblock Delay embeddings for forced systems. {II.} {S}tochastic forcing.
+\newblock \emph{Journal of Nonlinear Science}, 13\penalty0 (6):\penalty0
+  519--577, 2003.
+\newblock \doi{10.1007/s00332-003-0534-4}.
+
+\end{thebibliography}

@@ -1,0 +1,1 @@
+{"setup": "source", "seed": 999, "event": "wd", "t_e": 3500, "t_r": null, "P": 55050, "test_acc": 0.7631000280380249, "wall_s": 47.14869920001365, "wd_factor": 300.0, "cfg": {"width": 64, "dataset": "mnist", "loss": "ce", "reduction": "mean", "micro": 64, "accum": 1, "lr": 0.02, "wd": 0.0005, "bf16": false, "restart": false, "log": "norm"}}

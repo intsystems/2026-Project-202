@@ -1,0 +1,160 @@
+{
+ "n_runs": 54,
+ "n_collapse": 23,
+ "n_net_death": 2,
+ "n_non_collapse": 31,
+ "loss_rise_rule": {
+  "M": 2,
+  "B": 3,
+  "delta": -0.059040300483030564,
+  "sign": -1
+ },
+ "MG": {
+  "hit_collapse": "12/21",
+  "alarm_non_collapse": "12/31",
+  "alarm_harmless_shocks": "7/10",
+  "median_delay": 1500.0
+ },
+ "crossings": {
+  "hit_collapse": "19/21",
+  "alarm_non_collapse": "7/31",
+  "alarm_harmless_shocks": "2/10",
+  "median_delay": 1000.0
+ },
+ "lag1": {
+  "hit_collapse": "0/21",
+  "alarm_non_collapse": "0/31",
+  "alarm_harmless_shocks": "0/10",
+  "median_delay": null
+ },
+ "det_std": {
+  "hit_collapse": "21/21",
+  "alarm_non_collapse": "25/31",
+  "alarm_harmless_shocks": "9/10",
+  "median_delay": 500.0
+ },
+ "loss_rise": {
+  "hit_collapse": "21/21",
+  "alarm_non_collapse": "8/31",
+  "alarm_harmless_shocks": "5/10",
+  "median_delay": 500.0
+ },
+ "P1_hit_rate_MG": 0.5714285714285714,
+ "P2_false_alarm_rate_MG": 0.3870967741935484,
+ "P3_spearman_MGchange_vs_ddead": 0.26917649896016166,
+ "P4_shock_alarms_loss_vs_MG": [
+  5,
+  7,
+  10
+ ],
+ "per_arm": [
+  {
+   "arm": "base",
+   "dead_pre": 0.0,
+   "dead_post": 0.0,
+   "collapse": 0,
+   "net_death": 0,
+   "n": 6,
+   "MG_change": -4.167,
+   "MG_alarm": 1,
+   "loss_alarm": 0,
+   "acc": 0.85
+  },
+  {
+   "arm": "kill100",
+   "dead_pre": 0.0,
+   "dead_post": 0.231,
+   "collapse": 6,
+   "net_death": 1,
+   "n": 6,
+   "MG_change": 9.98,
+   "MG_alarm": 0,
+   "loss_alarm": 6,
+   "acc": 0.559
+  },
+  {
+   "arm": "kill15x3",
+   "dead_pre": 0.0,
+   "dead_post": 0.125,
+   "collapse": 5,
+   "net_death": 0,
+   "n": 6,
+   "MG_change": -5.527,
+   "MG_alarm": 3,
+   "loss_alarm": 6,
+   "acc": 0.689
+  },
+  {
+   "arm": "kill20x2",
+   "dead_pre": 0.0,
+   "dead_post": 0.125,
+   "collapse": 5,
+   "net_death": 1,
+   "n": 6,
+   "MG_change": -9.715,
+   "MG_alarm": 4,
+   "loss_alarm": 6,
+   "acc": 0.709
+  },
+  {
+   "arm": "kill50",
+   "dead_pre": 0.0,
+   "dead_post": 0.094,
+   "collapse": 5,
+   "net_death": 0,
+   "n": 6,
+   "MG_change": -17.216,
+   "MG_alarm": 6,
+   "loss_alarm": 6,
+   "acc": 0.815
+  },
+  {
+   "arm": "scale",
+   "dead_pre": 0.0,
+   "dead_post": 0.0,
+   "collapse": 0,
+   "net_death": 0,
+   "n": 6,
+   "MG_change": -4.167,
+   "MG_alarm": 1,
+   "loss_alarm": 0,
+   "acc": 0.85
+  },
+  {
+   "arm": "shock20",
+   "dead_pre": 0.0,
+   "dead_post": 0.0,
+   "collapse": 0,
+   "net_death": 0,
+   "n": 6,
+   "MG_change": -7.884,
+   "MG_alarm": 5,
+   "loss_alarm": 2,
+   "acc": 0.824
+  },
+  {
+   "arm": "shock30",
+   "dead_pre": 0.0,
+   "dead_post": 0.025,
+   "collapse": 2,
+   "net_death": 0,
+   "n": 6,
+   "MG_change": -10.281,
+   "MG_alarm": 4,
+   "loss_alarm": 5,
+   "acc": 0.815
+  },
+  {
+   "arm": "smooth",
+   "dead_pre": 0.0,
+   "dead_post": 0.0,
+   "collapse": 0,
+   "net_death": 0,
+   "n": 6,
+   "MG_change": -1.449,
+   "MG_alarm": 0,
+   "loss_alarm": 0,
+   "acc": 0.85
+  }
+ ]
+}

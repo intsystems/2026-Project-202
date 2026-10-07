@@ -1,0 +1,7 @@
+cohort,signal,ratio,seeds,decreases
+221-225 (post hoc),action_norm,0.7550395387928666,5,5
+221-225 (post hoc),delta_action_norm,0.7171293548776759,5,5
+221-225 (post hoc),mean_action,0.7579211207545941,5,5
+231-235 (follow-up),action_norm,0.6037129518756824,5,5
+231-235 (follow-up),delta_action_norm,0.6014768201821191,5,5
+231-235 (follow-up),mean_action,0.6512686106050382,5,5

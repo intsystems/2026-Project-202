@@ -1,0 +1,22 @@
+\claude{
+\section{Introduction}\label{sec:intro}
+A scalar training log records more than whether a loss or parameter norm rises or falls. Its fluctuations can reflect several interacting degrees of freedom. As learning progresses, some of these may disappear or become coordinated. Detecting that change from the log would help monitor training without storing every parameter vector or repeatedly analyzing the full network state.
+
+We develop a method for detecting such changes from one scalar time series. The starting point is delay-embedding theory: under suitable assumptions, a vector of delayed observations preserves the geometry of the underlying dynamics \citep{takens1981detecting,sauer1991embedology,stark1999delay,stark2003delay}. A dimension estimator applied to these vectors can then measure how many independent local coordinates the dynamics require. We use the pooled MacKay--Ghahramani (MG) form \citep{mackay2005comments} of the Levina--Bickel estimator \citep{levina2004maximum}.
+
+Our hypothesis is that this geometric information remains useful when the exact dimension interpretation is unavailable. Restricting parameter updates, suppressing a latent information pathway, or learning a more regular behavior may each reduce the complexity of a scalar record. We test these forms of simplification against independent measurements. For stochastic or transient training, the question is whether changes in MG track the specified outcome reliably. An exact component count is not required for this monitoring task.
+
+\paragraph{Contributions.}
+\begin{enumerate}[leftmargin=*,itemsep=2pt,topsep=3pt]
+\item \textbf{A method for monitoring simplification from scalar logs.} We combine MG with a specified observation and windowing procedure, numerical checks, and a change detector that uses only past data. Once the log is available, analysis depends on the window and embedding size, not the model's parameter count.
+\Needspace{4\baselineskip}
+\item \textbf{Controlled tests of the active-component interpretation.} We test recovery in analytic oscillators and learning problems, including an MLP-based task. In trained recurrent generators, MG from one neuron separates independent phases from harmonics even when spectral peak counts and covariance ranks are similar.
+\item \textbf{Independent validation in applied learning tasks.} MG detects 27/28 strong CNN interventions with no control alarms, transfers to backbone freezing in ResNet-18, and tracks both information loss and preservation in a text VAE. We compare it with simple scalar statistics using the same records and calibration procedure.
+\item \textbf{Measured savings in analysis and storage.} We separate the cost of obtaining a log from processing it. A CNN window takes 9.5\,ms to analyze; in a learned recurrent system, MG is 14--19 times faster than the full Lyapunov spectrum while detecting the same transition.
+\end{enumerate}
+
+The methodological contribution is the combination of scalar observation, calibrated estimation, and change detection for learning dynamics. Delay embeddings and local dimension estimators are established tools. We show how to use them for this task, test their interpretation, and measure their benefit against independent references and competing diagnostics.
+
+\paragraph{Relation to existing measurements.}
+Intrinsic-dimension methods usually analyze clouds of data points or representations \citep{facco2017estimating,ansuini2019intrinsic,pope2021intrinsic}. Subspace-training methods study how many parameter directions suffice to learn a task \citep{li2018measuring,aghajanyan2021intrinsic}. We instead analyze the temporal structure of a scalar record. Covariance participation ratio measures how variance is distributed across directions \citep{gao2017theory}, while Hessian spectra describe local curvature \citep{gurari2018gradient,cohen2021gradient}. Both provide useful independent comparisons. Since simple scalar statistics also avoid full-state storage, we compare MG with roughness, autocorrelation, spectral entropy, and surrogate records \citep{schreiber1996improved} to test what its geometric analysis adds.
+}

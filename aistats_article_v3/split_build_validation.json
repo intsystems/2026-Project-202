@@ -1,0 +1,35 @@
+{
+  "aistats2027": {
+    "main_text_pages": 8,
+    "issues": [],
+    "pdf_pages": 29,
+    "text_equal_blue": true
+  },
+  "aistats2027_blue": {
+    "main_text_pages": 8,
+    "issues": [],
+    "pdf_pages": 29
+  },
+  "aistats2027_main": {
+    "main_text_pages": 8,
+    "issues": [],
+    "pdf_pages": 11,
+    "text_equal_blue": true
+  },
+  "aistats2027_main_blue": {
+    "main_text_pages": 8,
+    "issues": [],
+    "pdf_pages": 11
+  },
+  "aistats2027_supplement": {
+    "main_text_pages": null,
+    "issues": [],
+    "pdf_pages": 18,
+    "text_equal_blue": true
+  },
+  "aistats2027_supplement_blue": {
+    "main_text_pages": null,
+    "issues": [],
+    "pdf_pages": 18
+  }
+}

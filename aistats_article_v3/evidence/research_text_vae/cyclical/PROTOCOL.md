@@ -1,0 +1,35 @@
+# Prospective cyclic-VAE monitoring experiment, 2026-09-29
+
+Written before cyclic training or detector fitting. This experiment asks whether MG can allocate expensive reference checks better than cheap alternatives, not whether its value equals exact active dimension.
+
+## Training, independent of monitor decisions
+
+Reuse the existing PTB data selection, vocabulary, TextVAE architecture (276016 parameters), optimizer and probes. Fresh initialization/batch-noise seeds: pilot100; confirmation101--109. No existing seed is continued. Fixed corpus/probe across all runs; seeds are not independent datasets. All nine confirmations will be retained regardless of outcome. Training uses CPU, 2 Torch threads, at most 2 workers. Other users' jobs are left alone.
+
+Train for7168 updates. First1024: beta=.01. Then three cycles of2048 updates; phase p=(t-1024) mod2048, beta=min(p/1024,1). Thus beta resets to0, rises linearly to1 during the first half, remains1 during the second half. This is a small-model adaptation of Fu et al., Cyclical Annealing Schedule: A Simple Approach to Mitigating KL Vanishing, NAACL2019, ACL N19-1021; no claim to reproduce that paper's results. Learning rate=.001, batch32, clipping5. No free bits, dropout or additional encoder steps. Training loss is mean sentence-summed NLL plus beta*KL. MG observes reconstruction NLL/token, never the KL-weighted objective.
+
+Each step t: reference if t is divisible by64, then fixed probe on16 sentences before update t, then sample batch and latent noise, train. Reference also at7168. Probe and reference noise fixed as previously. Save final weights and branch weights/Adam/RNG at1024 for audit. No monitor changes training: this is causal replay of monitoring decisions, not an intervention improving model quality.
+
+## Ground truth: reference events, not beta changes
+
+Reference MI is a four-draw Monte Carlo estimate for the empirical mixture of256 posterior distributions (bound log256), and response is per-token symmetric KL under cyclic posterior shuffling with matched noise. Baselines MI0,response0 are medians at checkpoints512,640,768,896,1024. Both must be nontrivial (MI0>.1,response0>1e-4) and step1024 must satisfy the high condition below; otherwise flag the run as initially unsuitable rather than invent events.
+
+Low: MI<=.5*MI0 AND response<=.5*response0. High: MI>=.65*MI0 AND response>=.65*response0. Start high at1024. A state transition requires the opposite condition at two consecutive reference checkpoints. Event time is the SECOND checkpoint, not a backdated crossing. Ambiguous readings preserve the state and reset the candidate counter. Retain both loss and recovery. This is partial information retention, not complete recovery. At most five transitions are expected across three cycles, but none are assumed in advance. Insufficient recovery is a result, not grounds to change the schedule.
+
+Primary scoring includes events confirmed by6656 (=7168-512), allowing a full512-step detection horizon. Later events are separately listed as right-censored. A check hits the most recent unmatched transition if it occurs on/after confirmation, within512 updates, before an opposite transition, AND its current raw reference meets that event's low/high condition. One check matches at most one event. Other checks are unproductive checks, not fabricated independent false-positive trials. Report recall, checks without new event, and delay conditional on detection, separately for loss/recovery. Labels are never inputs to monitor policies.
+
+## Frozen monitoring architecture; pilot-only thresholds
+
+Features at window ends512..7168 by64. Primary MG W512,E20,tau1,k20,Theiler39, fixed estimator seed123, no detrending. MG40 is a saved offline diagnostic, not an input. Baseline std and normalized non-DC FFT entropy use the same512-point probe. Ordinary KL uses the mean of the last64 training KL values, already available in the loss. A schedule-aware competitor beta uses beta for the last completed update, floored at.01. Include periodic checks, independent of features.
+
+At1024 anchor each feature by its median at512,640,768,896,1024. At t=1088,1152,...,7168 calculate abs(log(max(feature,1e-12)/max(anchor,1e-12))). If it reaches the threshold, at least128 updates passed since the last check, and the check budget is not exhausted, request a reference check and reset anchor to current feature. No lookahead, global ranking, or label feedback. Degenerate/nonfinite MG windows cannot trigger; report all skipped windows. Monitoring budgets B=6,12,24 additional reference checks, primary12. All policies also receive one initial reference at1024; warm-up reference labels used in evaluation are excluded from operational policy inputs and costs. Monitoring needs its feature warm-up but not those reference labels.
+
+Choose each feature's threshold separately on pilot100 from [.025,.05,.075,.1,.15,.2,.3,.4,.5,.7,1,1.5,2,3]. Rank by pilot event recall (higher), unproductive checks (lower), conditional mean delay (lower), total checks (lower), threshold (higher). Fit each B separately; persist the selected values and pilot results BEFORE training101--109. No tuning on confirmations and no replacement seeds. Even poor pilot MG results do not stop confirmation.
+
+Periodic primary: B checks at evenly spaced grid positions, final one at7168; no favorable phase search. Additionally compare each monitor to a periodic policy with exactly its actual used check count on that seed. This matched-count comparator knows only the count/horizon, not event times. It is an offline budget comparison, not a prospectively chosen count. Also report dense checks at all96 post1024 grid times as the expensive baseline. Equal check budget is not equal total compute: report both.
+
+## Costs and validation
+
+Parallel training times are NOT evidence of speed. After training, run interleaved warmed single-process benchmarks of probe16 forward, reference256 (encoder+MI+two decoder passes), primaryMG, std, entropy and KL/beta feature processing. Torch/BLAS2 threads, estimator1 thread. Other machine load is disclosed; timings are local measurements, not universal hardware claims. Reconstruction probe acquisition is fully charged for all7168 steps for MG/std/entropy. Costs = acquisition + feature processing at all105 grid times + (checks+1)*reference cost. KL is already calculated for training, so only aggregation/policy and reference costs are incremental. Periodic has no probe/feature cost. Dense baseline97*reference cost. Also give the case where an identical fixed probe was already logged, explicitly conditional, and reference-cost break-even where relevant. Reference truth collection for evaluation is not credited as deployment savings.
+
+Audit fresh seeds, complete logs, beta schedule, event labels, final reference recomputation from weights, selected thresholds, budget/cooldown, prefix-invariance of decisions, and no future inputs. Report positive and negative results and cheap competitors. Do not infer exact dimensionality, practical LLM-scale speed, or improved language quality.

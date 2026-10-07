@@ -1,0 +1,13 @@
+size,method,balanced_accuracy
+20,MG_flags_only,0.9972085833787961
+20,MG_values,0.9097677909995939
+20,ties_only,1.0
+50,MG_flags_only,0.9968812511365703
+50,MG_values,0.9144798028896574
+50,ties_only,1.0
+100,MG_flags_only,0.9968812511365703
+100,MG_values,0.9553911510910391
+100,ties_only,1.0
+1000,MG_flags_only,0.9999090743771595
+1000,MG_values,0.9875152966978274
+1000,ties_only,1.0

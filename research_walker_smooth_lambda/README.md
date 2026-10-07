@@ -1,6 +1,54 @@
 # Walker2d: coefficient sweep, 2026-09-30
 
-Read `report_lambda.pdf` (Russian) or `report_lambda.md` first.
+Read **`report_final_ru.pdf`** or **`report_final_ru.md`** first: the consolidated
+Russian report of 2026-10-01 leads with the demonstrated strengths of MG and
+contains the setting, reproducible protocol, independent checks, primary and
+secondary scalar results, checkpoint analysis, simple-baseline comparison,
+runtime and interpretation boundaries. It supersedes the two separate reports
+as the entry point; their detailed audit results remain available.
+
+Rebuild the final report from the project root:
+
+```powershell
+.\.venv_walker\Scripts\python.exe research_walker_smooth_lambda\final_figures.py
+.\.venv_walker\Scripts\python.exe research_walker_smooth_lambda\build_final_report.py
+```
+
+The earlier detailed reports are `report_lambda.pdf` and `report_baselines.pdf`.
+
+## Final scalar-baseline audit
+
+Read `report_baselines.pdf` (two pages, Russian) for the final recommendation:
+close this setting as a supplementary positive example, not evidence that MG
+outperforms cheap diagnostics. MG decreases more consistently under weak
+regularization of the primary scalar (5/5 vs 4/5 seeds), but scalar recurrence
+also captures the degradation contrast, at about 98 times lower runtime here.
+These are descriptive comparisons of five continuation seeds, not statistical
+superiority or validated failure-prediction accuracy.
+
+`BASELINE_PROTOCOL.md` fixes the follow-up computations. `baselines_windows.csv`
+contains all 1521 signal windows (169 trajectories, 3 scalars, 3 windows).
+`baselines_records.csv`, `baselines_pairs.csv`, `baselines_by_seed.csv`, and
+`baselines_summary.csv` show each aggregation level. `baselines_common4_*`
+restrict every arm to the same 23 surviving reset pairs; `baselines_rebound_*`
+compare coefficients 4 and 1 on the same 24 eligible triplets including control.
+Both checks retain the conclusion, but cannot eliminate survivor bias relative
+to all test episodes. `baselines_timing*.csv` and `baselines_provenance.json`
+record the separate scalar-only benchmark. `baselines_seed_curves.pdf` shows
+individual seed ratios for all four metrics of the primary signal.
+
+Reproduce from the project root:
+
+```powershell
+.\.venv_walker\Scripts\python.exe research_walker_smooth_lambda\compare_scalar_baselines.py
+.\.venv_walker\Scripts\python.exe research_walker_smooth_lambda\baseline_figures.py
+.\.venv_walker\Scripts\python.exe research_walker_smooth_lambda\build_baselines_report.py
+.\.venv_walker\Scripts\python.exe research_walker_smooth_lambda\package_results.py
+```
+
+No policy training was added. The previous report's stale runtime factor was
+corrected from 29 to 17 to match its own 0.455/0.0266 timing table; the new
+98x factor compares a different reference (scalar recurrence, not full state).
 
 ## What was run
 

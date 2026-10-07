@@ -1,0 +1,27 @@
+{
+  "MG": {
+    "feature": "MG",
+    "sign": -1,
+    "threshold": 9.00611334699452
+  },
+  "entropy": {
+    "feature": "entropy",
+    "sign": 1,
+    "threshold": -Infinity
+  },
+  "increments": {
+    "feature": "increments",
+    "sign": 1,
+    "threshold": -Infinity
+  },
+  "recurrence": {
+    "feature": "recurrence",
+    "sign": 1,
+    "threshold": -Infinity
+  },
+  "peak": {
+    "feature": "peak",
+    "sign": 1,
+    "threshold": -Infinity
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "kernel_agreement": true,
+  "causal_window_ends": true,
+  "valid_vector_number": true,
+  "affine_rescaling": true,
+  "flat_nonfinite_noise_floor_gates": true,
+  "insufficient_neighbors": true,
+  "automatic_dimension_certification": false
+}

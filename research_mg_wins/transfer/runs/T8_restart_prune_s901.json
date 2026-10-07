@@ -1,0 +1,1 @@
+{"setup": "T8_restart", "seed": 901, "event": "prune", "t_e": 4600, "t_r": 3100, "P": 55050, "test_acc": 0.9750000238418579, "wall_s": 36.77450120000867, "wd_factor": 100.0, "cfg": {"width": 64, "dataset": "mnist", "loss": "ce", "reduction": "mean", "micro": 64, "accum": 1, "lr": 0.02, "wd": 0.0005, "bf16": false, "restart": true, "log": "norm"}}

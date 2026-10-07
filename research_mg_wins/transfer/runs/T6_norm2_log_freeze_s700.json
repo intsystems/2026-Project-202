@@ -1,0 +1,1 @@
+{"setup": "T6_norm2_log", "seed": 700, "event": "freeze", "t_e": 3900, "t_r": null, "P": 55050, "test_acc": 0.9793999791145325, "wall_s": 47.2936122000101, "wd_factor": 100.0, "cfg": {"width": 64, "dataset": "mnist", "loss": "ce", "reduction": "mean", "micro": 64, "accum": 1, "lr": 0.02, "wd": 0.0005, "bf16": false, "restart": false, "log": "norm2"}}

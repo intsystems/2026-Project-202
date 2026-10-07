@@ -1,0 +1,19 @@
+\begin{tabular}{lrrrrr}
+\toprule
+Intervention & MG before & MG after & MG change & Update PR change & Moving parameters \\
+\midrule
+No intervention & 4.31 & 4.32 & +0.4\% & +40.3\% & 100.00\% \\
+Batch $\times4$ & 4.31 & 4.85 & +12.8\% & -7.3\% & 100.00\% \\
+Log $\times10$ & 4.31 & 4.32 & +0.4\% & +40.3\% & 100.00\% \\
+Smoothed log & 4.31 & 4.44 & +3.3\% & +40.3\% & 100.00\% \\
+Step / 3 & 4.31 & 4.35 & +0.9\% & -5.4\% & 100.00\% \\
+Step / 10 & 4.31 & 3.95 & -8.3\% & -21.6\% & 100.00\% \\
+Step / 100 & 4.31 & 3.85 & -11.5\% & -20.9\% & 100.00\% \\
+Freeze first two convolutions & 4.31 & 4.27 & -1.8\% & -13.6\% & 65.31\% \\
+Train head only & 4.31 & 3.51 & -18.5\% & -43.5\% & 2.25\% \\
+Train head bias only & 4.31 & 3.58 & -16.7\% & -68.4\% & 0.07\% \\
+Prune 50\% & 4.31 & 3.80 & -12.7\% & +14.7\% & 50.30\% \\
+Prune 80\% & 4.31 & 3.59 & -17.5\% & -10.3\% & 20.48\% \\
+Prune 95\% & 4.31 & 3.79 & -11.5\% & -45.3\% & 5.55\% \\
+\bottomrule
+\end{tabular}

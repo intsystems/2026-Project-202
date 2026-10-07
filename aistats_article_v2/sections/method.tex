@@ -1,0 +1,45 @@
+\claude{
+\section{Estimating complexity from a scalar time series}\label{sec:method}
+\subsection{Problem statement}
+Given one scalar observation per step, we want to detect when the underlying dynamics become simpler. Let $s_t$ be the system state and $x_t=\phi(s_t)$ the observation. During optimization, $s_t$ includes the parameters and optimizer variables. When evaluating a trained recurrent generator, the weights are fixed and $s_t$ is the evolving network activity. These are two different trajectories to which we apply the same estimator.
+
+We consider two tasks. In a recurrent regime with a well-defined dimension, we estimate the number of active components from a finite window of $x_t$. In nonstationary training, we test whether changes in the estimate track simplification measured independently of MG.
+
+For the first task, let $\mu$ be an ergodic occupation measure: $\mu(B(s,\epsilon))$ describes the fraction of time spent within distance $\epsilon$ of state $s$. We define active dimension by
+\begin{equation}
+d_{\rm act}=\lim_{\epsilon\downarrow0}
+\frac{\log\mu(B(s,\epsilon))}{\log\epsilon},
+\label{eq:active}
+\end{equation}
+when the limit exists and has the same value almost everywhere. On a smooth $d$-dimensional manifold with positive regular density, $d_{\rm act}=d$. An oscillator with $r$ independent phases has $r$ active components even if its output contains many harmonics. Thus a component is an independent coordinate of the dynamics, not simply a peak in the signal's spectrum.
+
+For the second task, we hold the observable and estimator settings fixed across windows. Each experiment defines its reference before examining MG: restricted parameter updates, reduced latent information, or more regular learned behavior. These are measurable forms of simplification, but they need not share a single dimension or improve predictive performance. For example, losing useful latent information is simplification that a monitoring method should detect even though it is undesirable.
+
+\subsection{The geometric information in delayed observations}
+A single observation can mix several components. Delayed observations can separate them by recording how the signal changes over time. We form the vector
+\begin{equation}
+y_t=(x_t,x_{t+\tau},\ldots,x_{t+(E-1)\tau})
+\label{eq:delay}
+\end{equation}
+with $E$ coordinates separated by lag $\tau$. The Takens and Sauer results give conditions under which generic smooth observations distinguish the states of a deterministic system \citep{takens1981detecting,sauer1991embedology}. Stark's extensions address forced systems under additional assumptions \citep{stark1999delay,stark2003delay}. These results explain why a scalar record can retain information about the underlying dynamics. They do not prescribe a finite-sample window or guarantee reconstruction for every SGD trajectory.
+
+The condition needed for our dimension interpretation is precise. If the delay map is bi-Lipschitz on the sampled support, it changes distances by at most fixed factors. Those factors disappear in the limit in Eq.~\eqref{eq:active}, so the local dimension is preserved. Appendix~\ref{app:theory} gives the statement and proof. We therefore estimate dimension from the delay vectors in controlled recurrent systems, and test their usefulness as a relative complexity measure in applied training.
+
+\subsection{Computing MG}
+Within a window of $W$ scalar samples, we subtract the mean, divide by the standard deviation, and form the delay vectors. We then find their nearest neighbors, excluding vectors too close in time through a Theiler exclusion $T$ \citep{theiler1986spurious}. This prevents adjacent samples from dominating the neighborhoods. Let $k$ be the number of retained neighbors, $r_{ij}$ the distance from vector $i$ to its $j$th admissible neighbor, and $n$ the number of valid query vectors. We compute
+\begin{equation}
+\MG=\frac{n(k-1)-1}
+{\displaystyle\sum_{i=1}^{n}\sum_{j=1}^{k-1}
+\log(r_{ik}/r_{ij})}.
+\label{eq:mg}
+\end{equation}
+The distance ratios measure how quickly neighborhoods fill as their radius grows; faster growth corresponds to higher local dimension. Equation~\eqref{eq:mg} pools this information across query vectors. The subtraction of one is a finite-sample correction under the local likelihood model, which assumes approximately uniform density at the neighborhood scale. Serial dependence, uneven excitation, and short records can still introduce bias. We retain these effects in the reported estimates rather than clipping values to $E$.
+
+\paragraph{Scale invariance.}
+For fixed delay and neighbor settings, the ideal estimator is invariant to $x_t\mapsto ax_t+b$, $a\ne0$. Standardization removes the offset and amplitude scale, and the distance ratios remain unchanged. Thus MG can distinguish a change in temporal structure from a uniform change in amplitude. Appendix~\ref{app:theory} proves this property and describes the effects of the small numerical noise added in the implementation. The invariance applies to a whole window; a scale change within that window can alter its temporal structure.
+
+\paragraph{Windowing and interpretation.}
+The delay span $S=(E-1)\tau$ determines the time interval represented by each vector. The window length $W$ determines how much data enter an estimate and how precisely a transition can be located. Estimating dimension requires repeated visits within one regime. Monitoring requires a window short enough to distinguish the regimes before and after a change. We choose settings on calibration records, hold them fixed during evaluation, and report detection delay. Appendix~\ref{app:settings} lists the configurations.
+
+Where measured, we report sensitivity to doubling the embedding dimension, $\rho_E=\MG(2E)/\MG(E)$, the frequency of numerical-floor corrections, and companion scalar statistics. For nearly constant records, we also check the amplitude before standardization. These checks expose sensitivity to the reconstruction and numerical noise. They do not establish recurrence or a local scaling law. Without those properties, we interpret MG through its agreement with the independent task-specific reference.
+}

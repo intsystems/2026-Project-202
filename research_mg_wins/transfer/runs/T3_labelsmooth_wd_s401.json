@@ -1,0 +1,1 @@
+{"setup": "T3_labelsmooth", "seed": 401, "event": "wd", "t_e": 3500, "t_r": null, "P": 55050, "test_acc": 0.909500002861023, "wall_s": 52.703207799990196, "wd_factor": 100.0, "cfg": {"width": 64, "dataset": "mnist", "loss": "ls", "reduction": "mean", "micro": 64, "accum": 1, "lr": 0.02, "wd": 0.0005, "bf16": false, "restart": false, "log": "norm"}}

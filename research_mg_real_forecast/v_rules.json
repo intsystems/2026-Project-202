@@ -1,0 +1,122 @@
+{
+  "(0, 512)": {
+    "fixed": 7,
+    "rules": {
+      "MG": {
+        "feature": "MG",
+        "sign": -1,
+        "t": 7.9612656713335355
+      },
+      "entropy": {
+        "feature": "entropy",
+        "sign": -1,
+        "t": 0.22645943701745608
+      },
+      "increments": {
+        "feature": "increments",
+        "sign": 1,
+        "t": 0.0003800695332848
+      },
+      "recurrence": {
+        "feature": "recurrence",
+        "sign": 1,
+        "t": 0.01361751246684635
+      },
+      "peak": {
+        "feature": "peak",
+        "sign": 1,
+        "t": 0.451055132302416
+      },
+      "vmin": {
+        "feature": "vmin",
+        "sign": -1,
+        "t": 0.14459787366604326
+      },
+      "vmargin": {
+        "feature": "vmargin",
+        "sign": -1,
+        "t": 0.1591738684556809
+      }
+    }
+  },
+  "(1, 512)": {
+    "fixed": 4,
+    "rules": {
+      "MG": {
+        "feature": "MG",
+        "sign": 1,
+        "t": Infinity
+      },
+      "entropy": {
+        "feature": "entropy",
+        "sign": 1,
+        "t": 0.37098887219665233
+      },
+      "increments": {
+        "feature": "increments",
+        "sign": 1,
+        "t": Infinity
+      },
+      "recurrence": {
+        "feature": "recurrence",
+        "sign": 1,
+        "t": Infinity
+      },
+      "peak": {
+        "feature": "peak",
+        "sign": 1,
+        "t": Infinity
+      },
+      "vmin": {
+        "feature": "vmin",
+        "sign": 1,
+        "t": Infinity
+      },
+      "vmargin": {
+        "feature": "vmargin",
+        "sign": 1,
+        "t": Infinity
+      }
+    }
+  },
+  "(2, 32)": {
+    "fixed": 5,
+    "rules": {
+      "MG": {
+        "feature": "MG",
+        "sign": -1,
+        "t": 7.340503223937415
+      },
+      "entropy": {
+        "feature": "entropy",
+        "sign": 1,
+        "t": 0.28654688980284954
+      },
+      "increments": {
+        "feature": "increments",
+        "sign": 1,
+        "t": 0.00048032727844369997
+      },
+      "recurrence": {
+        "feature": "recurrence",
+        "sign": 1,
+        "t": 0.0171830264061138
+      },
+      "peak": {
+        "feature": "peak",
+        "sign": 1,
+        "t": 0.3207439504414103
+      },
+      "vmin": {
+        "feature": "vmin",
+        "sign": 1,
+        "t": 0.023008087872453002
+      },
+      "vmargin": {
+        "feature": "vmargin",
+        "sign": 1,
+        "t": 0.04489460279702251
+      }
+    }
+  }
+}

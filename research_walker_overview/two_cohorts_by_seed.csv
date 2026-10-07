@@ -1,0 +1,31 @@
+cohort,seed,signal,n,ratio
+221-225 (post hoc),221,action_norm,8,0.6031840156087462
+221-225 (post hoc),221,delta_action_norm,8,0.7171293548776759
+221-225 (post hoc),221,mean_action,8,0.6213612433268523
+221-225 (post hoc),222,action_norm,6,0.7550395387928666
+221-225 (post hoc),222,delta_action_norm,6,0.6730040314420433
+221-225 (post hoc),222,mean_action,6,0.7577013633568794
+221-225 (post hoc),223,action_norm,10,0.8660451927737145
+221-225 (post hoc),223,delta_action_norm,10,0.971783860973258
+221-225 (post hoc),223,mean_action,10,0.8201136496876681
+221-225 (post hoc),224,action_norm,8,0.9252503919620652
+221-225 (post hoc),224,delta_action_norm,8,0.9332276406900052
+221-225 (post hoc),224,mean_action,8,0.8728887943030323
+221-225 (post hoc),225,action_norm,9,0.707933926892191
+221-225 (post hoc),225,delta_action_norm,9,0.7063600729806695
+221-225 (post hoc),225,mean_action,9,0.7579211207545941
+231-235 (follow-up),231,action_norm,10,0.6037129518756824
+231-235 (follow-up),231,delta_action_norm,10,0.5206657840297297
+231-235 (follow-up),231,mean_action,10,0.6512686106050382
+231-235 (follow-up),232,action_norm,7,0.7306835428071282
+231-235 (follow-up),232,delta_action_norm,7,0.7406715931196484
+231-235 (follow-up),232,mean_action,7,0.6657188124956701
+231-235 (follow-up),233,action_norm,10,0.5087616031551296
+231-235 (follow-up),233,delta_action_norm,10,0.4925728343590858
+231-235 (follow-up),233,mean_action,10,0.5056981581339046
+231-235 (follow-up),234,action_norm,9,0.5862554530083812
+231-235 (follow-up),234,delta_action_norm,9,0.6014768201821191
+231-235 (follow-up),234,mean_action,9,0.5850473509463139
+231-235 (follow-up),235,action_norm,9,0.7814372401093794
+231-235 (follow-up),235,delta_action_norm,9,0.6940277536826109
+231-235 (follow-up),235,mean_action,9,0.7415896960210708

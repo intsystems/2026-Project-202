@@ -1,0 +1,59 @@
+% Independent revision. Edit sections/; do not regenerate from the legacy manuscript.
+\documentclass[twoside]{article}
+\usepackage{aistats2027}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx,booktabs,tabularx,array,microtype,xcolor}
+\usepackage[round]{natbib}
+\usepackage{enumitem,needspace}
+\usepackage[hidelinks]{hyperref}
+\usepackage{etoolbox}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\newcommand{\MG}{\widehat d_{\mathrm{MG}}}
+\DeclareMathOperator{\PR}{PR}
+\DeclareMathOperator{\median}{median}
+\ifdefined\claudedraft
+  \definecolor{claudecolor}{RGB}{25,90,160}
+\else
+  \definecolor{claudecolor}{RGB}{0,0,0}
+\fi
+\long\def\claude#1{\begingroup\color{claudecolor}#1\endgroup}
+\let\cl\claude
+\AtBeginEnvironment{figure}{\color{claudecolor}}
+\AtBeginEnvironment{figure*}{\color{claudecolor}}
+\AtBeginEnvironment{table}{\color{claudecolor}\setlength{\tabcolsep}{3pt}}
+\AtBeginEnvironment{table*}{\color{claudecolor}\setlength{\tabcolsep}{3pt}}
+% Fit the template's fixed-width copyright box to its column; body geometry is unchanged.
+\makeatletter
+\patchcmd{\@copyrightspace}{\begin{picture}(20,2.5)}{\begin{picture}(19.5,2.5)}{}{}
+\patchcmd{\@copyrightspace}{\parbox[b]{19.75pc}}{\parbox[b]{\columnwidth}}{}{}
+\makeatother
+\input{tables/numbers.tex}
+\begin{document}
+\runningtitle{Active Dimension as a Lightweight Measure of Training Complexity}
+\runningauthor{Anonymous}
+\twocolumn[
+\aistatstitle{Active Dimension as a Lightweight Measure of the Complexity of Neural Network Training Dynamics from Scalar Training Logs}
+\aistatsauthor{Anonymous Author}
+\aistatsaddress{Anonymous Institution}
+]
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/method}
+\input{sections/controlled}
+\input{sections/applications}
+\input{sections/cost_discussion}
+\label{LastMainPage}
+\clearpage
+\input{sections/ai_use}
+\bibliographystyle{plainnat}
+\claude{\bibliography{references}}
+\clearpage
+\input{sections/checklist}
+\clearpage
+\appendix
+\input{sections/appendix}
+\end{document}

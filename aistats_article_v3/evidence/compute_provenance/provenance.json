@@ -1,0 +1,23 @@
+{
+  "recorded_on": "2026-10-02",
+  "purpose": "Revision-time hardware identification; not a retrospective per-run log",
+  "processor": "Intel Core i5-12500H",
+  "physical_cores": 12,
+  "logical_processors": 16,
+  "historical_sources": {
+    "force_environment": {
+      "source": "research_force_motion/environment.json",
+      "sha256": "69fd79ec195bc2d8bd094504ec54ed77d9c9785e39c0cace392f6464fab313e4"
+    },
+    "vae_environment": {
+      "source": "research_text_vae/environment.json",
+      "sha256": "4710a0de6c74b80d4957fff0e781a8b69da9d95c2581f6d27010e58b72370b97"
+    },
+    "walker_environment": {
+      "source": "research_walker_smooth_lambda/timing_environment.json",
+      "sha256": "a68d6710f2fe53437ade82ee1694ceeed1254e72fca76ceb328918199352e581"
+    }
+  },
+  "official_template_sha256": "aac31ecf2e41f5a2b7f21d00094bfc2fc1207c34d9f955e991b66f3dc98fdb9b",
+  "checklist_rule": "Yes, No, Not Applicable; 1-2 sentence justifications encouraged; do not change questions"
+}

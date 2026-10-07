@@ -1,0 +1,3 @@
+# Second independent batch
+
+First fresh cohort601--606 gave at most~1% gain for neuron0/horizon512 and failures in the other selected settings. Run seeds607--618 with identical256-unit architecture,40000training steps,all8tasks and all3 frozen scenarios. No rule retraining. Treat neuron0/h512 as selected based on first cohort, so607--618 is the replication set. Report601--606 separately and pooled only as secondary. Do not stop early or replace unsuccessful generators. Flat records handled uniformly in an audit sensitivity: absolute error with denominator max(prefix variance,1e-12); prefix std<1e-10 flagged and shared persistence fallback. Historical protocol primary error retained alongside this numerical correction.

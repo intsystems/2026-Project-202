@@ -1,0 +1,8 @@
+{
+  "seed": 696,
+  "arm": "chaos",
+  "fidelity": null,
+  "training_seconds": 0.0017091999761760235,
+  "n": 256,
+  "steps": 0
+}

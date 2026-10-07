@@ -1,0 +1,38 @@
+\claude{
+\section*{Paper Checklist}
+\begin{enumerate}
+\item For all models and algorithms presented, check if you include:
+\begin{enumerate}
+\item A clear description of the mathematical setting, assumptions, algorithm, and/or model. [Yes] Sections~\ref{sec:method}--\ref{sec:applied} and the appendices.
+\item An analysis of the properties and complexity (time, space, sample size) of any algorithm. [Yes] Scale invariance, window requirements, storage and empirical cost are discussed; no universal sample-complexity bound is claimed.
+\item (Optional) Anonymized source code, with specification of all dependencies, including external libraries. [No] The manuscript bundle contains figure/table reconstruction scripts and numerical evidence; a complete anonymized training-software release is separate.
+\end{enumerate}
+\item For any theoretical claim, check if you include:
+\begin{enumerate}
+\item Statements of the full set of assumptions of all theoretical results. [Yes] The propositions state their assumptions. Embedding results are cited as motivation and are not claimed to hold for every training record.
+\item Complete proofs of all theoretical results. [Yes] Appendix~\ref{app:theory} proves the two elementary propositions stated here; established embedding theorems are cited.
+\item Clear explanations of any assumptions. [Yes] Sections~\ref{sec:method} and~\ref{app:theory} distinguish geometric interpretation from empirical monitoring.
+\end{enumerate}
+\item For all figures and tables that present empirical results, check if you include:
+\begin{enumerate}
+\item The code, data, and instructions needed to reproduce the main experimental results (either in the supplemental material or as a URL). [Yes] The source bundle includes saved numerical outputs and scripts to reproduce the plotted and tabulated results. It does not include all weights or raw corpora needed to repeat every training run.
+\item All the training details (e.g., data splits, hyperparameters, how they were chosen). [Yes] Experiment-specific descriptions and calibration splits are in the appendices and accompanying protocols.
+\item A clear definition of the specific measure or statistics and error bars (e.g., with respect to the random seed after running experiments multiple times). [Yes] All figures show individual records or seeds; ratios, medians, counts and the VAE bootstrap are defined explicitly.
+\item A description of the computing infrastructure used. (e.g., type of GPUs, internal cluster, or cloud provider). [No] CPU/thread settings are specified for the main timing comparisons, but a complete hardware inventory for every legacy run is not available in this manuscript.
+\end{enumerate}
+\item If you are using existing assets (e.g., code, data, models) or curating/releasing new assets, check if you include:
+\begin{enumerate}
+\item Citations of the creator If your work uses existing assets. [Yes] Dataset/model and methodological sources are cited in the text and asset notes.
+\item The license information of the assets, if applicable. [No] A consolidated license inventory is not included in this version.
+\item New assets either in the supplemental material or as a URL, if applicable. [Yes] Numerical evidence and manuscript-reconstruction scripts are provided with the source bundle.
+\item Information about consent from data providers/curators. [Not Applicable] No newly collected participant data are used.
+\item Discussion of sensible content if applicable, e.g., personally identifiable information or offensive content. [Not Applicable] No new textual or image dataset is released; the bundled evidence is numerical.
+\end{enumerate}
+\item If you used crowdsourcing or conducted research with human subjects, check if you include:
+\begin{enumerate}
+\item The full text of instructions given to participants and screenshots. [Not Applicable]
+\item Descriptions of potential participant risks, with links to Institutional Review Board (IRB) approvals if applicable. [Not Applicable]
+\item The estimated hourly wage paid to participants and the total amount spent on participant compensation. [Not Applicable]
+\end{enumerate}
+\end{enumerate}
+}

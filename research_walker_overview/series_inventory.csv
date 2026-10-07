@@ -1,0 +1,9 @@
+branch,training_policies,training_segments,transitions
+gait,1,2,4194304
+repair,6,6,6291456
+smooth,12,12,12582912
+imitation,3,3,3145728
+phase,2,2,2097152
+phase_wide,12,12,12582912
+combined,4,4,4194304
+smooth_lambda,24,24,25165824

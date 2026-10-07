@@ -1,0 +1,9 @@
+# MG model selection on real time series
+
+Hypothesis: MG can select between a seasonal-naive forecast and a local autoregressive forecast when the scalar process changes between periodic and irregular regimes. The decision utility is future forecasting MSE; features never see future values.
+
+Datasets: UCI Appliances Energy Prediction (10-minute energy series) and UCI Metro Interstate Traffic Volume (hourly traffic series). Downloads and hashes are recorded. These datasets are used for a new exploratory test, not for the paper yet.
+
+For each series, use a contiguous clean segment. Windows use 14 periods of context and forecast one period: 336/24 samples for hourly traffic and 2016/144 samples for 10-minute energy. Candidate models: seasonal naive, ridge AR with two seasonal periods of lags, and their oracle best. Rolling origins are split chronologically: first 40% calibrates feature thresholds, final 60% is confirmation. A model selector chooses the candidate using one feature: MG, spectral entropy, normalized increments, scalar recurrence error, or spectral peak concentration. Threshold and direction are selected only on calibration windows by minimizing future validation MSE; no target windows enter fitting. Fixed seasonal and fixed AR baselines are included.
+
+MG uses E=20, k=20, dither seed123, adaptive lag and autocorrelation Theiler cap320. If the context is degenerate or has insufficient neighbors, MG is unavailable and falls back to the fixed seasonal model; report these cases. Feature computation uses only the context. Report per-origin MSE, selector wins against fixed baselines, regret to oracle and cost. Adjacent rolling origins are correlated; the unit is a time block, not an independent sample. A result is useful if MG beats both fixed baselines and the strongest competing selector on both datasets or on a held-out regime.

@@ -1,0 +1,146 @@
+ACCURACY
+            stat                 var   CAL  TEST_IN  S_sim  S_pg  S_decay  S_win  S_noise  S_K4  S_wide
+              MG                  MG 0.611    0.523  0.347 0.458    0.597  0.681    0.333 0.694   0.389
+         MG_tau1             MG_tau1 0.491    0.449  0.264 0.389    0.444  0.472    0.333 0.611   0.361
+           twonn               twonn 0.431    0.361  0.333 0.306    0.292  0.347    0.333 0.139   0.333
+ recurrence_rate     recurrence_rate 0.648    0.583  0.667 0.764    0.681  0.750    0.403 0.667   0.472
+        corr_dim            corr_dim 0.630    0.574  0.667 0.750    0.583  0.764    0.514 0.653   0.472
+spectral_entropy    spectral_entropy 0.620    0.630  0.403 0.333    0.347  0.472    0.431 0.694   0.417
+      peak_count     peak_count_0.02 0.634    0.597  0.319 0.319    0.625  0.472    0.514 0.694   0.472
+  harmonic_count harmonic_count_0.01 0.681    0.713  0.500 0.333    0.653  0.667    0.681 0.625   0.653
+     self_repeat         self_repeat 0.662    0.620  0.250 0.292    0.458  0.722    0.486 0.764   0.500
+self_repeat_long    self_repeat_long 0.750    0.713  0.361 0.333    0.361  0.750    0.472 0.764   0.639
+       roughness           roughness 0.463    0.412  0.319 0.306    0.417  0.431    0.333 0.639   0.444
+    perm_entropy        perm_entropy 0.454    0.370  0.486 0.431    0.389  0.403    0.333 0.556   0.375
+       linear_pr           linear_pr 0.472    0.329  0.347 0.333    0.319  0.347    0.417 0.708   0.347
+       crossings           crossings 0.440    0.398  0.333 0.319    0.389  0.431    0.347 0.472   0.444
+            lag1                lag1 0.421    0.398  0.319 0.306    0.361  0.361    0.333 0.583   0.417
+         det_std             det_std 0.454    0.426  0.389 0.375    0.431  0.319    0.431 0.556   0.458
+             xi2                 xi2 0.523    0.458  0.375 0.389    0.528  0.458    0.472 0.403   0.528
+        state_pr            state_pr 0.907    0.907  0.972 0.972    0.917  0.903    0.931 0.917   0.861
+     state_count    state_count_0.01 1.000    0.986  0.986 1.000    1.000  0.986    1.000 0.986   0.931
+        xplay_pr            xplay_pr 0.690    0.625  0.722 0.736    0.778  0.708    0.500 0.694   0.583
+     xplay_count    xplay_count_0.03 0.903    0.870  0.986 1.000    0.917  0.903    0.431 0.931   0.736
+        always_2            always_2 0.333    0.333  0.333 0.333    0.333  0.333    0.333 0.333   0.333
+        always_3            always_3 0.333    0.333  0.333 0.333    0.333  0.333    0.333 0.667   0.333
+COST
+            stat  TEST_IN_cost  S_sim_cost  S_pg_cost  S_decay_cost  S_win_cost  S_noise_cost  S_K4_cost  S_wide_cost
+              MG         0.662       0.736      0.611         0.569       0.444         1.000      0.444        0.889
+         MG_tau1         0.866       1.319      1.000         0.750       0.708         1.000      0.528        1.056
+           twonn         1.694       2.000      2.028         1.597       1.708         2.000      2.778        1.528
+ recurrence_rate         0.639       0.514      0.375         0.528       0.431         0.778      0.625        1.083
+        corr_dim         0.630       0.528      0.319         0.667       0.375         0.778      0.611        1.111
+spectral_entropy         0.662       0.833      1.000         0.944       0.861         0.833      0.681        1.000
+      peak_count         0.718       1.000      1.028         0.694       0.792         0.764      0.625        0.889
+  harmonic_count         0.532       1.042      1.333         0.583       0.653         0.556      0.694        0.708
+     self_repeat         0.556       1.069      1.097         0.625       0.403         0.667      0.403        0.722
+self_repeat_long         0.463       0.861      0.972         0.833       0.431         0.694      0.444        0.583
+       roughness         0.912       2.014      2.042         0.792       0.986         1.000      0.528        0.917
+    perm_entropy         1.236       1.264      0.917         1.139       1.028         1.000      0.861        1.194
+       linear_pr         1.097       0.986      1.000         1.083       1.028         0.931      0.417        1.056
+       crossings         0.995       2.000      2.014         0.917       1.056         0.958      0.958        0.917
+            lag1         0.940       2.014      2.042         0.917       1.083         1.000      0.611        0.944
+         det_std         1.042       0.903      0.917         1.069       2.014         0.958      0.944        1.139
+             xi2         1.074       1.097      1.639         1.014       1.042         1.083      1.319        0.931
+        state_pr         0.181       0.056      0.056         0.167       0.181         0.125      0.167        0.208
+     state_count         0.028       0.028      0.000         0.000       0.014         0.000      0.028        0.069
+        xplay_pr         0.514       0.347      0.361         0.264       0.417         0.639      0.472        0.694
+     xplay_count         0.241       0.028      0.000         0.139       0.153         0.792      0.111        0.458
+        always_2         1.000       1.000      1.000         1.000       1.000         1.000      1.333        1.000
+        always_3         1.000       1.000      1.000         1.000       1.000         1.000      0.333        1.000
+RHO
+            stat  TEST_IN_rho  S_sim_rho  S_pg_rho  S_decay_rho  S_win_rho  S_noise_rho  S_K4_rho  S_wide_rho
+              MG        0.321      0.690     0.846        0.462      0.744       -0.301     0.457       0.104
+         MG_tau1        0.094     -0.214    -0.378        0.216      0.330       -0.322     0.171      -0.209
+           twonn       -0.162      0.772     0.836        0.283      0.354       -0.108     0.434      -0.322
+ recurrence_rate       -0.519     -0.786    -0.850       -0.658     -0.749       -0.231    -0.560      -0.296
+        corr_dim        0.574      0.781     0.797        0.659      0.763        0.272     0.525       0.294
+spectral_entropy        0.594      0.126    -0.156        0.638      0.631        0.393     0.656       0.404
+      peak_count        0.624      0.117    -0.066        0.665      0.615        0.546     0.594       0.461
+  harmonic_count        0.728      0.476    -0.273        0.725      0.769        0.757     0.418       0.677
+     self_repeat        0.655      0.242    -0.045        0.701      0.740        0.560     0.674       0.453
+self_repeat_long        0.778      0.252    -0.045        0.737      0.847        0.513     0.745       0.636
+       roughness        0.212      0.151    -0.009        0.266      0.107       -0.058     0.038       0.350
+    perm_entropy        0.121      0.626     0.362        0.052      0.286        0.070     0.223       0.036
+       linear_pr        0.258     -0.024     0.089        0.178      0.056        0.140     0.286       0.204
+       crossings        0.144      0.454     0.222        0.143      0.026        0.170     0.006       0.280
+            lag1       -0.060     -0.090     0.041       -0.070     -0.040        0.090     0.040      -0.217
+         det_std        0.296      0.303     0.238        0.221     -0.217        0.215     0.169       0.275
+             xi2        0.507      0.425     0.465        0.498      0.151        0.327     0.340       0.531
+        state_pr        0.887      0.908     0.926        0.885      0.874        0.910     0.825       0.837
+     state_count        0.989      0.998     0.998        0.998      0.993        1.000     0.998       0.942
+        xplay_pr        0.719      0.777     0.818        0.816      0.818        0.549     0.561       0.603
+     xplay_count        0.647      0.990     1.000        0.805      0.860        0.078     0.836       0.537
+        always_2          NaN        NaN       NaN          NaN        NaN          NaN       NaN         NaN
+        always_3          NaN        NaN       NaN          NaN        NaN          NaN       NaN         NaN
+TEST_IN by B
+            stat  B=10000  B=100000  B=inf
+              MG    0.375     0.625  0.569
+         MG_tau1    0.333     0.444  0.569
+           twonn    0.292     0.347  0.444
+ recurrence_rate    0.514     0.639  0.597
+        corr_dim    0.556     0.597  0.569
+spectral_entropy    0.611     0.597  0.681
+      peak_count    0.597     0.583  0.611
+  harmonic_count    0.653     0.681  0.806
+     self_repeat    0.569     0.681  0.611
+self_repeat_long    0.667     0.750  0.722
+       roughness    0.361     0.403  0.472
+    perm_entropy    0.375     0.389  0.347
+       linear_pr    0.319     0.347  0.319
+       crossings    0.431     0.389  0.375
+            lag1    0.361     0.361  0.472
+         det_std    0.389     0.444  0.444
+             xi2    0.431     0.389  0.556
+        state_pr    0.917     0.903  0.903
+     state_count    0.972     1.000  0.986
+        xplay_pr    0.528     0.681  0.667
+     xplay_count    0.778     0.875  0.958
+TEST_IN, runs with all scalar stats finite
+            stat  acc_allfinite   n
+              MG          0.541 207
+         MG_tau1          0.464 207
+           twonn          0.372 207
+ recurrence_rate          0.604 207
+        corr_dim          0.594 207
+spectral_entropy          0.618 207
+      peak_count          0.589 207
+  harmonic_count          0.705 207
+     self_repeat          0.609 207
+self_repeat_long          0.725 207
+       roughness          0.411 207
+    perm_entropy          0.357 207
+       linear_pr          0.333 207
+       crossings          0.401 207
+            lag1          0.401 207
+         det_std          0.411 207
+             xi2          0.444 207
+        state_pr          0.908 207
+     state_count          0.986 207
+        xplay_pr          0.638 207
+     xplay_count          0.889 207
+S_K4: K=4 vs K=3 separation (in the calibrated direction)
+            stat  AUC_K4_vs_K3
+              MG         0.752
+         MG_tau1         0.752
+           twonn         0.384
+ recurrence_rate         0.790
+        corr_dim         0.689
+spectral_entropy         0.727
+      peak_count         0.635
+  harmonic_count         0.568
+     self_repeat         0.660
+self_repeat_long         0.710
+       roughness         0.484
+    perm_entropy         0.689
+       linear_pr         0.606
+       crossings         0.516
+            lag1         0.497
+         det_std         0.576
+             xi2         0.616
+        state_pr         0.906
+     state_count         1.000
+        xplay_pr         0.646
+     xplay_count         0.983
+mean seconds per window: {'MG': 1.928, 'MG_tau1': 0.612, 'spectral_entropy': 0.001, 'self_repeat': 0.007, 'self_repeat_long': 0.056, 'roughness': 0.0, 'peak_count_0.01': 0.009, 'harmonic_count_0.01': 0.012, 'peak_count_0.02': 0.009, 'harmonic_count_0.02': 0.01, 'peak_count_0.05': 0.009, 'harmonic_count_0.05': 0.009, 'peak_count_0.1': 0.009, 'harmonic_count_0.1': 0.009, 'perm_entropy': 0.003, 'recurrence_rate': 0.152, 'corr_dim': 0.357, 'twonn': 1.933, 'linear_pr': 0.008, 'simple': 0.002}
+mean sim seconds per run: 0.72 attempts mean/max 1.3942307692307692 7

@@ -1,0 +1,24 @@
+{
+  "seed": 1,
+  "action": "prune",
+  "step": 768,
+  "val_acc": 0.9160000085830688,
+  "test_acc": 0.925000011920929,
+  "train_clean_acc": 1.0,
+  "train_noisy_acc": 1.0,
+  "mac_ratio": 0.6276197604790419,
+  "train_seconds": 1.9903494999161921,
+  "parameters": 17418,
+  "before": {
+    "val_acc": 0.9079999923706055,
+    "test_acc": 0.9175000190734863,
+    "train_clean_acc": 0.9810000061988831,
+    "train_noisy_acc": 0.9810000061988831
+  },
+  "immediate": {
+    "val_acc": 0.5979999899864197,
+    "test_acc": 0.5695000290870667,
+    "train_clean_acc": 0.5740000009536743,
+    "train_noisy_acc": 0.5740000009536743
+  }
+}

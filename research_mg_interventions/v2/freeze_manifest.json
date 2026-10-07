@@ -1,0 +1,19 @@
+{
+  "protocol": "36b6d3af17b7bd3d3bc38c4b1072266973b4ecdb2adc93146df47647b59a3b73",
+  "rules": "c4717f9a44786a6f0e4da004b83760e33b9a4c1ab7e2765915ddc21580f0bc9e",
+  "pilot_seeds": [
+    0,
+    1,
+    2
+  ],
+  "confirmation_seeds": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ]
+}

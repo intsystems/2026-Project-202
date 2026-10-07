@@ -1,0 +1,172 @@
+\begin{thebibliography}{24}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Aghajanyan et~al.(2021)Aghajanyan, Gupta, and
+  Zettlemoyer]{aghajanyan2021intrinsic}
+Armen Aghajanyan, Sonal Gupta, and Luke Zettlemoyer.
+\newblock Intrinsic dimensionality explains the effectiveness of language model
+  fine-tuning.
+\newblock In \emph{Annual Meeting of the Association for Computational
+  Linguistics (ACL)}, pages 7319--7328, 2021.
+
+\bibitem[Ansuini et~al.(2019)Ansuini, Laio, Macke, and
+  Zoccolan]{ansuini2019intrinsic}
+Alessio Ansuini, Alessandro Laio, Jakob~H. Macke, and Davide Zoccolan.
+\newblock Intrinsic dimension of data representations in deep neural networks.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2019.
+
+\bibitem[Bowman et~al.(2016)Bowman, Vilnis, Vinyals, Dai, Jozefowicz, and
+  Bengio]{bowman2016generating}
+Samuel~R. Bowman, Luke Vilnis, Oriol Vinyals, Andrew~M. Dai, Rafal Jozefowicz,
+  and Samy Bengio.
+\newblock Generating sentences from a continuous space.
+\newblock In \emph{Proceedings of the 20th SIGNLL Conference on Computational
+  Natural Language Learning}, pages 10--21, 2016.
+\newblock \doi{10.18653/v1/K16-1002}.
+
+\bibitem[Cohen et~al.(2021)Cohen, Kaur, Li, Kolter, and
+  Talwalkar]{cohen2021gradient}
+Jeremy~M Cohen, Simran Kaur, Yuanzhi Li, J~Zico Kolter, and Ameet Talwalkar.
+\newblock Gradient descent on neural networks typically occurs at the edge of
+  stability.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2021.
+\newblock URL \url{https://openreview.net/forum?id=jh-rTtvkGeM}.
+
+\bibitem[Facco et~al.(2017)Facco, d'Errico, Rodriguez, and
+  Laio]{facco2017estimating}
+Elena Facco, Maria d'Errico, Alex Rodriguez, and Alessandro Laio.
+\newblock Estimating the intrinsic dimension of datasets by a minimal
+  neighborhood information.
+\newblock \emph{Scientific Reports}, 7\penalty0 (1):\penalty0 12140, 2017.
+
+\bibitem[Gao et~al.(2017)Gao, Trautmann, Yu, Santhanam, Ryu, Shenoy, and
+  Ganguli]{gao2017theory}
+Peiran Gao, Eric Trautmann, Byron~M. Yu, Gopal Santhanam, Stephen Ryu, Krishna
+  Shenoy, and Surya Ganguli.
+\newblock A theory of multineuronal dimensionality, dynamics and measurement.
+\newblock \emph{bioRxiv 214262}, 2017.
+\newblock \doi{10.1101/214262}.
+
+\bibitem[Gur-Ari et~al.(2018)Gur-Ari, Roberts, and Dyer]{gurari2018gradient}
+Guy Gur-Ari, Daniel~A. Roberts, and Ethan Dyer.
+\newblock Gradient descent happens in a tiny subspace.
+\newblock \emph{arXiv preprint arXiv:1812.04754}, 2018.
+
+\bibitem[He et~al.(2016)He, Zhang, Ren, and Sun]{he2016deep}
+Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
+\newblock Deep residual learning for image recognition.
+\newblock In \emph{Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 770--778, 2016.
+
+\bibitem[Krizhevsky(2009)]{krizhevsky2009learning}
+Alex Krizhevsky.
+\newblock Learning multiple layers of features from tiny images.
+\newblock Technical report, University of Toronto, 2009.
+
+\bibitem[Levina and Bickel(2004)]{levina2004maximum}
+Elizaveta Levina and Peter~J. Bickel.
+\newblock Maximum likelihood estimation of intrinsic dimension.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, volume~17, 2004.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper/2004/file/74934548253bcab8490ebd74afecebb5-Paper.pdf}.
+
+\bibitem[Li et~al.(2018)Li, Farkhoor, Liu, and Yosinski]{li2018measuring}
+Chunyuan Li, Heerad Farkhoor, Rosanne Liu, and Jason Yosinski.
+\newblock Measuring the intrinsic dimension of objective landscapes.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2018.
+\newblock URL \url{https://openreview.net/forum?id=ryup8-WCW}.
+
+\bibitem[MacKay and Ghahramani(2005)]{mackay2005comments}
+David J~C MacKay and Zoubin Ghahramani.
+\newblock Comments on `maximum likelihood estimation of intrinsic dimension' by
+  e. levina and p. bickel, 2005.
+\newblock URL \url{http://www.inference.org.uk/mackay/dimension/}.
+\newblock Unpublished note.
+
+\bibitem[Marcus et~al.(1993)Marcus, Santorini, and
+  Marcinkiewicz]{marcus1993building}
+Mitchell~P. Marcus, Beatrice Santorini, and Mary~Ann Marcinkiewicz.
+\newblock Building a large annotated corpus of english: The penn treebank.
+\newblock \emph{Computational Linguistics}, 19\penalty0 (2):\penalty0 313--330,
+  1993.
+
+\bibitem[Pedregosa et~al.(2011)]{pedregosa2011scikit}
+Fabian Pedregosa et~al.
+\newblock Scikit-learn: Machine learning in python.
+\newblock \emph{Journal of Machine Learning Research}, 12:\penalty0 2825--2830,
+  2011.
+
+\bibitem[Pope et~al.(2021)Pope, Zhu, Abdelkader, Goldblum, and
+  Goldstein]{pope2021intrinsic}
+Phil Pope, Chen Zhu, Ahmed Abdelkader, Micah Goldblum, and Tom Goldstein.
+\newblock The intrinsic dimension of images and its impact on learning.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2021.
+\newblock URL \url{https://openreview.net/forum?id=XJk19XzGq2J}.
+
+\bibitem[Sauer et~al.(1991)Sauer, Yorke, and Casdagli]{sauer1991embedology}
+Tim Sauer, James~A. Yorke, and Martin Casdagli.
+\newblock Embedology.
+\newblock \emph{Journal of Statistical Physics}, 65\penalty0 (3-4):\penalty0
+  579--616, 1991.
+
+\bibitem[Schreiber and Schmitz(1996)]{schreiber1996improved}
+Thomas Schreiber and Andreas Schmitz.
+\newblock Improved surrogate data for nonlinearity tests.
+\newblock \emph{Physical Review Letters}, 77\penalty0 (4):\penalty0 635--638,
+  1996.
+
+\bibitem[Schulman et~al.(2017)Schulman, Wolski, Dhariwal, Radford, and
+  Klimov]{schulman2017proximal}
+John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov.
+\newblock Proximal policy optimization algorithms, 2017.
+
+\bibitem[Stark(1999)]{stark1999delay}
+Jaroslav Stark.
+\newblock Delay embeddings for forced systems. {I.} {D}eterministic forcing.
+\newblock \emph{Journal of Nonlinear Science}, 9\penalty0 (3):\penalty0
+  255--332, 1999.
+\newblock \doi{10.1007/s003329900072}.
+
+\bibitem[Stark et~al.(2003)Stark, Broomhead, Davies, and Huke]{stark2003delay}
+Jaroslav Stark, David~S Broomhead, ME~Davies, and J~Huke.
+\newblock Delay embeddings for forced systems. {II.} {S}tochastic forcing.
+\newblock \emph{Journal of Nonlinear Science}, 13\penalty0 (6):\penalty0
+  519--577, 2003.
+\newblock \doi{10.1007/s00332-003-0534-4}.
+
+\bibitem[Sussillo and Abbott(2009)]{sussillo2009generating}
+David Sussillo and L.~F. Abbott.
+\newblock Generating coherent patterns of activity from chaotic neural
+  networks.
+\newblock \emph{Neuron}, 63\penalty0 (4):\penalty0 544--557, 2009.
+\newblock \doi{10.1016/j.neuron.2009.07.018}.
+
+\bibitem[Takens(1981)]{takens1981detecting}
+Floris Takens.
+\newblock Detecting strange attractors in turbulence.
+\newblock In \emph{Dynamical systems and turbulence, Warwick 1980}, pages
+  366--381. Springer, 1981.
+\newblock \doi{10.1007/BFb0091924}.
+
+\bibitem[Theiler(1986)]{theiler1986spurious}
+James Theiler.
+\newblock Spurious dimension from correlation algorithms applied to limited
+  time-series data.
+\newblock \emph{Physical Review A}, 34\penalty0 (3):\penalty0 2427--2432, 1986.
+
+\bibitem[Todorov et~al.(2012)Todorov, Erez, and Tassa]{todorov2012mujoco}
+Emanuel Todorov, Tom Erez, and Yuval Tassa.
+\newblock {MuJoCo}: A physics engine for model-based control.
+\newblock In \emph{IEEE/RSJ International Conference on Intelligent Robots and
+  Systems}, pages 5026--5033, 2012.
+
+\end{thebibliography}

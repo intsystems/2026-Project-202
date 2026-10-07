@@ -1,0 +1,1 @@
+{"setup": "T9_fashion", "seed": 1002, "event": "prune", "t_e": 3700, "t_r": null, "P": 55050, "test_acc": 0.8723000288009644, "wall_s": 30.877954299969133, "wd_factor": 100.0, "cfg": {"width": 64, "dataset": "fashion", "loss": "ce", "reduction": "mean", "micro": 64, "accum": 1, "lr": 0.02, "wd": 0.0005, "bf16": false, "restart": false, "log": "norm"}}

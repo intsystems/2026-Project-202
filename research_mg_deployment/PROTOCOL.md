@@ -1,0 +1,15 @@
+# MG-guided Walker2d policy selection
+
+Exploratory setting selected after examining earlier Walker studies. No new deployment outcomes were examined before this file was written. The task is practical policy selection, not a claim about curriculum learning or independent training from scratch.
+
+Candidate policies: final checkpoints from research_walker_smooth_lambda, coefficients 0, 0.25, 1, 4. All policies descend from one shared starting checkpoint. Pilot seed230; confirmation fine-tuning seeds231--235, with no seed replacement. The existing five-seed results informed the hypothesis, so this is a new-outcome validation on existing policies, not wholly unseen policies.
+
+Decision: choose one candidate using only three nominal rollouts, reset81001--81003, 256 warm-up plus 2048 measurement steps. Signal: norm of the six commanded actions. MG: E20,tau8,k20,Theiler312,window2048,dither seed123, no retuning. All methods share nominal return/survival eligibility: at least two complete nominal walks and mean zero-padded reward >=90% of the highest candidate mean. If none satisfy, choose highest nominal reward.
+
+Selectors: minimum MG, minimum scalar spectral entropy, minimum normalized squared increments, minimum scalar recurrence error over lags20--250, minimum full-action J1, and maximum nominal reward. Features use median over complete nominal rollouts; unavailable features give no advantage. Uniform random over eligible policies is an expected-value comparator; fixed coefficient is selected on pilot only. Oracle maximizes new target returns and is explicitly unavailable at decision time. No selector observes target results on confirmation seeds.
+
+Deployment test: deterministic PPO policy, default Walker2d-v5 dynamics, full nominal warm-up256 then actuator delay of 1, 2 or 3 control steps for 2048 steps. Applied actions come from a FIFO; the queue starts with the last warm-up command. Delays model a change in the execution interface, not new training. Ten fresh target resets82001--82010 shared across policies; true falls are retained and remaining reward is zero. Do not pad missing sensor samples for MG. Delay0 target is a nominal reference; primary target objective averages delays1--3 equally. Report delay-specific results and survivor counts, including failures.
+
+Primary utility: mean target zero-padded reward of the selected policy (all reset/delay outcomes included). Paired unit: fine-tuning seed. Report all five seed results, policy selections, differences from strongest baseline, and exact sign/randomization summaries without claiming five seeds establish universal superiority. Monitor acquisition/analysis cost and compare with evaluating all candidates on target conditions. Training sunk cost is shared and must be identified.
+
+Pilot gate: test seed230 without changing target delays. If all target policies immediately fail or measurement cannot be implemented, report and revise as a new protocol. Otherwise run all confirmation seeds regardless of whether MG wins on pilot. Do not revise the MG selector after confirmation. Article unchanged. Output concise Russian report and raw measurements.

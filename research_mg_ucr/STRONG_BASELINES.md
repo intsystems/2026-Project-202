@@ -1,0 +1,5 @@
+# Strong baselines for candidate ECG success
+
+The official TwoLeadECG outcome was inspected: MG augmentation increased accuracy. This prompted a post-hoc stronger-baseline audit; keep screening status. Freeze raw z-normalized DTW1NN at Sakoe-Chiba10% and20% radii(selected by3fold training CV), and random convolution/ROCKET-style ridge classification.1000 random kernels(length7/9/11,random dilation,padding,bias),max and positive-proportion features,seed90210. Ridge alphas .01,.1,1,10,100 selected by same training CV; StandardScaler fitted in fold. Compare ROCKET features alone and appended MG8 with same alpha search. This is an explicit independent implementation of ROCKET-style features, not a claim of reproducing the original full10,000-kernel benchmark. Also run these frozen comparisons on ECG200 to retain a negative/nonwinning example. Report extraction time, matched classifiers and test errors. No additional test-tuned kernel settings.
+
+ECG5000 original three-fold screening had a training class with2examples. Its CV cannot put that class in all folds; report limitation rather than silently retune after test.

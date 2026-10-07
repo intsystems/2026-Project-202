@@ -1,0 +1,18 @@
+{
+  "selected": [
+    [
+      "RH_3",
+      24
+    ],
+    [
+      "RH_6",
+      24
+    ],
+    [
+      "T1",
+      24
+    ]
+  ],
+  "model_sha256": "03e886fa0a5165dd9cb1710ecd582e505627a57f556a2f72ee28fad5fcaff3d1",
+  "protocol_sha256": "813e5a1261ce0fd4520f89797d872d3c8d8da4125676cf9c3df2f10bd1d5439f"
+}

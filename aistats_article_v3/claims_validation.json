@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "ResNet freezing 6/6, controls 0/24": true,
+    "ResNet changes rounded to -27.6 and -30.8": true,
+    "VAE loss 9/9": true,
+    "VAE q and interval": true,
+    "VAE preservation and interval": true,
+    "Cyclic VAE 28/41 vs 38/41": true,
+    "E9 harmonic order in all five seeds": true,
+    "E9 median T1-T4": true,
+    "FORCE 14-19x rounded speed ratio": true,
+    "FORCE five task successes, four strict cycles": true,
+    "Oscillator 22-23x rounded speed ratio": true,
+    "VAE monitoring total cost": true,
+    "ReLU-death comparison retained": true
+  },
+  "scope": "Checks saved numerical evidence and manuscript counts; no new training or independent scientific certification."
+}

@@ -1,0 +1,198 @@
+[
+  {
+    "path": "research_text_vae/all_seeds.csv",
+    "sha256": "66936efef5851f0c1b98b71e0b7fb814b8c8a65d7bdb4ccdfa4407c23cfd1e30"
+  },
+  {
+    "path": "research_text_vae/all_seeds_sensitivity.csv",
+    "sha256": "391af1f1354d9348bd54fac3ccd2afabcbf90050c93f2d2b9b01bc935f05cfc5"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed1/base/reference.csv",
+    "sha256": "8f857c39873d16641b39d50dddaca76e9f654c3720787327c3c2e8266a3cbe6f"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed1/regularized/reference.csv",
+    "sha256": "16fbe9ad3f1543e90f2cd05d32100e3dc97b6825130a2f943476d53b9901f6e6"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed2/base/reference.csv",
+    "sha256": "5baf68b69587f28602027388e7d04683b79853853c053f9cc8115fe9d6ebb804"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed2/regularized/reference.csv",
+    "sha256": "cccb35b72bc57dd229c18bed77034032e73246df83c6c48d78cc26b282f7bb43"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed3/base/reference.csv",
+    "sha256": "14dd8199847f78c96de09d1c5f225c8925022b64fdcdade7563f7966cf8f8963"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed3/regularized/reference.csv",
+    "sha256": "11bb84bfbc718603a49bd2c54e2d5587df0494191bc31cfb94f1650f282b2b30"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed4/base/reference.csv",
+    "sha256": "cd507546629555759c4144650d5ae0ab2a8634777f377bf9fe09c5ccfcefdc6c"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed4/regularized/reference.csv",
+    "sha256": "d2557e12bc72a65d6b04a3898bd1fcde61dd4fcf0033238ebdf7100a6adab91b"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed5/base/reference.csv",
+    "sha256": "39e6a5490256ca384b610fc2301e25511134f865b08a50988a28133b45596c09"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed5/regularized/reference.csv",
+    "sha256": "1fd4fcab82c0174e965dfcf4c8b6641d18539498e01997a28739735896b9e0d5"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed6/base/reference.csv",
+    "sha256": "91f60d72bb627b79fa901bbc17c5a98a790276f4fc1e024eb5b6915c7ee1c74f"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed6/regularized/reference.csv",
+    "sha256": "30e04bc509041ec6ee952105e1a05e331cf03b9cfc601ccd237a4ea52424dac0"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed7/base/reference.csv",
+    "sha256": "64a85a1a4fb5c46ed75dd7b8061b303b6aaa7a5ba0d8100da7c9dbb7957f180c"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed7/regularized/reference.csv",
+    "sha256": "750c1fd12bc2b99f93c8c87c785c73287c7f3055a9277828013ad4000984248f"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed8/base/reference.csv",
+    "sha256": "56d07f9c86364e4a506fe8606a5303800bb3e9d8ef7c36e9076304c24e596d41"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed8/regularized/reference.csv",
+    "sha256": "a450b25536169ae5d88b9f132475e4ea03d3b71555dbba14aaf220202cc7fd30"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed9/base/reference.csv",
+    "sha256": "1cd227fb7e9b693081612d70e7a536867b5aedaa97c25485606d3489a293a2ca"
+  },
+  {
+    "path": "research_text_vae/confirmation_seed9/regularized/reference.csv",
+    "sha256": "778217f5f1b9f914f8647c2f1837ff9df05d7cca0f0acdf9c247a0da54a6d348"
+  },
+  {
+    "path": "research_text_vae/cyclical/all_scores.csv",
+    "sha256": "060b26df45b11e75f9fc29bd3b4d02189b79798e5e4c2d149d14aaccb219ca0a"
+  },
+  {
+    "path": "research_text_vae/cyclical/benchmark.json",
+    "sha256": "4c1efc4994afccdff60144e8f40ba792e7a89558dfe2c73469d7070f7a28ff97"
+  },
+  {
+    "path": "research_text_vae/cyclical/costs.csv",
+    "sha256": "ae89eef973b06315a8939f6bedf6468b626d2c01267e7e95e38612603c51e778"
+  },
+  {
+    "path": "research_text_vae/pilot_seed0/base/reference.csv",
+    "sha256": "544507ffc81ffa7baa207bee5f7920695094f11b82d6e837ba1346c0bc6bebc3"
+  },
+  {
+    "path": "research_text_vae/pilot_seed0/regularized/reference.csv",
+    "sha256": "e3a6cbd1ae3ad67bf90fb3f1ccdc5f1287a8a421238b8bb3c3c2ea7586942f9e"
+  },
+  {
+    "path": "research_text_vae/protection/all_seeds.csv",
+    "sha256": "a88498684d8ea309c2e9db35c4ed6e3a67ca6b540691c7ef75b0e1ce4a9a3bc8"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed0/reference.csv",
+    "sha256": "38da96310644e4570223b320a1a41735055c67a419a740f617f080ccbec65941"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed0/three_arm_windows.csv",
+    "sha256": "071267ceb022e7f20ccd419cfc9824b18319f8de8b7453e40ec55ae1ec9dbecb"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed1/reference.csv",
+    "sha256": "020e51623213a163558242ad316efff3de892cb1479dc0b624da3d9935135ace"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed1/three_arm_windows.csv",
+    "sha256": "1c0ae37e2e552f8a180b2bd32413089971bacc3a7751b1a46e581bdecbf9fbc3"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed2/reference.csv",
+    "sha256": "f1c1afdeedcd16d1668b6f453b0e345ba811162516a91e47abd5a98063797a57"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed2/three_arm_windows.csv",
+    "sha256": "f8782f6c5bc455880721d3b6e4fe81328e119f4127efb8ede3d4bf31a0acc936"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed3/reference.csv",
+    "sha256": "d40c41944594d9cf865f39fc311caa17921d89dd08830e9817e81d8483d1e6a3"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed3/three_arm_windows.csv",
+    "sha256": "e08037a539d40487884fe6f20f65f45cc4cfc0aeaf9597c038213433e0167eb9"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed4/reference.csv",
+    "sha256": "278fbdd9cbdbdfd743a4140f8893806c4e0cfe9b1e4a924db5e8ad151e2697c0"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed4/three_arm_windows.csv",
+    "sha256": "64e4ad577be2bc43f1baffb9f290240e5efd210b76f02fd59e7929c87a995411"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed5/reference.csv",
+    "sha256": "0fa80f6d7722c75dfd3f6b031fe65f5bd04842e67cfea937a911cde3fb292742"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed5/three_arm_windows.csv",
+    "sha256": "f85a7d2b3737aecf09b9b1a49238e3aab55be58cae7b1ab764c4852f9710de20"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed6/reference.csv",
+    "sha256": "d9e7641190736578c99b71f0b94499c45e137e6ec5bafe18a242e3e8c86c80d9"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed6/three_arm_windows.csv",
+    "sha256": "6d3cd4a12ca582879c594d9edd022368d9e250a6d84aba7ea9ade928a0c3f222"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed7/reference.csv",
+    "sha256": "6e357b4a518ff03b055d29cb9e293d5fcdcbaf695aa61f910035b2412ba5dc1d"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed7/three_arm_windows.csv",
+    "sha256": "074018f77ecb18699c05a83c90e9070f9557ed41f5e134f208284d74f25c3014"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed8/reference.csv",
+    "sha256": "043dcd032e83f7328372d26c7b1263da45ebcde720e9ccc1b52c1c2558b8e89e"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed8/three_arm_windows.csv",
+    "sha256": "455efd09507fe054552e3c4dffdede546e1691523b4d8372aa18b23549bcf4b5"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed9/reference.csv",
+    "sha256": "04eadab6261226c527f35605d80374604d9de9010aeda30b8246e7409e72bb38"
+  },
+  {
+    "path": "research_text_vae/protection/freebits/seed9/three_arm_windows.csv",
+    "sha256": "935114ed8973459194f55f73a8b2916f85818cd0701515a5db9b0315e4094122"
+  },
+  {
+    "path": "research_text_vae/protection/sensitivity.csv",
+    "sha256": "58a39f1bb12724de211fee5578a5297498bc9eab721da0004bd34283d5066c46"
+  },
+  {
+    "path": "research_text_vae/protection/summary.json",
+    "sha256": "734225e45a08dd5c61096f881f73c85957d22d512498b5f1d7e9adbbdadc09c0"
+  },
+  {
+    "path": "research_text_vae/summary.json",
+    "sha256": "a25a53ee77daca458c8e3f3a5c5c611c6f008f67f7d76ed81aa68a1ec90f3aa7"
+  }
+]

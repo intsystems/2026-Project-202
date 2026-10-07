@@ -1,0 +1,7 @@
+{
+  "platform": "Windows-10-10.0.18363-SP0",
+  "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+  "python": "3.13.12 (tags/v3.13.12:1cbe481, Feb  3 2026, 18:22:25) [MSC v.1944 64 bit (AMD64)]",
+  "threads": 1,
+  "repeats": 5
+}

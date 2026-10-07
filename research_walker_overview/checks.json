@@ -1,0 +1,9 @@
+{
+  "branches": 8,
+  "training_policies": 64,
+  "training_segments": 65,
+  "transitions": 70254592,
+  "phase_whole_state_successes": 2,
+  "all_three_action_logs_decrease_in_each_cohort": true,
+  "no_new_training": true
+}

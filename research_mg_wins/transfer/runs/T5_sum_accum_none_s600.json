@@ -1,0 +1,1 @@
+{"setup": "T5_sum_accum", "seed": 600, "event": null, "t_e": null, "t_r": null, "P": 55050, "test_acc": 0.9779000282287598, "wall_s": 94.18386809999356, "wd_factor": 100.0, "cfg": {"width": 64, "dataset": "mnist", "loss": "ce", "reduction": "sum", "micro": 32, "accum": 4, "lr": 0.0003125, "wd": 0.064, "bf16": false, "restart": false, "log": "norm"}}

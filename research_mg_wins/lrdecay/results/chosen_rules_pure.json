@@ -1,0 +1,137 @@
+{
+ "fixed_step": {
+  "f": 0.9375
+ },
+ "pflug_chee_toulis": {
+  "tmin": 0.125,
+  "start": "zero"
+ },
+ "sasa": {
+  "tmin": 0.125,
+  "mode": "equiv",
+  "z": 1.96,
+  "delta": 0.35
+ },
+ "pesme_distance": {
+  "tmin": 0.125,
+  "q": 1.5,
+  "th": 0.75
+ },
+ "plateau_train_loss": {
+  "tmin": 0.125,
+  "patience": 3,
+  "thr": 0.001
+ },
+ "plateau_val_loss": {
+  "tmin": 0.125,
+  "patience": 10,
+  "thr": 0.03
+ },
+ "MG": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 4,
+  "B": 4,
+  "eps": 0.02,
+  "log": "batch_loss"
+ },
+ "MG_tau4": {
+  "type": "rel",
+  "tmin": 0.125,
+  "sign": -1,
+  "M": 4,
+  "B": 4,
+  "delta": 0.02,
+  "log": "param_norm"
+ },
+ "self_repeat": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 4,
+  "B": 4,
+  "eps": 0.01,
+  "log": "batch_loss"
+ },
+ "spectral_entropy": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 4,
+  "B": 4,
+  "eps": 0.01,
+  "log": "param_norm"
+ },
+ "roughness": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 4,
+  "B": 4,
+  "eps": 0.02,
+  "log": "batch_loss"
+ },
+ "perm_entropy": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 2,
+  "B": 4,
+  "eps": 0.05,
+  "log": "param_norm"
+ },
+ "recurrence_rate": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 4,
+  "B": 4,
+  "eps": 0.02,
+  "log": "param_norm"
+ },
+ "corr_dim": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 4,
+  "B": 4,
+  "eps": 0.01,
+  "log": "param_norm"
+ },
+ "twonn": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 4,
+  "B": 4,
+  "eps": 0.01,
+  "log": "batch_loss"
+ },
+ "linear_pr": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 2,
+  "B": 4,
+  "eps": 0.01,
+  "log": "batch_loss"
+ },
+ "crossings": {
+  "type": "rel",
+  "tmin": 0.125,
+  "sign": -1,
+  "M": 4,
+  "B": 4,
+  "delta": 0.02,
+  "log": "batch_loss"
+ },
+ "lag1": {
+  "type": "rel",
+  "tmin": 0.125,
+  "sign": -1,
+  "M": 4,
+  "B": 4,
+  "delta": 0.2,
+  "log": "batch_loss"
+ },
+ "det_std": {
+  "type": "stable",
+  "tmin": 0.125,
+  "M": 2,
+  "B": 4,
+  "eps": 0.1,
+  "log": "batch_loss"
+ }
+}

@@ -1,0 +1,87 @@
+{
+  "main": {
+    "n": 9,
+    "reference_events": 9,
+    "primary_agreement": 9,
+    "raw_MG_decreases": 9,
+    "base_MG_increases": 9,
+    "median_paired_MG": 0.5174594671736953,
+    "range_paired_MG": [
+      0.43016387494338715,
+      0.5990795228924738
+    ],
+    "bootstrap_median95": [
+      0.47958767750606696,
+      0.5422893402213523
+    ],
+    "bootstrap_resamples": 20000,
+    "bootstrap_seed": 20260929,
+    "failed_seeds": []
+  },
+  "protection": {
+    "mode": "freebits",
+    "n_confirmation": 9,
+    "protection_valid_count": 9,
+    "protected_MG_higher_count": 9,
+    "closer_to_base_count": 9,
+    "median_R_all": 1.2857694452650656,
+    "median_R_valid": 1.2857694452650656,
+    "median_R_valid_bootstrap95": [
+      1.1790238974050515,
+      1.4178553963280804
+    ],
+    "median_q_protected": 0.6386649959489379,
+    "median_q_regularized": 0.5174594671736953,
+    "failed_protection_seeds": [],
+    "sensitivity": [
+      {
+        "window": 512,
+        "tau": 1,
+        "median_R": 1.2857694452650656,
+        "min_R": 1.142545297329857,
+        "max_R": 1.4814073911594206,
+        "R_above_one": 9
+      },
+      {
+        "window": 256,
+        "tau": 1,
+        "median_R": 1.29894537336743,
+        "min_R": 1.1751659691578884,
+        "max_R": 1.5050516994772418,
+        "R_above_one": 9
+      },
+      {
+        "window": 1024,
+        "tau": 1,
+        "median_R": 1.2543491426000413,
+        "min_R": 1.1301545232754544,
+        "max_R": 1.4299096484310851,
+        "R_above_one": 9
+      },
+      {
+        "window": 512,
+        "tau": 4,
+        "median_R": 1.2848137888216842,
+        "min_R": 1.0197146278827276,
+        "max_R": 1.5272969178592395,
+        "R_above_one": 9
+      }
+    ],
+    "cheap_baselines": [
+      {
+        "metric": "std",
+        "median_R": 1.3019680034703358,
+        "R_above_one": 9
+      },
+      {
+        "metric": "entropy",
+        "median_R": 1.0484399590559925,
+        "R_above_one": 7
+      }
+    ]
+  },
+  "reference_to_MG_cost_ratio": 16.23883459902773,
+  "distinct_initializations": 20,
+  "confirmation_initializations": 18,
+  "protection_reuses_first_cohort": true
+}

@@ -1,0 +1,274 @@
+{
+ "MG": {
+  "M": 3,
+  "B": 6,
+  "sign": -1,
+  "thr": -0.2782468719159574,
+  "cal_hits": 4,
+  "cal_null_fa": 0,
+  "cal_delay": 2150.0
+ },
+ "MG_t1k20": {
+  "M": 4,
+  "B": 6,
+  "sign": -1,
+  "thr": -0.15366117807007182,
+  "cal_hits": 2,
+  "cal_null_fa": 0,
+  "cal_delay": 2950.0
+ },
+ "self_repeat": {
+  "M": 2,
+  "B": 6,
+  "sign": -1,
+  "thr": -8.533422666256454,
+  "cal_hits": 8,
+  "cal_null_fa": 0,
+  "cal_delay": 650.0
+ },
+ "spectral_entropy": {
+  "M": 3,
+  "B": 6,
+  "sign": -1,
+  "thr": -0.27243327520033955,
+  "cal_hits": 4,
+  "cal_null_fa": 0,
+  "cal_delay": 1600.0
+ },
+ "roughness": {
+  "M": 2,
+  "B": 6,
+  "sign": -1,
+  "thr": -2.447369223258718,
+  "cal_hits": 8,
+  "cal_null_fa": 0,
+  "cal_delay": 650.0
+ },
+ "perm_entropy": {
+  "M": 2,
+  "B": 3,
+  "sign": 1,
+  "thr": -0.13126111508713753,
+  "cal_hits": 6,
+  "cal_null_fa": 0,
+  "cal_delay": 1150.0
+ },
+ "recurrence_rate": {
+  "M": 2,
+  "B": 4,
+  "sign": -1,
+  "thr": -0.9414992927864232,
+  "cal_hits": 9,
+  "cal_null_fa": 0,
+  "cal_delay": 600.0
+ },
+ "corr_dim": {
+  "M": 2,
+  "B": 4,
+  "sign": -1,
+  "thr": -0.4501043839914458,
+  "cal_hits": 6,
+  "cal_null_fa": 0,
+  "cal_delay": 1700.0
+ },
+ "twonn": {
+  "M": 2,
+  "B": 3,
+  "sign": 1,
+  "thr": -0.33482757175187405,
+  "cal_hits": 4,
+  "cal_null_fa": 0,
+  "cal_delay": 1650.0
+ },
+ "linear_pr": {
+  "M": 2,
+  "B": 3,
+  "sign": -1,
+  "thr": -0.05998225398928268,
+  "cal_hits": 5,
+  "cal_null_fa": 0,
+  "cal_delay": 1600.0
+ },
+ "crossings": {
+  "M": 2,
+  "B": 6,
+  "sign": -1,
+  "thr": -1.1311111111111112,
+  "cal_hits": 8,
+  "cal_null_fa": 0,
+  "cal_delay": 2100.0
+ },
+ "lag1": {
+  "M": 2,
+  "B": 3,
+  "sign": 1,
+  "thr": -0.020861982999861844,
+  "cal_hits": 0,
+  "cal_null_fa": 0,
+  "cal_delay": 1000000000.0
+ },
+ "det_std": {
+  "M": 2,
+  "B": 3,
+  "sign": 1,
+  "thr": -0.5935346883524264,
+  "cal_hits": 12,
+  "cal_null_fa": 0,
+  "cal_delay": 1700.0
+ },
+ "gradnorm_ratio": {
+  "M": 2,
+  "B": 3,
+  "sign": -1,
+  "thr": -0.03400696769396715,
+  "cal_hits": 10,
+  "cal_null_fa": 0,
+  "cal_delay": 700.0
+ },
+ "gradnorm_abs": {
+  "sign": -1,
+  "thr": -1.06089185762338,
+  "cal_hits": 7,
+  "cal_null_fa": 0,
+  "cal_delay": 700.0
+ },
+ "gradnorm_z": {
+  "block": 100,
+  "nref": 20,
+  "sign": -1,
+  "thr": -2.323333804415146,
+  "cal_hits": 11,
+  "cal_null_fa": 0,
+  "cal_delay": 100.0
+ },
+ "loss_plateau": {
+  "theta": 0.1,
+  "patience": 3000,
+  "thr": null,
+  "cal_hits": 10,
+  "cal_null_fa": 0,
+  "cal_delay": 2579.0
+ },
+ "srank_abs": {
+  "sign": 1,
+  "thr": 56.84,
+  "cal_hits": 5,
+  "cal_null_fa": 0,
+  "cal_delay": 700.0
+ },
+ "srank_ratio": {
+  "M": 2,
+  "B": 3,
+  "sign": 1,
+  "thr": -0.03694915254237284,
+  "cal_hits": 5,
+  "cal_null_fa": 0,
+  "cal_delay": 1000.0
+ },
+ "erank_ratio": {
+  "M": 2,
+  "B": 3,
+  "sign": 1,
+  "thr": -0.029560931942481643,
+  "cal_hits": 6,
+  "cal_null_fa": 0,
+  "cal_delay": 850.0
+ },
+ "dormant_abs": {
+  "sign": -1,
+  "thr": -0.0478125,
+  "cal_hits": 2,
+  "cal_null_fa": 0,
+  "cal_delay": 1550.0
+ },
+ "MG_dt": {
+  "M": 2,
+  "B": 3,
+  "sign": 1,
+  "thr": -0.3377725226109747,
+  "cal_hits": 3,
+  "cal_null_fa": 0,
+  "cal_delay": 1100.0
+ },
+ "MG_t1k20_dt": {
+  "M": 2,
+  "B": 3,
+  "sign": 1,
+  "thr": -0.20339202286293231,
+  "cal_hits": 8,
+  "cal_null_fa": 0,
+  "cal_delay": 1150.0
+ },
+ "self_repeat_dt": {
+  "M": 2,
+  "B": 6,
+  "sign": -1,
+  "thr": -1.1971459424887758,
+  "cal_hits": 6,
+  "cal_null_fa": 0,
+  "cal_delay": 1650.0
+ },
+ "spectral_entropy_dt": {
+  "M": 3,
+  "B": 6,
+  "sign": -1,
+  "thr": -0.3666838772830219,
+  "cal_hits": 7,
+  "cal_null_fa": 0,
+  "cal_delay": 1700.0
+ },
+ "roughness_dt": {
+  "M": 2,
+  "B": 3,
+  "sign": -1,
+  "thr": -0.7094616049531477,
+  "cal_hits": 9,
+  "cal_null_fa": 0,
+  "cal_delay": 1500.0
+ },
+ "perm_entropy_dt": {
+  "M": 2,
+  "B": 3,
+  "sign": 1,
+  "thr": -0.14340555038377742,
+  "cal_hits": 11,
+  "cal_null_fa": 0,
+  "cal_delay": 200.0
+ },
+ "recurrence_rate_dt": {
+  "M": 2,
+  "B": 6,
+  "sign": 1,
+  "thr": -0.6283080917351801,
+  "cal_hits": 8,
+  "cal_null_fa": 0,
+  "cal_delay": 2050.0
+ },
+ "corr_dim_dt": {
+  "M": 2,
+  "B": 6,
+  "sign": -1,
+  "thr": -0.17185113548840333,
+  "cal_hits": 6,
+  "cal_null_fa": 0,
+  "cal_delay": 2050.0
+ },
+ "twonn_dt": {
+  "M": 4,
+  "B": 3,
+  "sign": 1,
+  "thr": -0.3290013750371583,
+  "cal_hits": 7,
+  "cal_null_fa": 0,
+  "cal_delay": 1700.0
+ },
+ "linear_pr_dt": {
+  "M": 3,
+  "B": 3,
+  "sign": -1,
+  "thr": -0.07645821273457586,
+  "cal_hits": 5,
+  "cal_null_fa": 0,
+  "cal_delay": 2100.0
+ }
+}

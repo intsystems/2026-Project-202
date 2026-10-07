@@ -1,0 +1,126 @@
+[
+  {
+    "path": "research_known_modes_results/stationary_summary.csv",
+    "sha256": "0e9d5a4aca50dcdf8b0019300732b3f2963189f52d60d55015813d6ebb5202a0"
+  },
+  {
+    "path": "research_generator/results/runs.csv",
+    "sha256": "05c72ff533918f78f5a6445f900f1fffa7a5c80247d0492b218abdeb8d174592"
+  },
+  {
+    "path": "research_generator/results/summary.json",
+    "sha256": "1748f7c081793fae5a01e9726d8ebab051793ad9baf3844dabf01060267c8236"
+  },
+  {
+    "path": "research_trajectory_reference/results_graded/per_run.csv",
+    "sha256": "6c7c92b3926b7d2e1ee6a4d4ef1d2b318c7aed8f5d1774d03515f16d3bac8045"
+  },
+  {
+    "path": "research_trajectory_reference/results_graded/summary.json",
+    "sha256": "343bd28f30b7661eda50187b79239fe3179889d539e38d5542d57578a3a2510b"
+  },
+  {
+    "path": "research_trajectory_reference/results_detector/test_per_run.csv",
+    "sha256": "2d23435eb62e618fe60251a4f7a330409e1515d3052188a906989c326c7f9e5a"
+  },
+  {
+    "path": "research_trajectory_reference/results_detector/test_overall.csv",
+    "sha256": "1d10f1dbb6408136caee0ef48b7419f35b8086942d9b807414d7eaba164eac2c"
+  },
+  {
+    "path": "research_trajectory_reference/results_collapse/summary.json",
+    "sha256": "46872a0d86764ac6e7f141f7ece2985d2239eadab5ee2bc4e5a9820dc89fe9e4"
+  },
+  {
+    "path": "research_text_vae/protection/all_seeds.csv",
+    "sha256": "a88498684d8ea309c2e9db35c4ed6e3a67ca6b540691c7ef75b0e1ce4a9a3bc8"
+  },
+  {
+    "path": "research_text_vae/summary.json",
+    "sha256": "a25a53ee77daca458c8e3f3a5c5c611c6f008f67f7d76ed81aa68a1ec90f3aa7"
+  },
+  {
+    "path": "research_text_vae/protection/summary.json",
+    "sha256": "734225e45a08dd5c61096f881f73c85957d22d512498b5f1d7e9adbbdadc09c0"
+  },
+  {
+    "path": "research_text_vae/cyclical/all_scores.csv",
+    "sha256": "060b26df45b11e75f9fc29bd3b4d02189b79798e5e4c2d149d14aaccb219ca0a"
+  },
+  {
+    "path": "research_text_vae/cyclical/costs.csv",
+    "sha256": "ae89eef973b06315a8939f6bedf6468b626d2c01267e7e95e38612603c51e778"
+  },
+  {
+    "path": "research_text_vae/cyclical/benchmark.json",
+    "sha256": "4c1efc4994afccdff60144e8f40ba792e7a89558dfe2c73469d7070f7a28ff97"
+  },
+  {
+    "path": "research_force_motion/results_chaotic/report_summary.json",
+    "sha256": "223cfe5e6b32bb3bd90157985c7e95987b921e27d1667656e87a6b92d2015dfa"
+  },
+  {
+    "path": "research_force_motion/results_chaotic/benchmark.csv",
+    "sha256": "d8929614aed3c752da89b2db07a5c1596ddc3288e2033f03e4a06ec4b3cf4a4e"
+  },
+  {
+    "path": "research_sync_control_results/computation_benchmark_repeated.csv",
+    "sha256": "491896d08005b5a044cd12d3fd91f5b273ca42b8d38d94f40ae4ebb9493bfd15"
+  },
+  {
+    "path": "research_sync_control_results/same_seed_timing.csv",
+    "sha256": "c5e4da280f1e0e4c18867abb776330ac2c314955cbd67c90386b8fee24ffbb05"
+  },
+  {
+    "path": "research_trajectory_reference/results_resnet/e7_results/scratch/per_run.csv",
+    "sha256": "55d72922f0e1a953c40a9becfd548dfe3a3676b8158fadef35fd0c0142c02416"
+  },
+  {
+    "path": "research_trajectory_reference/results_resnet/e7_results/scratch/detector_per_run.csv",
+    "sha256": "e1b1ae764e4589b16b6d4e893e6774eb99cf04e3e8ed928a96e65b3edc4a28fc"
+  },
+  {
+    "path": "research_trajectory_reference/results_resnet/e7_results/finetune/per_run.csv",
+    "sha256": "b18c153369b0cfefe4743f4fa40949c5d2d03a9999220e586471dfa1cc46dee3"
+  },
+  {
+    "path": "research_trajectory_reference/results_resnet/e7_results/finetune/detector_per_run.csv",
+    "sha256": "b50d227296d3d5f3f2f5b1aae07f5656934909d0824340ced41ae522804eb467"
+  },
+  {
+    "path": "research_force_motion/PROTOCOL.md",
+    "sha256": "268adb85bec4550e2a1a8c245f9af337a2f749e2c4e159cb74f89a4e1291b2f2"
+  },
+  {
+    "path": "research_generator/REPORT_E9_ru.md",
+    "sha256": "be42c67411c67ff4e6b445999a3f65b5ca566f31fe3fe9eb562549750ae7f250"
+  },
+  {
+    "path": "research_trajectory_reference/REPORT_E8_ru.md",
+    "sha256": "d887f1c0f43fcb5695460e178cd7692256d3cff49b208aa3c104591fbc7a1adb"
+  },
+  {
+    "path": "research_known_modes_results/report_ru.md",
+    "sha256": "52764fad131a3fad8967aff52156a41fc5bf20755f7d153ba2d75b9722635c9d"
+  },
+  {
+    "path": "research_text_vae/PROTOCOL.md",
+    "sha256": "3c5321a8e47d8aa9e95f265ff300bd991e5ee0ccb9197d7f3ec55ea514a43e33"
+  },
+  {
+    "path": "research_text_vae/protection/PROTOCOL.md",
+    "sha256": "82ddfa7e31f667378c247ab86ea0247c19817ab49933eb1690aca83a751bfd0a"
+  },
+  {
+    "path": "research_text_vae/cyclical/PROTOCOL.md",
+    "sha256": "be85e2dec722838eafa2ad6e5b12df05479ed5f0e327449d2cd00e8c7dd87da3"
+  },
+  {
+    "path": "research_walker_overview/report_ru.md",
+    "sha256": "3d0ce4b0b9248e3b50ee44cc7ecc995f7ea6a5b0190225ff6723833e0d4b5405"
+  },
+  {
+    "path": "research_mnist_dynamics/report_ru.md",
+    "sha256": "9feb6af5cae861171086c9516dd6c3c4d75329877aa46afca60284485f896fcf"
+  }
+]

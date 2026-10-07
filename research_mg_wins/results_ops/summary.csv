@@ -1,0 +1,13 @@
+stat,resume_exact,opt_reset,reseed,bf16,clip,total
+crossings,0,0,0,0,0,0
+lag1,0,0,0,0,0,0
+self_repeat,0,0,0,0,0,0
+linear_pr,0,0,0,0,0,0
+twonn,0,0,0,0,0,0
+recurrence_rate,0,1,0,1,1,3
+spectral_entropy,1,0,0,1,1,3
+perm_entropy,0,1,1,1,1,4
+det_std,1,1,0,1,2,5
+MG,1,1,2,1,1,6
+roughness,1,1,2,1,1,6
+corr_dim,1,1,2,1,1,6

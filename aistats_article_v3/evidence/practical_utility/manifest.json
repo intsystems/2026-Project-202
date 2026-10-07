@@ -1,0 +1,138 @@
+[
+  {
+    "path": "audit_final.py",
+    "sha256": "4d0e95a01cabc416fccabedcb099e1c44107df408a09c2b05b7114079bd0bdb7"
+  },
+  {
+    "path": "campaign.py",
+    "sha256": "d146df454bc49c0663361d84ce243298d6d718902bc4b45bd769d4ef065f517b"
+  },
+  {
+    "path": "check_query_audit.py",
+    "sha256": "a1074c2fa95242f2ba9ff469284761f87f84960e6947687398862f32186c22cf"
+  },
+  {
+    "path": "final_audit.json",
+    "sha256": "5e7f42ed03339d331d2b5ba76f9fcbfd519eb25ab2fb0da0e7231ea4c037cacb"
+  },
+  {
+    "path": "final_audited_comparisons.csv",
+    "sha256": "bbde7ae5c489dda127a5ff0aed627dfca11254769116e0af7dbed2f7fc26d68b"
+  },
+  {
+    "path": "final_audited_decisions.csv",
+    "sha256": "85ebc5dd71ad04a3dd13204f3b9344aebc6a045d54ac14cf93c91d7fc45bb7a5"
+  },
+  {
+    "path": "FINAL_CONFIRMATION.md",
+    "sha256": "38d7b079358f4f9910f77a0e3587911b4e35b6f93e790de68df89ac3e45e8d00"
+  },
+  {
+    "path": "final_freeze.json",
+    "sha256": "1f6815dda830ac2a560114dd80d7db615b4acb9d12d6f8c3e411d54be6c4cf71"
+  },
+  {
+    "path": "final_without_control.csv",
+    "sha256": "79b732177fbf85d920f3cb9c80fc3f6eeab7f04a6a843410a3ad1284b7a2abcf"
+  },
+  {
+    "path": "fresh_generators.py",
+    "sha256": "4f4f9b6a44c8cb70e67bfb01225572e3fae452bf3d20368236b8936134f863bc"
+  },
+  {
+    "path": "GENERATOR_SCREEN.md",
+    "sha256": "b1520ff5c0586afe59c6d16c5c7614f3081765f60946214427dd9d92ee14f90c"
+  },
+  {
+    "path": "generator_screen.py",
+    "sha256": "d1bb8f1ac13b4694661f78fbe0a91970607ea01f8fd747d4239709ca341fabb2"
+  },
+  {
+    "path": "geometric_audit.py",
+    "sha256": "2d8e2ec14ffd1b1f572ec86182dfa23deb47b7af73db22aa81d58d033ad42de0"
+  },
+  {
+    "path": "intervention_control.py",
+    "sha256": "730534aa349df2943a618c4a3c7251356fec6d1afa6578d9ab45ad5c7913c763"
+  },
+  {
+    "path": "intervention_decisions.csv",
+    "sha256": "897d426a168450e53addf72b22569fb73d42c677e7e6ae97c9b7c00f260905b5"
+  },
+  {
+    "path": "intervention_freeze.json",
+    "sha256": "571cc3443ce6b55749f02009f7a41412ae9cde985df38835057e2b21ab4995f9"
+  },
+  {
+    "path": "INTERVENTION_PROTOCOL.md",
+    "sha256": "36b6d3af17b7bd3d3bc38c4b1072266973b4ecdb2adc93146df47647b59a3b73"
+  },
+  {
+    "path": "intervention_rules.json",
+    "sha256": "c4717f9a44786a6f0e4da004b83760e33b9a4c1ab7e2765915ddc21580f0bc9e"
+  },
+  {
+    "path": "intervention_train.py",
+    "sha256": "903904de102c428572fc3e3cfbc0e6e689f7187f332dcfb84798dc44ccfc715c"
+  },
+  {
+    "path": "query_audit.json",
+    "sha256": "17891a7fdb545603f6c68e5045e2f93c7612da29703c487830488c7601e529c5"
+  },
+  {
+    "path": "QUERY_BUDGET.md",
+    "sha256": "b2edc34fb267022fdac7cd912e42d89f7b62513ebb5e37073770a4dd08b9f19a"
+  },
+  {
+    "path": "query_budget.py",
+    "sha256": "803c8f88fa12c707f5f23c1918899db54bac85a5edffd0b1e148a0c29ea39ba7"
+  },
+  {
+    "path": "query_compare.py",
+    "sha256": "5013813c16f5559d16e3430f8db5511016e95b32c4ccafe6b129e5c18a144d73"
+  },
+  {
+    "path": "query_freeze.json",
+    "sha256": "d7406426e00df11151f0fddef74b637547033ae9b8a8c02ed071fe1ddaac4d8d"
+  },
+  {
+    "path": "query_fresh.csv",
+    "sha256": "60efe3e621b7d58ad4feefe635c912624c6a69637822f9fe4b1c8efcdaf83391"
+  },
+  {
+    "path": "query_fresh_comparisons.csv",
+    "sha256": "db3ea3f92681437397b4d401d7879e94c4177a618bde96fa4575a79b34d0055c"
+  },
+  {
+    "path": "query_intervals.csv",
+    "sha256": "3737f5807a7936c6f3fa492f5e136c1162f5560730511a0a4cffbeef5a3cc3aa"
+  },
+  {
+    "path": "query_paired_summary.csv",
+    "sha256": "0945fc858d1ec49b652ec8747823024ea72bf1b618d41416e20d81654d44127a"
+  },
+  {
+    "path": "query_paired_timing.csv",
+    "sha256": "293fb8d5bb3a8012bdafa8650ea13bd810c150a768d483a276199987659541c3"
+  },
+  {
+    "path": "ROUTING_REPLICATION.md",
+    "sha256": "1c23532a6a65f980452871522f346596c30e8ff9b946f2ab992ff989ed533e3c"
+  },
+  {
+    "path": "ROUTING_V2.md",
+    "sha256": "8074265b852f8306c56d08be913a30444df4ad0dcf2f7481f259637cdcdd0db0"
+  },
+  {
+    "path": "routing_v2.py",
+    "sha256": "a975b1fe7886b99b292f6a40fc10dbac8ea9210d9301fac43a2a680196cb39b7"
+  },
+  {
+    "path": "routing_v2_cv.csv",
+    "sha256": "e32b56f542cbd3dcb5ffd9d5feb9710c6b240e1193c5d0aac95c6b7303e5d517"
+  },
+  {
+    "path": "routing_v2_manifest.json",
+    "sha256": "3eeec16b932dc95b2b09a2326ec3464a766de042cbb4b5c7ce08815c58590cc1"
+  }
+]

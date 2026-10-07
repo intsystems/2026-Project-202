@@ -1,0 +1,10 @@
+{
+  "kind": "illustration, not experimental evidence",
+  "formula": "x_t=cos(2*pi*t/(40*sqrt(2)))",
+  "samples": 2048,
+  "tau": 10,
+  "E": 2,
+  "k": 8,
+  "Theiler": 10,
+  "query": 721
+}

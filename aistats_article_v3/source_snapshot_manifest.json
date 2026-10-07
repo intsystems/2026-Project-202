@@ -1,0 +1,1627 @@
+[
+  {
+    "path": "measurement_code/actdim/__init__.py",
+    "source": "code/actdim/__init__.py",
+    "sha256": "36e6aad867c8a2eae98cef30e5b9ec7e1052641da9b0f0d11fcb6b4c539a04a5"
+  },
+  {
+    "path": "measurement_code/actdim/estimator/calibration.py",
+    "source": "code/actdim/estimator/calibration.py",
+    "sha256": "e2edc16019a568980eed2b7778e4327c4fc62571c3de4ff39c778fbf0b06c4ae"
+  },
+  {
+    "path": "measurement_code/actdim/estimator/companions.py",
+    "source": "code/actdim/estimator/companions.py",
+    "sha256": "5b7efa81f1ce4270bc32b10da5d91e4ef40c8ef475df6ad45107ac6e532fe3a3"
+  },
+  {
+    "path": "measurement_code/actdim/estimator/config.py",
+    "source": "code/actdim/estimator/config.py",
+    "sha256": "0da6339345e3bcd41a7507a4f5c995f50ba6f2492608dcb8fb74f7732fc65889"
+  },
+  {
+    "path": "measurement_code/actdim/estimator/diagnostics.py",
+    "source": "code/actdim/estimator/diagnostics.py",
+    "sha256": "ca5ceaf538655e4ea8efd2954bfe2f83abf7628630259e9efb87bda3ca896810"
+  },
+  {
+    "path": "measurement_code/actdim/estimator/embedding.py",
+    "source": "code/actdim/estimator/embedding.py",
+    "sha256": "5ebfc13202a97aa71940d219d880daab3d3b36d8d8149f7962abf3180dc2d07c"
+  },
+  {
+    "path": "measurement_code/actdim/estimator/mle.py",
+    "source": "code/actdim/estimator/mle.py",
+    "sha256": "595ccd1a48015af197db970b90a8feeb9063e97996f270208d58a56ee64eb580"
+  },
+  {
+    "path": "measurement_code/actdim/estimator/neighbours.py",
+    "source": "code/actdim/estimator/neighbours.py",
+    "sha256": "050eef07e9439f8bd6540e97070bb05913236dbb9cae995a462e22a3e3206147"
+  },
+  {
+    "path": "measurement_code/actdim/estimator/surrogates.py",
+    "source": "code/actdim/estimator/surrogates.py",
+    "sha256": "e5a4f139715a41aec800e40b6852f903b9667db7c0de44913ac74f7395a89c50"
+  },
+  {
+    "path": "measurement_code/actdim/estimator/windows.py",
+    "source": "code/actdim/estimator/windows.py",
+    "sha256": "1f15007aea985c56033d8d9e6a97a7cc17b95863f402e796ba68810a305f15ae"
+  },
+  {
+    "path": "measurement_code/actdim/estimator/__init__.py",
+    "source": "code/actdim/estimator/__init__.py",
+    "sha256": "27e73abd4bbdb8c8a90340c887b2492424c75451004c804f9a129d39a04f8f72"
+  },
+  {
+    "path": "experiment_code/code/actdim/frozen.py",
+    "source": "code/actdim/frozen.py",
+    "sha256": "852b99ff1920d1d90413fc4a5c69d23698e62c219a901c38919e47a3adefc302"
+  },
+  {
+    "path": "experiment_code/code/actdim/linalg.py",
+    "source": "code/actdim/linalg.py",
+    "sha256": "19bfd3a686d3aac6219eadcf7ffb012bdf27144fa7d764cdaa88698f7618e64d"
+  },
+  {
+    "path": "experiment_code/code/actdim/observers.py",
+    "source": "code/actdim/observers.py",
+    "sha256": "ce2adbcaffa6e103837743509a36ae5f1a81eb8bb45f7c82e628b79847c4d797"
+  },
+  {
+    "path": "experiment_code/code/actdim/tables.py",
+    "source": "code/actdim/tables.py",
+    "sha256": "a39f59632eff55b9c0249c6495b34b73d282c1dfd9ccee8203aeedecc0c86890"
+  },
+  {
+    "path": "experiment_code/code/actdim/__init__.py",
+    "source": "code/actdim/__init__.py",
+    "sha256": "36e6aad867c8a2eae98cef30e5b9ec7e1052641da9b0f0d11fcb6b4c539a04a5"
+  },
+  {
+    "path": "experiment_code/code/actdim/__main__.py",
+    "source": "code/actdim/__main__.py",
+    "sha256": "5404b2a6f6b45a5879ffb388b09b4151d3f4f7fb8c4b7e2228bafec1e169fcce"
+  },
+  {
+    "path": "experiment_code/code/actdim/analysis/logs.py",
+    "source": "code/actdim/analysis/logs.py",
+    "sha256": "0dc6d30bc035350bd5e4f83de9b65e902f3acedc3ca61a486670203338f5171f"
+  },
+  {
+    "path": "experiment_code/code/actdim/analysis/representation.py",
+    "source": "code/actdim/analysis/representation.py",
+    "sha256": "a997deb34b612e48f0aaa30e82a3c44f76912cd514ff8aa1e06afb83cd2cb8d5"
+  },
+  {
+    "path": "experiment_code/code/actdim/analysis/__init__.py",
+    "source": "code/actdim/analysis/__init__.py",
+    "sha256": "ef5fc5120dea7c8a92ca314393ae360b15452a6ad180b7e037b9d237abaea37a"
+  },
+  {
+    "path": "experiment_code/code/actdim/estimator/calibration.py",
+    "source": "code/actdim/estimator/calibration.py",
+    "sha256": "e2edc16019a568980eed2b7778e4327c4fc62571c3de4ff39c778fbf0b06c4ae"
+  },
+  {
+    "path": "experiment_code/code/actdim/estimator/companions.py",
+    "source": "code/actdim/estimator/companions.py",
+    "sha256": "5b7efa81f1ce4270bc32b10da5d91e4ef40c8ef475df6ad45107ac6e532fe3a3"
+  },
+  {
+    "path": "experiment_code/code/actdim/estimator/config.py",
+    "source": "code/actdim/estimator/config.py",
+    "sha256": "0da6339345e3bcd41a7507a4f5c995f50ba6f2492608dcb8fb74f7732fc65889"
+  },
+  {
+    "path": "experiment_code/code/actdim/estimator/diagnostics.py",
+    "source": "code/actdim/estimator/diagnostics.py",
+    "sha256": "ca5ceaf538655e4ea8efd2954bfe2f83abf7628630259e9efb87bda3ca896810"
+  },
+  {
+    "path": "experiment_code/code/actdim/estimator/embedding.py",
+    "source": "code/actdim/estimator/embedding.py",
+    "sha256": "5ebfc13202a97aa71940d219d880daab3d3b36d8d8149f7962abf3180dc2d07c"
+  },
+  {
+    "path": "experiment_code/code/actdim/estimator/mle.py",
+    "source": "code/actdim/estimator/mle.py",
+    "sha256": "595ccd1a48015af197db970b90a8feeb9063e97996f270208d58a56ee64eb580"
+  },
+  {
+    "path": "experiment_code/code/actdim/estimator/neighbours.py",
+    "source": "code/actdim/estimator/neighbours.py",
+    "sha256": "050eef07e9439f8bd6540e97070bb05913236dbb9cae995a462e22a3e3206147"
+  },
+  {
+    "path": "experiment_code/code/actdim/estimator/surrogates.py",
+    "source": "code/actdim/estimator/surrogates.py",
+    "sha256": "e5a4f139715a41aec800e40b6852f903b9667db7c0de44913ac74f7395a89c50"
+  },
+  {
+    "path": "experiment_code/code/actdim/estimator/windows.py",
+    "source": "code/actdim/estimator/windows.py",
+    "sha256": "1f15007aea985c56033d8d9e6a97a7cc17b95863f402e796ba68810a305f15ae"
+  },
+  {
+    "path": "experiment_code/code/actdim/estimator/__init__.py",
+    "source": "code/actdim/estimator/__init__.py",
+    "sha256": "27e73abd4bbdb8c8a90340c887b2492424c75451004c804f9a129d39a04f8f72"
+  },
+  {
+    "path": "experiment_code/code/actdim/experiments/calibration.py",
+    "source": "code/actdim/experiments/calibration.py",
+    "sha256": "e9de6e3e06cec728837111399e9b9e571a39aa4be6016f524e1359f3b03598dd"
+  },
+  {
+    "path": "experiment_code/code/actdim/experiments/checks.py",
+    "source": "code/actdim/experiments/checks.py",
+    "sha256": "aea52f517134a0de0883162df517de9f231699f945a5d3565fbb197ff870f1ee"
+  },
+  {
+    "path": "experiment_code/code/actdim/experiments/curves.py",
+    "source": "code/actdim/experiments/curves.py",
+    "sha256": "77c4cf4a63ddeb3964dd24ed4d62424b3de5113ed0c8b7660673d95e8b3cc5b3"
+  },
+  {
+    "path": "experiment_code/code/actdim/experiments/grok.py",
+    "source": "code/actdim/experiments/grok.py",
+    "sha256": "e97fe82f0845dd69faa06575f827bd8dd97d0b3c9ebb15b416e1ab3376e9dd33"
+  },
+  {
+    "path": "experiment_code/code/actdim/experiments/paper.py",
+    "source": "code/actdim/experiments/paper.py",
+    "sha256": "2a23eaa9038588a5efb799c9631af3ffe957d23ace13bf040fc7703d662262c1"
+  },
+  {
+    "path": "experiment_code/code/actdim/experiments/systems.py",
+    "source": "code/actdim/experiments/systems.py",
+    "sha256": "4e0d7f48218e7109c0229b4bf35e29fa749e5cc0783fac0e32a874fbd3d6c077"
+  },
+  {
+    "path": "experiment_code/code/actdim/experiments/train.py",
+    "source": "code/actdim/experiments/train.py",
+    "sha256": "c70b50835d9d5bac76280e4275757b5465e39f054b647a57b7e7e0b1f7e50c8b"
+  },
+  {
+    "path": "experiment_code/code/actdim/experiments/validity.py",
+    "source": "code/actdim/experiments/validity.py",
+    "sha256": "80dca8d0836969abe13f7f5a2ad68a581da3f49662da02815fb712faf8e58399"
+  },
+  {
+    "path": "experiment_code/code/actdim/experiments/__init__.py",
+    "source": "code/actdim/experiments/__init__.py",
+    "sha256": "2a4555b07e8782cedcd62f8c1f27dcfcefe9580f3909dd09e138bfa96ed260a3"
+  },
+  {
+    "path": "experiment_code/code/actdim/figures/extent.py",
+    "source": "code/actdim/figures/extent.py",
+    "sha256": "0384ad219089396b6bf945faac599754d9ac9a6ae5858eae5740fa0bb901d322"
+  },
+  {
+    "path": "experiment_code/code/actdim/figures/panels.py",
+    "source": "code/actdim/figures/panels.py",
+    "sha256": "d2800637a5e68c04a42f03b544641d5d3d6b710243638334637185e459f2b87b"
+  },
+  {
+    "path": "experiment_code/code/actdim/figures/sources.py",
+    "source": "code/actdim/figures/sources.py",
+    "sha256": "e6babc7464342cc9fa344da168cd81da1acea15106880873c7b6fff17bb672bd"
+  },
+  {
+    "path": "experiment_code/code/actdim/figures/style.py",
+    "source": "code/actdim/figures/style.py",
+    "sha256": "f80860e3a99eea90843f7cd353ad8881d98daea5861eee3452a30df9cbfb828e"
+  },
+  {
+    "path": "experiment_code/code/actdim/figures/__init__.py",
+    "source": "code/actdim/figures/__init__.py",
+    "sha256": "8f0980a745afb2a74177f89b21b0a32a51115ccf0c47402a662f58efadbb5219"
+  },
+  {
+    "path": "experiment_code/code/actdim/models/perceptron.py",
+    "source": "code/actdim/models/perceptron.py",
+    "sha256": "d8cac4e84ebccf8b1b84b0f59d4aa84ecfc891e9e8fdd8b1b6683d13f3170e59"
+  },
+  {
+    "path": "experiment_code/code/actdim/models/transformer.py",
+    "source": "code/actdim/models/transformer.py",
+    "sha256": "4171c8ae09bdd09f207982da96019ab6e8cd94afb7e9062596c9174963e14056"
+  },
+  {
+    "path": "experiment_code/code/actdim/models/__init__.py",
+    "source": "code/actdim/models/__init__.py",
+    "sha256": "2fe038d0cb637b53537a3add666c32aabc99b6618801cb0e2914eda273a90254"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/archive.py",
+    "source": "code/actdim/runtime/archive.py",
+    "sha256": "a797b42585d455d52f03ab14a16845b6b8b99631193fb01c8a7a78cc96a2b0c6"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/cli.py",
+    "source": "code/actdim/runtime/cli.py",
+    "sha256": "00fa6896c9a97749f97e2fa73f4bc6b55f446e6c58fd049dfa31de9123c9c162"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/compare.py",
+    "source": "code/actdim/runtime/compare.py",
+    "sha256": "505f7e39b8f81088c82f014650a307a91cebd339d28d553896b878ccf42febc4"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/context.py",
+    "source": "code/actdim/runtime/context.py",
+    "sha256": "ea28009e02be772c9f5b20c683b367c1abd987d61bd7770d4ff79be6497943f5"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/determinism.py",
+    "source": "code/actdim/runtime/determinism.py",
+    "sha256": "9ea495270a11374468f5c0660698a2459687857300acdde626146f3356afa0a5"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/device.py",
+    "source": "code/actdim/runtime/device.py",
+    "sha256": "d4cbb34e9372c1e7cff8e51ec13add496703186fc13327d5f1f85a43b8394b9c"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/parallel.py",
+    "source": "code/actdim/runtime/parallel.py",
+    "sha256": "ad2bdc8f0b9b0507a2d0b93fd5efffcf217debbbf6ce4a1d6cbd68eb5baeb422"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/provenance.py",
+    "source": "code/actdim/runtime/provenance.py",
+    "sha256": "da5de2e30ab2c3a130d0d231a6bed126eb9436bfaad5f3d1c45aaab64812060d"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/registry.py",
+    "source": "code/actdim/runtime/registry.py",
+    "sha256": "e7376d2e69ce5cb3c80b73d4e5e19267f9169c1923ef545fab89371880392623"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/store.py",
+    "source": "code/actdim/runtime/store.py",
+    "sha256": "5f86d81a7fc61a5e6effbf9c94287b087afc9ddb63fe51de0acb9d098f2a2a39"
+  },
+  {
+    "path": "experiment_code/code/actdim/runtime/__init__.py",
+    "source": "code/actdim/runtime/__init__.py",
+    "sha256": "65456f5260fd0ca7e8b0425512c62fbc50da20db692fb8f552b01905d54b4394"
+  },
+  {
+    "path": "experiment_code/code/actdim/sketch/analysis.py",
+    "source": "code/actdim/sketch/analysis.py",
+    "sha256": "1e09d8558b124dc9bf2cb791f0dbe225b7ea2a64b60c27ac369e28ff8a3355ed"
+  },
+  {
+    "path": "experiment_code/code/actdim/sketch/countsketch.py",
+    "source": "code/actdim/sketch/countsketch.py",
+    "sha256": "36f31d3d0c1581d4aa5ad985fb586dcd09e8b72700250356db34694c1c62afec"
+  },
+  {
+    "path": "experiment_code/code/actdim/sketch/probe.py",
+    "source": "code/actdim/sketch/probe.py",
+    "sha256": "0e119b4638bf3f0fd2e57600c05723b0bd44b9de294336e0543f748fe8cfb7b8"
+  },
+  {
+    "path": "experiment_code/code/actdim/sketch/__init__.py",
+    "source": "code/actdim/sketch/__init__.py",
+    "sha256": "51983c05d6f5423953f576dd96158eb6b68da083ed1a36ec91945799646d5969"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/clocks.py",
+    "source": "code/actdim/systems/clocks.py",
+    "sha256": "8db83c969a3a4d2d5574174089a77328ec049cb0beb7471ca736dfe1cdb8196b"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/decoder.py",
+    "source": "code/actdim/systems/decoder.py",
+    "sha256": "27fc7376518d7c818514e58bf07a3c5dba905308ad5a010d9bc5623808817927"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/digits_function.py",
+    "source": "code/actdim/systems/digits_function.py",
+    "sha256": "b960d4df1040d9633804fb55137b385a55a5be41b3c5b654eead553b3a3ed038"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/digits_parameter.py",
+    "source": "code/actdim/systems/digits_parameter.py",
+    "sha256": "40a167d4a03ff27453a571f9d896232441365c99b05411400c1a8d1c0e2b7b38"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/drive.py",
+    "source": "code/actdim/systems/drive.py",
+    "sha256": "f3b2835106faae7e47f63e1f18a25fbecabe2dae87ef49fffa3fa28dc591f45b"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/matrix.py",
+    "source": "code/actdim/systems/matrix.py",
+    "sha256": "ec5da1977e567976066eacfc8cb0c5851aeaa4206f57b3af435d656799d24d85"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/regression.py",
+    "source": "code/actdim/systems/regression.py",
+    "sha256": "8a97485e48b60e47925e3d857d74bf8a39102b6e62f5f39ff6b8585052e64c98"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/spec.py",
+    "source": "code/actdim/systems/spec.py",
+    "sha256": "c2434ce03d150bab4a3d5d6b481951c6cb0699451ceeb10c0d39ad1136eef261"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/subspace.py",
+    "source": "code/actdim/systems/subspace.py",
+    "sha256": "2eb0ac99e6ee9118e1f514e03ae0c9dfec619f1d32a7fbc6a597a4a364de8a3e"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/synthetic.py",
+    "source": "code/actdim/systems/synthetic.py",
+    "sha256": "caf7468adbdd441236cbf272b73d5a23f08e75a086fa0f2b1a2719abc9b16643"
+  },
+  {
+    "path": "experiment_code/code/actdim/systems/__init__.py",
+    "source": "code/actdim/systems/__init__.py",
+    "sha256": "bb51dd6f84cfd110bd086d2272834731185fae8b6cce7691fafb6585515e8b17"
+  },
+  {
+    "path": "experiment_code/code/actdim/tasks/arithmetic.py",
+    "source": "code/actdim/tasks/arithmetic.py",
+    "sha256": "d0e1d088d9534a9510fa76331096af6bd182f66bfbd05921f56e1b13d0823666"
+  },
+  {
+    "path": "experiment_code/code/actdim/tasks/groups.py",
+    "source": "code/actdim/tasks/groups.py",
+    "sha256": "f451135f32eeaf2fd1d6e01150eb1f8668f84b2c966a1b3ee8f456f8fc95a962"
+  },
+  {
+    "path": "experiment_code/code/actdim/tasks/modular.py",
+    "source": "code/actdim/tasks/modular.py",
+    "sha256": "56e65f33923a9460a5c958141b3d27dd043063de736cff4eb4dcbcbdc089359a"
+  },
+  {
+    "path": "experiment_code/code/actdim/tasks/polynomials.py",
+    "source": "code/actdim/tasks/polynomials.py",
+    "sha256": "43e1cdf631e86b3379f9aec98e9d61d6246375ce8cf9278a7514e01d45f6e34e"
+  },
+  {
+    "path": "experiment_code/code/actdim/tasks/__init__.py",
+    "source": "code/actdim/tasks/__init__.py",
+    "sha256": "0a4f2b0612ca1418e74359f28e362b3758decfeef11aadeca67b675b48a29d2c"
+  },
+  {
+    "path": "experiment_code/code/actdim/training/eos.py",
+    "source": "code/actdim/training/eos.py",
+    "sha256": "ba8105b33c64b059eda6d8210b9105d7fad92165e67707636f9cc48ba6efa804"
+  },
+  {
+    "path": "experiment_code/code/actdim/training/perceptron.py",
+    "source": "code/actdim/training/perceptron.py",
+    "sha256": "a3700d5d06c86da9af2d1710f4999a3da09028f83fd5f882aad4784ccb4ec80a"
+  },
+  {
+    "path": "experiment_code/code/actdim/training/runs.py",
+    "source": "code/actdim/training/runs.py",
+    "sha256": "ec87e9edebe04e6926fa36b53902c4298d7e0ccb00c1b116268add25df317ffe"
+  },
+  {
+    "path": "experiment_code/code/actdim/training/runs_perceptron.py",
+    "source": "code/actdim/training/runs_perceptron.py",
+    "sha256": "7b727fcfe116e9bc5f60a2d2178be78433b90a1f76710eec753003fe6d61587f"
+  },
+  {
+    "path": "experiment_code/code/actdim/training/transformer.py",
+    "source": "code/actdim/training/transformer.py",
+    "sha256": "d17101e8ff2fb451743e9fb88169da1c3e4564660fef1937dbd63830edf194a3"
+  },
+  {
+    "path": "experiment_code/code/actdim/training/__init__.py",
+    "source": "code/actdim/training/__init__.py",
+    "sha256": "eb14c5fbae8a756995bfc26a5f5ea27545b786b02d9733c6009ad4078c08c3b9"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/cifar_analyse.py",
+    "source": "research_trajectory_reference/cifar_analyse.py",
+    "sha256": "43e28f1969948566b97c055f287a9a52790f70ae9824c3149a27971674dd90f2"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/cifar_events.py",
+    "source": "research_trajectory_reference/cifar_events.py",
+    "sha256": "18ae3e389e8ab4b6b69db9cb7c146c4750bdfe3b8aed0628e99d41aef9733bf6"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/cifar_graded.py",
+    "source": "research_trajectory_reference/cifar_graded.py",
+    "sha256": "40a7ed2966110b5f40b48ca96696e4ceabf54f6af389389c3dd219447a1b086c"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/cifar_paramnorm.py",
+    "source": "research_trajectory_reference/cifar_paramnorm.py",
+    "sha256": "d48bfb5a8e35f5a10c30dd08fdd246f17f905d2972ada77c019da43bf1b9edd4"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/collapse.py",
+    "source": "research_trajectory_reference/collapse.py",
+    "sha256": "fb3121cc135111e339c1f7b473d1a4503f02849f90ae030d4cb80a0b41373710"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/collapse_analyse.py",
+    "source": "research_trajectory_reference/collapse_analyse.py",
+    "sha256": "d7bf285c3a674dd12f3440997ed161447ad7f8fc9fc63e02a69563724f1d3d67"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/collapse_pilot.py",
+    "source": "research_trajectory_reference/collapse_pilot.py",
+    "sha256": "74f9c03bc61da76fec9aed610ac867863116c2f71523655dd4317524d184f50c"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/detector.py",
+    "source": "research_trajectory_reference/detector.py",
+    "sha256": "ebc4dc7bced77202b49fbb8bb8fea1c90938799d2f672ad3e99032d38c72a444"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/e7b_analyse.py",
+    "source": "research_trajectory_reference/e7b_analyse.py",
+    "sha256": "0bb33df857033d7e27594292226023bdcd1aa0179a6f52af0bb03b956af8ba35"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/eos.py",
+    "source": "research_trajectory_reference/eos.py",
+    "sha256": "25783046dff18ce7899445409a70630d7698a517c67ade0b205fe4ef9773fae1"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/eos_analyse.py",
+    "source": "research_trajectory_reference/eos_analyse.py",
+    "sha256": "12160ae5ff82b65b2ca726e565312265306549453b97188afe57243b11b602d0"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/eos_posthoc.py",
+    "source": "research_trajectory_reference/eos_posthoc.py",
+    "sha256": "257ad026787f7ba103053749b843758309f064ca9cbfa2a829530f0bac766444"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/explore_observer.py",
+    "source": "research_trajectory_reference/explore_observer.py",
+    "sha256": "34885c4c3d4fba27a3f6c60cb9c5c1448382ee1dcb498c65adecc38fcd44adf5"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/fullbatch.py",
+    "source": "research_trajectory_reference/fullbatch.py",
+    "sha256": "364b7b92ebb1f709c16bceb295f30c3cac20a21a9939c47305c2fdc0abe444a5"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/graded_analyse.py",
+    "source": "research_trajectory_reference/graded_analyse.py",
+    "sha256": "117ce4a3b009adf1f495f98df1ed1d3373e823d7082ba0a71aeed2421be0a61e"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/pilot.py",
+    "source": "research_trajectory_reference/pilot.py",
+    "sha256": "dc86fab8acd8580c4a19b3138aa83faacc6de6c3d1027a21db79791e4cd8cd2c"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/reanalyse.py",
+    "source": "research_trajectory_reference/reanalyse.py",
+    "sha256": "ea2e3278be2b3815a7376a4f3224913ef0e3c18b8e6a2e703a34fb1c68b9495f"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/analyse_resnet.py",
+    "source": "research_trajectory_reference/colab_resnet/analyse_resnet.py",
+    "sha256": "284548d2378a292ce4b3f34582038e100d456513102c87849120546c3847493c"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/export_observers.py",
+    "source": "research_trajectory_reference/colab_resnet/export_observers.py",
+    "sha256": "db82fc76e8e8959fd234c0782f94e8ec2b5656747247320445554fa61925d8a4"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/run_resnet.py",
+    "source": "research_trajectory_reference/colab_resnet/run_resnet.py",
+    "sha256": "b1ebc9746f902628419eba2ff4246fb4e07d3c743abb2a0a9cfc68ae5326731f"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/__init__.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/__init__.py",
+    "sha256": "36e6aad867c8a2eae98cef30e5b9ec7e1052641da9b0f0d11fcb6b4c539a04a5"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/estimator/calibration.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/estimator/calibration.py",
+    "sha256": "e2edc16019a568980eed2b7778e4327c4fc62571c3de4ff39c778fbf0b06c4ae"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/estimator/companions.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/estimator/companions.py",
+    "sha256": "5b7efa81f1ce4270bc32b10da5d91e4ef40c8ef475df6ad45107ac6e532fe3a3"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/estimator/config.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/estimator/config.py",
+    "sha256": "0da6339345e3bcd41a7507a4f5c995f50ba6f2492608dcb8fb74f7732fc65889"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/estimator/diagnostics.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/estimator/diagnostics.py",
+    "sha256": "ca5ceaf538655e4ea8efd2954bfe2f83abf7628630259e9efb87bda3ca896810"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/estimator/embedding.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/estimator/embedding.py",
+    "sha256": "5ebfc13202a97aa71940d219d880daab3d3b36d8d8149f7962abf3180dc2d07c"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/estimator/mle.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/estimator/mle.py",
+    "sha256": "595ccd1a48015af197db970b90a8feeb9063e97996f270208d58a56ee64eb580"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/estimator/neighbours.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/estimator/neighbours.py",
+    "sha256": "050eef07e9439f8bd6540e97070bb05913236dbb9cae995a462e22a3e3206147"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/estimator/surrogates.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/estimator/surrogates.py",
+    "sha256": "e5a4f139715a41aec800e40b6852f903b9667db7c0de44913ac74f7395a89c50"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/estimator/windows.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/estimator/windows.py",
+    "sha256": "1f15007aea985c56033d8d9e6a97a7cc17b95863f402e796ba68810a305f15ae"
+  },
+  {
+    "path": "experiment_code/research_trajectory_reference/colab_resnet/code/actdim/estimator/__init__.py",
+    "source": "research_trajectory_reference/colab_resnet/code/actdim/estimator/__init__.py",
+    "sha256": "27e73abd4bbdb8c8a90340c887b2492424c75451004c804f9a129d39a04f8f72"
+  },
+  {
+    "path": "experiment_code/research_text_vae/analyze.py",
+    "source": "research_text_vae/analyze.py",
+    "sha256": "d0662efc3896d639716c5232ff1156cd8794cf3c71936dc1c30417490a66c8d7"
+  },
+  {
+    "path": "experiment_code/research_text_vae/audit.py",
+    "source": "research_text_vae/audit.py",
+    "sha256": "52dbeefde436c583f6edc1e6b02ff1cc3cbcd73261dab4e1008f590c0845e27c"
+  },
+  {
+    "path": "experiment_code/research_text_vae/build_report.py",
+    "source": "research_text_vae/build_report.py",
+    "sha256": "6b4f19a912e52d48eea39f20bb8404620148a6635cf58b39b9c468dbff8cff65"
+  },
+  {
+    "path": "experiment_code/research_text_vae/expand.py",
+    "source": "research_text_vae/expand.py",
+    "sha256": "3d383c94c19b603ee52dbff43944079fe98343ae071c5b408b568c678d483eb9"
+  },
+  {
+    "path": "experiment_code/research_text_vae/extras.py",
+    "source": "research_text_vae/extras.py",
+    "sha256": "b8a64326d2144cdfb3c3e58d0946d58c009a53cfdceb90aa98c1c5168f1d83b8"
+  },
+  {
+    "path": "experiment_code/research_text_vae/make_report.py",
+    "source": "research_text_vae/make_report.py",
+    "sha256": "9dd4a3b4482d2f9cf74681d92e90a0c7cbd172da7ebbf29e5bb2daea42cef7c0"
+  },
+  {
+    "path": "experiment_code/research_text_vae/package_results.py",
+    "source": "research_text_vae/package_results.py",
+    "sha256": "ad32b9b6ed085cc8f607e4dacc4f7cd78c38036bae6d46876a4d4d9d1a8fb2bb"
+  },
+  {
+    "path": "experiment_code/research_text_vae/report_expanded.py",
+    "source": "research_text_vae/report_expanded.py",
+    "sha256": "a1399824bc15ad329d81e10e6efc31e77a4424aa4af13ad57a5c30865bf0a426"
+  },
+  {
+    "path": "experiment_code/research_text_vae/run.py",
+    "source": "research_text_vae/run.py",
+    "sha256": "8d38dffd614218e0ccc972955ca7350985f06c586fb59f477acc8a3280b067b9"
+  },
+  {
+    "path": "experiment_code/research_text_vae/verify_series.py",
+    "source": "research_text_vae/verify_series.py",
+    "sha256": "854685cacc75b32c461aa25703d25e06211d26e0b1efa152e3f8581b1135ff21"
+  },
+  {
+    "path": "experiment_code/research_text_vae/cyclical/benchmark.py",
+    "source": "research_text_vae/cyclical/benchmark.py",
+    "sha256": "0e7d72ebba890b04421d53c755e61170b7caf2147e969e2cf1359d6fd76131df"
+  },
+  {
+    "path": "experiment_code/research_text_vae/cyclical/build_report.py",
+    "source": "research_text_vae/cyclical/build_report.py",
+    "sha256": "6b4f19a912e52d48eea39f20bb8404620148a6635cf58b39b9c468dbff8cff65"
+  },
+  {
+    "path": "experiment_code/research_text_vae/cyclical/confirm.py",
+    "source": "research_text_vae/cyclical/confirm.py",
+    "sha256": "b87f653038f08862879919ebf77c1c3b6195494e0587b9df62fa0f29c6a6886b"
+  },
+  {
+    "path": "experiment_code/research_text_vae/cyclical/features.py",
+    "source": "research_text_vae/cyclical/features.py",
+    "sha256": "d0e3c735a1a088ec97c8df5f8317eacf9fe8432f3ac93f7c152321394fd249cd"
+  },
+  {
+    "path": "experiment_code/research_text_vae/cyclical/monitor.py",
+    "source": "research_text_vae/cyclical/monitor.py",
+    "sha256": "396467ccf7855f1c563db0d863d00182b34d16785ccae15b7d96671c1e0eb773"
+  },
+  {
+    "path": "experiment_code/research_text_vae/cyclical/package.py",
+    "source": "research_text_vae/cyclical/package.py",
+    "sha256": "14f80a189e863667f7cfaa3140a24325ac778c0507bcb26952520aec58bade6c"
+  },
+  {
+    "path": "experiment_code/research_text_vae/cyclical/summarize.py",
+    "source": "research_text_vae/cyclical/summarize.py",
+    "sha256": "5e4c6bcd2199c5cca01d13a88e43e26b52405fc84b5f6102cbe0634546dc1001"
+  },
+  {
+    "path": "experiment_code/research_text_vae/cyclical/train.py",
+    "source": "research_text_vae/cyclical/train.py",
+    "sha256": "cd614ba8a1ba6c6af82f4221ffccde8685cf4c26d490a69a67bce480b2c32fa3"
+  },
+  {
+    "path": "experiment_code/research_text_vae/cyclical/verify.py",
+    "source": "research_text_vae/cyclical/verify.py",
+    "sha256": "250431ff1abda08a47dbf9cde98c88cbaf87d9bf882f158a0e16d51d913f4452"
+  },
+  {
+    "path": "experiment_code/research_text_vae/protection/analyze_protection.py",
+    "source": "research_text_vae/protection/analyze_protection.py",
+    "sha256": "d88a2ea20179eb4363bbaaa8f8da4730740d68cf7bf05cad5258ba20e0d9cc51"
+  },
+  {
+    "path": "experiment_code/research_text_vae/protection/build_report.py",
+    "source": "research_text_vae/protection/build_report.py",
+    "sha256": "6b4f19a912e52d48eea39f20bb8404620148a6635cf58b39b9c468dbff8cff65"
+  },
+  {
+    "path": "experiment_code/research_text_vae/protection/confirm_protection.py",
+    "source": "research_text_vae/protection/confirm_protection.py",
+    "sha256": "22bb55c3259d55c6ab37ea9ffaf64f1fd0f74f744cb76badf5dfd97cd89dd11f"
+  },
+  {
+    "path": "experiment_code/research_text_vae/protection/report_integration.py",
+    "source": "research_text_vae/protection/report_integration.py",
+    "sha256": "2f60657afeaf163046039bd5570aa1ded009aad969920f31f3ad6acf380f9d99"
+  },
+  {
+    "path": "experiment_code/research_text_vae/protection/run_protection.py",
+    "source": "research_text_vae/protection/run_protection.py",
+    "sha256": "91e428a7242ab92777086e583aad86bb5c87235f569e6a6c5cd0549a84ff9fb5"
+  },
+  {
+    "path": "experiment_code/research_text_vae/protection/summarize_protection.py",
+    "source": "research_text_vae/protection/summarize_protection.py",
+    "sha256": "6fa63aeff07bbdaf8befb27ecbea2b204051471a9dc242b2f0aa618ef5106c71"
+  },
+  {
+    "path": "experiment_code/research_text_vae/protection/verify_protection.py",
+    "source": "research_text_vae/protection/verify_protection.py",
+    "sha256": "366e12e66cf1bf012a7b7388e4d6f4791365e9bee28d0fe4b11e446027357e08"
+  },
+  {
+    "path": "experiment_code/research_generator/analyse.py",
+    "source": "research_generator/analyse.py",
+    "sha256": "dbc086d17a1c08cd0e2bd66ff2b3064407422bcc33c08efe03f5c73e24afcce4"
+  },
+  {
+    "path": "experiment_code/research_generator/calibrate.py",
+    "source": "research_generator/calibrate.py",
+    "sha256": "45eb34e74a9d871c42cf12c1871edbbe20ca30bbe9dda49f96430ea803f42b4b"
+  },
+  {
+    "path": "experiment_code/research_generator/generator.py",
+    "source": "research_generator/generator.py",
+    "sha256": "d43b133d2cdf481845f06ce3c51e5c376f0d13a1d50cd767b8808299994e5cce"
+  },
+  {
+    "path": "experiment_code/research_generator/pilot.py",
+    "source": "research_generator/pilot.py",
+    "sha256": "fbbb45c1bbfd5b660624345486ec7667872812177d55c78c75d0909a98138274"
+  },
+  {
+    "path": "experiment_code/research_generator/pilot2.py",
+    "source": "research_generator/pilot2.py",
+    "sha256": "71c64f880c191d1e5ae208fb285595c73aa8a54d73a82d6f3a011a2fc3f3a6de"
+  },
+  {
+    "path": "experiment_code/research_generator/run.py",
+    "source": "research_generator/run.py",
+    "sha256": "f861fe1fb4b15c34cee198e4465fccb4dfb345127fcf6db26b2e7d6c53805144"
+  },
+  {
+    "path": "experiment_code/research_force_motion/analyze.py",
+    "source": "research_force_motion/analyze.py",
+    "sha256": "5a70c8ee6afc7d072b56b9fbc3402ae5f76c2d55e215c626c7856364e551c2ad"
+  },
+  {
+    "path": "experiment_code/research_force_motion/benchmark.py",
+    "source": "research_force_motion/benchmark.py",
+    "sha256": "fe370fdfc0f1bcb0a8ef9871c7ea80295dda9918e44c98299129de0b35dcad79"
+  },
+  {
+    "path": "experiment_code/research_force_motion/build_report.py",
+    "source": "research_force_motion/build_report.py",
+    "sha256": "908122c47ac7e45e8b54d34cb31ca2cb10240a66fe555306cc24ab73a922adf7"
+  },
+  {
+    "path": "experiment_code/research_force_motion/make_report.py",
+    "source": "research_force_motion/make_report.py",
+    "sha256": "45013b39cf332f37d4b7c796e3445cc282a7765b7e76c79b77a41481936de569"
+  },
+  {
+    "path": "experiment_code/research_force_motion/package_results.py",
+    "source": "research_force_motion/package_results.py",
+    "sha256": "6301ac115056d2afb7a7a38e6ff99d0ac40578b4bfa8738260f4bb5f0ffed048"
+  },
+  {
+    "path": "experiment_code/research_force_motion/run.py",
+    "source": "research_force_motion/run.py",
+    "sha256": "075346aa8ba0491dedbcda3a2fb75d27e97bf7bac893411ead71fa1a42e1f829"
+  },
+  {
+    "path": "experiment_code/research_force_motion/screen.py",
+    "source": "research_force_motion/screen.py",
+    "sha256": "b8bc8c9b370890330363e757db5538a24799a1c9300eafe990b9eb4c93a84e9f"
+  },
+  {
+    "path": "experiment_code/research_force_motion/validate_results.py",
+    "source": "research_force_motion/validate_results.py",
+    "sha256": "68b313222dcfe81e666cf12dfe3e7c0f6e1f5a8d0ee65158f030d3a170360314"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/build_report.py",
+    "source": "research_walker_combined/build_report.py",
+    "sha256": "e4d5fda92eb503a1d250d206db434b0fb4668f1cfcbf8ad0ab74142c2c450c8d"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/environment.py",
+    "source": "research_walker_combined/environment.py",
+    "sha256": "af471f2ce4af7313535add8e895505ab9cde6917091080baa9fcd982526ae21a"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/evaluate.py",
+    "source": "research_walker_combined/evaluate.py",
+    "sha256": "35522bc2b2b0bd669a7c829aaf1d9a449e78e56fb8a6bc7c4f94daaf5ca1332e"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/features.py",
+    "source": "research_walker_combined/features.py",
+    "sha256": "deb56bd9e77476e78d7624969f9f3ece74d2bf567824036ff36e795db542a58a"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/motion.py",
+    "source": "research_walker_combined/motion.py",
+    "sha256": "606110b12f45e2de8b75b0e9adb9c0cfda08e65e8d5097e47b191a201ee161dc"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/probes.py",
+    "source": "research_walker_combined/probes.py",
+    "sha256": "8c9d22aec54257ff56f477c4e3885c131f8e847031261958d63a3a9feaff33e5"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/smooth_ppo.py",
+    "source": "research_walker_combined/smooth_ppo.py",
+    "sha256": "9493f845f0c71a7180bb89846c4bc71a985be4e1d299ad49142eb819290be341"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/train.py",
+    "source": "research_walker_combined/train.py",
+    "sha256": "00fe28704788c5e46b705d03e8584b1efe8a57ba3981c5fe2b23bb4df4d7f9ed"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/validate_training.py",
+    "source": "research_walker_combined/validate_training.py",
+    "sha256": "e5cce7dbc5ba4a6bc2cad87721ae3f2c2327b8cf6cb845830033734462f3962c"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/whole_cycle.py",
+    "source": "research_walker_combined/whole_cycle.py",
+    "sha256": "60839a3bdee04c1a51dbaf49d3c52459ae9ed360efa65de5286f8a3e45e7ee25"
+  },
+  {
+    "path": "experiment_code/research_walker_combined/workflow.py",
+    "source": "research_walker_combined/workflow.py",
+    "sha256": "f4c9e78c26b998fabbbd8c81845f26f7c5de4ea39f0a666da72ead44d7f6619d"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/benchmark.py",
+    "source": "research_walker_gait/benchmark.py",
+    "sha256": "057b34d841c9424d03389343533b32c6c74aba7b74fabe18df2832acf86671f3"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/build_report.py",
+    "source": "research_walker_gait/build_report.py",
+    "sha256": "e4d5fda92eb503a1d250d206db434b0fb4668f1cfcbf8ad0ab74142c2c450c8d"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/confirm.py",
+    "source": "research_walker_gait/confirm.py",
+    "sha256": "ccbcab87387bef7f575bff4bfb625b2532b76f8f0d06414be274bf8e4da15111"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/delivery_check.py",
+    "source": "research_walker_gait/delivery_check.py",
+    "sha256": "fb532a4b128af449a34a2ec013a122cc7703734a708f0db2021992fdadbdec7f"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/feasibility_report.py",
+    "source": "research_walker_gait/feasibility_report.py",
+    "sha256": "2edb459dc64de2c6d2ea89cf9d71ff3f141b34b2ff1040504856ee20086516ed"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/features.py",
+    "source": "research_walker_gait/features.py",
+    "sha256": "a20198520406f2886d912994c94566deb54ff4695b2602f83c1a10e565141ba7"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/finish.py",
+    "source": "research_walker_gait/finish.py",
+    "sha256": "d1588652222f5ea962484676f666437ad13acb949995a68dd9f8e8a041ffdd38"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/motion.py",
+    "source": "research_walker_gait/motion.py",
+    "sha256": "b3e15813b19f277e74f63d8fea9ee8c37a3b97103088cd549ff7205b57b09803"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/package.py",
+    "source": "research_walker_gait/package.py",
+    "sha256": "52461f723fc408e262206ac28bdae967216ac01d3a5af6537631fbcc1a0e8889"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/perturb.py",
+    "source": "research_walker_gait/perturb.py",
+    "sha256": "29253ff633adc33e1d7ec8c845fe56c18bb5c437ec63a53d993e0a4b078452f9"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/render_preview.py",
+    "source": "research_walker_gait/render_preview.py",
+    "sha256": "ad3e2bfabc3cace2613c84c406e5fc27d15a70595a730fea8afd88f79269fbab"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/select_pilot.py",
+    "source": "research_walker_gait/select_pilot.py",
+    "sha256": "e08dbff02cf1e3a8962c4842b1ee17ce5ccf0f2a43491e0e16cc285d4d9001f2"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/standard_eval_audit.py",
+    "source": "research_walker_gait/standard_eval_audit.py",
+    "sha256": "cdfe92ced1dbd68ba3125762959f0c8bc3f51680c32c47ffcb522711a7bc5cbf"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/summarize.py",
+    "source": "research_walker_gait/summarize.py",
+    "sha256": "4e72b08043fdb428a782c1f0fe4275f877d61217641a330d3ffe2980ff07d545"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/train.py",
+    "source": "research_walker_gait/train.py",
+    "sha256": "ebc078267031b8d341d943c39189f47306751ecb4301bf0b81d4fd3028cb864f"
+  },
+  {
+    "path": "experiment_code/research_walker_gait/verify.py",
+    "source": "research_walker_gait/verify.py",
+    "sha256": "3893db6d6ea3b5b8ed8c1e83e2398a736d5f5c517e671b799ba52f612f8a8447"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/build_report.py",
+    "source": "research_walker_imitation/build_report.py",
+    "sha256": "e4d5fda92eb503a1d250d206db434b0fb4668f1cfcbf8ad0ab74142c2c450c8d"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/evaluate.py",
+    "source": "research_walker_imitation/evaluate.py",
+    "sha256": "4e3e8624ac829c96bc229298a9cc003a42c4f4b0f59babbb9ef0383eed384541"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/features.py",
+    "source": "research_walker_imitation/features.py",
+    "sha256": "deb56bd9e77476e78d7624969f9f3ece74d2bf567824036ff36e795db542a58a"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/measure.py",
+    "source": "research_walker_imitation/measure.py",
+    "sha256": "330b7f3ec1c9c3e7bff3b489ba43d22560c68c4c83815dda9b641813b4b58675"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/motion.py",
+    "source": "research_walker_imitation/motion.py",
+    "sha256": "2b98b868a285006df510f310770c93d96b0a4771de926a6836476f0365624b9c"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/perturb_fixed.py",
+    "source": "research_walker_imitation/perturb_fixed.py",
+    "sha256": "4e941a099ed75f2584fee68ecb6bdbcae9055a1465e9a85f9aada612ea7f7a97"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/postpilot.py",
+    "source": "research_walker_imitation/postpilot.py",
+    "sha256": "3b7999bc677811e61570e0fc7e7e335255bc7cd88b6d43e0796ed52badf43edf"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/reference.py",
+    "source": "research_walker_imitation/reference.py",
+    "sha256": "9fca5d541097737c19520d35bcbc236b04159f8d537a91545762ce7627e6b850"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/sensors.py",
+    "source": "research_walker_imitation/sensors.py",
+    "sha256": "80ee9884a30a90410670526ea67c796600c7c5f9054d00b6b03ee9bc004d525b"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/summarize.py",
+    "source": "research_walker_imitation/summarize.py",
+    "sha256": "a60449c81f1a3b31ee7865619e9879e2ed0d9fc15f0dabdc4335f21a05fcba87"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/train.py",
+    "source": "research_walker_imitation/train.py",
+    "sha256": "94d84aefaa3cbd8ba02fd1f95498ca13e741e9d3b033f4375717e383e0d1b48a"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/validate.py",
+    "source": "research_walker_imitation/validate.py",
+    "sha256": "662ccae39b8fd9d707329a4c683896efa28dce1db13978b901319df32550fc2a"
+  },
+  {
+    "path": "experiment_code/research_walker_imitation/workflow.py",
+    "source": "research_walker_imitation/workflow.py",
+    "sha256": "5120aeaa56bc41b7d79ed8bf150ddb92961c5bdc6126061410034f8237485b48"
+  },
+  {
+    "path": "experiment_code/research_walker_overview/build_report.py",
+    "source": "research_walker_overview/build_report.py",
+    "sha256": "87326240c4b1630ddcc57a35293fb5312c4ea839c950ebc7ae2b3b5f37f65a8e"
+  },
+  {
+    "path": "experiment_code/research_walker_overview/collect_evidence.py",
+    "source": "research_walker_overview/collect_evidence.py",
+    "sha256": "a56720294a90719378a21ce5ae1e5f752de5e2a9772711d78285e67cae89d609"
+  },
+  {
+    "path": "experiment_code/research_walker_overview/figures.py",
+    "source": "research_walker_overview/figures.py",
+    "sha256": "a9b8405050daba8554c04608f1f101e0285a37eeb5efb268a4d32200dc6f871b"
+  },
+  {
+    "path": "experiment_code/research_walker_overview/package_report.py",
+    "source": "research_walker_overview/package_report.py",
+    "sha256": "0272b3c244d9fcd02935dfefd0e09119ccbc7d97c751ccaeec6f48417fe33a0e"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/adapt.py",
+    "source": "research_walker_phase/adapt.py",
+    "sha256": "2c87d0e17f74f15c373a4ef42f9d96ddfc01d6d3d8ea1f8c23f5e1c2e7c2cda9"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/audit.py",
+    "source": "research_walker_phase/audit.py",
+    "sha256": "5d1f974bc29c7e4a68babc9d35dfd95bf1082355b566744b56a00cfb3dedcf3c"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/benchmark.py",
+    "source": "research_walker_phase/benchmark.py",
+    "sha256": "f3996ba5c3304d26193688df3055926b108e8562a8ed9d1c766e2943a363ca17"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/build_report.py",
+    "source": "research_walker_phase/build_report.py",
+    "sha256": "e4d5fda92eb503a1d250d206db434b0fb4668f1cfcbf8ad0ab74142c2c450c8d"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/environment.py",
+    "source": "research_walker_phase/environment.py",
+    "sha256": "0e9de40f21b5d0a41cee0ae582509b6d707959e69b032a6879a9d5adeb81c0d3"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/evaluate.py",
+    "source": "research_walker_phase/evaluate.py",
+    "sha256": "b3207b06cee3117d774944a607b8149462d5e3ee39fca75a71fc74bfbbfb0277"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/features.py",
+    "source": "research_walker_phase/features.py",
+    "sha256": "deb56bd9e77476e78d7624969f9f3ece74d2bf567824036ff36e795db542a58a"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/measure.py",
+    "source": "research_walker_phase/measure.py",
+    "sha256": "539e569849af7fedbad4bd00790c90c6adef5d15eacca5fa3531d1e89e0d3af8"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/motion.py",
+    "source": "research_walker_phase/motion.py",
+    "sha256": "606110b12f45e2de8b75b0e9adb9c0cfda08e65e8d5097e47b191a201ee161dc"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/postpilot.py",
+    "source": "research_walker_phase/postpilot.py",
+    "sha256": "438444d7687ab1b57be8352a4d1694b437d290e6d29d140af6c400b558631d21"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/prepare.py",
+    "source": "research_walker_phase/prepare.py",
+    "sha256": "9a7c392d54bae275bd1aeea812de5905db0e642b0067ac800f4b5138b28228a6"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/probes.py",
+    "source": "research_walker_phase/probes.py",
+    "sha256": "8c9d22aec54257ff56f477c4e3885c131f8e847031261958d63a3a9feaff33e5"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/summarize.py",
+    "source": "research_walker_phase/summarize.py",
+    "sha256": "00b3ac5611eb888cfeabb7fc70cea2f282b3f6351a1bb8eefd4ed4b602707650"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/train.py",
+    "source": "research_walker_phase/train.py",
+    "sha256": "a58e199310bb83f1725c7c22ac69767777630a9f4617f62eeca789c999d20449"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/validate.py",
+    "source": "research_walker_phase/validate.py",
+    "sha256": "d5920233bb6e8e196de8a9b6d57a2c85cf6a4a670f23a2a2ec30d4ab95c9048b"
+  },
+  {
+    "path": "experiment_code/research_walker_phase/workflow.py",
+    "source": "research_walker_phase/workflow.py",
+    "sha256": "5e9a1c59db20fdc4865e4c6ec88443255e3d618efc1cca9d77e7af7953777661"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/audit.py",
+    "source": "research_walker_phase_wide/audit.py",
+    "sha256": "e4173f8c041474797ef8df7f3e9549206d009b7e58f7d19f5ea79fef61aa6e8c"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/benchmark.py",
+    "source": "research_walker_phase_wide/benchmark.py",
+    "sha256": "f3996ba5c3304d26193688df3055926b108e8562a8ed9d1c766e2943a363ca17"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/build_report.py",
+    "source": "research_walker_phase_wide/build_report.py",
+    "sha256": "e4d5fda92eb503a1d250d206db434b0fb4668f1cfcbf8ad0ab74142c2c450c8d"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/environment.py",
+    "source": "research_walker_phase_wide/environment.py",
+    "sha256": "af471f2ce4af7313535add8e895505ab9cde6917091080baa9fcd982526ae21a"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/evaluate.py",
+    "source": "research_walker_phase_wide/evaluate.py",
+    "sha256": "a4645516819c1acf198340aa83829d0e3b8ae306ececd17f3a581446b07f3b83"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/extra_figures.py",
+    "source": "research_walker_phase_wide/extra_figures.py",
+    "sha256": "91aa27e497ca961a7ed6ec440fdc6e2096213fdfd4171bf0873873d5b5c6ecd9"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/features.py",
+    "source": "research_walker_phase_wide/features.py",
+    "sha256": "deb56bd9e77476e78d7624969f9f3ece74d2bf567824036ff36e795db542a58a"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/make_report.py",
+    "source": "research_walker_phase_wide/make_report.py",
+    "sha256": "949fa7a85b809535529d0ec22993b92a5bf2bcf31481b7228df0603119f3008e"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/measure.py",
+    "source": "research_walker_phase_wide/measure.py",
+    "sha256": "ee153c88676b7f8a80d3913babc55688c287ca36770de9f70681ab76dbe3d747"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/motion.py",
+    "source": "research_walker_phase_wide/motion.py",
+    "sha256": "606110b12f45e2de8b75b0e9adb9c0cfda08e65e8d5097e47b191a201ee161dc"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/package.py",
+    "source": "research_walker_phase_wide/package.py",
+    "sha256": "70ea338980ca7b7d80241872931898b4cd0bfbd14c9e13e255d39dbc99109237"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/postpilot.py",
+    "source": "research_walker_phase_wide/postpilot.py",
+    "sha256": "b7c92b6669f6751749434589bdec22d5fbf227d19e23d028ca9705eae37897b2"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/probes.py",
+    "source": "research_walker_phase_wide/probes.py",
+    "sha256": "8c9d22aec54257ff56f477c4e3885c131f8e847031261958d63a3a9feaff33e5"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/sensor_robustness.py",
+    "source": "research_walker_phase_wide/sensor_robustness.py",
+    "sha256": "0569876bb0263a5eaaf86c0ebd8bb805730cac884fdda557cb9a60b383cf8fff"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/summarize.py",
+    "source": "research_walker_phase_wide/summarize.py",
+    "sha256": "264431d23141b6496b8347cd13dcf7115d1a8bf15e900791f2758e399c1aa7bf"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/train.py",
+    "source": "research_walker_phase_wide/train.py",
+    "sha256": "a58e199310bb83f1725c7c22ac69767777630a9f4617f62eeca789c999d20449"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/validate.py",
+    "source": "research_walker_phase_wide/validate.py",
+    "sha256": "d5920233bb6e8e196de8a9b6d57a2c85cf6a4a670f23a2a2ec30d4ab95c9048b"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/whole_cycle.py",
+    "source": "research_walker_phase_wide/whole_cycle.py",
+    "sha256": "60839a3bdee04c1a51dbaf49d3c52459ae9ed360efa65de5286f8a3e45e7ee25"
+  },
+  {
+    "path": "experiment_code/research_walker_phase_wide/workflow.py",
+    "source": "research_walker_phase_wide/workflow.py",
+    "sha256": "1c25dc58efad3159d639409d7b2792761b27716a6836ea8c848d3d89effed9de"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/benchmark.py",
+    "source": "research_walker_repair/benchmark.py",
+    "sha256": "befde8a3938fdd7788d73dbf0e5812bac40e7918fdda065de91d2c25718b2206"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/benchmark_aligned.py",
+    "source": "research_walker_repair/benchmark_aligned.py",
+    "sha256": "a056fe52bed8ec68d51cb40d864f10c8085db1c297b0aba92d2927d9dfe0a31e"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/build_report.py",
+    "source": "research_walker_repair/build_report.py",
+    "sha256": "e4d5fda92eb503a1d250d206db434b0fb4668f1cfcbf8ad0ab74142c2c450c8d"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/confirm.py",
+    "source": "research_walker_repair/confirm.py",
+    "sha256": "ab4f569a8f419f5c63797fbf9cf6124f9434d0920ab75102b5c9929591ec76f1"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/delivery_check.py",
+    "source": "research_walker_repair/delivery_check.py",
+    "sha256": "c33e66ece76233eb7d162ca3ceb9deb642a7be03f1575a6c07338747a403dc2b"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/evaluate.py",
+    "source": "research_walker_repair/evaluate.py",
+    "sha256": "5bd8870b24ea7560df3de3e20a845ed76354e30d1d77943e5b7243556e822347"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/features.py",
+    "source": "research_walker_repair/features.py",
+    "sha256": "deb56bd9e77476e78d7624969f9f3ece74d2bf567824036ff36e795db542a58a"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/freeze_config.py",
+    "source": "research_walker_repair/freeze_config.py",
+    "sha256": "06aa0cb9e48cab1fa19906125c036181c2a149b0c21149e87e11b09f10b6bd56"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/measure.py",
+    "source": "research_walker_repair/measure.py",
+    "sha256": "4ae5ceb52f4875423fbf7444bd48c745ddec895e1894de53e505dc4cd8da6b1c"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/motion.py",
+    "source": "research_walker_repair/motion.py",
+    "sha256": "b3e15813b19f277e74f63d8fea9ee8c37a3b97103088cd549ff7205b57b09803"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/old_final_control.py",
+    "source": "research_walker_repair/old_final_control.py",
+    "sha256": "cea88638f45d88cc7fb7c7de65191e5a32ecf56f85e3f2969b320201ecf24821"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/package.py",
+    "source": "research_walker_repair/package.py",
+    "sha256": "08d752b489f83f50f8427b1f323f6790c0d3cf648e6ff3ef8586fcb9b3344c71"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/perturb.py",
+    "source": "research_walker_repair/perturb.py",
+    "sha256": "29253ff633adc33e1d7ec8c845fe56c18bb5c437ec63a53d993e0a4b078452f9"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/postprocess.py",
+    "source": "research_walker_repair/postprocess.py",
+    "sha256": "5cbfe31ec69d4afca4c6a595be2dfb14a413e62657c1d640c07a85a662f326d8"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/render_preview.py",
+    "source": "research_walker_repair/render_preview.py",
+    "sha256": "ad3e2bfabc3cace2613c84c406e5fc27d15a70595a730fea8afd88f79269fbab"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/summarize.py",
+    "source": "research_walker_repair/summarize.py",
+    "sha256": "91d78e742d282a74efde680f30053683b9d0f4373fa08f038f6bba864bcdd487"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/train.py",
+    "source": "research_walker_repair/train.py",
+    "sha256": "690392ddc7a79628f95c075251f13290af5d766be4284f5e83fbfccb147b5c77"
+  },
+  {
+    "path": "experiment_code/research_walker_repair/verify.py",
+    "source": "research_walker_repair/verify.py",
+    "sha256": "a030ae762598edf081f1f1b0994dc472f9376be6a56bdaf95fcde3e1ca602b25"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/action_mg.py",
+    "source": "research_walker_smooth/action_mg.py",
+    "sha256": "ba6f95330328b3a586ef7d987da511c78e6e2ef914379b603842214a015bad4b"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/audit.py",
+    "source": "research_walker_smooth/audit.py",
+    "sha256": "78c602c1cb60e374ee33c579e67e71dcbb1d3f62f64ba3222170757b618da3b2"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/benchmark.py",
+    "source": "research_walker_smooth/benchmark.py",
+    "sha256": "bf4cb81415c4745f01f212b1369d036b200c85ceda0cfd1485e3d49944c6965a"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/build_report.py",
+    "source": "research_walker_smooth/build_report.py",
+    "sha256": "e4d5fda92eb503a1d250d206db434b0fb4668f1cfcbf8ad0ab74142c2c450c8d"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/build_timecourse_report.py",
+    "source": "research_walker_smooth/build_timecourse_report.py",
+    "sha256": "bef95f239f2da1396776acf768a35a6bcb24b2b7c075e5831dcab8cf923b8514"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/checkpoint_timecourse.py",
+    "source": "research_walker_smooth/checkpoint_timecourse.py",
+    "sha256": "cad0533e73d15bc662880ea22ef09f605d76a5c7c2e36c3e730cdb2e5522c0b4"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/diagnostic.py",
+    "source": "research_walker_smooth/diagnostic.py",
+    "sha256": "fc7ebb3c1e19efce044d130695eba27792afd8bbad219051d5f9a5d5e26683af"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/evaluate.py",
+    "source": "research_walker_smooth/evaluate.py",
+    "sha256": "d16c5497011f5328e751b33d526a427b64324ae32d2bb1942693d90233e6947f"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/make_report.py",
+    "source": "research_walker_smooth/make_report.py",
+    "sha256": "1974d5f79320c5e10d9b413cd7c8e408e0ef06fa6a9575998f11c7aebf1ee4bf"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/measure_new.py",
+    "source": "research_walker_smooth/measure_new.py",
+    "sha256": "a36c43dc5bfdbe9a330d931f3a64611605c410125cc4e00503d0ee2dbd6ad687"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/motion.py",
+    "source": "research_walker_smooth/motion.py",
+    "sha256": "2b98b868a285006df510f310770c93d96b0a4771de926a6836476f0365624b9c"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/old_probes.py",
+    "source": "research_walker_smooth/old_probes.py",
+    "sha256": "be2e745a63e2e0d3fb2e212f5c79722ee94e5dde4fe31bb12b780d84dc8b54ce"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/package.py",
+    "source": "research_walker_smooth/package.py",
+    "sha256": "2c79dc2f6c02571a4b3ac09ad9557e9ee7831ded4e37e9edbb0ee3a755b6194b"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/perturb_fixed.py",
+    "source": "research_walker_smooth/perturb_fixed.py",
+    "sha256": "4e941a099ed75f2584fee68ecb6bdbcae9055a1465e9a85f9aada612ea7f7a97"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/prepare_code.py",
+    "source": "research_walker_smooth/prepare_code.py",
+    "sha256": "fb6b948e7bfb0022bbdc34c8744c3a3f15291b26dc422f24754d96f27065acbf"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/smooth_ppo.py",
+    "source": "research_walker_smooth/smooth_ppo.py",
+    "sha256": "9493f845f0c71a7180bb89846c4bc71a985be4e1d299ad49142eb819290be341"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/summarize.py",
+    "source": "research_walker_smooth/summarize.py",
+    "sha256": "ab6d2eb5af4426aef381db749853e9c9aa07cfd3b2dd371dfea2e9fbfbfbb81d"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/timecourse_figure.py",
+    "source": "research_walker_smooth/timecourse_figure.py",
+    "sha256": "d812f5c8cd7c0d3d5b5b61ef1265cfc68e6a57619461b912ecbbdb0ed40edadf"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/train.py",
+    "source": "research_walker_smooth/train.py",
+    "sha256": "b75d8d74646bce6c0c716f2a3a135a6b1b58bb8a07c9f68a93781ab8622db914"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/validate_training.py",
+    "source": "research_walker_smooth/validate_training.py",
+    "sha256": "617009b5152394a5cc7f9d339acd15ec6a77e275de6dc75694d0b9cdf2bd8599"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth/workflow.py",
+    "source": "research_walker_smooth/workflow.py",
+    "sha256": "c46fc91d0cb372ce398470cda05ec11255d42e538c0828845d2b80a741959833"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/action_mg.py",
+    "source": "research_walker_smooth_lambda/action_mg.py",
+    "sha256": "eac18398aef56a82b1606f15d4e92a1742d7fd8b46130f502252528d0428883a"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/baseline_figures.py",
+    "source": "research_walker_smooth_lambda/baseline_figures.py",
+    "sha256": "0c288187087fd46ed2059c1fb21207e51b8cae9920ced02435697b3fd01bbaef"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/benchmark.py",
+    "source": "research_walker_smooth_lambda/benchmark.py",
+    "sha256": "71ff1877e76f3bcace8a8af3a207d9d1d3755a94481a81956784fa1d06290774"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/build_baselines_report.py",
+    "source": "research_walker_smooth_lambda/build_baselines_report.py",
+    "sha256": "1230c5384d7851e11c143e795b12251205c123055420e9e16baff207c88e7f8c"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/build_final_report.py",
+    "source": "research_walker_smooth_lambda/build_final_report.py",
+    "sha256": "cca822ec6035b47fa6608ac4191005ca794d150123f59bc7d0de3be66ad78bae"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/build_lambda_report.py",
+    "source": "research_walker_smooth_lambda/build_lambda_report.py",
+    "sha256": "fa7705238b388d26e3e1a5f03ff30f12b11236f626b741622e7f3e0b33352572"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/build_report.py",
+    "source": "research_walker_smooth_lambda/build_report.py",
+    "sha256": "e4d5fda92eb503a1d250d206db434b0fb4668f1cfcbf8ad0ab74142c2c450c8d"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/checkpoint_timecourse.py",
+    "source": "research_walker_smooth_lambda/checkpoint_timecourse.py",
+    "sha256": "9adc33365da8f3ec35f8e51149fbea23d13314d48b1664a273d541230525cf32"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/compare_scalar_baselines.py",
+    "source": "research_walker_smooth_lambda/compare_scalar_baselines.py",
+    "sha256": "3ff1f37b5a23dac9155fc50eb35e9bd59256c70a19fc40f5133e293b90501fcb"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/diagnostic.py",
+    "source": "research_walker_smooth_lambda/diagnostic.py",
+    "sha256": "fc7ebb3c1e19efce044d130695eba27792afd8bbad219051d5f9a5d5e26683af"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/evaluate.py",
+    "source": "research_walker_smooth_lambda/evaluate.py",
+    "sha256": "d16c5497011f5328e751b33d526a427b64324ae32d2bb1942693d90233e6947f"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/figures.py",
+    "source": "research_walker_smooth_lambda/figures.py",
+    "sha256": "d73085e8f78763d95d03b941c1842ae4f0c86737d1d66e43ea938fa90fb0e9a3"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/final_figures.py",
+    "source": "research_walker_smooth_lambda/final_figures.py",
+    "sha256": "e63b08a593fa0ce9c970d86fbeccf058abd4f6139f34eb83b836f95b98a0baf2"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/motion.py",
+    "source": "research_walker_smooth_lambda/motion.py",
+    "sha256": "2b98b868a285006df510f310770c93d96b0a4771de926a6836476f0365624b9c"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/package_results.py",
+    "source": "research_walker_smooth_lambda/package_results.py",
+    "sha256": "293527ae004a52c7133a0ed5e13dd30c7c392ab065e1d9909204a0ced330cac0"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/pilot_workflow.py",
+    "source": "research_walker_smooth_lambda/pilot_workflow.py",
+    "sha256": "4cbd3772147fc87fcb7f402b03bf7c0e5630444ef5d877a5b383599ed26ca5f8"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/smooth_ppo.py",
+    "source": "research_walker_smooth_lambda/smooth_ppo.py",
+    "sha256": "9493f845f0c71a7180bb89846c4bc71a985be4e1d299ad49142eb819290be341"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/summarize_confirmation.py",
+    "source": "research_walker_smooth_lambda/summarize_confirmation.py",
+    "sha256": "0ab99e3fe205a0f5992288c75b3e253adc2778470cc68218a6b970fd0a2c8afb"
+  },
+  {
+    "path": "experiment_code/research_walker_smooth_lambda/train.py",
+    "source": "research_walker_smooth_lambda/train.py",
+    "sha256": "b75d8d74646bce6c0c716f2a3a135a6b1b58bb8a07c9f68a93781ab8622db914"
+  },
+  {
+    "path": "experiment_code/research_known_modes.py",
+    "source": "research_known_modes.py",
+    "sha256": "88f0668a80337fc0dc01c1ee1858ecd966e4b4b9bb6413215afead3965cbb6a2"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/analyze.py",
+    "source": "archived_code/active_dimension/analyze.py",
+    "sha256": "ed1904bc6839bc77fba2cf561c65144387813659268472186c4fa47317eb9063"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/calibration_k20.py",
+    "source": "archived_code/active_dimension/calibration_k20.py",
+    "sha256": "b6610a1083764cf1f794075947eb7a57eac820d45071e017abb053d6892bf0fc"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/dynamics.py",
+    "source": "archived_code/active_dimension/dynamics.py",
+    "sha256": "22b7afd6f5c1281708cb86ff1e8b00234ee18d9bc88aa4a9c3a8207b7ab08e63"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e0b_observer_amplitude.py",
+    "source": "archived_code/active_dimension/e0b_observer_amplitude.py",
+    "sha256": "0eb9f25e09b2e0b33ac049c849840291715377f9ecab4b130b6be0926ba63d01"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e0_atlas.py",
+    "source": "archived_code/active_dimension/e0_atlas.py",
+    "sha256": "3ddb6c5f9764137f9b31def8ae04c477ea8cee158fc2e4ba7300899d43b6631b"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e10_ceiling_sweep.py",
+    "source": "archived_code/active_dimension/e10_ceiling_sweep.py",
+    "sha256": "22e792c43a285c6b85d8151c070b2d45d9d8a2e2c232cd2de234d662a4f5ec7c"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e10_surrogate.py",
+    "source": "archived_code/active_dimension/e10_surrogate.py",
+    "sha256": "0032aa57eacec966019d8b5069827327d91f0ad673fa000c525a80f28ffa4f50"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e11_export_traces.py",
+    "source": "archived_code/active_dimension/e11_export_traces.py",
+    "sha256": "c6a2f998133c7fbfa027899a34f55f5f3ec7836ac1a35b43f9823809c27bc15a"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e11_theiler_contrast.py",
+    "source": "archived_code/active_dimension/e11_theiler_contrast.py",
+    "sha256": "3fbdc80f4fa954d190042e6ee575d3f36b2d685b45bd9590a4f0ce8c01e3eb1a"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e12_mle_geometry_demo.py",
+    "source": "archived_code/active_dimension/e12_mle_geometry_demo.py",
+    "sha256": "d7137f55fa581940373c6d83042904aed5b81310cfec8802da6502e47805528a"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e1_calibration.py",
+    "source": "archived_code/active_dimension/e1_calibration.py",
+    "sha256": "86940c3e43c1da4916fa6d8f64ee1e30b1e63cf0c8895bf1b730987366b0d533"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e2_rank_sweep.py",
+    "source": "archived_code/active_dimension/e2_rank_sweep.py",
+    "sha256": "ede831f87a2ad26f82e7af9c6adb47f9ad28b9ffe377a1a3abb7abbb3a29e15f"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e3_transitions.py",
+    "source": "archived_code/active_dimension/e3_transitions.py",
+    "sha256": "2a72027bf2d64eb08ded3594d5cc3b7314182d34ff01b647586f896cacf898f8"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e4_controls.py",
+    "source": "archived_code/active_dimension/e4_controls.py",
+    "sha256": "725268a6726bfd15c9e55c13f15d83fc6fd14ac1cfd1fa1e1e5db7672204a0ed"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e5_real_logs.py",
+    "source": "archived_code/active_dimension/e5_real_logs.py",
+    "sha256": "20edb39fc1062610bcf75ed2502cd5a174330baae435f92118b9adbdbeaa307e"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e6_tau_sensitivity.py",
+    "source": "archived_code/active_dimension/e6_tau_sensitivity.py",
+    "sha256": "5dff75ae7a6a4f19952d152a9b5f9d9e1bc20e0d54d25f247364c407cbc2aa95"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e7b_theiler_quick.py",
+    "source": "archived_code/active_dimension/e7b_theiler_quick.py",
+    "sha256": "12cdba5aef08cb5826aed8cd1c9ea2e8901ac12a7b182e1d795c41df538f8b6e"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e7_theiler_k20.py",
+    "source": "archived_code/active_dimension/e7_theiler_k20.py",
+    "sha256": "27230a46641232aa497278ac6f553ab52fa784b23ffc6c6c911ed39ff593e088"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e8_anisotropy.py",
+    "source": "archived_code/active_dimension/e8_anisotropy.py",
+    "sha256": "d4a8f9179846273ec98f76fb898adcfe2878004bf87f1955c759f7b05b13c303"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e9_analyse.py",
+    "source": "archived_code/active_dimension/e9_analyse.py",
+    "sha256": "4f5efc775887edacd5cce70f938125acc258aba6e4049d173a3265a792b2ed61"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/e9_matched_window.py",
+    "source": "archived_code/active_dimension/e9_matched_window.py",
+    "sha256": "a97a6dcc4952c9796b1e3de832f5f6764ecbe04945a3041bfe769fe1d1382938"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/figures.py",
+    "source": "archived_code/active_dimension/figures.py",
+    "sha256": "db42940f5ba247aa69d8e61c237d591bf305ef8d5c6031f222a9fa1ddec3e47b"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/generators.py",
+    "source": "archived_code/active_dimension/generators.py",
+    "sha256": "9606b0df28ef249c3505721a210fc4b59135ac805888cf31efdcaf04c82c05a6"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/mg.py",
+    "source": "archived_code/active_dimension/mg.py",
+    "sha256": "72470658258de1c49ac481650efd4b51b94f90f1d6d260ddd42762a382da79e5"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/paper_tables.py",
+    "source": "archived_code/active_dimension/paper_tables.py",
+    "sha256": "b25b2e02b60fb3105dd588347bcce1875c18b3752e6fad599742a95fb21dfc60"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/runner.py",
+    "source": "archived_code/active_dimension/runner.py",
+    "sha256": "75b245a450f20f4f7841d8a26a8c34a2d0ba4b4d6315e57d5d45b1e9c8431bf4"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/run_all.py",
+    "source": "archived_code/active_dimension/run_all.py",
+    "sha256": "79e3aa9621b5e1d2faee3d9026ee5c1810334b51970d8b5092cb6821546bce04"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/score_k20_parallel.py",
+    "source": "archived_code/active_dimension/score_k20_parallel.py",
+    "sha256": "adaaeb6fcc5bd495071f8f62a1667b718248e0ab05e9456cc721053c28f5131b"
+  },
+  {
+    "path": "experiment_code/archived_code/active_dimension/system.py",
+    "source": "archived_code/active_dimension/system.py",
+    "sha256": "0c6e8ef6a943ffd6e41dd4da077901aa7cc8c5d638d705054ed48afe24261cee"
+  },
+  {
+    "path": "evidence/research_text_vae/cyclical/selection.json",
+    "source": "research_text_vae/cyclical/selection.json",
+    "sha256": "d606c992b0cde3f98f8e1ad1883994c3db6278cc8ac0e90e1aa4e4a569357c8b"
+  },
+  {
+    "path": "evidence/research_known_modes_results/metadata.json",
+    "source": "research_known_modes_results/metadata.json",
+    "sha256": "590bc643820b5a74d3be036473c62b75385fefbb97f740211666a6c8585fe906"
+  },
+  {
+    "path": "evidence/code/data/calib.e8/frozen_config.json",
+    "source": "code/data/calib.e8/frozen_config.json",
+    "sha256": "c1ee8b8e92eab0462175983125aac95b3967e3c7ce0b0937ddc5a0dc02d0a45e"
+  }
+]

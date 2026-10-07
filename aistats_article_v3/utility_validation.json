@@ -1,0 +1,19 @@
+{
+  "forecast_30_seed_coverage": true,
+  "forecast_20_seed_coverage": true,
+  "all_methods_same_records": true,
+  "seed_bootstrap_recomputed": true,
+  "query_decisions_equal": 160,
+  "intervention_seed_coverage": true,
+  "final_MG": 0.03138477923818985,
+  "final_validation": 0.032235092462122764,
+  "query_MG": 0.036370895240979154,
+  "query_validation": 0.040743345693571714,
+  "timing_medians_ms": {
+    "MG": 199.0639000141527,
+    "MG_q128": 12.217549985507452,
+    "validation": 45.3012500074692
+  },
+  "median_speedup_full": 16.293303469922744,
+  "median_speedup_validation": 3.7233473782455686
+}

@@ -1,0 +1,192 @@
+{
+  "MG_block": {
+    "detector": "block",
+    "M": 2,
+    "B": 3,
+    "sign": 1,
+    "delta": 0.08829884007532394,
+    "stat": "MG",
+    "calibration_hits": 12,
+    "calibration_n": 12
+  },
+  "MG_cusum": {
+    "detector": "cusum",
+    "drift": 0.25,
+    "sign": 1,
+    "delta": 44.3108515328873,
+    "stat": "MG",
+    "calibration_hits": 9,
+    "calibration_n": 12
+  },
+  "abs_diff_block": {
+    "detector": "block",
+    "M": 2,
+    "B": 3,
+    "sign": 1,
+    "delta": 0.33830497636108003,
+    "stat": "abs_diff",
+    "calibration_hits": 12,
+    "calibration_n": 12
+  },
+  "abs_diff_cusum": {
+    "detector": "cusum",
+    "drift": 1.0,
+    "sign": 1,
+    "delta": 19.792877501602362,
+    "stat": "abs_diff",
+    "calibration_hits": 11,
+    "calibration_n": 12
+  },
+  "norm_diff_block": {
+    "detector": "block",
+    "M": 4,
+    "B": 4,
+    "sign": -1,
+    "delta": 0.02894380744512291,
+    "stat": "norm_diff",
+    "calibration_hits": 12,
+    "calibration_n": 12
+  },
+  "norm_diff_cusum": {
+    "detector": "cusum",
+    "drift": 0.25,
+    "sign": -1,
+    "delta": 5.903291256142634,
+    "stat": "norm_diff",
+    "calibration_hits": 12,
+    "calibration_n": 12
+  },
+  "perm_entropy_block": {
+    "detector": "block",
+    "M": 2,
+    "B": 6,
+    "sign": -1,
+    "delta": 0.3390377444617141,
+    "stat": "perm_entropy",
+    "calibration_hits": 12,
+    "calibration_n": 12
+  },
+  "perm_entropy_cusum": {
+    "detector": "cusum",
+    "drift": 1.0,
+    "sign": -1,
+    "delta": 7.794491146422178,
+    "stat": "perm_entropy",
+    "calibration_hits": 11,
+    "calibration_n": 12
+  },
+  "sample_entropy_block": {
+    "detector": "block",
+    "M": 2,
+    "B": 3,
+    "sign": -1,
+    "delta": 0.1866994460507607,
+    "stat": "sample_entropy",
+    "calibration_hits": 12,
+    "calibration_n": 12
+  },
+  "sample_entropy_cusum": {
+    "detector": "cusum",
+    "drift": 0.25,
+    "sign": -1,
+    "delta": 9.860633274984965,
+    "stat": "sample_entropy",
+    "calibration_hits": 12,
+    "calibration_n": 12
+  },
+  "spectral_entropy_block": {
+    "detector": "block",
+    "M": 3,
+    "B": 3,
+    "sign": -1,
+    "delta": 1.299612946839757,
+    "stat": "spectral_entropy",
+    "calibration_hits": 7,
+    "calibration_n": 12
+  },
+  "spectral_entropy_cusum": {
+    "detector": "cusum",
+    "drift": 0.25,
+    "sign": 1,
+    "delta": 6.743636483066817,
+    "stat": "spectral_entropy",
+    "calibration_hits": 3,
+    "calibration_n": 12
+  },
+  "crossings_block": {
+    "detector": "block",
+    "M": 2,
+    "B": 4,
+    "sign": 1,
+    "delta": 0.6628571428571428,
+    "stat": "crossings",
+    "calibration_hits": 11,
+    "calibration_n": 12
+  },
+  "crossings_cusum": {
+    "detector": "cusum",
+    "drift": 0.5,
+    "sign": 1,
+    "delta": 2.316258611157535,
+    "stat": "crossings",
+    "calibration_hits": 8,
+    "calibration_n": 12
+  },
+  "lag1_block": {
+    "detector": "block",
+    "M": 2,
+    "B": 3,
+    "sign": 1,
+    "delta": 0.023881403876642376,
+    "stat": "lag1",
+    "calibration_hits": 0,
+    "calibration_n": 12
+  },
+  "lag1_cusum": {
+    "detector": "cusum",
+    "drift": 0.25,
+    "sign": 1,
+    "delta": 0.6533686900424218,
+    "stat": "lag1",
+    "calibration_hits": 0,
+    "calibration_n": 12
+  },
+  "det_std_block": {
+    "detector": "block",
+    "M": 2,
+    "B": 3,
+    "sign": -1,
+    "delta": 0.3054394770224109,
+    "stat": "det_std",
+    "calibration_hits": 12,
+    "calibration_n": 12
+  },
+  "det_std_cusum": {
+    "detector": "cusum",
+    "drift": 0.25,
+    "sign": -1,
+    "delta": 0.5,
+    "stat": "det_std",
+    "calibration_hits": 12,
+    "calibration_n": 12
+  },
+  "level_block": {
+    "detector": "block",
+    "M": 2,
+    "B": 3,
+    "sign": 1,
+    "delta": 0.02,
+    "stat": "level",
+    "calibration_hits": 0,
+    "calibration_n": 12
+  },
+  "level_cusum": {
+    "detector": "cusum",
+    "drift": 0.25,
+    "sign": 1,
+    "delta": 0.5,
+    "stat": "level",
+    "calibration_hits": 0,
+    "calibration_n": 12
+  }
+}

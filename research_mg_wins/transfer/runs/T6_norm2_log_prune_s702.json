@@ -1,0 +1,1 @@
+{"setup": "T6_norm2_log", "seed": 702, "event": "prune", "t_e": 4700, "t_r": null, "P": 55050, "test_acc": 0.972000002861023, "wall_s": 55.273132199945394, "wd_factor": 100.0, "cfg": {"width": 64, "dataset": "mnist", "loss": "ce", "reduction": "mean", "micro": 64, "accum": 1, "lr": 0.02, "wd": 0.0005, "bf16": false, "restart": false, "log": "norm2"}}

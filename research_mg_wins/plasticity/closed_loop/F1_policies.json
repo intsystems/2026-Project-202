@@ -1,0 +1,94 @@
+{
+ "never": "never",
+ "fixed": "fixed",
+ "MG": [
+  "MG|pnorm|within",
+  [
+   "ABS",
+   -1,
+   0,
+   2,
+   4.6973547497593815
+  ]
+ ],
+ "dormant_0.0": [
+  "dormant_0.0",
+  [
+   "ABS",
+   -1,
+   0,
+   2,
+   0.0546875
+  ]
+ ],
+ "dormant_0.1": [
+  "dormant_0.1",
+  [
+   "ABS",
+   -1,
+   0,
+   1,
+   0.251953125
+  ]
+ ],
+ "srank": [
+  "srank",
+  [
+   "REL",
+   1,
+   2,
+   1,
+   0.03
+  ]
+ ],
+ "pnorm_end": [
+  "pnorm_end",
+  [
+   "ABS",
+   -1,
+   0,
+   1,
+   21.028452301025393
+  ]
+ ],
+ "acc_mean": [
+  "acc_mean",
+  [
+   "REL",
+   1,
+   2,
+   1,
+   0.005
+  ]
+ ],
+ "self_repeat": [
+  "self_repeat|loss|within",
+  [
+   "REL",
+   1,
+   2,
+   1,
+   0.005
+  ]
+ ],
+ "spectral_entropy": [
+  "spectral_entropy|pnorm|within",
+  [
+   "REL",
+   -1,
+   2,
+   1,
+   0.005
+  ]
+ ],
+ "MG_drop": [
+  "MG|loss|within",
+  [
+   "REL",
+   1,
+   2,
+   1,
+   0.03
+  ]
+ ]
+}

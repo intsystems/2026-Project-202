@@ -1,0 +1,33 @@
+\claude{
+\section{Computational cost and measurement requirements}\label{sec:cost}
+MG analyzes one scalar per step, with storage and neighbor-search cost set by $W$ and $E$. It needs no model access once the record is available. Acquisition is separate: a parameter or gradient norm requires an $O(P)$ reduction; probe loss requires a forward pass.
+
+\begin{table}[t]
+\centering\small
+\caption{\claude{Analysis time, excluding scalar acquisition. References: full Lyapunov spectrum (FORCE; pre/post-training medians) and information/code-shuffling measurements (VAE). Comparisons are within rows; \appref{app:cost} documents hardware and timing procedures.}}
+\label{tab:cost}
+\begin{tabular}{lrr}
+\toprule
+Setting & MG & Reference \\
+\midrule
+CNN, 1,000-point window & 9.5\,ms & --- \\
+FORCE, 256 units & 0.60--0.84\,s & 11.55--12.01\,s \\
+VAE, 512-point window & 12.89\,ms & 209.32\,ms \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The CNN scalar record occupies about 39\,KiB, compared with 559\,MiB for the stored float32 parameter trajectory (Table~\ref{tab:cost}).
+
+\paragraph{Comparison with full-state diagnostics.}
+In the FORCE benchmark, MG identifies the transition toward a cycle from one neuron; the full Lyapunov spectrum independently confirms the change using state and tangent dynamics. Table~\ref{tab:cost} measures the cost of these two analyses, not two equivalent outputs: MG does not recover individual exponents. A largest-exponent calculation and simple scalar features can be cheaper. This saving matters when a scalar summary is sufficient (\appref{app:cost}).
+
+\paragraph{Cost of obtaining the scalar.}
+The forecast experiment uses an available record, so fewer MG queries directly reduce selection cost (Section~\ref{sec:forecast_utility}). In the cyclic VAE experiment, probe evaluations dominate. Low analysis cost is most useful when the scalar is already recorded.
+
+\paragraph{Observable sensitivity and detector transfer.}
+The CNN detector transfers to backbone freezing, but performs worse than trend crossings in the ReLU-death test. MG also fails to track near-threshold Hessian modes in the tested edge-of-stability setting. Each new observable and event therefore needs a separate check (Section~\ref{sec:mg_conditions}). Noise, drift and numerical effects in nearly constant records can alter the estimate.
+
+\section{Conclusion}
+We developed a method for extracting geometric information from one scalar log. In recurrent experiments, single-neuron MG distinguishes phase structures with identical spectral peak numbers and similar covariance ranks. In applied learning, it tracks independently measured changes and guides model selection without state trajectories or embedding extraction on evaluated runs. Sampled queries make forecast selection faster than held-out model search in our benchmark. These results connect scalar observations to useful information about dynamical complexity. Exact dimension recovery requires the stated assumptions; empirical utility remains task-dependent.
+}

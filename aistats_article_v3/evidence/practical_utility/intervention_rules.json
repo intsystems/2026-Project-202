@@ -1,0 +1,238 @@
+{
+  "stop_0.4": {
+    "MG": {
+      "kind": "feature",
+      "feature": "MG",
+      "obs": "norm",
+      "sign": -1,
+      "threshold": 6.431355370585929
+    },
+    "entropy": {
+      "kind": "feature",
+      "feature": "entropy",
+      "obs": "probe",
+      "sign": -1,
+      "threshold": 0.1781527361362593
+    },
+    "increments": {
+      "kind": "feature",
+      "feature": "increments",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 9.526982956701041e-05
+    },
+    "slope": {
+      "kind": "feature",
+      "feature": "slope",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.11934356502361426
+    },
+    "level": {
+      "kind": "feature",
+      "feature": "level",
+      "obs": "probe",
+      "sign": 1,
+      "threshold": 1.8491781669668854
+    },
+    "std": {
+      "kind": "feature",
+      "feature": "std",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.01286432280648912
+    },
+    "lag1": {
+      "kind": "feature",
+      "feature": "lag1",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.9989987091018464
+    },
+    "fixed": {
+      "kind": "fixed",
+      "step": 512
+    },
+    "never": {
+      "kind": "fixed",
+      "step": 2048
+    }
+  },
+  "stop_0.6": {
+    "MG": {
+      "kind": "feature",
+      "feature": "MG",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 7.334015348315307
+    },
+    "entropy": {
+      "kind": "feature",
+      "feature": "entropy",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.5311970967763423
+    },
+    "increments": {
+      "kind": "feature",
+      "feature": "increments",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 8.829593892524954e-05
+    },
+    "slope": {
+      "kind": "feature",
+      "feature": "slope",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.1534873194204316
+    },
+    "level": {
+      "kind": "feature",
+      "feature": "level",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 13.614745789766314
+    },
+    "std": {
+      "kind": "feature",
+      "feature": "std",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.0042575457353092
+    },
+    "lag1": {
+      "kind": "feature",
+      "feature": "lag1",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.9979309507662436
+    },
+    "fixed": {
+      "kind": "fixed",
+      "step": 256
+    },
+    "never": {
+      "kind": "fixed",
+      "step": 2048
+    }
+  },
+  "freeze_0": {
+    "MG": {
+      "kind": "feature",
+      "feature": "MG",
+      "obs": "norm",
+      "sign": -1,
+      "threshold": 7.762315445311671
+    },
+    "entropy": {
+      "kind": "feature",
+      "feature": "entropy",
+      "obs": "probe",
+      "sign": -1,
+      "threshold": 0.17353338080138817
+    },
+    "increments": {
+      "kind": "feature",
+      "feature": "increments",
+      "obs": "probe",
+      "sign": -1,
+      "threshold": 0.00033771163219053997
+    },
+    "slope": {
+      "kind": "feature",
+      "feature": "slope",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.22230120728909847
+    },
+    "level": {
+      "kind": "feature",
+      "feature": "level",
+      "obs": "norm",
+      "sign": -1,
+      "threshold": 15.507673508673907
+    },
+    "std": {
+      "kind": "feature",
+      "feature": "std",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.008442841086102475
+    },
+    "lag1": {
+      "kind": "feature",
+      "feature": "lag1",
+      "obs": "probe",
+      "sign": 1,
+      "threshold": 0.9993157256935618
+    },
+    "fixed": {
+      "kind": "fixed",
+      "step": 512
+    },
+    "never": {
+      "kind": "fixed",
+      "step": 2048
+    }
+  },
+  "prune_0": {
+    "MG": {
+      "kind": "feature",
+      "feature": "MG",
+      "obs": "norm",
+      "sign": -1,
+      "threshold": 7.735571924958644
+    },
+    "entropy": {
+      "kind": "feature",
+      "feature": "entropy",
+      "obs": "probe",
+      "sign": -1,
+      "threshold": 0.39641914807827616
+    },
+    "increments": {
+      "kind": "feature",
+      "feature": "increments",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 9.314304990588366e-05
+    },
+    "slope": {
+      "kind": "feature",
+      "feature": "slope",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.05823665818232788
+    },
+    "level": {
+      "kind": "feature",
+      "feature": "level",
+      "obs": "norm",
+      "sign": -1,
+      "threshold": 16.324180313944815
+    },
+    "std": {
+      "kind": "feature",
+      "feature": "std",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.0013712552041929
+    },
+    "lag1": {
+      "kind": "feature",
+      "feature": "lag1",
+      "obs": "norm",
+      "sign": 1,
+      "threshold": 0.9993177281641592
+    },
+    "fixed": {
+      "kind": "fixed",
+      "step": 768
+    },
+    "never": {
+      "kind": "fixed",
+      "step": 2048
+    }
+  }
+}
