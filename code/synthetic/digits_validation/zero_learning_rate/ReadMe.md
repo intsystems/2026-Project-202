@@ -1,18 +1,17 @@
-# Digits parameter subspace
+# Zero learning rate
 
-A constrained head on a frozen model trained on handwritten digits. The number of controlled forcing phases supplies the reference.
+Freeze the optimizer to check whether the scalar observation changes when its parameters are held fixed.
 
-Reference in the publication materials — Article, Sections 5–6 and Appendices C/E.
+Reference in the publication materials — Article, Sections 4–5 and Table 6.
 
 - [CSV logs and results](logs/ReadMe.md)
 - [PDF figures](figures/ReadMe.md)
-- [Digits and the validation protocol](../ReadMe.md)
+- [Handwritten digits and estimator calibration](../ReadMe.md)
 
 - [collect_logs.py](collect_logs.py). Run the registered simulation or training pipeline and collect fresh outputs under code/runs.
 - [analyze_logs.py](analyze_logs.py). Regenerate the PDF figures from the included CSV files.
 
-- [Controlled training and observations](system.py)
-- [Parameter subspace validation](../run_validation.py)
+- [Zero-learning-rate experiment](../run_validation.py)
 
 Run from this directory after installing the [common dependencies](../../../ReadMe.md#run-the-code).
 

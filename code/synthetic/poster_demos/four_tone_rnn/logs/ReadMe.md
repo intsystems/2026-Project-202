@@ -1,22 +1,10 @@
-# Four-tone RNN learning logs
+# Four-tone RNN learning data
+
+Autonomous activity from recurrent generators trained on targets with four tones and one, two, or four independent rhythms.
 
 [Experiment overview](../ReadMe.md)
 
-| CSV | Contents | Original project path |
-| --- | --- | --- |
-| [obs_H4_s1.csv](obs_H4_s1.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_H4_s1.npz` |
-| [obs_H4_s2.csv](obs_H4_s2.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_H4_s2.npz` |
-| [obs_H4_s3.csv](obs_H4_s3.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_H4_s3.npz` |
-| [obs_H4_s4.csv](obs_H4_s4.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_H4_s4.npz` |
-| [obs_H4_s5.csv](obs_H4_s5.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_H4_s5.npz` |
-| [obs_M4_s1.csv](obs_M4_s1.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_M4_s1.npz` |
-| [obs_M4_s2.csv](obs_M4_s2.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_M4_s2.npz` |
-| [obs_M4_s3.csv](obs_M4_s3.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_M4_s3.npz` |
-| [obs_M4_s4.csv](obs_M4_s4.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_M4_s4.npz` |
-| [obs_M4_s5.csv](obs_M4_s5.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_M4_s5.npz` |
-| [obs_T4_s1.csv](obs_T4_s1.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_T4_s1.npz` |
-| [obs_T4_s2.csv](obs_T4_s2.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_T4_s2.npz` |
-| [obs_T4_s3.csv](obs_T4_s3.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_T4_s3.npz` |
-| [obs_T4_s4.csv](obs_T4_s4.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_T4_s4.npz` |
-| [obs_T4_s5.csv](obs_T4_s5.csv) | Neuron activity exported from the recorded autonomous rollout. | `research_generator/results/obs_T4_s5.npz` |
-| [runs.csv](runs.csv) | Archived CSV from the original experiment. | `research_generator/results/runs.csv` |
+| CSV | What it contains |
+| --- | --- |
+| [`runs.csv`](runs.csv) | One row per run, with target settings, learning fidelity, MG, and state-dynamics statistics. |
+| `obs_H4_*.csv` (5 files, [example](obs_H4_s1.csv)), `obs_M4_*.csv` (5 files, [example](obs_M4_s1.csv)), `obs_T4_*.csv` (5 files, [example](obs_T4_s1.csv)) | Activity of three recorded neurons after training. The filename identifies the target condition and seed. |

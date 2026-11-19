@@ -1,10 +1,13 @@
 # Experiment code
 
-- [Synthetic experiments](synthetic/ReadMe.md)
-- [Experiments on recorded model runs](real/ReadMe.md)
-- [Active dimension methodology](actdim/ReadMe.md)
+| Folder | What you will find |
+| --- | --- |
+| [`synthetic/`](synthetic/ReadMe.md) | Controlled systems, calibration on handwritten digits, estimator limits, and synthetic poster examples. |
+| [`real/`](real/ReadMe.md) | Grokking and stability, diagnostics of model dynamics, and selection and stopping experiments. |
+| [`actdim/`](actdim/ReadMe.md) | The shared estimator, trajectory sketch, and rank calculations. |
+| [`experiment_runner/`](experiment_runner/ReadMe.md) | Common code for running collections and saving plots. |
 
-Each experiment has a collection entry point, a CSV analysis and plotting entry point, and separate directories for its CSVs and PDF figures. Some entries include the original training, scoring or configuration files. The individual pages describe runtime requirements and inputs.
+Within an experiment, `logs/ReadMe.md` describes the CSVs, `figures/ReadMe.md` lists the PDF plots, `analyze_logs.py` redraws those plots from CSVs, and `collect_logs.py` starts a fresh collection. The experiment README links to the implementation and describes any extra inputs.
 
 ## Run the code
 

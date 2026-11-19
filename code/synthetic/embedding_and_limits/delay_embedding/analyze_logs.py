@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib.patches import Circle
 from actdim.estimator.embedding import resolve_theiler
-from synthetic.validation_protocol.estimator_calibration.settings import eight_direction
+from synthetic.digits_validation.estimator_calibration.settings import eight_direction
 from experiment_runner.plotting import FAINT, GREY, INK, POINTER, RECURRENT, STOCHASTIC, TRANSIENT, WIDTH
 from experiment_runner.plotting import draw
 

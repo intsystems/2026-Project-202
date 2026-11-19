@@ -20,7 +20,7 @@ from typing import Any, Dict, Iterator, List, Mapping, Optional, Sequence, Tuple
 import numpy as np
 import pandas as pd
 
-from synthetic.validation_protocol.estimator_calibration import settings as frozen
+from synthetic.digits_validation.estimator_calibration import settings as frozen
 from actdim.estimator.config import EstimatorConfig
 # One implementation of each, imported rather than restated: the control pairing and the
 # milestone rule are the same ones the direct measurement of section 7.2 uses, and the two

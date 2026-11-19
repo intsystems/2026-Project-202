@@ -1,9 +1,11 @@
-# Logistic regression logs
+# Logistic regression data
+
+Estimates from logistic regression under controlled quasiperiodic forcing.
 
 [Experiment overview](../ReadMe.md)
 
-| CSV | Contents | Original project path |
-| --- | --- | --- |
-| [heldout_raw.csv](heldout_raw.csv) | Result or recorded log from the article's experiment output. | `code/data/sys.logistic/heldout_raw.csv` |
-| [heldout_summary.csv](heldout_summary.csv) | Result or recorded log from the article's experiment output. | `code/data/sys.logistic/heldout_summary.csv` |
-| [observer_ranking.csv](observer_ranking.csv) | Result or recorded log from the article's experiment output. | `code/data/sys.logistic/observer_ranking.csv` |
+| CSV | What it contains |
+| --- | --- |
+| [`heldout_summary.csv`](heldout_summary.csv) | MG, Levina?Bickel, delay-space participation ratio, and roughness by reference dimension and scalar signal. |
+| [`heldout_raw.csv`](heldout_raw.csv) | Per-run estimates, reference ranks, effective ranks, and window diagnostics by seed and scalar signal. |
+| [`observer_ranking.csv`](observer_ranking.csv) | Scalar signals ranked by error, rank correlation, and ordering inversions. |

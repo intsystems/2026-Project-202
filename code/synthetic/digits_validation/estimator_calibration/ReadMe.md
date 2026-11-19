@@ -1,18 +1,18 @@
-# Digits function subspace
+# Estimator calibration
 
-A function-space control on a digits model. The effective excitation did not meet the full protocol.
+Configuration selection on the development seeds and ranks for the eight- and twenty-direction protocols.
 
-Reference in the publication materials — Article, Section 5 and Table 6.
+Reference in the publication materials — Article, Appendix B and Tables 4 and 9.
 
 - [CSV logs and results](logs/ReadMe.md)
 - [PDF figures](figures/ReadMe.md)
-- [Digits and the validation protocol](../ReadMe.md)
+- [Handwritten digits and estimator calibration](../ReadMe.md)
 
+- [settings.py](settings.py). Fixed calibration settings and selection data.
 - [collect_logs.py](collect_logs.py). Run the registered simulation or training pipeline and collect fresh outputs under code/runs.
 - [analyze_logs.py](analyze_logs.py). Regenerate the PDF figures from the included CSV files.
 
-- [Function subspace model](system.py)
-- [Collection and scoring](../../known_dimension/run_systems.py)
+- [Calibration runs and scoring](calibrate.py)
 
 Run from this directory after installing the [common dependencies](../../../ReadMe.md#run-the-code).
 

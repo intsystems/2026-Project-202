@@ -113,7 +113,7 @@ def _standardise(x: np.ndarray) -> np.ndarray:
 def curves(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen_mod
+    from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from actdim.estimator.companions import delay_participation_ratio, roughness
     from actdim.estimator.embedding import reconstruct
     from actdim.estimator.mle import estimate_from

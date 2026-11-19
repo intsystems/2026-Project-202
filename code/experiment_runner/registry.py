@@ -76,8 +76,8 @@ def load() -> Dict[str, Experiment]:
 
     for module in (
         'synthetic.known_dimension.run_systems',
-        'synthetic.validation_protocol.estimator_calibration.calibrate',
-        'synthetic.validation_protocol.run_validation',
+        'synthetic.digits_validation.estimator_calibration.calibrate',
+        'synthetic.digits_validation.run_validation',
         'synthetic.embedding_and_limits.delay_embedding.collect_curves',
         'synthetic.robustness_and_measurement.trajectory_sketch.measure_sketch',
         'real.grokking_and_stability.analyze_training',

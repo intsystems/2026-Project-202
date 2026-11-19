@@ -1,8 +1,10 @@
-# Observer and scale controls logs
+# Observer and scale controls data
+
+Changes to the observed signal and forcing that test what can move MG at a fixed reference dimension.
 
 [Experiment overview](../ReadMe.md)
 
-| CSV | Contents | Original project path |
-| --- | --- | --- |
-| [controls_raw.csv](controls_raw.csv) | Result or recorded log from the article's experiment output. | `code/data/valid.nuisance/controls_raw.csv` |
-| [controls_scored.csv](controls_scored.csv) | Result or recorded log from the article's experiment output. | `code/data/valid.nuisance/controls_scored.csv` |
+| CSV | What it contains |
+| --- | --- |
+| [`controls_raw.csv`](controls_raw.csv) | MG, signal statistics, and trajectory participation ratio by control, seed, and scalar signal. |
+| [`controls_scored.csv`](controls_scored.csv) | Within-run changes, baseline-relative changes, and detection flags. |

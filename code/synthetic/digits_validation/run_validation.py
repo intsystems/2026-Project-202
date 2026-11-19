@@ -26,7 +26,7 @@ the exclusion sweep of appendix P measures the capped and the uncapped rule side
 *One trend-crossing count and one stride rule.* Three copies of the first and two of the
 second existed. The count is :func:`actdim.estimator.diagnostics.trend_crossings`, in
 closed form so that a window holding a NaN returns NaN rather than raising from inside a
-worker; the stride is :func:`synthetic.validation_protocol.estimator_calibration.settings.constructed_geometry`.
+worker; the stride is :func:`synthetic.digits_validation.estimator_calibration.settings.constructed_geometry`.
 
 *Everything collected in parallel is written in input order.* The archived raw tables were
 written in pool-completion order, so the values were stable and no re-run could be diffed
@@ -43,10 +43,10 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 
-from synthetic.validation_protocol.observers import CEILING_PANEL
+from synthetic.digits_validation.observers import CEILING_PANEL
 from experiment_runner import CPU, Context, experiment
 from experiment_runner.parallel import default_jobs, map_ordered
-from synthetic.validation_protocol.estimator_calibration.calibrate import mae, shrink as _shrink
+from synthetic.digits_validation.estimator_calibration.calibrate import mae, shrink as _shrink
 from synthetic.known_dimension.run_systems import _spearman as spearman
 
 # ============================================================== shared measurement pieces
@@ -101,7 +101,7 @@ def _median(values) -> float:
 
 def _frozen(**overrides):
     """The eight-direction configuration, with whatever this experiment overrides."""
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen
+    from synthetic.digits_validation.estimator_calibration import settings as frozen
 
     return frozen.eight_direction(**overrides)
 
@@ -155,7 +155,7 @@ CONTROL_ARMS: Tuple[str, ...] = ("qp_eta0", "noise_eta0", "qp_nopre", "noise_nop
 
 def sweep_config(arm: str, rank: int, record: int, burn: int, extra=()):
     """One arm of the parameter-subspace sweep at one rank."""
-    from synthetic.validation_protocol.digits_parameter_subspace.system import F_FAST, F_SLOW, ten_direction
+    from synthetic.digits_validation.digits_parameter_subspace.system import F_FAST, F_SLOW, ten_direction
 
     settings = dict(ARMS[arm])
     slow = settings.pop("slow", False)
@@ -176,10 +176,10 @@ def _sweep_cell(args) -> List[Dict[str, Any]]:
     """One (arm, rank, seed): simulate once, score every observer at the frozen setting."""
     arm, rank, seed, record, burn, panel, ident, extra = args
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen_mod
-    from synthetic.validation_protocol import observers as registry
+    from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
+    from synthetic.digits_validation import observers as registry
     from actdim.estimator import windows
-    from synthetic.validation_protocol.digits_parameter_subspace import system as digits_parameter
+    from synthetic.digits_validation.digits_parameter_subspace import system as digits_parameter
 
     simulation = digits_parameter.simulate(sweep_config(arm, rank, record, burn, extra),
                                            seed=seed)
@@ -265,7 +265,7 @@ def _calibration_pairs() -> Tuple[Dict[str, Dict[str, List[float]]], str]:
     the pairs; the archived file carries only the knots of the fitted isotonic map, and
     those are used as a stand-in with the substitution recorded.
     """
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen_mod
+    from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
 
     stored = frozen_mod.read_calibration(frozen_mod.EIGHT_DIRECTION)
     points = stored.get("calibration_points")
@@ -329,7 +329,7 @@ def _calibrated_error(raw, ranks: Sequence[int]):
 def digits_parameter(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.validation_protocol.observers import PAPER_TWELVE
+    from synthetic.digits_validation.observers import PAPER_TWELVE
 
     panel = PAPER_TWELVE
     ranks, seeds, control_seeds = SWEEP_RANKS, SWEEP_SEEDS, CONTROL_SEEDS
@@ -437,7 +437,7 @@ def _silence_cell(args) -> List[Dict[str, Any]]:
     """One (system, rank, seed) run twice: with the optimiser, and with it silenced."""
     system_id, rank, seed, record, extra = args
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen_mod
+    from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from actdim.estimator import windows
     from synthetic.known_dimension import system_registry as spec
 
@@ -477,7 +477,7 @@ def _claims_state_only(observer: str) -> bool:
     contamination is visible rather than assumed away. Every other constructed system's
     observers are functions of the optimiser state and none of them declares an exception.
     """
-    from synthetic.validation_protocol import observers as registry
+    from synthetic.digits_validation import observers as registry
 
     return registry.REGISTRY[observer].state_only if observer in registry.REGISTRY else True
 
@@ -824,7 +824,7 @@ NUISANCE_SKIP: Tuple[Tuple[str, str], ...] = (("qp", "noise_step"),
 
 def _nuisance_setup(control: str, mode: str, rank: int, record: int, burn: int, extra=()):
     """One control's system configuration and its per-step schedules."""
-    from synthetic.validation_protocol.digits_parameter_subspace.system import F_FAST, Schedules, ten_direction
+    from synthetic.digits_validation.digits_parameter_subspace.system import F_FAST, Schedules, ten_direction
 
     settings: Dict[str, Any] = dict(k=rank, window=record, burn=burn, eta=0.15,
                                     precondition=True, f0=F_FAST)
@@ -860,9 +860,9 @@ def _nuisance_setup(control: str, mode: str, rank: int, record: int, burn: int, 
 def _nuisance_cell(args) -> List[Dict[str, Any]]:
     control, mode, seed, rank, record, burn, panel, extra = args
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen_mod
+    from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from actdim.estimator import windows
-    from synthetic.validation_protocol.digits_parameter_subspace import system as digits_parameter
+    from synthetic.digits_validation.digits_parameter_subspace import system as digits_parameter
 
     config, schedules = _nuisance_setup(control, mode, rank, record, burn, extra)
     simulation = digits_parameter.simulate(config, seed=seed, schedules=schedules)
@@ -956,7 +956,7 @@ def _nuisance_score(raw, rotation_observers: Sequence[str]):
 def nuisance(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.validation_protocol.observers import PAPER_TWELVE
+    from synthetic.digits_validation.observers import PAPER_TWELVE
 
     panel = PAPER_TWELVE
     controls, seeds = NUISANCE_CONTROLS, NUISANCE_SEEDS
@@ -1100,7 +1100,7 @@ GEOMETRY_RECORD = 16_000
 #: Short enough to localise the switch, long enough to resolve four phases in this
 #: construction. Both are the frozen eight-direction configuration with the window geometry
 #: overridden and no estimator field touched -- the same discipline as the three overrides
-#: :mod:`synthetic.validation_protocol.estimator_calibration.settings` states. The archived script wrote the seven fields out as literals,
+#: :mod:`synthetic.digits_validation.estimator_calibration.settings` states. The archived script wrote the seven fields out as literals,
 #: which is how a configuration comes to differ from the one that was calibrated.
 GEOMETRY_TRACE_GEOMETRY: Dict[str, int] = {"window": 4_000, "stride": 400}
 GEOMETRY_LEVEL_GEOMETRY: Dict[str, int] = {"window": 8_000, "stride": 4_000}
@@ -1373,10 +1373,10 @@ TRANSITION_HOLD = 2
 def _transition_cell(args) -> List[Dict[str, Any]]:
     mode, high, low, seed, segment, burn, panel, extra = args
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen_mod
+    from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from actdim.estimator import windows
     from actdim.linalg import rank_report
-    from synthetic.validation_protocol.digits_parameter_subspace.system import F_FAST, Schedules, ten_direction, trajectory
+    from synthetic.digits_validation.digits_parameter_subspace.system import F_FAST, Schedules, ten_direction, trajectory
 
     length = burn + 3 * segment
     schedule = np.full(length, high, dtype=int)
@@ -1467,7 +1467,7 @@ def _transition_cell(args) -> List[Dict[str, Any]]:
 def transitions(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.validation_protocol.observers import PAPER_TWELVE
+    from synthetic.digits_validation.observers import PAPER_TWELVE
 
     panel = PAPER_TWELVE
     levels, seeds = TRANSITION_LEVELS, TRANSITION_SEEDS
@@ -1515,7 +1515,7 @@ def _cap_cell(args) -> List[Dict[str, Any]]:
 
     from actdim.estimator import windows
     from actdim.estimator.config import EstimatorConfig
-    from synthetic.validation_protocol.estimator_calibration.calibrate import k20_load
+    from synthetic.digits_validation.estimator_calibration.calibrate import k20_load
 
     logs, info = k20_load(Path(path), panel)
     cfg = EstimatorConfig.from_dict(dict(cfg_values)).replace(theiler=int(exclusion),
@@ -1553,8 +1553,8 @@ def _cap_cell(args) -> List[Dict[str, Any]]:
 def theiler_cap(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen_mod
-    from synthetic.validation_protocol.observers import K20_PANEL
+    from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
+    from synthetic.digits_validation.observers import K20_PANEL
 
     import re
 
@@ -1785,9 +1785,9 @@ def _contrast_cell(args) -> Dict[str, Any]:
     """One (arm, rank, seed): simulate, sweep the exclusion over every window."""
     arm, mode, rank, seed, record, burn, panel, exclusions, extra = args
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen_mod
+    from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from actdim.estimator.windows import window_starts
-    from synthetic.validation_protocol.digits_parameter_subspace import system as digits_parameter
+    from synthetic.digits_validation.digits_parameter_subspace import system as digits_parameter
 
     simulation = digits_parameter.simulate(sweep_config(mode, rank, record, burn, extra),
                                            seed=seed)
@@ -1947,9 +1947,9 @@ def _ceiling_simulate(args) -> Dict[str, Any]:
     rank, seed, lengths, burn, directory, panel, extra = args
 
     from actdim.linalg import TRAJECTORY_RANK_TOL, rank_report
-    from synthetic.validation_protocol.digits_parameter_subspace.system import trajectory
+    from synthetic.digits_validation.digits_parameter_subspace.system import trajectory
 
-    from synthetic.validation_protocol.estimator_calibration.calibrate import k20_system
+    from synthetic.digits_validation.estimator_calibration.calibrate import k20_system
 
     config = k20_system("qp", rank, max(lengths), burn, extra)
     series, coordinates, _, drive, condition, _ = trajectory(config, seed)
@@ -2183,7 +2183,7 @@ def _ceiling_slopes(summary) -> Any:
 def ceiling(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.validation_protocol.observers import CEILING_STORED
+    from synthetic.digits_validation.observers import CEILING_STORED
 
     embeddings, lengths = CEILING_EMBEDDINGS, CEILING_LENGTHS
     wide_lengths, ranks, seeds = CEILING_WIDE_LENGTHS, CEILING_RANKS, CEILING_SEEDS

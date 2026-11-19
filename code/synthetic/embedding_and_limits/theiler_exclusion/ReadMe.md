@@ -11,7 +11,7 @@ Reference in the publication materials — Article, Appendix I.
 - [collect_logs.py](collect_logs.py). Run the registered simulation or training pipeline and collect fresh outputs under code/runs.
 - [analyze_logs.py](analyze_logs.py). Regenerate the PDF figures from the included CSV files.
 
-- [Collection and scoring for this control](../../validation_protocol/run_validation.py)
+- [Collection and scoring for this control](../../digits_validation/run_validation.py)
 
 Run from this directory after installing the [common dependencies](../../../ReadMe.md#run-the-code).
 

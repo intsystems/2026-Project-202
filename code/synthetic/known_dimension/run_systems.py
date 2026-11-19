@@ -74,7 +74,7 @@ def _cell(args) -> Dict[str, Any]:
     """
     system_id, k, seed, wide, fast = args
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen
+    from synthetic.digits_validation.estimator_calibration import settings as frozen
     from actdim.estimator import windows
     from synthetic.known_dimension import system_registry as spec
 

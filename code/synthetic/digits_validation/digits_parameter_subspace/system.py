@@ -81,7 +81,7 @@ from typing import Any, Dict, Optional, Tuple
 import numpy as np
 
 from actdim.linalg import TRAJECTORY_RANK_TOL, participation_ratio, rank_report
-from synthetic.validation_protocol.observers import PAPER_TWELVE, Observation, Probe, directions, select
+from synthetic.digits_validation.observers import PAPER_TWELVE, Observation, Probe, directions, select
 from experiment_runner.determinism import rng as stream_rng
 from experiment_runner.determinism import stream_seed
 from synthetic.known_dimension.drive import DEFAULT_BAND, DriveConfig, build_drive, centre_for_octave

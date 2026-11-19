@@ -51,7 +51,7 @@ def mae(estimate, truth) -> float:
     """Mean absolute error over the pairs where both sides are finite.
 
     The companion of :func:`spearman` above and the other half of every objective in this
-    module and in :mod:`synthetic.validation_protocol.run_validation`. An all-NaN comparison returns NaN
+    module and in :mod:`synthetic.digits_validation.run_validation`. An all-NaN comparison returns NaN
     rather than the mean of an empty selection, which is a RuntimeWarning and was how
     three of them reached a committed table.
     """
@@ -157,7 +157,7 @@ def twenty_direction_grid(fast: bool = False) -> List[Any]:
 # ----------------------------------------------------------------- the systems
 
 def _e8_system(rank: int, record: int, burn: int, extra=()):
-    from synthetic.validation_protocol.digits_parameter_subspace.system import F_FAST, ten_direction
+    from synthetic.digits_validation.digits_parameter_subspace.system import F_FAST, ten_direction
 
     return ten_direction(k=rank, mode="qp", drive_amp=0.8, noise_amp=0.0,
                          f0=F_FAST, precondition=True, eta=0.15,
@@ -171,7 +171,7 @@ def k20_system(arm: str, rank: int, record: int, burn: int, extra=()):
     archived tree spelled the same seven settings out in three scripts and two of them
     disagreed about the backbone.
     """
-    from synthetic.validation_protocol.digits_parameter_subspace.system import F_FAST, F_SLOW, twenty_direction
+    from synthetic.digits_validation.digits_parameter_subspace.system import F_FAST, F_SLOW, twenty_direction
 
     settings: Dict[str, Any] = dict(k=rank, mode="qp", drive_amp=0.8, noise_amp=0.0,
                                     f0=F_FAST, precondition=True, eta=0.15,
@@ -199,7 +199,7 @@ def k20_system(arm: str, rank: int, record: int, burn: int, extra=()):
 
 def _k20_schedules(arm: str, length: int):
     """The one control that acts on the observers rather than on the dynamics."""
-    from synthetic.validation_protocol.digits_parameter_subspace.system import EMPTY, Schedules
+    from synthetic.digits_validation.digits_parameter_subspace.system import EMPTY, Schedules
 
     if arm == "qp_scale2":
         return Schedules(observer_gain=np.full(length, 2.0))
@@ -215,9 +215,9 @@ def _e8_cell(args) -> List[Dict[str, Any]]:
     """
     seed, rank, record, burn, observer_names, grid_fast, extra = args
 
-    from synthetic.validation_protocol import observers as observer_registry
+    from synthetic.digits_validation import observers as observer_registry
     from actdim.estimator import windows
-    from synthetic.validation_protocol.digits_parameter_subspace import system as digits_parameter
+    from synthetic.digits_validation.digits_parameter_subspace import system as digits_parameter
 
     simulation = digits_parameter.simulate(_e8_system(rank, record, burn, extra),
                                            seed=seed)
@@ -344,7 +344,7 @@ def eight_direction(ctx: Context) -> None:
     import pandas as pd
 
     from actdim.estimator.config import DEFAULT
-    from synthetic.validation_protocol.observers import K20_CALIBRATION
+    from synthetic.digits_validation.observers import K20_CALIBRATION
 
     seeds, ranks = E8_SEEDS, E8_RANKS
     observer_names = K20_CALIBRATION           # one observer per family, as table 7 says
@@ -407,7 +407,7 @@ def _k20_simulate(args) -> Dict[str, Any]:
     """
     arm, rank, seed, record, burn, directory, panel, extra = args
 
-    from synthetic.validation_protocol.digits_parameter_subspace import system as digits_parameter
+    from synthetic.digits_validation.digits_parameter_subspace import system as digits_parameter
 
     config = k20_system(arm, rank, record, burn, extra)
     schedules = _k20_schedules(arm, config.length)
@@ -594,7 +594,7 @@ def _k20_controls(scored, rank: int, panel: Sequence[str]):
 def twenty_direction(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.validation_protocol.observers import K20_CALIBRATION, K20_PANEL
+    from synthetic.digits_validation.observers import K20_CALIBRATION, K20_PANEL
 
     panel = K20_PANEL
     calibration_observers = K20_CALIBRATION

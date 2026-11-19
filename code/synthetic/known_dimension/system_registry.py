@@ -255,8 +255,8 @@ def load() -> Dict[str, SystemEntry]:
             'regression': 'synthetic.known_dimension.regression',
             'decoder': 'synthetic.known_dimension.frozen_decoder.system',
             'subspace': 'synthetic.known_dimension.subspace_perceptron.system',
-            'digits_function': 'synthetic.validation_protocol.digits_function_subspace.system',
-            'digits_parameter': 'synthetic.validation_protocol.digits_parameter_subspace.system',
+            'digits_function': 'synthetic.digits_validation.digits_function_subspace.system',
+            'digits_parameter': 'synthetic.digits_validation.digits_parameter_subspace.system',
         }[name])
     return SYSTEMS
 

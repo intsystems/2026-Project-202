@@ -18,13 +18,13 @@ excited, and the answer is: not very. The response gain of mode ``j`` goes as
 ``1 / |eta + i omega_j|`` and the ``r`` forcing directions are not orthogonal in the
 network's own metric, so the trajectory's effective rank reaches 3.1 at r = 10 and 4.7 at
 r = 20. That is measured here and reported beside the rank. The image-data system of
-:mod:`synthetic.validation_protocol.digits_parameter_subspace.system` exists partly because it removes exactly this
+:mod:`synthetic.digits_validation.digits_parameter_subspace.system` exists partly because it removes exactly this
 defect, by equalising the gains.
 
 The system also fails requirement 4: the drive moves the targets, so a zero learning rate
 leaves the loss still varying through the residual.
 
-The two-layer tanh perceptron below is shared with :mod:`synthetic.validation_protocol.digits_function_subspace.system`,
+The two-layer tanh perceptron below is shared with :mod:`synthetic.digits_validation.digits_function_subspace.system`,
 which builds its adapter around the same architecture at a different size. The archived
 tree had the layout, forward pass and backward pass written out in both files, differing
 only in the names of the constants.

@@ -1,9 +1,11 @@
 # Experiments on recorded model runs
 
-Applications of MG and trajectory measurements to trained networks and policies. The grokking, FORCE and RNN forecasting tasks include generated targets or simulated dynamics.
+These experiments apply MG and trajectory measurements to logs of trained networks and policies. Some tasks use generated targets or simulated environments.
 
-- [Grokking and optimization stability](grokking_and_stability/ReadMe.md). The article experiments on delayed generalization and full-batch dynamics near the edge of stability.
-- [Diagnostics of model dynamics](dynamics_diagnostics/ReadMe.md). Poster experiments that use scalar logs to detect backbone freezing, loss of latent information, or a learned cycle.
-- [Model selection and early stopping](selection_and_stopping/ReadMe.md). Poster experiments where a diagnostic informs a decision about a forecaster, a deployment policy, or a training checkpoint.
+| Folder | What you will find |
+| --- | --- |
+| [`grokking_and_stability/`](grokking_and_stability/ReadMe.md) | Transformer and perceptron grokking, with scalar diagnostics, trajectory measurements, and full-batch runs at the edge of stability. |
+| [`dynamics_diagnostics/`](dynamics_diagnostics/ReadMe.md) | Detecting backbone freezing in ResNet, loss of latent information in a text VAE, and a learned oscillation in a FORCE RNN. |
+| [`selection_and_stopping/`](selection_and_stopping/ReadMe.md) | Selecting an RNN forecaster, selecting a Walker2d policy under actuator lag and noise, and stopping training early on MNIST with noisy labels. |
 
 [Code index](../ReadMe.md)

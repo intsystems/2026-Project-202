@@ -343,7 +343,7 @@ def _matched_headline() -> Dict[str, Any]:
     calibration logs -- and a copy of the old name here would have left the headline cell
     claiming to follow a rule it no longer followed.
     """
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen_mod
+    from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from real.grokking_and_stability import log_metrics as logs
 
     base = frozen_mod.eight_direction()
@@ -512,7 +512,7 @@ def _matched_inputs(ctx: Context, runs: Sequence[str]):
 def matched_window(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen
+    from synthetic.digits_validation.estimator_calibration import settings as frozen
     from real.grokking_and_stability import log_metrics as logs
 
     runs: Sequence[str] = logs.TRANSFORMER_SKETCHED
@@ -691,7 +691,7 @@ def _surrogate_cell(args) -> List[Dict[str, Any]]:
 def matched_surrogate(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen
+    from synthetic.digits_validation.estimator_calibration import settings as frozen
     from real.grokking_and_stability import log_metrics as logs
 
     runs: Sequence[str] = logs.TRANSFORMER_SKETCHED
@@ -1194,7 +1194,7 @@ def _eos_recurrence_run(args) -> List[Dict[str, Any]]:
 def eos(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.validation_protocol.estimator_calibration import settings as frozen
+    from synthetic.digits_validation.estimator_calibration import settings as frozen
     from real.grokking_and_stability import log_metrics as logs
     from real.grokking_and_stability.edge_of_stability.train import analysable
 
