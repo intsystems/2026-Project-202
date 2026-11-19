@@ -56,7 +56,7 @@ def preserve_torch_rng(device: Any = None):
     ``device`` names the stream the block could perturb. The CUDA state is saved only when
     a CUDA device is in play: reading it costs a synchronisation, and a CPU forward pass
     cannot touch it. The availability check below asks whether a CUDA generator exists to
-    be saved; it is not a device choice, which belongs to ``actdim.runtime.device``.
+    be saved; it is not a device choice, which belongs to ``experiment_runner.device``.
     """
     import torch
 

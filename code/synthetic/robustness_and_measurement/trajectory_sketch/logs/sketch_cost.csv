@@ -1,0 +1,2 @@
+device,fast,full_float32_MB,log_every,model,n_logged,n_params,overhead_frac,overhead_is_bound,repeats,seconds_bare,seconds_probed,sketch_dim,sketched_float32_MB,steps,storage_ratio
+cuda:0,False,87.882,10,perceptron,151,145500,0.05865876847603291,False,4,1.6981807202100754,1.797793909907341,1024,2.473984,1500,35.5224609375

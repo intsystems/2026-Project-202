@@ -48,7 +48,7 @@ class EstimatorConfig:
     line rather than of the set it fills.
 
     ``window`` and ``stride`` describe how a record is divided, not how a window is scored.
-    Three pipelines override them and no other field; see ``actdim.frozen``.
+    Three pipelines override them and no other field; see ``synthetic.validation_protocol.estimator_calibration.settings``.
     """
 
     max_E: int = 20
