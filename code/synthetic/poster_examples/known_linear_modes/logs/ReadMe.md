@@ -6,7 +6,7 @@ Scalar logs and estimates from linear learning with a known number of oscillator
 
 | CSV | What it contains |
 | --- | --- |
-| [`stationary_summary.csv`](stationary_summary.csv) | Median and range of MG by mode count, window length, and scalar signal. Used by the poster. |
+| [`stationary_summary.csv`](stationary_summary.csv) | Median and range of MG by mode count, window length, and scalar signal. |
 | [`measurements.csv`](measurements.csv) | Window estimates by run, signal, and regime, including the phase switch and damped controls. |
 | [`audits.csv`](audits.csv) | Checks on data rank, gradients, and invariant drift. |
 | [`amplitude_control.csv`](amplitude_control.csv) | MG when the scalar signal is rescaled. |

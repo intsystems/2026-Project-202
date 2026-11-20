@@ -2,9 +2,9 @@
 
 Compare baseline, code suppression and free bits on Penn Treebank. Plot scalar reconstruction loss, rolling MG and independently measured mutual information.
 
-## On the poster
+## In the article
 
-[Block 06 · Diagnose code loss and cycle formation](../../../../article/poster/ReadMe.md#block-06--diagnose-code-loss-and-cycle-formation) · Text VAE on Penn Treebank. This experiment belongs to the poster.
+The current manuscript does not report this experiment.
 
 ## Files and commands
 
@@ -18,7 +18,7 @@ Compare baseline, code suppression and free bits on Penn Treebank. Plot scalar r
 - [collect_logs.py](collect_logs.py). Collect the paired VAE branches.
 - [recompute_metrics.py](recompute_metrics.py). Score the three branches from a fresh run.
 - [analyze.py](analyze.py). Analyze the fresh baseline and suppression branches.
-- [analyze_logs.py](analyze_logs.py). Rebuild the poster panel from the included CSVs.
+- [analyze_logs.py](analyze_logs.py). Regenerate the figure from the included CSVs.
 
 Run from this directory after installing the [common dependencies](../../../ReadMe.md#run-the-code).
 

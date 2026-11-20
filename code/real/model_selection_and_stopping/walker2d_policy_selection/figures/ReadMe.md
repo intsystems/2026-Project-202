@@ -2,4 +2,4 @@
 
 [Experiment overview](../ReadMe.md)
 
-- [policy_selection.pdf](policy_selection.pdf). Vector figure embedded in the supplied poster.
+- [policy_selection.pdf](policy_selection.pdf). Policy performance with actuator lag and noise, grouped by the selection rule.

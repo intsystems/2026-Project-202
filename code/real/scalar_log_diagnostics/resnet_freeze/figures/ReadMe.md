@@ -2,4 +2,4 @@
 
 [Experiment overview](../ReadMe.md)
 
-- [resnet.pdf](resnet.pdf). Vector figure embedded in the supplied poster.
+- [resnet.pdf](resnet.pdf). Weight norms and windowed MG around backbone freezing.

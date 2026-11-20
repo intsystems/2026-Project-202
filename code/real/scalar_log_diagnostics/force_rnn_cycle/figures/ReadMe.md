@@ -2,4 +2,4 @@
 
 [Experiment overview](../ReadMe.md)
 
-- [rnn_real_log.pdf](rnn_real_log.pdf). Vector figure embedded in the supplied poster.
+- [rnn_real_log.pdf](rnn_real_log.pdf). Neuron activity and windowed MG before and after FORCE training.

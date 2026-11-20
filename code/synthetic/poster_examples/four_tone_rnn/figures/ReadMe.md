@@ -2,5 +2,5 @@
 
 [Experiment overview](../ReadMe.md)
 
-- [four_tone_rnn.pdf](four_tone_rnn.pdf). Standalone replot of the right poster panel.
-- [synthetic.pdf](synthetic.pdf). Full two-panel figure from the poster. The left panel is documented in ../known_linear_modes/.
+- [four_tone_rnn.pdf](four_tone_rnn.pdf). MG estimates for the one-, two-, and four-rhythm RNN conditions.
+- [synthetic.pdf](synthetic.pdf). Combined comparison of the four-tone RNN and the [linear learning experiment](../../known_linear_modes/ReadMe.md).

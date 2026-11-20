@@ -2,9 +2,9 @@
 
 Compare one neuron's autonomous activity before and after learning a figure-eight reference. Evaluation holds weights fixed.
 
-## On the poster
+## In the article
 
-[Block 06 · Diagnose code loss and cycle formation](../../../../article/poster/ReadMe.md#block-06--diagnose-code-loss-and-cycle-formation) · FORCE-trained recurrent network. This experiment belongs to the poster.
+The current manuscript does not report this experiment.
 
 ## Files and commands
 
@@ -15,7 +15,7 @@ Compare one neuron's autonomous activity before and after learning a figure-eigh
 - [run.py](run.py). Original source. Train and evaluate the FORCE recurrent model or score its rollouts.
 - [analyze.py](analyze.py). Original source. Train and evaluate the FORCE recurrent model or score its rollouts.
 - [collect_logs.py](collect_logs.py). Train the FORCE model and record autonomous rollouts.
-- [analyze_logs.py](analyze_logs.py). Rebuild the poster panel from the included CSVs.
+- [analyze_logs.py](analyze_logs.py). Regenerate the figure from the included CSVs.
 
 Run from this directory after installing the [common dependencies](../../../ReadMe.md#run-the-code).
 

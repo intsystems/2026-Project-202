@@ -2,9 +2,9 @@
 
 Use a weight-norm log to detect backbone freezing on CIFAR-10. Compare scratch and ImageNet initializations.
 
-## On the poster
+## In the article
 
-[Block 05 · Detect restricted training in ResNet](../../../../article/poster/ReadMe.md#block-05--detect-restricted-training-in-resnet) · ResNet-18 on CIFAR-10. This experiment belongs to the poster.
+The current manuscript does not report this experiment.
 
 ## Files and commands
 
@@ -16,7 +16,7 @@ Use a weight-norm log to detect backbone freezing on CIFAR-10. Compare scratch a
 - [analyse_resnet.py](analyse_resnet.py). Original source. Train ResNet, export the observers, or compute rolling statistics and detector outputs.
 - [export_observers.py](export_observers.py). Original source. Train ResNet, export the observers, or compute rolling statistics and detector outputs.
 - [collect_logs.py](collect_logs.py). Collect ResNet training logs for the selected scenario.
-- [analyze_logs.py](analyze_logs.py). Rebuild the poster panel from the included CSVs.
+- [analyze_logs.py](analyze_logs.py). Regenerate the figure from the included CSVs.
 
 Run from this directory after installing the [common dependencies](../../../ReadMe.md#run-the-code).
 
