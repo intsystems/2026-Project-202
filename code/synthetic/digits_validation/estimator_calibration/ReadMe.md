@@ -2,7 +2,12 @@
 
 Configuration selection on the development seeds and ranks for the eight- and twenty-direction protocols.
 
-Reference in the publication materials — Article, Appendix B and Tables 4 and 9.
+## In the article
+
+- [Section 4 · Validation protocol](../../../../article/manuscript/ReadMe.md#section-4--validation-protocol). Rules for holding out ranks and freezing estimator settings.
+- [Appendix B.3 · Frozen configurations](../../../../article/manuscript/ReadMe.md#appendix-b3--frozen-configurations). The selected eight- and twenty-direction configurations in Table 4.
+
+## Files and commands
 
 - [CSV logs and results](logs/ReadMe.md)
 - [PDF figures](figures/ReadMe.md)

@@ -75,11 +75,11 @@ def load() -> Dict[str, Experiment]:
     from importlib import import_module
 
     for module in (
-        'synthetic.known_dimension.run_systems',
+        'synthetic.controlled_systems.run_systems',
         'synthetic.digits_validation.estimator_calibration.calibrate',
         'synthetic.digits_validation.run_validation',
-        'synthetic.embedding_and_limits.delay_embedding.collect_curves',
-        'synthetic.robustness_and_measurement.trajectory_sketch.measure_sketch',
+        'synthetic.delay_embedding_and_limits.delay_embedding.collect_curves',
+        'synthetic.signal_controls_and_sketches.trajectory_sketch.measure_sketch',
         'real.grokking_and_stability.analyze_training',
         'real.grokking_and_stability.train_models',
     ):

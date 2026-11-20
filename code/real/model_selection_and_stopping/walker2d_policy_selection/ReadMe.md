@@ -1,0 +1,29 @@
+# Walker2d policy selection
+
+Select policies for transfer to actuator lag and noise using nominal reward, MG, entropy or a fixed policy.
+
+## On the poster
+
+[Block 07 · Select models and stop training](../../../../article/poster/ReadMe.md#block-07--select-models-and-stop-training) · Walker2d policy selection. This experiment belongs to the poster.
+
+## Files and commands
+
+- [CSV logs and results](logs/ReadMe.md)
+- [PDF figures](figures/ReadMe.md)
+- [Model selection and early stopping](../ReadMe.md)
+
+- [analyze_logs.py](analyze_logs.py). Rebuild the poster panel from the included CSVs.
+- [checkpoint_selection.py](checkpoint_selection.py). Original source. Evaluate historical policies and collect episode metrics.
+- [analyze.py](analyze.py). Original source. Score and summarize selections.
+- [collect_logs.py](collect_logs.py). Run original collection with the local historical inputs.
+
+Run from this directory after installing the [common dependencies](../../../ReadMe.md#run-the-code).
+
+```bash
+python analyze_logs.py
+python collect_logs.py 232
+```
+
+The local plotting entry point uses only the included CSV files. Run the historical collection pipeline from its original archival layout for frozen model files and other upstream inputs.
+
+Full reevaluation needs the original Walker2d checkpoints, normalization files and simulation environment. The included tables are sufficient to redraw the panel.

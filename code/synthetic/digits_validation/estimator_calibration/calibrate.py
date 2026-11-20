@@ -44,7 +44,7 @@ from experiment_runner.parallel import map_ordered
 # The package's one rank correlation. It lives in the ladder module because that was
 # written first; importing it is the alternative to a fifth copy, which is what the
 # archived tree had -- three of them differing in how they treated a constant input.
-from synthetic.known_dimension.run_systems import _spearman as spearman
+from synthetic.controlled_systems.run_systems import _spearman as spearman
 
 
 def mae(estimate, truth) -> float:
@@ -157,7 +157,7 @@ def twenty_direction_grid(fast: bool = False) -> List[Any]:
 # ----------------------------------------------------------------- the systems
 
 def _e8_system(rank: int, record: int, burn: int, extra=()):
-    from synthetic.digits_validation.digits_parameter_subspace.system import F_FAST, ten_direction
+    from synthetic.digits_validation.digits_classifier_head.system import F_FAST, ten_direction
 
     return ten_direction(k=rank, mode="qp", drive_amp=0.8, noise_amp=0.0,
                          f0=F_FAST, precondition=True, eta=0.15,
@@ -171,7 +171,7 @@ def k20_system(arm: str, rank: int, record: int, burn: int, extra=()):
     archived tree spelled the same seven settings out in three scripts and two of them
     disagreed about the backbone.
     """
-    from synthetic.digits_validation.digits_parameter_subspace.system import F_FAST, F_SLOW, twenty_direction
+    from synthetic.digits_validation.digits_classifier_head.system import F_FAST, F_SLOW, twenty_direction
 
     settings: Dict[str, Any] = dict(k=rank, mode="qp", drive_amp=0.8, noise_amp=0.0,
                                     f0=F_FAST, precondition=True, eta=0.15,
@@ -199,7 +199,7 @@ def k20_system(arm: str, rank: int, record: int, burn: int, extra=()):
 
 def _k20_schedules(arm: str, length: int):
     """The one control that acts on the observers rather than on the dynamics."""
-    from synthetic.digits_validation.digits_parameter_subspace.system import EMPTY, Schedules
+    from synthetic.digits_validation.digits_classifier_head.system import EMPTY, Schedules
 
     if arm == "qp_scale2":
         return Schedules(observer_gain=np.full(length, 2.0))
@@ -217,7 +217,7 @@ def _e8_cell(args) -> List[Dict[str, Any]]:
 
     from synthetic.digits_validation import observers as observer_registry
     from actdim.estimator import windows
-    from synthetic.digits_validation.digits_parameter_subspace import system as digits_parameter
+    from synthetic.digits_validation.digits_classifier_head import system as digits_parameter
 
     simulation = digits_parameter.simulate(_e8_system(rank, record, burn, extra),
                                            seed=seed)
@@ -407,7 +407,7 @@ def _k20_simulate(args) -> Dict[str, Any]:
     """
     arm, rank, seed, record, burn, directory, panel, extra = args
 
-    from synthetic.digits_validation.digits_parameter_subspace import system as digits_parameter
+    from synthetic.digits_validation.digits_classifier_head import system as digits_parameter
 
     config = k20_system(arm, rank, record, burn, extra)
     schedules = _k20_schedules(arm, config.length)

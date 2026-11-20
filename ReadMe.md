@@ -12,6 +12,6 @@ The controlled experiments test when the scalar estimate tracks a known number o
 | [`code/actdim/`](code/actdim/ReadMe.md) | The MG estimator and tools for compressing trajectories and calculating their effective rank. |
 | [`archive/`](archive/ReadMe.md) | An index for the local archive of earlier project materials. |
 
-Each experiment links to the CSVs, PDF figures, and commands for working with them. Start with the [handwritten digits experiment](code/synthetic/digits_validation/digits_parameter_subspace/ReadMe.md) for a test against a known reference, or with [transformer grokking](code/real/grokking_and_stability/transformer_grokking/ReadMe.md) for the article's main training result.
+Each experiment links to the CSVs, PDF figures, and commands for working with them. Start with the [handwritten digits experiment](code/synthetic/digits_validation/digits_classifier_head/ReadMe.md) for a test against a known reference, or with [transformer grokking](code/real/grokking_and_stability/transformer_grokking/ReadMe.md) for the article's main training result.
 
-[Setup and reproduction](code/ReadMe.md) ? [MIT license](LICENSE)
+[Setup and reproduction](code/ReadMe.md) · [MIT license](LICENSE)

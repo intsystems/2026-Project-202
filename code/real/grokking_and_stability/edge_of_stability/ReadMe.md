@@ -2,7 +2,11 @@
 
 Track Hessian sharpness, oscillation and recurrence in full-batch descent on a quadratic perceptron.
 
-Reference in the publication materials — Article, Appendix K.
+## In the article
+
+- [Appendix K · Descent at the edge of stability](../../../../article/manuscript/ReadMe.md#appendix-k--descent-at-the-edge-of-stability). Hessian sharpness, oscillation, and recurrence in Table 22 and Figure 15.
+
+## Files and commands
 
 - [CSV logs and results](logs/ReadMe.md)
 - [PDF figures](figures/ReadMe.md)

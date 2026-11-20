@@ -1,8 +1,10 @@
 # Article and poster
 
-- [Estimating Active Dimension of Training Dynamics from One Scalar Log, with an Application to Grokking](icomp_artifacts.pdf). Workshop submission PDF including the full appendix. This copy displays anonymous authors and a review distribution notice.
-- [Measuring Dynamic Simplification from Scalar Neural Network Logs](poster_120x90.pdf). ASCOMP 2026 poster, 120 × 90 cm.
+| Document | Reference PDF | Editable source |
+| --- | --- | --- |
+| Estimating Active Dimension of Training Dynamics from One Scalar Log, with an Application to Grokking | [Workshop submission](icomp_artifacts.pdf) | [Manuscript, build instructions, and section-to-code map](manuscript/ReadMe.md) |
+| Measuring Dynamic Simplification from Scalar Neural Network Logs | [ASCOMP 2026 poster](poster_120x90.pdf) | [Poster, build instructions, and block-to-code map](poster/ReadMe.md) |
 
-Find the corresponding data and figures in the [experiment index](../code/ReadMe.md).
+Both source folders contain their figure PDFs and build from the files in this repository. The article PDF is the anonymous submission and displays the review distribution notice.
 
-[Publication home](../ReadMe.md)
+[Experiment code and CSV data](../code/ReadMe.md) · [Publication home](../ReadMe.md)

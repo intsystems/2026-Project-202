@@ -173,7 +173,7 @@ def fig_window():
     # The ramped-gain nuisance bound of section 6.3, read from the file that sets it
     # rather than copied: it moved from 1.16 to 1.53 when the controls were rerun, and a
     # copy here would have drawn the figure against a floor the text no longer states.
-    controls = pd.read_csv(CODE / 'synthetic/robustness_and_measurement/observer_controls/logs/controls_scored.csv')
+    controls = pd.read_csv(CODE / 'synthetic/signal_controls_and_sketches/observer_controls/logs/controls_scored.csv')
     FLOOR = float(controls[(controls["mode"] == "qp")
                            & (controls.control == "obs_scale")].between.median())
     d["centre"] = d.right_step - HALF

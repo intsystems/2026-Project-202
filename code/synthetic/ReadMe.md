@@ -4,10 +4,10 @@ These experiments test the estimator with known phase counts or controlled chang
 
 | Folder | What you will find |
 | --- | --- |
-| [`known_dimension/`](known_dimension/ReadMe.md) | The oscillating matrix, linear and logistic regression, frozen decoder, and constrained perceptron. |
+| [`controlled_systems/`](controlled_systems/ReadMe.md) | The oscillating matrix, linear and logistic regression, frozen decoder, and constrained perceptron. |
 | [`digits_validation/`](digits_validation/ReadMe.md) | The parameter- and function-space tests on handwritten digits, fixed estimator settings, and the zero-learning-rate check. |
-| [`embedding_and_limits/`](embedding_and_limits/ReadMe.md) | Delay-coordinate examples and tests of lag, the Theiler exclusion, and the dimension ceiling. |
-| [`robustness_and_measurement/`](robustness_and_measurement/ReadMe.md) | Known dimension changes, controls for signal roughness and amplitude, and the accuracy and cost of trajectory sketches. |
-| [`poster_demos/`](poster_demos/ReadMe.md) | The linear learning and four-tone RNN demonstrations shown on the poster. |
+| [`delay_embedding_and_limits/`](delay_embedding_and_limits/ReadMe.md) | Delay-coordinate examples and tests of lag, the Theiler exclusion, and the dimension ceiling. |
+| [`signal_controls_and_sketches/`](signal_controls_and_sketches/ReadMe.md) | Known dimension changes, controls for signal roughness and amplitude, and the accuracy and cost of trajectory sketches. |
+| [`poster_examples/`](poster_examples/ReadMe.md) | The linear learning and four-tone RNN demonstrations shown on the poster. |
 
 [Code index](../ReadMe.md)

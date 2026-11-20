@@ -33,7 +33,7 @@ written in pool-completion order, so the values were stable and no re-run could 
 against them.
 
 *The observer no longer moves with the embedding dimension.* See
-:mod:`synthetic.known_dimension.synthetic_systems`.
+:mod:`synthetic.controlled_systems.synthetic_systems`.
 """
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ from synthetic.digits_validation.observers import CEILING_PANEL
 from experiment_runner import CPU, Context, experiment
 from experiment_runner.parallel import default_jobs, map_ordered
 from synthetic.digits_validation.estimator_calibration.calibrate import mae, shrink as _shrink
-from synthetic.known_dimension.run_systems import _spearman as spearman
+from synthetic.controlled_systems.run_systems import _spearman as spearman
 
 # ============================================================== shared measurement pieces
 
@@ -155,7 +155,7 @@ CONTROL_ARMS: Tuple[str, ...] = ("qp_eta0", "noise_eta0", "qp_nopre", "noise_nop
 
 def sweep_config(arm: str, rank: int, record: int, burn: int, extra=()):
     """One arm of the parameter-subspace sweep at one rank."""
-    from synthetic.digits_validation.digits_parameter_subspace.system import F_FAST, F_SLOW, ten_direction
+    from synthetic.digits_validation.digits_classifier_head.system import F_FAST, F_SLOW, ten_direction
 
     settings = dict(ARMS[arm])
     slow = settings.pop("slow", False)
@@ -179,7 +179,7 @@ def _sweep_cell(args) -> List[Dict[str, Any]]:
     from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from synthetic.digits_validation import observers as registry
     from actdim.estimator import windows
-    from synthetic.digits_validation.digits_parameter_subspace import system as digits_parameter
+    from synthetic.digits_validation.digits_classifier_head import system as digits_parameter
 
     simulation = digits_parameter.simulate(sweep_config(arm, rank, record, burn, extra),
                                            seed=seed)
@@ -389,7 +389,7 @@ SILENCE_RECORD = 8_000
 
 #: A silent series counts as still moving when its spread reaches this fraction of the
 #: trained run's. The floor has to clear the measurement jitter: every constructed system
-#: adds noise of :data:`synthetic.known_dimension.system_registry.DEFAULT_JITTER`, a millionth of the spread, to
+#: adds noise of :data:`synthetic.controlled_systems.system_registry.DEFAULT_JITTER`, a millionth of the spread, to
 #: each recorded series, so a frozen observer arrives here with a spread of exactly that
 #: and not of zero. An observer that really still reads the drive moves by a tenth of its
 #: trained spread or more, so three decades of clearance costs nothing and nothing turns on
@@ -406,7 +406,7 @@ def _silence_config(system_id: str, rank: int, record: int, silent: bool, extra=
     """
     import dataclasses
 
-    from synthetic.known_dimension import system_registry as spec
+    from synthetic.controlled_systems import system_registry as spec
 
     entry = spec.get(system_id)
     fields = {f.name for f in dataclasses.fields(entry.config)}
@@ -439,7 +439,7 @@ def _silence_cell(args) -> List[Dict[str, Any]]:
 
     from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from actdim.estimator import windows
-    from synthetic.known_dimension import system_registry as spec
+    from synthetic.controlled_systems import system_registry as spec
 
     entry = spec.get(system_id)
     trained_config = _silence_config(system_id, rank, record, False, extra)
@@ -555,7 +555,7 @@ def _silence_verdict(raw):
 def silence(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.known_dimension import system_registry as spec
+    from synthetic.controlled_systems import system_registry as spec
 
     systems = [name for name in spec.LADDER if name in spec.load()]
     ranks, seeds = SILENCE_RANKS, SILENCE_SEEDS
@@ -637,7 +637,7 @@ def _atlas_cell(args) -> Dict[str, Any]:
 
     from actdim.estimator import windows
     from actdim.estimator.config import EstimatorConfig
-    from synthetic.known_dimension import synthetic_systems as synthetic
+    from synthetic.controlled_systems import synthetic_systems as synthetic
 
     state, meta = synthetic.generate(family, rank, length, seed, **dict(options))
     series = synthetic.observe(state, seed, observer)
@@ -743,7 +743,7 @@ def _tau_cell(args) -> Dict[str, Any]:
 
     from actdim.estimator import windows
     from actdim.estimator.config import EstimatorConfig
-    from synthetic.known_dimension import synthetic_systems as synthetic
+    from synthetic.controlled_systems import synthetic_systems as synthetic
 
     state, meta = synthetic.quasiperiodic(rank, length, seed, f0=1.0 / period)
     series = synthetic.observe(state, seed, "generic")
@@ -824,7 +824,7 @@ NUISANCE_SKIP: Tuple[Tuple[str, str], ...] = (("qp", "noise_step"),
 
 def _nuisance_setup(control: str, mode: str, rank: int, record: int, burn: int, extra=()):
     """One control's system configuration and its per-step schedules."""
-    from synthetic.digits_validation.digits_parameter_subspace.system import F_FAST, Schedules, ten_direction
+    from synthetic.digits_validation.digits_classifier_head.system import F_FAST, Schedules, ten_direction
 
     settings: Dict[str, Any] = dict(k=rank, window=record, burn=burn, eta=0.15,
                                     precondition=True, f0=F_FAST)
@@ -862,7 +862,7 @@ def _nuisance_cell(args) -> List[Dict[str, Any]]:
 
     from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from actdim.estimator import windows
-    from synthetic.digits_validation.digits_parameter_subspace import system as digits_parameter
+    from synthetic.digits_validation.digits_classifier_head import system as digits_parameter
 
     config, schedules = _nuisance_setup(control, mode, rank, record, burn, extra)
     simulation = digits_parameter.simulate(config, seed=seed, schedules=schedules)
@@ -1006,7 +1006,7 @@ def _aniso_cell(args) -> Dict[str, Any]:
 
     The construction is the oscillating diagonal matrix of section 5.1 with one thing
     changed: the amplitudes decay geometrically instead of being drawn. It is written out
-    here rather than added to :mod:`synthetic.known_dimension.oscillating_matrix.system`, because it is not a rung -- it
+    here rather than added to :mod:`synthetic.controlled_systems.oscillating_matrix.system`, because it is not a rung -- it
     is a probe of what the estimator reports when the manifold dimension and the effective
     rank disagree, and no ladder row is allowed to have them disagree.
     """
@@ -1016,7 +1016,7 @@ def _aniso_cell(args) -> Dict[str, Any]:
     from actdim.estimator.config import EstimatorConfig
     from actdim.linalg import participation_ratio, rank_report
     from experiment_runner.determinism import rng as stream_rng
-    from synthetic.known_dimension.drive import DEFAULT_BAND, centre_for_octave, frequencies
+    from synthetic.controlled_systems.drive import DEFAULT_BAND, centre_for_octave, frequencies
 
     freqs = frequencies(rank, centre_for_octave(ANISO_F0, DEFAULT_BAND), seed=seed)
     generator = stream_rng(seed, "drive_phases")
@@ -1163,7 +1163,7 @@ def _geometry_trace_cell(args) -> List[Dict[str, Any]]:
 
     from actdim.estimator import windows
     from actdim.estimator.config import EstimatorConfig
-    from synthetic.robustness_and_measurement.roughness_controls import clocks
+    from synthetic.signal_controls_and_sketches.phase_count_and_roughness import clocks
 
     length = 3 * int(segment)
     cfg = EstimatorConfig.from_dict(dict(cfg_values))
@@ -1186,7 +1186,7 @@ def _geometry_level_cell(args) -> List[Dict[str, Any]]:
 
     from actdim.estimator import windows
     from actdim.estimator.config import EstimatorConfig
-    from synthetic.robustness_and_measurement.roughness_controls import clocks
+    from synthetic.signal_controls_and_sketches.phase_count_and_roughness import clocks
 
     cfg = EstimatorConfig.from_dict(dict(cfg_values))
     pair = clocks.pair(seed, record)
@@ -1206,7 +1206,7 @@ def _geometry_warp_cell(args) -> List[Dict[str, Any]]:
     from actdim.estimator import windows
     from actdim.estimator.companions import roughness
     from actdim.estimator.config import EstimatorConfig
-    from synthetic.robustness_and_measurement.roughness_controls import clocks
+    from synthetic.signal_controls_and_sketches.phase_count_and_roughness import clocks
 
     cfg = EstimatorConfig.from_dict(dict(cfg_values))
     pair = clocks.pair(seed, record)
@@ -1236,7 +1236,7 @@ def _geometry_segments(trace):
 
 def _geometry_verdict(segments, warps) -> Dict[str, Any]:
     """The two pre-specified criteria, applied to the medians over seeds."""
-    from synthetic.robustness_and_measurement.roughness_controls.clocks import HANDS
+    from synthetic.signal_controls_and_sketches.phase_count_and_roughness.clocks import HANDS
 
     levels = segments.groupby("segment").median(numeric_only=True)
     mg_one = float(levels.loc["one clock", "MG"])
@@ -1285,7 +1285,7 @@ def _geometry_verdict(segments, warps) -> Dict[str, Any]:
 def geometry(ctx: Context) -> None:
     import pandas as pd
 
-    from synthetic.robustness_and_measurement.roughness_controls.clocks import BAND_MODE, HANDS, WARP_NAMES
+    from synthetic.signal_controls_and_sketches.phase_count_and_roughness.clocks import BAND_MODE, HANDS, WARP_NAMES
 
     seeds = GEOMETRY_SEEDS
     segment, ramp, record = GEOMETRY_SEGMENT, GEOMETRY_RAMP, GEOMETRY_RECORD
@@ -1310,7 +1310,7 @@ def geometry(ctx: Context) -> None:
                geometry="frozen eight-direction, window and stride overridden")
     # The frequency layout takes no stream in this mode, which is the point of it here: the
     # four-clock reference is the same on every replicate and only the clocks' phases and
-    # amplitudes move. See synthetic.robustness_and_measurement.roughness_controls.clocks.BAND_MODE.
+    # amplitudes move. See synthetic.signal_controls_and_sketches.phase_count_and_roughness.clocks.BAND_MODE.
     ctx.declare_seeds("clock_phases", "clock_amplitudes")
 
     trace_values = tuple(trace_cfg.as_dict().items())
@@ -1376,7 +1376,7 @@ def _transition_cell(args) -> List[Dict[str, Any]]:
     from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from actdim.estimator import windows
     from actdim.linalg import rank_report
-    from synthetic.digits_validation.digits_parameter_subspace.system import F_FAST, Schedules, ten_direction, trajectory
+    from synthetic.digits_validation.digits_classifier_head.system import F_FAST, Schedules, ten_direction, trajectory
 
     length = burn + 3 * segment
     schedule = np.full(length, high, dtype=int)
@@ -1787,7 +1787,7 @@ def _contrast_cell(args) -> Dict[str, Any]:
 
     from synthetic.digits_validation.estimator_calibration import settings as frozen_mod
     from actdim.estimator.windows import window_starts
-    from synthetic.digits_validation.digits_parameter_subspace import system as digits_parameter
+    from synthetic.digits_validation.digits_classifier_head import system as digits_parameter
 
     simulation = digits_parameter.simulate(sweep_config(mode, rank, record, burn, extra),
                                            seed=seed)
@@ -1947,7 +1947,7 @@ def _ceiling_simulate(args) -> Dict[str, Any]:
     rank, seed, lengths, burn, directory, panel, extra = args
 
     from actdim.linalg import TRAJECTORY_RANK_TOL, rank_report
-    from synthetic.digits_validation.digits_parameter_subspace.system import trajectory
+    from synthetic.digits_validation.digits_classifier_head.system import trajectory
 
     from synthetic.digits_validation.estimator_calibration.calibrate import k20_system
 

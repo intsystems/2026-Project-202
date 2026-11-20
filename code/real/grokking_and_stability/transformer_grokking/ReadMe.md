@@ -2,7 +2,16 @@
 
 Track scalar logs and detrended trajectory rank for modular addition and S5 composition, with no-decay controls.
 
-Reference in the publication materials — Article, Section 7 and Appendices F–H/J.
+## In the article
+
+- [Section 7.1 · The diagnostics reject both settings](../../../../article/manuscript/ReadMe.md#section-71--the-diagnostics-reject-both-settings). Scalar diagnostics for the transformer logs.
+- [Section 7.2 · The trajectory simplifies at generalisation](../../../../article/manuscript/ReadMe.md#section-72--the-trajectory-simplifies-at-generalisation). The effective-rank dip and recovery in Figure 3.
+- [Section 7.3 · The log estimate falls where the trajectory does](../../../../article/manuscript/ReadMe.md#section-73--the-log-estimate-falls-where-the-trajectory-does). The aligned scalar-log estimate in Figure 3.
+- [Appendix G.2 · The effective-rank collapse, run by run](../../../../article/manuscript/ReadMe.md#appendix-g2--the-effective-rank-collapse-run-by-run). Timing and depth of the dip in Figure 10 and Table 16.
+- [Appendix H.2 · Declines of the estimate that are not generalisation](../../../../article/manuscript/ReadMe.md#appendix-h2--declines-of-the-estimate-that-are-not-generalisation). Long-window estimates that decline without generalisation.
+- [Appendix H.3 · Resolution of a windowed estimate on a training log](../../../../article/manuscript/ReadMe.md#appendix-h3--resolution-of-a-windowed-estimate-on-a-training-log). Resolution and surrogate controls in Table 18 and Figures 11–12.
+
+## Files and commands
 
 - [CSV logs and results](logs/ReadMe.md)
 - [PDF figures](figures/ReadMe.md)

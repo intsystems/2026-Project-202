@@ -2,7 +2,13 @@
 
 Freeze the optimizer to check whether the scalar observation changes when its parameters are held fixed.
 
-Reference in the publication materials — Article, Sections 4–5 and Table 6.
+## In the article
+
+- [Section 4 · Validation protocol](../../../../article/manuscript/ReadMe.md#section-4--validation-protocol). The requirement that the observed signal be constant when learning is switched off.
+- [Section 5.1 · A constrained head on a network trained on image data](../../../../article/manuscript/ReadMe.md#section-51--a-constrained-head-on-a-network-trained-on-image-data). The zero-learning-rate test and the rejected mini-batch loss.
+- [Appendix C · Per-observer results and alternative statistics](../../../../article/manuscript/ReadMe.md#appendix-c--per-observer-results-and-alternative-statistics). Table 6 marks the systems that fail the check.
+
+## Files and commands
 
 - [CSV logs and results](logs/ReadMe.md)
 - [PDF figures](figures/ReadMe.md)
