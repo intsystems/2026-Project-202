@@ -1,6 +1,6 @@
 # Poster demonstrations
 
-The two examples in Section 04 of the ASCOMP poster. Both have a controlled number of independent rhythms.
+The two examples in Section 04 of the ICOMP poster. Both have a controlled number of independent rhythms.
 
 **On the poster** · [Block 04 · Synthetic tests with a known active dimension](../../../article/poster/ReadMe.md#block-04--synthetic-tests-with-a-known-active-dimension)
 

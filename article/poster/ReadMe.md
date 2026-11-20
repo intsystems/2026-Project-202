@@ -1,6 +1,6 @@
-# ASCOMP poster source
+# ICOMP poster source
 
-Edit [main.tex](main.tex) for the 120 × 90 cm poster. The [figure directory](figures/ReadMe.md) contains the vector panels. The ICOMP logo and white MIPT logo are the two PNGs next to the TeX source.
+Edit [main.tex](main.tex) for the 120 × 90 cm poster. The [figure directory](figures/ReadMe.md) contains the vector panels. The ICOMP logo and white MIPT logo are the two PNGs next to the TeX source. The original layout includes the ASCOMP 2026 badge beneath the ICOMP logo.
 
 ## Build
 
