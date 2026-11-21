@@ -1,10 +1,19 @@
 # Article and poster
 
-| Document | Reference PDF | Editable source |
-| --- | --- | --- |
-| Estimating Active Dimension of Training Dynamics from One Scalar Log, with an Application to Grokking | [Workshop submission](icomp_artifacts.pdf) | [Manuscript, build instructions, and section-to-code map](manuscript/ReadMe.md) |
-| Measuring Dynamic Simplification from Scalar Neural Network Logs | [ICOMP poster](poster_120x90.pdf) | [Poster, build instructions, and block-to-code map](poster/ReadMe.md) |
+## Detecting Simplification in Neural Network Dynamics from Scalar Logs: Active Dimension in Controlled Recurrent Systems
 
-Both source folders contain their figure PDFs and build from the files in this repository. The article PDF is the anonymous submission and displays the review distribution notice.
+The PDF editions use one [editable manuscript](manuscript/ReadMe.md) based on AISTATS v3.
+
+| Style | PDF | LaTeX entry point |
+| --- | --- | --- |
+| AISTATS 2027 | [PDF](aistats2027.pdf) | [aistats2027.tex](manuscript/aistats2027.tex) |
+| ICOMP 2026 | [PDF](icomp2026.pdf) | [icomp2026.tex](manuscript/icomp2026.tex) |
+| NeurIPS Artifacts workshop, anonymous | [PDF](icomp_artifacts.pdf) | [main.tex](manuscript/main.tex) |
+| NeurIPS Artifacts workshop, camera-ready | [PDF](artifacts_camera_ready.pdf) | [artifacts_camera_ready.tex](manuscript/artifacts_camera_ready.tex) |
+| NeurIPS NewInML workshop, anonymous | [PDF](newinml.pdf) | [newinml.tex](manuscript/newinml.tex) |
+
+## ICOMP poster
+
+[Measuring Dynamic Simplification from Scalar Neural Network Logs](poster_120x90.pdf) is available as a PDF with an [editable poster source](poster/ReadMe.md).
 
 [Experiment code and CSV data](../code/ReadMe.md) · [Publication home](../ReadMe.md)

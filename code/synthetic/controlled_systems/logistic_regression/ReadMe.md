@@ -4,8 +4,7 @@ Quasiperiodic forcing of a logistic regression optimizer.
 
 ## In the article
 
-- [Section 5 · Evaluation on systems with a known active dimension](../../../../article/manuscript/ReadMe.md#section-5--evaluation-on-systems-with-a-known-active-dimension). The controlled-system comparison.
-- [Appendix C · Per-observer results and alternative statistics](../../../../article/manuscript/ReadMe.md#appendix-c--per-observer-results-and-alternative-statistics). The logistic regression row in Table 6.
+- [Appendix C.1 · Analytic and driven-learning evaluation](../../../../article/manuscript/ReadMe.md#appendix-c1--analytic-and-driven-learning-evaluation). Logistic regression is listed among the development systems with externally driven variation.
 
 ## Files and commands
 

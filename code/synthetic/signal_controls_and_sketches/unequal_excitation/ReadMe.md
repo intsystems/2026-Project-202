@@ -4,8 +4,7 @@ Hold the number of phases fixed and vary their relative amplitudes to compare MG
 
 ## In the article
 
-- [Section 6.4 · Nuisance factors and nulls](../../../../article/manuscript/ReadMe.md#section-64--nuisance-factors-and-nulls). When weakly excited phases become hard to resolve.
-- [Appendix D · Conditions of validity in detail](../../../../article/manuscript/ReadMe.md#appendix-d--conditions-of-validity-in-detail). The amplitude-ratio sweep in Figure 7.
+- [Section 2.3 · Pooled local-dimension estimation](../../../../article/manuscript/ReadMe.md#section-23--pooled-local-dimension-estimation). Uneven excitation is a source of finite-scale bias. This folder contains an earlier amplitude-ratio sweep.
 
 ## Files and commands
 

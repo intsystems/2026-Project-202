@@ -4,9 +4,8 @@ Sweep temporal separation and compare the capped and full exclusion in the wider
 
 ## In the article
 
-- [Section 6.1 · Recovery in each regime](../../../../article/manuscript/ReadMe.md#section-61--recovery-in-each-regime). Why exclusion changes the transient estimate.
-- [Appendix I.1 · The exclusion cap at the twenty-component configuration](../../../../article/manuscript/ReadMe.md#appendix-i1--the-exclusion-cap-at-the-twenty-component-configuration). The capped and uncapped comparison in Table 19.
-- [Appendix I.2 · The Theiler exclusion and the dimension of a transient](../../../../article/manuscript/ReadMe.md#appendix-i2--the-theiler-exclusion-and-the-dimension-of-a-transient). The exclusion sweep in Table 20 and Figures 13–14.
+- [Section 2.3 · Pooled local-dimension estimation](../../../../article/manuscript/ReadMe.md#section-23--pooled-local-dimension-estimation). The temporal exclusion used when selecting admissible neighbors.
+- [Appendix B · Configurations and reproducibility](../../../../article/manuscript/ReadMe.md#appendix-b--configurations-and-reproducibility). The rule, its cap, and their interaction with the lag. The standalone transient sweep is from the earlier study.
 
 ## Files and commands
 

@@ -4,8 +4,8 @@ Check CountSketch on known ranks, compare logs with and without recording, and m
 
 ## In the article
 
-- [Appendix G.1 · The trajectory sketch](../../../../article/manuscript/ReadMe.md#appendix-g1--the-trajectory-sketch). Sketch accuracy and the check that recording preserves training. See Table 15.
-- [Appendix N · Compute cost and code availability](../../../../article/manuscript/ReadMe.md#appendix-n--compute-cost-and-code-availability). Memory and training-time costs.
+- [Section 4.4 · Detecting changes during grokking](../../../../article/manuscript/ReadMe.md#section-44--detecting-changes-during-grokking). The sketches provide the trajectory reference for the grokking comparison.
+- [Appendix E · Additional learning settings](../../../../article/manuscript/ReadMe.md#appendix-e--additional-learning-settings). The grokking paragraph describes how the parameter and logit trajectories are projected. This folder contains separate sketch validation runs.
 
 ## Files and commands
 

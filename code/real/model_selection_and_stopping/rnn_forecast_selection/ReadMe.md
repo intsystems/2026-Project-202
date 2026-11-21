@@ -4,7 +4,8 @@ Compare reduced-query MG, full MG and held-out validation for choosing a model t
 
 ## In the article
 
-The current manuscript does not report this experiment.
+- [Section 4.8 · Forecast model selection from single-neuron recordings](../../../../article/manuscript/ReadMe.md#section-48--forecast-model-selection-from-single-neuron-recordings). Choosing forecasters from single-neuron activity windows.
+- [Appendix G · Forecast selection and sampled-query estimation](../../../../article/manuscript/ReadMe.md#appendix-g--forecast-selection-and-sampled-query-estimation). Full and sampled-query MG, forecasts, and timing comparisons.
 
 ## Files and commands
 

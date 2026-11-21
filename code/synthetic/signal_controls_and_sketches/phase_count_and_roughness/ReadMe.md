@@ -4,7 +4,7 @@ Match scalar roughness across different phase counts and vary observer roughness
 
 ## In the article
 
-- [Appendix M · Two controls separating the estimator from roughness](../../../../article/manuscript/ReadMe.md#appendix-m--two-controls-separating-the-estimator-from-roughness). Matched roughness at different phase counts and signal warps at fixed phase count in Table 25.
+- [Section 3.2 · Learned generators distinguish phases from harmonics](../../../../article/manuscript/ReadMe.md#section-32--learned-generators-distinguish-phases-from-harmonics). Related control for distinguishing independent phases from spectral peaks. This folder contains the earlier synthetic roughness controls.
 
 ## Files and commands
 

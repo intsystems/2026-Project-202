@@ -4,7 +4,7 @@ Use rules fixed on development runs to select stopping checkpoints in eight conf
 
 ## In the article
 
-The current manuscript does not report this experiment.
+- [Appendix H · Comparing intervention rules](../../../../article/manuscript/ReadMe.md#appendix-h--comparing-intervention-rules). Noisy-label MNIST stopping against fixed schedules and scalar rules. The folder covers the 40% noise condition.
 
 ## Files and commands
 

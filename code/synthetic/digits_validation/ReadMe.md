@@ -2,7 +2,7 @@
 
 Two experiments use models trained on handwritten digits to test whether MG tracks the number of active directions under controlled forcing. This folder also contains the fixed settings used in the comparison and the zero-learning-rate check applied across the controlled systems.
 
-**In the article** · [Section 4 · Validation protocol](../../../article/manuscript/ReadMe.md#section-4--validation-protocol) · [Section 5.1 · A constrained head on a network trained on image data](../../../article/manuscript/ReadMe.md#section-51--a-constrained-head-on-a-network-trained-on-image-data) · [Appendix B.3 · Frozen configurations](../../../article/manuscript/ReadMe.md#appendix-b3--frozen-configurations) · [Appendix E · System constructions](../../../article/manuscript/ReadMe.md#appendix-e--system-constructions)
+**In the article** · [Section 3.1 · Analytic oscillators and learning](../../../article/manuscript/ReadMe.md#section-31--analytic-oscillators-and-learning) · [Appendix C.1 · Analytic and driven-learning evaluation](../../../article/manuscript/ReadMe.md#appendix-c1--analytic-and-driven-learning-evaluation) · [Appendix B · Configurations and reproducibility](../../../article/manuscript/ReadMe.md#appendix-b--configurations-and-reproducibility)
 
 | Folder | What you will find |
 | --- | --- |

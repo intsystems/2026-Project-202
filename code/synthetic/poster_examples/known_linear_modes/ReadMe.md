@@ -4,7 +4,8 @@ Heavy-ball linear learning excites a controlled number of independent modes. The
 
 ## In the article
 
-The current manuscript does not report this experiment.
+- [Section 3.1 · Analytic oscillators and learning](../../../../article/manuscript/ReadMe.md#section-31--analytic-oscillators-and-learning). Dense regression with independently controlled oscillatory modes.
+- [Appendix C.2 · Dense regression with endogenous modes](../../../../article/manuscript/ReadMe.md#appendix-c2--dense-regression-with-endogenous-modes). The known-mode table and the separate selective-damping comparison.
 
 ## Files and commands
 

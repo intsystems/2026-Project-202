@@ -2,7 +2,7 @@
 
 Controls for interpreting changes in MG, tests with known dimension transitions, and validation of the trajectory sketch used to measure effective rank in the grokking runs.
 
-**In the article** · [Appendix D · Conditions of validity in detail](../../../article/manuscript/ReadMe.md#appendix-d--conditions-of-validity-in-detail) · [Appendix M · Two controls separating the estimator from roughness](../../../article/manuscript/ReadMe.md#appendix-m--two-controls-separating-the-estimator-from-roughness) · [Appendix G.1 · The trajectory sketch](../../../article/manuscript/ReadMe.md#appendix-g1--the-trajectory-sketch)
+**In the article** · [Section 2.3 · Pooled local-dimension estimation](../../../article/manuscript/ReadMe.md#section-23--pooled-local-dimension-estimation) · [Section 3.2 · Learned generators distinguish phases from harmonics](../../../article/manuscript/ReadMe.md#section-32--learned-generators-distinguish-phases-from-harmonics) · [Section 4.4 · Detecting changes during grokking](../../../article/manuscript/ReadMe.md#section-44--detecting-changes-during-grokking)
 
 - [Observer and scale controls](observer_controls/ReadMe.md). Compare estimator shifts under changes in observer gain, amplitude, forcing and coordinate rotation.
 - [Dimension transitions](dimension_transitions/ReadMe.md). Switch between higher and lower counts of excited phases and test whether the estimate tracks the change and recovery.

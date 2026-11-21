@@ -1,133 +1,133 @@
-# Manuscript source
+# Shared article source
 
-Edit [main.tex](main.tex) for the workshop article. The file contains the main text and appendices. [references.bib](references.bib) holds the bibliography, [neurips_2026.sty](neurips_2026.sty) supplies the workshop style, and [figures/](figures/ReadMe.md) contains the vector graphics included by LaTeX.
+The scientific content is the AISTATS v3 revision of *Detecting Simplification in Neural Network Dynamics from Scalar Logs: Active Dimension in Controlled Recurrent Systems*. Edit the [sections](sections/ReadMe.md), [table inputs](tables/ReadMe.md), [figure files](figures/ReadMe.md), or bibliography here. [main_part.tex](main_part.tex) sets the order of the main paper and bibliography. [appendix_part.tex](appendix_part.tex) includes the appendices. All style entry points use both files.
 
 ## Build
 
-From this directory, run:
+Run from this directory with TeX Live and `latexmk`.
 
 ```bash
-latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error main.tex
+latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error aistats2027.tex icomp2026.tex main.tex artifacts_camera_ready.tex newinml.tex
 ```
 
-The build writes `.build/main.pdf`. A full TeX Live installation provides the required LaTeX packages and fonts.
+The PDFs appear in `.build/` under their entry point names. [The article index](../ReadMe.md) lists the filenames used for the checked-in copies. AISTATS uses eight pages for the main paper. The other styles use ten for the same content.
 
-The [reference PDF](../icomp_artifacts.pdf) is the anonymous submission. To update it, rebuild, inspect the result, and replace that PDF with the approved version.
+For an editorial copy with blue text, set the flag at build time. For example:
 
-## Article sections and experiments
+```bash
+latexmk -pdf '-outdir=.build' '-jobname=aistats2027_blue' '-usepretex=\def\claudedraft{1}' aistats2027.tex
+```
 
-Use the TeX labels to find the cited text in [main.tex](main.tex). The experiment pages link back here. When revising a section title or moving a result, update these links and the corresponding experiment README.
+## Article sections and experiment folders
 
-### Section 3.3 · Observation model and estimator
+Section numbers and titles apply to every style. The experiment READMEs describe any differences between the bundled runs and the article's reported protocols.
 
-TeX label `sec:estimator`. Related code and data: [Delay coordinate reconstruction](../../code/synthetic/delay_embedding_and_limits/delay_embedding/ReadMe.md).
+### Section 2.2 · Delay reconstruction and dynamical-systems theory
 
-### Section 4 · Validation protocol
+- [Delay coordinate reconstruction](../../code/synthetic/delay_embedding_and_limits/delay_embedding/ReadMe.md)
 
-TeX label `sec:protocol`. Related code and data: [Estimator calibration](../../code/synthetic/digits_validation/estimator_calibration/ReadMe.md), [Zero learning rate](../../code/synthetic/digits_validation/zero_learning_rate/ReadMe.md).
+### Section 2.3 · Pooled local-dimension estimation
 
-### Section 5 · Evaluation on systems with a known active dimension
+- [Observer and scale controls](../../code/synthetic/signal_controls_and_sketches/observer_controls/ReadMe.md)
+- [Theiler exclusion and transients](../../code/synthetic/delay_embedding_and_limits/theiler_exclusion/ReadMe.md)
+- [Unequal excitation](../../code/synthetic/signal_controls_and_sketches/unequal_excitation/ReadMe.md)
 
-TeX label `sec:ladder`. Related code and data: [Frozen nonlinear decoder](../../code/synthetic/controlled_systems/frozen_decoder/ReadMe.md), [Logistic regression](../../code/synthetic/controlled_systems/logistic_regression/ReadMe.md), [Online linear regression](../../code/synthetic/controlled_systems/online_linear_regression/ReadMe.md), [Oscillating diagonal matrix](../../code/synthetic/controlled_systems/oscillating_matrix/ReadMe.md), [Perceptron in a subspace](../../code/synthetic/controlled_systems/subspace_perceptron/ReadMe.md).
+### Section 3.1 · Analytic oscillators and learning
 
-### Section 5.1 · A constrained head on a network trained on image data
+- [Digits parameter subspace](../../code/synthetic/digits_validation/digits_classifier_head/ReadMe.md)
+- [Dimension transitions](../../code/synthetic/signal_controls_and_sketches/dimension_transitions/ReadMe.md)
+- [Estimator calibration](../../code/synthetic/digits_validation/estimator_calibration/ReadMe.md)
+- [Known modes in linear learning](../../code/synthetic/poster_examples/known_linear_modes/ReadMe.md)
+- [Oscillating diagonal matrix](../../code/synthetic/controlled_systems/oscillating_matrix/ReadMe.md)
+- [Zero learning rate](../../code/synthetic/digits_validation/zero_learning_rate/ReadMe.md)
 
-TeX label `sec:digits`. Related code and data: [Dimension ceiling](../../code/synthetic/delay_embedding_and_limits/dimension_ceiling/ReadMe.md), [Digits parameter subspace](../../code/synthetic/digits_validation/digits_classifier_head/ReadMe.md), [Zero learning rate](../../code/synthetic/digits_validation/zero_learning_rate/ReadMe.md).
+### Section 3.2 · Learned generators distinguish phases from harmonics
 
-### Section 6.1 · Recovery in each regime
+- [Four-tone RNN learning](../../code/synthetic/poster_examples/four_tone_rnn/ReadMe.md)
+- [Roughness and phase controls](../../code/synthetic/signal_controls_and_sketches/phase_count_and_roughness/ReadMe.md)
 
-TeX label `sec:regime`. Related code and data: [Theiler exclusion and transients](../../code/synthetic/delay_embedding_and_limits/theiler_exclusion/ReadMe.md), [Digits parameter subspace](../../code/synthetic/digits_validation/digits_classifier_head/ReadMe.md).
+### Section 3.3 · FORCE training from chaos to periodic output
 
-### Section 6.2 · The delay lag
+- [FORCE RNN cycle](../../code/real/scalar_log_diagnostics/force_rnn_cycle/ReadMe.md)
 
-TeX label `sec:tau`. Related code and data: [Delay lag sensitivity](../../code/synthetic/delay_embedding_and_limits/delay_lag_sweep/ReadMe.md).
+### Section 4.2 · Transferring the detector to ResNet-18
 
-### Section 6.4 · Nuisance factors and nulls
+- [ResNet-18 backbone freeze](../../code/real/scalar_log_diagnostics/resnet_freeze/ReadMe.md)
 
-TeX label `sec:nuisance`. Related code and data: [Observer and scale controls](../../code/synthetic/signal_controls_and_sketches/observer_controls/ReadMe.md), [Unequal excitation](../../code/synthetic/signal_controls_and_sketches/unequal_excitation/ReadMe.md).
+### Section 4.3 · Tracking latent information in a text VAE
 
-### Section 7.1 · The diagnostics reject both settings
+- [Text VAE code loss](../../code/real/scalar_log_diagnostics/text_vae_latent_code/ReadMe.md)
 
-TeX label `sec:grok-diagnostics`. Related code and data: [Full-batch perceptron grokking](../../code/real/grokking_and_stability/perceptron_grokking/ReadMe.md), [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md).
+### Section 4.4 · Detecting changes during grokking
 
-### Section 7.2 · The trajectory simplifies at generalisation
+- [Full-batch perceptron grokking](../../code/real/grokking_and_stability/perceptron_grokking/ReadMe.md)
+- [Trajectory sketch validation](../../code/synthetic/signal_controls_and_sketches/trajectory_sketch/ReadMe.md)
+- [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md)
 
-TeX label `sec:direct`. Related code and data: [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md).
+### Section 4.5 · Selecting Walker2d policies under actuator shifts
 
-### Section 7.3 · The log estimate falls where the trajectory does
+- [Walker2d policy selection](../../code/real/model_selection_and_stopping/walker2d_policy_selection/ReadMe.md)
 
-TeX label `sec:matched`. Related code and data: [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md).
+### Section 4.8 · Forecast model selection from single-neuron recordings
 
-### Appendix A · The results behind the estimator
+- [RNN forecast selection](../../code/real/model_selection_and_stopping/rnn_forecast_selection/ReadMe.md)
 
-TeX label `app:theory`. Related code and data: [Delay coordinate reconstruction](../../code/synthetic/delay_embedding_and_limits/delay_embedding/ReadMe.md).
+### Appendix A.2 · Recurrent, transient, and stochastic regimes
 
-### Appendix B.3 · Frozen configurations
+- [Delay coordinate reconstruction](../../code/synthetic/delay_embedding_and_limits/delay_embedding/ReadMe.md)
 
-TeX label `app:config`. Related code and data: [Estimator calibration](../../code/synthetic/digits_validation/estimator_calibration/ReadMe.md).
+### Appendix B · Configurations and reproducibility
 
-### Appendix C · Per-observer results and alternative statistics
+- [Delay lag sensitivity](../../code/synthetic/delay_embedding_and_limits/delay_lag_sweep/ReadMe.md)
+- [Dimension ceiling](../../code/synthetic/delay_embedding_and_limits/dimension_ceiling/ReadMe.md)
+- [Theiler exclusion and transients](../../code/synthetic/delay_embedding_and_limits/theiler_exclusion/ReadMe.md)
 
-TeX label `app:nulls`. Related code and data: [Frozen nonlinear decoder](../../code/synthetic/controlled_systems/frozen_decoder/ReadMe.md), [Logistic regression](../../code/synthetic/controlled_systems/logistic_regression/ReadMe.md), [Online linear regression](../../code/synthetic/controlled_systems/online_linear_regression/ReadMe.md), [Oscillating diagonal matrix](../../code/synthetic/controlled_systems/oscillating_matrix/ReadMe.md), [Perceptron in a subspace](../../code/synthetic/controlled_systems/subspace_perceptron/ReadMe.md), [Delay coordinate reconstruction](../../code/synthetic/delay_embedding_and_limits/delay_embedding/ReadMe.md), [Digits function subspace](../../code/synthetic/digits_validation/digits_function_space/ReadMe.md), [Zero learning rate](../../code/synthetic/digits_validation/zero_learning_rate/ReadMe.md).
+### Appendix C.1 · Analytic and driven-learning evaluation
 
-### Appendix D · Conditions of validity in detail
+- [Digits parameter subspace](../../code/synthetic/digits_validation/digits_classifier_head/ReadMe.md)
+- [Digits function subspace](../../code/synthetic/digits_validation/digits_function_space/ReadMe.md)
+- [Estimator calibration](../../code/synthetic/digits_validation/estimator_calibration/ReadMe.md)
+- [Frozen nonlinear decoder](../../code/synthetic/controlled_systems/frozen_decoder/ReadMe.md)
+- [Logistic regression](../../code/synthetic/controlled_systems/logistic_regression/ReadMe.md)
+- [Online linear regression](../../code/synthetic/controlled_systems/online_linear_regression/ReadMe.md)
+- [Oscillating diagonal matrix](../../code/synthetic/controlled_systems/oscillating_matrix/ReadMe.md)
+- [Perceptron in a subspace](../../code/synthetic/controlled_systems/subspace_perceptron/ReadMe.md)
+- [Zero learning rate](../../code/synthetic/digits_validation/zero_learning_rate/ReadMe.md)
 
-TeX label `app:validity`. Related code and data: [Delay lag sensitivity](../../code/synthetic/delay_embedding_and_limits/delay_lag_sweep/ReadMe.md), [Dimension transitions](../../code/synthetic/signal_controls_and_sketches/dimension_transitions/ReadMe.md), [Observer and scale controls](../../code/synthetic/signal_controls_and_sketches/observer_controls/ReadMe.md), [Unequal excitation](../../code/synthetic/signal_controls_and_sketches/unequal_excitation/ReadMe.md).
+### Appendix C.2 · Dense regression with endogenous modes
 
-### Appendix E · System constructions
+- [Known modes in linear learning](../../code/synthetic/poster_examples/known_linear_modes/ReadMe.md)
 
-TeX label `app:constructions`. Related code and data: [Digits parameter subspace](../../code/synthetic/digits_validation/digits_classifier_head/ReadMe.md), [Digits function subspace](../../code/synthetic/digits_validation/digits_function_space/ReadMe.md).
+### Appendix C.3 · Learned autonomous generators
 
-### Appendix F · Diagnostics and figures for the grokking application
+- [FORCE RNN cycle](../../code/real/scalar_log_diagnostics/force_rnn_cycle/ReadMe.md)
+- [Four-tone RNN learning](../../code/synthetic/poster_examples/four_tone_rnn/ReadMe.md)
 
-TeX label `app:pairs`. Related code and data: [Full-batch perceptron grokking](../../code/real/grokking_and_stability/perceptron_grokking/ReadMe.md).
+### Appendix D.1 · CNN and ResNet interventions
 
-### Appendix G.1 · The trajectory sketch
+- [ResNet-18 backbone freeze](../../code/real/scalar_log_diagnostics/resnet_freeze/ReadMe.md)
 
-TeX label `app:sketch`. Related code and data: [Trajectory sketch validation](../../code/synthetic/signal_controls_and_sketches/trajectory_sketch/ReadMe.md).
+### Appendix D.4 · Text VAE and preservation reference
 
-### Appendix G.2 · The effective-rank collapse, run by run
+- [Text VAE code loss](../../code/real/scalar_log_diagnostics/text_vae_latent_code/ReadMe.md)
 
-TeX label `app:dip`. Related code and data: [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md).
+### Appendix E · Additional learning settings
 
-### Appendix H.1 · The full-batch setting
+- [Edge of stability](../../code/real/grokking_and_stability/edge_of_stability/ReadMe.md)
+- [Full-batch perceptron grokking](../../code/real/grokking_and_stability/perceptron_grokking/ReadMe.md)
+- [Trajectory sketch validation](../../code/synthetic/signal_controls_and_sketches/trajectory_sketch/ReadMe.md)
+- [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md)
 
-TeX label `app:fb`. Related code and data: [Full-batch perceptron grokking](../../code/real/grokking_and_stability/perceptron_grokking/ReadMe.md).
+### Appendix E.1 · Selecting policies for actuator shifts
 
-### Appendix H.2 · Declines of the estimate that are not generalisation
+- [Walker2d policy selection](../../code/real/model_selection_and_stopping/walker2d_policy_selection/ReadMe.md)
 
-TeX label `app:falls`. Related code and data: [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md).
+### Appendix G · Forecast selection and sampled-query estimation
 
-### Appendix H.3 · Resolution of a windowed estimate on a training log
+- [RNN forecast selection](../../code/real/model_selection_and_stopping/rnn_forecast_selection/ReadMe.md)
 
-TeX label `app:window`. Related code and data: [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md).
+### Appendix H · Comparing intervention rules
 
-### Appendix I.1 · The exclusion cap at the twenty-component configuration
-
-TeX label `app:theiler`. Related code and data: [Theiler exclusion and transients](../../code/synthetic/delay_embedding_and_limits/theiler_exclusion/ReadMe.md).
-
-### Appendix I.2 · The Theiler exclusion and the dimension of a transient
-
-TeX label `app:exclusion`. Related code and data: [Theiler exclusion and transients](../../code/synthetic/delay_embedding_and_limits/theiler_exclusion/ReadMe.md).
-
-### Appendix J · The training runs
-
-TeX label `app:runs`. Related code and data: [Full-batch perceptron grokking](../../code/real/grokking_and_stability/perceptron_grokking/ReadMe.md).
-
-### Appendix K · Descent at the edge of stability
-
-TeX label `app:eos`. Related code and data: [Edge of stability](../../code/real/grokking_and_stability/edge_of_stability/ReadMe.md).
-
-### Appendix L · The ceiling: embedding dimension against record length
-
-TeX label `app:ceiling`. Related code and data: [Dimension ceiling](../../code/synthetic/delay_embedding_and_limits/dimension_ceiling/ReadMe.md).
-
-### Appendix M · Two controls separating the estimator from roughness
-
-TeX label `app:clocks`. Related code and data: [Roughness and phase controls](../../code/synthetic/signal_controls_and_sketches/phase_count_and_roughness/ReadMe.md).
-
-### Appendix N · Compute cost and code availability
-
-TeX label `app:compute`. Related code and data: [Trajectory sketch validation](../../code/synthetic/signal_controls_and_sketches/trajectory_sketch/ReadMe.md).
+- [Noisy MNIST early stopping](../../code/real/model_selection_and_stopping/mnist_early_stopping/ReadMe.md)
 
 [Article and poster index](../ReadMe.md)

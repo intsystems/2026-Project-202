@@ -2,7 +2,7 @@
 
 The article experiments on delayed generalization and full-batch dynamics near the edge of stability.
 
-**In the article** · [Section 7.2 · The trajectory simplifies at generalisation](../../../article/manuscript/ReadMe.md#section-72--the-trajectory-simplifies-at-generalisation) · [Appendix H.1 · The full-batch setting](../../../article/manuscript/ReadMe.md#appendix-h1--the-full-batch-setting) · [Appendix K · Descent at the edge of stability](../../../article/manuscript/ReadMe.md#appendix-k--descent-at-the-edge-of-stability)
+**In the article** · [Section 4.4 · Detecting changes during grokking](../../../article/manuscript/ReadMe.md#section-44--detecting-changes-during-grokking) · [Appendix E · Additional learning settings](../../../article/manuscript/ReadMe.md#appendix-e--additional-learning-settings)
 
 - [Transformer grokking](transformer_grokking/ReadMe.md). Track scalar logs and detrended trajectory rank for modular addition and S5 composition, with no-decay controls.
 - [Full-batch perceptron grokking](perceptron_grokking/ReadMe.md). Compare modular arithmetic and polynomial targets, including label-matched controls and the window-length sweep.

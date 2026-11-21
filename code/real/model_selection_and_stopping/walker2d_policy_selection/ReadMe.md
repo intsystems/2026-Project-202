@@ -4,7 +4,8 @@ Select policies for transfer to actuator lag and noise using nominal reward, MG,
 
 ## In the article
 
-The current manuscript does not report this experiment.
+- [Section 4.5 · Selecting Walker2d policies under actuator shifts](../../../../article/manuscript/ReadMe.md#section-45--selecting-walker2d-policies-under-actuator-shifts). Selecting checkpoints under hidden actuator lag and noise.
+- [Appendix E.1 · Selecting policies for actuator shifts](../../../../article/manuscript/ReadMe.md#appendix-e1--selecting-policies-for-actuator-shifts). Nominal acquisition, target evaluation, and comparisons with simple selection rules.
 
 ## Files and commands
 

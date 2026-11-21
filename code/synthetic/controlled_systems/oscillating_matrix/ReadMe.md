@@ -4,8 +4,8 @@ Known independent phases in a diagonal matrix trajectory.
 
 ## In the article
 
-- [Section 5 · Evaluation on systems with a known active dimension](../../../../article/manuscript/ReadMe.md#section-5--evaluation-on-systems-with-a-known-active-dimension). The diagonal-matrix example.
-- [Appendix C · Per-observer results and alternative statistics](../../../../article/manuscript/ReadMe.md#appendix-c--per-observer-results-and-alternative-statistics). The oscillating matrix row in Table 6.
+- [Section 3.1 · Analytic oscillators and learning](../../../../article/manuscript/ReadMe.md#section-31--analytic-oscillators-and-learning). Recovery on prescribed diagonal oscillations.
+- [Appendix C.1 · Analytic and driven-learning evaluation](../../../../article/manuscript/ReadMe.md#appendix-c1--analytic-and-driven-learning-evaluation). Synthetic results against known component counts.
 
 ## Files and commands
 

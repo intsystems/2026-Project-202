@@ -1,0 +1,21 @@
+\documentclass[twoside]{article}
+\usepackage{aistats2027}
+\input{preamble}
+% Fit the template's fixed-width copyright box to its column; body geometry is unchanged.
+\makeatletter
+\patchcmd{\@copyrightspace}{\begin{picture}(20,2.5)}{\begin{picture}(19.5,2.5)}{}{}
+\patchcmd{\@copyrightspace}{\parbox[b]{19.75pc}}{\parbox[b]{\columnwidth}}{}{}
+\makeatother
+\input{title}
+
+\begin{document}
+\runningtitle{Detecting Simplification from Scalar Logs}
+\runningauthor{Anonymous}
+\twocolumn[
+\aistatstitle{\papertitle}
+\aistatsauthor{Anonymous Author}
+\aistatsaddress{Anonymous Institution}
+]
+\input{main_part}
+\input{appendix_part}
+\end{document}

@@ -4,7 +4,8 @@ Train recurrent generators on four tones that have one, two or four independent 
 
 ## In the article
 
-The current manuscript does not report this experiment.
+- [Section 3.2 · Learned generators distinguish phases from harmonics](../../../../article/manuscript/ReadMe.md#section-32--learned-generators-distinguish-phases-from-harmonics). The H4, M4, and T4 cases of the generator study. The folder contains those three conditions.
+- [Appendix C.3 · Learned autonomous generators](../../../../article/manuscript/ReadMe.md#appendix-c3--learned-autonomous-generators). Architecture, settings, and the independent Lyapunov reference.
 
 ## Files and commands
 

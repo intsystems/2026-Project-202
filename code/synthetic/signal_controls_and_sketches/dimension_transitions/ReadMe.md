@@ -4,7 +4,7 @@ Switch between higher and lower counts of excited phases and test whether the es
 
 ## In the article
 
-- [Appendix D · Conditions of validity in detail](../../../../article/manuscript/ReadMe.md#appendix-d--conditions-of-validity-in-detail). The “Detection of a change” experiment in Table 12.
+- [Section 3.1 · Analytic oscillators and learning](../../../../article/manuscript/ReadMe.md#section-31--analytic-oscillators-and-learning). Related intervention in which selective damping removes two regression modes. This folder contains a separate transition benchmark.
 
 ## Files and commands
 

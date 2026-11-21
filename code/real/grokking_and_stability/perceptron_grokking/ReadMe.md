@@ -4,10 +4,8 @@ Compare modular arithmetic and polynomial targets, including label-matched contr
 
 ## In the article
 
-- [Section 7.1 · The diagnostics reject both settings](../../../../article/manuscript/ReadMe.md#section-71--the-diagnostics-reject-both-settings). Scalar diagnostics for the full-batch setting.
-- [Appendix F · Diagnostics and figures for the grokking application](../../../../article/manuscript/ReadMe.md#appendix-f--diagnostics-and-figures-for-the-grokking-application). Diagnostic map and label-matched tasks in Figures 8–9.
-- [Appendix H.1 · The full-batch setting](../../../../article/manuscript/ReadMe.md#appendix-h1--the-full-batch-setting). The effective-rank window-length comparison in Table 17.
-- [Appendix J · The training runs](../../../../article/manuscript/ReadMe.md#appendix-j--the-training-runs). The perceptron run inventory in Table 21.
+- [Section 4.4 · Detecting changes during grokking](../../../../article/manuscript/ReadMe.md#section-44--detecting-changes-during-grokking). The full-batch comparison.
+- [Appendix E · Additional learning settings](../../../../article/manuscript/ReadMe.md#appendix-e--additional-learning-settings). The unregularized quadratic perceptron in the grokking paragraph.
 
 ## Files and commands
 

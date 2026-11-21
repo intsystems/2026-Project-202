@@ -4,8 +4,7 @@ Compare estimator shifts under changes in observer gain, amplitude, forcing and 
 
 ## In the article
 
-- [Section 6.4 · Nuisance factors and nulls](../../../../article/manuscript/ReadMe.md#section-64--nuisance-factors-and-nulls). Changes in the signal or forcing that can shift MG at fixed dimension.
-- [Appendix D · Conditions of validity in detail](../../../../article/manuscript/ReadMe.md#appendix-d--conditions-of-validity-in-detail). The changes summarized in Table 11.
+- [Section 2.3 · Pooled local-dimension estimation](../../../../article/manuscript/ReadMe.md#section-23--pooled-local-dimension-estimation). Related discussion of affine rescaling and sensitivity to the observed signal. This folder contains separate control sweeps.
 
 ## Files and commands
 

@@ -4,8 +4,7 @@ Quasiperiodic forcing of a linear regression optimizer.
 
 ## In the article
 
-- [Section 5 · Evaluation on systems with a known active dimension](../../../../article/manuscript/ReadMe.md#section-5--evaluation-on-systems-with-a-known-active-dimension). The controlled-system comparison.
-- [Appendix C · Per-observer results and alternative statistics](../../../../article/manuscript/ReadMe.md#appendix-c--per-observer-results-and-alternative-statistics). The online linear regression row in Table 6.
+- [Appendix C.1 · Analytic and driven-learning evaluation](../../../../article/manuscript/ReadMe.md#appendix-c1--analytic-and-driven-learning-evaluation). The earlier driven-target regression used to check whether the input alone can change the observable.
 
 ## Files and commands
 

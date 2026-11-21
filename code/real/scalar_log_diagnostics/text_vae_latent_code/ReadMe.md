@@ -4,7 +4,8 @@ Compare baseline, code suppression and free bits on Penn Treebank. Plot scalar r
 
 ## In the article
 
-The current manuscript does not report this experiment.
+- [Section 4.3 · Tracking latent information in a text VAE](../../../../article/manuscript/ReadMe.md#section-43--tracking-latent-information-in-a-text-vae). Probe reconstruction loss under latent-code suppression and free-bits protection.
+- [Appendix D.4 · Text VAE and preservation reference](../../../../article/manuscript/ReadMe.md#appendix-d4--text-vae-and-preservation-reference). Comparison with the independently measured retention of latent information.
 
 ## Files and commands
 

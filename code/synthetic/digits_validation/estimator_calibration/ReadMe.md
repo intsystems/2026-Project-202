@@ -4,8 +4,8 @@ Configuration selection on the development seeds and ranks for the eight- and tw
 
 ## In the article
 
-- [Section 4 · Validation protocol](../../../../article/manuscript/ReadMe.md#section-4--validation-protocol). Rules for holding out ranks and freezing estimator settings.
-- [Appendix B.3 · Frozen configurations](../../../../article/manuscript/ReadMe.md#appendix-b3--frozen-configurations). The selected eight- and twenty-direction configurations in Table 4.
+- [Section 3.1 · Analytic oscillators and learning](../../../../article/manuscript/ReadMe.md#section-31--analytic-oscillators-and-learning). Separate seeds and ranks for selecting and evaluating the estimator settings.
+- [Appendix C.1 · Analytic and driven-learning evaluation](../../../../article/manuscript/ReadMe.md#appendix-c1--analytic-and-driven-learning-evaluation). The frozen handwritten digits configuration. The wider calibration sweep belongs to the earlier study.
 
 ## Files and commands
 

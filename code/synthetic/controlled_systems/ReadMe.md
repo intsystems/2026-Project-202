@@ -2,7 +2,7 @@
 
 Five systems from the comparison in Table 6 of the article, from an oscillating matrix to constrained learning dynamics.
 
-**In the article** · [Section 5 · Evaluation on systems with a known active dimension](../../../article/manuscript/ReadMe.md#section-5--evaluation-on-systems-with-a-known-active-dimension) · [Appendix C · Per-observer results and alternative statistics](../../../article/manuscript/ReadMe.md#appendix-c--per-observer-results-and-alternative-statistics)
+**In the article** · [Section 3.1 · Analytic oscillators and learning](../../../article/manuscript/ReadMe.md#section-31--analytic-oscillators-and-learning) · [Appendix C.1 · Analytic and driven-learning evaluation](../../../article/manuscript/ReadMe.md#appendix-c1--analytic-and-driven-learning-evaluation)
 
 - [Oscillating diagonal matrix](oscillating_matrix/ReadMe.md). Known independent phases in a diagonal matrix trajectory.
 - [Online linear regression](online_linear_regression/ReadMe.md). Quasiperiodic forcing of a linear regression optimizer.

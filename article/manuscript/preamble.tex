@@ -1,0 +1,30 @@
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx,booktabs,tabularx,array,microtype,xcolor}
+\usepackage[round]{natbib}
+\usepackage{enumitem,needspace}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{etoolbox}
+\setlength{\emergencystretch}{2em}
+\newtheorem{proposition}{Proposition}
+\newcommand{\MG}{\widehat d_{\mathrm{MG}}}
+\DeclareMathOperator{\PR}{PR}
+\DeclareMathOperator{\median}{median}
+\ifdefined\claudedraft
+  \definecolor{claudecolor}{RGB}{25,90,160}
+\else
+  \definecolor{claudecolor}{RGB}{0,0,0}
+\fi
+\long\def\claude#1{\begingroup\color{claudecolor}#1\endgroup}
+\let\cl\claude
+\AtBeginEnvironment{figure}{\color{claudecolor}}
+\AtBeginEnvironment{figure*}{\color{claudecolor}}
+\AtBeginEnvironment{table}{\color{claudecolor}\setlength{\tabcolsep}{3pt}}
+\AtBeginEnvironment{table*}{\color{claudecolor}\setlength{\tabcolsep}{3pt}}
+\input{tables/numbers.tex}
+
+% Main-paper cross-references resolve to numbered appendices in the combined build.
+\newcommand{\appref}[1]{Appendix~\ref{#1}}

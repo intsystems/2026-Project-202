@@ -4,8 +4,7 @@ A function-space control on a digits model. The effective excitation did not mee
 
 ## In the article
 
-- [Appendix E · System constructions](../../../../article/manuscript/ReadMe.md#appendix-e--system-constructions). The function-space construction and its excitation check.
-- [Appendix C · Per-observer results and alternative statistics](../../../../article/manuscript/ReadMe.md#appendix-c--per-observer-results-and-alternative-statistics). The function-subspace row in Table 6.
+- [Appendix C.1 · Analytic and driven-learning evaluation](../../../../article/manuscript/ReadMe.md#appendix-c1--analytic-and-driven-learning-evaluation). Related parameter-space classifier. The function-space construction is an earlier experiment.
 
 ## Files and commands
 

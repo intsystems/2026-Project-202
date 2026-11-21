@@ -4,8 +4,7 @@ Sweep embedding dimension and record length to measure where MG stops tracking t
 
 ## In the article
 
-- [Section 5.1 · A constrained head on a network trained on image data](../../../../article/manuscript/ReadMe.md#section-51--a-constrained-head-on-a-network-trained-on-image-data). The paragraph headed “The ceiling.”
-- [Appendix L · The ceiling: embedding dimension against record length](../../../../article/manuscript/ReadMe.md#appendix-l--the-ceiling-embedding-dimension-against-record-length). Embedding-dimension and record-length sweeps in Tables 23–24.
+- [Appendix B · Configurations and reproducibility](../../../../article/manuscript/ReadMe.md#appendix-b--configurations-and-reproducibility). Related record-length and recurrence requirements. The embedding-dimension ceiling sweep is from the earlier study.
 
 ## Files and commands
 

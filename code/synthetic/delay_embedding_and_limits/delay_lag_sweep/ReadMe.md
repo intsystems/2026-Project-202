@@ -4,8 +4,7 @@ Sweep the delay span relative to the recurrent period while keeping the dynamics
 
 ## In the article
 
-- [Section 6.2 · The delay lag](../../../../article/manuscript/ReadMe.md#section-62--the-delay-lag). Lag expressed as a fraction of the recurrent period.
-- [Appendix D · Conditions of validity in detail](../../../../article/manuscript/ReadMe.md#appendix-d--conditions-of-validity-in-detail). The lag sweep in Figure 6.
+- [Appendix B · Configurations and reproducibility](../../../../article/manuscript/ReadMe.md#appendix-b--configurations-and-reproducibility). Related discussion of lag, recurrence, and window length. The standalone delay-lag sweep is from the earlier study.
 
 ## Files and commands
 

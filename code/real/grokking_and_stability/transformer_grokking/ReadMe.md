@@ -4,12 +4,8 @@ Track scalar logs and detrended trajectory rank for modular addition and S5 comp
 
 ## In the article
 
-- [Section 7.1 · The diagnostics reject both settings](../../../../article/manuscript/ReadMe.md#section-71--the-diagnostics-reject-both-settings). Scalar diagnostics for the transformer logs.
-- [Section 7.2 · The trajectory simplifies at generalisation](../../../../article/manuscript/ReadMe.md#section-72--the-trajectory-simplifies-at-generalisation). The effective-rank dip and recovery in Figure 3.
-- [Section 7.3 · The log estimate falls where the trajectory does](../../../../article/manuscript/ReadMe.md#section-73--the-log-estimate-falls-where-the-trajectory-does). The aligned scalar-log estimate in Figure 3.
-- [Appendix G.2 · The effective-rank collapse, run by run](../../../../article/manuscript/ReadMe.md#appendix-g2--the-effective-rank-collapse-run-by-run). Timing and depth of the dip in Figure 10 and Table 16.
-- [Appendix H.2 · Declines of the estimate that are not generalisation](../../../../article/manuscript/ReadMe.md#appendix-h2--declines-of-the-estimate-that-are-not-generalisation). Long-window estimates that decline without generalisation.
-- [Appendix H.3 · Resolution of a windowed estimate on a training log](../../../../article/manuscript/ReadMe.md#appendix-h3--resolution-of-a-windowed-estimate-on-a-training-log). Resolution and surrogate controls in Table 18 and Figures 11–12.
+- [Section 4.4 · Detecting changes during grokking](../../../../article/manuscript/ReadMe.md#section-44--detecting-changes-during-grokking). Matched-window MG and trajectory changes near generalization.
+- [Appendix E · Additional learning settings](../../../../article/manuscript/ReadMe.md#appendix-e--additional-learning-settings). The modular arithmetic and permutation tasks, configuration grid, and controls in the grokking paragraph.
 
 ## Files and commands
 

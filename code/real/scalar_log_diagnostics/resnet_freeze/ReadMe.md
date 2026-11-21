@@ -4,7 +4,8 @@ Use a weight-norm log to detect backbone freezing on CIFAR-10. Compare scratch a
 
 ## In the article
 
-The current manuscript does not report this experiment.
+- [Section 4.2 · Transferring the detector to ResNet-18](../../../../article/manuscript/ReadMe.md#section-42--transferring-the-detector-to-resnet-18). Backbone freezing in scratch and ImageNet-initialized ResNet-18.
+- [Appendix D.1 · CNN and ResNet interventions](../../../../article/manuscript/ReadMe.md#appendix-d1--cnn-and-resnet-interventions). Training conditions and the frozen detector and update-sketch reference.
 
 ## Files and commands
 

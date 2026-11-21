@@ -4,9 +4,8 @@ Example scalar observations and delay clouds for recurrent, transient and mini-b
 
 ## In the article
 
-- [Section 3.3 · Observation model and estimator](../../../../article/manuscript/ReadMe.md#section-33--observation-model-and-estimator). Figure 1 shows a scalar signal, its delay coordinates, and admissible neighbors.
-- [Appendix A · The results behind the estimator](../../../../article/manuscript/ReadMe.md#appendix-a--the-results-behind-the-estimator). Figure 4 compares delay clouds across regimes.
-- [Appendix C · Per-observer results and alternative statistics](../../../../article/manuscript/ReadMe.md#appendix-c--per-observer-results-and-alternative-statistics). The traces and window estimates also supply Figure 5.
+- [Section 2.2 · Delay reconstruction and dynamical-systems theory](../../../../article/manuscript/ReadMe.md#section-22--delay-reconstruction-and-dynamical-systems-theory). Figure 1 illustrates the scalar samples, delay vectors, and admissible neighbors.
+- [Appendix A.2 · Recurrent, transient, and stochastic regimes](../../../../article/manuscript/ReadMe.md#appendix-a2--recurrent-transient-and-stochastic-regimes). Delay reconstructions and scalar traces for the recurrent, transient, and stochastic examples.
 
 ## Files and commands
 

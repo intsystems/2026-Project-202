@@ -4,9 +4,8 @@ A constrained head on a frozen model trained on handwritten digits. The number o
 
 ## In the article
 
-- [Section 5.1 · A constrained head on a network trained on image data](../../../../article/manuscript/ReadMe.md#section-51--a-constrained-head-on-a-network-trained-on-image-data). Reference rank and recovery for the constrained classifier head.
-- [Section 6.1 · Recovery in each regime](../../../../article/manuscript/ReadMe.md#section-61--recovery-in-each-regime). Fast and slow recurrent forcing, noise, and transient regimes in Figure 2.
-- [Appendix E · System constructions](../../../../article/manuscript/ReadMe.md#appendix-e--system-constructions). Details of the image-data system and reference participation ratios in Table 13.
+- [Section 3.1 · Analytic oscillators and learning](../../../../article/manuscript/ReadMe.md#section-31--analytic-oscillators-and-learning). Held-out ranks for the handwritten digits classifier with frozen features.
+- [Appendix C.1 · Analytic and driven-learning evaluation](../../../../article/manuscript/ReadMe.md#appendix-c1--analytic-and-driven-learning-evaluation). Forcing, reference effective rank, and errors by observable.
 
 ## Files and commands
 

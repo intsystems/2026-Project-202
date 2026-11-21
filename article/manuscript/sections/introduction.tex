@@ -1,0 +1,20 @@
+\claude{
+\section{Introduction}\label{sec:intro}
+A training loss can decrease while the learned representation loses useful information. A recurrent network can reproduce its target more accurately while its activity settles onto a simpler cycle. Both changes matter, but measuring them directly may require saving activations, analyzing parameter trajectories, or propagating tangent dynamics. We ask how much of this information can be obtained from the scalar logs already available during training.
+
+A scalar value cannot describe a network state, but its history records how that state evolves. Delay-embedding theory explains when delayed observations reconstruct the dynamics \citep{takens1981detecting,sauer1991embedology,stark1999delay,stark2003delay}. We apply pooled MacKay--Ghahramani (MG) estimation \citep{mackay2005comments,levina2004maximum} to this reconstruction. Under the conditions in Section~\ref{sec:method}, its local dimension reflects active state components.
+
+This geometric information differs from spectral peak number: one periodic component can generate many harmonics. Our recurrent experiments show that single-neuron MG separates phase structures with identical peak numbers and similar covariance ranks. Applied experiments test whether the same statistic supports monitoring and decisions from scalar data, alongside strong simple alternatives.
+
+\paragraph{Contributions.}
+We test the information in a scalar record, its practical uses and its computational cost.
+\begin{enumerate}[leftmargin=*,itemsep=2pt,topsep=3pt]
+\item \textbf{Component structure from one scalar.} We define an MG measurement procedure with explicit interpretation conditions. Synthetic and learned recurrent systems test dimension recovery and distinguish independent phases from harmonics.
+\item \textbf{Model and policy selection from logs.} We test MG against independent measurements in CNNs, VAEs and RL, then use it to select SSL configurations and forecasters. Strong scalar baselines accompany each comparison.
+\item \textbf{Faster decisions without full-state analysis.} Sampled-query MG is 3.7 times faster than held-out forecast search in the paired benchmark, with no statistically resolved accuracy difference. It retains all full-MG choices. A separate recurrent benchmark shows 14--19-fold savings over the full Lyapunov spectrum.
+\end{enumerate}
+The contribution is the measurement procedure and its evaluation; delay embeddings and dimension estimators are established tools.
+
+\paragraph{Related work.}
+Intrinsic-dimension methods analyze point clouds and representations \citep{facco2017estimating,ansuini2019intrinsic,pope2021intrinsic}; other work studies fractal dimensions of optimizer trajectories and invariant measures \citep{simsekli2020hausdorff,camuto2021fractal,birdal2021intrinsic,tan2024limitations}. Random-walk PCA \citep{antognini2018pca} and Koopman analysis \citep{redman2024equivalent} help interpret training trajectories. We measure local temporal geometry from one scalar, comparing it with participation ratio, Hessian spectra, and grokking-related changes in function complexity and weight rank \citep{gao2017theory,cohen2021gradient,liu2022omnigrok,yunis2024rank,humayun2024deep}. Roughness, recurrence, and entropy test whether this geometry adds useful information beyond simpler features.
+}
