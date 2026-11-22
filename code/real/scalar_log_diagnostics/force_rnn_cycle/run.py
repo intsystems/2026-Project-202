@@ -72,23 +72,28 @@ def top_lyap(a,states,burn=1000):
         if i>=burn:logs.append(np.log(norm))
     return float(np.mean(logs)/DT),time.perf_counter()-started
 
-def train(seed,n,out,checkpoints,gain=1.5):
+def train(seed,n,out,checkpoints,gain=1.5,scalar_rollouts=False):
     d=out/f'seed_{seed}';d.mkdir(parents=True,exist_ok=True)
     j,u,x=init(seed,n,gain);w=np.zeros((n,2));p=np.eye(n)
     checkpointset=set(checkpoints);logs=[];rows=[]
     started=time.perf_counter()
     for it in range(max(checkpoints)+1):
         if it in checkpointset:
-            np.savez(d/f'checkpoint_{it:05d}.npz',j=j,u=u,w=w,x=x,training_step=it)
+            if not scalar_rollouts:
+                np.savez(d/f'checkpoint_{it:05d}.npz',j=j,u=u,w=w,x=x,training_step=it)
             a=j+u@w.T
             states,z,t,seconds=rollout(a,w,x,it*DT)
-            lam,lsec=top_lyap(a,states)
-            row=dict(seed=seed,n=n,training_step=it,**task(z,t),**recurrence(states),
-                     lambda_top=lam,top_seconds=lsec,record_seconds=seconds)
-            rows.append(row)
-            np.savez_compressed(d/f'rollout_{it:05d}.npz',states=states,z=z,t=t)
-            pd.DataFrame(rows).to_csv(d/'reference_pilot.csv',index=False)
-            print(row,flush=True)
+            rollout_file=d/f'rollout_{it:05d}.npz'
+            if scalar_rollouts:
+                np.savez_compressed(rollout_file,activity=np.tanh(states[:,0]))
+            else:
+                lam,lsec=top_lyap(a,states)
+                row=dict(seed=seed,n=n,training_step=it,**task(z,t),**recurrence(states),
+                         lambda_top=lam,top_seconds=lsec,record_seconds=seconds)
+                rows.append(row)
+                np.savez_compressed(rollout_file,states=states,z=z,t=t)
+                pd.DataFrame(rows).to_csv(d/'reference_pilot.csv',index=False)
+                print(row,flush=True)
         if it==max(checkpoints):break
         x=(1-DT)*x+DT*(j@np.tanh(x)+u@(w.T@np.tanh(x)))
         r=np.tanh(x);err=r@w-target((it+1)*DT)
@@ -116,7 +121,9 @@ if __name__=='__main__':
     p.add_argument('--seeds',type=int,nargs='+',default=[0]);p.add_argument('--out',type=Path,default=HERE/'pilot')
     p.add_argument('--gain',type=float,default=1.5)
     p.add_argument('--checkpoints',type=int,nargs='+',default=[0,2000,8000,20000,40000])
+    p.add_argument('--scalar-rollouts',action='store_true',
+                   help='Save neuron-zero activity at each checkpoint and skip full-state outputs and diagnostics.')
     a=p.parse_args()
     with threadpool_limits(limits=1):
         validate()
-        for seed in a.seeds:train(seed,a.n,a.out,a.checkpoints,a.gain)
+        for seed in a.seeds:train(seed,a.n,a.out,a.checkpoints,a.gain,scalar_rollouts=a.scalar_rollouts)

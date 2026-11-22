@@ -10,7 +10,13 @@ Run from this directory with TeX Live and `latexmk`.
 latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error aistats2027.tex icomp2026.tex main.tex artifacts_camera_ready.tex newinml.tex
 ```
 
-The PDFs appear in `.build/` under their entry point names. [The article index](../ReadMe.md) lists the filenames used for the checked-in copies. AISTATS uses eight pages for the main paper. The other styles use ten for the same content.
+The PDFs appear in `.build/` under their entry point names. [The article index](../ReadMe.md) lists the filenames used for the checked-in copies.
+
+The [Codex review copy](../artifacts_camera_ready_codex.pdf) uses the camera-ready layout and shows Codex edits in teal.
+
+```bash
+latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error artifacts_camera_ready_codex.tex
+```
 
 For an editorial copy with blue text, set the flag at build time. For example:
 
@@ -22,53 +28,48 @@ latexmk -pdf '-outdir=.build' '-jobname=aistats2027_blue' '-usepretex=\def\claud
 
 Section numbers and titles apply to every style. The experiment READMEs describe any differences between the bundled runs and the article's reported protocols.
 
-### Section 2.2 · Delay reconstruction and dynamical-systems theory
+<a id="section-22--delay-reconstruction-and-dynamical-systems-theory"></a>
+
+### Section 2.1 · Delay reconstruction
 
 - [Delay coordinate reconstruction](../../code/synthetic/delay_embedding_and_limits/delay_embedding/ReadMe.md)
 
-### Section 2.3 · Pooled local-dimension estimation
+<a id="section-23--pooled-local-dimension-estimation"></a>
+
+### Section 2.2 · Pooled local-dimension estimation
 
 - [Observer and scale controls](../../code/synthetic/signal_controls_and_sketches/observer_controls/ReadMe.md)
 - [Theiler exclusion and transients](../../code/synthetic/delay_embedding_and_limits/theiler_exclusion/ReadMe.md)
 - [Unequal excitation](../../code/synthetic/signal_controls_and_sketches/unequal_excitation/ReadMe.md)
 
-### Section 3.1 · Analytic oscillators and learning
+<a id="section-32--learned-generators-distinguish-phases-from-harmonics"></a>
 
-- [Digits parameter subspace](../../code/synthetic/digits_validation/digits_classifier_head/ReadMe.md)
-- [Dimension transitions](../../code/synthetic/signal_controls_and_sketches/dimension_transitions/ReadMe.md)
-- [Estimator calibration](../../code/synthetic/digits_validation/estimator_calibration/ReadMe.md)
-- [Known modes in linear learning](../../code/synthetic/poster_examples/known_linear_modes/ReadMe.md)
-- [Oscillating diagonal matrix](../../code/synthetic/controlled_systems/oscillating_matrix/ReadMe.md)
-- [Zero learning rate](../../code/synthetic/digits_validation/zero_learning_rate/ReadMe.md)
-
-### Section 3.2 · Learned generators distinguish phases from harmonics
+### Section 3.1 · Learned generators distinguish phases from harmonics
 
 - [Four-tone RNN learning](../../code/synthetic/poster_examples/four_tone_rnn/ReadMe.md)
 - [Roughness and phase controls](../../code/synthetic/signal_controls_and_sketches/phase_count_and_roughness/ReadMe.md)
 
-### Section 3.3 · FORCE training from chaos to periodic output
+<a id="section-33--force-training-from-chaos-to-periodic-output"></a>
+
+### Section 3.2 · FORCE training from chaos to periodic output
 
 - [FORCE RNN cycle](../../code/real/scalar_log_diagnostics/force_rnn_cycle/ReadMe.md)
 
-### Section 4.2 · Transferring the detector to ResNet-18
+<a id="section-42--transferring-the-detector-to-resnet-18"></a>
+
+### Section 4.1 · Detecting restricted parameter updates
 
 - [ResNet-18 backbone freeze](../../code/real/scalar_log_diagnostics/resnet_freeze/ReadMe.md)
 
-### Section 4.3 · Tracking latent information in a text VAE
+<a id="section-43--tracking-latent-information-in-a-text-vae"></a>
+
+### Section 4.2 · Tracking latent information in a text VAE
 
 - [Text VAE code loss](../../code/real/scalar_log_diagnostics/text_vae_latent_code/ReadMe.md)
 
-### Section 4.4 · Detecting changes during grokking
+<a id="section-48--forecast-model-selection-from-single-neuron-recordings"></a>
 
-- [Full-batch perceptron grokking](../../code/real/grokking_and_stability/perceptron_grokking/ReadMe.md)
-- [Trajectory sketch validation](../../code/synthetic/signal_controls_and_sketches/trajectory_sketch/ReadMe.md)
-- [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md)
-
-### Section 4.5 · Selecting Walker2d policies under actuator shifts
-
-- [Walker2d policy selection](../../code/real/model_selection_and_stopping/walker2d_policy_selection/ReadMe.md)
-
-### Section 4.8 · Forecast model selection from single-neuron recordings
+### Section 4.4 · Selection from scalar logs
 
 - [RNN forecast selection](../../code/real/model_selection_and_stopping/rnn_forecast_selection/ReadMe.md)
 
@@ -81,6 +82,8 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 - [Delay lag sensitivity](../../code/synthetic/delay_embedding_and_limits/delay_lag_sweep/ReadMe.md)
 - [Dimension ceiling](../../code/synthetic/delay_embedding_and_limits/dimension_ceiling/ReadMe.md)
 - [Theiler exclusion and transients](../../code/synthetic/delay_embedding_and_limits/theiler_exclusion/ReadMe.md)
+
+<a id="section-31--analytic-oscillators-and-learning"></a>
 
 ### Appendix C.1 · Analytic and driven-learning evaluation
 
@@ -111,12 +114,16 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 
 - [Text VAE code loss](../../code/real/scalar_log_diagnostics/text_vae_latent_code/ReadMe.md)
 
+<a id="section-44--detecting-changes-during-grokking"></a>
+
 ### Appendix E · Additional learning settings
 
 - [Edge of stability](../../code/real/grokking_and_stability/edge_of_stability/ReadMe.md)
 - [Full-batch perceptron grokking](../../code/real/grokking_and_stability/perceptron_grokking/ReadMe.md)
 - [Trajectory sketch validation](../../code/synthetic/signal_controls_and_sketches/trajectory_sketch/ReadMe.md)
 - [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md)
+
+<a id="section-45--selecting-walker2d-policies-under-actuator-shifts"></a>
 
 ### Appendix E.1 · Selecting policies for actuator shifts
 

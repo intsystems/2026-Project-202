@@ -1,0 +1,18 @@
+{
+  "run": "c4_s11",
+  "onset": 2495,
+  "onsets": [
+    1558,
+    2495
+  ],
+  "first_scored_step": 1500,
+  "horizon": 500,
+  "thresholds": {
+    "MG": 6.314388098960783,
+    "roughness": 0.2689456533633745
+  },
+  "leads": {
+    "MG": 195,
+    "roughness": 295
+  }
+}

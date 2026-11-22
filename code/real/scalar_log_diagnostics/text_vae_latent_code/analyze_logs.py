@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 import sys
 
@@ -11,14 +12,21 @@ from matplotlib.lines import Line2D
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 import numpy as np
 import pandas as pd
+from threadpoolctl import threadpool_limits
 
-from experiment_runner.plotting import options
+from analyze import measure
 
 BLUE, ORANGE, GREEN, GRAY, INK = "#0072B2", "#D55E00", "#009E73", "#7B858D", "#20262B"
 
 
-def read(name):
-    return pd.read_csv(HERE / "logs" / name)
+def load_branch(arm, run_dir):
+    if run_dir is None:
+        logs = HERE / "logs"
+        return (pd.read_csv(logs / f"vae_{arm}_log.csv", float_precision="round_trip"),
+                pd.read_csv(logs / f"vae_{arm}_mi.csv"))
+    branch = run_dir / ("freebits" if arm == "protected" else arm)
+    return (pd.read_csv(branch / "logs.csv", float_precision="round_trip"),
+            pd.read_csv(branch / "reference.csv"))
 
 
 def style(ax,xlabel='',ylabel=''):
@@ -33,7 +41,7 @@ def save(fig, name):
     plt.close(fig)
 
 
-def real_logs():
+def real_logs(run_dir):
     H=5.6                                   # taller figure; margins kept in inches
     fig,axs=plt.subplots(3,1,figsize=(11,H),sharex=True)
     arms=[('base',GRAY,'Base'),('regularized',ORANGE,'Code suppressed'),
@@ -45,19 +53,22 @@ def real_logs():
     axs[0].set_position([.15,y0,.43,h0/H])
     zoom=fig.add_axes([.71,y0,.20,h0/H])
     for arm,color,label in arms:
-        log=read(f'vae_{arm}_log.csv')
-        mg=read(f'vae_{arm}_mg.csv')
-        mi=read(f'vae_{arm}_mi.csv')
-        assert len(log)==3072 and len(mg)==21 and not mg.degenerate.any()
+        log, mi = load_branch(arm, run_dir)
+        assert np.array_equal(log.step.to_numpy(), np.arange(3072)) and mi.step.max() == 3072
+        probe = log.probe_nll.to_numpy()
+        ends = range(512, len(probe) + 1, 128)
+        scores = [measure(probe[end - 512:end], 512) for end in ends]
+        assert not any(score["degenerate"] for score in scores)
         axs[0].plot(log.step,log.probe_nll,color=color,lw=1.25,label=label)
         segment=log[log.step.between(1024,1408)]
         zoom.plot(segment.step,segment.probe_nll,color=color,lw=1.25)
-        axs[1].plot(mg.end,mg.MG,color=color,lw=1.8,marker='o',ms=3)
+        axs[1].plot(ends,[score["MG"] for score in scores],color=color,lw=1.8,marker='o',ms=3)
         axs[2].plot(mi.step,mi.MI,color=color,lw=1.8,marker='o',ms=3)
-    for ax,ylabel in zip(axs,['NLL','MG','MI']):
+    for ax,ylabel in zip(axs,['Probe NLL','MG@probe NLL','MI']):
         style(ax,'',ylabel);ax.yaxis.label.set_size(21)
         ax.axvline(1024,color=INK,ls='--',lw=1.1)
         ax.set_xlim(0,3072);ax.set_xticks([0,1024,2048,3072])
+    axs[1].yaxis.label.set_size(15)
     axs[1].axvspan(1024,1536,color=GRAY,alpha=.12,zorder=0)
     axs[0].set_yticks([4.5,7.5]);axs[0].set_ylim(4,8)
     axs[1].set_yticks([4,8]);axs[1].set_ylim(3,9)
@@ -80,8 +91,14 @@ def real_logs():
 
 
 if __name__ == "__main__":
-    OUTPUT = options(HERE)
+    parser = argparse.ArgumentParser(description="Build the VAE figure from bundled CSVs or a new run.")
+    parser.add_argument("--output", type=Path, default=HERE.parents[2] / "runs" / "redrawn" / HERE.name)
+    parser.add_argument("--run-dir", type=Path, help="Directory containing the base, regularized, and freebits runs.")
+    args = parser.parse_args()
+    OUTPUT = args.output
+    OUTPUT.mkdir(parents=True, exist_ok=True)
     plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 21, "axes.labelsize": 21,
                           "text.color": INK, "pdf.fonttype": 42})
-    real_logs()
+    with threadpool_limits(limits=1):
+        real_logs(args.run_dir)
     print(OUTPUT)

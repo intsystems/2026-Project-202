@@ -2,13 +2,67 @@
 
 | File | Article content |
 | --- | --- |
-| [icomp_method.pdf](icomp_method.pdf) | Scalar samples, delay vectors, and admissible neighbors in Section 2.2. |
-| [components.pdf](components.pdf) | Known-mode regression and the learned generator phase comparison in Section 3.2. |
-| [applications.pdf](applications.pdf) | CNN and ResNet interventions and VAE latent-information suppression in Section 4. |
-| [icomp_regimes.pdf](icomp_regimes.pdf) | Regime diagnostics in Appendix A.2. |
+| [icomp_method.pdf](icomp_method.pdf) | Delay reconstruction and neighbor distances for a periodic signal and a text VAE loss record. |
+| [components.pdf](components.pdf) | Known-mode regression and the learned generator phase comparison. |
+| [force_training_transition.pdf](force_training_transition.pdf) | FORCE rollouts, delay geometry, and windowed MG at selected checkpoints. |
+| [vae_real_log.pdf](../../poster/figures/vae_real_log.pdf) | Probe loss, MG and independently measured mutual information. |
+| [resnet_freeze_trace.pdf](resnet_freeze_trace.pdf) | Weight-norm log, MG alarm, and independent update rank after freezing the ResNet backbone. |
+| [grokking_matched_traces.pdf](grokking_matched_traces.pdf) | Weight norm, MG@weight norm, logit trajectory rank, and training and validation accuracy for paired modular-addition runs. |
+| [mnist_stop_trace.pdf](mnist_stop_trace.pdf) | Weight norm, probe loss, decision thresholds, and paired stopping outcomes in the intervention-rules appendix. |
+| [ssl_probe_scatter.pdf](ssl_probe_scatter.pdf) | Appendix comparison of MG@gradient norm and linear-probe accuracy by SSL configuration. |
+| [slingshot_warning.pdf](slingshot_warning.pdf) | A recorded loss spike with the frozen MG and roughness warnings. |
+| [single_neuron_forecasts.pdf](single_neuron_forecasts.pdf) | Forecasts from two selectors on mixed- and independent-frequency targets. |
 | [icomp_shapes.pdf](icomp_shapes.pdf) | Delay reconstructions in Appendix A.2. |
-| [icomp_traces.pdf](icomp_traces.pdf) | Scalar traces in Appendix A.2. |
-| [forecast_utility.pdf](forecast_utility.pdf) | Forecast selection and the sampled-query comparison in Appendix G. |
-| [ssl_campaign.pdf](ssl_campaign.pdf) | SSL ranking across seeds in Appendix I. |
 
 [Manuscript index](../ReadMe.md)
+
+Figure labels use `MG@series` for MG calculated from the named input. The summary PDFs `components.pdf`, `applications.pdf`, and `icomp_regimes.pdf` use the existing vector plots with updated labels.
+
+## Rebuild the method figure
+
+```bash
+python article/manuscript/figures/plot_method_geometry.py --output article/manuscript/.build/reproduced
+```
+
+Both panels use the text VAE estimator settings. The recorded example uses steps 2,048 through 2,559 of the [baseline probe loss](../../../code/real/scalar_log_diagnostics/text_vae_latent_code/logs/vae_base_log.csv). The middle delay vector is the query. The plots show the first and last coordinates, and the neighbor search uses the full vectors.
+
+## Rebuild the FORCE and VAE figures
+
+Run from the repository root after installing the [code dependencies](../../../code/ReadMe.md#run-the-code):
+
+```bash
+python article/manuscript/figures/plot_force_training_transition.py --output article/manuscript/.build/reproduced
+python code/real/scalar_log_diagnostics/text_vae_latent_code/analyze_logs.py --output article/manuscript/.build/reproduced
+```
+
+Both scripts recompute MG from the scalar samples committed under the respective experiment's `logs/`. The VAE script reads the separately measured mutual information from the bundled CSVs. That quantity uses the encoder's posterior distributions.
+
+To generate new rollouts and VAE measurements, run the following in a fresh checkout. The VAE run also requires PyTorch and the two Penn Treebank files downloaded by its training script. The recorded VAE environment used Python 3.13.12 and PyTorch 2.10.0. Retain the bundled logs for exact comparisons with the values in the paper.
+
+```bash
+python code/real/scalar_log_diagnostics/force_rnn_cycle/run.py --n 256 --gain 1.5 --seeds 7 \
+  --checkpoints $(seq 0 25 1000) 1250 1500 1750 2000 2500 3000 3500 4000 5000 6000 8000 10000 12000 16000 20000 24000 28000 32000 36000 40000 \
+  --scalar-rollouts --out article/manuscript/.build/force-replay
+python article/manuscript/figures/plot_force_training_transition.py --rollout-dir article/manuscript/.build/force-replay/seed_7 --output article/manuscript/.build/replayed
+python code/real/scalar_log_diagnostics/text_vae_latent_code/collect_logs.py --seed 1
+python code/real/scalar_log_diagnostics/text_vae_latent_code/analyze_logs.py --run-dir code/real/scalar_log_diagnostics/text_vae_latent_code/generated/seed1 --output article/manuscript/.build/replayed
+```
+
+## Rebuild the application traces
+
+```bash
+python article/manuscript/figures/plot_application_traces.py --output article/manuscript/.build/reproduced
+```
+
+The script uses the bundled [ResNet](../../../code/real/scalar_log_diagnostics/resnet_freeze/logs/ReadMe.md), [grokking](../../../code/real/grokking_and_stability/transformer_grokking/logs/ReadMe.md), and [MNIST](../../../code/real/model_selection_and_stopping/mnist_early_stopping/logs/ReadMe.md) CSVs. The plotted detector alarms, stop decisions, and generalization time come from the saved records.
+
+## Rebuild the selection and warning figures
+
+```bash
+python article/manuscript/figures/plot_selection_and_warning.py --output article/manuscript/.build/reproduced
+```
+
+- The [standalone Walker2d comparison](walker2d_selection.pdf) uses the four evaluation repeats in [checkpoint_selections.csv](../../../code/real/model_selection_and_stopping/walker2d_policy_selection/logs/checkpoint_selections.csv).
+- The SSL points average the five evaluation repeats in [ssl_probe_scores.csv](data/ssl_probe_scores.csv). The columns come from `results_main/test_final.csv` and `results_confirm/confirm_final.csv` under `aistats_article_v3/evidence/oct07_campaign/ssl` at commit `f6b579b1`.
+- The slingshot plot uses [logged window statistics](data/slingshot_windows.csv) and [frozen thresholds and onsets](data/slingshot_example.json) from `research_mg_wins/spikes` at commit `f6b579b1`. The loss curve shows recorded block means with minima and maxima. The example is the first eligible held-out event with different warning times and a rise of over one log unit in the recorded loss envelope.
+- The forecast panels use the M4 and T4 recordings from evaluation repeat 681 and the corresponding [saved model choices](../../../code/real/model_selection_and_stopping/rnn_forecast_selection/logs/query_fresh_comparisons.csv). The script refits each chosen model on the full prefix and checks that its error matches the saved outcome.

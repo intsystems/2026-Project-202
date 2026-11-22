@@ -15,6 +15,8 @@ def main():
     args = parser.parse_args()
     seed = str(args.seed)
     output = HERE / "generated" / f"seed{seed}"
+    if (output / "freebits" / "meta.json").is_file():
+        parser.error(f"Complete run already exists: {output}")
     env = os.environ.copy()
     earlier = env.get("PYTHONPATH")
     env["PYTHONPATH"] = os.pathsep.join([str(CODE)] + ([earlier] if earlier else []))

@@ -1,0 +1,106 @@
+\begin{table}[htbp]
+\centering\small
+\caption{\cx{Model architectures used in the reported experiments.}}
+\label{tab:architectures}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.26\linewidth}X@{}}
+\toprule
+\cx{Task} & \cx{Model} \\
+\midrule
+\cx{Digits-head recovery} & Frozen tanh MLP (hidden widths 64, 64); trainable linear classifier in a fixed parameter subspace \\
+\cx{Synthetic generators and forecasting} & FORCE/RLS rate networks; 1,000 units for phase recovery, 256 for the figure-eight and forecast tasks \\
+\cx{CIFAR-10 interventions} & ReLU CNN with $3\times3$ convolutions of widths 16, 32, 32; max pooling after the first two layers, adaptive average pooling, and a linear classifier \\
+\cx{ResNet transfer} & ResNet-18 with a ten-class head; $3\times3$ stride-one stem without max pooling from scratch; standard $7\times7$ stride-two stem and max pooling with ImageNet pretraining \\
+\cx{Text VAE} & 48-dimensional shared embeddings, GRU encoder and decoder with hidden size 64, 16-dimensional Gaussian code \\
+\cx{Grokking} & One-layer transformer, width 128, four 32-dimensional heads, MLP width 512, no layer normalization; full-batch comparison uses a width-500 quadratic perceptron \\
+\cx{MNIST representation selection} & 784--256--256 encoder with batch normalization and ReLU; 256--256--64 projector (one variant outputs 16 coordinates); predictor width 64 in the standard SimSiam/BYOL settings \\
+\cx{MNIST intervention rules} & 196--128--128--10 ReLU MLP; pruning narrows both hidden layers \\
+\cx{Loss-spike warning} & Pre-layer-normalized transformer with two layers, width 64, and four heads \\
+\cx{Walker2d} & Separate 64--64 tanh MLPs for actor and critic; six action outputs \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{\cx{CNN intervention and detector protocol. Configurations shared with ResNet are in Table~\ref{tab:mg-settings}.}}
+\label{tab:cnn-protocol}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.28\linewidth}X@{}}
+\toprule
+\cx{Component} & \cx{Setting} \\
+\midrule
+\cx{Small CNN training} & 10,000 CIFAR-10 images; 10,000 SGD updates; learning rate 0.02, momentum 0.9, weight decay $5\cdot10^{-4}$, batch 64 with replacement \\
+\cx{Intervention update} & 4,000; pre/post summaries exclude windows that overlap the intervention \\
+\cx{Interventions} & Learning-rate divisors 3, 10, 100; freeze later trainable subsets, head only or bias only; prune 50\%, 80\%, 95\% \\
+\cx{References} & Unchanged or $4\times$ batch; separate suffix-only transforms rescale by 10 or smooth with a 16-sample causal mean \\
+\cx{Replication} & 4 development and 4 held-out repeats; 10 additional repeats for timing-shift transfer \\
+\cx{Detector} & $M=2$, $B=3$, $D_j<-0.08829884$; feature windows ending at or before update 1,500 are excluded \\
+\cx{Scoring} & 5,000 updates after intervention; 7 strong intervention types and 4 reference types per held-out repeat \\
+\cx{Search grid} & $M\in\{2,3,4\}$, $B\in\{3,4,6\}$; threshold margin 0.02 beyond the development reference maximum \\
+\cx{IAAFT surrogates} & 2 per window, 100 spectrum/rank projections; endpoint matching can trim up to 15\% of the window \\
+\cx{Entropy features} & Permutation order 5, delay 1, stable tie sorting; sample-entropy template length 2, delay 1, Chebyshev distance, tolerance 0.2 window SDs, no self-matches \\
+\cx{CUSUM development} & Warm-up windows ending at updates 2,000--3,500; scale floor $\max(0.01|\mu_0|,10^{-10})$; drift grid $\{0.25,0.5,1\}$ and threshold margin 0.5 \\
+\cx{ReLU-death stress test} & Learning-rate multipliers 20, 30, 50, 100 for one update, 15 for three updates, or 20 for two. On 500 diagnostic images, the dead-channel fraction must rise by at least 0.05 \\
+\cx{ResNet data and SGD} & Full CIFAR-10; scratch at $32\times32$, pretrained at $64\times64$ with ImageNet normalization; batch 128 without augmentation, learning rate 0.02, momentum 0.9, weight decay $5\cdot10^{-4}$ \\
+\cx{ResNet replication and reference} & 3 repeats per initialization type; 1,024-coordinate update sketches \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{\cx{Text VAE and cyclic monitoring protocols.}}
+\label{tab:vae-protocol}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.28\linewidth}X@{}}
+\toprule
+\cx{Component} & \cx{Setting} \\
+\midrule
+\cx{Data} & 6,000 training and 256 evaluation sentences, 8--24 words before EOS; 2,000-token vocabulary \\
+\cx{Training} & Teacher forcing; Adam at $10^{-3}$, batch 32, gradient clipping at 5, no dropout \\
+\cx{Paired continuations} & Shared to update 1,024 at $\beta=0.01$; continue to 3,072 with $\beta=0.01$, $\beta=1$, or $\beta=1$ with free bits (0.5 nats per coordinate) \\
+\cx{Probe and summaries} & 16 fixed evaluation sentences per update; early windows end at 512--1,024, late windows at 2,048--3,072 \\
+\cx{Independent measurements} & Every 128 updates; 4 fixed draws per posterior for mutual information; symmetric KL for decoder response to code shuffling \\
+\cx{Paired criteria} & Loss: both references fall below half of baseline. Preservation: each retains at least half its early value and doubles the suppressed value \\
+\cx{Cyclic training} & 1,024 shared warm-up steps, then three 2,048-step cycles with a ramp from $\beta=0$ to 1 followed by a hold; 7,168 updates total \\
+\cx{Cyclic event labels} & References every 64 updates; loss at ratios $\le0.50$, recovery at ratios $\ge0.65$, sustained over two checks; horizon 512 updates \\
+\cx{Check schedules} & One initial check; extra budgets 6, 12, 24; at least 128 updates between triggered checks; 1 development and 9 evaluation repeats \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{\cx{Walker2d training and evaluation protocol. Actor and critic widths are in Table~\ref{tab:architectures}.}}
+\label{tab:walker-protocol}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.27\linewidth}X@{}}
+\toprule
+\cx{Component} & \cx{Setting} \\
+\midrule
+\cx{PPO sampling and updates} & 8 environments, 512 steps per rollout and environment, minibatch 256, 5 PPO epochs \\
+\cx{Optimizer and clipping} & Learning rate $3\cdot10^{-5}$ to $3\cdot10^{-6}$; PPO clip 0.1, target KL 0.01, gradient clip 0.5 \\
+\cx{Return and objective} & Discount 0.99, GAE 0.95, entropy coefficient 0, value coefficient 0.5; frozen normalizations \\
+\cx{Fine-tuning} & Common checkpoint at 655,360 transitions; 1,048,576 further transitions per branch \\
+\cx{Fixed-policy motion records} & 512 warm-up and 4,096 measured steps. Phase reference: 152 samples, phase period $\approx152.215$ steps \\
+\cx{Candidate controls} & $\lambda\in\{0,0.25,1,4\}$ at checkpoints 262,144, 524,288, 786,432, 1,048,576; 4 evaluation repeats \\
+\cx{Nominal selection} & 3 episodes per candidate; 256 warm-up and 2,048 measured steps. Require at least 2 completions and mean return $\ge90\%$ of the best nominal mean \\
+\cx{Fixed comparator} & $\lambda=0.25$ at final checkpoint; use nominal-return choice if ineligible \\
+\cx{Deployment} & Actuator lag $\alpha\in\{0.05,0.1,0.2\}$ and noise $\sigma\in\{0,0.02\}$; 5 resets per condition \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering\small
+\caption{\cx{Grokking runs and the matched-window analysis.}}
+\label{tab:grokking-protocol}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.26\linewidth}X@{}}
+\toprule
+\cx{Component} & \cx{Setting} \\
+\midrule
+\cx{Modular addition} & Modulus 113; training fraction 0.30; weight decay 1.0; 20,000 optimizer updates; 3 regularized runs \\
+\cx{Permutation composition} & $S_5$; training fraction 0.50; weight decay 0.2; 30,000 optimizer updates; 1 regularized run \\
+\cx{Transformer optimization} & AdamW at $10^{-3}$, betas $(0.9,0.98)$, batch 256, float64 \\
+\cx{References} & One zero-decay run per task; full-batch perceptron on addition modulo 97 with 50\% training data, gradient descent on squared error \\
+\cx{Matched-window grid} & 60 log samples at sketch centers; $E\in\{4,6,10\}$, $\tau\in\{1,2,4\}$, $k\in\{5,20\}$; span and ACF exclusion \\
+\bottomrule
+\end{tabularx}
+\end{table}

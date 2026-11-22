@@ -20,6 +20,10 @@
 \fi
 \long\def\claude#1{\begingroup\color{claudecolor}#1\endgroup}
 \let\cl\claude
+% Codex review copies show edits in teal, as in SignMuon.
+\definecolor{codexcolor}{RGB}{0,127,115}
+\newcommand{\cx}[1]{\ifdefined\codexdraft\textcolor{codexcolor}{#1}\else#1\fi}
+\newenvironment{codex}{\ifdefined\codexdraft\color{codexcolor}\fi}{}
 \AtBeginEnvironment{figure}{\color{claudecolor}}
 \AtBeginEnvironment{figure*}{\color{claudecolor}}
 \AtBeginEnvironment{table}{\color{claudecolor}\setlength{\tabcolsep}{3pt}}

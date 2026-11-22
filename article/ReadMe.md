@@ -10,6 +10,7 @@ The PDF editions use one [editable manuscript](manuscript/ReadMe.md) based on AI
 | ICOMP 2026 | [PDF](icomp2026.pdf) | [icomp2026.tex](manuscript/icomp2026.tex) |
 | NeurIPS Artifacts workshop, anonymous | [PDF](icomp_artifacts.pdf) | [main.tex](manuscript/main.tex) |
 | NeurIPS Artifacts workshop, camera-ready | [PDF](artifacts_camera_ready.pdf) | [artifacts_camera_ready.tex](manuscript/artifacts_camera_ready.tex) |
+| NeurIPS Artifacts workshop, Codex review | [PDF](artifacts_camera_ready_codex.pdf) | [artifacts_camera_ready_codex.tex](manuscript/artifacts_camera_ready_codex.tex) |
 | NeurIPS NewInML workshop, anonymous | [PDF](newinml.pdf) | [newinml.tex](manuscript/newinml.tex) |
 
 ## ICOMP poster
