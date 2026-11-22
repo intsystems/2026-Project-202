@@ -1,5 +1,4 @@
-/archive/*
-!/archive/ReadMe.md
+/archive/
 /code/runs/
 /code/data/
 **/generated/

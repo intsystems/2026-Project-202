@@ -8,7 +8,6 @@ This repository accompanies the [article](article/ReadMe.md) and the ICOMP poste
 | [`code/synthetic/`](code/synthetic/ReadMe.md) | Controlled experiments with known dimensions, estimator checks, and learned recurrent generators. |
 | [`code/real/`](code/real/ReadMe.md) | Recorded runs for grokking, training diagnostics, and model selection. |
 | [`code/actdim/`](code/actdim/ReadMe.md) | The MG estimator and tools for compressing trajectories and calculating their effective rank. |
-| [`archive/`](archive/ReadMe.md) | An index for the local archive of earlier project materials. |
 
 Each experiment describes its CSVs, PDF figures and commands, and links to the article sections that discuss it.
 
