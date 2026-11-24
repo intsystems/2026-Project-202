@@ -1,6 +1,6 @@
 # Article and poster
 
-## Detecting Simplification in Neural Network Dynamics from Scalar Logs: Active Dimension in Controlled Recurrent Systems
+## Detecting Simplification in Neural Network Dynamics from Scalar Logs
 
 The PDF editions use one [editable manuscript](manuscript/ReadMe.md) based on AISTATS v3.
 

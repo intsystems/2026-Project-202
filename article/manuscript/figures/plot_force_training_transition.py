@@ -79,7 +79,7 @@ def plot_transition(steps, time, activity, summary):
         trace = fig.add_subplot(grid[0, col])
         trace.plot(time[short], activity[index, short], color=color, lw=0.75)
         trace.set(title=f"{iteration:,} iterations", xlim=(0, 125), ylim=(-1.05, 1.05),
-                  xticks=[0, 60, 120], yticks=[-1, 0, 1], xlabel="Rollout time")
+                  xticks=[0, 60, 120], yticks=[-1, 0, 1], xlabel="Simulation time")
         trace.title.set_color(color)
         trace.grid(alpha=0.16)
         delay = fig.add_subplot(grid[1, col], aspect="equal")

@@ -29,7 +29,7 @@ def plot_walker_selection():
     methods = [
         ("MG", "MG@action norm", BLUE),
         ("entropy", "Spectral entropy", GRAY),
-        ("fixed_pilot", "Fixed policy", GRAY),
+        ("fixed_pilot", "Fixed policy choice", GRAY),
     ]
     fig, ax = plt.subplots(figsize=(5.9, 1.75), layout="constrained")
     ax.axvline(0, color="#8B969F", ls="--", lw=.95, zorder=1)
@@ -39,7 +39,7 @@ def plot_walker_selection():
         ax.scatter(gain, row + offsets, s=22, facecolor="white", edgecolor=color,
                    linewidth=.9, zorder=3)
         ax.vlines(gain.mean(), row - .29, row + .29, color=color, lw=2.25, zorder=4)
-    ax.set(xlabel="Deployment return difference vs. nominal-return selection",
+    ax.set(xlabel="Reward difference in perturbed trials\nrelative to selection by unperturbed reward",
            yticks=range(len(methods)), yticklabels=[label for _, label, _ in methods],
            ylim=(2.5, -.5), xticks=[-.5, 0, .5, 1], xlim=(-.51, 1.04))
     ax.spines["left"].set_visible(False)
@@ -68,7 +68,7 @@ def plot_ssl():
             ax.scatter(group.gradient_norm_mg, 100 * group.probe_accuracy, s=29,
                        c=color, marker=marker, label=label, edgecolor="white", linewidth=.45)
         ax.grid(alpha=.17)
-    full.set(xlabel="MG@gradient norm", ylabel="Linear-probe accuracy (%)", ylim=(6, 102),
+    full.set(xlabel="MG@gradient norm", ylabel="Linear classifier accuracy (%)", ylim=(6, 102),
              xlim=(7.75, 15.65))
     full.legend(frameon=False, loc="center left", bbox_to_anchor=(.02, .57),
                 handletextpad=.3, borderaxespad=.15)
@@ -169,7 +169,7 @@ def plot_forecast():
     for ax in axes:
         ax.set_ylim(-1.05, 1.68)
     fig.legend(handles=[
-        Line2D([], [], color=GRAY, label="Observed prefix"),
+        Line2D([], [], color=GRAY, label="Observed activity"),
         Line2D([], [], color="#20262B", label="Measured continuation"),
     ], loc="outside lower center", ncol=2, frameon=False)
     return fig

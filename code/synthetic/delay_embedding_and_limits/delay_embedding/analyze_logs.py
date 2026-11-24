@@ -66,8 +66,8 @@ def fig_method():
     # At rank one the log turns over every few samples, so ten thousand of them across an
     # inch and a half resolve nothing at all.
     ax.plot(log["sample"].to_numpy(), log.z.to_numpy(), "-", color=RECURRENT, lw=0.8)
-    ax.set_xlabel("optimiser step $t$", labelpad=1.5)
-    ax.set_ylabel("$x_t$")
+    ax.set_xlabel("optimizer step $t$", labelpad=1.5)
+    ax.set_ylabel("$z_t$")
     ax.set_xlim(0, 400)
     ax.set_xticks([0, 200, 400])
     ax.set_ylim(-2.8, 2.8)
@@ -89,8 +89,8 @@ def fig_method():
             ls="none", zorder=4)
     bx.plot([points[centre, 0]], [points[centre, 1]], "o", mfc="white", mec=RECURRENT,
             mew=1.3, ms=5.4, ls="none", zorder=5)
-    bx.set_xlabel("$x_t$", labelpad=1.5)
-    bx.set_ylabel(r"$x_{t-\tau}$")
+    bx.set_xlabel("$z_t$", labelpad=1.5)
+    bx.set_ylabel(r"$z_{t+\tau}$")
     span = 1.12 * np.abs(points).max()
     bx.set_xlim(-span, span)
     bx.set_ylim(-span, span)
@@ -116,7 +116,7 @@ def fig_method():
     # The power law as the panel's axis name: it is what the panel is for and it costs no
     # row of its own. The radius has to be named somewhere, and this is the one pointer.
     cx.set_xlabel(r"$m(r) \propto r^{\,d}$", labelpad=1.5)
-    cx.annotate(r"$r_m$", xy=(points[centre, 0] - 0.70 * radius,
+    cx.annotate(r"$r_{ik}$", xy=(points[centre, 0] - 0.70 * radius,
                               points[centre, 1] + 0.70 * radius),
                 xytext=(points[centre, 0] - 1.34 * radius,
                         points[centre, 1] + 1.16 * radius),
@@ -129,11 +129,11 @@ def fig_method():
     handles = [Line2D([], [], color=RECURRENT, marker=".", ms=6, mew=0, alpha=0.45,
                       ls="none", label="the reconstruction"),
                Line2D([], [], color=GREY, marker=".", ms=8, mew=0, ls="none",
-                      label=r"excluded: $|\Delta t| \leq W_T$"),
+                      label=r"excluded: $|i-\ell| \leq T$"),
                Line2D([], [], mfc="white", mec=RECURRENT, mew=1.3, marker="o", ms=5.4,
                       ls="none", label="reference point"),
                Line2D([], [], color=RECURRENT, marker=".", ms=8, mew=0, ls="none",
-                      label=r"its $m$ nearest")]
+                      label=r"its $k$ nearest")]
     fig.legend(handles=handles, ncol=4, loc="lower center", bbox_to_anchor=(0.5, 0.005),
                handlelength=0.8, handletextpad=0.35, columnspacing=1.1)
     return fig
@@ -158,7 +158,7 @@ def fig_shapes():
         ax.set_xticks([])
         ax.set_yticks([])
     axes[0].set_xlabel("$z_t$", labelpad=1.0)
-    axes[0].set_ylabel(r"$z_{t-\tau}$", labelpad=1.0)
+    axes[0].set_ylabel(r"$z_{t+\tau}$", labelpad=1.0)
 
     fig.tight_layout(w_pad=0.7)
     return fig

@@ -4,6 +4,30 @@
 \clearpage
 \appendix
 \onecolumn
+\section*{\cx{Appendix guide}}
+\begingroup
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.18}
+\newcommand{\appendixguideentry}[3]{%
+  \mbox{\hyperref[#1]{\textbf{\makebox[1.6em][l]{\ref*{#1}}#2}}} & \cx{#3}\\
+}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule[.5pt]
+\appendixguideentry{app:theory}{\cx{Interpreting MG}}{When delay coordinates preserve dimension and how to interpret MG in transient and stochastic regimes.}
+\appendixguideentry{app:settings}{\cx{Reproducibility}}{Recorded signals and the settings for MG, the detectors, and model training.}
+\addlinespace[.45em]
+\appendixguideentry{app:controlled}{\cx{Dimension recovery}}{Tests with known oscillations in matrices, classification, regression, and recurrent generators.}
+\appendixguideentry{app:applied}{\cx{Detecting training changes}}{Detector comparisons for classifier interventions and changes in latent-code use in a text VAE.}
+\appendixguideentry{app:additional}{\cx{Grokking and Walker2d}}{Delayed generalization, command smoothing, and policy choice under actuator lag and noise.}
+\appendixguideentry{app:cost}{Computational cost}{Required inputs, computation time, and storage for each diagnostic.}
+\addlinespace[.45em]
+\appendixguideentry{app:forecast_utility}{Forecasting}{Choosing a forecaster from one neuron's activity and estimating MG with fewer neighbor searches.}
+\appendixguideentry{app:intervention_utility}{\cx{Interventions on MNIST}}{Accuracy and computation when stopping training, freezing layers, or pruning neurons.}
+\appendixguideentry{app:campaign}{\cx{Selection and warnings}}{Selecting self-supervised models, anticipating loss spikes, and testing rules in new training settings.}
+\bottomrule[.5pt]
+\end{tabularx}
+\endgroup
 \input{sections/appendix}
 \input{sections/practical_appendix}
 \input{sections/campaign_appendix}

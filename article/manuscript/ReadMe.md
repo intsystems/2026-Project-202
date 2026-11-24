@@ -1,6 +1,6 @@
 # Shared article source
 
-The scientific content is the AISTATS v3 revision of *Detecting Simplification in Neural Network Dynamics from Scalar Logs: Active Dimension in Controlled Recurrent Systems*. Edit the [sections](sections/ReadMe.md), [table inputs](tables/ReadMe.md), [figure files](figures/ReadMe.md), or bibliography here. [main_part.tex](main_part.tex) sets the order of the main paper and bibliography. [appendix_part.tex](appendix_part.tex) includes the appendices. All style entry points use both files.
+The manuscript for *Detecting Simplification in Neural Network Dynamics from Scalar Logs* is based on the AISTATS v3 revision. Edit the [sections](sections/ReadMe.md), [table inputs](tables/ReadMe.md), [figure files](figures/ReadMe.md), or bibliography here. [main_part.tex](main_part.tex) sets the order of the main paper and bibliography. [appendix_part.tex](appendix_part.tex) includes the appendices. All style entry points use both files.
 
 ## Build
 
@@ -12,7 +12,7 @@ latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error aistats202
 
 The PDFs appear in `.build/` under their entry point names. [The article index](../ReadMe.md) lists the filenames used for the checked-in copies.
 
-The [Codex review copy](../artifacts_camera_ready_codex.pdf) uses the camera-ready layout and shows Codex edits in teal.
+The [Codex review copy](../artifacts_camera_ready_codex.pdf) uses the camera-ready layout and shows edits from the latest revision in teal.
 
 ```bash
 latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error artifacts_camera_ready_codex.tex
@@ -23,6 +23,14 @@ For an editorial copy with blue text, set the flag at build time. For example:
 ```bash
 latexmk -pdf '-outdir=.build' '-jobname=aistats2027_blue' '-usepretex=\def\claudedraft{1}' aistats2027.tex
 ```
+
+## Reproduce reported measurements
+
+- For the digit-classifier errors, select `qp` records with learning enabled and ranks 1, 3, 5, and 8. Average `abs(MG - traj_PR)` within each recorded quantity. The pooled error uses all quantities except `loss_step` and `acc_probe`. [Digit-classifier records](../../code/synthetic/digits_validation/digits_classifier_head/logs/sweep_raw.csv)
+- For the phase comparison, compute the mean and sample standard deviation of `MG_n0` and `PR` over repeats within each task. The experiment page gives the commands to redraw the plots and to train a new generator. [Generator measurements](../../code/synthetic/poster_examples/four_tone_rnn/logs/runs.csv), [Generator code and commands](../../code/synthetic/poster_examples/four_tone_rnn/ReadMe.md)
+- For forecasting, average errors across tasks within a repeat, then compute the mean and sample standard deviation across repeats. For times, take medians across repetitions within each input and method, then across inputs. The saved choices also reproduce exact agreement between full MG and 128-query MG. [Forecast scores and timing repetitions](../../code/real/model_selection_and_stopping/rnn_forecast_selection/logs/ReadMe.md)
+
+Full-precision detector parameters and scoring records are in `aistats_article_v3/new_results/` at commit `f6b579b1`. The selected warning scores and calibration records are under `research_mg_wins/spikes/` at the same commit.
 
 ## Article sections and experiment folders
 
@@ -41,6 +49,10 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 - [Observer and scale controls](../../code/synthetic/signal_controls_and_sketches/observer_controls/ReadMe.md)
 - [Theiler exclusion and transients](../../code/synthetic/delay_embedding_and_limits/theiler_exclusion/ReadMe.md)
 - [Unequal excitation](../../code/synthetic/signal_controls_and_sketches/unequal_excitation/ReadMe.md)
+
+### Section 2.3 · Experimental questions
+
+- [Questions, experiments, and comparisons](sections/method.tex)
 
 <a id="section-32--learned-generators-distinguish-phases-from-harmonics"></a>
 
@@ -85,7 +97,9 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 
 <a id="section-31--analytic-oscillators-and-learning"></a>
 
-### Appendix C.1 · Analytic and driven-learning evaluation
+<a id="appendix-c1--analytic-and-driven-learning-evaluation"></a>
+
+### Appendix C.1 · Oscillations in the diagonal matrix and digit classifier
 
 - [Digits parameter subspace](../../code/synthetic/digits_validation/digits_classifier_head/ReadMe.md)
 - [Digits function subspace](../../code/synthetic/digits_validation/digits_function_space/ReadMe.md)

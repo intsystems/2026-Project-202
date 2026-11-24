@@ -1,26 +1,13 @@
-\begin{tabular}{lrrr}
+\begin{tabular}{@{}l*{4}{rr}@{}}
 \toprule
-Task & Rule & Accuracy (\%) & MAC ratio \\
+ & \multicolumn{2}{c}{Stop, 40\% noise} & \multicolumn{2}{c}{Stop, 60\% noise} & \multicolumn{2}{c}{Freeze} & \multicolumn{2}{c}{Prune} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+Rule & Acc. & Cost & Acc. & Cost & Acc. & Cost & Acc. & Cost \\
 \midrule
-Stop, 40\% noise & MG & 84.75 & 0.219 \\
-Stop, 40\% noise & fixed & 84.72 & 0.250 \\
-Stop, 40\% noise & level & 84.90 & 0.188 \\
-Stop, 40\% noise & entropy & 84.67 & 0.203 \\
-Stop, 40\% noise & never & 64.11 & 1.000 \\
-Stop, 60\% noise & MG & 76.58 & 0.125 \\
-Stop, 60\% noise & fixed & 76.58 & 0.125 \\
-Stop, 60\% noise & level & 76.58 & 0.125 \\
-Stop, 60\% noise & entropy & 76.58 & 0.125 \\
-Stop, 60\% noise & never & 43.83 & 1.000 \\
-Freeze, clean & MG & 91.53 & 0.535 \\
-Freeze, clean & fixed & 91.32 & 0.515 \\
-Freeze, clean & level & 91.32 & 0.515 \\
-Freeze, clean & entropy & 91.32 & 0.515 \\
-Freeze, clean & never & 92.29 & 1.000 \\
-Prune, clean & MG & 92.44 & 0.572 \\
-Prune, clean & fixed & 92.52 & 0.628 \\
-Prune, clean & level & 92.50 & 0.618 \\
-Prune, clean & entropy & 92.38 & 0.553 \\
-Prune, clean & never & 92.29 & 1.000 \\
+MG & 84.75 & 0.219 & 76.58 & 0.125 & 91.53 & 0.535 & 92.44 & 0.572 \\
+Window mean & 84.90 & 0.188 & 76.58 & 0.125 & 91.32 & 0.515 & 92.50 & 0.618 \\
+Spectral entropy & 84.67 & 0.203 & 76.58 & 0.125 & 91.32 & 0.515 & 92.38 & 0.553 \\
+Fixed schedule & 84.72 & 0.250 & 76.58 & 0.125 & 91.32 & 0.515 & 92.52 & 0.628 \\
+Uninterrupted training & 64.11 & 1.000 & 43.83 & 1.000 & 92.29 & 1.000 & 92.29 & 1.000 \\
 \bottomrule
 \end{tabular}

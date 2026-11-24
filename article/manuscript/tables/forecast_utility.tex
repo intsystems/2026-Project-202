@@ -1,11 +1,9 @@
-\begin{tabular}{lrr}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xrr@{}}
 \toprule
-Selector & NMSE & Time (ms) \\
+Selection rule & NMSE & \cx{Time (ms)} \\
 \midrule
-MG & $0.0364\,\cx{\pm 0.0213}$ & 199.1 \\
-MG, $q=128$ & $0.0364\,\cx{\pm 0.0213}$ & 12.2 \\
-Held-out model search & $0.0407\,\cx{\pm 0.0324}$ & 45.3 \\
-Cheap + held-out search & $0.0338\,\cx{\pm 0.0175}$ & --- \\
-Held-out errors + MG & $0.0317\,\cx{\pm 0.0216}$ & --- \\
+MG, all queries \cx{(KD-tree)} & $0.0364\,\pm 0.0213$ & 199.1 \\
+MG, 128 queries \cx{(blocked distances)} & $0.0364\,\pm 0.0213$ & 12.2 \\
+Held-out model search & $0.0407\,\pm 0.0324$ & 45.3 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}

@@ -2,6 +2,7 @@
 
 import argparse
 from pathlib import Path
+import sys
 
 import matplotlib
 import numpy as np
@@ -10,10 +11,12 @@ import pandas as pd
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
 
 
 FIGURES = Path(__file__).resolve().parent
 EXPERIMENTS = FIGURES.parents[2] / "code" / "real"
+GROKKING_LOGS = EXPERIMENTS / "grokking_and_stability/transformer_grokking/logs"
 BLUE = "#0072B2"
 GRAY = "#707B87"
 ORANGE = "#B65117"
@@ -31,7 +34,7 @@ def plot_resnet():
     freeze = 4000
     repeat = 20
     conditions = (("base", GRAY), ("freeze_head", BLUE))
-    for column, (mode, title) in enumerate((("scratch", "From scratch"),
+    for column, (mode, title) in enumerate((("scratch", "Random initialization"),
                                            ("finetune", "ImageNet initialization"))):
         norm, mg, rank = axes[:, column]
         norm.set_title(title)
@@ -100,14 +103,14 @@ def plot_mnist():
     loss.plot(signal.step, signal.probe, color=PURPLE, alpha=.3, lw=.65)
     loss.plot(probe.step, probe.level, color=PURPLE, lw=1, marker="s", ms=2.8, label="Window mean")
     loss.axhline(rules.loc["level", "threshold"], color=PURPLE, lw=.9, ls=":")
-    loss.set_ylabel("Probe loss")
+    loss.set_ylabel("Fixed-set loss")
     loss.legend(loc="upper right", frameon=False)
 
     accuracy.plot(metrics.index, metrics.test_acc * 100, color=GRAY, lw=1.2,
                   marker=".", label="Test")
     accuracy.plot(metrics.index, metrics.train_noisy_acc * 100, color=ORANGE, lw=1,
                   marker=".", ls="--", label="Train (noisy labels)")
-    methods = (("level", "Probe loss", PURPLE, "s"), ("MG", "MG", BLUE, "o"),
+    methods = (("level", "Fixed-set loss", PURPLE, "s"), ("MG", "MG", BLUE, "o"),
                ("fixed", "Fixed step", GRAY, "D"))
     decision_scores = {"level": (loss, probe.set_index("step").level),
                        "MG": (mg, scores.set_index("step").MG)}
@@ -149,19 +152,44 @@ def plot_mnist():
     return figure
 
 
+def mark_validation_rise(axes, rise_start, rise_end, event):
+    for axis in axes:
+        axis.axvspan(rise_start, rise_end, color=BLUE, alpha=.10, lw=0, zorder=0)
+        axis.axvline(event, color=ORANGE, ls=":", lw=1.0)
+        axis.grid(axis="y", alpha=.17)
+        axis.set(xlim=(0, 20000))
+
+
+def plot_grokking_accuracy(axis, training, color):
+    axis.plot(training.step, training.val_acc * 100, color=color, lw=1.1)
+    axis.plot(training.step, training.train_acc * 100, color=color, lw=.85, ls="--", alpha=.85)
+    axis.set(ylim=(-3, 103), yticks=[0, 50, 100])
+
+
+def label_grokking_steps(axes):
+    for axis in axes:
+        axis.set_xticks([0, 5000, 10000, 15000, 20000], ["0", "5k", "10k", "15k", "20k"])
+        axis.set_xlabel("Optimization step")
+
+
 def plot_grokking():
-    logs = EXPERIMENTS / "grokking_and_stability/transformer_grokking/logs"
-    aligned = read(logs, "headline_trace.csv").query("column == 'weight_norm'")
-    ranks = read(logs, "rank_windows.csv")
-    milestones = read(logs, "rank_milestones.csv").set_index("run")
+    sys.path.insert(0, str(EXPERIMENTS.parent))
+    from real.grokking_and_stability.transformer_grokking.compare_accuracy_rise import accuracy_rise
+
+    aligned = read(GROKKING_LOGS, "headline_trace.csv").query("column == 'weight_norm'")
+    ranks = read(GROKKING_LOGS, "rank_windows.csv")
+    milestones = read(GROKKING_LOGS, "rank_milestones.csv").set_index("run")
     event = milestones.loc["mod_wd1", "t_gen"]
+    example = read(GROKKING_LOGS, "mod_wd1_train.csv")
+    rise_start, rise_end = accuracy_rise(example)
+    assert event == example.loc[example.val_acc >= 0.95, "step"].iloc[0]
+    assert rise_start < rise_end < event
     figure, axes = plt.subplots(2, 2, sharex=True, figsize=(6.1, 3.5))
     figure.subplots_adjust(left=.12, right=.965, top=.80, bottom=.15, hspace=.35, wspace=.29)
     norm, mg, rank, accuracy = axes.flat
-    cases = (("mod_wd1", "mod_wd1_train.csv", BLUE),
-             ("mod_wd0", "sketched__mod_wd0_train.csv", GRAY))
-    for run, training_file, color in cases:
-        training = read(logs, training_file)
+    cases = (("mod_wd1", example, BLUE),
+             ("mod_wd0", read(GROKKING_LOGS, "sketched__mod_wd0_train.csv"), GRAY))
+    for run, training, color in cases:
         scalar = aligned[aligned.run == run].sort_values("mid_step")
         geometry = ranks[ranks.run == run].sort_values("centre")
         assert np.array_equal(scalar.mid_step, geometry.centre)
@@ -169,26 +197,55 @@ def plot_grokking():
         norm.plot(training.step, training.weight_norm, color=color, lw=1.05)
         mg.plot(scalar.mid_step, scalar.MG, color=color, lw=1.05)
         rank.plot(geometry.centre, geometry.fn_PR_pos_det, color=color, lw=1.05)
-        accuracy.plot(training.step, training.val_acc * 100, color=color, lw=1.1)
-        accuracy.plot(training.step, training.train_acc * 100, color=color, lw=.85, ls="--", alpha=.85)
-    for axis, title in zip(axes.flat, ("Weight norm", "MG@weight norm", "Detrended logit trajectory PR",
+        plot_grokking_accuracy(accuracy, training, color)
+    for axis, title in zip(axes.flat, ("Weight norm", "MG@weight norm", "PR of detrended logits",
                                      "Train and validation accuracy (%)")):
         axis.set_title(title, loc="left")
-        axis.axvline(event, color=ORANGE, ls=":", lw=1.0)
-        axis.grid(axis="y", alpha=.17)
-        axis.set_xlim(0, 20000)
-    accuracy.set_ylim(-3, 103)
+    mark_validation_rise(axes.flat, rise_start, rise_end, event)
+    mg.set(ylim=(0, 6), yticks=[0, 2, 4, 6])
     accuracy.legend(handles=[Line2D([], [], color="black", label="Validation"),
                              Line2D([], [], color="black", ls="--", label="Train")],
                     loc="center left", bbox_to_anchor=(.20, .60), frameon=False, fontsize=7)
-    for axis in axes[-1]:
-        axis.set_xticks([0, 5000, 10000, 15000, 20000], ["0", "5k", "10k", "15k", "20k"])
-        axis.set_xlabel("Optimization step")
+    label_grokking_steps(axes[-1])
     figure.legend(handles=[
-        Line2D([], [], color=BLUE, label="With weight decay"),
+        Line2D([], [], color=BLUE, label="Run 1 (weight decay)"),
         Line2D([], [], color=GRAY, label="Zero decay"),
-        Line2D([], [], color=ORANGE, ls=":", label="Generalization"),
-    ], ncol=3, frameon=False, loc="upper center")
+        Patch(facecolor=BLUE, alpha=.10, edgecolor="none", label="Validation 10–90%"),
+        Line2D([], [], color=ORANGE, ls=":", label="First 95% validation"),
+    ], ncol=4, frameon=False, loc="upper center", columnspacing=1.25, handletextpad=.55)
+    return figure
+
+
+def plot_grokking_repeats():
+    sys.path.insert(0, str(EXPERIMENTS.parent))
+    from real.grokking_and_stability.transformer_grokking.compare_accuracy_rise import (
+        accuracy_rise,
+        weight_norm_mg,
+    )
+
+    figure, axes = plt.subplots(2, 2, sharex=True, sharey="row", figsize=(6.1, 2.75))
+    figure.subplots_adjust(left=.105, right=.965, top=.78, bottom=.19, hspace=.23, wspace=.16)
+    cases = ((2, "sketched__mod_wd1_s43_train.csv"),
+             (3, "sketched__mod_wd1_s44_train.csv"))
+    for (mg, accuracy), (run, filename) in zip(axes.T, cases):
+        training = read(GROKKING_LOGS, filename)
+        windows = weight_norm_mg(training)
+        center = (windows.left_step + windows.right_step) / 2
+        rise_start, rise_end = accuracy_rise(training)
+        event = training.loc[training.val_acc >= 0.95, "step"].iloc[0]
+        mg.plot(center, windows.MG, color=BLUE, lw=1.05)
+        mg.set(title=f"Run {run}", ylim=(0, 6), yticks=[0, 2, 4, 6])
+        plot_grokking_accuracy(accuracy, training, BLUE)
+        mark_validation_rise((mg, accuracy), rise_start, rise_end, event)
+    axes[0, 0].set_ylabel("MG@weight norm")
+    axes[1, 0].set_ylabel("Accuracy (%)")
+    label_grokking_steps(axes[-1])
+    figure.legend(handles=[
+        Line2D([], [], color=BLUE, label="Validation"),
+        Line2D([], [], color=BLUE, ls="--", label="Train"),
+        Patch(facecolor=BLUE, alpha=.10, edgecolor="none", label="Validation 10–90%"),
+        Line2D([], [], color=ORANGE, ls=":", label="First 95% validation"),
+    ], ncol=4, frameon=False, loc="upper center")
     return figure
 
 
@@ -202,7 +259,8 @@ def main():
                          "axes.linewidth": .6, "axes.axisbelow": True})
     for filename, plot in (("resnet_freeze_trace.pdf", plot_resnet),
                            ("mnist_stop_trace.pdf", plot_mnist),
-                           ("grokking_matched_traces.pdf", plot_grokking)):
+                           ("grokking_matched_traces.pdf", plot_grokking),
+                           ("grokking_other_runs.pdf", plot_grokking_repeats)):
         figure = plot()
         figure.savefig(args.output / filename)
         plt.close(figure)

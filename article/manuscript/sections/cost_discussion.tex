@@ -1,11 +1,10 @@
 \claude{
-% Keep the closing sections below the final forecast figure.
 \newpage
 \section{Discussion}\label{sec:cost}
-\cx{The signal we record determines which aspects of simplification MG can reveal. In the training interventions, we connect changes in MG to independently measured changes inside the network. In the grokking experiment, MG@weight norm also falls in a run that memorizes the training examples (\appref{app:additional}), illustrating why each interpretation needs independent evidence.}
+MG describes the geometry of the recorded signal. Noise and temporal dependence can affect this geometry, so interpretation requires evidence about what the signal captures. In a modular-addition control, MG changes while validation accuracy stays low (\appref{app:additional}).
 
-\cx{Evaluating an MG-based decision requires measuring its cost and outcome. For alerts, compare detection rules on the same log at a matched false-warning rate. For forecast selection, report prediction error and the time to select and fit the model. Timing on saved logs isolates computation. In the cyclic VAE, measuring loss on fixed sentences dominates the cost of monitoring (\appref{app:cost}).}
+Monitoring cost includes recording the log. In the VAE scheduling test, measuring loss on fixed sentences accounts for most of the time (\appref{app:cost}). On existing logs, roughness detects more loss spikes at the same false-positive rate, and querying fewer delay vectors speeds up forecast selection.
 
-\section[Conclusion]{\cx{Conclusion}}
-\cx{We propose a common way to track dynamical simplification from a single scalar log. In our controlled recurrent systems, MG captures differences in the structure of repeated motion. In our training experiments, changes in MG from window to window track independently measured simplification, including in feedforward networks.}
+\section[Conclusion]{Conclusion}
+We propose a common way to track dynamical simplification from a single scalar log. In recurrent networks trained to produce prescribed oscillations, MG captures differences in the structure of repeated motion. In our training experiments, changes in MG from window to window track independently measured simplification, including in feedforward networks.
 }

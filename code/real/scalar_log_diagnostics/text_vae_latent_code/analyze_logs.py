@@ -44,7 +44,7 @@ def save(fig, name):
 def real_logs(run_dir):
     H=5.6                                   # taller figure; margins kept in inches
     fig,axs=plt.subplots(3,1,figsize=(11,H),sharex=True)
-    arms=[('base',GRAY,'Base'),('regularized',ORANGE,'Code suppressed'),
+    arms=[('base',GRAY,'Lower penalty'),('regularized',ORANGE,'Higher penalty'),
           ('protected',GREEN,'Free bits')]
     bottom,top_band,gap,big_gap=.833,.833,.26,.43        # inches: x label, legend+zoom title, row gaps
     h=(H-bottom-top_band-gap-big_gap)/3.15; h0=1.15*h     # MG/MI rows and the taller NLL row
@@ -64,7 +64,7 @@ def real_logs(run_dir):
         zoom.plot(segment.step,segment.probe_nll,color=color,lw=1.25)
         axs[1].plot(ends,[score["MG"] for score in scores],color=color,lw=1.8,marker='o',ms=3)
         axs[2].plot(mi.step,mi.MI,color=color,lw=1.8,marker='o',ms=3)
-    for ax,ylabel in zip(axs,['Probe NLL','MG@probe NLL','MI']):
+    for ax,ylabel in zip(axs,['NLL','MG@NLL','MI (nats)']):
         style(ax,'',ylabel);ax.yaxis.label.set_size(21)
         ax.axvline(1024,color=INK,ls='--',lw=1.1)
         ax.set_xlim(0,3072);ax.set_xticks([0,1024,2048,3072])
@@ -80,7 +80,7 @@ def real_logs(run_dir):
     zoom.set_xticks([1024,1408]);zoom.set_yticks([4.6,5.2])
     zoom.tick_params(labelsize=17,pad=3)
     zoom.yaxis.tick_right()              # keep tick labels away from the inset connectors
-    zoom.set_title('Zoom after branching',fontsize=19,pad=7,loc='center')
+    zoom.set_title('After update 1,024',fontsize=19,pad=7,loc='center')
     for side in ('top','right','bottom','left'):
         zoom.spines[side].set_visible(True);zoom.spines[side].set_color(INK);zoom.spines[side].set_linewidth(.9)
     zoom.axvline(1024,color=INK,ls='--',lw=1.1)

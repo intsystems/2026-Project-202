@@ -2,60 +2,57 @@
 \section{Monitoring and selection in learned systems}\label{sec:applied}
 
 \subsection{Detecting restricted parameter updates}\label{sec:cnn}
-\cx{Freezing layers restricts how a model's weights can change. Can a log of the weight norm reveal such changes without recording every update? We freeze layers, prune weights, or lower the learning rate in a CIFAR-10 image classifier \citep{krizhevsky2009learning} and compare with unchanged and larger-batch runs. A rule calibrated on separate runs flags shifts in MG@weight norm (\appref{app:applied}). It detects most strong interventions. Simple increments are at least as effective (Tables~\ref{tab:detectors} and~\ref{tab:detector-transfer}).}
+We test whether weight norm reveals changes that restrict how far or in which directions weights can move. In a CIFAR-10 classifier \citep{krizhevsky2009learning}, we freeze layers, prune weights, or reduce the learning rate. We also analyze unchanged runs, runs with larger batches, and logs rescaled or smoothed after recording.
+
+We compute \cx{$m_j=\MG$} in each completed window \cx{$j$} of the weight norm. The detector raises an alarm when the median of the latest windows drops sufficiently below the preceding median. Development runs set the numbers of windows and the threshold (\appref{app:applied}). A first alarm within the scoring interval after intervention counts as a detection. An alarm on a comparison record counts as a false positive. Statistics of successive differences match or exceed MG in detection counts (Tables~\ref{tab:detectors} and~\ref{tab:detector-transfer}).
 
 \begin{table}[h]
 \centering\small
-\caption{\cx{Block-detector results across matched CNN runs. Hits cover strong interventions, false positives cover reference runs, and delay is the median over hits.}}
+\caption{Detection of strong interventions in the CIFAR-10 classifier. \cx{Delay is the median number of updates among detections.}}
 \label{tab:detectors}
 \scriptsize\setlength{\tabcolsep}{2pt}
 \input{tables/extra_baselines.tex}
 \end{table}
 
-\cx{We transfer the MG detector to ResNet-18 \citep{he2016deep} and freeze its feature extractor while training the classifier head. MG@weight norm falls alongside the independently measured rank of the updates (Figure~\ref{fig:resnet-freeze-trace}). The detector flags every tested freeze, from scratch and with ImageNet pretraining, without flagging reference runs (Table~\ref{tab:monitoring-results}).}
+We apply the same detector to ResNet-18 \citep{he2016deep}. We freeze the feature extractor (backbone) and continue training the final classification layer. MG@weight norm and the covariance PR of parameter updates both decline (Figure~\ref{fig:resnet-freeze-trace}). The detector identifies every freeze with random or ImageNet initialization and produces zero false alarms on the comparison records (Table~\ref{tab:resnet-freeze}).
 
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=.96\textwidth]{figures/resnet_freeze_trace.pdf}
-\caption{\cx{Backbone freezing in ResNet-18. Each column pairs a frozen run with unchanged training. The detector raises an alarm from MG@weight norm. Update PR independently estimates the effective rank of parameter updates. Both windowed measures are plotted at window ends.}}
+\caption{Freezing the feature extractor in ResNet-18. Each column compares freezing with unchanged training \cx{for one matched repeat}. Update PR is computed from the covariance of parameter updates. Both statistics are plotted at the end of each window.}
 \label{fig:resnet-freeze-trace}
 \end{figure*}
 
 \Needspace{7\baselineskip}
 \subsection{Tracking latent information in a text VAE}\label{sec:vae}
-\cx{A text variational autoencoder (VAE) turns a sentence into a vector called a latent code \citep{bowman2016generating}. It reconstructs each word from this code and the preceding words. Relying on those words can keep reconstruction loss low even as the model uses less of the code. We ask whether the loss history can reveal this change.}
+A text variational autoencoder (VAE) encodes a sentence as a vector \citep{bowman2016generating}. The decoder uses this latent code and the preceding words to reconstruct each word. Accurate predictions from preceding words can keep reconstruction loss low as the model uses less of the code. We test whether MG of the loss history detects reduced code use.
 
-\cx{Starting from one checkpoint on Penn Treebank \citep{marcus1993building}, we keep or raise the penalty on the code. A third branch uses the higher penalty with an allowance for a small amount of information in the code (free bits). We track MG of the reconstruction loss on the same sentences throughout training. Separately, we estimate how much information the codes carry and how much predictions change when we shuffle the codes between sentences.}
+In each Penn Treebank repeat \citep{marcus1993building}, we continue from the same saved training state under three penalty settings. We use a low penalty, a higher penalty, and the higher penalty with free bits \cx{\citep{kingma2016improved}}, which keeps the penalty constant below a cutoff for each code coordinate. We compute MG from reconstruction loss on fixed held-out sentences.
 
-\cx{Reconstruction loss stays similar across branches. Under the stronger penalty, MG falls alongside both independent measures of code use. Free bits partly preserves MG and mutual information (Figure~\ref{fig:vae-loss-log}). Standard deviation and spectral entropy also detect reduced code use across runs (Table~\ref{tab:monitoring-results}).}
+We estimate mutual information $I(X;Z)$ by Monte Carlo sampling. The encoder gives a Gaussian distribution over codes $Z$ for each evaluation sentence $X$. We draw codes from each Gaussian. For each draw, we take the log of the ratio of its density in the source Gaussian to its density in the equal-weight mixture over all evaluation sentences. We average these log ratios (\appref{app:vae-information}). Separately, we measure how replacing a code changes the decoder's predictions.
+
+Reconstruction loss stays similar across penalty conditions. Under the higher penalty, MG falls alongside both measures of code use. Free bits partly preserves MG and mutual information (Figure~\ref{fig:vae-loss-log} and Table~\ref{tab:vae-mg-ratios}). Standard deviation and spectral entropy also track reduced code use (\appref{app:vae-information}).
 
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=.96\textwidth]{../poster/figures/vae_real_log.pdf}
-\caption{\cx{Tracking code use from reconstruction loss on fixed sentences. NLL is negative log-likelihood. The vertical line marks the shared checkpoint, and shading ends at the first full window after it. Mutual information (MI) measures how much the code tells us about the sentence.}}
+\caption{Code use during text VAE training. NLL is mean negative log-likelihood per token on fixed sentences. The vertical line marks the start of the penalty comparison. Shading ends at the first full window under the new settings. MI is $I(X;Z)$ in nats.}
 \label{fig:vae-loss-log}
 \end{figure*}
 
-\begin{table*}[htbp]
+\begin{table}[htbp]
 \centering\small
-\caption{\cx{Monitoring results in ResNet, the text VAE, and grokking (delayed generalization). VAE intervals are paired 95\% bootstrap intervals over nine repeats. Grokking settings reuse the same trajectories.}}
-\label{tab:monitoring-results}
-\begin{tabularx}{\linewidth}{@{}p{.17\linewidth}Xl@{}}
+\caption{Ratios of late MG under the text VAE penalty settings.}
+\label{tab:vae-mg-ratios}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xrr@{}}
 \toprule
-\cx{Experiment} & \cx{Outcome} & \cx{Result} \\
+\cx{Conditions (first / second)} & \cx{Median} & 95\% interval \\
 \midrule
-\cx{ResNet} & \cx{Median MG change after backbone freeze: scratch; pretrained} & $-27.6\%$; $-30.8\%$ \\
-& \cx{Freeze detections; reference false alarms} & 6/6; 0/24 \\
-\addlinespace
-\cx{Text VAE} & \cx{Late MG ratio, suppressed / low regularization} & $0.517$ $[0.480,0.542]$ \\
-& \cx{Late MG ratio, free bits / suppressed} & $1.286$ $[1.179,1.418]$ \\
-& \cx{Runs where each fixed-probe statistic (MG, SD, spectral entropy) fell under suppression} & 9/9 each \\
-& \cx{Runs where mini-batch-loss MG fell in the expected direction} & 4/9 \\
-\addlinespace
-\cx{Grokking} & \cx{Usable settings separating the generalizing runs from their references} & 24/26 \\
+Higher penalty / lower penalty & $0.517$ & $[0.480,0.542]$ \\
+Higher penalty with free bits / higher penalty alone & $1.286$ & $[1.179,1.418]$ \\
 \bottomrule
 \end{tabularx}
-\end{table*}
+\end{table}
 
 \input{sections/campaign_main}
 \input{sections/forecast_utility}

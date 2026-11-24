@@ -1,16 +1,18 @@
 \begin{tabular}{lrrrrr}
 \toprule
-Feature & 500 & 1,000 & 2,000 & 5,000 & FP \\
+Statistic & \multicolumn{4}{c}{Detection within this many updates} & False alarms \\
+\cmidrule(lr){2-5}
+ & 500 & 1,000 & 2,000 & 5,000 & \\
 \midrule
-MG & 8/28 & 16/28 & 22/28 & 27/28 & 0/16 \\
-Abs. increments & 15/28 & 16/28 & 26/28 & 27/28 & 0/16 \\
-Norm. increments & 0/28 & 0/28 & 21/28 & 28/28 & 0/16 \\
-Perm. entropy & 0/28 & 0/28 & 23/28 & 28/28 & 7/16 \\
+Normalized increments & 0/28 & 0/28 & 21/28 & 28/28 & 0/16 \\
 Sample entropy & 8/28 & 13/28 & 27/28 & 28/28 & 4/16 \\
-Spectral entropy & 0/28 & 0/28 & 0/28 & 4/28 & 2/16 \\
+Permutation entropy & 0/28 & 0/28 & 23/28 & 28/28 & 7/16 \\
+\cx{Relative} detrended standard deviation & 25/28 & 27/28 & 27/28 & 28/28 & 10/16 \\
+Absolute increments & 15/28 & 16/28 & 26/28 & 27/28 & 0/16 \\
+MG & 8/28 & 16/28 & 22/28 & 27/28 & 0/16 \\
 Trend crossings & 0/28 & 15/28 & 15/28 & 15/28 & 5/16 \\
-Lag-one corr. & 0/28 & 0/28 & 0/28 & 0/28 & 0/16 \\
-Detrended std. & 25/28 & 27/28 & 27/28 & 28/28 & 10/16 \\
-Level & 0/28 & 4/28 & 4/28 & 4/28 & 0/16 \\
+Window mean & 0/28 & 4/28 & 4/28 & 4/28 & 0/16 \\
+Spectral entropy & 0/28 & 0/28 & 0/28 & 4/28 & 2/16 \\
+\cx{Detrended} lag-one correlation & 0/28 & 0/28 & 0/28 & 0/28 & 0/16 \\
 \bottomrule
 \end{tabular}

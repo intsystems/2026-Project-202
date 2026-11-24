@@ -1,18 +1,18 @@
-\begin{tabular}{lrr}
+\begin{tabular}{lrrr}
 \toprule
-Score & \cx{Mean Spearman $\rho$} & Regret (pp) \\
+Score & Mean Spearman $\rho$ & Accuracy gap (pp) & 95\% interval for $\Delta\rho$ \\
 \midrule
-MG (gradient norm) & 0.712 & 0.41 \\
-Embedding spread & 0.730 & 1.46 \\
-Spectral entropy & 0.595 & 1.00 \\
-Roughness & 0.599 & 1.20 \\
-Delay covariance PR & 0.626 & 1.08 \\
-Correlation dimension & 0.594 & 0.75 \\
-Recurrence error & 0.474 & 18.13 \\
-RankMe ($h$) & 0.321 & 4.00 \\
-RankMe ($z$) & 0.522 & 1.46 \\
-$\alpha$-ReQ slope & 0.404 & 1.46 \\
-LiDAR ($z$) & 0.124 & 85.03 \\
-\cx{Random configuration} & --- & 5.47 \\
+MG (gradient norm) & 0.712 & 0.41 & --- \\
+Correlation dimension & 0.594 & 0.75 & $[-0.050,\,0.326]$ \\
+Spectral entropy & 0.595 & 1.00 & $[-0.050,\,0.330]$ \\
+Delay covariance PR & 0.626 & 1.08 & $[-0.073,\,0.304]$ \\
+Roughness & 0.599 & 1.20 & $[-0.099,\,0.363]$ \\
+\cx{Scaled mean coordinate SD} & 0.730 & 1.46 & $[-0.192,\,0.190]$ \\
+RankMe ($z$) & 0.522 & 1.46 & $[-0.025,\,0.461]$ \\
+$\alpha$-ReQ slope & 0.404 & 1.46 & $[0.042,\,0.613]$ \\
+RankMe ($h$) & 0.321 & 4.00 & $[0.078,\,0.771]$ \\
+Recurrence error & 0.474 & 18.13 & $[0.035,\,0.446]$ \\
+LiDAR ($z$) & 0.124 & 85.03 & $[0.180,\,1.053]$ \\
+Random configuration & --- & 5.47 & --- \\
 \bottomrule
 \end{tabular}

@@ -1,90 +1,91 @@
 \claude{
-\section{Theory, implementation, and experimental details}\label{app:theory}
+\section[When delay reconstruction supports a dimension estimate]{When delay reconstruction supports a dimension estimate}\label{app:theory}
 \subsection{Dimension preservation under delay reconstruction}
-\cx{For a stationary ergodic trajectory, the occupation measure $\mu(A)$ is the long-run fraction of time spent in $A$ for sets with boundary of zero measure. The local dimension at $s$ is}
+Section~\ref{sec:method} uses neighbors of delay vectors to compare the geometry of recorded signals. The link to state-space dimension starts with the distribution of visited states. For a stationary ergodic process, its occupation measure $\mu(A)$ is the long-run fraction of steps with $s_t\in A$ for sets whose boundaries have zero measure. The local dimension at $s$ is
 \begin{equation}
 d_{\rm act}=\lim_{\epsilon\to0^+}
 \frac{\log\mu(B(s,\epsilon))}{\log\epsilon},
 \label{eq:active}
 \end{equation}
-\cx{where $B(s,\epsilon)$ is a ball of radius $\epsilon$. We use a single dimension when the limit exists and is constant $\mu$-almost everywhere. For $r$ independent phases on a smooth invariant torus with regular density, the dimension is $r$.}
+where $B(s,\epsilon)$ is a ball of radius $\epsilon$ \cx{in the state-space metric, taken to be Euclidean for the vector states here}. We use a single dimension when the limit exists and is constant $\mu$-almost everywhere. For $r$ independent phases on a smooth invariant torus with regular density, the dimension is $r$.
 
 
-\begin{proposition}[Bi-Lipschitz invariance]
-Let $\mu$ have local dimension $d$ at $s$, and let $F$ be bi-Lipschitz on its support, with constants $0<c\le C<\infty$. Then the pushforward $F_\#\mu$ has local dimension $d$ at $F(s)$.
+\begin{proposition}[Preservation of local dimension]
+Let $\mu$ have local dimension $d$ at $s$. Suppose $F$ is bi-Lipschitz on the support of $\mu$, meaning $c\|x-y\|\le\|F(x)-F(y)\|\le C\|x-y\|$ for all $x,y$ there and constants $0<c\le C<\infty$. The distribution $F_\#\mu$ of reconstructed points then has local dimension $d$ at $F(s)$.
 \end{proposition}
 \begin{proof}
 For sufficiently small $\epsilon$, the inverse image of $B(F(s),\epsilon)$ is bounded on the support between $B(s,\epsilon/C)$ and $B(s,\epsilon/c)$. Their probabilities bound the pushforward probability. The logarithms of $c$ and $C$ contribute vanishing constants after division by $\log\epsilon$, so both bounds have the same limiting exponent $d$.
 \end{proof}
-\cx{A smooth embedding of a compact smooth manifold provides the needed local regularity \citep{takens1981detecting}. Fractal supports and forced systems require additional conditions on distance distortion and reconstruction \citep{sauer1991embedology,stark1999delay,stark2003delay}.}
+Takens gives conditions under which delays of a scalar observation embed the state of a smooth autonomous system \citep{takens1981detecting}. A smooth embedding of a compact smooth manifold supplies the required distance bounds. Sauer et al.\ extend reconstruction to fractal sets \citep{sauer1991embedology}. Stark and colleagues give embedding results for deterministic and stochastic forcing under assumptions on the dynamics and observations \citep{stark1999delay,stark2003delay}. Applying the proposition requires control of distance distortion on the support being measured.
 
 
 \subsection{Recurrent, transient, and stochastic regimes}
-\cx{Recurrent trajectories revisit nearby states. Transients make a single pass, and stochastic forcing can fill the reconstructed space according to the noise and observable (Figure~\ref{fig:shapes}). These regimes can all produce finite MG scores. A dimension interpretation requires stable recurrence and a dimension-preserving observation.}
+An embedding preserves information about the state. Estimating the local dimension of its occupation measure also requires enough repeat visits to nearby states within the recorded window. For example, periodic motion repeatedly visits a closed orbit. A transient can produce a thin delay reconstruction during a single pass, and stochastic forcing can spread delay vectors according to the input and the observed quantity (Figure~\ref{fig:shapes}). These cases can yield finite MG values. In Section~\ref{sec:applied}, we test whether changes in these values track independently measured changes during training.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=.86\linewidth]{figures/icomp_shapes.pdf}
-\caption{\claude{Delay reconstructions of four cases. A recurrent one-phase signal closes a loop; two phases fill a higher-dimensional set; a transient follows a path without returning; stochastic forcing fills the available region. These pictures explain why recurrence and identifiability are required before reading MG as active dimension.}}
+\caption{Delay reconstructions of periodic, quasiperiodic, transient, and stochastically forced signals. \cx{The panels show coordinates $z_t$ and $z_{t+\tau}$.}}
 \label{fig:shapes}
 \end{figure}
 
 
 \subsection{Computing the pooled estimator}
-\cx{The implementation adds fixed-scale dither after standardization and tracks when distances or log-ratio sums reach numerical floors (Table~\ref{tab:mg-numerics}). Nonfinite, constant, or short records and windows with too few eligible neighbors yield unavailable estimates.}
+After standardization, we add a very small amount of independent Gaussian noise to each sample. \cx{This noise, called dither, perturbs ties. Distances near zero and their query-level log-ratio sums are still subject to the floors in Table~\ref{tab:mg-numerics}. We count the fraction at each floor over the selected distances and over the query sums, respectively. The shared estimator returns the value and a degeneracy flag. Forecast sampling and VAE check scheduling exclude flagged estimates.} Nonfinite, \cx{zero-variance}, or short records and windows with too few eligible neighbors yield unavailable estimates.
 
-\subsection{Affine invariance and its implementation boundary}
-\begin{proposition}[Affine invariance of the ideal scalar estimate]
+\subsection[Changes of scale and offset]{Changes of scale and offset}
+\begin{proposition}[Scaling and shifting a record]
 For a finite nonconstant record, fixed delay and neighbor settings, and no numerical dither, the MG formula is unchanged by replacing every observation with $ax_t+b$, for any $a\ne0$, provided the estimate is defined.
 \end{proposition}
 \begin{proof}
 After centering and dividing by standard deviation, the transformed series is the original standardized series multiplied by $\operatorname{sign}(a)$. All pairwise Euclidean distances of its delay vectors are identical. Temporal exclusions and admissible neighbors therefore remain unchanged, as do all distance ratios and their pooled estimate.
 \end{proof}
-\cx{Positive rescaling preserves the standardized record and the result with the same dither. Negative rescaling preserves the estimate's distribution under symmetric dither.} Finite precision and almost-constant records require separate checks. The proposition concerns a whole-window affine transformation: a scale change within a window is a different time series.
+A common positive scale and offset applied to every sample leave the standardized record and its MG unchanged for the same dither. With a negative scale, the estimate has the same distribution under symmetric dither. Finite precision can affect estimates on almost constant records.
 
 \subsection{Pooling and dependence}
-The numerator $n(k-1)-1$ is the bias correction used by the existing implementation. Its Gamma-model motivation assumes idealized independent local statistics. Neighbor reuse and serial dependence mean that this correction is not a general finite-sample unbiasedness guarantee for the records in this paper. We use the same implementation throughout, preserve degeneracy flags, and do not clip large estimates to $E$. The Theiler exclusion removes temporally adjacent candidates but does not make the remaining observations independent.
+The numerator $n(k-1)-1$ includes a bias correction motivated by a Gamma model with independent local statistics. Finite-sample bias can remain when queries share neighbors or observations are serially dependent. Eligible neighbors can remain dependent after Theiler exclusion. The implementation retains estimates above $E$ and flags numerical degeneracy.
 
 \section{Configurations and reproducibility}\label{app:settings}
-\cx{The figures and tables use saved experimental outputs. The estimator is shared across tasks. Table~\ref{tab:mg-settings} gives the observable and the settings used at each timescale.}
+The same estimator is used in the dimension tests and the training monitors. Table~\ref{tab:mg-settings} gives the recorded quantities and the analysis settings. Stride is the number of samples between window starts. The exclusion span is $(E-1)\tau$. The autocorrelation rule (ACF) uses the larger of the span and the autocorrelation time, subject to the listed upper limit on either side of the query. The figures and tables use saved experimental outputs.
 
 \begin{table*}[htbp]
 \centering\small
-\caption{\claude{Primary configurations. An exclusion of \emph{span} is $(E-1)\tau$. \cx{\emph{Cap} is the maximum number of samples excluded on either side of each query. The adaptive lag rule is given below.}}}
+\caption{Scalar records and MG settings.}
 \label{tab:mg-settings}
 \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}Xrrrrll@{}}
 \toprule
 Experiment & Observable & $W$ & $E$ & $\tau$ & $k$ & Theiler exclusion & Stride \\
 \midrule
 Digits head & state-based & 8,000 & 20 & 4 & 20 & span; cap 150 & 3,000 \\
-Regression & loss / probe & 2,048; 8,192 & 16 & 1 & 10 & 100 & endpoints \\
+Regression & loss / fixed-example error & 2,048; 8,192 & 16 & 1 & 10 & 100 & first / last \\
 Generator & neuron zero & 8,192 & 20 & adaptive & 20 & ACF; cap 320 & 8,192 \\
+\cx{FORCE transition figure} & \cx{neuron zero} & \cx{4,096} & \cx{20} & \cx{4} & \cx{20} & \cx{156} & \cx{512} \\
 CNN / ResNet-18 & parameter norm & 1,000 & 20 & 1 & 20 & span & 500 \\
-\cx{Text VAE} & probe NLL & 512 & 20 & 1 & 20 & 39 & 128 \\
-\cx{Cyclic VAE} & probe NLL & 512 & 20 & 1 & 20 & 39 & 64 \\
-\cx{Walker2d motion} & joint / action scalar & 2,048 & 20 & 8 & 20 & 312 & \cx{1,024} \\
-\cx{Walker2d selection} & action norm & 2,048 & 20 & 8 & 20 & 312 & \cx{episode} \\
-\cx{Grokking} & parameter norm & 60 & 10 & 1 & 20 & span & \cx{sketch centers} \\
-\cx{SSL selection} & gradient norm & 1,000 & 20 & 1 & 20 & 19 & \cx{final window} \\
-\cx{Spike warning} & log loss & 500 & 20 & 1 & 20 & 19 & 50 \\
-\cx{Forecast selection} & single neuron & 2,048 & 20 & adaptive & 20 & ACF; cap 150 & \cx{prefix} \\
-\cx{MNIST interventions} & norm or probe loss & 256 & 10 & 1 & 10 & 19 & \cx{candidate updates} \\
+Text VAE & fixed-set NLL & 512 & 20 & 1 & 20 & 39 & 128 \\
+VAE check scheduling & fixed-set NLL & 512 & 20 & 1 & 20 & 39 & 64 \\
+Walker2d motion & joint / action scalar & 2,048 & 20 & 8 & 20 & 312 & 1,024 \\
+Walker2d selection & action norm & 2,048 & 20 & 8 & 20 & 312 & episode \\
+Grokking & parameter norm & 60 & 10 & 1 & 20 & ACF & aligned windows \\
+Self-supervised & gradient norm & 1,000 & 20 & 1 & 20 & 19 & final window \\
+Spike warning & log loss & 500 & 20 & 1 & 20 & 19 & 50 \\
+Forecast selection & single neuron & 2,048 & 20 & adaptive & 20 & ACF; cap 150 & one window \\
+MNIST interventions & norm or fixed-set loss & 256 & 10 & 1 & 10 & 19 & candidate updates \\
 \bottomrule
 \end{tabularx}
 \end{table*}
 
 \begin{table}[htbp]
 \centering\small
-\caption{\cx{Numerical safeguards for MG. Dither is added after standardization.}}
+\caption{Noise scale and minimum values used to compute MG.}
 \label{tab:mg-numerics}
 \begin{tabular}{lr}
 \toprule
-\cx{Quantity} & \cx{Value} \\
+Quantity & Value \\
 \midrule
-\cx{Gaussian dither scale} & $10^{-9}$ \\
-\cx{Distance floor} & $10^{-8}$ \\
-\cx{Local log-sum floor} & $10^{-5}$ \\
-\cx{Flag if fraction at either floor exceeds} & 1\% \\
+Standard deviation of added Gaussian noise & $10^{-9}$ \\
+Distance floor & $10^{-8}$ \\
+Local log-sum floor & $10^{-5}$ \\
+Flag if fraction at either floor exceeds & 1\% \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -92,78 +93,86 @@ CNN / ResNet-18 & parameter norm & 1,000 & 20 & 1 & 20 & span & 500 \\
 \input{tables/experiment_protocols.tex}
 
 \paragraph{Exact adaptive rules.}
-For centered samples $z_t$, define $a(\ell)=\sum_{t=1}^{W-\ell}z_tz_{t+\ell}/\sum_{t=1}^Wz_t^2$. The autocorrelation time $t_a$ is the first lag with $a(\ell)<e^{-1}$, or $W$ if none exists. The adaptive generator uses
+For centered samples $z_t$, define $a(\ell)=\sum_{t=1}^{W-\ell}z_tz_{t+\ell}/\sum_{t=1}^Wz_t^2$. The autocorrelation time $t_a$ is the first lag with $a(\ell)<e^{-1}$, or $W$ if none exists. \cx{The autocorrelation routine returns zero when the sample standard deviation is below $10^{-12}$. We compute the adaptive lag from the original window and the autocorrelation exclusion from the standardized, dithered window.} The adaptive generator uses
 \[
 \begin{aligned}
 \tau_0&=\max(1,\operatorname{round}(t_a/4)),\\
 \tau&=\min\{\tau_0,\max(1,\lfloor W/[8(E-1)]\rfloor)\}.
 \end{aligned}
 \]
-The implementation uses nearest-even rounding. \cx{The second line limits how much of the window a delay vector spans, leaving most sample positions available as vector starts. The neighbor exclusion serves a different purpose. It avoids counting consecutive points along the trajectory as returns. A broader exclusion makes the search inspect more candidate neighbors, so we limit it to a fixed budget.} Theiler settings resolve to $T=\min(T_{\max},T_0)$, where $T_0=(E-1)\tau$ for the embedding rule and $T_0=\max((E-1)\tau,t_a)$ for the autocorrelation rule. An explicit integer is also capped. \cx{If the bound binds, some nearby delay vectors may still overlap or be correlated. These bounds are practical settings. They do not establish that the remaining neighbors are independent.}
+The implementation uses nearest-even rounding. The span limit keeps most samples available as starting points for delay vectors. The search requests $k+2T+1$ candidates to allow for temporal exclusions and the query itself, so limiting $T$ bounds this work. Theiler settings resolve to $T=\min(T_{\max},T_0)$, where $T_0=(E-1)\tau$ for the embedding rule and $T_0=\max((E-1)\tau,t_a)$ for the autocorrelation rule. Explicit choices of $T$ obey the same upper limit. \cx{When $T_{\max}<(E-1)\tau$, the resolved exclusion is shorter than the delay span.} Eligible delay vectors can still overlap or be correlated.
 
 
 \paragraph{Window length and recurrence requirements.}
-A window must leave enough admissible neighbors after delay reconstruction and temporal exclusion. \cx{For dimension estimation it must also cover repeated visits within a regime. For detection, longer windows smooth estimates and delay the response.}
+\cx{For $T>0$, retaining $k$ eligible neighbors for every query requires $n\ge 2T+k+1$, or $W\ge(E-1)\tau+2T+k+1$. The shared code also checks the input length before reconstruction. It needs at least $E\tau+20$ samples for a fixed lag and $E+20$ for an adaptive lag.} For dimension estimation the window must also cover repeated visits within a regime. For detection, longer windows smooth estimates and delay the response.
 
-\paragraph{Units of replication.}
-\cx{CNN interventions and VAE branches share starting trajectories. Generator tasks share initialization draws. Walker continuations start from one learned skill. We calculate paired contrasts at these levels and keep overlapping windows and transformed logs together.}
+\paragraph{What is compared within each repeat.}
+CNN and VAE conditions start from the same saved training state within a repeat. Generator tasks share initial weights. In Walker2d, selection rules choose from the same candidates within each repeat of continued training. Comparisons formed within a repeat use these shared starting points or inputs. When we resample runs for intervals, we keep the measurements from each repeat together.
 
-\section{Development systems and MLP-based recovery}\label{app:controlled}
-\subsection{Analytic and driven-learning evaluation}
-\cx{The analytic matrix provides a prescribed phase dimension. In the digits-head experiment, setting the learning rate to zero tests which observables still vary without learning. State-based logs become constant. Mini-batch loss can still vary, and quantized probe accuracy can be degenerate.}
+\section[Dimension tests and recurrent generators]{Dimension tests and recurrent generators}\label{app:controlled}
+\subsection[Oscillations in the diagonal matrix and digit classifier]{Oscillations in the diagonal matrix and digit classifier}
+The diagonal matrix evaluates dimension recovery directly against its prescribed number of independent oscillations. The mean absolute error is 0.27 over the tested dimensions from one to eight. For the digit classifier, Table~\ref{tab:synthetic-errors} uses the measured weight covariance PR as its comparison. \cx{We average the absolute deviations for each recorded quantity over four held-out ranks and four repeats, with 16 records per row. Across all ten usable quantities the pooled error is 0.90 over 160 records.}
 
 
-In the digits experiment \citep{pedregosa2011scikit}, we train and freeze an MLP feature extractor, then train a linear head in a fixed affine parameter subspace. \cx{We modulate the cross-entropy loss weights of fixed data groups. The drive mixes sinusoids across groups to balance the linearized forcing gains. Its weights are}
+We use the handwritten-digit data distributed with scikit-learn \citep{pedregosa2011scikit}. We train and freeze a multilayer perceptron that extracts features, then train a linear classifier whose weights move within a fixed affine subspace. We randomly assign each training example to a subset before training the classifier. All examples in subset $i$ share the time-dependent coefficient $w_i(t)$ in the cross-entropy loss
 \[
 w_i(t)=\max\!\left\{0.05,1+0.8\sum_{j=1}^r G_{ji}\sum_{\ell=1}^r A_{j\ell}\sin(2\pi f_\ell t+\phi_\ell)\right\}.
 \]
-\cx{Here $G$ identifies the groups and $A$ balances the forcing directions. The phases are uniform on $[0,2\pi)$.} For $r>1$, $f_j=2^{a_j}/16$ with $a_j=0.03+0.94(b_j-\min b)/(\max b-\min b)$ and $b_j=\operatorname{frac}(\sqrt{p_j})$ for the first $r$ primes; for $r=1$, $f_1=\sqrt2/16$. \cx{Table~\ref{tab:controlled-settings} gives the split and training settings.}
+Each column of $G$ gives the coefficients for one subset. The matrix $A$ mixes the oscillations to balance their effects on weight updates near initialization. The phases are uniform on $[0,2\pi)$. For $r>1$, $f_j=2^{a_j}/16$ with $a_j=0.03+0.94(b_j-\min b)/(\max b-\min b)$ and $b_j=\operatorname{frac}(\sqrt{p_j})$ for the first $r$ primes. For $r=1$, $f_1=\sqrt2/16$. Table~\ref{tab:controlled-settings} gives the training settings.
 
-\cx{The phases specify the intended structure. Covariance rank measures how strongly the training trajectory excites it.}
+The number of independent phases in the loss weights specifies the intended dimension. The covariance PR measures how evenly the classifier weight vectors vary across directions. \cx{The reported gradient norm differentiates the unweighted loss on the full training set with respect to the classifier's subspace coordinates.} With zero learning rate, the weights stay constant while loss on fresh mini-batches can still vary. Accuracy on a fixed set of examples can be too coarsely quantized to estimate MG.
 
 \begin{table}[htbp]
 \centering\small
-\caption{\cx{Protocols for controlled learning and recurrent generators.}}
+\caption{Settings for the dimension-recovery experiments.}
 \label{tab:controlled-settings}
 \begin{tabularx}{\linewidth}{@{}p{.28\linewidth}X@{}}
 \toprule
-\cx{Component} & \cx{Setting} \\
+Component & Setting \\
 \midrule
-\cx{Digits head} & 12 fixed groups; preconditioned step 0.15. Development: 3 repeats, ranks 2, 4, 6. Evaluation: 4 repeats, ranks 1, 3, 5, 8 \\
-\cx{Dense regression} & 256 samples, 32 weights, unit step size and momentum. At update 8,192, set momentum to 0.98 in two of four groups; the late window starts at 12,288 \\
-\cx{Generator tasks} & T1--T4: independent frequencies proportional to $1,\sqrt2,\sqrt3,\sqrt5$; H2/H4: integer harmonics; M4: $1,2,\sqrt2,2\sqrt2$ \\
-\cx{Generator training and record} & Gain 1.2, FORCE/RLS for 100,000 steps, then 5,000 burn-in and 32,768 recorded samples; 5 repeats per task \\
-\cx{Generator Lyapunov reference} & 12 tangent vectors; exponent cutoff $-0.02$ \\
-\cx{Figure-eight training} & Recurrent gain 1.5; FORCE for 40,000 steps; 2,000 burn-in and 8,192 recorded samples per checkpoint \\
+Digit classifier & Assign images to 12 fixed subsets. Use a preconditioned step of 0.15. Development uses 3 repeats at ranks 2, 4, and 6. Evaluation uses 4 repeats at ranks 1, 3, 5, and 8. \\
+Dense regression & 256 examples and 32 weights. Learning rate and momentum coefficient both start at 1. At update 8,192, momentum falls to 0.98 for the directions associated with two of the four frequencies. The late window starts at 12,288. \\
+Generator tasks & T1--T4: independent frequencies proportional to $1,\sqrt2,\sqrt3,\sqrt5$; H2/H4: integer harmonics; M4: $1,2,\sqrt2,2\sqrt2$. \cx{The frequency scale is $(10\pi)^{-1}$ per unit of simulation time. For $q$ output frequencies each amplitude is $1.2/\sqrt q$. Initial phases are uniform on $[0,2\pi)$.} \\
+Generator training and record & Gain 1.2. Train with FORCE and recursive least squares for 100,000 steps. At fixed weights, discard 5,000 steps before recording 32,768 samples. Five repeats per task. \\
+\cx{Output fidelity} & \cx{Each output must place at least 80\% of its nonzero-frequency power within 3\% of its prescribed frequency. We use a Hann window before taking the Fourier transform.} \\
+\cx{Resolved settings for the four-tone records} & \begin{tabular}[t]{@{}lrrr@{}}
+\cx{Task} & \cx{$t_a$} & \cx{$\tau$} & \cx{$T$} \\
+\cx{H4} & \cx{21--29} & \cx{5--7} & \cx{95--133} \\
+\cx{M4} & \cx{28--40} & \cx{7--10} & \cx{133--190} \\
+\cx{T4} & \cx{32--40} & \cx{8--10} & \cx{152--190}
+\end{tabular} \\
+Generator stability analysis & Estimate the 12 largest Lyapunov exponents over the first 16,384 recorded steps. Count those at or above $-0.02$ per unit of simulation time. \\
+\cx{Observation-noise check} & \cx{Use the first 4,096 or 8,192 samples from each of three neurons in H4, M4, and T4. Add Gaussian noise with standard deviation $0$, $0.01$, or $0.05$ times the observed standard deviation.} \\
+Periodic-signal training & Recurrent gain 1.5. Train with FORCE for 40,000 steps. At each selected training step, discard 2,000 simulation steps before recording 8,192 samples at fixed weights. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\subsection{Dense regression with endogenous modes}
-\cx{The data matrix $X$ has full column rank and Hessian $H=X^\top X/N$, with $N$ samples. Orthogonal rotations produce dense data and weights. Each of the $r$ repeated Hessian eigenvalues has one excited direction. With unit momentum and step size, its error follows}
+\subsection[Oscillations in linear regression]{Oscillations in linear regression}
+The squared-loss Hessian is $H=X^\top X/N$, where $X$ has full column rank and $N$ rows. The weight error is the current weight vector minus the optimal one. For each of $r$ distinct Hessian eigenvalues, we initialize an error component along one eigenvector in that eigenspace. The projection onto that eigenvector is $q_{j,t}$ for mode $j$ at step $t$. With learning rate and momentum coefficient both equal to one,
 \[
 q_{j,t+1}=2\cos(\omega_j)q_{j,t}-q_{j,t-1},
 \qquad \lambda_j=2(1-\cos\omega_j).
 \]
-The selected irrational frequencies produce $r$ independent phases. \cx{All original weight coordinates move. Changing the basis, teacher direction, and probe leaves the normalized loss dynamics unchanged up to rounding.}
+Here $\omega_j$ is the angular frequency and $\lambda_j$ is the Hessian eigenvalue for mode $j$. We choose frequencies that produce $r$ independent phases and rotate the eigenbasis so all original weight coordinates vary. We also record prediction error on one fixed test input.
 
 \begin{table}[h]
 \centering\small
-\caption{\claude{Known-mode regression: median scalar MG. Settings are fixed across $r$. A longer record does not uniformly reduce bias.}}
+\caption{Median MG in regression with $r$ known modes.}
 \input{tables/known_modes.tex}
 \end{table}
 
-\cx{After selective damping, MG falls in both loss and probe recordings (Table~\ref{tab:regression_variation}). With ordinary momentum below one, the loss reaches rounding scale and standardization can inflate the estimate. Checking raw amplitude catches this failure mode.}
+We use the final window of each stationary run and keep estimator settings fixed across the known mode counts. For the damping comparison, we use the first window before damping and the final window after it. \cx{The full-batch loss is unchanged by the rotations used across repeats and gives the same MG. The fixed-input errors vary across rotations} (Table~\ref{tab:regression_variation}). With momentum below one, tiny loss values can expose numerical roundoff after standardization.
 
 \begin{table}[h]
 \centering\small
-\caption{\claude{Three-seed variation in the selective-damping regression experiment.}}
+\caption{Median MG before and after damping, across three runs. Brackets give the range.}
 \label{tab:regression_variation}
 \input{tables/regression_variation.tex}
 \end{table}
 
 \subsection{Learned autonomous generators}
-The 1,000-unit generator evolves as
+The generator has 1,000 recurrent neurons. Its state evolves as
 \[
 \begin{aligned}
 \boldsymbol h_{t+1}&=0.9\boldsymbol h_t+
@@ -171,249 +180,312 @@ The 1,000-unit generator evolves as
 \boldsymbol z_t&=A^\top\tanh\boldsymbol h_t.
 \end{aligned}
 \]
-Here $\boldsymbol h_t$ is the network state, \cx{$J$ is the recurrent matrix, $U$ feeds back the output, and $A$ is the trained readout (Table~\ref{tab:controlled-settings}). Within each run, we take the median MG across four disjoint windows of neuron-zero activity. Other neurons provide a robustness check.}
+The vector $\boldsymbol h_t$ contains the internal states of all neurons, and $\tanh\boldsymbol h_t$ gives their activations. $J$ contains recurrent weights, $U$ feeds back the output, and $A$ maps activations to the output. The recurrent gain $g$ sets the initial standard deviation of the entries of $J$ to $g/\sqrt n$ for $n$ neurons. Each step advances simulation time by $0.1$. We take median MG across four disjoint windows of one neuron's activity and repeat for other neurons to check sensitivity. \cx{Table~\ref{tab:controlled-settings} gives the resolved settings across the saved windows of neuron zero. We compute covariance PR from the full activation vector every fourth sample. Peak counts use the summed output and a minimum peak power of 5\% of total nonzero-frequency power.}
 
 
-\cx{Within each matched repeat, MG is lower for H2 than T2 and increases from H4 to M4 to T4. All trained networks meet the output-fidelity criterion.}
+Within each matched repeat, MG is lower for H2 than T2 and increases from H4 to M4 to T4. All trained networks meet the output-fidelity criterion \cx{in Table~\ref{tab:controlled-settings}}.
 
-\cx{The Lyapunov reference usually agrees with the intended phase dimension. Weak contraction near its cutoff makes some harmonic runs ambiguous. MG also has finite-record bias, especially where the higher-dimensional tasks overlap.}
+We estimate finite-time Lyapunov exponents at fixed weights by propagating small state perturbations through successive Jacobians of the state update. Every ten steps we factor the perturbation matrix as $QR$ and continue with the orthonormal columns of $Q$. After discarding the first 1,000 propagation steps, we sum $\log|R_{ii}|$ for each direction $i$ and divide by elapsed simulation time. The number of exponents at or above the cutoff in Table~\ref{tab:controlled-settings} usually agrees with the phase count of the prescribed output. Several harmonic runs have weakly contracting directions near the cutoff.
 
-\cx{In a separate noise check, MG still distinguishes the phase structures with small observation noise. The ordering breaks down at higher noise.}
+A separate test varies the observation noise. MG distinguishes the phase structures at low noise. The ordering becomes inconsistent at higher noise.
 
-\cx{For the figure-eight experiment, a positive pretraining Lyapunov exponent identifies eligible chaotic initializations. We compare the trained checkpoints against their starts. Table~\ref{tab:force-outcome} describes the selected networks.}
+The prescribed output for the periodic-signal experiment is $(\sin\theta,\tfrac12\sin 2\theta)$, with phase $\theta$ increasing at a constant rate. We estimate the full Lyapunov spectrum at selected training steps. The test for stable periodic motion requires $|\lambda_1|<0.005$ and $\lambda_2<-0.005$ for the two largest exponents. Normalized root mean squared error must be below $0.1$ for both the phase-aligned output and the return to the same hidden state after one estimated period. \cx{The state-return test interpolates the shifted states and normalizes the squared return error by the total variance of the hidden states before taking the square root.}
 
 \begin{table}[htbp]
 \centering\small
-\caption{\cx{Figure-eight results for the selected chaotic initializations. Ranges are across the evaluated networks.}}
+\caption{Transition to periodic motion during FORCE training.}
 \label{tab:force-outcome}
 \begin{tabular}{lr}
 \toprule
-\cx{Measure} & \cx{Result} \\
+Measure & Result \\
 \midrule
-\cx{Single-neuron MG before training} & 3.56--5.07 \\
-\cx{Single-neuron MG after training} & 1.08--1.13 \\
-\cx{Stable-cycle criterion} & 4/5 \\
+Single-neuron MG before training & 3.56--5.07 \\
+Single-neuron MG after training & 1.08--1.13 \\
+Runs passing the test for stable periodic motion & 4/5 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \section{Applied training procedures and full comparisons}\label{app:applied}
 \subsection{CNN and ResNet interventions}
-\cx{The CNN architecture and training are specified in Tables~\ref{tab:architectures} and~\ref{tab:cnn-protocol}. We compare windows entirely before or after an intervention.}
+Section~\ref{sec:cnn} asks whether changes in weight motion are visible in weight norm. We calculate each change from windows entirely before and after the intervention in the same run, then take the median across repeats. Before intervention, median MG is 4.31 in all conditions. Changes in MG and update PR have Spearman correlation $0.59$ (Table~\ref{tab:cnn-graded}).
 
-\cx{Some freezing and pruning interventions rebuild SGD. Their effects include the change in optimizer state. The transformed references operate on logs from unchanged training.}
+\cx{Freezing reinitializes the optimizer in the small CNN. Pruning reapplies its weight mask after each update.} The rescaled and smoothed records use logs from unchanged training.
 
-\cx{The iterative amplitude-adjusted Fourier transform (IAAFT) \citep{schreiber1996improved} reorders a log's values while approximately preserving its power spectrum. We use it as a descriptive check on the retained segment after endpoint matching. MG separates interventions less clearly on these reordered logs (Table~\ref{tab:cnn-separation}).}
+To test whether the power spectrum accounts for the observed changes, we use the iterative amplitude-adjusted Fourier transform (IAAFT) \citep{schreiber1996improved}. We trim segment ends to reduce jumps across the Fourier boundary, then reorder the retained values with IAAFT to approximately preserve their power spectrum. Table~\ref{tab:cnn-separation} compares separation using the area under the receiver operating characteristic curve (AUC). MG separates interventions less clearly on the reordered records.
 
 \begin{table*}[t]
 \centering\small
-\caption{\claude{CNN interventions at all tested strengths, on four held-out seeds. Changes are medians of paired record ratios. Update covariance and the fraction of moving parameters provide independent comparisons. Stronger pruning does not always produce a larger MG decline.}\ \cx{Across intervention strengths, the Spearman correlation between MG ratios and update PR changes is 0.59.}}
+\caption{Changes in CNN weight motion across four repeats.}
 \label{tab:cnn-graded}
 \input{tables/cnn_graded.tex}
 \end{table*}
 
 \begin{table}[t]
 \centering\small
-\caption{\cx{Descriptive separation of graded CNN interventions from unchanged and increased-batch reference runs. AUC is the area under the ROC curve.}}
+\caption{Separation from unchanged and larger-batch CNN training.}
 \label{tab:cnn-separation}
-\begin{codex}
+\begingroup
 \begin{tabular}{lr}
 \toprule
-Feature & AUC \\
+Statistic & AUC \\
 \midrule
 MG & 0.93 \\
 MG (IAAFT surrogates) & 0.68 \\
+\cx{Relative} detrended standard deviation & 0.57 \\
 Trend crossings & 0.56 \\
-Lag-one correlation & 0.48 \\
-Detrended standard deviation & 0.57 \\
+\cx{Detrended} lag-one correlation & 0.48 \\
 \bottomrule
 \end{tabular}
-\end{codex}
+\endgroup
 \end{table}
 
-\cx{Let $m_j$ be the value of the monitoring statistic in completed window $j$. We compare the latest $M$ values with the preceding $B$ using}
+Let $m_j$ be the monitoring statistic in completed window $j$ \cx{with $m_j=\MG$ for the MG detector}. The detector compares the median of the latest $M$ windows with that of the previous $B$ windows. Their relative change is
 \begin{equation}
 D_j=\frac{\median(m_{j-M+1},\ldots,m_j)}
 {\median(m_{j-M-B+1},\ldots,m_{j-M})}-1.
 \label{eq:detector}
 \end{equation}
-\cx{We select the rule that finds the most development events, breaking ties by shorter delay. The first threshold crossing counts as a hit if it follows the intervention within the scoring horizon. Earlier crossings count as false alarms (Table~\ref{tab:cnn-protocol}).}
+\cx{The rule raises an alarm when $-sD_j>\delta$, where $s=1$ for a drop and $s=-1$ for a rise. A comparison is skipped if either block contains a nonfinite score or the earlier median has magnitude at most $10^{-12}$. MG uses $s=1$.} On development runs we select the rule with the most detections, using shorter delay to resolve ties. An intervention is detected when the first alarm falls within the scoring interval after it. \cx{Alarms at or before an intervention count as premature. The false-positive column in Table~\ref{tab:detectors} counts alarms on comparison records. All conditions use the same four evaluation seeds.}
 
-\subsection{Natural scalar baselines}\label{app:baselines}
-We computed additional scalar features on the same saved parameter-norm records. Permutation entropy measures the diversity of local ordinal patterns~\citep{bandt2002permutation}; sample entropy measures the recurrence of similar short templates~\citep{richman2000physiological}; normalized increments measure local motion; and spectral entropy summarizes the detrended periodogram. We also tested a one-sided Page CUSUM~\citep{page1954continuous} on each window feature. \cx{Features share the split, event definition, and detector search.}
+\subsection[Comparing scalar detection statistics]{Comparing scalar detection statistics}\label{app:baselines}
+We compute comparison statistics on the same weight-norm records. Permutation entropy measures the variety of local orderings~\citep{bandt2002permutation}. Sample entropy measures how often similar short sequences recur~\citep{richman2000physiological}. \cx{Normalized increments divide the mean absolute change between adjacent samples by the window standard deviation plus $10^{-12}$. Trend crossings count sign changes after subtracting a fitted line. Lag-one correlation uses the same residuals. Relative detrended standard deviation divides their standard deviation by the magnitude of the original window mean plus $10^{-12}$.} Spectral entropy measures how broadly power is distributed across frequencies after detrending. We also test a one-sided cumulative sum (CUSUM) rule~\citep{page1954continuous} that accumulates deviations from an earlier baseline. All statistics use the same run split, event definition, and detector search.
 
 
 \begin{table}[h]
 \centering\small
-\caption{\claude{False positives by type for the block detector. The reference records share the four held-out seeds; the table therefore describes this matched benchmark rather than independent false-positive probabilities.}}
+\caption{False alarms by comparison condition.}
 \label{tab:baseline_references}
 \scriptsize\setlength{\tabcolsep}{2pt}
 \input{tables/baseline_controls.tex}
 \end{table}
 
-\cx{The block score is $s(1-\operatorname{median}_M/\operatorname{median}_B)$, where $s$ fixes the direction of change. Development data determine the direction and threshold for each baseline (Table~\ref{tab:baseline_rules}). Normalized increments divide mean absolute increments by the window SD. The other feature definitions are the same for block and CUSUM scores.}
+Development data determine the sign $s$ and threshold $\delta$ for each statistic (Table~\ref{tab:baseline_rules}). The window mean uses the recorded values directly. Both detectors use the same window statistics.
 
-\cx{CUSUM estimates its mean and scale on completed warm-up windows (Table~\ref{tab:cnn-protocol}). The recursion is $C_j=\max\{0,C_{j-1}+s(\mu_0-v_j)/\sigma_0-\kappa\}$, with a detection when $C_j>h$. Scoring begins after warm-up.}
+CUSUM estimates the baseline mean $\mu_0$ and scale $\sigma_0$ from the initial windows (Table~\ref{tab:cnn-protocol}). \cx{After this baseline period, it starts at $C_0=0$ and updates} $C_j=\max\{0,C_{j-1}+s(\mu_0-\cx{m_j})/\sigma_0-\kappa\}$. The sign $s$ sets the direction and $\kappa$ sets the tolerated drift. An alarm occurs when $C_j$ exceeds the threshold $h$. \cx{The sign is calibrated separately for CUSUM and median comparison.}
 
 \begin{table*}[t]
 \centering\small
-\caption{\cx{Selected block and CUSUM parameters. Sign is the direction used by the block detector.}}
+\caption{Calibrated detector settings.}
 \label{tab:baseline_rules}
 \input{tables/baseline_rules.tex}
 \end{table*}
 
 \begin{table}[h]
 \centering\scriptsize\setlength{\tabcolsep}{2pt}
-\caption{\claude{Past-only CUSUM on the held-out CNN records. Thresholds are selected on development records; the table reports strong-event detections, reference false positives, and median delay.}}
+\caption{CNN intervention detection using cumulative sums. \cx{Delay is the median among detected interventions.}}
 \label{tab:cusum}
 \input{tables/cusum.tex}
 \end{table}
 
-\cx{Absolute increments match MG on hits and false positives with shorter median delay. Normalized increments detect all strong events (Table~\ref{tab:detectors}).}
+Absolute increments match MG in detection and false-positive counts, with shorter median delay. Normalized increments detect all strong events (Table~\ref{tab:detectors}).
 
 \begin{table*}[t]
 \centering\small
-\caption{\claude{Post-hoc horizon sensitivity with thresholds and first detections unchanged. Entries are detections within the specified number of updates; FP uses each complete reference record and is independent of the event horizon.}}
+\caption{CNN detections by time allowed after intervention.}
 \label{tab:horizons}
 \input{tables/horizon_sensitivity.tex}
 \end{table*}
 
-\cx{We tested transfer on new seeds with shifted intervention times using detector rules fixed before training (Table~\ref{tab:detector-transfer}).}
+\cx{In Table~\ref{tab:horizons}, rules that require eight windows in their two blocks can first score at update 5,500, which is 1,500 updates after the intervention.} We apply the fixed rules to new runs with shifted intervention times \cx{and report premature alarms separately from alarms on unchanged training} (Table~\ref{tab:detector-transfer}).
 
 \begin{table}[t]
 \centering\small
-\caption{\cx{Transfer to ten new seeds with shifted intervention times. False positives count reference runs with a threshold crossing. MG also crossed its threshold before the scheduled intervention in six intervention runs.}}
+\caption{Detector performance at shifted intervention times.}
 \label{tab:detector-transfer}
-\begin{codex}
-\begin{tabular}{lrr}
+\begingroup
+\begin{tabular}{lrrr}
 \toprule
-Feature & Detected & False positives \\
+Feature & Detected & \cx{Alarms on unchanged runs} & \cx{Premature alarms} \\
 \midrule
-MG & 19/30 & 5/10 \\
-Abs. increments & 30/30 & 0/10 \\
-Norm. increments & 29/30 & 2/10 \\
+Absolute increments & 30/30 & 0/10 & \cx{0/30} \\
+Normalized increments & 29/30 & 2/10 & \cx{0/30} \\
+MG & 19/30 & 5/10 & \cx{6/30} \\
 \bottomrule
 \end{tabular}
-\end{codex}
+\endgroup
 \end{table}
 
-\cx{The ResNet runs share the CIFAR-10 training set. CountSketch update traces provide the covariance reference (Table~\ref{tab:cnn-protocol}). The transferred rule misses pruning and learning-rate reductions, and layer norms and random projections introduce false alarms.}
+\paragraph{Transfer to ResNet-18.}
+We apply the CIFAR-10 detector to ResNet-18 with random and ImageNet initialization. Both settings reuse the same three seed values. To measure update PR, we use CountSketch \citep{charikar2002finding}. It assigns each coordinate a random bin and sign and sums the signed values in each bin. We compute PR on the covariance of the compressed updates. The transferred rule detects freezing (Table~\ref{tab:resnet-freeze}) and misses pruning and learning-rate reductions. Layer norms and random projections produce false alarms.
 
-\subsection{ReLU-death stress test}
-\cx{A ReLU channel that never activates on the diagnostic images contributes no signal on those inputs. We test whether the transferred detector flags this loss of channels after abrupt learning-rate shocks (Table~\ref{tab:cnn-protocol}). The scored records include transformed logs. Network-wide failures are scored separately from the eligible channel-death events.}
+\begin{table}[H]
+\centering\small
+\caption{ResNet-18 feature-extractor freezing.}
+\label{tab:resnet-freeze}
+\begin{tabular}{lrrr}
+\toprule
+Initialization & Median MG change & Freeze detections & False alarms \\
+\midrule
+Random & $-27.6\%$ & 3/3 & 0/12 \\
+ImageNet & $-30.8\%$ & 3/3 & 0/12 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection[Loss of active ReLU channels]{Loss of active ReLU channels}
+A ReLU channel is inactive on a set of images if its output is zero for every image. We test whether the transferred detector flags a rise in the fraction of inactive channels after a brief increase in the learning rate (Table~\ref{tab:cnn-protocol}). \cx{Of 42 training runs, 23 meet the channel-loss criterion. Two of those 23 also meet the network-wide failure criterion and are excluded from detection counts. The 31 comparison records comprise the other 19 runs and 12 transformed logs from unchanged runs.}
 
 \begin{table}[h]
 \centering\small
-\caption{\claude{Boundary case: the transferred detector on ReLU death. Rules are fixed before the confirmation results.}}
+\caption{Detection of newly inactive ReLU channels.}
 \begin{tabular}{lrr}
 \toprule
 Statistic & Detected / 21 & False positives / 31 \\
 \midrule
-MG & 12 & 12 \\
+\cx{Training-loss comparison} & 21 & 8 \\
+\cx{Relative} detrended standard deviation & 21 & 25 \\
 Trend crossings & 19 & 7 \\
-Loss stagnation & 21 & 8 \\
-Detrended std. & 21 & 25 \\
-Lag-one correlation & 0 & 0 \\
+MG & 12 & 12 \\
+\cx{Detrended} lag-one correlation & 0 & 0 \\
 \bottomrule
 \end{tabular}
 \end{table}
-MG changes are nonmonotone in channel death: moderate loss of channels and catastrophic disruption can move the estimate in opposite directions. \cx{Trend crossings detect more cases with fewer false alarms.}
+The estimate can move in opposite directions for moderate channel loss and network-wide failure. Trend crossings detect more cases with fewer false alarms.
 
-\subsection{Text VAE and preservation reference}
-\cx{The VAE branches share weights, optimizer state, and batch and noise schedules at the split. We compare low and high KL regularization and a high-KL free-bits branch, which stops penalizing coordinates below a KL threshold. MG uses the reconstruction loss on a fixed sentence probe (Table~\ref{tab:vae-protocol}).}
+\subsection[Measuring information in the text VAE]{Measuring information in the text VAE}\label{app:vae-information}
+The three VAE training conditions start from the same weights and optimizer state within each repeat. They use the same batches and Gaussian draws. The penalty is the Kullback--Leibler (KL) divergence from the encoder distribution to a standard normal prior. Free bits holds each coordinate's penalty constant when its batch-average KL is below the threshold. At each update, we log per-token reconstruction loss on the same evaluation sentences and reuse the Gaussian draws for their codes (Table~\ref{tab:vae-protocol}).
 
-
-\cx{We estimate mutual information with an empirical mixture of posteriors. Decoder response is the symmetric KL between token predictions from matched and cyclically shuffled codes, using the same noise and input tokens. Both measures enter the loss and preservation criteria in Table~\ref{tab:vae-protocol}.}
+The mutual information in Section~\ref{sec:vae} refers to a sentence drawn uniformly from the evaluation set and a code drawn from its encoder distribution. Let $q(z\mid x_i)$ be the diagonal Gaussian density for sentence $x_i$. We evaluate the marginal code density directly by averaging these $N$ Gaussians. The Monte Carlo step draws $S$ codes $z_{i\ell}$ from each $q(z\mid x_i)$ and estimates the expected log density ratio
+\begin{equation}
+\widehat I(X;Z)=\frac{1}{NS}\sum_{i=1}^N\sum_{\ell=1}^S
+\log\frac{q(z_{i\ell}\mid x_i)}{N^{-1}\sum_{j=1}^N q(z_{i\ell}\mid x_j)}.
+\label{eq:vae-mi}
+\end{equation}
+The natural logarithm gives the estimate in nats. To test whether the decoder uses the code, we shift the assignment of encoder distributions to sentences by one position and keep the preceding words and Gaussian noise fixed. We average the two directions of KL divergence between the original and reassigned predictions, then average over tokens. Both measures enter the criteria in Table~\ref{tab:vae-protocol}.
 
 
 \begin{table}[h]
 \centering\small
-\caption{\claude{Text VAE: late medians across \cx{paired evaluation runs}. MI and code response are independent of the MG calculation.}}
+\caption{Late medians of VAE code-use measurements and MG.}
 \input{tables/vae.tex}
 \end{table}
 
-\cx{At the primary lag, MG detects reduced code use across the tested window lengths. Longer lags and mini-batch loss give less consistent MG changes. Table~\ref{tab:monitoring-results} uses percentile intervals from 20,000 paired bootstrap resamples.}
+For the intervals in Table~\ref{tab:vae-mg-ratios}, we first form late MG ratios within each repeat. We bootstrap the nine repeats with 20,000 resamples and keep the three continuations of each starting state together. MG, standard deviation, and spectral entropy on loss from fixed sentences all decline under the higher penalty in all nine repeats. MG on minibatch loss declines in four repeats, and longer lags also make the decrease less consistent.
 
 
-\subsection{Cyclic-VAE monitoring}
-\cx{Measuring latent information during training takes time. We ask whether the loss log can tell us when to run those checks on a fixed budget. Repeated ramps of the KL weight produce loss and recovery of latent information. Reference measurements define these events independently of the monitoring schedule (Table~\ref{tab:vae-protocol}).}
+\subsection[Scheduling checks for changes in VAE code use]{Scheduling checks for changes in VAE code use}
+We test whether loss on fixed sentences can schedule information checks under a fixed budget. Repeated increases in the KL penalty induce loss and recovery of code use. To label these events, we measure mutual information and decoder sensitivity on a dense schedule independent of when monitoring rules request checks (Table~\ref{tab:vae-protocol}).
 
-\cx{For triggered checks, we compare the latest completed window's statistic with its value at the last request. Development runs determine thresholds, and requests follow a fixed budget and minimum spacing. Periodic checks use evenly spaced times.}
+A rule requests a check when the statistic differs enough from its value at the last request, measured by the absolute log ratio. Before the first request, we use its median over the early windows. \cx{The two training-only statistics are the mean KL divergence over the latest 64 updates and the scheduled penalty weight, floored at 0.01.} Development runs set the thresholds. The budget counts checks beyond the initial check. Periodic checks use evenly spaced times.
 
 \begin{table}[h]
 \centering\small
-\caption{\claude{Cyclic VAE: detected events out of 41 at all tested budgets. Primary budget is 12.}}
+\caption{VAE information-loss and recovery events detected out of 41.}
 \label{tab:cyclic}
 \input{tables/cyclic.tex}
 \end{table}
 
-\cx{At the smallest budget, MG finds more events than periodic checking. At the primary budget, periodic checking finds more events, even when it uses the same number of checks as MG (Table~\ref{tab:cyclic}).}
+Periodic checking detects more events at the primary budget, including when it uses the same number of checks as MG. At the smallest budget, MG detects more events (Table~\ref{tab:cyclic}).
 
 \section{Additional learning settings}\label{app:additional}
-\paragraph{Grokking.}
-\cx{In grokking, accuracy on new examples improves long after the model fits the training examples. We ask whether the weight norm log marks this delayed generalization. We compare regularized transformers trained on modular addition and permutation composition with zero-decay references and an unregularized full-batch perceptron (Table~\ref{tab:grokking-protocol}). Random projections of parameters and logits provide the covariance sketches. We choose the largest embedding that fits the prescribed span limit and keep the neighbor and exclusion rules fixed.}
+The classifier and VAE tests use interventions at known times. The timing check for grokking locates the change from validation accuracy. In Walker2d we compare regularity of the actuator commands with repeatability of the simulator state.
 
+\paragraph{Grokking.}
+In grokking, accuracy on new examples improves long after the model fits the training examples. We compare transformers trained with weight decay on modular addition and permutation composition with zero-decay runs and a full-batch perceptron (Table~\ref{tab:grokking-protocol}). We record compressed weight vectors and class scores (logits) on fixed inputs. Before compression, we subtract the mean class score for each input and scale its logit vector to unit length. We compute covariance PR within windows, including after subtracting a linear trend from the compressed coordinates. Each MG window is centered at the time of a PR estimate.
+
+\FloatBarrier
 \begin{figure}[H]
 \centering
 \includegraphics[width=.96\linewidth]{figures/grokking_matched_traces.pdf}
-\caption{\cx{Two modular-addition runs on the same optimization clock. MG@weight norm and independently measured detrended logit trajectory PR are plotted at window centers. Dashed accuracy curves show the training split and solid curves show the held-out validation split. The vertical line marks recorded generalization in the weight-decay run. The zero-decay run reaches high training accuracy and stays low on validation.}}
+\caption{Two modular-addition runs aligned by optimizer step. MG@weight norm and the covariance PR of detrended logits are shown at window centers. Dashed curves show training accuracy. In \cx{run~1}, shading spans the sustained validation crossings at 10\% and 90\%. The dotted line marks the first reading at or above 95\%.}
 \label{fig:grokking-matched-traces}
 \end{figure}
 
-\cx{Figure~\ref{fig:grokking-matched-traces} shows a local drop in both MG and logit trajectory rank near generalization in the weight-decay run. The zero-decay comparison also shows changes in MG during training.}
+In \cx{run~1}, MG is elevated during the rise in validation accuracy. MG and logit PR both fall near the 95\% crossing. MG also changes in the zero-decay run, which fits the training examples and has low validation accuracy (Figure~\ref{fig:grokking-matched-traces}).
 
-\cx{The separation in Table~\ref{tab:monitoring-results} disappears after linear detrending. Covariance rank can also change with drift or correlation time \citep{antognini2018pca}. Roughness changes are stronger, and the full-batch perceptron shows no comparable MG transition. In the edge-of-stability test, MG does not track the near-threshold Hessian modes.}
+\cx{Figure~\ref{fig:grokking-other-runs} shows the other two runs with the same training settings as run~1. In run~2, median MG during the rise exceeds the medians on either side. In run~3, the medians during and after the rise are similar, and the interval between training fit and the rise contains no complete MG windows.}
 
-\paragraph{Walker2d.}
-\cx{In Walker2d, a policy controls a simulated two-legged walker. We ask whether making the commands smoother also makes the gait more regular. For policies trained with PPO \citep{schulman2017proximal,todorov2012mujoco}, we compare action and joint logs with whole-state return errors, inter-cycle variation, and responses to perturbations. Phase-conditioned runs encode position in a reference cycle (Table~\ref{tab:walker-protocol}).}
+\begin{figure}[H]
+\centering
+\includegraphics[width=.96\linewidth]{figures/grokking_other_runs.pdf}
+\caption{\cx{Two further modular-addition runs with weight decay. The time and value scales and the validation markers match Figure~\ref{fig:grokking-matched-traces}.}}
+\label{fig:grokking-other-runs}
+\end{figure}
+
+We check this timing across saved transformer logs. \cx{For each boundary of the shaded interval,} we take the first of five consecutive readings at or above \cx{the corresponding threshold}. We compare median MG during the rise with medians from equally long adjacent intervals, limited to the available record after training accuracy reaches 95\%. Each interval must contain at least three valid MG windows that lie fully inside it. Median MG is highest during the rise in two of six comparable runs. With thresholds of 20\% and 80\%, only \cx{run~1} shows this pattern.
+
+We also ask whether a brief drop in MG distinguishes the four transformer runs that generalize from their two controls. We measure the drop as the ratio of the median before generalization to the lowest estimate near it. We use the corresponding step in the control for each task. A setting separates the runs if every generalizing run has a larger drop than either control. The same six runs are used for every setting (Table~\ref{tab:grokking-drop}).
+
+\begin{table}[H]
+\centering\small
+\caption{Settings where the MG drop separates grokking runs from controls.}
+\label{tab:grokking-drop}
+\begin{tabular}{lrr}
+\toprule
+Weight-norm record & Settings with separation & Usable settings \\
+\midrule
+Original & 24 & 26 \\
+After removing a linear trend & 0 & 26 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Covariance PR is also sensitive to drift and correlation time \citep{antognini2018pca}. Roughness changes more than MG. The full-batch perceptron shows no comparable change in MG.
+
+\paragraph{Command smoothing and state repeatability in Walker2d.}
+Walker2d simulates a biped with six actuator commands. We train a walking policy using proximal policy optimization (PPO) \citep{schulman2017proximal,todorov2012mujoco}. Continuing training from this policy with different penalties on changes in successive commands tests how smoothing affects MG@action norm.
 
 The smoothing objective is
 \[
 L=L_{\rm PPO}+\frac{\lambda}{6}\mathbb E\|\bar a_\theta(s_{t+1})-\bar a_\theta(s_t)\|_2^2,
 \]
-where $\bar a_\theta(s)$ is the policy mean clipped to $[-1,1]$ per actuator. Episode boundaries are excluded. The environment reward and executed commands receive no extra smoothing. \cx{The separate phase-tracking runs shape the reward by distance from the reference cycle.}
+where $\bar a_\theta(s)$ is the policy's mean command vector clipped to $[-1,1]$ per actuator. The penalty averages squared differences across consecutive steps within an episode and across the six commands. We compare MG of the command norm with its value at $\lambda=0$ within each repeat.
 
+In a separate experiment, the policy receives \cx{the sine and cosine of} the phase of a prescribed stride. \cx{We subtract $\lambda(1-\exp[-e_t^2/(2\sigma^2)])$ from the simulator reward, where $e_t^2$ is the squared distance to the interpolated state at that phase. The distance omits the horizontal position and divides all velocities by five.} We measure repeatability with two quantities. \cx{The return error is the minimum mean squared state difference over lags of 20--250 steps, divided by twice the total state variance. Phase-matched variation is the variance of interpolated states at phase zero divided by the total state variance. We require at least eight phase crossings per retained episode.} We require both measures to fall by at least one quarter, with reward and completion meeting the criteria in Table~\ref{tab:walker-protocol}. MG declines consistently under moderate smoothing. Improvements in state repeatability are less frequent in the reference-gait test (Table~\ref{tab:walker-motion}).
 
-\cx{Moderate smoothing lowers action-log MG consistently. The whole-gait measures agree less often (Table~\ref{tab:walker-motion}).}
-
-\begin{table}[htbp]
+\begin{table}[H]
 \centering\small
-\caption{\cx{Action-log and whole-gait outcomes in the Walker2d motion tests.}}
+\caption{Command smoothing and state repeatability in Walker2d.}
 \label{tab:walker-motion}
-\begin{tabularx}{\linewidth}{@{}Xl@{}}
+\begin{minipage}[t]{.43\linewidth}
+\centering
+\begin{tabular}{@{}lrr@{}}
+\multicolumn{3}{@{}l}{\textbf{Command smoothing}} \\
 \toprule
-\cx{Outcome} & \cx{Result} \\
+Penalty $\lambda$ & Median MG ratio & Lower MG \\
 \midrule
-\cx{Median action-log MG relative to reference, $\lambda=0.25$ and $1$} & 0.801; 0.604 \\
-\cx{Falling action-log MG at both strengths} & 5/5 paired runs \\
-\cx{Whole-gait joint improvement criterion} & 2/5 pairs \\
-\cx{Lower whole-gait MG across all prescribed reconstructions} & 1/5 pairs \\
+$0.25$ & 0.801 & 5/5 \\
+$1$ & 0.604 & 5/5 \\
 \bottomrule
-\end{tabularx}
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[t]{.51\linewidth}
+\centering
+\begin{tabular}{@{}lr@{}}
+\multicolumn{2}{@{}l}{\textbf{Training with a reference gait}} \\
+\toprule
+Outcome & Repeats \\
+\midrule
+State and performance criteria met & 2/5 \\
+Lower MG in every reconstruction & 1/5 \\
+\bottomrule
+\end{tabular}
+\end{minipage}
 \end{table}
 
 \subsection{Selecting policies for actuator shifts}\label{app:rl_selection}
-\cx{A policy that walks well in training can lose reward when the actuators respond with delay or noise. We test whether action logs collected under standard conditions help choose a policy for that shift. We evaluate saved checkpoints under both conditions. All fine-tuning repeats share one learned starting policy (Table~\ref{tab:walker-protocol}).}
+We test whether policies selected in the original Walker2d simulator retain their performance under changes in actuator response. In unperturbed trials, commands are applied directly. Separate trials add actuator delay and sometimes noise. We evaluate each candidate in both settings, select policies using the unperturbed trials, and report their rewards in the perturbed trials (Table~\ref{tab:walker-protocol}).
 
-\cx{Every selector uses the same nominal-return and completion gate. MG chooses the smallest median action-norm estimate across complete nominal episodes. Entropy, increments, and scalar recurrence use the same log; action smoothness uses all commands. Reward selection includes returns from incomplete episodes.}
+The rules share the same minimum reward and completion requirements in the unperturbed trials. If no policy qualifies, they choose the highest unperturbed reward. This rule averages over all episodes, including incomplete ones. MG selects the lowest median across complete episodes, using the command-vector norm at each step. Entropy, increments, and recurrence use the same record. \cx{For the norm series, normalized squared increments average squared successive differences divided by twice the series variance. Scalar recurrence minimizes the same normalized difference over lags from 20 to 250 steps. Action smoothness averages squared successive changes across time and all six commands.} The random rule selects uniformly among qualifying policies.
 
-Deployment applies $v_t=(1-\alpha)u_t+\alpha v_{t-1}+\epsilon_t$, with $v_{-1}=0$, commanded action $u_t$, and independent Gaussian components of $\epsilon_t$ with standard deviation $\sigma$. The environment receives $v_t$ clipped to $[-1,1]$; the recursion retains the unclipped value. \cx{We apply the shifts during warm-up and evaluation (Table~\ref{tab:walker-protocol}). Return averages reward over the scheduled evaluation, counting zero after a fall. Only the oracle sees deployment outcomes for the evaluation repeats before choosing.}
+In the perturbed trials, we compute $v_t=(1-\alpha)u_t+\alpha v_{t-1}+\epsilon_t$ from the current command $u_t$ and the previous filtered value. We start with $v_{-1}=0$ and add independent Gaussian noise of standard deviation $\sigma$ per component. The simulator receives $v_t$ clipped to $[-1,1]$. \cx{The recursion retains the unclipped value, including during the initial steps discarded from scoring.} Mean reward divides the total by the planned number of steps, counting zero after a fall.
 
 \begin{table}[ht]
 \centering\small
-\caption{\claude{Policy selection under hidden actuator shifts: mean over \cx{fine-tuning repeats}. Completion is \cx{the fraction of selected deployment episodes completed}. Random denotes expected uniform choice among eligible policies; the oracle uses target returns.}}
+\caption{Walker2d reward and completion under actuator delay and noise.}
 \label{tab:rl_selection}
 \input{tables/rl_selection.tex}
 \end{table}
 
-\cx{MG improves on nominal-return selection in most fine-tuning repeats. The paired comparison leaves considerable uncertainty, and both spectral entropy and the fixed comparator remain competitive. Episodes and checkpoints from the same repeat are related.}
+Within each repeat, we compare rules on the same candidates. The last row shows the best eligible policy if rewards under perturbations are available for selection. MG improves on selection by unperturbed reward in most repeats. Spectral entropy and the fixed policy choice give comparable rewards.
 
 \section{Timing procedures and information requirements}\label{app:cost}
-\cx{We distinguish the cost of recording a log from the cost of analyzing it. Reference diagnostics can require additional model access or simulation.}
+We report the cost of recording a log and the cost of analyzing the saved measurements. Computing Lyapunov exponents requires the state update and full hidden states. Measuring VAE code use requires evaluating the encoder and decoder.
 
 
-\subsection{\cx{Timing environments}}\label{app:hardware}
-\cx{The FORCE and forecast timing runs use an Intel Core i5-12500H CPU with one numerical thread. The cyclic VAE uses two PyTorch threads and one estimator thread. Walker timing uses one numerical thread. Hardware metadata are incomplete for the CNN and cyclic VAE.}
+\subsection{Timing environments}\label{app:hardware}
+The FORCE and forecast timing runs use an Intel Core i5-12500H CPU with one numerical thread. The VAE scheduling test uses two PyTorch threads and one estimator thread. Walker2d timing uses one numerical thread. Hardware metadata are incomplete for the CNN and the VAE scheduling test.
 
 
 
@@ -421,45 +493,58 @@ Deployment applies $v_t=(1-\alpha)u_t+\alpha v_{t-1}+\epsilon_t$, with $v_{-1}=0
 
 \begin{table}[htbp]
 \centering\small
-\caption{\cx{Analysis time on saved records. FORCE uses the full Lyapunov spectrum as a reference, and the VAE uses information and code-shuffling diagnostics.}}
+\caption{Analysis time on saved records. \cx{FORCE times are medians before and after training, in that order.}}
 \label{tab:cost}
-\begin{tabular}{lrr}
+\begin{tabular}{lrlr}
 \toprule
-Setting & MG & Reference \\
+Setting & MG & Comparison calculation & Time \\
 \midrule
-CNN, 1,000-point window & 9.5\,ms & --- \\
-FORCE, 256 units & 0.60--0.84\,s & 11.55--12.01\,s \\
-VAE, 512-point window & 12.89\,ms & 209.32\,ms \\
+CNN, 1,000-point window & 9.5\,ms & --- & --- \\
+FORCE, 256 neurons & \cx{0.835 / 0.598\,s} & Full Lyapunov spectrum & \cx{12.006 / 11.551\,s} \\
+VAE, 512-point window & 12.89\,ms & Mutual information and code swaps & 209.32\,ms \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{table}[htbp]
 \centering\small
-\caption{\cx{Storage, acquisition, and reference costs for the tested records. Table~\ref{tab:cost} reports analysis times on saved inputs.}}
+\caption{Storage and timing by operation.}
 \label{tab:record-cost}
 \begin{tabularx}{\linewidth}{@{}p{.20\linewidth}Xl@{}}
 \toprule
-\cx{Setting} & \cx{Quantity} & \cx{Cost} \\
+Experiment & Quantity or operation & Measured cost \\
 \midrule
-\cx{CNN} & \cx{Float32 scalar log and full parameter trajectory} & 39.06\,KiB; 559.46\,MiB \\
-\cx{FORCE cycle} & \cx{Scalar recording before and after training, including rollout} & 0.102\,s; 0.166\,s \\
-\cx{FORCE cycle} & \cx{Largest Lyapunov exponent before and after training} & 0.198\,s; 0.153\,s \\
-\cx{Learned generators} & \cx{Scalar MG on four windows and full-state PCA} & 8--23\,s; $\sim0.2$\,s \\
-\cx{Cyclic VAE} & \cx{Fixed probe and combined information reference} & 7.134\,ms; 209.323\,ms \\
-& \cx{Estimated probe acquisition and total for MG at the primary budget} & 51.14\,s; 54.68\,s \\
-\cx{Walker selection} & \cx{Nominal acquisition and deployment evaluation} & 5.52\,s; 44.7\,s \\
-& \cx{Analysis for MG, entropy, and scalar recurrence} & 0.516\,s; 0.00014\,s; 0.0062\,s \\
+CNN & Store the 32-bit scalar log & 39.06\,KiB \\
+& Store the sequence of weight vectors & 559.46\,MiB \\
+\addlinespace
+FORCE & Simulate and record one neuron before training & 0.102\,s \\
+& Simulate and record one neuron after training & 0.166\,s \\
+& Largest Lyapunov exponent before training & 0.198\,s \\
+& Largest Lyapunov exponent after training & 0.153\,s \\
+\addlinespace
+Generators & MG on four windows & 8--23\,s \\
+& Principal components of all activations & $\sim0.2$\,s \\
+\addlinespace
+VAE scheduling & One evaluation of loss on fixed sentences & 7.134\,ms \\
+& One joint evaluation of MI and decoder sensitivity & 209.323\,ms \\
+& All loss evaluations at the primary budget & 51.14\,s \\
+& Total estimate with MG at the primary budget & 54.68\,s \\
+\addlinespace
+Walker2d selection & Actuator command recording without perturbations & 5.52\,s \\
+& Trials under actuator delay and noise & 44.7\,s \\
+& MG & 0.516\,s \\
+& Spectral entropy & 0.00014\,s \\
+& Scalar recurrence & 0.0062\,s \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\cx{MG can be cheaper than computing a full Lyapunov spectrum from saved trajectories. Full-state PCA is faster than MG in the learned generator timing, if the states are already available.}
+On the saved FORCE states, computing the spectrum takes longer than MG. Computing principal components of saved generator activation vectors is faster than MG.
 
-\cx{The cyclic-VAE total multiplies per-call medians by the number of operations. The probe dominates the cost and is shared by other scalar monitors. Periodic reference checks work without that probe stream.}
+For VAE check scheduling, we multiply the median time of each calculation by how often it is used. Evaluating reconstruction loss on fixed sentences dominates the time for the scalar monitors. Periodic checks measure latent information at scheduled times.
 
 
 \paragraph{Walker2d.}
-\cx{Walker perturbation probes require repeated simulations and measure stability directly. An action-log statistic describes the commands. Other scalar methods use the same smaller records.}
+In Walker2d, tests of gait stability require additional simulations with perturbed states. MG and the other scalar statistics use the recorded actuator commands.
 
 }

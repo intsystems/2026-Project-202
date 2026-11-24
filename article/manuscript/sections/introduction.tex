@@ -1,8 +1,8 @@
 \claude{
 \section{Introduction}\label{sec:intro}
-\cx{During learning, a system's trajectory can become more regular or explore fewer directions. We ask when one recorded quantity, such as loss or weight norm, is enough to detect such a change.}
+As a network learns, its activity may become periodic or its weights may vary along fewer directions. Checking these changes directly can require saving every activation or weight vector. We ask what can be inferred from a scalar log such as loss or weight norm.
 
-\cx{We use the same measurement across systems. We reconstruct each window from delayed observations and apply the pooled MacKay--Ghahramani (MG) estimator \citep{mackay2005comments,levina2004maximum}. We test MG against known dimensions in controlled recurrent systems. In our training experiments, we compare changes in windowed MG with independent measurements of the dynamics and with simpler statistics computed from the same log.}
+Intrinsic-dimension methods have been used to study neural representations \citep{facco2017estimating,ansuini2019intrinsic,pope2021intrinsic} and sequences of weights during optimization \citep{simsekli2020hausdorff,camuto2021fractal,birdal2021intrinsic,tan2024limitations}. Delay reconstruction builds a point cloud from a scalar series \citep{takens1981detecting,sauer1991embedology}. In this reconstruction, a periodic signal traces a curve. Several independent oscillations can fill a higher-dimensional set even with the same number of spectral peaks.
 
-\cx{Related work estimates the intrinsic dimension of representations \citep{facco2017estimating,ansuini2019intrinsic,pope2021intrinsic} or studies the dimension of optimizer trajectories \citep{simsekli2020hausdorff,camuto2021fractal,birdal2021intrinsic,tan2024limitations}. Here the input is a single time series, and the neighbors come from its delay reconstruction.}
+The pooled MacKay--Ghahramani (MG) estimator quantifies this geometry using ratios of neighbor distances \citep{levina2004maximum,mackay2005comments}. Pooling gives one dimension estimate per window, which lets us track changes in the log over time.
 }

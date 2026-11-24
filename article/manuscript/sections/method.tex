@@ -1,38 +1,47 @@
 \claude{
-\section[Measuring simplification from a scalar log]{\cx{Measuring simplification from a scalar log}}\label{sec:method}
-\cx{For each window of a scalar log, MG measures how quickly the number of neighbors grows with distance in the delay reconstruction. Under the conditions in \appref{app:theory}, MG estimates local dimension. We compare MG across windows to look for simplification during training.}
-
+\section[Measuring simplification from a scalar log]{Measuring simplification from a scalar log}\label{sec:method}
 \subsection{Delay reconstruction}
-\cx{Let $x_t=\phi(s_t)$ be a scalar observation of state $s_t$. We standardize it within each window to obtain $z_t$ and form}
+A periodic signal can take the same value as it rises and falls. The next reading can distinguish the rising and falling portions. Write $x_t=\phi(s_t)$ for the observation of state $s_t$. Centering and rescaling each window to unit variance gives the standardized readings $z_t$. We form a point, called a delay vector, from $E$ readings spaced $\tau$ steps apart
 \begin{equation}
-y_t=(z_t,z_{t+\tau},\ldots,z_{t+(E-1)\tau}),
+y_t=(z_t,z_{t+\tau},\ldots,z_{t+(E-1)\tau}).
 \label{eq:delay}
 \end{equation}
-\cx{Here $E$ is the number of coordinates and $\tau$ is the lag.}
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=.97\textwidth]{figures/icomp_method.pdf}
-\caption{\cx{From scalar samples to neighbor distances for a periodic reference and a recorded text reconstruction loss (Section~\ref{sec:vae}). The blue segments mark the query spans. Delay plots show the first and last coordinates. Gray crosses are excluded by time, and blue neighbors are chosen in the full delay space.}}
+\includegraphics[width=.95\textwidth]{figures/icomp_method.pdf}
+\caption{Delay reconstruction for a periodic signal and a text reconstruction loss (Section~\ref{sec:vae}). The blue trace supplies the selected vector, or query, shown as a hollow circle in two coordinates. Gray crosses show exclusions based on time. Distances in all coordinates determine the $k$ neighbors shown in blue.}
 \label{fig:method_geometry}
 \end{figure*}
 
 \subsection{Pooled local-dimension estimation}
-\cx{A window of $W$ samples yields $n=W-(E-1)\tau$ delay vectors. Let $r_{ij}$ be the distance from vector $i$ to its $j$th closest eligible neighbor. We exclude candidates within $T$ samples of the query \citep{theiler1986spurious} so that adjacent points along one pass do not dominate the search (Figure~\ref{fig:method_geometry}). With $k$ eligible neighbors per query, we compute}
+Doubling the radius of a small neighborhood roughly doubles the count of uniformly sampled points on a curve and quadruples it on a surface. MG estimates this scaling (\appref{app:theory}).
+
+A window of $W$ samples yields $n=W-(E-1)\tau$ delay vectors. We use each vector in turn as a query. \cx{For query $y_i$, Theiler exclusion removes vectors $y_\ell$ with $|i-\ell|\le T$ to limit comparisons along a single pass} \citep{theiler1986spurious}. Let $r_{ij}$ be the \cx{Euclidean} distance to the $j$th closest remaining vector from query $i$ (Figure~\ref{fig:method_geometry}). With $k$ neighbors per query, we compute
 \begin{equation}
 \MG=\frac{n(k-1)-1}
 {\displaystyle\sum_{i=1}^{n}\sum_{j=1}^{k-1}
 \log(r_{ik}/r_{ij})}.
 \label{eq:mg}
 \end{equation}
-\cx{MG pools the distance ratios across queries. A lower MG estimate means the number of neighbors grows more slowly with radius. Adding a constant to all samples or rescaling them uniformly preserves the ideal MG estimate (\appref{app:theory}).}
+Lower MG indicates slower growth in neighbor counts with radius. Shifting or rescaling all the samples preserves the ideal estimate (\appref{app:theory}). In figures, MG@weight norm means MG computed from the weight-norm log.
 
-\subsection{Using MG on a log}\label{sec:mg_conditions}
-\begin{enumerate}[leftmargin=*,itemsep=1pt,topsep=2pt]
-\item \cx{\textbf{Choose a signal.} Specify the change of interest and how you will measure it independently.}
-\item \cx{\textbf{Set the analysis timescale.} Choose the window, lag, and decision rule on development data. Score completed windows and flag unusable estimates (\appref{app:settings}).}
-\item \cx{\textbf{Check against a reference.} For dimension recovery, check recurrence and observability. For training changes, compare MG with the independent measurement and simple features of the same log.}
-\end{enumerate}
+\subsection[Experimental questions]{Experimental questions}\label{sec:mg_conditions}
+Table~\ref{tab:experiment-questions} summarizes the tests. We choose settings on development runs and fix them for separate evaluations. To estimate state-space dimension, a window must capture repeated visits to nearby states and the reconstruction must preserve local dimension. In training logs we test MG against independent measurements (\appref{app:theory}).
 
-\cx{In figures, MG@series names the scalar input used to compute MG. Changes in noise or temporal correlation can also affect MG.}
+\begin{table}[!htbp]
+\centering\small
+\caption{What each experiment tests.}
+\label{tab:experiment-questions}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.22\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Test & Experiments and comparisons \\
+\midrule
+Known structure & Compare MG with known oscillation counts and verified periodic motion (Section~\ref{sec:controlled}). \\
+Training changes & Compare MG with measurements of classifier weight updates and information use in a text autoencoder (Sections~\ref{sec:cnn} and~\ref{sec:vae}). \\
+Advance warning & Compare early warnings of transformer loss spikes and their false alarm rates (Section~\ref{sec:spike-warning}). \\
+Model selection & Evaluate image classification accuracy and forecast error for models selected from scalar logs (Sections~\ref{sec:ssl} and~\ref{sec:forecast_utility}). \\
+\bottomrule
+\end{tabularx}
+\end{table}
 }

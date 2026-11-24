@@ -1,13 +1,16 @@
 \begin{tabular}{lrrr}
 \toprule
-Method & $B=6$ & $B=12$ & $B=24$ \\
+Method & \multicolumn{3}{c}{Extra checks allowed} \\
+\cmidrule(lr){2-4}
+ & 6 & 12 & 24 \\
 \midrule
+Periodic checks & 12 & 38 & 40 \\
 MG & 18 & 28 & 36 \\
-Standard deviation & 13 & 20 & 38 \\
 Spectral entropy & 17 & 28 & 35 \\
-Training KL & 8 & 13 & 31 \\
-Schedule & 18 & 18 & 26 \\
-Periodic & 12 & 38 & 40 \\
-\cx{Periodic, matched to MG requests} & --- & \cx{34} & --- \\
+Standard deviation & 13 & 20 & 38 \\
+Scheduled KL weight & 18 & 18 & 26 \\
+Training KL divergence & 8 & 13 & 31 \\
+\addlinespace
+Periodic with the same count as MG & --- & 34 & --- \\
 \bottomrule
 \end{tabular}

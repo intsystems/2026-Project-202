@@ -23,9 +23,8 @@ Run from this directory after installing the [common dependencies](../../../Read
 
 ```bash
 python analyze_logs.py
-python collect_logs.py 681
 ```
 
-The local plotting entry point uses only the included CSV files. Run the historical collection pipeline from its original archival layout for frozen model files and other upstream inputs.
+The plotter verifies agreement on all 160 saved choices and draws the timing comparison from the included CSV files. Fresh generation uses the scripts and frozen models in `research_mg_real_forecast/` and the generator implementation in `research_generator/` at commit `f6b579b1`. From a checkout of that commit with the common dependencies installed, run `python research_mg_real_forecast/fresh_generators.py 681` to produce one new repeat.
 
 The timing comparison measures selection plus fitting the chosen forecaster. The panel compares model choices for confirmation seeds 681–700.

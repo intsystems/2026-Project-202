@@ -1,98 +1,102 @@
 \claude{
 \section{Forecast selection and sampled-query estimation}\label{app:forecast_utility}
-\cx{Forecasters use one neuron's observed prefix for normalization, feature calculation, and fitting. The generators share the phase combinations in Table~\ref{tab:generator_phases}. We include all trained networks, along with an untrained reference.}
+We train recurrent networks to produce the oscillations in Table~\ref{tab:generator_phases} and also record an untrained network. For each record, we use the observed segment of one neuron's activity to select and fit a model that predicts the next samples.
 
 \begin{table}[htbp]
 \centering\small
-\caption{\cx{Forecast benchmark design. Network sizes are in Table~\ref{tab:architectures}.}}
+\caption{Forecast benchmark design. Network sizes are in Table~\ref{tab:architectures}.}
 \label{tab:forecast-design}
 \begin{tabularx}{\linewidth}{@{}p{.25\linewidth}X@{}}
 \toprule
-\cx{Component} & \cx{Setting} \\
+Component & Setting \\
 \midrule
-\cx{Trained dynamics} & FORCE/RLS, gain 1.2, integration step 0.1, 40,000 updates; RLS starts at identity and updates every 2 steps \\
-\cx{Untrained reference} & Gain 1.5; fixed point or other realized activity \\
-\cx{Recorded activity} & $\tanh(h_{t,2})$ (zero-based neuron 2); 5,000 burn-in and 8,192 recorded samples \\
-\cx{Observed prefix and target} & Samples 4,096--6,143 and 6,144--6,175, respectively \\
-\cx{Fixed forecasts} & Last value, prefix mean, and repetition at lag 314 \\
-\cx{Fitted forecasts} & Ridge and 5-nearest-neighbor regression at lags 8 and 48; ridge on 64 random Fourier features at lag 48 \\
-\cx{Forecast parameters} & Ridge penalty 1, intercept penalty $10^{-8}$; Fourier bandwidth $1/48$; forecasts clipped at $\pm10$ prefix SDs \\
-\cx{Degenerate prefix} & Persistence if prefix SD is below $10^{-10}$; scoring variance floor $10^{-12}$ \\
-\cx{Selector training} & 18 repeats, 3-fold grouped validation; trees of depth 2/3 with leaf size at least 8, forests of 100 trees with depth 3/6 and leaf size at least 5 \\
-\cx{Held-out model search} & 4 rolling validation prefixes with 32-point targets; one refit on the whole prefix \\
-\cx{Query budgets} & Main budget 128; sensitivity checks at 64 and 256; blocks of 64 queries \\
-\cx{Timing} & Intel Core i5-12500H, one numerical thread; 12 matched inputs, 7 interleaved repetitions after warm-up \\
+Trained dynamics & FORCE with RLS, gain 1.2, integration step 0.1, 40,000 steps. The RLS matrix starts at identity and updates every 2 steps. \\
+Untrained network & Recurrent gain 1.5. Depending on initialization, the network can settle to a constant state or remain time-varying. \\
+Recorded activity & $\tanh(h_{t,2})$ (zero-based neuron 2). Discard 5,000 initial steps and record 8,192 samples. \\
+Observed and later samples & Samples 4,096--6,143 and 6,144--6,175, respectively \\
+Fixed forecasts & Repeat the last value, the mean of the observed samples, or the values from 314 steps earlier. \\
+Fitted forecasts & Ridge and 5-nearest-neighbor regression at lags 8 and 48; ridge on 64 random Fourier features at lag 48 \\
+Forecast parameters & Ridge penalty 1, intercept penalty $10^{-8}$, Fourier bandwidth $1/48$. Clip standardized forecasts at $\pm10$. \\
+Near-constant observations & Repeat the last value if the observed standard deviation is below $10^{-10}$. In NMSE, use observed variance or $10^{-12}$, whichever is larger. \\
+Training the selection rule & 18 repeats and three validation folds grouped by initialization. Decision trees have maximum depth 2 or 3 and at least 8 examples per leaf. Random forests use 100 trees of depth at most 3 or 6 and at least 5 examples per leaf. \\
+Held-out model search & Fit each candidate to four initial segments of increasing length. Test each fit on the next 32 observed samples. Choose the model with the lowest mean error and refit it on all observed samples. \\
+Query budgets & Main budget 128; sensitivity checks at 64 and 256; blocks of 64 queries \\
+Timing & Intel Core i5-12500H, one numerical thread. Use the same 12 inputs for every rule. After an untimed run, repeat seven times per input, changing the order of the rules between repetitions. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\cx{Each selector predicts candidate errors and chooses the smallest. All feature sets share development data and model search. We fit imputation within each fold and keep tasks from the same initialization together. Held-out search validates candidates on rolling prefixes before refitting the chosen model. The oracle uses future errors. Query sampling uses the second evaluation set.}
+The learned selection rules predict each candidate's error. Summary statistics of the observed segment are its mean, standard deviation, fitted slope, lag-one correlation, normalized squared changes between adjacent samples, minimum error when aligned with a shifted copy, spectral entropy, and the fraction of spectral power in the largest peak. The held-out error features give the validation error of each candidate. All learned rules use the same training procedure, with tasks from each initialization kept in the same fold. We estimate replacements for missing features from the training portion of each fold.
 
 \begin{table}[ht]
 \centering\small
-\caption{\cx{Forecast errors (mean $\pm$ SD) across repeats. Within a repeat we average the tasks first. The final row gives the paired bootstrap interval for held-out search error minus MG error.}}
+\caption{Forecast NMSE across model-selection rules. Entries show mean $\pm$ standard deviation.}
 \label{tab:forecast_all}
 \input{tables/forecast_all.tex}
 \end{table}
 
+We average tasks within each repeat. The interval in Table~\ref{tab:forecast_all} resamples the within-repeat error differences between search and MG. Choosing from the measured continuation gives the lowest error attainable by the candidate set.
+
 \paragraph{Sampled-query MG.}
-\cx{We keep the full estimator settings in Table~\ref{tab:mg-settings} and select $q$ evenly spaced query indices, capped at the number $n$ of delay vectors. Their zero-based indices are $\lfloor j(n-1)/(q-1)\rfloor$ for $j=0,\ldots,q-1$.} All $n$ vectors remain candidate neighbors. With original time indices retained in the exclusion, compute
+To reduce computation, we search for neighbors around $q$ evenly spaced query vectors. All $n$ delay vectors remain available as neighbors, subject to the same time exclusion. The zero-based query indices are \cx{$\lfloor \ell(n-1)/(q-1)\rfloor$ for $\ell=0,\ldots,q-1$}, with $2\le q\le n$. For the selected set $Q$, we compute
 \begin{equation}
 \widehat d_{\rm MG}^{(q)}=
 \frac{q(k-1)-1}{\displaystyle\sum_{i\in Q}\sum_{j=1}^{k-1}\log(r_{ik}/r_{ij})}.
 \label{eq:querymg}
 \end{equation}
-The approximation equals full MG when $Q$ contains every query. Numerical-floor checks use the queried distances and sums. Insufficient neighbors, nonfinite values or constant records yield unavailable estimates. The unchanged selector uses imputed scores to choose a forecast.
+\cx{When $Q$ contains every query and passes the numerical checks, the formula reduces to Equation~\eqref{eq:mg}.} We check the selected distances and sums against the numerical limits. Insufficient neighbors, nonfinite values, or constant records yield unavailable estimates. The model-selection rule uses the replacements learned on development runs for missing scores.
 
-\cx{Distance computation batches queries and costs $O(qnE)$ with bounded block memory. The timing difference also reflects the change from a tree search to batched distances.}
+\cx{The blocked implementation computes distances to all vectors for one block of queries at a time, at cost $O(qnE)$ for the distance calculations. The full implementation uses a KD-tree. Table~\ref{tab:forecast_utility} compares the two implementations as used.}
 
-\paragraph{Paired runtime procedure.}
-\cx{Timing includes feature calculation, selection, and fitting the chosen forecaster (Table~\ref{tab:forecast_utility}). We take the median across repetitions for each input before comparing methods. The reported time excludes recording the prefix and training the selector.}
+\paragraph{Timing on the same inputs.}
+Timing includes computing features, choosing a forecaster, and fitting it. All three timed rules use the same inputs. For each input we take the median time over repetitions, then report the median across inputs (Table~\ref{tab:forecast_utility}).
 
 
 \section{Comparing intervention rules}\label{app:intervention_utility}
-\cx{Stopping early can limit memorization of noisy labels. Freezing layers or pruning units can reduce the work needed for later updates. We compare when MG, simpler log statistics, and fixed schedules choose to intervene. All rules use the same development runs and candidate intervention times.}
+Stopping early can limit memorization of noisy labels. Freezing layers or pruning hidden neurons can reduce the computation needed for later updates. We compare when MG-based rules, simpler statistics, and fixed schedules intervene. All rules use the same development runs and candidate times.
 
-\cx{We test stopping on MNIST with label corruption and freezing or pruning on clean labels. Candidate interventions use parameter norm or a fixed loss probe on training examples. Table~\ref{tab:mnist-intervention-setup} gives the setup.}
+For the stopping experiments, we replace some training labels with randomly chosen incorrect labels. The freezing and pruning experiments retain the original training labels. The rules use weight norm or loss on a fixed set of training images with their assigned labels (Table~\ref{tab:mnist-intervention-setup}).
 
 \begin{table}[htbp]
 \centering\small
-\caption{\cx{MNIST intervention protocol.}}
+\caption{MNIST intervention protocol.}
 \label{tab:mnist-intervention-setup}
 \begin{tabularx}{\linewidth}{@{}p{.30\linewidth}X@{}}
 \toprule
-\cx{Component} & \cx{Setting} \\
+Component & Setting \\
 \midrule
-\cx{Data} & $14\times14$ pooled images; 2,000 training, 500 clean validation, 2,000 test \\
-\cx{Training} & Adam at $10^{-3}$, batch 64, at most 2,048 updates \\
-\cx{Label corruption} & 40\% or 60\%; wrong classes sampled independently for each run \\
-\cx{Loss probe} & 128 training examples, using their assigned labels \\
-\cx{Candidate updates} & 256, 512, 768, 1,024, 1,536 \\
-\cx{Threshold selection} & Clean validation accuracy minus $0.02$ times the relative arithmetic budget; 3 development and 8 evaluation repeats \\
-\cx{Pruned layers} & Width 64 per hidden layer, ranked by incoming-row norm times outgoing-column norm \\
+Data & $14\times14$ images after pooling. Use 2,000 for training, 500 for validation, and 2,000 for testing. Validation and test labels are unchanged. \\
+Training & Adam at $10^{-3}$, batch 64, at most 2,048 updates \\
+Label corruption & 40\% or 60\%; wrong classes sampled independently for each run \\
+Fixed set for loss & 128 training examples, using their assigned labels \\
+Candidate updates & 256, 512, 768, 1,024, 1,536 \\
+Repeats & Use 3 repeats to choose the rule and 8 separate repeats to evaluate it. \\
+Pruned layers & Retain 64 neurons per hidden layer. Rank neurons by the product of the norms of their incoming and outgoing weights. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\cx{Scalar methods share the rule search and use completed windows. Training runs to the fixed budget if the rule never triggers. The validation comparator uses clean labels.}
+The scalar rules use completed windows. A rule based on the window mean compares it with a threshold. A fixed schedule chooses the same step in every evaluation run. Training runs to the full budget if the rule never triggers.
+
+We score each rule by validation accuracy with a penalty for computation. We maximize $A-0.02C$, where $A$ is mean validation accuracy as a fraction and $C$ is the mean number of estimated multiply--accumulate operations relative to uninterrupted training. Saving half the operations improves this score as much as one percentage point of accuracy.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.96\linewidth]{figures/mnist_stop_trace.pdf}
-\caption{\cx{Early stopping on MNIST with 40\% noisy labels. Left, one held-out run in which the two rules stop at different checkpoints. The dotted lines show the frozen thresholds for MG@weight norm and the mean loss on a fixed training probe. Accuracy is measured along the recorded full training run. Right, lines connect test accuracies for the same repeat and numbers count the repeats stopping at each step.}}
+\caption{Early stopping on MNIST with 40\% noisy labels. Left, thresholds and stopping steps in one run. Right, within-run differences in test accuracy and counts of stops by step.}
 \label{fig:mnist-stop-trace}
 \end{figure}
 
-\cx{MG and probe-loss rules can stop at different checkpoints with similar test accuracy across repeats (Figure~\ref{fig:mnist-stop-trace}).}
+The MG and fixed-set loss rules can stop at different training steps with similar test accuracy across repeats (Figure~\ref{fig:mnist-stop-trace}).
 
-On clean training, freezing disables gradients through both hidden layers and continues fitting the final head. \cx{Pruning shrinks both hidden layers and carries over the retained weights and Adam moments. We measure real continuations from saved checkpoints with matched minibatches.}
+Freezing holds the hidden-layer weights fixed and continues training the classifier. Pruning removes hidden neurons and keeps the retained weights and their optimizer state. After intervention, both runs use the same minibatches as uninterrupted training.
 
 \begin{table*}[ht]
 \centering\small
-\caption{\claude{Eight-seed intervention results, including strong simple comparisons. MAC ratio is an approximate matrix-arithmetic budget relative to uninterrupted dense training; it excludes logging, monitoring, nonlinearities, optimizer work, and memory overhead and is not a wall-time speedup.}}
+\caption{MNIST test accuracy (\%) and relative arithmetic cost across eight repeats.}
 \label{tab:intervention_utility}
 \input{tables/intervention_utility.tex}
 \end{table*}
 
-\cx{Early stopping improves test accuracy with noisy labels. Pruning preserves clean-data accuracy at a lower arithmetic budget. Simple rules often match MG (Table~\ref{tab:intervention_utility}).}
+Early stopping improves test accuracy when some training labels are incorrect. Pruning preserves accuracy while reducing the estimated number of operations. Simple rules often match MG (Table~\ref{tab:intervention_utility}).
 }

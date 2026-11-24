@@ -96,12 +96,12 @@ def main():
                          "axes.linewidth": .6, "axes.axisbelow": True})
     fig = plt.figure(figsize=(6.4, 2.95), layout="constrained")
     grid = fig.add_gridspec(2, 4, height_ratios=(.78, 1.12), width_ratios=(1.1, .85, 1.1, .85))
-    draw_example(fig, grid, 0, "Periodic reference", sample, periodic, "Sample index", "Signal")
-    draw_example(fig, grid, 2, "Text VAE training", window.step.to_numpy(),
-                 window.probe_nll.to_numpy(), "Optimization step", "Probe NLL")
+    draw_example(fig, grid, 0, "Periodic signal", sample, periodic, "Sample index", "Signal")
+    draw_example(fig, grid, 2, "Text reconstruction loss", window.step.to_numpy(),
+                 window.probe_nll.to_numpy(), "Optimization step", "Loss")
     fig.legend(handles=[
         Line2D([], [], marker="o", color=INK, markerfacecolor="white", ls="none", ms=4.5,
-               label="Query"),
+               label="Search center (query)"),
         Line2D([], [], marker="x", color=GRAY, ls="none", ms=4.5,
                label="Excluded in time"),
         Line2D([], [], marker="o", color=BLUE, ls="none", ms=4.5,
