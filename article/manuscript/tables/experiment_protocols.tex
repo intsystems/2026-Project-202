@@ -10,12 +10,12 @@ Digit classifier & Fixed tanh MLP (64--64), linear classifier in a fixed paramet
 Synthetic generators and forecasting & FORCE recurrent networks (1,000 neurons for phase recovery, 256 for the periodic-signal and forecast tasks) \\
 CIFAR-10 interventions & $3\times3$ ReLU convolutions (16, 32, 32 channels), max pooling after the first two, adaptive average pooling, linear classifier \\
 ResNet transfer & ResNet-18, 10 classes. Input convolution: random init.\ $3\times3$, stride 1, no max pooling. ImageNet init.\ $7\times7$, stride 2, max pooling. \\
-Text VAE & 48-dimensional shared embeddings, GRU encoder and decoder with hidden size 64, 16-dimensional Gaussian code \\
+Text VAE & 48-dimensional shared embeddings, GRU encoder and decoder with hidden size 64, \cx{16-dimensional Gaussian latent variable} \\
 Grokking & One-layer transformer, width 128, four 32-dimensional heads, MLP width 512, no layer normalization; full-batch comparison uses a width-500 quadratic perceptron \\
 MNIST representation selection & 784--256--256 encoder with batch normalization and ReLU; 256--256--64 projector (one variant outputs 16 coordinates); predictor width 64 in the standard SimSiam/BYOL settings \\
 MNIST intervention rules & 196--128--128--10 ReLU MLP; pruning narrows both hidden layers \\
 Loss-spike warning & Pre-layer-normalized transformer with two layers, width 64, and four heads \\
-Walker2d & Separate 64--64 tanh MLPs for actor and critic; six action outputs \\
+Walker2d & The actor and critic each have their own pair of 64-unit tanh layers. The actor outputs six commands. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -90,11 +90,12 @@ Decoder context & Actual preceding words \\
 Shared training / continuation ends & 1,024 at $\beta=0.01$ / 3,072 updates \\
 KL weights $\beta$ & $0.01$, $1$, $1$ with free bits \\
 Free-bits threshold $\lambda$ (nats / coordinate) & 0.5 \\
-Loss log / code-use measurements & 16 fixed sentences per update / every 128 updates \\
+\cx{Reconstruction loss} & \cx{16 fixed sentences per update} \\
+\cx{Mutual information and decoder sensitivity} & \cx{Every 128 updates} \\
 Initial / final evaluation intervals (updates) & 512--1,024 / 2,048--3,072 \\
 MI draws per evaluation sentence & 4 \\
-Code loss (both measurements) & $<50\%$ of low-penalty values \\
-Code preservation (both measurements) & $\ge0.5\times$ early and $\ge2\times$ suppressed values \\
+\cx{Loss of sentence information (both measures)} & $<50\%$ of low-penalty values \\
+\cx{Retention of sentence information (both measures)} & $\ge0.5\times$ early and $\ge2\times$ suppressed values \\
 Bootstrap (matched repeats / resamples) & 9 / 20,000 \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Penalty schedule and event labels}} \\
@@ -102,7 +103,7 @@ Initial training & 1,024 updates at $\beta=0.01$ \\
 Schedules and duration & 3 repetitions of 2,048 updates \\
 KL weight within each repetition & $0\to1$ over 1,024 updates, then fixed at $1$ \\
 Early checks / subsequent check interval & 512--1,024 every 128 updates / every 64 updates \\
-Minimum early MI / code-swap median (nats) & $>0.1$ / $>10^{-4}$ \\
+\cx{Minimum early medians (MI / decoder sensitivity, nats)} & $>0.1$ / $>10^{-4}$ \\
 Starting values at update 1,024 & Both $\ge0.65\times$ their early medians \\
 Loss / recovery ratios to early medians & Both $\le0.50$ / both $\ge0.65$ \\
 Event time / minimum time left & Second consecutive qualifying check / 512 updates \\
@@ -141,15 +142,17 @@ Initial steps discarded / steps recorded at fixed policy & 512 / 4,096 \\
 Reference gait (samples / simulator steps per stride) & $152$ / $\approx 152.215$ \\
 Reference advance (samples per simulator step) & $(1+\sqrt{2}/1000)^{-1}$ \\
 Matched reference-gait penalties and scale & $\lambda=0$ vs.\ $3$ at $\sigma^2=38.4774$ \\
-\cx{State distance / velocity scale} & \cx{Omit horizontal position / divide velocities by 5} \\
-\cx{Return-error lags / phase for state variance} & \cx{20--250 steps / phase zero} \\
-\cx{Minimum phase crossings per retained episode} & \cx{8} \\
+Coordinates for state distance & Omit horizontal position and divide velocities by~5 \\
+Lags tested for return error & 20--250 simulator steps \\
+Reference gait phase for stride-to-stride variance & Phase 0 \\
+Minimum phase crossings per retained episode & 8 \\
 Return error and phase-matched variation ratios & Both $\le0.75$ vs.\ no reference reward \\
 Minimum baseline return error / phase-matched variation & 0.02 / 0.001 \\
 Common completed simulations / reward ratio / extra falls & $\ge 8$ / $\ge90\%$ / $\le1$ \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Policy choice under actuator shifts}} \\
-Candidate penalties / evaluation repeats & $\lambda\in\{0,0.25,1,4\}$ / 4 \\
+Candidate command-smoothing weights & $\lambda\in\{0,0.25,1,4\}$ \\
+Training seeds used for evaluation & 4 \\
 Additional training steps when policies are saved & 262,144, 524,288, 786,432, 1,048,576 \\
 Unperturbed episodes per candidate & 3 \\
 Unperturbed steps discarded / recorded & 256 / 2,048 \\
@@ -184,10 +187,10 @@ AdamW rate / $(\beta_1,\beta_2)$ & $10^{-3}$ / $(0.9,0.98)$ \\
 Batch size / precision & 256 / float64 \\
 Perceptron comparison & Half the modulo-97 pairs, full-batch gradient descent, squared error \\
 Window length / center & 60 log samples / time of covariance estimate \\
-\cx{Training accuracy marking fit} & \cx{$\ge95\%$} \\
-\cx{Rise boundaries / minimum windows per interval} & \cx{First of 5 consecutive readings at or above each cutoff / 3} \\
+Training accuracy marking fit & $\ge95\%$ \\
+Rise boundaries / minimum windows per interval & First of 5 consecutive readings at or above each cutoff / 3 \\
 MG setting grid & $E\in\{4,6,10\}$, $\tau\in\{1,2,4\}$, $k\in\{5,20\}$ \\
-Time exclusion & Delay span or autocorrelation rule \\
+Time exclusion before capping & $(E-1)\tau$ steps or the autocorrelation rule \\
 \bottomrule
 \end{tabularx}
 \end{table}

@@ -1,11 +1,11 @@
 # Known modes in linear learning
 
-Heavy-ball linear learning excites a controlled number of independent modes. The analysis uses the probe error.
+In this linear regression, momentum makes the weights oscillate around the least-squares solution. Figure 2 of the article uses the training loss, half the mean squared prediction error over all training examples. The standalone plot uses the signed prediction error on one fixed test input.
 
 ## In the article
 
-- [Section 3.1 · Analytic oscillators and learning](../../../../article/manuscript/ReadMe.md#section-31--analytic-oscillators-and-learning). Dense regression with independently controlled oscillatory modes.
-- [Appendix C.2 · Dense regression with endogenous modes](../../../../article/manuscript/ReadMe.md#appendix-c2--dense-regression-with-endogenous-modes). The known-mode table and the separate selective-damping comparison.
+- [Section 3.1 · Independent oscillations and harmonics](../../../../article/manuscript/ReadMe.md#section-31--independent-oscillations-and-harmonics). Estimating the number of oscillating weight directions from the training loss.
+- [Appendix C.2 · Dense regression with endogenous modes](../../../../article/manuscript/ReadMe.md#appendix-c2--dense-regression-with-endogenous-modes). The loss formula, oscillation frequencies and selective-damping comparison.
 
 ## Files and commands
 

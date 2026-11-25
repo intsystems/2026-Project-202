@@ -10,6 +10,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib.patches import ConnectionPatch, Rectangle
+from matplotlib.ticker import MultipleLocator
 import numpy as np
 import pandas as pd
 from threadpoolctl import threadpool_limits
@@ -136,42 +137,63 @@ def plot_slingshot():
 def plot_forecast():
     logs = EXPERIMENTS / "model_selection_and_stopping/rnn_forecast_selection/logs"
     comparisons = pd.read_csv(logs / "query_fresh_comparisons.csv")
-    model_names = {"knn8": "5-NN, lag 8", "knn48": "5-NN, lag 48", "ridge48": "Ridge, lag 48"}
-    fig, axes = plt.subplots(1, 2, sharey=True, figsize=(6.2, 2.6), layout="constrained")
-    for ax, arm, title in zip(axes, ("M4", "T4"), ("Mixed frequencies", "Independent frequencies")):
-        repeat = 681
+    model_names = {"knn8": "5-NN, 8 lags", "knn48": "5-NN, 48 lags", "ridge48": "Ridge, 48 lags"}
+    rules = [
+        ("MG", "MG-predicted error", BLUE, "--"),
+        ("validation", "Validation error", ORANGE, (0, (1.2, 1.4))),
+    ]
+    signals = [("M4", "Two frequencies and their harmonics"), ("T4", "Four independent frequencies")]
+    repeat = 681
+    origin = 6144
+    history_steps = 16
+    actual_color = "#253039"
+    fig, (axes, keys) = plt.subplots(2, 2, figsize=(6.3, 2.6), height_ratios=[3, 1])
+    fig.subplots_adjust(left=.087, right=.987, top=.89, bottom=.035, wspace=.22, hspace=.55)
+    for ax, key, (arm, title) in zip(axes, keys, signals):
         signal = pd.read_csv(logs / f"fresh_seed{repeat}__{arm}.csv", float_precision="round_trip")
-        origin = 6144
         prefix = signal.loc[signal["sample"] < origin, "neuron_2"].to_numpy()
         target = signal.loc[signal["sample"] >= origin, "neuron_2"].to_numpy()
         assert len(prefix) == 2048 and len(target) == 32
+        horizon = len(target)
         selected = comparisons.query("seed == @repeat and arm == @arm").set_index("method")
-        history = 96
-        time = np.arange(-1, len(target))
-        ax.plot(np.arange(-history, 0), prefix[-history:], color=GRAY, lw=1.05)
-        ax.plot(time, np.r_[prefix[-1], target], color="#20262B", lw=1.4)
-        for method, color, style, label in [
-            ("MG", BLUE, "--", "MG@neuron activation"),
-            ("validation", ORANGE, "-.", "Held-out search"),
-        ]:
+        best_rule = selected.loc[["MG", "validation"], "error"].idxmin()
+
+        # Step zero is the last available observation. Both forecasts start from it.
+        ax.axvspan(0, horizon, color="#EBF1F4", lw=0, zorder=0)
+        ax.axvline(0, color=GRAY, lw=.7, ls=":")
+        ax.plot(np.arange(-history_steps, horizon + 1), np.r_[prefix[-(history_steps + 1):], target],
+                color=actual_color, lw=1.6)
+        ax.text(1.1, .96, "Forecast", transform=ax.get_xaxis_transform(), va="top", color="#485660")
+        ax.annotate("Recorded", (horizon, target[-1]), xytext=(-2, -4), textcoords="offset points",
+                    ha="right", va="top", fontsize=7.5, color=actual_color)
+        ax.set(title=title, xlabel="Steps from last observation", xlim=(-history_steps, horizon),
+               xticks=[-history_steps, 0, 16, horizon])
+        ax.margins(y=.22)
+        ax.yaxis.set_major_locator(MultipleLocator(.2))
+        ax.tick_params(length=3, pad=2)
+        ax.grid(axis="y", color="#D6DCE0", lw=.55)
+
+        key.set(xlim=(0, 1), ylim=(0, 1))
+        key.set_axis_off()
+        model_column = .54
+        for x, heading, align in [(0, "Select by", "left"), (model_column, "Model", "left"),
+                                  (1, "Test NMSE", "right")]:
+            key.text(x, .92, heading, va="center", ha=align, fontsize=7.6, color="#485660")
+        key.plot([0, 1], [.72, .72], color="#AEB9BF", lw=.6)
+        for row, (method, criterion, color, style) in enumerate(rules):
             model = selected.loc[method, "model"]
-            prediction = forecast(prefix, len(target), model)
+            prediction = forecast(prefix, horizon, model)
             error = np.mean((prediction - target)**2) / prefix.var()
             np.testing.assert_allclose(error, selected.loc[method, "error"], rtol=1e-9)
-            ax.plot(time, np.r_[prefix[-1], prediction], color=color, ls=style, lw=1.35,
-                    label=f"{label} ({model_names[model]})")
-        ax.axvline(0, color=GRAY, lw=.75, ls=":")
-        ax.axvspan(0, len(target), color="#DCE5EE", alpha=.35, zorder=0)
-        ax.set(title=title, xlabel="Sample relative to forecast start", xlim=(-history, len(target)))
-        ax.grid(axis="y", alpha=.15)
-        ax.legend(loc="upper left", frameon=False, fontsize=6.6, handlelength=2)
+            ax.plot(np.arange(horizon + 1), np.r_[prefix[-1], prediction], color=color, ls=style, lw=1.55)
+
+            y = .46 - row * .4
+            key.plot([0, .09], [y, y], color=color, ls=style, lw=1.55)
+            key.text(.115, y, criterion, va="center", fontsize=7.6)
+            key.text(model_column, y, model_names[model], va="center", fontsize=7.6)
+            key.text(1, y, f"{error:.3f}", ha="right", va="center", fontsize=7.6,
+                     fontweight="bold" if method == best_rule else "normal")
     axes[0].set_ylabel("Neuron activation")
-    for ax in axes:
-        ax.set_ylim(-1.05, 1.68)
-    fig.legend(handles=[
-        Line2D([], [], color=GRAY, label="Observed activation"),
-        Line2D([], [], color="#20262B", label="Measured continuation"),
-    ], loc="outside lower center", ncol=2, frameon=False)
     return fig
 
 

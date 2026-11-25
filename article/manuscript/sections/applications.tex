@@ -2,35 +2,37 @@
 \section{Monitoring and selection in learned systems}\label{sec:applied}
 
 \subsection{Detecting restricted parameter updates}\label{sec:cnn}
-\cx{Can weight norm reveal that a classifier's updates now occupy fewer directions? We freeze layers, prune weights, or lower the learning rate in a CIFAR-10 classifier} \citep{krizhevsky2009learning}. \cx{Comparisons use unchanged training, larger batches, and unchanged logs rescaled or smoothed after recording.}
+Can weight norm reveal that a classifier's updates now occupy fewer directions? We freeze layers, prune weights, or lower the learning rate in a CIFAR-10 classifier \citep{krizhevsky2009learning}. Comparisons use unchanged training, larger batches, and unchanged logs rescaled or smoothed after recording.
 
-\cx{Our detector signals a drop in median MG between consecutive blocks of windows. We choose block lengths and a threshold on separate runs. MG detects nearly all strong interventions without false alarms on the comparison records. Absolute successive changes detect as many and respond sooner. Dividing the mean absolute change by the window standard deviation detects every strong intervention (Tables~\ref{tab:decisions} and~\ref{tab:detectors}). Absolute changes transfer best to new intervention times (Table~\ref{tab:detector-transfer}).}
+We look for a sustained drop in MG of the weight-norm log. On development runs we set the threshold above the largest drop in the controls and choose the block lengths that detect the most interventions. The resulting rule raises an alarm when median MG in the latest two windows is more than $8.83\%$ below the median of the preceding three (Equation~\ref{eq:detector}).
 
-\cx{In ResNet-18} \citep{he2016deep}, \cx{freezing the feature extractor leaves only the final classification layer trainable. MG falls along with the covariance PR of the weight updates (Figure~\ref{fig:resnet-freeze-trace}). The same rule detects every freeze with random or ImageNet initialization, but misses pruning and learning-rate reductions} (\appref{app:applied}).
+We count a detection if the first alarm comes within 5,000 updates after the intervention. This happened in 27 of 28 evaluation runs across seven strong interventions. The miss was one tenfold learning-rate reduction, and none of the comparison records triggered an alarm. Absolute successive changes detected as many interventions sooner, and normalized increments detected them all (Tables~\ref{tab:decisions} and~\ref{tab:detectors}).
+
+In ResNet-18 \citep{he2016deep}, freezing the feature extractor leaves only the final classification layer trainable. MG falls along with the covariance PR of the weight updates (Figure~\ref{fig:resnet-freeze-trace}). The same rule detects every freeze with random or ImageNet initialization, but misses pruning and learning-rate reductions (\appref{app:applied}).
 
 \begin{figure*}[!htb]
 \centering
 \includegraphics[width=.96\textwidth]{figures/resnet_freeze_trace.pdf}
-\caption{Freezing the feature extractor in ResNet-18. \cx{Each column compares runs from the same starting weights, aligned at the intervention. The lower panels show how widely the updates vary across directions (update covariance PR). Points are placed at window ends.}}
+\caption{Freezing the feature extractor in ResNet-18. Each column compares runs from the same starting weights, aligned at the intervention. The lower panels show how widely the updates vary across directions (update covariance PR). Points are placed at window ends.}
 \label{fig:resnet-freeze-trace}
 \end{figure*}
 
 \FloatBarrier
-\subsection{Tracking latent information in a text VAE}\label{sec:vae}
-\cx{A text variational autoencoder (VAE) predicts each word from a latent code for the sentence and the preceding words} \citep{bowman2016generating}. \cx{If those words suffice, reconstruction loss can stay low even as the decoder stops using the code. Can the loss history reveal that change?}
+\subsection[Tracking sentence information in a text VAE]{\cx{Tracking sentence information in a text VAE}}\label{sec:vae}
+\cx{In a text variational autoencoder (VAE), the encoder maps each sentence $x$ to an approximate posterior $q(z\mid x)$ over a sentence-level latent variable $Z$. The decoder predicts each word from a sampled vector $z$ and the preceding words} \citep{bowman2016generating}. \cx{If the preceding words suffice for prediction, reconstruction loss can stay low even as the decoder becomes less sensitive to $z$.} Can the loss history reveal that change?
 
-\cx{Starting from the same Penn Treebank model within each repeat} \citep{marcus1993building}, \cx{we vary the penalty on the Kullback--Leibler (KL) divergence between the encoder's code distribution and a standard normal prior. A stronger penalty discourages sentence-specific codes. We also test \emph{free~bits}, which lets the batch-average KL of each code coordinate rise to a threshold before the penalty increases} \citep{kingma2016improved}.
+Starting from the same Penn Treebank model within each repeat \citep{marcus1993building}, we vary the penalty on the Kullback--Leibler (KL) divergence between \cx{$q(z\mid x)$ and the standard normal prior. A stronger penalty encourages the posteriors for different sentences to approach the same prior.} We also test \emph{free~bits}, which lets the batch-average KL of each \cx{latent dimension} rise to a threshold before the penalty increases \citep{kingma2016improved}.
 
-\cx{We check code use in two ways. To estimate mutual information $I(X;Z)$ between a sentence $X$ and its code $Z$, we sample codes from the encoder. We average the log ratio of each code's density under its source sentence to its density in the mixture over evaluation sentences (Equation~\eqref{eq:vae-mi}). We also measure how predictions change when the decoder receives another sentence's code.}
+\cx{We estimate how much information $Z$ carries about the input sentence $X$ using mutual information $I(X;Z)$. For each draw $z$ from $q(z\mid x)$, we compare its density under that sentence's posterior with its density under the mixture of posteriors across evaluation sentences. We average the log density ratio over draws and sentences (Equation~\eqref{eq:vae-mi}). To measure decoder sensitivity to $z$, we keep the preceding words fixed and measure how much the predicted word distribution changes when we draw $z$ from another sentence's posterior.}
 
 \begin{figure*}[!htb]
 \centering
 \includegraphics[width=.96\textwidth]{../poster/figures/vae_real_log.pdf}
-\caption{Code use during text VAE training. NLL is mean negative log-likelihood per token on fixed sentences. The vertical line marks the start of the penalty comparison. Shading ends at the first full window under the new settings. MI is $I(X;Z)$ in nats.}
+\caption{\cx{Reconstruction loss, MG and sentence information during text VAE training.} NLL is the mean negative log-likelihood per token on fixed sentences. \cx{The bottom panel shows mutual information $I(X;Z)$ in nats.} The vertical line marks when the three penalty conditions begin. Shading extends to the end of the first MG window recorded entirely under the new setting.}
 \label{fig:vae-loss-log}
 \end{figure*}
 
-\cx{Under the stronger penalty, average reconstruction loss on fixed sentences changes little, yet MG from that loss falls alongside both measures of code use. Free bits partly preserves sentence information and MG (Figure~\ref{fig:vae-loss-log} and Table~\ref{tab:vae-mg-ratios}). Standard deviation and spectral entropy also detect the decline (\appref{app:vae-information}).}
+Here we compare conditions over the final training interval. In each repeat we divide median MG of fixed-sentence loss under the stronger penalty by its median under the weaker penalty. The median ratio across nine repeats is 0.52. \cx{Mean loss changes little, while mutual information and decoder sensitivity both fall.} Free bits partly preserves sentence information and MG (Figure~\ref{fig:vae-loss-log} and Table~\ref{tab:vae-mg-ratios}). Standard deviation and spectral entropy of the loss also fall in every repeat (\appref{app:vae-information}).
 
 \input{sections/campaign_main}
 \input{sections/forecast_utility}

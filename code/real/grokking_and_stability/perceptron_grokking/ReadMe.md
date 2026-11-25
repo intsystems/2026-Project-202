@@ -4,8 +4,7 @@ Compare modular arithmetic and polynomial targets, including label-matched contr
 
 ## In the article
 
-- [Section 4.4 · Detecting changes during grokking](../../../../article/manuscript/ReadMe.md#section-44--detecting-changes-during-grokking). The full-batch comparison.
-- [Appendix E · Additional learning settings](../../../../article/manuscript/ReadMe.md#appendix-e--additional-learning-settings). The unregularized quadratic perceptron in the grokking paragraph.
+- [Appendix E · Grokking](../../../../article/manuscript/ReadMe.md#appendix-e--grokking). The unregularized quadratic perceptron in the grokking section.
 
 ## Files and commands
 

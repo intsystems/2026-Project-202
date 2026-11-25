@@ -1,27 +1,27 @@
 \subsection[Forecast model choice]{Forecast model choice}\label{sec:forecast_utility}
-\cx{Given part of one neuron's activation series (the prefix), which model best forecasts the continuation? On separate runs we learn to predict each candidate's error from prefix MG and choose the lowest. Held-out search fits and tests candidates on successive portions of the prefix (Figure~\ref{fig:single-neuron-forecasts}).}
+Which model best forecasts the continuation of one neuron's activity? On development runs we compute MG from the observed segment (the prefix) and measure how well each candidate forecasts the continuation. A regression tree groups prefixes by MG and assigns each group the forecaster with the lowest mean error. On a new series, prefix MG alone determines the choice. The validation rule chooses the candidate with the lowest mean error on the last four 32-sample blocks of this prefix. Each candidate forecasts each block using only the samples before it. Both rules fit their chosen model on the full 2,048-sample prefix to forecast the next 32 samples (Figure~\ref{fig:single-neuron-forecasts}).
 
-\cx{Normalized mean squared error (NMSE) divides mean squared forecast error by the prefix variance with a positive floor. Mean errors are close (Table~\ref{tab:decisions}), and the interval for their within-repeat difference includes zero (Table~\ref{tab:forecast_all}). Sampling MG queries preserves all model choices in this test and is faster than held-out search (Table~\ref{tab:forecast_utility}).}
+Normalized mean squared error (NMSE) divides mean squared forecast error by the prefix variance with a positive floor. Mean errors are close (Table~\ref{tab:decisions}), and the interval for their within-repeat difference includes zero (Table~\ref{tab:forecast_all}). Sampling MG queries preserves all model choices in this test and is faster than selection by validation error (Table~\ref{tab:forecast_utility}).
 
 \begin{figure*}[!htb]
 \centering
-\includegraphics[width=.96\textwidth]{figures/single_neuron_forecasts.pdf}
-\caption{\cx{Forecasts for two signals from one evaluation repeat. Shading begins where observations end. Held-out search is more accurate for the mixed frequencies (left), MG for the independent frequencies (right).}}
+\includegraphics[width=\linewidth]{figures/single_neuron_forecasts.pdf}
+\caption{Forecasts for two signals from one evaluation repeat. MG (blue dashes) selects the model with the lowest mean forecast error on other runs in the same MG range. Validation (orange dots) compares the models on four earlier 32-step blocks of this signal. Test NMSE measures error against the recording (solid line) over the shaded 32 steps. On the left both forecasts rise despite the nearly flat recording, but the ridge model chosen by validation rises less. On the right the ridge model chosen by MG better tracks the decline.}
 \label{fig:single-neuron-forecasts}
 \end{figure*}
 
 \begin{table*}[!htbp]
 \centering\small
-\caption{\cx{Decisions on evaluation runs. Within each detection task the rules have the same false-alarm rate. Forecast errors are means and standard deviations over 20 repeats.}}
+\caption{Decisions on evaluation runs. Classifier detections count first alarms within 5,000 updates after intervention (0/16 comparison records alarmed for either rule). Spike detections count warnings within 500 updates before onset (both rules had 2.44 false alarms per 10,000 scored updates). Forecast errors are means and standard deviations over 20 repeats.}
 \label{tab:decisions}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xrrl@{}}
 \toprule
-\cx{Outcome} & \cx{MG} & \cx{Baseline} & \cx{Baseline rule} \\
+Outcome & MG & Baseline & Baseline rule \\
 \midrule
-\cx{Classifier interventions detected} & \cx{27/28} & \cx{28/28} & \cx{Normalized increments} \\
-\cx{Loss spikes detected in advance} & \cx{22/23} & \cx{23/23} & \cx{Roughness} \\
-\cx{Accuracy gap (percentage points)} & \cx{0.41} & \cx{0.75} & \cx{Correlation dimension} \\
-\cx{Forecast NMSE} & \cx{$0.036\pm0.021$} & \cx{$0.041\pm0.032$} & \cx{Held-out search} \\
+Classifier interventions detected & 27/28 & 28/28 & Normalized increments \\
+Loss spikes detected in advance & 22/23 & 23/23 & Roughness \\
+Accuracy gap (percentage points) & 0.41 & 0.75 & Correlation dimension \\
+Forecast NMSE & $0.036\pm0.021$ & $0.041\pm0.032$ & Lowest validation error \\
 \bottomrule
 \end{tabularx}
 \end{table*}

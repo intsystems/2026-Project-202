@@ -1,6 +1,6 @@
 # Shared article source
 
-The manuscript for *Detecting Simplification in Neural Network Dynamics from Scalar Logs* is based on the AISTATS v3 revision. Edit the [sections](sections/ReadMe.md), [table inputs](tables/ReadMe.md), [figure files](figures/ReadMe.md), or bibliography here. [main_part.tex](main_part.tex) sets the order of the main paper and bibliography. [appendix_part.tex](appendix_part.tex) includes the appendices. All style entry points use both files.
+The manuscript for *What Can a Scalar Log of Loss, Weight Norm, or Neuron Activation Reveal About a Neural Network?* is based on the AISTATS v3 revision. Edit the [sections](sections/ReadMe.md), [table inputs](tables/ReadMe.md), [figure files](figures/ReadMe.md), or bibliography here. [main_part.tex](main_part.tex) sets the order of the main paper and bibliography. [appendix_part.tex](appendix_part.tex) includes the appendices. All style entry points use both files.
 
 ## Build
 
@@ -56,8 +56,9 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 
 <a id="section-32--learned-generators-distinguish-phases-from-harmonics"></a>
 
-### Section 3.1 · Separating independent oscillations from harmonics
+### Section 3.1 · Independent oscillations and harmonics
 
+- [Linear regression with known oscillations](../../code/synthetic/poster_examples/known_linear_modes/ReadMe.md)
 - [Four-tone RNN learning](../../code/synthetic/poster_examples/four_tone_rnn/ReadMe.md)
 - [Roughness and phase controls](../../code/synthetic/signal_controls_and_sketches/phase_count_and_roughness/ReadMe.md)
 
@@ -75,9 +76,11 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 
 <a id="section-43--tracking-latent-information-in-a-text-vae"></a>
 
-### Section 4.2 · Tracking latent information in a text VAE
+<a id="section-42--tracking-latent-information-in-a-text-vae"></a>
 
-- [Text VAE code loss](../../code/real/scalar_log_diagnostics/text_vae_latent_code/ReadMe.md)
+### Section 4.2 · Tracking sentence information in a text VAE
+
+- [Sentence information in the text VAE](../../code/real/scalar_log_diagnostics/text_vae_latent_code/ReadMe.md)
 
 <a id="section-48--forecast-model-selection-from-single-neuron-recordings"></a>
 
@@ -126,28 +129,30 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 
 ### Appendix D.4 · Text VAE and preservation reference
 
-- [Text VAE code loss](../../code/real/scalar_log_diagnostics/text_vae_latent_code/ReadMe.md)
+- [Sentence information in the text VAE](../../code/real/scalar_log_diagnostics/text_vae_latent_code/ReadMe.md)
 
 <a id="section-44--detecting-changes-during-grokking"></a>
 
-### Appendix E · Additional learning settings
+### Appendix E · Grokking
 
 - [Edge of stability](../../code/real/grokking_and_stability/edge_of_stability/ReadMe.md)
 - [Full-batch perceptron grokking](../../code/real/grokking_and_stability/perceptron_grokking/ReadMe.md)
 - [Trajectory sketch validation](../../code/synthetic/signal_controls_and_sketches/trajectory_sketch/ReadMe.md)
 - [Transformer grokking](../../code/real/grokking_and_stability/transformer_grokking/ReadMe.md)
 
+### Appendix F · Walker2d
+
 <a id="section-45--selecting-walker2d-policies-under-actuator-shifts"></a>
 
-### Appendix E.1 · Selecting policies for actuator shifts
+### Appendix F.2 · Selecting policies for actuator shifts
 
 - [Walker2d policy selection](../../code/real/model_selection_and_stopping/walker2d_policy_selection/ReadMe.md)
 
-### Appendix G · Forecast selection and sampled-query estimation
+### Appendix H · Forecast selection and sampled-query estimation
 
 - [RNN forecast selection](../../code/real/model_selection_and_stopping/rnn_forecast_selection/ReadMe.md)
 
-### Appendix H · Comparing intervention rules
+### Appendix I · Comparing intervention rules
 
 - [Noisy MNIST early stopping](../../code/real/model_selection_and_stopping/mnist_early_stopping/ReadMe.md)
 

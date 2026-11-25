@@ -2,7 +2,7 @@
 \FloatBarrier
 \section{Further tests of practical decisions}\label{app:campaign}
 \subsection{Self-supervised representation selection}
-\cx{We compare MNIST encoders trained with SimSiam, BYOL, VICReg and SimCLR} \citep{chen2021simsiam,grill2020byol,bardes2022vicreg,chen2020simclr}. \cx{For each statistic, development runs determine the scalar log and ranking direction that best agree with the accuracy of a linear classifier fitted to frozen features. For MG this selects gradient norm, ranked from high to low. Evaluation repeats use the same rule and test images (Table~\ref{tab:ssl-protocol}).}
+We compare MNIST encoders trained with SimSiam, BYOL, VICReg and SimCLR \citep{chen2021simsiam,grill2020byol,bardes2022vicreg,chen2020simclr}. For each statistic, development runs determine the scalar log and ranking direction that best agree with the accuracy of a linear classifier fitted to frozen features. For MG this selects gradient norm, ranked from high to low. Evaluation repeats use the same rule and test images (Table~\ref{tab:ssl-protocol}).
 
 \begin{table}[!htbp]
 \centering\small
@@ -61,9 +61,9 @@ Strong & 6 & 30 & 0.25 & 0.8 & 0.7 & 0.25 & 0.30 \\
 \end{table}
 
 
-\cx{Each SimSiam, BYOL or VICReg variant changes one default. For random erasing, each half-side is uniform on $[2,2+14b]$ pixels. The linear classifier uses separate labeled training and test sets. All scalar methods have access to the same logs, and undefined scores rank last. Covariance PR uses MG's delay settings (Appendix~\ref{app:forecast_utility}).}
+Each SimSiam, BYOL or VICReg variant changes one default. For random erasing, each half-side is uniform on $[2,2+14b]$ pixels. We fit the linear classifier on labeled training images and evaluate it on held-out test images. All scalar methods have access to the same logs, and undefined scores rank last. Covariance PR uses MG's delay settings (Appendix~\ref{app:forecast_utility}).
 
-\cx{Other comparisons use features from multiple images} \citep{garrido2023rankme,agrawal2022alphareq,thilak2024lidar}. \cx{In Table~\ref{tab:ssl_campaign}, $h$ is the encoder output and $z$ its projection by the network used during training. For scaled mean coordinate SD, we normalize each $z$ to unit length, average coordinate standard deviations across the dimensions, and multiply by the square root of their number. Each standard deviation is taken across images.}
+Other comparisons use features from multiple images \citep{garrido2023rankme,agrawal2022alphareq,thilak2024lidar}. In Table~\ref{tab:ssl_campaign}, $h$ is the encoder output and $z$ its projection by the network used during training. For scaled mean coordinate SD, we normalize each $z$ to unit length, average coordinate standard deviations across the dimensions, and multiply by the square root of their number. Each standard deviation is taken across images.
 
 \begin{figure}[!htbp]
 \centering
@@ -72,7 +72,7 @@ Strong & 6 & 30 & 0.25 & 0.8 & 0.7 & 0.25 & 0.30 \\
 \label{fig:ssl-probe-scatter}
 \end{figure}
 
-\cx{The accuracy gap is the difference in percentage points between the best and selected configurations. We average the gap and rank correlation over evaluation repeats. Intervals for $\Delta\rho=\rho_{\rm MG}-\rho_{\rm comparison}$ resample configurations with all their initializations.}
+The accuracy gap is the difference in percentage points between the best and selected configurations. We average the gap and rank correlation over evaluation repeats. Intervals for $\Delta\rho=\rho_{\rm MG}-\rho_{\rm comparison}$ resample configurations with all their initializations.
 
 \begin{table}[!htbp]
 \centering\small
@@ -83,9 +83,9 @@ Strong & 6 & 30 & 0.25 & 0.8 & 0.7 & 0.25 & 0.30 \\
 
 \Needspace{6\baselineskip}
 \subsection{Warning of slingshot loss spikes}
-\cx{The transformer reads two operands and a delimiter and predicts their sum modulo a fixed integer. We test whether its training logs give advance warning of sharp loss increases known as slingshot spikes} \citep{thilak2022slingshot}.
+The transformer reads two operands and a delimiter and predicts their sum modulo a fixed integer. We test whether its training logs give advance warning of sharp loss increases known as slingshot spikes \citep{thilak2022slingshot}.
 
-\cx{We label a spike when the upcoming mean log loss rises sufficiently above the preceding median, or at the first nonfinite loss. The threshold accounts for the median absolute deviation (MAD) of past losses. After excluding recovery periods, a scored warning outside every advance-warning interval is a false alarm (Table~\ref{tab:spike-protocol}).}
+We label a spike when the upcoming mean log loss rises sufficiently above the preceding median, or at the first nonfinite loss. The threshold accounts for the median absolute deviation (MAD) of past losses. After excluding recovery periods, a scored warning outside every advance-warning interval is a false alarm (Table~\ref{tab:spike-protocol}).
 
 \begin{table}[!htbp]
 \centering\small
@@ -119,16 +119,16 @@ Onset labels & Past / future windows (updates) & 200 / 10 \\
  & Minimum spacing for finite-loss onsets (updates) & 300 \\
  & First nonfinite loss & Marks an onset \\
 \addlinespace
-\cx{Input statistics} & \cx{Loss, gradient norm and update norm} & \cx{$\log_{10}$ after flooring at $10^{-12}$} \\
- & \cx{Older scores in a median / minimum gap} & \cx{4 or 10 / one full window} \\
- & \cx{Lags for recurrence error} & \cx{20--250 samples} \\
- & \cx{Recurrence radius} & \cx{0.1 times median eligible distance} \\
- & \cx{Distance quantiles for correlation dimension} & \cx{8 from 0.01 to 0.10} \\
+Input statistics & Loss, gradient norm and update norm & $\log_{10}$ after flooring at $10^{-12}$ \\
+ & Older scores in a median / minimum gap & 4 or 10 / one full window \\
+ & Lags for recurrence error & 20--250 samples \\
+ & Recurrence radius & 0.1 times median eligible distance \\
+ & Distance quantiles for correlation dimension & 8 from 0.01 to 0.10 \\
 \addlinespace
 Warning scoring & First scored update & 1,500 \\
  & Advance-warning interval & 500 updates before onset \\
  & Excluded interval & Onset and next 500 updates \\
- & Minimum separation between retained false alarms (updates) & 500 \\
+ & Minimum interval between counted false alarms (updates) & 500 \\
 \addlinespace
 Rule selection & Development / evaluation runs per configuration & 4 / 4 \\
  & Development false-alarm limit per 10,000 scored updates & 2 \\
@@ -136,15 +136,15 @@ Rule selection & Development / evaluation runs per configuration & 4 / 4 \\
 \end{tabularx}
 \end{table}
 
-\cx{On development runs we seek the lowest threshold within each candidate's false-alarm limit, then select the input and rule that detect the most spikes. Ties favor fewer false alarms, then longer median warning time. We keep these choices fixed for evaluation.}
+On development runs we seek the lowest threshold within each candidate's false-alarm limit, then select the input and rule that detect the most spikes. Ties favor fewer false alarms, then longer median warning time. We keep these choices fixed for evaluation.
 
-\cx{Warnings use only past samples. We test rises and falls in levels and in deviations from an earlier median. Direct monitoring uses the mean, minimum or maximum since the previous scoring time (Table~\ref{tab:spike-protocol}). We compute correlation between successive residuals as in Appendix~\ref{app:baselines}.}
+Warnings use only past samples. We test rises and falls in levels and in deviations from an earlier median. Direct monitoring uses the mean, minimum or maximum since the previous scoring time (Table~\ref{tab:spike-protocol}). We compute correlation between successive residuals as in Appendix~\ref{app:baselines}.
 
-\cx{Recurrence error is the smallest mean squared difference from a shifted copy, divided by twice the window variance. Spectral entropy describes nonzero-frequency power in the centered series. Recurrence rate, correlation dimension, TwoNN and covariance PR use MG's delay coordinates. Excluding pairs within a delay span, recurrence rate measures the fraction closer than a fixed radius. Correlation dimension estimates its growth with radius on logarithmic axes}~\citep{grassberger1983measuring}.
+Recurrence error is the smallest mean squared difference from a shifted copy, divided by twice the window variance. Spectral entropy describes nonzero-frequency power in the centered series. Recurrence rate, correlation dimension, TwoNN and covariance PR use MG's delay coordinates. For recurrence rate we compare vectors whose starting times differ by more than 19 steps. The rate is the fraction of these pairs closer than a fixed radius. Correlation dimension measures how this fraction grows with radius on logarithmic axes~\citep{grassberger1983measuring}.
 
-\cx{We maximize attention logits over examples, positions, heads and layers. We average attention entropy over examples and query positions before minimizing over heads and layers. For class scores $o_c$, the output log-partition is $\log\sum_c\exp(o_c)$ averaged over output positions and examples.}
+We maximize attention logits over examples, positions, heads and layers. We average attention entropy over examples and query positions before minimizing over heads and layers. For class scores $o_c$, the output log-partition is $\log\sum_c\exp(o_c)$ averaged over output positions and examples.
 
-\cx{For the area under the receiver operating characteristic curve (AUROC), a scored window is positive if it ends in an advance-warning interval. Table~\ref{tab:spikes_campaign} also gives event detections and false alarms.}
+For the area under the receiver operating characteristic curve (AUROC), a scored window is positive if it ends in an advance-warning interval. Table~\ref{tab:spikes_campaign} also gives event detections and false alarms.
 
 \begin{table}[!htbp]
 \centering\small
@@ -155,7 +155,7 @@ Rule selection & Development / evaluation runs per configuration & 4 / 4 \\
 
 \Needspace{6\baselineskip}
 \subsection{Reset rules, schedules, and transfer}
-\cx{As successive MNIST tasks change pixel order and sometimes add noise, can the network still learn? We test resetting weights and optimizer state based on MG or on the fraction of neurons with low mean absolute activation relative to their layer} \citep{sokar2023dormant}. \cx{Both improve accuracy relative to keeping all weights. Table~\ref{tab:reset-rules} averages accuracy measured before each batch update across tasks.}
+At each MNIST task boundary we decide whether to reset the weights and optimizer state for the next task. We select the scalar log, window and threshold rule by mean online accuracy on development sequences, breaking ties in favor of fewer resets. Both selected rules use weight-norm MG measured within each task. With reordered pixels, a reset occurs when the median of the last two task scores exceeds 4.70. With added noise, a reset occurs when the latest score exceeds 4.69 (rounded). We also test resets based on the fraction of neurons with low mean absolute activation relative to their layer \citep{sokar2023dormant}. Table~\ref{tab:reset-rules} reports accuracy measured before each batch update on new sequences.
 
 \begin{table}[!htbp]
 \centering\small
@@ -171,7 +171,7 @@ Reordered pixels and noise & 0.834 & 0.843 & 0.776 \\
 \end{tabular}
 \end{table}
 
-\cx{Task-specific rules also outperform MG for timing learning-rate changes, inferring oscillations from game payoffs and transferring MNIST detectors (Table~\ref{tab:campaign_scope}).}
+Table~\ref{tab:campaign_scope} reports three further decisions. For CIFAR-10, we select the timing rule with the highest mean final accuracy on development runs. It reduces the learning rate once at least half the training budget has elapsed and median minibatch-loss MG differs by less than 2\% between successive blocks of four windows. For games we fit two cutoffs on labeled development games. Each cutoff exceeded by MG of the first player's payoff raises the predicted class by one, from one oscillation to two to three or more (cutoffs 2.81 and 3.90, rounded). For MNIST transfer we fit a detector on one source network and apply it unchanged. It alarms when median weight-norm MG in the latest three windows exceeds that of the preceding six by more than 27.8\%. A hit requires the first alarm to fall within 5,000 updates after the intervention. The false-positive count in the table is the number of comparison runs that alarm.
 
 \begin{table}[!htbp]
 \centering\small

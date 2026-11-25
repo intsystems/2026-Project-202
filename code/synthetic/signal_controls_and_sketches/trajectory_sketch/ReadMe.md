@@ -4,8 +4,7 @@ Check CountSketch on known ranks, compare logs with and without recording, and m
 
 ## In the article
 
-- [Section 4.4 · Detecting changes during grokking](../../../../article/manuscript/ReadMe.md#section-44--detecting-changes-during-grokking). The sketches provide the trajectory reference for the grokking comparison.
-- [Appendix E · Additional learning settings](../../../../article/manuscript/ReadMe.md#appendix-e--additional-learning-settings). The grokking paragraph describes how the parameter and logit trajectories are projected. This folder contains separate sketch validation runs.
+- [Appendix E · Grokking](../../../../article/manuscript/ReadMe.md#appendix-e--grokking). The grokking section describes how the parameter and logit trajectories are projected. This folder contains separate sketch validation runs.
 
 ## Files and commands
 

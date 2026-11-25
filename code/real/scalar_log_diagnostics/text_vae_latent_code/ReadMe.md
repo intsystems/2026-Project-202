@@ -1,10 +1,10 @@
-# Text VAE code loss
+# Sentence information in a text VAE
 
-Compare baseline, code suppression and free bits on Penn Treebank. Plot scalar reconstruction loss, rolling MG and independently measured mutual information.
+Compare KL penalties with and without free bits on Penn Treebank. Plot scalar reconstruction loss, rolling MG and mutual information between sentences and the latent variable.
 
 ## In the article
 
-- [Section 4.3 · Tracking latent information in a text VAE](../../../../article/manuscript/ReadMe.md#section-43--tracking-latent-information-in-a-text-vae). Probe reconstruction loss under latent-code suppression and free-bits protection.
+- [Section 4.2 · Tracking sentence information in a text VAE](../../../../article/manuscript/ReadMe.md#section-42--tracking-sentence-information-in-a-text-vae). Compare changes in reconstruction loss with mutual information and decoder sensitivity.
 - [Appendix D.4 · Text VAE and preservation reference](../../../../article/manuscript/ReadMe.md#appendix-d4--text-vae-and-preservation-reference). Comparison with the independently measured retention of latent information.
 
 ## Files and commands

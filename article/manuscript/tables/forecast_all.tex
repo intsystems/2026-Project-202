@@ -2,15 +2,15 @@
 \toprule
 Inputs or selection rule & Full-query test ($n=30$) & Query sampling test ($n=20$) \\
 \midrule
-Held-out errors + MG & $0.03423\,\pm 0.02164$ & $0.03167\,\pm 0.02162$ \\
-Series statistics + held-out errors & $0.03617\,\pm 0.02199$ & $0.03379\,\pm 0.01753$ \\
-Held-out errors & $0.03997\,\pm 0.02869$ & $0.03424\,\pm 0.02069$ \\
+Validation errors + MG & $0.03423\,\pm 0.02164$ & $0.03167\,\pm 0.02162$ \\
+Series statistics + validation errors & $0.03617\,\pm 0.02199$ & $0.03379\,\pm 0.01753$ \\
+Validation errors & $0.03997\,\pm 0.02869$ & $0.03424\,\pm 0.02069$ \\
 MG & $0.03138\,\pm 0.02369$ & $0.03637\,\pm 0.02128$ \\
 Series statistics + MG & $0.03138\,\pm 0.02369$ & $0.03637\,\pm 0.02128$ \\
 All inputs except MG & $0.03669\,\pm 0.02740$ & $0.03939\,\pm 0.02625$ \\
-Series statistics + held-out errors + MG & $0.03534\,\pm 0.02528$ & $0.03994\,\pm 0.02952$ \\
+Series statistics + validation errors + MG & $0.03534\,\pm 0.02528$ & $0.03994\,\pm 0.02952$ \\
 All inputs, including MG & $0.03420\,\pm 0.02191$ & $0.04071\,\pm 0.02865$ \\
-Held-out model search & $0.03224\,\pm 0.03094$ & $0.04074\,\pm 0.03236$ \\
+Lowest validation error & $0.03224\,\pm 0.03094$ & $0.04074\,\pm 0.03236$ \\
 TwoNN & $0.03540\,\pm 0.02669$ & $0.04364\,\pm 0.02027$ \\
 Levina--Bickel & $0.04054\,\pm 0.03208$ & $0.04732\,\pm 0.04060$ \\
 Permutation entropy & $0.04484\,\pm 0.03033$ & $0.05384\,\pm 0.05040$ \\
@@ -20,7 +20,7 @@ Best fixed on development runs & $0.04475\,\pm 0.02978$ & $0.06041\,\pm 0.05629$
 PR of delay-vector covariance & $0.04397\,\pm 0.02700$ & $0.06098\,\pm 0.04815$ \\
 Best using the measured continuation & $0.00759\,\pm 0.00622$ & $0.00847\,\pm 0.00741$ \\
 \addlinespace
-Search NMSE minus MG (95\% CI)
+Validation minus MG (95\% CI)
  & $[-0.0102,\,0.0125]$
  & $[-0.0073,\,0.0176]$ \\
 \bottomrule

@@ -4,7 +4,7 @@ Track Hessian sharpness, oscillation and recurrence in full-batch descent on a q
 
 ## In the article
 
-- [Appendix E · Additional learning settings](../../../../article/manuscript/ReadMe.md#appendix-e--additional-learning-settings). The grokking paragraph reports the full-batch perceptron comparison. The Hessian-sharpness and recurrence analysis in this folder belongs to the earlier study.
+- [Appendix E · Grokking](../../../../article/manuscript/ReadMe.md#appendix-e--grokking). The grokking section reports the full-batch perceptron comparison. The Hessian-sharpness and recurrence analysis in this folder belongs to the earlier study.
 
 ## Files and commands
 

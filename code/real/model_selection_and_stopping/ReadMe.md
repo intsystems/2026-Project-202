@@ -2,7 +2,7 @@
 
 These experiments use diagnostics to select a forecaster, deployment policy, or training checkpoint.
 
-**In the article** · [Section 4.5 · Selecting Walker2d policies under actuator shifts](../../../article/manuscript/ReadMe.md#section-45--selecting-walker2d-policies-under-actuator-shifts) · [Section 4.8 · Forecast model selection from single-neuron recordings](../../../article/manuscript/ReadMe.md#section-48--forecast-model-selection-from-single-neuron-recordings) · [Appendix H · Comparing intervention rules](../../../article/manuscript/ReadMe.md#appendix-h--comparing-intervention-rules)
+**In the article** · [Appendix F.2 · Selecting policies for actuator shifts](../../../article/manuscript/ReadMe.md#appendix-f2--selecting-policies-for-actuator-shifts) · [Section 4.8 · Forecast model selection from single-neuron recordings](../../../article/manuscript/ReadMe.md#section-48--forecast-model-selection-from-single-neuron-recordings) · [Appendix I · Comparing intervention rules](../../../article/manuscript/ReadMe.md#appendix-i--comparing-intervention-rules)
 
 - [RNN forecast selection](rnn_forecast_selection/ReadMe.md). Compare reduced-query MG, full MG and held-out validation for choosing a model to forecast one neuron in trained recurrent generators.
 - [Walker2d policy selection](walker2d_policy_selection/ReadMe.md). Select policies for transfer to actuator lag and noise using nominal reward, MG, entropy or a fixed policy.

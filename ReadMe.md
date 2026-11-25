@@ -1,4 +1,4 @@
-# Measuring dynamic simplification from scalar neural network logs
+# What Can a Scalar Log of Loss, Weight Norm, or Neuron Activation Reveal About a Neural Network?
 
 This repository accompanies the [article](article/ReadMe.md) and the ICOMP poster on estimating active dimension from scalar logs. The article tests dimension recovery on controlled systems and evaluates MG for monitoring training and selecting models.
 

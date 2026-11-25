@@ -3,7 +3,7 @@
 | File | Article content |
 | --- | --- |
 | [icomp_method.pdf](icomp_method.pdf) | Delay reconstruction and neighbor distances for a periodic signal and a text VAE loss record. |
-| [components.pdf](components.pdf) | Known-mode regression and the learned generator phase comparison. |
+| [components.pdf](components.pdf) | MG of the linear model's training loss (half the mean squared prediction error) and the phase comparison in trained recurrent generators. |
 | [force_training_transition.pdf](force_training_transition.pdf) | Fixed-weight FORCE simulations, delay reconstruction, and windowed MG at selected training steps. |
 | [vae_real_log.pdf](../../poster/figures/vae_real_log.pdf) | Reconstruction loss on fixed evaluation sentences, MG, and sentence-code mutual information. |
 | [resnet_freeze_trace.pdf](resnet_freeze_trace.pdf) | Weight-norm log, MG alarm, and independent update rank after freezing the ResNet backbone. |
@@ -38,7 +38,7 @@ python article/manuscript/figures/plot_force_training_transition.py --output art
 python code/real/scalar_log_diagnostics/text_vae_latent_code/analyze_logs.py --output article/manuscript/.build/reproduced
 ```
 
-Both scripts recompute MG from the scalar samples committed under the respective experiment's `logs/`. The VAE script reads the separately measured mutual information from the bundled CSVs. That quantity uses the encoder's posterior distributions.
+Both scripts recompute MG from the scalar samples committed under the respective experiment's `logs/`. The VAE script reads mutual information from the bundled CSVs. Those values were estimated from the encoder's posterior distributions.
 
 The FORCE figure shows the median and range of MG across valid windows at each training step. It excludes windows flagged by the estimator and leaves a gap when a simulation has no valid windows.
 

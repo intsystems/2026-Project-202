@@ -1,6 +1,6 @@
 \claude{
 \section{Forecast selection and sampled-query estimation}\label{app:forecast_utility}
-\cx{Each forecast task supplies an observed segment of one neuron's activation and a continuation reserved for scoring. The series come from untrained networks and networks trained to produce the oscillations in Table~\ref{tab:generator_phases}.}
+Each forecast task supplies an observed segment of one neuron's activation and a continuation reserved for scoring. The series come from untrained networks and networks trained to produce the oscillations in Table~\ref{tab:generator_phases}.
 
 \begin{table}[htbp]
 \centering\small
@@ -35,7 +35,7 @@ Shifts tested for recurrence (samples) & 6--288 \\
 Development repeats / validation folds by initialization & 18 / 3 \\
 Decision tree (depths / minimum leaf size) & $\{2,3\}$ / 8 \\
 Random forest (trees / depths / minimum leaf size) & 100 / $\{3,6\}$ / 5 \\
-Held-out search (initial segments / next samples per test) & 4 / 32 \\
+Validation blocks / forecast steps per block & 4 / 32 \\
 Queries per window (primary / sensitivity) / block size & 128 / $\{64,256\}$ / 64 \\
 Timing CPU / numerical threads & Intel Core i5-12500H / 1 \\
 Common inputs / timed repeats per input & 12 / 7 \\
@@ -43,15 +43,15 @@ Common inputs / timed repeats per input & 12 / 7 \\
 \end{tabularx}
 \end{table}
 
-\cx{Untrained networks can settle to a constant or continue to vary. Held-out search chooses the lowest mean validation error across initial segments, then refits the model on the whole observed segment.}
+Untrained networks can settle to a constant or continue to vary. For validation, each candidate starts with 1,920 observed samples and forecasts the next 32. We then add those 32 observations to its history and repeat. After four such forecasts we select the model with the lowest mean validation error and refit it on all 2,048 observations.
 
 \paragraph{Inputs to the learned rules.}
-\cx{The \emph{series statistics} describe the level and shape of the observed segment (Table~\ref{tab:forecast-design}). We use its mean and standard deviation, the slope after standardization, and the Pearson correlation between successive samples. To measure roughness and recurrence, we compute the mean squared difference between neighbors and the smallest such difference over shifted copies of the series, each divided by twice its variance. From the nonzero-frequency power spectrum we take the entropy relative to its maximum and the fraction of power at the strongest frequency.}
+The \emph{series statistics} describe the level and shape of the observed segment (Table~\ref{tab:forecast-design}). We use its mean and standard deviation, the slope after standardization, and the Pearson correlation between successive samples. To measure roughness and recurrence, we compute the mean squared difference between neighbors and the smallest such difference over shifted copies of the series, each divided by twice its variance. From the nonzero-frequency power spectrum we take the entropy relative to its maximum and the fraction of power at the strongest frequency.
 
-\cx{\emph{Held-out errors} are the candidates' mean validation errors on the splits used in direct search. The full input adds these to the series statistics, MG, TwoNN and Levina--Bickel dimension estimates, permutation and sample entropy, and the covariance PR below. Each rule predicts continuation error per candidate. We keep each initialization in a single fold and estimate missing-feature replacements on the training folds.}
+Some learned rules also use the candidates' mean errors on these four blocks as inputs (\emph{validation errors} in Table~\ref{tab:forecast_all}). The full input adds these to the series statistics, MG, TwoNN and Levina--Bickel dimension estimates, permutation and sample entropy, and the covariance PR below. We choose among the trees and forests in Table~\ref{tab:forecast-design} by the mean forecast error of their selections on held-out development folds. Each initialization stays in one fold. We estimate missing-feature replacements on the training folds. For MG alone, this procedure selects a depth-two regression tree. Its splits group prefixes by MG and each leaf chooses the candidate with the lowest mean development error in that group.
 
 \paragraph{PR of delay-vector covariance.}
-\cx{We apply the PR in Section~\ref{sec:controlled} to the eigenvalues of the sample covariance across delay vectors $y_t$ (Equation~\eqref{eq:delay}). A value near one means most variation lies along one linear direction. Forecasting uses the same vectors for PR and MG.}
+For covariance eigenvalues $v_i$, the participation ratio is $(\sum_i v_i)^2/\sum_i v_i^2$. Here we use the sample covariance of the delay vectors $y_t$ (Equation~\eqref{eq:delay}). A value near one means most variation lies along one linear direction. Forecasting uses the same vectors for PR and MG.
 
 \begin{table}[ht]
 \centering\small
@@ -60,18 +60,18 @@ Common inputs / timed repeats per input & 12 / 7 \\
 \input{tables/forecast_all.tex}
 \end{table}
 
-We average tasks within each repeat. The interval in Table~\ref{tab:forecast_all} resamples the within-repeat error differences between search and MG. Choosing from the measured continuation gives the lowest error attainable by the candidate set.
+We average tasks within each repeat. The interval in Table~\ref{tab:forecast_all} resamples the within-repeat error differences between the validation and MG rules. Choosing from the measured continuation gives the lowest error attainable by the candidate set.
 
 \paragraph{Sampled-query MG.}
-\cx{We search around $q$ evenly spaced queries, keeping all $n$ vectors eligible as neighbors subject to temporal exclusion. For $2\le q\le n$, the query indices are $\lfloor\ell(n-1)/(q-1)\rfloor$, $\ell=0,\ldots,q-1$. On this subset $Q$ we compute}
+We search around $q$ evenly spaced queries, keeping all $n$ vectors eligible as neighbors subject to temporal exclusion. For $2\le q\le n$, the query indices are $\lfloor\ell(n-1)/(q-1)\rfloor$, $\ell=0,\ldots,q-1$. On this subset $Q$ we compute
 \begin{equation}
 \widehat d_{\rm MG}^{(q)}=
 \frac{q(k-1)-1}{\displaystyle\sum_{i\in Q}\sum_{j=1}^{k-1}\log(r_{ik}/r_{ij})}.
 \label{eq:querymg}
 \end{equation}
-\cx{With all queries this recovers Equation~\eqref{eq:mg} whenever the numerical checks pass. We apply the same distance and log-sum checks to the sampled queries. If an estimate is unavailable, the rule uses the replacement learned on development runs.}
+With all queries this recovers Equation~\eqref{eq:mg} whenever the numerical checks pass. We apply the same distance and log-sum checks to the sampled queries. If an estimate is unavailable, the rule uses the replacement learned on development runs.
 
-\cx{Sampled MG computes distances in blocks at $O(qnE)$ cost. Full MG uses a KD-tree. Their timings therefore reflect both query sampling and the distance-search implementation.}
+Sampled MG computes distances in blocks at $O(qnE)$ cost. Full MG uses a KD-tree. Their timings therefore reflect both query sampling and the distance-search implementation.
 
 \begin{table}[!htbp]
 \centering\small
@@ -81,13 +81,13 @@ We average tasks within each repeat. The interval in Table~\ref{tab:forecast_all
 \end{table}
 
 \paragraph{Timing on the same inputs.}
-\cx{On identical inputs we time feature computation, selection and fitting together. After one untimed run per rule, we vary run order and take median time first within each input, then across inputs (Table~\ref{tab:forecast_utility}).}
+On identical inputs we time feature computation, selection and fitting together. After one untimed run per rule, we vary run order and take median time first within each input, then across inputs (Table~\ref{tab:forecast_utility}).
 
 
 \section{Comparing intervention rules}\label{app:intervention_utility}
-\cx{On MNIST we ask when to stop fitting noisy labels, freeze hidden layers or prune neurons. All rules choose among the same intervention times on the same development runs.}
+On MNIST we ask when to stop fitting noisy labels, freeze hidden layers or prune neurons. All rules choose among the same intervention times on the same development runs.
 
-\cx{Only the stopping experiment corrupts training labels. Rules read weight norm or loss on fixed training images with their assigned labels (Table~\ref{tab:mnist-intervention-setup}).}
+Only the stopping experiment corrupts training labels. Rules read weight norm or loss on fixed training images with their assigned labels (Table~\ref{tab:mnist-intervention-setup}).
 
 \begin{table}[htbp]
 \centering\small
@@ -97,21 +97,19 @@ We average tasks within each repeat. The interval in Table~\ref{tab:forecast_all
 \toprule
 Component & Setting \\
 \midrule
-Data & \cx{Pooled $14\times14$ images. Training / validation / test images, 2,000 / 500 / 2,000. Original validation and test labels.} \\
+Data & Pooled $14\times14$ images. Training / validation / test images, 2,000 / 500 / 2,000. Original validation and test labels. \\
 Training & Adam at $10^{-3}$, batch 64, at most 2,048 updates \\
 Label corruption & 40\% or 60\%; wrong classes sampled independently for each run \\
 Fixed set for loss & 128 training examples, using their assigned labels \\
 Candidate updates & 256, 512, 768, 1,024, 1,536 \\
-\cx{Rule selection score (higher is better)} & \cx{$A-0.02C$, with validation accuracy $A$ and relative arithmetic cost $C$} \\
-Repeats & \cx{3 for rule choice, 8 for evaluation} \\
+Rule selection score (higher is better) & $A-0.02C$, with validation accuracy $A$ and relative arithmetic cost $C$ \\
+Repeats & 3 for rule choice, 8 for evaluation \\
 Pruned layers & Retain 64 neurons per hidden layer. Rank neurons by the product of the norms of their incoming and outgoing weights. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\cx{Scalar rules act on completed windows. The window-mean rule uses a threshold, the fixed schedule uses the same step in every run, and a run with no alarm uses its full budget.}
-
-\cx{We select the rule that gives the best trade-off between validation accuracy and computation under the score in Table~\ref{tab:mnist-intervention-setup}. Accuracy is a fraction, and cost is the estimated number of multiply--accumulate operations relative to uninterrupted training.}
+For each action we try both logs, both threshold directions, and cutoffs at deciles of development scores. We choose the rule maximizing validation accuracy minus $0.02$ times relative arithmetic cost (Table~\ref{tab:mnist-intervention-setup}). All four selected MG rules use weight norm. At the first eligible step where MG exceeds 6.43 we stop training with 40\% noisy labels. With 60\% noise the selected rule stops when MG is at or below 7.33. For freezing and pruning the triggers are MG above 7.76 and 7.74, respectively (cutoffs rounded). A run that never meets its condition continues to the full budget.
 
 \begin{figure}[!htbp]
 \centering
@@ -121,7 +119,7 @@ Pruned layers & Retain 64 neurons per hidden layer. Rank neurons by the product 
 \end{figure}
 
 
-\cx{After freezing, only the classifier trains. After pruning, the surviving weights retain their optimizer state. Both interventions use the same minibatches as uninterrupted training.}
+After freezing, only the classifier trains. After pruning, the surviving weights retain their optimizer state. Both interventions use the same minibatches as uninterrupted training.
 
 \begin{table}[!htbp]
 \centering\small
@@ -130,5 +128,5 @@ Pruned layers & Retain 64 neurons per hidden layer. Rank neurons by the product 
 \input{tables/intervention_utility.tex}
 \end{table}
 
-\cx{With noisy labels, different stopping steps give similar test accuracy across rules (Figure~\ref{fig:mnist-stop-trace}). Pruning preserves accuracy at lower arithmetic cost under both MG and simpler rules (Table~\ref{tab:intervention_utility}).}
+With noisy labels, different stopping steps give similar test accuracy across rules (Figure~\ref{fig:mnist-stop-trace}). Pruning preserves accuracy at lower arithmetic cost under both MG and simpler rules (Table~\ref{tab:intervention_utility}).
 }

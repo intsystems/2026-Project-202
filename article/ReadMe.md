@@ -1,6 +1,6 @@
 # Article and poster
 
-## Detecting Simplification in Neural Network Dynamics from Scalar Logs
+## What Can a Scalar Log of Loss, Weight Norm, or Neuron Activation Reveal About a Neural Network?
 
 The PDF editions use one [editable manuscript](manuscript/ReadMe.md) based on AISTATS v3.
 

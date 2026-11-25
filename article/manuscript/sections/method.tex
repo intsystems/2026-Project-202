@@ -1,47 +1,47 @@
 \claude{
 \section[Measuring simplification from a scalar log]{Measuring simplification from a scalar log}\label{sec:method}
 \subsection{Delay reconstruction}
-A periodic signal can take the same value as it rises and falls. \cx{Two readings in sequence can distinguish those cases. Write $x_t=\phi(s_t)$ for a scalar observation of state $s_t$. Within each window we subtract the mean and divide by the standard deviation. A delay vector collects $E$ standardized readings $z_t$ spaced $\tau$ steps apart,}
+A periodic signal can take the same value as it rises and falls. The next reading can show which way the signal is moving. Write $x_t=\phi(s_t)$ for a scalar observation of state $s_t$. Each MG estimate uses a window of $W$ consecutive readings. To track changes over time, we move the window along the log. Within each window we subtract the mean and divide by the standard deviation to obtain $z_t$. A delay vector collects $E$ of these standardized readings spaced $\tau$ steps apart,
 \begin{equation}
 y_t=(z_t,z_{t+\tau},\ldots,z_{t+(E-1)\tau}).
 \label{eq:delay}
 \end{equation}
-\cx{Figure~\ref{fig:method_geometry} follows one selected vector (the query). Its delay projection shows just the first and last entries. Distances use all $E$ entries.}
+Figure~\ref{fig:method_geometry} follows one selected vector (the query). Its delay projection shows just the first and last entries. Distances use all $E$ entries.
 
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=.9\textwidth]{figures/icomp_method.pdf}
-\caption{\cx{Delay vectors from a periodic signal and a text model's reconstruction loss (Section~\ref{sec:vae}). Blue samples form the query (hollow circle). Gray crosses mark vectors excluded by time. Blue dots mark neighbors selected using all $E$ coordinates.}}
+\caption{Delay vectors from a periodic signal and a text model's reconstruction loss (Section~\ref{sec:vae}). Blue samples form the query (hollow circle). Gray crosses mark vectors excluded by time. Blue dots mark neighbors selected using all $E$ coordinates.}
 \label{fig:method_geometry}
 \end{figure*}
 
 \subsection{Pooled local-dimension estimation}
-With uniform sampling, doubling a small neighborhood's radius roughly doubles the number of points it contains on a curve and quadruples it on a surface. \cx{MG estimates how quickly this number grows from the distances to nearby vectors.}
+With uniform sampling, doubling a small neighborhood's radius roughly doubles the number of points it contains on a curve and quadruples it on a surface. MG estimates how quickly this number grows from the distances to nearby vectors.
 
-A window of $W$ samples yields $n=W-(E-1)\tau$ delay vectors. \cx{For each query $y_i$, we exclude $y_\ell$ with $|i-\ell|\le T$ to limit matches on the same pass (Theiler exclusion)} \citep{theiler1986spurious}. \cx{Let $r_{ij}$ be the Euclidean distance to its $j$th closest eligible neighbor. Pooling distance ratios for the $k$ nearest neighbors of each query gives}
+A window of $W$ samples yields $n=W-(E-1)\tau$ delay vectors. For each query $y_i$, we exclude $y_\ell$ with $|i-\ell|\le T$ to limit matches on the same pass (Theiler exclusion) \citep{theiler1986spurious}. Let $r_{ij}$ be the Euclidean distance to its $j$th closest eligible neighbor. Pooling distance ratios for the $k$ nearest neighbors of each query gives
 \begin{equation}
 \MG=\frac{n(k-1)-1}
 {\displaystyle\sum_{i=1}^{n}\sum_{j=1}^{k-1}
 \log(r_{ik}/r_{ij})}.
 \label{eq:mg}
 \end{equation}
-\cx{Lower MG means that the number of nearby vectors grows more slowly with radius.} Shifting or rescaling all the samples preserves the ideal estimate (\appref{app:theory}). In figures, MG@weight norm means MG computed from the weight-norm log.
+Lower MG means that the number of nearby vectors grows more slowly with radius. Shifting or rescaling all the samples preserves the ideal estimate (\appref{app:theory}). In figures, MG@weight norm means MG computed from the weight-norm log.
 
 \subsection[Experimental questions]{Experimental questions}\label{sec:mg_conditions}
-\cx{Repeated visits to nearby states let us interpret MG as a dimension when the delay coordinates preserve local geometry (\appref{app:theory}). Training can change the system within a window. There we test MG against independent measurements of the change itself, then compare decisions based on MG with alternatives (Table~\ref{tab:experiment-questions}).}
+Repeated visits to nearby states let us interpret MG as a dimension when the delay coordinates preserve local geometry (\appref{app:theory}). Training can change the system within a window. There we test MG against independent measurements of the change itself, then compare decisions based on MG with alternatives (Table~\ref{tab:experiment-questions}).
 
 \begin{table}[H]
 \centering\small
-\caption{What each experiment tests.}
+\caption{Selected experiments from the main text, grouped by research question.}
 \label{tab:experiment-questions}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.22\linewidth}>{\raggedright\arraybackslash}p{.31\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
-\cx{Question} & \cx{Scalar measurement} & \cx{Basis for comparison} \\
+Question & Scalar measurement & Basis for comparison \\
 \midrule
-\cx{Recover dimension} & \cx{Loss, weight measurements, neuron activation} & \cx{Prescribed oscillations and verified periodic motion (Section~\ref{sec:controlled})} \\
-\cx{Track training changes} & \cx{Weight norm or reconstruction loss} & \cx{Weight updates and sentence information (Sections~\ref{sec:cnn}--\ref{sec:vae})} \\
-\cx{Warn of a spike} & \cx{Transformer log loss} & \cx{Advance warnings and false alarms (Section~\ref{sec:spike-warning})} \\
-\cx{Choose a model} & \cx{Gradient norm or neuron activation} & \cx{Classification accuracy and forecast error (Sections~\ref{sec:ssl}--\ref{sec:forecast_utility})} \\
+Recover dimension & Loss, weight measurements, neuron activation & Prescribed oscillations and verified periodic motion (Section~\ref{sec:controlled}) \\
+Track training changes & Weight norm or reconstruction loss & Weight updates and sentence information (Sections~\ref{sec:cnn}--\ref{sec:vae}) \\
+Warn of a spike & Transformer log loss & Advance warnings and false alarms (Section~\ref{sec:spike-warning}) \\
+Choose a model & Gradient norm or neuron activation & Classification accuracy and forecast error (Sections~\ref{sec:ssl}--\ref{sec:forecast_utility}) \\
 \bottomrule
 \end{tabularx}
 \end{table}
