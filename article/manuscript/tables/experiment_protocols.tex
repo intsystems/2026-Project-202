@@ -38,11 +38,13 @@ Freezing choices & First two convolutions, all layers before the classifier, or 
 Pruned weight fractions & 50\%, 80\%, 95\% \\
 Comparison training runs & Unchanged training or batch size $\times4$ \\
 Comparison logs from unchanged training & Later samples $\times10$ or a mean over the latest 16 samples \\
-Development / evaluation / shifted-time repeats & 4 / 4 / 10 \\
+\cx{Repeats by purpose} & \cx{4 to choose detector settings, 4 to test them, 10 to test new intervention times} \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Detector settings and evaluation}} \\
 MG detector & $M=2$, $B=3$, $D_j<-0.08829884$ \\
-Block sizes tested / threshold margin & $M\in\{2,3,4\}$, $B\in\{3,4,6\}$ / $0.02$ \\
+\cx{Number of recent windows ($M$)} & \cx{2, 3 or 4} \\
+\cx{Number of preceding windows ($B$)} & \cx{3, 4 or 6} \\
+\cx{Margin above the largest control drop} & \cx{2 percentage points} \\
 Window ends / post-intervention horizon & $>1{,}500$ / 5,000 updates \\
 Strong interventions / comparisons per repeat & 7 / 4 \\
 Excluded from the strong set & Learning rate divided by 3, first two convolutions frozen \\
@@ -106,15 +108,17 @@ Early checks / subsequent check interval & 512--1,024 every 128 updates / every 
 \cx{Minimum early medians (MI / decoder sensitivity, nats)} & $>0.1$ / $>10^{-4}$ \\
 Starting values at update 1,024 & Both $\ge0.65\times$ their early medians \\
 Loss / recovery ratios to early medians & Both $\le0.50$ / both $\ge0.65$ \\
-Event time / minimum time left & Second consecutive qualifying check / 512 updates \\
+Event time & Second consecutive qualifying check \\
+\cx{Minimum time left at onset / maximum detection delay} & \cx{512 updates each} \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Rules for scheduling checks}} \\
 Training KL divergence & Mean over the latest 64 updates \\
 Scheduled KL weight & $\max\{\beta_t,0.01\}$ at update $t$ \\
 Initial checks / extra checks allowed & 1 / 6, 12 (primary), 24 \\
 Minimum time between triggered checks & 128 updates \\
-Development / evaluation repeats & 1 / 9 \\
-Threshold grid & 0.025, 0.05, 0.075, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.7, 1, 1.5, 2, 3 \\
+\cx{Repeats by purpose} & \cx{1 to choose the threshold, 9 to test it} \\
+Threshold grid \cx{(primary MG threshold in bold)} & 0.025, 0.05, 0.075, 0.1, 0.15, \cx{\textbf{0.20}}, 0.3, 0.4, 0.5, 0.7, 1, 1.5, 2, 3 \\
+\cx{Threshold tie-breakers, in order} & \cx{Fewer unproductive checks, shorter delay, fewer total checks, then larger threshold} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -188,7 +192,7 @@ Batch size / precision & 256 / float64 \\
 Perceptron comparison & Half the modulo-97 pairs, full-batch gradient descent, squared error \\
 Window length / center & 60 log samples / time of covariance estimate \\
 Training accuracy marking fit & $\ge95\%$ \\
-Rise boundaries / minimum windows per interval & First of 5 consecutive readings at or above each cutoff / 3 \\
+Rise boundaries / minimum windows per interval & \cx{First of 5 consecutive logged steps with validation accuracy at or above the cutoff} / 3 \\
 MG setting grid & $E\in\{4,6,10\}$, $\tau\in\{1,2,4\}$, $k\in\{5,20\}$ \\
 Time exclusion before capping & $(E-1)\tau$ steps or the autocorrelation rule \\
 \bottomrule

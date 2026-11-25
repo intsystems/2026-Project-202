@@ -4,7 +4,7 @@ Compare one neuron's autonomous activity before and after learning a figure-eigh
 
 ## In the article
 
-- [Section 3.3 · FORCE training from chaos to periodic output](../../../../article/manuscript/ReadMe.md#section-33--force-training-from-chaos-to-periodic-output). The figure-eight intervention and pre/post-training single-neuron analysis.
+- [Section 3.2 · Tracking the transition to a periodic orbit](../../../../article/manuscript/ReadMe.md#section-32--tracking-the-transition-to-a-periodic-orbit). Single-neuron MG during figure-eight learning and independent checks of the full hidden state.
 - [Appendix C.3 · Learned autonomous generators](../../../../article/manuscript/ReadMe.md#appendix-c3--learned-autonomous-generators). Checkpoint evaluation details and the Lyapunov-based selection of chaotic initializations.
 
 ## Files and commands

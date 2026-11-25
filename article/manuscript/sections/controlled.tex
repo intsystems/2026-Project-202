@@ -2,11 +2,11 @@
 \section[Dimension recovery and periodic motion]{Dimension recovery and periodic motion}\label{sec:controlled}
 
 \subsection[Independent oscillations and harmonics]{Independent oscillations and harmonics}\label{sec:generator}
-A periodic waveform can have several spectral peaks. Its harmonics all follow the same phase. Independent tones can produce just as many peaks, but each tone has its own phase. To test whether a neuron's activity reveals this difference, we train recurrent networks to generate harmonics, independent tones, or a mixture. During first-order reduced and controlled error (FORCE) learning, the network feeds its output back to its recurrent units as the output weights adapt \citep{sussillo2009generating}.
+A periodic waveform can have several spectral peaks. Its harmonics all follow the same phase. Independent tones can produce just as many peaks, but each tone has its own phase. \cx{We train recurrent networks to generate harmonics, independent tones, or mixtures of the two so that we can vary the number of independent phases at a fixed peak count.} During first-order reduced and controlled error (FORCE) learning, the network feeds its output back to its recurrent units as the output weights adapt \citep{sussillo2009generating}.
 
 After training, we fix the weights and record one neuron's activation. Among outputs with the same number of peaks, single-neuron MG is lowest for harmonics and highest for independent tones (Figure~\ref{fig:components}). MG captures the ordering in this comparison, although estimates for different numbers of independent tones overlap across runs (Table~\ref{tab:generator_phases}). The participation ratio (PR) of the covariance of all neurons' activations measures how many directions carry appreciable variance. It changes little across the same generators.
 
-A training loss can also reveal oscillations in the weights. We fit a linear predictor to fixed inputs and targets. At every update we record half the mean squared prediction error over the training set. We choose the data so that undamped momentum makes the weights oscillate around the least-squares solution along known directions, each at its own frequency. Each oscillation contributes to the loss through the squared displacement along that direction. MG of this loss curve rises as more directions oscillate (Figure~\ref{fig:components}, left) and falls when we damp some of them (Table~\ref{tab:regression_variation}).
+\cx{In linear regression we can set how many independent weight oscillations contribute to the training loss.} We fit a linear predictor to fixed inputs and targets. At every update we record half the mean squared prediction error over the training set. We choose the data so that undamped momentum makes the weights oscillate around the least-squares solution along known directions, each at its own frequency. Each oscillation contributes to the loss through the squared displacement along that direction. MG of this loss curve rises as more directions oscillate (Figure~\ref{fig:components}, left) and falls when we damp some of them (Table~\ref{tab:regression_variation}).
 
 Other recordings capture different parts of the motion. In a diagonal matrix whose entries oscillate independently, a single entry follows only its own rhythm, while the matrix norm reflects them all (Table~\ref{tab:matrix-observations}). In a digit classifier with periodically varying loss weights, MG from weight norm or loss on fixed examples tracks the PR of the weight trajectory more closely than MG from gradient norm (Table~\ref{tab:synthetic-errors}).
 
@@ -17,15 +17,18 @@ Other recordings capture different parts of the motion. In a diagonal matrix who
 \label{fig:components}
 \end{figure*}
 
-\subsection{FORCE training from chaos to periodic output}\label{sec:force}
-We train initially chaotic networks to produce a periodic output. If the hidden state settles onto a periodic orbit, a single coordinate, its phase, locates the state on that orbit. Can one neuron's activity reveal this reduction to one degree of freedom? At successive stages of learning, we pause the weight updates and record the same neuron as the network runs freely. Its delay vectors initially spread across the projection. By the final checkpoint they trace a loop, and single-neuron MG is close to one (Figure~\ref{fig:force-log-geometry}).
+\FloatBarrier
+\subsection[Tracking the transition to a periodic orbit]{\cx{Tracking the transition to a periodic orbit}}\label{sec:force}
+\cx{On a periodic orbit, the phase of the cycle determines the activity of every neuron. Delay vectors from a single oscillating neuron should therefore lie along a curve, with MG close to one. To induce this transition in an initially chaotic network, we train its two outputs to trace a repeating figure eight. A single phase sets both target coordinates. Because the outputs feed back into the network, adjusting their weights with FORCE can bring the hidden state onto a periodic orbit.}
 
-We check this interpretation in the full network. Before training, nearby states diverge, as indicated by a positive largest finite-time Lyapunov exponent. After training, four of five networks pass the independent checks for stable periodic motion (Table~\ref{tab:force-outcome}). They reproduce the target and return close to the same hidden state after each period. Perturbations along the orbit persist as small phase shifts, while perturbations across it decay.
+\cx{At each checkpoint we hold the weights fixed and record the same neuron's activity while the network runs without the target. Plotting its activation against a delayed copy gives a broad cloud before training and a closed loop after training. MG of the delay vectors falls to just above one (Figure~\ref{fig:force-log-geometry}).}
+
+\cx{A network can repeat the figure eight even if its hidden state differs from one cycle to the next. We therefore check the full state. Nearby hidden states diverge before training. After training, all networks reproduce the target and return close to the same state one period later. In most runs, small displacements along the orbit persist as phase shifts, while displacements across it decay. In one run with single-neuron MG close to one, a second direction contracts too slowly to meet our stability criterion (Table~\ref{tab:force-outcome}).}
 
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/force_training_transition.pdf}
-\caption{One neuron's activation at four fixed-weight checkpoints (top) and its delay projection (middle). The bottom panels show the median and range of MG across valid windows. At 50 and 75 updates the activation settles to a constant and no window yields a reliable estimate. Before training, median MG is 5.62. At 40,000 updates the delay vectors trace a closed loop and median MG is 1.13, close to the value of one (dashed line) expected when phase alone specifies position on the orbit.}
+\caption{One neuron's activation at four fixed-weight checkpoints (top) and its delay projection (middle). The bottom panels show the median and range of MG across valid windows. \cx{The gap at 50 and 75 updates occurs because the activation settles to a constant. The dashed line marks the dimension of a periodic orbit.}}
 \label{fig:force-log-geometry}
 \end{figure*}
 }

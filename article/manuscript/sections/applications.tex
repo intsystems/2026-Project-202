@@ -2,24 +2,25 @@
 \section{Monitoring and selection in learned systems}\label{sec:applied}
 
 \subsection{Detecting restricted parameter updates}\label{sec:cnn}
-Can weight norm reveal that a classifier's updates now occupy fewer directions? We freeze layers, prune weights, or lower the learning rate in a CIFAR-10 classifier \citep{krizhevsky2009learning}. Comparisons use unchanged training, larger batches, and unchanged logs rescaled or smoothed after recording.
+\cx{If a training run saved only the weight norm at each step, could we tell when the updates began to concentrate in fewer directions? In a small convolutional classifier trained on CIFAR-10} \citep{krizhevsky2009learning}, \cx{we freeze layers at a known step and compare MG of the norm history with a direct measurement from the update vectors. We also test pruning and learning-rate reductions.} Comparisons use unchanged training, larger batches, and unchanged logs rescaled or smoothed after recording.
 
-We look for a sustained drop in MG of the weight-norm log. On development runs we set the threshold above the largest drop in the controls and choose the block lengths that detect the most interventions. The resulting rule raises an alarm when median MG in the latest two windows is more than $8.83\%$ below the median of the preceding three (Equation~\ref{eq:detector}).
+\cx{The update participation ratio (update PR) measures the effective number of directions in the covariance of the weight changes $\Delta\theta_t=\theta_t-\theta_{t-1}$ within a window. It equals one for variation along a line and $r$ when $r$ orthogonal directions share the variance equally.}
 
-We count a detection if the first alarm comes within 5,000 updates after the intervention. This happened in 27 of 28 evaluation runs across seven strong interventions. The miss was one tenfold learning-rate reduction, and none of the comparison records triggered an alarm. Absolute successive changes detected as many interventions sooner, and normalized increments detected them all (Tables~\ref{tab:decisions} and~\ref{tab:detectors}).
-
-In ResNet-18 \citep{he2016deep}, freezing the feature extractor leaves only the final classification layer trainable. MG falls along with the covariance PR of the weight updates (Figure~\ref{fig:resnet-freeze-trace}). The same rule detects every freeze with random or ImageNet initialization, but misses pruning and learning-rate reductions (\appref{app:applied}).
+In ResNet-18 \citep{he2016deep}, freezing the feature extractor leaves only the final classification layer trainable. \cx{After freezing, weight-norm MG falls. Update PR estimated from compressed update vectors also falls (Figure~\ref{fig:resnet-freeze-trace}). Pruning half the weights in the small classifier lowers MG while update PR rises (Table~\ref{tab:cnn-graded}). A drop in MG flags an interval for inspection. Update PR checks whether the updates actually concentrated in fewer directions.}
 
 \begin{figure*}[!htb]
 \centering
-\includegraphics[width=.96\textwidth]{figures/resnet_freeze_trace.pdf}
-\caption{Freezing the feature extractor in ResNet-18. Each column compares runs from the same starting weights, aligned at the intervention. The lower panels show how widely the updates vary across directions (update covariance PR). Points are placed at window ends.}
+\includegraphics[width=.98\textwidth]{figures/resnet_freeze_trace.pdf}
+\caption{Freezing the feature extractor in ResNet-18. \cx{Each row compares runs from the same starting weights. At right, a lower update participation ratio (PR) means that fewer directions account for most of the variation among updates.} Points are placed at window ends.}
 \label{fig:resnet-freeze-trace}
 \end{figure*}
 
-\FloatBarrier
+\cx{We fit the rule on one set of classifier runs. For each pair of window counts we set the threshold above the largest MG drop in the controls. We choose the pair that detects the most interventions. The rule signals when median MG in the latest two windows falls more than $8.83\%$ below the median in the preceding three (Equation~\ref{eq:detector}). On new runs the first alarm must fall within 5,000 updates after the intervention.}
+
+\cx{The rule detected 27 of 28 strong interventions in the small classifier. It missed one tenfold learning-rate reduction and raised no alarms on the comparison records. Absolute changes between successive weight norms detected as many interventions with a shorter median delay. Normalized increments detected them all (Tables~\ref{tab:decisions} and~\ref{tab:detectors}). Applied to ResNet-18, the same MG rule flagged every freeze with random or ImageNet initialization but missed pruning and learning-rate reductions} (\appref{app:applied}).
+
 \subsection[Tracking sentence information in a text VAE]{\cx{Tracking sentence information in a text VAE}}\label{sec:vae}
-\cx{In a text variational autoencoder (VAE), the encoder maps each sentence $x$ to an approximate posterior $q(z\mid x)$ over a sentence-level latent variable $Z$. The decoder predicts each word from a sampled vector $z$ and the preceding words} \citep{bowman2016generating}. \cx{If the preceding words suffice for prediction, reconstruction loss can stay low even as the decoder becomes less sensitive to $z$.} Can the loss history reveal that change?
+\cx{In a text variational autoencoder (VAE), the encoder maps each sentence $x$ to an approximate posterior $q(z\mid x)$ over a sentence-level latent variable $Z$. The decoder predicts each word from a sampled vector $z$ and the preceding words} \citep{bowman2016generating}. \cx{If the preceding words suffice for prediction, reconstruction loss can stay low even as the decoder becomes less sensitive to $z$. We test whether MG of the loss falls as $Z$ carries less information about the sentence.}
 
 Starting from the same Penn Treebank model within each repeat \citep{marcus1993building}, we vary the penalty on the Kullback--Leibler (KL) divergence between \cx{$q(z\mid x)$ and the standard normal prior. A stronger penalty encourages the posteriors for different sentences to approach the same prior.} We also test \emph{free~bits}, which lets the batch-average KL of each \cx{latent dimension} rise to a threshold before the penalty increases \citep{kingma2016improved}.
 
@@ -28,7 +29,7 @@ Starting from the same Penn Treebank model within each repeat \citep{marcus1993b
 \begin{figure*}[!htb]
 \centering
 \includegraphics[width=.96\textwidth]{../poster/figures/vae_real_log.pdf}
-\caption{\cx{Reconstruction loss, MG and sentence information during text VAE training.} NLL is the mean negative log-likelihood per token on fixed sentences. \cx{The bottom panel shows mutual information $I(X;Z)$ in nats.} The vertical line marks when the three penalty conditions begin. Shading extends to the end of the first MG window recorded entirely under the new setting.}
+\caption{\cx{Reconstruction loss, MG and sentence information during text VAE training.} NLL is the mean negative log-likelihood per token on fixed sentences. \cx{$X$ is the input sentence and $Z$ its sampled latent representation.} The vertical line marks when the three penalty conditions begin. Shading extends to the end of the first MG window recorded entirely under the new setting.}
 \label{fig:vae-loss-log}
 \end{figure*}
 

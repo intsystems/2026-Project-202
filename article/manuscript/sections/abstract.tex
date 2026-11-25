@@ -1,5 +1,5 @@
 \begin{abstract}
-\claude{We ask when a scalar log such as loss or weight norm reveals that a neural network's activations or weight updates vary in fewer independent directions. We measure the local dimension of vectors formed from successive readings with the pooled MacKay--Ghahramani (MG) estimator.
+\claude{\cx{We test whether a dimension estimate from a single recorded quantity, such as loss or weight norm, falls when a network's activations or weight updates vary in fewer independent directions. We form delay vectors from samples of the same quantity at different times and estimate their local dimension with the pooled MacKay--Ghahramani (MG) estimator.}
 In recurrent generators with the same number of spectral peaks, MG of one neuron's activations is higher for independent oscillations than for harmonics of a single rhythm. Freezing a classifier's feature extractor concentrates its updates in fewer directions and lowers MG of the weight norm. \cx{In a text variational autoencoder, MG of reconstruction loss falls as the latent variable carries less information about the input sentence}, even when mean loss changes little.
 On MNIST, we select the self-supervised encoder with the highest MG of its gradient-norm log. A linear classifier using its features nearly matches the best test accuracy across encoders.}
 \end{abstract}

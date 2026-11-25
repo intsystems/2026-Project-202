@@ -64,7 +64,9 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 
 <a id="section-33--force-training-from-chaos-to-periodic-output"></a>
 
-### Section 3.2 · FORCE training from chaos to periodic output
+<a id="section-32--force-training-from-chaos-to-periodic-output"></a>
+
+### Section 3.2 · Tracking the transition to a periodic orbit
 
 - [FORCE RNN cycle](../../code/real/scalar_log_diagnostics/force_rnn_cycle/ReadMe.md)
 

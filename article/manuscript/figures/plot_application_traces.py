@@ -29,15 +29,16 @@ def read(logs, file):
 
 def plot_resnet():
     logs = EXPERIMENTS / "scalar_log_diagnostics/resnet_freeze/logs"
-    figure, axes = plt.subplots(3, 2, sharex=True, sharey="row", figsize=(6.1, 3.8))
-    figure.subplots_adjust(left=.13, right=.98, top=.84, bottom=.13, hspace=.20, wspace=.14)
+    figure, axes = plt.subplots(2, 3, sharex=True, sharey="col", figsize=(6.25, 2.6))
+    figure.subplots_adjust(left=.18, right=.99, top=.72, bottom=.19, hspace=.28, wspace=.34)
     freeze = 4000
     repeat = 20
     conditions = (("base", GRAY), ("freeze_head", BLUE))
-    for column, (mode, title) in enumerate((("scratch", "Random initialization"),
-                                           ("finetune", "ImageNet initialization"))):
-        norm, mg, rank = axes[:, column]
-        norm.set_title(title)
+    for row, (mode, title) in enumerate((("scratch", "Random\ninitialization"),
+                                        ("finetune", "ImageNet\ninitialization"))):
+        norm, mg, rank = axes[row]
+        norm.set_ylabel(title, rotation=0, ha="right", va="center")
+        norm.yaxis.set_label_coords(-.24, .5)
         norms = read(logs, f"{mode}_param_norm.csv")
         windows = read(logs, f"{mode}_windows.csv")
         detection = read(logs, f"{mode}_detector_per_run.csv")
@@ -52,12 +53,13 @@ def plot_resnet():
                 alarm_step = int(freeze + result.delay)
                 alarm_mg = trace.loc[trace.end == alarm_step, "MG"].item()
                 mg.scatter(alarm_step, alarm_mg, s=38, facecolors="white", edgecolors=BLUE, zorder=6)
-        for axis in axes[:, column]:
+        for axis in axes[row]:
             axis.axvline(freeze, ls="--", lw=.95, color=ORANGE)
             axis.grid(axis="y", alpha=.17)
-        rank.set(xlim=(0, 10000), xticks=[0, 4000, 8000], xlabel="Optimization step")
-    for axis, label in zip(axes[:, 0], ("Weight norm", "MG@weight norm", "Update PR")):
-        axis.set_ylabel(label)
+    axes[0, 0].set(xlim=(0, 10000), xticks=[0, 4000, 8000])
+    for axis, title in zip(axes[0], ("Weight norm", "MG@weight norm", "Effective number of\nupdate directions (PR)")):
+        axis.set_title(title)
+    axes[-1, 1].set_xlabel("Optimization step")
     figure.legend(handles=[
         Line2D([], [], color=GRAY, label="Unchanged training"),
         Line2D([], [], color=BLUE, label="Backbone frozen"),

@@ -32,11 +32,12 @@ Time points for the fitted trend & Equally spaced on $[-1,1]$ \\
 Shifts tested for recurrence (samples) & 6--288 \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Model selection and timing}} \\
-Development repeats / validation folds by initialization & 18 / 3 \\
+\cx{Repeats used to fit the selection rule} & \cx{18, grouped by initialization into 3 folds} \\
 Decision tree (depths / minimum leaf size) & $\{2,3\}$ / 8 \\
 Random forest (trees / depths / minimum leaf size) & 100 / $\{3,6\}$ / 5 \\
-Validation blocks / forecast steps per block & 4 / 32 \\
-Queries per window (primary / sensitivity) / block size & 128 / $\{64,256\}$ / 64 \\
+\cx{Validation forecasts per candidate} & \cx{4 successive forecasts of 32 samples each} \\
+\cx{Query vectors sampled per window} & \cx{128 in the main test, 64 and 256 in sensitivity tests} \\
+\cx{Query vectors processed at a time} & \cx{Up to 64} \\
 Timing CPU / numerical threads & Intel Core i5-12500H / 1 \\
 Common inputs / timed repeats per input & 12 / 7 \\
 \bottomrule
@@ -48,7 +49,7 @@ Untrained networks can settle to a constant or continue to vary. For validation,
 \paragraph{Inputs to the learned rules.}
 The \emph{series statistics} describe the level and shape of the observed segment (Table~\ref{tab:forecast-design}). We use its mean and standard deviation, the slope after standardization, and the Pearson correlation between successive samples. To measure roughness and recurrence, we compute the mean squared difference between neighbors and the smallest such difference over shifted copies of the series, each divided by twice its variance. From the nonzero-frequency power spectrum we take the entropy relative to its maximum and the fraction of power at the strongest frequency.
 
-Some learned rules also use the candidates' mean errors on these four blocks as inputs (\emph{validation errors} in Table~\ref{tab:forecast_all}). The full input adds these to the series statistics, MG, TwoNN and Levina--Bickel dimension estimates, permutation and sample entropy, and the covariance PR below. We choose among the trees and forests in Table~\ref{tab:forecast-design} by the mean forecast error of their selections on held-out development folds. Each initialization stays in one fold. We estimate missing-feature replacements on the training folds. For MG alone, this procedure selects a depth-two regression tree. Its splits group prefixes by MG and each leaf chooses the candidate with the lowest mean development error in that group.
+\cx{Some learned rules also use each candidate's mean error across its validation forecasts as an input} (\emph{validation errors} in Table~\ref{tab:forecast_all}). The full input adds these to the series statistics, MG, TwoNN and Levina--Bickel dimension estimates, permutation and sample entropy, and the covariance PR below. \cx{To choose among the trees and forests in Table~\ref{tab:forecast-design}, we divide the recordings used to fit the selection rule into folds, keeping each initialization in one fold. We compare the mean forecast errors of their choices on each fold after fitting on the others.} We estimate missing-feature replacements on the training folds. \cx{With MG as the input, this procedure selects} a depth-two regression tree. Its splits group prefixes by MG and each leaf chooses the candidate with the \cx{lowest mean forecast error among the recordings assigned to that leaf during fitting}.
 
 \paragraph{PR of delay-vector covariance.}
 For covariance eigenvalues $v_i$, the participation ratio is $(\sum_i v_i)^2/\sum_i v_i^2$. Here we use the sample covariance of the delay vectors $y_t$ (Equation~\eqref{eq:delay}). A value near one means most variation lies along one linear direction. Forecasting uses the same vectors for PR and MG.
@@ -60,18 +61,18 @@ For covariance eigenvalues $v_i$, the participation ratio is $(\sum_i v_i)^2/\su
 \input{tables/forecast_all.tex}
 \end{table}
 
-We average tasks within each repeat. The interval in Table~\ref{tab:forecast_all} resamples the within-repeat error differences between the validation and MG rules. Choosing from the measured continuation gives the lowest error attainable by the candidate set.
+\cx{For each task, we divide the mean squared forecast error by the variance of the observed segment, subject to the variance floor in Table~\ref{tab:forecast-design}.} We average tasks within each repeat. The interval in Table~\ref{tab:forecast_all} resamples the within-repeat error differences between the validation and MG rules. Choosing from the measured continuation gives the lowest error attainable by the candidate set.
 
 \paragraph{Sampled-query MG.}
-We search around $q$ evenly spaced queries, keeping all $n$ vectors eligible as neighbors subject to temporal exclusion. For $2\le q\le n$, the query indices are $\lfloor\ell(n-1)/(q-1)\rfloor$, $\ell=0,\ldots,q-1$. On this subset $Q$ we compute
+\cx{We use $q$ evenly spaced delay vectors as query points. For each selected $y_i$, we still search the full window for neighbors, comparing it with every $y_\ell$ whose starting index satisfies $|\ell-i|>T$ (Section~\ref{sec:mg-neighbors}). Numbering the $n$ vectors from 1 as in Equation~\eqref{eq:delay}, the query indices are $1+\lfloor a(n-1)/(q-1)\rfloor$ for $a=0,\ldots,q-1$ and $2\le q\le n$.} On this subset $Q$ we compute
 \begin{equation}
 \widehat d_{\rm MG}^{(q)}=
 \frac{q(k-1)-1}{\displaystyle\sum_{i\in Q}\sum_{j=1}^{k-1}\log(r_{ik}/r_{ij})}.
 \label{eq:querymg}
 \end{equation}
-With all queries this recovers Equation~\eqref{eq:mg} whenever the numerical checks pass. We apply the same distance and log-sum checks to the sampled queries. If an estimate is unavailable, the rule uses the replacement learned on development runs.
+With all queries this recovers Equation~\eqref{eq:mg} whenever the numerical checks pass. We apply the same distance and log-sum checks to the sampled queries. If an estimate is unavailable, the rule uses \cx{the replacement value estimated when fitting the selection rule}.
 
-Sampled MG computes distances in blocks at $O(qnE)$ cost. Full MG uses a KD-tree. Their timings therefore reflect both query sampling and the distance-search implementation.
+\cx{For sampled MG, we compute distances from each query to all $n$ delay vectors, processing several queries at a time (Table~\ref{tab:forecast-design}). Across $q$ queries of dimension $E$, this takes $O(qnE)$ work.} Full MG uses a KD-tree. Their timings therefore reflect both query sampling and the distance-search implementation.
 
 \begin{table}[!htbp]
 \centering\small
@@ -85,7 +86,7 @@ On identical inputs we time feature computation, selection and fitting together.
 
 
 \section{Comparing intervention rules}\label{app:intervention_utility}
-On MNIST we ask when to stop fitting noisy labels, freeze hidden layers or prune neurons. All rules choose among the same intervention times on the same development runs.
+On MNIST we ask when to stop fitting noisy labels, freeze hidden layers or prune neurons. \cx{We use one set of MNIST training runs to choose the rules, comparing the same candidate intervention times for each. We evaluate the chosen rules on new runs.}
 
 Only the stopping experiment corrupts training labels. Rules read weight norm or loss on fixed training images with their assigned labels (Table~\ref{tab:mnist-intervention-setup}).
 
@@ -109,7 +110,7 @@ Pruned layers & Retain 64 neurons per hidden layer. Rank neurons by the product 
 \end{tabularx}
 \end{table}
 
-For each action we try both logs, both threshold directions, and cutoffs at deciles of development scores. We choose the rule maximizing validation accuracy minus $0.02$ times relative arithmetic cost (Table~\ref{tab:mnist-intervention-setup}). All four selected MG rules use weight norm. At the first eligible step where MG exceeds 6.43 we stop training with 40\% noisy labels. With 60\% noise the selected rule stops when MG is at or below 7.33. For freezing and pruning the triggers are MG above 7.76 and 7.74, respectively (cutoffs rounded). A run that never meets its condition continues to the full budget.
+For each action we try both logs, both threshold directions, and cutoffs at \cx{deciles of the scores from the runs used to choose the rule}. We choose the rule maximizing validation accuracy minus $0.02$ times relative arithmetic cost (Table~\ref{tab:mnist-intervention-setup}). All four selected MG rules use weight norm. At the first eligible step where MG exceeds 6.43 we stop training with 40\% noisy labels. With 60\% noise the selected rule stops when MG is at or below 7.33. For freezing and pruning the triggers are MG above 7.76 and 7.74, respectively (cutoffs rounded). A run that never meets its condition continues to the full budget.
 
 \begin{figure}[!htbp]
 \centering

@@ -64,7 +64,7 @@ def real_logs(run_dir):
         zoom.plot(segment.step,segment.probe_nll,color=color,lw=1.25)
         axs[1].plot(ends,[score["MG"] for score in scores],color=color,lw=1.8,marker='o',ms=3)
         axs[2].plot(mi.step,mi.MI,color=color,lw=1.8,marker='o',ms=3)
-    for ax,ylabel in zip(axs,['NLL','MG@NLL','MI (nats)']):
+    for ax,ylabel in zip(axs,['NLL','MG@NLL','$I(X;Z)$\n(nats)']):
         style(ax,'',ylabel);ax.yaxis.label.set_size(21)
         ax.axvline(1024,color=INK,ls='--',lw=1.1)
         ax.set_xlim(0,3072);ax.set_xticks([0,1024,2048,3072])

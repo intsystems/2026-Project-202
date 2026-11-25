@@ -1,18 +1,18 @@
 \subsection[Forecast model choice]{Forecast model choice}\label{sec:forecast_utility}
-Which model best forecasts the continuation of one neuron's activity? On development runs we compute MG from the observed segment (the prefix) and measure how well each candidate forecasts the continuation. A regression tree groups prefixes by MG and assigns each group the forecaster with the lowest mean error. On a new series, prefix MG alone determines the choice. The validation rule chooses the candidate with the lowest mean error on the last four 32-sample blocks of this prefix. Each candidate forecasts each block using only the samples before it. Both rules fit their chosen model on the full 2,048-sample prefix to forecast the next 32 samples (Figure~\ref{fig:single-neuron-forecasts}).
+\cx{Which model best forecasts the continuation of a neuron's activity? We first fit a regression tree to recordings with known continuations. For each range of MG in the observed segments, the tree selects the forecaster with the lowest mean error on those continuations. For a new recording, the tree selects a forecaster from the MG of the observed segment. For validation, each candidate predicts the end of the observed segment a few samples at a time. After each forecast, we add the actual observations to its history. We choose the candidate with the lowest mean error across these forecasts. Both rules fit the selected model to the full observed segment before forecasting its continuation (Figure~\ref{fig:single-neuron-forecasts}).}
 
-Normalized mean squared error (NMSE) divides mean squared forecast error by the prefix variance with a positive floor. Mean errors are close (Table~\ref{tab:decisions}), and the interval for their within-repeat difference includes zero (Table~\ref{tab:forecast_all}). Sampling MG queries preserves all model choices in this test and is faster than selection by validation error (Table~\ref{tab:forecast_utility}).
+\cx{The rules gave similar mean forecast errors on new recordings (Tables~\ref{tab:decisions} and~\ref{tab:forecast_all}). Computing MG on a subset of query points gave the same model choices as the full calculation and took less time than validation (Table~\ref{tab:forecast_utility}).}
 
 \begin{figure*}[!htb]
 \centering
 \includegraphics[width=\linewidth]{figures/single_neuron_forecasts.pdf}
-\caption{Forecasts for two signals from one evaluation repeat. MG (blue dashes) selects the model with the lowest mean forecast error on other runs in the same MG range. Validation (orange dots) compares the models on four earlier 32-step blocks of this signal. Test NMSE measures error against the recording (solid line) over the shaded 32 steps. On the left both forecasts rise despite the nearly flat recording, but the ridge model chosen by validation rises less. On the right the ridge model chosen by MG better tracks the decline.}
+\caption{\cx{Forecasts selected by MG (blue dashes) and validation (orange dots). The solid line shows the recorded activity. Test NMSE is the normalized mean squared error over the shaded forecast interval. On the left both forecasts rise while the recording stays nearly flat, but the model chosen by validation rises less. On the right the model chosen by MG tracks the decline more closely.}}
 \label{fig:single-neuron-forecasts}
 \end{figure*}
 
 \begin{table*}[!htbp]
 \centering\small
-\caption{Decisions on evaluation runs. Classifier detections count first alarms within 5,000 updates after intervention (0/16 comparison records alarmed for either rule). Spike detections count warnings within 500 updates before onset (both rules had 2.44 false alarms per 10,000 scored updates). Forecast errors are means and standard deviations over 20 repeats.}
+\caption{\cx{Decisions on held-out runs. Classifier detections count interventions with a first alarm in the scoring interval after onset. Spike detections count spikes with a warning in the interval before onset. Forecast errors are means and standard deviations across repeats.}}
 \label{tab:decisions}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xrrl@{}}
 \toprule

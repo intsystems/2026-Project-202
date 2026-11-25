@@ -2,7 +2,7 @@
 \FloatBarrier
 \section{Further tests of practical decisions}\label{app:campaign}
 \subsection{Self-supervised representation selection}
-We compare MNIST encoders trained with SimSiam, BYOL, VICReg and SimCLR \citep{chen2021simsiam,grill2020byol,bardes2022vicreg,chen2020simclr}. For each statistic, development runs determine the scalar log and ranking direction that best agree with the accuracy of a linear classifier fitted to frozen features. For MG this selects gradient norm, ranked from high to low. Evaluation repeats use the same rule and test images (Table~\ref{tab:ssl-protocol}).
+We compare MNIST encoders trained with SimSiam, BYOL, VICReg and SimCLR \citep{chen2021simsiam,grill2020byol,bardes2022vicreg,chen2020simclr}. \cx{We divide the encoder training repeats by random seed. For each statistic, we use the first group to choose the log and ranking direction with the highest mean Spearman correlation with linear-classifier accuracy.} For MG this selects gradient norm, ranked from high to low. \cx{We evaluate the chosen rule on the remaining seeds using the same test images} (Table~\ref{tab:ssl-protocol}).
 
 \begin{table}[!htbp]
 \centering\small
@@ -17,7 +17,8 @@ Stage & Parameter & Setting \\
 Training & SGD updates / batch / momentum & 3,000 / 128 / 0.9 \\
  & Linear rate warm-up & 100 updates, then fixed \\
  & Default rate / decay / augmentation & $0.05$ / $10^{-4}$ / medium \\
- & Configurations / dev.\ and evaluation repeats & 29 / 2 / 5 \\
+ & \cx{Encoder configurations} & \cx{29} \\
+ & \cx{Repeats per configuration} & \cx{2 to choose the rule, 5 to test it} \\
 \addlinespace
 Linear classifier & Input / train and test images & Standardized encoder features / 5,000 each \\
  & Logistic regression $C$ / iteration limit & 0.1 / 300 \\
@@ -120,9 +121,10 @@ Onset labels & Past / future windows (updates) & 200 / 10 \\
  & First nonfinite loss & Marks an onset \\
 \addlinespace
 Input statistics & Loss, gradient norm and update norm & $\log_{10}$ after flooring at $10^{-12}$ \\
+ & \cx{Roughness of log loss $x_t$} & \cx{$\mathrm{SD}(x_t-x_{t-1})/\mathrm{SD}(x_t)$} \\
  & Older scores in a median / minimum gap & 4 or 10 / one full window \\
  & Lags for recurrence error & 20--250 samples \\
- & Recurrence radius & 0.1 times median eligible distance \\
+ & Recurrence radius & \cx{0.1 times the median distance over pairs with $|\ell-i|>19$} \\
  & Distance quantiles for correlation dimension & 8 from 0.01 to 0.10 \\
 \addlinespace
 Warning scoring & First scored update & 1,500 \\
@@ -130,13 +132,14 @@ Warning scoring & First scored update & 1,500 \\
  & Excluded interval & Onset and next 500 updates \\
  & Minimum interval between counted false alarms (updates) & 500 \\
 \addlinespace
-Rule selection & Development / evaluation runs per configuration & 4 / 4 \\
- & Development false-alarm limit per 10,000 scored updates & 2 \\
+Rule selection & \cx{Runs per configuration} & \cx{4 to choose rules, 4 to test them} \\
+ & \cx{False-alarm limit per 10,000 scored updates during rule selection} & 2 \\
+ & \cx{Warn when MG of log loss is at or below} & \cx{6.3144 (rounded)} \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-On development runs we seek the lowest threshold within each candidate's false-alarm limit, then select the input and rule that detect the most spikes. Ties favor fewer false alarms, then longer median warning time. We keep these choices fixed for evaluation.
+\cx{We use the runs reserved for choosing the warning rule to find the lowest threshold within each candidate's false-alarm limit. We then select the input and rule that detect the most spikes in those runs.} Ties favor fewer false alarms, then longer median warning time. We keep these choices fixed for evaluation.
 
 Warnings use only past samples. We test rises and falls in levels and in deviations from an earlier median. Direct monitoring uses the mean, minimum or maximum since the previous scoring time (Table~\ref{tab:spike-protocol}). We compute correlation between successive residuals as in Appendix~\ref{app:baselines}.
 
@@ -155,7 +158,7 @@ For the area under the receiver operating characteristic curve (AUROC), a scored
 
 \Needspace{6\baselineskip}
 \subsection{Reset rules, schedules, and transfer}
-At each MNIST task boundary we decide whether to reset the weights and optimizer state for the next task. We select the scalar log, window and threshold rule by mean online accuracy on development sequences, breaking ties in favor of fewer resets. Both selected rules use weight-norm MG measured within each task. With reordered pixels, a reset occurs when the median of the last two task scores exceeds 4.70. With added noise, a reset occurs when the latest score exceeds 4.69 (rounded). We also test resets based on the fraction of neurons with low mean absolute activation relative to their layer \citep{sokar2023dormant}. Table~\ref{tab:reset-rules} reports accuracy measured before each batch update on new sequences.
+At each MNIST task boundary we decide whether to reset the weights and optimizer state for the next task. We select the scalar log, window and threshold rule \cx{by mean online accuracy on validation sequences}, breaking ties in favor of fewer resets. Both selected rules use weight-norm MG measured within each task. With reordered pixels, a reset occurs when the median of the last two task scores exceeds 4.70. With added noise, a reset occurs when the latest score exceeds 4.69 (rounded). We also test resets based on the fraction of neurons with low mean absolute activation relative to their layer \citep{sokar2023dormant}. Table~\ref{tab:reset-rules} reports accuracy measured before each batch update on new sequences.
 
 \begin{table}[!htbp]
 \centering\small
@@ -171,7 +174,7 @@ Reordered pixels and noise & 0.834 & 0.843 & 0.776 \\
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:campaign_scope} reports three further decisions. For CIFAR-10, we select the timing rule with the highest mean final accuracy on development runs. It reduces the learning rate once at least half the training budget has elapsed and median minibatch-loss MG differs by less than 2\% between successive blocks of four windows. For games we fit two cutoffs on labeled development games. Each cutoff exceeded by MG of the first player's payoff raises the predicted class by one, from one oscillation to two to three or more (cutoffs 2.81 and 3.90, rounded). For MNIST transfer we fit a detector on one source network and apply it unchanged. It alarms when median weight-norm MG in the latest three windows exceeds that of the preceding six by more than 27.8\%. A hit requires the first alarm to fall within 5,000 updates after the intervention. The false-positive count in the table is the number of comparison runs that alarm.
+Table~\ref{tab:campaign_scope} reports three further decisions. \cx{For CIFAR-10, we compare timing rules on one set of runs and test the rule with the highest mean final accuracy on new runs.} \cx{Once at least half the training budget has elapsed, the rule reduces the learning rate if the median MG of minibatch loss in the latest four windows differs by less than 2\% from the median in the preceding four.} For games we fit two cutoffs \cx{using games with known numbers of oscillations, then apply them to new games.} Each cutoff exceeded by MG of the first player's payoff raises the predicted class by one, from one oscillation to two to three or more (cutoffs 2.81 and 3.90, rounded). For MNIST transfer we fit a detector on one source network and apply it unchanged. It alarms when median weight-norm MG in the latest three windows exceeds that of the preceding six by more than 27.8\%. A hit requires the first alarm to fall within 5,000 updates after the intervention. The false-positive count in the table is the number of comparison runs that alarm.
 
 \begin{table}[!htbp]
 \centering\small
