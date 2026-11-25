@@ -1,8 +1,10 @@
-\begin{tabular}{lrr}
+\begin{tabular}{@{}lrrrr@{}}
 \toprule
-Recorded quantity & Before damping & After damping \\
+ & \multicolumn{1}{c}{\cx{Training loss}} & \multicolumn{3}{c@{}}{\cx{Prediction error on one fixed input}} \\
+\cmidrule(lr){2-2}\cmidrule(l){3-5}
+\cx{Window} & \cx{All three runs} & \cx{Minimum} & \cx{Median} & \cx{Maximum} \\
 \midrule
-Training loss & 4.971 & 2.563 \\
-Fixed-input error & 4.154 [3.601, 4.206] & 2.634 [1.996, 2.681] \\
+\cx{Before damping} & \cx{4.971} & \cx{3.601} & \cx{4.154} & \cx{4.206} \\
+\cx{After damping} & \cx{2.563} & \cx{1.996} & \cx{2.634} & \cx{2.681} \\
 \bottomrule
 \end{tabular}

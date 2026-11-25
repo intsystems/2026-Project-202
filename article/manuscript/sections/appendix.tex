@@ -30,19 +30,12 @@ In a delay embedding, different states map to different points. To estimate how 
 \end{figure}
 
 
-\subsection{Computing the pooled estimator}
-To see why Equation~\eqref{eq:mg} subtracts one in the numerator, consider points sampled at uniform density near each query in $d$ dimensions. Under the local Poisson approximation \citep{levina2004maximum}, the sum of log distance ratios for one query has a gamma distribution with shape $k-1$ and rate $d$. If the $n$ query sums are independent, their total $S$ satisfies $\mathbb{E}[1/S]=d/[n(k-1)-1]$, so the pooled estimate has mean $d$. In a delay reconstruction, queries can share neighbors and observations can remain correlated beyond the temporal exclusion, so the estimate can still be biased.
+\subsection{Computing the pooled estimator}\label{app:pooled-mg}
+\cx{Under the local Poisson model of \citet{levina2004maximum}, the log distance ratios for a query sum to $S_i=\sum_{j=1}^{k-1}\log(r_{ik}/r_{ij})$, which has a gamma distribution with shape $k-1$ and rate $d$. Following \citet{mackay2005comments}, we pool these sums before taking the reciprocal. If the $S_i$ are independent, $S=\sum_i S_i$ is gamma distributed with shape $n(k-1)$ and rate $d$. For $n(k-1)>1$, its reciprocal has mean $\mathbb{E}[1/S]=d/[n(k-1)-1]$, which gives the numerator in Equation~\eqref{eq:mg}. For queries on the same trajectory, neighborhoods can overlap and observations can remain correlated beyond the Theiler window, so the estimate can still be biased.}
 
-\cx{Repeated patterns in the scalar series can produce coincident delay vectors.} A zero neighbor distance makes the log ratio in Equation~\eqref{eq:mg} undefined. We therefore break ties before forming delay vectors and set lower bounds on the distances and on each query's contribution to the denominator (Table~\ref{tab:mg-numerics}). If either bound is reached too often, we flag the window. We omit flagged estimates from the FORCE plot (Figure~\ref{fig:force-log-geometry}), forecast sampling and VAE check scheduling. Nonfinite or constant records, short windows and too few eligible neighbors yield no estimate. We retain estimates above the embedding dimension $E$.
+\cx{Repeated patterns in the scalar series can produce coincident delay vectors.} A zero neighbor distance makes the log ratio in Equation~\eqref{eq:mg} undefined. We therefore break ties before forming delay vectors and set lower bounds on the distances and on each query's contribution to the denominator (Table~\ref{tab:mg-numerics}). \cx{For the FORCE plot (Figure~\ref{fig:force-log-geometry}), forecast sampling and VAE check scheduling, we omit a window's estimate if either bound applies to more than $1\%$ of the corresponding values.} Nonfinite or constant records, short windows and too few eligible neighbors yield no estimate. We retain estimates above the embedding dimension $E$.
 
-\subsection[Changes of scale and offset]{Changes of scale and offset}
-\begin{proposition}[Scaling and shifting a record]
-For a finite nonconstant record, fixed delay and neighbor settings, and no numerical dither, the MG formula is unchanged by replacing every observation with $ax_t+b$, for any $a\ne0$, provided the estimate is defined.
-\end{proposition}
-\begin{proof}
-Standardizing $ax_t+b$ multiplies each standardized sample by $\operatorname{sign}(a)$. This preserves all Euclidean distances, temporal exclusions and the distance ratios in Equation~\eqref{eq:mg}.
-\end{proof}
-A common positive scale and offset applied to every sample leave the standardized record and its MG unchanged for the same dither. With a negative scale, the estimate has the same distribution under symmetric dither. Finite precision can affect estimates on almost constant records.
+\cx{In a nonconstant window, standardizing $ax_t+b$ gives $\operatorname{sign}(a)z_t$ for any $a\ne0$. At fixed delay and neighbor settings, this preserves all distances in Equation~\eqref{eq:mg} before noise is added. With the Gaussian noise in Table~\ref{tab:mg-numerics}, positive rescalings give the same estimate for the same noise realization, and negative rescalings give the same distribution by symmetry. Rounding can affect nearly constant records.}
 
 \section{Configurations and reproducibility}\label{app:settings}
 In Table~\ref{tab:mg-settings}, stride counts samples between successive window starts. The first and last \cx{samples} in one delay vector are $(E-1)\tau$ steps apart. \cx{For a query starting at $i$, only vectors starting at $\ell$ with $|\ell-i|>T$ enter the distance ranking (Section~\ref{sec:mg-neighbors}).} For the CNN, for example, each vector contains 20 consecutive \cx{samples} and $T=19$, \cx{so none of its eligible neighbors uses any of the same samples.} The autocorrelation rule (ACF) uses the longer of $(E-1)\tau$ and the autocorrelation time, up to the cap shown where applicable.
@@ -55,6 +48,7 @@ In Table~\ref{tab:mg-settings}, stride counts samples between successive window 
 \toprule
 Experiment & Observable & $W$ & $E$ & $\tau$ & $k$ & Exclusion $T$ & Stride \\
 \midrule
+\cx{Tone sums} & \cx{sum of sinusoids} & \cx{8,000} & \cx{20} & \cx{4} & \cx{20} & \cx{76} & \cx{4,000} \\
 Digits head & state-based & 8,000 & 20 & 4 & 20 & 76 (cap 150) & 3,000 \\
 Regression & training loss / error on one test input & 2,048; 8,192 & 16 & 1 & 10 & 100 & first / last \\
 Generator & neuron zero & 8,192 & 20 & adaptive & 20 & ACF; cap 320 & 8,192 \\
@@ -84,7 +78,7 @@ Stage & Rule applied within each window \\
 Standardized samples & Add independent Gaussian noise with standard deviation $10^{-9}$ to break ties before forming delay vectors. \\
 Neighbor distances & Use $\max(r_{ij},10^{-8})$ for each distance before taking log ratios. This keeps the ratios finite for coincident vectors. \\
 One query & Sum its $k-1$ log ratios and use at least $10^{-5}$ for that sum before pooling. Equally distant neighbors would give a sum of zero. \\
-Whole window & Flag the estimate if more than $1\%$ of the $nk$ distances reach their floor or more than $1\%$ of the $n$ query sums reach theirs. \\
+Whole window & \cx{A window is numerically degenerate if more than $1\%$ of its $nk$ neighbor distances reach their floor or more than $1\%$ of its $n$ query sums reach theirs.} \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -111,8 +105,26 @@ For $T>0$, retaining $k$ eligible neighbors for every query requires $n\ge 2T+k+
 Within each repeat, CNN and VAE conditions share a starting model, generator tasks share initial weights, and Walker2d rules choose among the same policies. Resampling for intervals keeps each repeat's measurements together.
 
 \section[Dimension tests and recurrent generators]{Dimension tests and recurrent generators}\label{app:controlled}
+\cx{For the scalar sums in Section~\ref{sec:generator}, each matched pair of signals uses the same four amplitudes and initial phase offsets. We choose the fundamental frequency of the harmonic sum so that the two records have the same ratio of the standard deviation of successive differences to that of the signal, $\operatorname{sd}(\Delta x)/\operatorname{sd}(x)$. Table~\ref{tab:tone-sums} compares MG with the phase counts fixed by the frequencies.}
+
+\begin{table}[htbp]
+\centering\small
+\caption{\cx{MG computed directly from scalar sums of four tones. We take median MG over the windows in each record (Table~\ref{tab:mg-settings}), then the median over eight paired realizations.}}
+\label{tab:tone-sums}
+\begin{codex}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Frequencies in the sum & Independent phases & Median MG \\
+\midrule
+First four harmonics of one fundamental & 1 & 1.11 \\
+Four rationally independent frequencies & 4 & 3.92 \\
+\bottomrule
+\end{tabular}
+\end{codex}
+\end{table}
+
 \subsection[Oscillations in the diagonal matrix and digit classifier]{Oscillations in the diagonal matrix and digit classifier}
-The Frobenius norm combines all the entries of the matrix by summing their squares and taking the square root. A single oscillating entry records only its own rhythm. Comparing the two logs shows which oscillations an estimate can recover from the same system (Table~\ref{tab:matrix-observations}).
+The Frobenius norm combines all the entries of the matrix by summing their squares and taking the square root. \cx{Each oscillating diagonal entry varies sinusoidally at one prescribed frequency.} Comparing the two logs shows which oscillations an estimate can recover from the same system (Table~\ref{tab:matrix-observations}).
 
 \begin{table}[!htbp]
 \centering\small
@@ -213,7 +225,7 @@ Estimator settings are fixed across modes. In the damping experiment we reduce m
 
 \begin{table}[h]
 \centering\small
-\caption{Median MG before and after damping, across three runs. Brackets give the range.}
+\caption{\cx{MG before and after damping two weight oscillations. Each row summarizes the same three regression runs.}}
 \label{tab:regression_variation}
 \input{tables/regression_variation.tex}
 \end{table}
@@ -227,15 +239,18 @@ The recurrent generator feeds its output back into the state update,
 \boldsymbol z_t&=A^\top\tanh\boldsymbol h_t.
 \end{aligned}
 \]
-Here $J$ couples neurons, $U$ feeds back the output, and $A$ maps activations $\tanh\boldsymbol h_t$ to that output. Gain $g$ sets the initial standard deviation of $J$'s entries to $g/\sqrt n$ for $n$ neurons (Table~\ref{tab:architectures}). We take median MG over disjoint windows of the same neuron's activation and repeat for other neurons. For comparison we measure covariance PR from all activations and identify spectral peaks in the summed output (Table~\ref{tab:controlled-settings}).
+Here $J$ couples neurons, $U$ feeds back the output, and $A$ maps activations $\tanh\boldsymbol h_t$ to that output. Gain $g$ sets the initial standard deviation of $J$'s entries to $g/\sqrt n$ for $n$ neurons (Table~\ref{tab:architectures}).
 
+\cx{For a task with $q$ outputs, the target for output $j$ is $\sin(2\pi f_j t+\phi_j)$. We draw the initial phase offsets $\phi_j$ once per run and hold them fixed. Table~\ref{tab:generator_phases} gives the frequencies relative to $f_0=(10\pi)^{-1}$. In the task labels, the numeral gives the number of output tones. H denotes one harmonic series, M combines two such series with independent fundamentals, and T uses independent frequencies. The number of independent phases is the size of the largest rationally independent subset of the frequencies. The T label refers to the torus. With $q$ independent frequencies, the joint phase winds densely around a product of $q$ circles} \citep{teschl2012ordinary}.
 
 \begin{table}[htbp]
 \centering\small
-\caption{Phase structure in learned generators. Entries show mean $\pm$ standard deviation across five runs. MG uses one neuron and PR uses all activations.}
+\caption{Phase structure in learned generators. Entries show mean $\pm$ standard deviation across five runs. MG uses one neuron and PR uses all activations. \cx{Single-neuron MG ranges from $5.00$ to $7.89$ for T3 and from $4.24$ to $6.29$ for T4.}}
 \label{tab:generator_phases}
 \input{tables/generator_phases.tex}
 \end{table}
+
+\cx{We take median MG over disjoint windows of one neuron's activation and repeat for other neurons. We compute covariance PR from all activations. For the spectral checks, we count peaks in the sum of the outputs and measure each output's power near its prescribed frequency (Table~\ref{tab:controlled-settings}). Before each Fourier transform we subtract the mean of the $N$ samples and multiply sample $n$ by the symmetric Hann window $w_n=\tfrac12[1-\cos(2\pi n/(N-1))]$, $0\le n<N$. The weights taper to zero at both ends, reducing leakage into distant frequency bins when the record ends partway through a cycle} \citep{harris1978windows}.
 
 \begin{table}[!htbp]
 \centering\small
@@ -246,15 +261,13 @@ Here $J$ couples neurons, $U$ feeds back the output, and $A$ maps activations $\
 Parameter & Setting \\
 \midrule
 \multicolumn{2}{@{}l}{\textbf{Learned generators}} \\
-T1--T4 frequencies, relative to scale & $1,\sqrt{2},\sqrt{3},\sqrt{5}$ \\
-H2/H4 and M4 frequencies, relative to scale & Integer harmonics (H2/H4), $1,2,\sqrt{2},2\sqrt{2}$ (M4) \\
-Frequency scale / amplitude per tone / phase & $(10\pi)^{-1}$ / $1.2/\sqrt{q}$ for $q$ tones / uniform on $[0,2\pi)$ \\
+\cx{Base frequency $f_0$ / target amplitude / initial phase} & \cx{$(10\pi)^{-1}$ / 1 per output / uniform on $[0,2\pi)$} \\
 Gain / FORCE steps with recursive least squares / repeats per task & 1.2 / 100,000 / 5 \\
 Initial fixed-weight steps discarded / samples kept & 5,000 / 32,768 \\
 Simulation step / MG windows per neuron & 0.1 / 4 \\
 Sampling for full-state PR & Every fourth activation vector \\
 Minimum spectral peak power & 5\% of nonzero-frequency power in summed output \\
-Output fidelity (Hann window) & $\ge80\%$ of nonzero-frequency power within 3\% of the prescribed frequency, per output \\
+Output fidelity & $\ge80\%$ of nonzero-frequency power within 3\% of the prescribed frequency, per output \\
 Lyapunov exponents / first steps used / inclusion threshold & 12 largest / 16,384 / $\ge-0.02$ per unit time \\
 QR factorization interval / initial propagation discarded (steps) & 10 / 1,000 \\
 Noise test (first samples / neurons / tasks) & $\{4{,}096,8{,}192\}$ / 3 / H4, M4, T4 \\
@@ -287,10 +300,11 @@ We estimate finite-time Lyapunov exponents by propagating small state perturbati
 Low observation noise preserves the ordering by phase structure. At higher noise the ordering becomes inconsistent.
 
 The prescribed output for the periodic-signal experiment is $(\sin\theta,\tfrac12\sin 2\theta)$, with phase $\theta$ increasing at a constant rate. We check whether the leading Lyapunov exponent is near zero while the remaining directions contract. The output must also match the prescribed signal after phase alignment, and the hidden state must return close to its starting value after a period (Table~\ref{tab:controlled-settings}). For the latter check we interpolate the shifted states and divide their mean squared return error by total hidden-state variance before taking the square root.
+\cx{For the 500-iteration checkpoint in Figure~\ref{fig:force-log-geometry}, the second half of the recording gives a normalized full-state return error of $0.04$ at a lag of about $1{,}900$ simulation steps.}
 
 \begin{table}[htbp]
 \centering\small
-\caption{Transition to periodic motion during FORCE training. \cx{The ranges use the median of two nonoverlapping windows per network. Figure~\ref{fig:force-log-geometry} uses overlapping windows from one run. In the run that missed the stability criterion, the second Lyapunov exponent was $-0.0022$, above the cutoff of $-0.005$ for contraction across the orbit.}}
+\caption{Transition to periodic motion during FORCE training. \cx{For each network we take the median MG over two nonoverlapping windows. The first two rows give the smallest and largest of these medians across five networks. Figure~\ref{fig:force-log-geometry} uses overlapping windows from one run. In the run that missed the stability criterion, the second Lyapunov exponent was $-0.0022$, above the cutoff of $-0.005$ for contraction across the orbit.}}
 \label{tab:force-outcome}
 \begin{tabular}{lr}
 \toprule
@@ -391,7 +405,7 @@ CUSUM estimates the baseline mean $\mu_0$ and scale $\sigma_0$ from the initial 
 \input{tables/cusum.tex}
 \end{table}
 
-Normalized increments detect all strong interventions with median comparison. Under CUSUM, they also raise false alarms (Tables~\ref{tab:detectors} and~\ref{tab:cusum}).
+\cx{At the fixed intervention time, the MG median rule missed one tenfold learning-rate reduction. With normalized increments, both the median rule and CUSUM detected every strong intervention. Only CUSUM raised alarms on the comparison records (Tables~\ref{tab:detectors} and~\ref{tab:cusum}).}
 
 \begin{table}[!htbp]
 \centering\small
@@ -525,7 +539,7 @@ Within a run, each final value is the median over the interval in Table~\ref{tab
 \section[Grokking]{Grokking}\label{app:grokking}
 Grokking is the rise in accuracy on held-out examples long after a model fits its training set. We use the one-layer transformer and addition modulo 113 from \citet{nanda2023progress}, training with minibatches. We also train this architecture to compose permutations in $S_5$, a task from \citet{power2022grokking}. Both transformer tasks include a control with zero weight decay. For the full-batch experiments, we train the quadratic perceptron of \citet{gromov2023grokking} by gradient descent on modular arithmetic tasks, including polynomials from \citet{doshi2024grokking} (Table~\ref{tab:grokking-protocol}).
 
-We track the weight norm and the class scores (logits) on fixed inputs. Before compressing the weight and logit vectors, we center each input's logit vector across classes and scale it to unit length. Within each window we fit a least-squares line $a_j+b_j t$ to each compressed coordinate $y_{tj}$, where $t$ indexes samples. We compute covariance PR from the residuals $y_{tj}-a_j-b_j t$ and compare it with PR from the original coordinates. For the detrended MG comparison (Table~\ref{tab:grokking-drop}), we likewise subtract the line fitted to the scalar weight norm in each window before constructing its delay vectors.
+\cx{During training we record the weight norm and compute class scores (logits) on a fixed set of inputs.} Before compressing the weight and logit vectors, we center each input's logit vector across classes and scale it to unit length. Within each window we fit a least-squares line $a_j+b_j t$ to each compressed coordinate $y_{tj}$, where $t$ indexes samples. We compute covariance PR from the residuals $y_{tj}-a_j-b_j t$ and compare it with PR from the original coordinates. For the detrended MG comparison (Table~\ref{tab:grokking-drop}), we likewise subtract the line fitted to the scalar weight norm in each window before constructing its delay vectors.
 
 \begin{figure}[H]
 \centering

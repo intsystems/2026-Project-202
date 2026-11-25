@@ -1,10 +1,10 @@
 # Four-tone RNN learning
 
-Train recurrent generators on four tones that have one, two or four independent phases. Record individual neuron activity after training.
+Each output learns one sinusoid of unit amplitude. In our task labels, H denotes harmonics of one fundamental, M mixes independent fundamentals with their harmonics, and T denotes a torus target with rationally independent frequencies. The digit counts sinusoidal outputs. The bundled neuron recordings cover H4, M4 and T4, which have one, two and four independent phases, respectively.
 
 ## In the article
 
-- [Section 3.2 · Learned generators distinguish phases from harmonics](../../../../article/manuscript/ReadMe.md#section-32--learned-generators-distinguish-phases-from-harmonics). The H4, M4, and T4 cases of the generator study. The folder contains those three conditions.
+- [Section 3.1 · Independent oscillations and harmonics](../../../../article/manuscript/ReadMe.md#section-31--independent-oscillations-and-harmonics). Single-neuron MG for targets with the same number of spectral lines.
 - [Appendix C.3 · Learned autonomous generators](../../../../article/manuscript/ReadMe.md#appendix-c3--learned-autonomous-generators). Architecture, settings, and the independent Lyapunov reference.
 
 ## Files and commands

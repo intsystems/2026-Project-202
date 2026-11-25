@@ -7,16 +7,18 @@ The manuscript for *What Can a Scalar Log of Loss, Weight Norm, or Neuron Activa
 Run from this directory with TeX Live and `latexmk`.
 
 ```bash
-latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error aistats2027.tex icomp2026.tex main.tex artifacts_camera_ready.tex newinml.tex
+latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error aistats2027.tex icomp2026.tex main.tex artifacts_camera_ready.tex artifacts_camera_ready_codex.tex newinml.tex
 ```
 
 The PDFs appear in `.build/` under their entry point names. [The article index](../ReadMe.md) lists the filenames used for the checked-in copies.
 
-The [Codex review copy](../artifacts_camera_ready_codex.pdf) uses the camera-ready layout and shows edits from the latest revision in teal.
+With no targets, `latexmk` builds both camera-ready copies. The [clean copy](../artifacts_camera_ready.pdf) and the [Codex review copy](../artifacts_camera_ready_codex.pdf) use the same text, figures and layout. Only the review copy highlights edits in teal.
 
 ```bash
-latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error artifacts_camera_ready_codex.tex
+latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error
 ```
+
+When updating the checked-in camera-ready PDFs, copy both output files from `.build/` to `article/` together.
 
 For an editorial copy with blue text, set the flag at build time. For example:
 
@@ -66,7 +68,9 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 
 <a id="section-32--force-training-from-chaos-to-periodic-output"></a>
 
-### Section 3.2 · Tracking the transition to a periodic orbit
+<a id="section-32--tracking-the-transition-to-a-periodic-orbit"></a>
+
+### Section 3.2 · Testing for a periodic orbit after training
 
 - [FORCE RNN cycle](../../code/real/scalar_log_diagnostics/force_rnn_cycle/ReadMe.md)
 
@@ -80,7 +84,9 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 
 <a id="section-42--tracking-latent-information-in-a-text-vae"></a>
 
-### Section 4.2 · Tracking sentence information in a text VAE
+<a id="section-42--tracking-sentence-information-in-a-text-vae"></a>
+
+### Section 4.2 · Reconstruction loss and sentence information in a text VAE
 
 - [Sentence information in the text VAE](../../code/real/scalar_log_diagnostics/text_vae_latent_code/ReadMe.md)
 

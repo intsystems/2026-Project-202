@@ -60,20 +60,22 @@ def plot_transition(steps, time, activity, summary):
                          "axes.spines.top": False, "axes.spines.right": False,
                          "axes.linewidth": 0.6, "axes.axisbelow": True})
     fig = plt.figure(figsize=(6.0, 4.15), layout="constrained")
-    grid = fig.add_gridspec(3, 4, height_ratios=[1, 1.22, 1.42])
+    grid = fig.add_gridspec(3, 4, height_ratios=[1, 1.22, 1.42], hspace=0.13)
 
     span = (MG_CONFIG.max_E - 1) * MG_CONFIG.tau
-    short = time <= 125
+    simulation_steps = np.arange(min(len(time), MG_CONFIG.window))
     for col, (index, color) in enumerate(zip(phase_indices, DISPLAY_COLORS)):
         iteration = steps[index]
+        window = activity[index, :MG_CONFIG.window]
         trace = fig.add_subplot(grid[0, col])
-        trace.plot(time[short], activity[index, short], color=color, lw=0.75)
-        trace.set(title=f"{iteration:,} iterations", xlim=(0, 125), ylim=(-1.05, 1.05),
-                  xticks=[0, 60, 120], yticks=[-1, 0, 1], xlabel="Simulation time")
+        trace.plot(simulation_steps, window, color=color, lw=0.65)
+        trace.set(title=f"{iteration:,} iterations", xlim=(0, simulation_steps[-1]),
+                  ylim=(-1.05, 1.05), yticks=[-1, 0, 1])
+        trace.set_xticks([0, 2000, 4000], labels=["0", "2,000", "4,000"])
+        trace.tick_params(axis="x", pad=2)
         trace.title.set_color(color)
         trace.grid(alpha=0.16)
         delay = fig.add_subplot(grid[1, col], aspect="equal")
-        window = activity[index, :MG_CONFIG.window]
         standardized = (window - window.mean()) / window.std()
         delay.scatter(standardized[:-span], standardized[span:], s=1.8, alpha=0.19,
                       linewidths=0, color=color)
@@ -82,6 +84,7 @@ def plot_transition(steps, time, activity, summary):
         delay.grid(alpha=0.16)
         if col == 0:
             trace.set_ylabel("Neuron activation")
+            trace.set_xlabel("Simulation step", loc="left", labelpad=0.3)
             delay.set_ylabel(r"$z_{t+(E-1)\tau}$")
         else:
             trace.tick_params(labelleft=False)

@@ -2,7 +2,7 @@
 
 | Content | Source |
 | --- | --- |
-| Abstract, introduction, and related work | [abstract.tex](abstract.tex), [introduction.tex](introduction.tex), [related_work.tex](related_work.tex) |
+| Abstract and introduction, including related work | [abstract.tex](abstract.tex), [introduction.tex](introduction.tex) |
 | Estimator and experimental questions | [method.tex](method.tex) |
 | Synthetic experiments | [controlled.tex](controlled.tex) |
 | Applied experiments | [applications.tex](applications.tex), [campaign_main.tex](campaign_main.tex), [forecast_utility.tex](forecast_utility.tex) |

@@ -65,7 +65,7 @@ def draw_example(fig, grid, column, title, index, signal, xlabel, ylabel):
                      edgecolor=INK, linewidth=.95, zorder=4)
     low, high = projection.min(), projection.max()
     pad = .06 * (high - low)
-    geometry.set(title="Delay vectors", xlabel=r"$z_t$", ylabel=r"$z_{t+(E-1)\tau}$",
+    geometry.set(title="Projected delay vectors", xlabel=r"$z_t$", ylabel=r"$z_{t+(E-1)\tau}$",
                  xlim=(low - pad, high + pad), ylim=(low - pad, high + pad))
     geometry.xaxis.set_major_locator(MaxNLocator(4, integer=True))
     geometry.yaxis.set_major_locator(MaxNLocator(4, integer=True))
@@ -105,8 +105,8 @@ def main():
     fig = plt.figure(figsize=(6.4, 3.0), layout="constrained")
     grid = fig.add_gridspec(2, 4, height_ratios=(.78, 1.12), width_ratios=(1.1, .85, 1.1, .85))
     draw_example(fig, grid, 0, "Periodic signal", sample, periodic, "Sample index", "Signal")
-    draw_example(fig, grid, 2, "Text reconstruction loss", window.step.to_numpy(),
-                 window.probe_nll.to_numpy(), "Optimization step", "Loss")
+    draw_example(fig, grid, 2, "Word prediction on fixed sentences", window.step.to_numpy(),
+                 window.probe_nll.to_numpy(), "Training step", "Log loss per token")
     fig.legend(handles=[
         Line2D([], [], marker="o", color=INK, markerfacecolor="white", ls="none", ms=4.5,
                label=r"Query $y_i$"),

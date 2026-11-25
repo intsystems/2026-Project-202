@@ -1,9 +1,6 @@
 \claude{
-\section{Discussion}\label{sec:cost}
-\cx{Adding independent oscillations raises MG of a matrix norm while each entry follows one rhythm (Table~\ref{tab:matrix-observations}). In ResNet-18, update PR confirms that the fall in weight-norm MG accompanies more concentrated updates (Figure~\ref{fig:resnet-freeze-trace}). For most settings, weight-norm MG dips more deeply in grokking runs near generalization than in matched controls. Removing the local linear trend eliminates this ordering (\appref{app:grokking}).}
+\section{Discussion and conclusion}\label{sec:cost}
+\cx{A scalar log can reveal when a neural network's behavior becomes simpler. When a network learned a repeating cycle, we could see the change in the activity of just one neuron. We treated each short sequence of its readings as a point. The points traced a loop with an estimated dimension close to one. Many neurons were still active, yet one variable, the phase of the cycle, described their joint motion.}
 
-\cx{Encoders with higher gradient-norm MG tended to give better digit classifiers on MNIST. For forecasting, selection by MG and by validation gave similar mean errors. For classifier interventions and transformer loss spikes, changes between consecutive log values detected at least as many events as MG at comparable false-alarm rates (Table~\ref{tab:decisions}).}
-
-\section[Conclusion]{Conclusion}
-\cx{Single-neuron MG approaches one in recurrent networks that learn a periodic orbit. In a classifier, freezing the feature extractor reduces both weight-norm MG and the effective number of update directions.} Once independent measurements establish which change the log tracks, MG can help locate that change retrospectively in loss or weight-norm records from comparable runs.
+\cx{This gives a reason to keep the history of loss or weight norm during training. Even when mean loss barely changes, the pattern of fluctuations can mark a period worth revisiting. Measurements of the weights or activations can then help explain what changed inside the network. We hope future work will show how broadly this approach applies to other kinds of scalar logs.}
 }

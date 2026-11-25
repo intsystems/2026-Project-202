@@ -4,7 +4,7 @@ Match scalar roughness across different phase counts and vary observer roughness
 
 ## In the article
 
-- [Section 3.2 · Learned generators distinguish phases from harmonics](../../../../article/manuscript/ReadMe.md#section-32--learned-generators-distinguish-phases-from-harmonics). Related control for distinguishing independent phases from spectral peaks. This folder contains the earlier synthetic roughness controls.
+- [Section 3.1 · Independent oscillations and harmonics](../../../../article/manuscript/ReadMe.md#section-31--independent-oscillations-and-harmonics). The direct check uses scalar sums of four tones with matched roughness. The appendix reports the median across the eight paired records in [geometry_levels.csv](logs/geometry_levels.csv).
 
 ## Files and commands
 

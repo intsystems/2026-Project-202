@@ -1,22 +1,23 @@
 \claude{
 \section[Measuring simplification from a scalar log]{Measuring simplification from a scalar log}\label{sec:method}
 \subsection{Delay reconstruction}
-\cx{Let $s_t$ denote the state of the system at step $t$. Given the input and any random draw at that step, $s_t$ determines the next state $s_{t+1}$. The log records one scalar observation $x_t=\phi(s_t)$. In a freely running recurrent network with fixed weights, $s_t$ can be the vector of hidden activations and $\phi$ can select one component. During training, $s_t$ can include the weights $\theta_t$ and the optimizer's internal variables. A weight-norm log then records $x_t=\|\theta_t\|_2$.}
+\cx{Suppose we have access only to a scalar log $x_1,\ldots,x_N$. At step $t$ we observe $x_t=\phi(s_t)$, where $s_t$ is the system state and $\phi$ is a scalar measurement function. For example, in minibatch stochastic gradient descent (SGD) with fixed learning rate $\eta$, the state is the parameter vector $s_t=\theta_t$. Given a randomly sampled minibatch $B_t$, the next state is $\theta_{t+1}=\theta_t-\eta\nabla_\theta L_{B_t}(\theta_t)$, where $L_{B_t}$ is the mean loss on that batch. A weight-norm log records $x_t=\|\theta_t\|_2$. With momentum, the state also includes the velocity vector. For a recurrent network with fixed weights and no external input, let $s_t$ be the vector of hidden activations. The network updates this vector as $s_{t+1}=F(s_t)$, and recording neuron $j$ gives $x_t=(s_t)_j$.}
 
-\cx{Different states can give the same $x_t$. A sinusoid takes the same value as it rises and falls. A second sample can show which way it is moving. In each sliding window, number the $W$ consecutive samples $x_1,\ldots,x_W$ in time order. Subtract the window mean and divide by its standard deviation to obtain $z_1,\ldots,z_W$. Taking $E$ values spaced $\tau$ samples apart gives $n=W-(E-1)\tau$ delay vectors,}
+\cx{\citet{takens1981detecting} gave conditions under which delay coordinates from a single scalar time series reconstruct an autonomous system's state space and dynamics up to a smooth change of coordinates. Related embedding theorems apply to systems with deterministic or stochastic forcing \citep{stark1999delay,stark2003delay}.}
+
+\cx{Within each sliding window, index its $W$ consecutive observations from 1 to $W$ and define $z_t=(x_t-\bar x)/\sigma_x$, where $\bar x$ and $\sigma_x>0$ are the window mean and standard deviation. For an integer lag $\tau\ge1$, the window yields $n=W-(E-1)\tau$ delay vectors with $E$ coordinates,}
 \begin{equation}
 y_t=(z_t,z_{t+\tau},\ldots,z_{t+(E-1)\tau})\in\mathbb{R}^E,\qquad 1\le t\le n.
 \label{eq:delay}
 \end{equation}
-\cx{On each time trace in Figure~\ref{fig:method_geometry}, the open circle marks the first sample $x_i$ of the orange segment. After standardization this segment gives one point $y_i$. The open circle below shows it in projection, with its first coordinate $z_i$ on the horizontal axis and its last coordinate $z_{i+(E-1)\tau}$ on the vertical axis.}
 
 \subsection{Pooled local-dimension estimation}\label{sec:mg-neighbors}
-\cx{Each delay vector $y_i$ in the window serves in turn as the \emph{query point}. A vector $y_\ell$ from the same window is an \emph{eligible neighbor} of $y_i$ if their starting indices differ by more than $T$ samples, $|\ell-i|>T$. This Theiler exclusion removes the query itself and limits matches between successive points on one pass along the trajectory} \citep{theiler1986spurious}. \cx{Among the eligible vectors, let $r_{i1}\le\cdots\le r_{ik}$ be the $k$ smallest Euclidean distances $\|y_\ell-y_i\|_2$, computed using all $E$ coordinates. In $r_{ij}$, $j$ is the neighbor's rank by distance to $y_i$.}
+\cx{We take each delay vector $y_i$ in turn as the query point and search for neighbors within the same sliding window. When $\tau=1$, consecutive delay vectors share $E-1$ samples. Temporal correlations can persist even between disjoint segments. To limit their effect on the neighbor search, we use a Theiler window} \citep{theiler1986spurious}. \cx{A candidate vector $y_\ell$ is an eligible neighbor of $y_i$ if their starting indices differ by more than $T$ samples, $|\ell-i|>T$. We rank these vectors by Euclidean distance $\|y_\ell-y_i\|_2$ in all $E$ coordinates (Figure~\ref{fig:method_geometry}). We retain the $k$ smallest distances $r_{i1}\le\cdots\le r_{ik}$, where $r_{ij}$ is the distance to the $j$th nearest eligible neighbor of $y_i$.}
 
 \begin{figure*}[!htbp]
 \centering
 \includegraphics[width=\linewidth]{figures/icomp_method.pdf}
-\caption{\cx{Neighbor search for a periodic signal and a text model's reconstruction loss (Section~\ref{sec:vae}). The 20 consecutive samples in orange form the query $y_i$ after standardization. Other vectors starting in the shaded band lie within 39 samples of $i$ and are excluded (gray crosses in the projection). Blue dots mark the starts of the 20 selected neighbors on the trace, their positions in the projection and their distances to $y_i$ in all 20 coordinates. On the left, the closest neighbor starts at sample 345, about one period after the query starts at 246.}}
+\caption{\cx{Blue dots on the sine wave and loss curve mark the eligible start indices $\ell$ with the $k$ smallest distances $\|y_\ell-y_i\|_2$ to the orange query. The shaded band is the Theiler window $|\ell-i|\le T$.}}
 \label{fig:method_geometry}
 \end{figure*}
 
@@ -27,24 +28,37 @@ y_t=(z_t,z_{t+\tau},\ldots,z_{t+(E-1)\tau})\in\mathbb{R}^E,\qquad 1\le t\le n.
 \log(r_{ik}/r_{ij})}.
 \label{eq:mg}
 \end{equation}
-\cx{A lower estimate corresponds to slower growth of the neighbor count with radius. \appref{app:theory} derives the numerator's finite-sample correction and shows why shifts and nonzero rescalings of the log preserve the ideal estimate.} In figures, MG@weight norm means MG computed from the weight-norm log.
+\cx{Under the local Poisson model, subtracting one in the numerator makes the estimate unbiased if the sums for different queries are independent (\appref{app:pooled-mg}). A lower estimate corresponds to slower growth of the neighbor count with radius.}
 
 \subsection[Experimental questions]{Experimental questions}\label{sec:mg_conditions}
-\cx{If delay reconstruction preserves local distances up to constant factors, it preserves the local dimension of the distribution of visited states (\appref{app:theory}). Estimating that dimension from a finite window also requires repeated visits to nearby states. During training, the dynamics can change within a window. We therefore test dimension recovery where the motion is known, then compare changes in MG with independent measurements and test decisions based on MG (Table~\ref{tab:experiment-questions}).}
+\cx{For recurrent motion, MG can estimate dimension when the delay coordinates preserve local geometry and the recording includes repeated visits to nearby states (\appref{app:theory}). We test this interpretation where we can prescribe the phases or verify a periodic orbit. For training logs, we check changes in MG against independent measurements from the same run (Table~\ref{tab:experiment-questions}). We compare warning and model selection rules by their performance on new runs (Table~\ref{tab:decisions}).}
 
-\begin{table}[H]
+\begin{table*}[!htbp]
 \centering\small
-\caption{Selected experiments from the main text, grouped by research question.}
+\caption{\cx{We test whether MG from a single scalar log can recover a known dimension, detect changes during training, warn of loss spikes, or help choose a model.}}
 \label{tab:experiment-questions}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.22\linewidth}>{\raggedright\arraybackslash}p{.31\linewidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.225\linewidth}>{\raggedright\arraybackslash}p{.225\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
-Question & Scalar measurement & Basis for comparison \\
+\cx{Experiment} & \cx{Input to MG} & \cx{What the comparison shows} \\
 \midrule
-Recover dimension & Loss, weight measurements, neuron activation & Prescribed oscillations and verified periodic motion (Section~\ref{sec:controlled}) \\
-Track training changes & Weight norm or reconstruction loss & Weight updates and sentence information (Sections~\ref{sec:cnn}--\ref{sec:vae}) \\
-Warn of a spike & Transformer log loss & Advance warnings and false alarms (Section~\ref{sec:spike-warning}) \\
-Choose a model & Gradient norm or neuron activation & Classification accuracy and forecast error (Sections~\ref{sec:ssl}--\ref{sec:forecast_utility}) \\
+\multicolumn{3}{@{}l}{\cx{\textbf{When does MG recover dimension?} (Section~\ref{sec:controlled})}} \\
+\cx{Sum of tones} & \cx{Waveform amplitude} & \cx{MG approximates the number of independent phases.} \\
+\cx{Recurrent tone generator} & \cx{One neuron's activation} & \cx{For the same number of spectral peaks, independent tones give higher mean MG than harmonics.} \\
+\cx{Linear regression} & \cx{Training loss} & \cx{MG rises with the number of oscillating weight directions.} \\
+\cx{Diagonal matrix} & \cx{Matrix norm, one entry} & \cx{Adding independent oscillations raises MG for the norm. MG for a single entry stays near one.} \\
+\cx{Digit classifier} & \cx{Weight norm, gradient norm} & \cx{Weight-norm MG is closer than gradient-norm MG to the effective dimension estimated from weight covariance.} \\
+\cx{Figure-eight generator} & \cx{One neuron's activation} & \cx{MG is near one when the full network state repeats.} \\
+\addlinespace
+\multicolumn{3}{@{}l}{\cx{\textbf{Which changes are visible in training logs?} (Sections~\ref{sec:cnn}--\ref{sec:vae})}} \\
+\cx{Small CIFAR-10 classifier} & \cx{Weight norm} & \cx{Freezing and 50\% pruning both lower MG. Updates vary in fewer directions after freezing and in more after pruning.} \\
+\cx{ResNet-18} & \cx{Weight norm} & \cx{A threshold from the small classifier detects freezing but misses pruning and learning-rate reductions.} \\
+\cx{Text autoencoder} & \cx{Reconstruction loss} & \cx{MG falls as the code retains less information about the input sentence.} \\
+\addlinespace
+\multicolumn{3}{@{}l}{\cx{\textbf{Can MG warn of spikes or help choose a model?} (Sections~\ref{sec:spike-warning}--\ref{sec:forecast_utility})}} \\
+\cx{Transformer loss spikes} & \cx{Logarithm of training loss} & \cx{MG warns of 22 of 23 spikes. Step-to-step variation warns of all at the same false-alarm rate.} \\
+\cx{Self-supervised digit encoders} & \cx{Gradient norm} & \cx{Choosing the encoder with the highest MG gives near-best linear classification accuracy on average.} \\
+\cx{Activation forecasts} & \cx{One neuron's activation} & \cx{MG and validation select forecasters with similar mean error on new recordings.} \\
 \bottomrule
 \end{tabularx}
-\end{table}
+\end{table*}
 }
