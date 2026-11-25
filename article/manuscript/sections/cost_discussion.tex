@@ -1,10 +1,9 @@
 \claude{
-\newpage
 \section{Discussion}\label{sec:cost}
-MG describes the geometry of the recorded signal. Noise and temporal dependence can affect this geometry, so interpretation requires evidence about what the signal captures. In a modular-addition control, MG changes while validation accuracy stays low (\appref{app:additional}).
+\cx{In a trained generator, the closed curve traced by one neuron's delay vectors reflects periodic motion of the full network. During optimization, interpreting a change in MG requires an independent check. Freezing layers concentrates weight updates, but changes in weight-norm MG also occur in modular-addition runs whose validation accuracy stays low (\appref{app:additional}).}
 
-Monitoring cost includes recording the log. In the VAE scheduling test, measuring loss on fixed sentences accounts for most of the time (\appref{app:cost}). On existing logs, roughness detects more loss spikes at the same false-positive rate, and querying fewer delay vectors speeds up forecast selection.
+\cx{A log can reveal a change even when a simpler rule suffices for a decision. In Walker2d, MG of the action norm and a fixed policy choice give nearly identical mean rewards under actuator shifts (\appref{app:rl_selection}). In the text VAE, periodic checks detect more changes at the primary budget (Table~\ref{tab:cyclic}). Recording loss accounts for most of the monitoring time (\appref{app:cost}).}
 
 \section[Conclusion]{Conclusion}
-We propose a common way to track dynamical simplification from a single scalar log. In recurrent networks trained to produce prescribed oscillations, MG captures differences in the structure of repeated motion. In our training experiments, changes in MG from window to window track independently measured simplification, including in feedforward networks.
+\cx{The same geometric estimate distinguishes rhythms in a recurrent network and tracks changes during classifier and text-model training. Across these settings, the order of readings in one scalar log reveals changes in behavior that the level of the signal alone can obscure.}
 }

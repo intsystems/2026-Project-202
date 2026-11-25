@@ -40,6 +40,8 @@ python code/real/scalar_log_diagnostics/text_vae_latent_code/analyze_logs.py --o
 
 Both scripts recompute MG from the scalar samples committed under the respective experiment's `logs/`. The VAE script reads the separately measured mutual information from the bundled CSVs. That quantity uses the encoder's posterior distributions.
 
+The FORCE figure shows the median and range of MG across valid windows at each training step. It excludes windows flagged by the estimator and leaves a gap when a simulation has no valid windows.
+
 To generate new rollouts and VAE measurements, run the following in a fresh checkout. The VAE run also requires PyTorch and the two Penn Treebank files downloaded by its training script. The recorded VAE environment used Python 3.13.12 and PyTorch 2.10.0. Retain the bundled logs for exact comparisons with the values in the paper.
 
 ```bash

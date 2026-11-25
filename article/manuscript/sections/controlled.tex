@@ -1,57 +1,32 @@
 \claude{
-\Needspace{8\baselineskip}
 \section[Dimension recovery and periodic motion]{Dimension recovery and periodic motion}\label{sec:controlled}
-A diagonal matrix with oscillating entries provides an exact comparison. Its dimension is the number of independent oscillations, and MG tracks that number (\appref{app:controlled}). We then vary the loss weights of a digit classifier to induce oscillations in its trainable parameters. The loss weights set the frequencies, and covariance across training steps shows which weight directions vary.
+\cx{We start with a system whose dimension we can set directly. Each moving entry of a diagonal matrix oscillates at its own frequency. As we add independent oscillations, MG of the matrix norm rises. MG of a single entry stays near one because that entry follows only its own oscillation (Table~\ref{tab:matrix-observations}).}
 
-For the classifier we compare MG with the participation ratio (PR) of the weight covariance. PR is $(\sum_i v_i)^2/\sum_i v_i^2$ for covariance eigenvalues $v_i$. \cx{PR equals $r$ when exactly $r$ covariance eigenvalues are nonzero and equal.} We keep the estimator settings fixed across evaluation runs. Parameter logs and loss on fixed examples give more accurate estimates than gradient norm (Table~\ref{tab:synthetic-errors}).
+\cx{In a digit classifier we can vary the loss weights periodically, but the optimizer determines how the classifier weights respond. We measure how widely they vary using the participation ratio (PR) of their covariance. For eigenvalues $v_i$, PR is $(\sum_i v_i)^2/\sum_i v_i^2$. It equals $r$ when variance is shared equally among $r$ directions. MG from weight norm or loss on fixed examples follows this measure more closely than MG from gradient norm (Table~\ref{tab:synthetic-errors}).}
 
-\begin{table}[htbp]
-\centering\small
-\setlength{\tabcolsep}{2.5pt}
-\caption{\cx{Digit classifier errors against weight covariance PR across held-out rank--repeat pairs.}}
-\label{tab:synthetic-errors}
-\begin{tabular}{lr}
-\toprule
-Recorded quantity & \cx{Mean absolute error} \\
-\midrule
-Parameter norm & \cx{0.57} \\
-Loss on fixed examples & \cx{0.59} \\
-Fixed parameter projection & \cx{0.62} \\
-Gradient norm & \cx{1.70} \\
-\bottomrule
-\end{tabular}
-\end{table}
+In linear regression, a mode is an oscillating component of the weight error along a Hessian eigenvector. \cx{MG from the loss rises as more modes oscillate and falls when we damp some of them, even though every weight remains trainable} (Figure~\ref{fig:components}, left, and Table~\ref{tab:regression_variation}).
 
-In linear regression, a mode is an oscillating component of the weight error along a Hessian eigenvector. \cx{Loss-based MG increases with the number of excited modes (Figure~\ref{fig:components}, left) and falls after selected modes are damped (Table~\ref{tab:regression_variation}). All weights remain trainable.}
+\subsection[Separating independent oscillations from harmonics]{\cx{Separating independent oscillations from harmonics}}\label{sec:generator}
+\cx{A spectrum alone can leave the number of independent oscillations ambiguous. We train recurrent networks to produce signals with the same number of peaks using first-order reduced and controlled error (FORCE) learning} \citep{sussillo2009generating}. \cx{FORCE adjusts the output weights to reproduce a prescribed signal and feeds the output back into the network. We then fix the weights and record one neuron's activation, $\tanh(h_{t,i})$, the value neuron $i$ passes on from its internal state $h_{t,i}$ at step $t$.}
 
-\subsection{Learned generators distinguish phases from harmonics}\label{sec:generator}
-Several spectral peaks can arise from harmonics of one oscillation or from independent oscillations. We train recurrent networks to produce both kinds of signal using first-order reduced and controlled error (FORCE) learning \citep{sussillo2009generating}. FORCE adjusts the output weights to reproduce a prescribed signal and feeds each output back into the state. We then fix the weights and compute MG from one neuron's activation recorded at each simulated step.
+\cx{The labels in Figure~\ref{fig:components} give the type and number of output frequencies. H denotes harmonics of a common rhythm, T independent tones, and M a mixture. For signals with the same number of peaks, MG from a single neuron rises with the number of independent phases. Full-state covariance PR changes little across those same generators. At higher dimensions the MG estimates overlap (Table~\ref{tab:generator_phases}).}
 
-\cx{The numeral in each task label counts output frequencies. H4 uses one fundamental frequency and three harmonics. M4 uses two independent fundamental frequencies and their second harmonics. T4 uses four independent frequencies. Each target has four spectral peaks.} MG separates these generators despite their similar full-state covariance PRs (Figure~\ref{fig:components}). At higher dimension, MG overestimates the number of independent oscillations and the estimates overlap (Table~\ref{tab:generator_phases}).
-
-\begin{figure*}[htbp]
+\begin{figure*}[!htbp]
 \centering
 \includegraphics[width=.98\textwidth]{figures/components.pdf}
-\caption{Left, MG@loss tracks how many independent oscillations (modes) contribute to the weight error in linear regression. Center and right, generators with four peaks \cx{in the summed output} and different numbers of independent phases. Dots show runs and bars show medians. MG separates phase counts more clearly than the covariance PR of activation vectors across all neurons.}
+\caption{\cx{Left, MG from regression loss against the known number of modes (dashed line). Center and right, MG and full-state covariance PR for generators with four peaks in the summed output.} Dots show runs and bars show medians.}
 \label{fig:components}
 \end{figure*}
 
-\begin{table}[htbp]
-\centering\small
-\caption{Phase structure in learned generators. Entries show mean $\pm$ standard deviation across five runs. \cx{MG uses one neuron and PR uses all activations.}}
-\label{tab:generator_phases}
-\input{tables/generator_phases.tex}
-\end{table}
-
 \subsection{FORCE training from chaos to periodic output}\label{sec:force}
-We use FORCE to train networks with chaotic initial dynamics to reproduce a prescribed two-dimensional periodic signal. At selected training steps, we take the current state and simulate the network with the weights held fixed. Along this sequence of states, called a rollout, we record one neuron's activation. MG approaches one, the dimension of a closed periodic orbit (Figure~\ref{fig:force-log-geometry}).
+\cx{To see how periodic motion emerges during learning, we train initially chaotic networks to produce a two-dimensional periodic signal. At selected training steps we pause learning and simulate the current network with fixed weights. Each simulation, or rollout, supplies one neuron's activation series. Its delay projection narrows to a closed curve as MG approaches one (Figure~\ref{fig:force-log-geometry}).}
 
-We estimate finite-time Lyapunov exponents, the average exponential growth rates of small perturbations to the full hidden state. We select initial networks with a positive largest exponent. Most trained networks pass a test for stable periodic motion that checks the state return after one period and contraction in directions transverse to the orbit (Table~\ref{tab:force-outcome}).
+\cx{To check this interpretation we perturb the full state. A finite-time Lyapunov exponent is the log ratio of final to initial perturbation size divided by elapsed time. A positive value means growth, as for the largest exponent before training. After training, most networks return close to the same state after a period. Small displacements along the orbit persist as phase shifts, while transverse perturbations decay} (Table~\ref{tab:force-outcome}).
 
-\begin{figure*}[htbp]
+\begin{figure*}[!htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/force_training_transition.pdf}
-\caption{Single-neuron activity during FORCE training. The upper panels show separate fixed-weight simulations and \cx{projections of the first window onto the first and last delay coordinates}. The bottom panels show \cx{the median and range across windows within each simulation}. Crosses indicate unavailable estimates, the triangle indicates an off-scale value, and the dashed line marks dimension one.}
+\caption{Single-neuron activation during FORCE training. \cx{Top, simulations with weights fixed at the indicated training steps. Middle, delay projection in the first window. Below, median and range of valid window estimates on a log scale. At iterations 50 and 75 the network settles to a fixed point. Delay vectors nearly coincide and every window fails the numerical checks (Table~\ref{tab:mg-numerics}), leaving a gap.} The dashed line marks dimension one.}
 \label{fig:force-log-geometry}
 \end{figure*}
 }

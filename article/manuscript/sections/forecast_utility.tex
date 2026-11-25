@@ -1,19 +1,27 @@
-\Needspace{7\baselineskip}
 \subsection[Forecast model choice]{Forecast model choice}\label{sec:forecast_utility}
-We use an observed segment of one neuron's activity, the prefix, to choose a model to predict the samples that follow. On development runs, we train a rule to predict each model's error from MG. At evaluation it chooses the lowest predicted error. In held-out model search, we fit each candidate on increasingly long initial portions of the prefix and test it on the observations immediately following each portion. Figure~\ref{fig:single-neuron-forecasts} shows where the rules disagree.
+\cx{Given part of one neuron's activation series (the prefix), which model best forecasts the continuation? On separate runs we learn to predict each candidate's error from prefix MG and choose the lowest. Held-out search fits and tests candidates on successive portions of the prefix (Figure~\ref{fig:single-neuron-forecasts}).}
 
-We report normalized mean squared error (NMSE), the mean squared forecast error divided by the variance of the prefix \cx{with a positive floor}. \cx{The interval for the paired NMSE difference includes zero} (Table~\ref{tab:forecast_all}). \cx{The sampled calculation preserves every full-MG choice in this test and is faster than held-out search. The timing comparison between the MG variants includes both query sampling and a change in how distances are computed} (Table~\ref{tab:forecast_utility}).
+\cx{Normalized mean squared error (NMSE) divides mean squared forecast error by the prefix variance with a positive floor. Mean errors are close (Table~\ref{tab:decisions}), and the interval for their within-repeat difference includes zero (Table~\ref{tab:forecast_all}). Sampling MG queries preserves all model choices in this test and is faster than held-out search (Table~\ref{tab:forecast_utility}).}
 
-\begin{table}[!t]
-\centering\small
-\caption{Forecast error and \cx{time to select and fit a model}. NMSE is mean $\pm$ standard deviation across 20 repeats.}
-\label{tab:forecast_utility}
-\input{tables/forecast_utility.tex}
-\end{table}
-
-\begin{figure*}[!t]
+\begin{figure*}[!htb]
 \centering
 \includegraphics[width=.96\textwidth]{figures/single_neuron_forecasts.pdf}
-\caption{Two tasks from the same evaluation repeat. The unshaded interval shows the end of the observed activity. The shaded interval begins at sample zero and contains the measured continuation and forecasts. Held-out search is more accurate on the mixed-frequency example. MG is more accurate on the independent-frequency example.}
+\caption{\cx{Forecasts for two signals from one evaluation repeat. Shading begins where observations end. Held-out search is more accurate for the mixed frequencies (left), MG for the independent frequencies (right).}}
 \label{fig:single-neuron-forecasts}
 \end{figure*}
+
+\begin{table*}[!htbp]
+\centering\small
+\caption{\cx{Decisions on evaluation runs. Within each detection task the rules have the same false-alarm rate. Forecast errors are means and standard deviations over 20 repeats.}}
+\label{tab:decisions}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xrrl@{}}
+\toprule
+\cx{Outcome} & \cx{MG} & \cx{Baseline} & \cx{Baseline rule} \\
+\midrule
+\cx{Classifier interventions detected} & \cx{27/28} & \cx{28/28} & \cx{Normalized increments} \\
+\cx{Loss spikes detected in advance} & \cx{22/23} & \cx{23/23} & \cx{Roughness} \\
+\cx{Accuracy gap (percentage points)} & \cx{0.41} & \cx{0.75} & \cx{Correlation dimension} \\
+\cx{Forecast NMSE} & \cx{$0.036\pm0.021$} & \cx{$0.041\pm0.032$} & \cx{Held-out search} \\
+\bottomrule
+\end{tabularx}
+\end{table*}

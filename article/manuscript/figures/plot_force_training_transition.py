@@ -6,6 +6,7 @@ from pathlib import Path
 
 import matplotlib
 import numpy as np
+from matplotlib.ticker import NullLocator
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -16,7 +17,6 @@ from plot_force_log_geometry import FIGURES, LOGS, MG_CONFIG, load_trace, window
 BUNDLE = LOGS / "force_training_traces.npz"
 DISPLAY_STEPS = (0, 150, 500, 40000)
 DISPLAY_COLORS = ("#BD520E", "#9056A0", "#257770", "#0072B2")
-MG_VIEW_MAX = 6.5
 
 
 def read_run(rollout_dir):
@@ -30,11 +30,12 @@ def read_run(rollout_dir):
 
 
 def checkpoint_summary(scores):
-    """Summarize a rollout when MG is available in every analysis window."""
-    complete = np.isfinite(scores).all(axis=1)
+    """Summarize the valid windows in each fixed-weight simulation."""
     summary = np.full((len(scores), 3), np.nan)
-    windows = scores[complete]
-    summary[complete] = np.column_stack((windows.min(axis=1), np.median(windows, axis=1), windows.max(axis=1)))
+    for index, windows in enumerate(scores):
+        valid = windows[np.isfinite(windows)]
+        if valid.size:
+            summary[index] = valid.min(), np.median(valid), valid.max()
     return summary
 
 
@@ -42,20 +43,9 @@ def plot_progress(ax, steps, summary, phase_indices, horizon, scale):
     shown = steps <= horizon
     time = steps[shown] / scale
     lower, median, upper = summary[shown].T
-    off_scale = median > MG_VIEW_MAX
-    ax.fill_between(time, lower, upper, where=~off_scale, color="#DCE5EE", linewidth=0)
-    ax.plot(time, np.where(off_scale, np.nan, median), color="#3C5269",
-            lw=1.0, marker="o", markersize=2.0)
+    ax.fill_between(time, lower, upper, color="#DCE5EE", linewidth=0)
+    ax.plot(time, median, color="#3C5269", lw=1.0, marker="o", markersize=2.0)
     ax.axhline(1, color="#89939E", lw=0.7, ls="--")
-    unavailable = time[~np.isfinite(median)]
-    ax.scatter(unavailable, np.full(len(unavailable), 0.035), transform=ax.get_xaxis_transform(),
-               color="#3C5269", marker="x", s=14, linewidths=0.8, zorder=4)
-    ax.scatter(time[off_scale], np.full(off_scale.sum(), 0.93), transform=ax.get_xaxis_transform(),
-               color="#3C5269", marker="^", s=18, zorder=4)
-    if scale == 1:
-        for iteration, score in zip(time[off_scale], median[off_scale]):
-            ax.annotate(f"{score:.0f}", (iteration, 0.93), xycoords=ax.get_xaxis_transform(),
-                        xytext=(5, 0), textcoords="offset points", va="center", fontsize=7)
     for index, color in zip(phase_indices, DISPLAY_COLORS):
         if shown[index] and np.isfinite(summary[index, 1]):
             ax.scatter(steps[index] / scale, summary[index, 1], s=22,
@@ -70,7 +60,7 @@ def plot_transition(steps, time, activity, summary):
                          "axes.spines.top": False, "axes.spines.right": False,
                          "axes.linewidth": 0.6, "axes.axisbelow": True})
     fig = plt.figure(figsize=(6.0, 4.15), layout="constrained")
-    grid = fig.add_gridspec(3, 4, height_ratios=[1, 1.27, 1.18])
+    grid = fig.add_gridspec(3, 4, height_ratios=[1, 1.22, 1.42])
 
     span = (MG_CONFIG.max_E - 1) * MG_CONFIG.tau
     short = time <= 125
@@ -91,7 +81,7 @@ def plot_transition(steps, time, activity, summary):
                   xticks=[-3, 0, 3], yticks=[-3, 0, 3], xlabel=r"$z_t$")
         delay.grid(alpha=0.16)
         if col == 0:
-            trace.set_ylabel("Neuron activity")
+            trace.set_ylabel("Neuron activation")
             delay.set_ylabel(r"$z_{t+(E-1)\tau}$")
         else:
             trace.tick_params(labelleft=False)
@@ -105,7 +95,9 @@ def plot_transition(steps, time, activity, summary):
         ax.set_title(title)
         ax.grid(axis="y", alpha=0.22)
     early.set(xticks=[0, 250, 500, 750, 1000], xlabel="Training iteration",
-              ylabel="MG@neuron activity", ylim=(0, MG_VIEW_MAX))
+              ylabel="MG@neuron activation", yscale="log")
+    early.set_yticks([0.5, 1, 3, 10, 30, 100], labels=["0.5", "1", "3", "10", "30", "100"])
+    early.yaxis.set_minor_locator(NullLocator())
     full.set(xticks=[0, 10, 20, 30, 40], xlabel="Training iteration (thousands)")
     full.tick_params(labelleft=False)
     return fig

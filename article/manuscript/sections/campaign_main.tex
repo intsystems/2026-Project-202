@@ -1,14 +1,13 @@
-\Needspace{7\baselineskip}
 \subsection{Warning of transformer loss spikes}\label{sec:spike-warning}
-We test whether a transformer's loss history provides advance warning of spikes while it learns modular addition. MG and roughness use the same windows of log loss. Roughness divides the standard deviation of successive differences by that of the log values in the window. Both warn before the spike in Figure~\ref{fig:slingshot-warning}. Roughness detects more spikes at the same false-positive rate and costs less to compute (Table~\ref{tab:spikes_campaign}).
+\cx{We next ask whether a loss history gives warning of a future change. As a transformer learns modular addition, its loss can spike abruptly. MG and roughness both warn ahead of the spike in Figure~\ref{fig:slingshot-warning}. Roughness divides the standard deviation of successive log-loss differences by that of the log-loss values in the same window. It catches more spikes at the same false-alarm rate (Table~\ref{tab:spikes_campaign}).}
 
-\begin{figure*}[htbp]
+\begin{figure*}[!htb]
 \centering
 \includegraphics[width=.92\textwidth]{figures/slingshot_warning.pdf}
-\caption{A loss spike in an evaluation run. The top band shows the minimum and maximum log loss around the mean in each block. Blue shading marks the interval in which alarms count as advance warnings. Dotted lines mark the calibrated thresholds and dots mark the first warnings.}
+\caption{A loss spike in an evaluation run. The top band shows the minimum and maximum log loss around the mean in each block. Blue shading marks the interval for successful warnings. Dotted lines show the thresholds chosen on development runs. Dots mark the first warnings.}
 \label{fig:slingshot-warning}
 \end{figure*}
 
-\Needspace{8\baselineskip}
+\Needspace{7\baselineskip}
 \subsection[Model selection from scalar logs]{Model selection from scalar logs}\label{sec:ssl}
-Self-supervised training learns features from unlabeled images. We test whether a gradient-norm log can help choose a configuration before testing its features on labeled digits. On MNIST we measure feature quality by fitting a linear classifier with the feature extractor fixed. MG selects configurations with near-best accuracy. \cx{The scaled mean coordinate standard deviation of normalized projections gives the highest rank correlation with classifier accuracy} (Table~\ref{tab:ssl_campaign}).
+\cx{Self-supervised encoders learn without class labels. We rank MNIST configurations by MG of the gradient norm, then test a linear classifier on each encoder's frozen features. MG gives the smallest mean gap to the best accuracy. A statistic using features from many images ranks the full set slightly better (Figure~\ref{fig:ssl-probe-scatter} and Table~\ref{tab:ssl_campaign}).}

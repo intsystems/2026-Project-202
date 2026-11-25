@@ -151,7 +151,7 @@ def plot_forecast():
         ax.plot(np.arange(-history, 0), prefix[-history:], color=GRAY, lw=1.05)
         ax.plot(time, np.r_[prefix[-1], target], color="#20262B", lw=1.4)
         for method, color, style, label in [
-            ("MG", BLUE, "--", "MG@neuron activity"),
+            ("MG", BLUE, "--", "MG@neuron activation"),
             ("validation", ORANGE, "-.", "Held-out search"),
         ]:
             model = selected.loc[method, "model"]
@@ -165,11 +165,11 @@ def plot_forecast():
         ax.set(title=title, xlabel="Sample relative to forecast start", xlim=(-history, len(target)))
         ax.grid(axis="y", alpha=.15)
         ax.legend(loc="upper left", frameon=False, fontsize=6.6, handlelength=2)
-    axes[0].set_ylabel("Neuron activity")
+    axes[0].set_ylabel("Neuron activation")
     for ax in axes:
         ax.set_ylim(-1.05, 1.68)
     fig.legend(handles=[
-        Line2D([], [], color=GRAY, label="Observed activity"),
+        Line2D([], [], color=GRAY, label="Observed activation"),
         Line2D([], [], color="#20262B", label="Measured continuation"),
     ], loc="outside lower center", ncol=2, frameon=False)
     return fig

@@ -1,8 +1,8 @@
 \claude{
 \section{Introduction}\label{sec:intro}
-As a network learns, its activity may become periodic or its weights may vary along fewer directions. Checking these changes directly can require saving every activation or weight vector. We ask what can be inferred from a scalar log such as loss or weight norm.
+\cx{Consider a system observed through one quantity, such as training loss or the magnitude of a control command. Its readings can stay within their usual range even as the system settles into a more regular pattern. Can the order of the readings reveal that change?}
 
-Intrinsic-dimension methods have been used to study neural representations \citep{facco2017estimating,ansuini2019intrinsic,pope2021intrinsic} and sequences of weights during optimization \citep{simsekli2020hausdorff,camuto2021fractal,birdal2021intrinsic,tan2024limitations}. Delay reconstruction builds a point cloud from a scalar series \citep{takens1981detecting,sauer1991embedology}. In this reconstruction, a periodic signal traces a curve. Several independent oscillations can fill a higher-dimensional set even with the same number of spectral peaks.
+Intrinsic-dimension methods have been used to study neural representations \citep{facco2017estimating,ansuini2019intrinsic,pope2021intrinsic} and sequences of weights during optimization \citep{simsekli2020hausdorff,camuto2021fractal,birdal2021intrinsic,tan2024limitations}. \cx{These studies use many coordinates at once. Delay reconstruction builds coordinates from successive readings of one quantity} \citep{takens1981detecting,sauer1991embedology}. \cx{A periodic signal traces a curve in these coordinates even when it has many spectral peaks. Independent oscillations can fill a surface.}
 
-The pooled MacKay--Ghahramani (MG) estimator quantifies this geometry using ratios of neighbor distances \citep{levina2004maximum,mackay2005comments}. Pooling gives one dimension estimate per window, which lets us track changes in the log over time.
+\cx{We use the pooled MacKay--Ghahramani (MG) estimator} \citep{levina2004maximum,mackay2005comments} \cx{to follow this geometry from window to window. We compare different logs of systems whose motion we know, then check changes in training logs against independent measurements. Finally, we ask when MG helps with monitoring or model selection.}
 }

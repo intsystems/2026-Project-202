@@ -4,27 +4,27 @@
 \clearpage
 \appendix
 \onecolumn
-\section*{\cx{Appendix guide}}
+\section*{Appendix guide}
 \begingroup
 \small
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.18}
 \newcommand{\appendixguideentry}[3]{%
-  \mbox{\hyperref[#1]{\textbf{\makebox[1.6em][l]{\ref*{#1}}#2}}} & \cx{#3}\\
+  \mbox{\hyperref[#1]{\textbf{\makebox[1.6em][l]{\ref*{#1}}#2}}} & #3\\
 }
 \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
 \toprule[.5pt]
-\appendixguideentry{app:theory}{\cx{Interpreting MG}}{When delay coordinates preserve dimension and how to interpret MG in transient and stochastic regimes.}
-\appendixguideentry{app:settings}{\cx{Reproducibility}}{Recorded signals and the settings for MG, the detectors, and model training.}
+\appendixguideentry{app:theory}{Interpreting MG}{\cx{When the dimension of a log reflects the dimension of the motion.}}
+\appendixguideentry{app:settings}{Reproducibility}{\cx{Which signals were recorded and how each experiment was run.}}
 \addlinespace[.45em]
-\appendixguideentry{app:controlled}{\cx{Dimension recovery}}{Tests with known oscillations in matrices, classification, regression, and recurrent generators.}
-\appendixguideentry{app:applied}{\cx{Detecting training changes}}{Detector comparisons for classifier interventions and changes in latent-code use in a text VAE.}
-\appendixguideentry{app:additional}{\cx{Grokking and Walker2d}}{Delayed generalization, command smoothing, and policy choice under actuator lag and noise.}
+\appendixguideentry{app:controlled}{Dimension recovery}{\cx{Known oscillations in matrices, classifiers, regression and generators.}}
+\appendixguideentry{app:applied}{Detecting training changes}{\cx{How changes in a scalar log compare with weight updates and latent-code use.}}
+\appendixguideentry{app:additional}{Grokking and Walker2d}{Delayed generalization, command smoothing, and policy choice under actuator lag and noise.}
 \appendixguideentry{app:cost}{Computational cost}{Required inputs, computation time, and storage for each diagnostic.}
 \addlinespace[.45em]
-\appendixguideentry{app:forecast_utility}{Forecasting}{Choosing a forecaster from one neuron's activity and estimating MG with fewer neighbor searches.}
-\appendixguideentry{app:intervention_utility}{\cx{Interventions on MNIST}}{Accuracy and computation when stopping training, freezing layers, or pruning neurons.}
-\appendixguideentry{app:campaign}{\cx{Selection and warnings}}{Selecting self-supervised models, anticipating loss spikes, and testing rules in new training settings.}
+\appendixguideentry{app:forecast_utility}{Forecasting}{Choosing a forecaster from one neuron's activation and estimating MG with fewer neighbor searches.}
+\appendixguideentry{app:intervention_utility}{Interventions on MNIST}{Accuracy and computation when stopping training, freezing layers, or pruning neurons.}
+\appendixguideentry{app:campaign}{Selection and warnings}{\cx{Image representations, transformer loss spikes and transfer to new tasks.}}
 \bottomrule[.5pt]
 \end{tabularx}
 \endgroup

@@ -1,27 +1,27 @@
 \begin{tabular}{llrrr}
 \toprule
-Statistic & \cx{Input} & Detections & \cx{False alarms / 10,000} & AUROC \\
+Statistic & Input & Detections & False alarms / 10,000 & AUROC \\
 \midrule
-Detrended lag-one correlation & \cx{Weight norm} & 23/23 & 2.34 & 0.951 \\
-\cx{Minimum loss} & \cx{Loss} & 23/23 & 2.34 & 0.946 \\
-Roughness & \cx{Loss} & 23/23 & 2.44 & 0.960 \\
-Delay-vector covariance PR & \cx{Loss} & 23/23 & 2.66 & 0.959 \\
-Recurrence error & \cx{Loss} & 23/23 & 2.76 & 0.960 \\
-Relative detrended standard deviation & \cx{Loss} & 23/23 & 2.76 & 0.931 \\
-\cx{Minimum gradient norm} & \cx{Gradient norm} & 22/23 & 2.34 & 0.917 \\
-\textbf{MG} & \cx{Loss} & 22/23 & 2.44 & 0.949 \\
-Detrended standard deviation & \cx{Loss} & 22/23 & 2.44 & 0.923 \\
-Spectral entropy & \cx{Loss} & 21/23 & 2.02 & 0.962 \\
-TwoNN dimension estimate & \cx{Loss} & 21/23 & 2.12 & 0.889 \\
-\cx{Maximum log-partition} & \cx{Output scores} & 20/23 & 1.91 & 0.827 \\
-Recurrence rate & \cx{Gradient norm} & 20/23 & 2.44 & 0.726 \\
-MG (lag 4, 50 neighbors) & \cx{Gradient norm} & 20/23 & 2.66 & 0.927 \\
-Permutation entropy & \cx{Loss} & 19/23 & 2.23 & 0.881 \\
-Trend crossings & \cx{Update norm} & 17/23 & 2.44 & 0.841 \\
-Minimum attention entropy & \cx{Attention} & 15/23 & 1.59 & 0.911 \\
-\cx{Maximum update norm} & \cx{Update norm} & 15/23 & 2.34 & 0.788 \\
-\cx{Minimum weight norm} & \cx{Weight norm} & 14/23 & 3.40 & 0.716 \\
-Correlation dimension & \cx{Gradient norm} & 12/23 & 2.44 & 0.882 \\
-Maximum attention logit & \cx{Attention} & 4/23 & 1.70 & 0.645 \\
+Correlation of successive residuals & Weight norm & 23/23 & 2.34 & 0.951 \\
+Minimum loss & Loss & 23/23 & 2.34 & 0.946 \\
+Roughness & Loss & 23/23 & 2.44 & 0.960 \\
+PR of delay-vector covariance & Loss & 23/23 & 2.66 & 0.959 \\
+Recurrence error & Loss & 23/23 & 2.76 & 0.960 \\
+Relative detrended standard deviation & Loss & 23/23 & 2.76 & 0.931 \\
+Minimum gradient norm & Gradient norm & 22/23 & 2.34 & 0.917 \\
+\textbf{MG} & Loss & 22/23 & 2.44 & 0.949 \\
+Detrended standard deviation & Loss & 22/23 & 2.44 & 0.923 \\
+Spectral entropy & Loss & 21/23 & 2.02 & 0.962 \\
+TwoNN dimension estimate & Loss & 21/23 & 2.12 & 0.889 \\
+Maximum log-partition & Output scores & 20/23 & 1.91 & 0.827 \\
+Recurrence rate & Gradient norm & 20/23 & 2.44 & 0.726 \\
+MG (lag 4, 50 neighbors) & Gradient norm & 20/23 & 2.66 & 0.927 \\
+Permutation entropy & Loss & 19/23 & 2.23 & 0.881 \\
+Trend crossings & Update norm & 17/23 & 2.44 & 0.841 \\
+Minimum attention entropy & Attention & 15/23 & 1.59 & 0.911 \\
+Maximum update norm & Update norm & 15/23 & 2.34 & 0.788 \\
+Minimum weight norm & Weight norm & 14/23 & 3.40 & 0.716 \\
+Correlation dimension & Gradient norm & 12/23 & 2.44 & 0.882 \\
+Maximum attention logit & Attention & 4/23 & 1.70 & 0.645 \\
 \bottomrule
 \end{tabular}

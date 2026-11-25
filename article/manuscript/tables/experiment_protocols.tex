@@ -6,10 +6,10 @@
 \toprule
 Task & Model \\
 \midrule
-Digit classifier & Fixed multilayer perceptron with two 64-neuron tanh layers. Train a linear classifier within a fixed parameter subspace. \\
-Synthetic generators and forecasting & FORCE-trained recurrent networks with 1,000 neurons for phase recovery and 256 for the periodic-signal and forecast tasks \\
-CIFAR-10 interventions & Convolutional neural network (CNN) with ReLU activations and $3\times3$ kernels. Channel counts 16, 32, and 32. Max pooling after the first two layers, then adaptive average pooling and a linear classifier. \\
-ResNet transfer & ResNet-18 with a ten-class classifier. Random initialization uses a $3\times3$ input convolution with stride 1 and no max pooling. ImageNet initialization uses a $7\times7$ input convolution with stride 2 and max pooling. \\
+Digit classifier & Fixed tanh MLP (64--64), linear classifier in a fixed parameter subspace \\
+Synthetic generators and forecasting & FORCE recurrent networks (1,000 neurons for phase recovery, 256 for the periodic-signal and forecast tasks) \\
+CIFAR-10 interventions & $3\times3$ ReLU convolutions (16, 32, 32 channels), max pooling after the first two, adaptive average pooling, linear classifier \\
+ResNet transfer & ResNet-18, 10 classes. Input convolution: random init.\ $3\times3$, stride 1, no max pooling. ImageNet init.\ $7\times7$, stride 2, max pooling. \\
 Text VAE & 48-dimensional shared embeddings, GRU encoder and decoder with hidden size 64, 16-dimensional Gaussian code \\
 Grokking & One-layer transformer, width 128, four 32-dimensional heads, MLP width 512, no layer normalization; full-batch comparison uses a width-500 quadratic perceptron \\
 MNIST representation selection & 784--256--256 encoder with batch normalization and ReLU; 256--256--64 projector (one variant outputs 16 coordinates); predictor width 64 in the standard SimSiam/BYOL settings \\
@@ -24,30 +24,49 @@ Walker2d & Separate 64--64 tanh MLPs for actor and critic; six action outputs \\
 \centering\small
 \caption{Classifier intervention and detector settings.}
 \label{tab:cnn-protocol}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.28\linewidth}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.43\linewidth}>{\raggedright\arraybackslash}X@{}}
 \toprule
-Component & Setting \\
+Parameter & Setting \\
 \midrule
 \multicolumn{2}{@{}l}{\textbf{CIFAR-10 intervention benchmark}} \\
-Small CNN training & 10,000 CIFAR-10 images; 10,000 SGD updates; learning rate 0.02, momentum 0.9, weight decay $5\cdot10^{-4}$, batch 64 with replacement \\
-Intervention update & 4,000; pre/post summaries exclude windows that overlap the intervention \\
-Interventions & Divide the learning rate by 3, 10, or 100. Freeze the first two convolutions, all layers before the classifier, or all weights except the classifier bias. Prune 50\%, 80\%, or 95\% of weights. \\
-Comparison records & Unchanged training or four times the batch size. Two additional records multiply the later part of an unchanged log by 10 or smooth it with a mean over the latest 16 samples. \\
-Replication & 4 development and 4 held-out repeats; 10 additional repeats for timing-shift transfer \\
+Training images / SGD updates & 10,000 / 10,000 \\
+SGD rate / momentum / weight decay & $0.02$ / $0.9$ / $5\cdot10^{-4}$ \\
+Batch size / sampling & 64 / with replacement \\
+Intervention update & 4,000 \\
+Learning-rate divisors & 3, 10, 100 \\
+Freezing choices & First two convolutions, all layers before the classifier, or all parameters except the classifier bias \\
+Pruned weight fractions & 50\%, 80\%, 95\% \\
+Comparison training runs & Unchanged training or batch size $\times4$ \\
+Comparison logs from unchanged training & Later samples $\times10$ or a mean over the latest 16 samples \\
+Development / evaluation / shifted-time repeats & 4 / 4 / 10 \\
 \addlinespace
-\multicolumn{2}{@{}l}{\textbf{Detector calibration and comparisons}} \\
-Detector & $M=2$, $B=3$, $D_j<-0.08829884$; feature windows ending at or before update 1,500 are excluded \\
-Scoring & 5,000 updates after intervention. Each evaluation repeat includes 7 strong intervention types and 4 comparison conditions. \cx{The strong set excludes the threefold learning-rate reduction and freezing the first two convolutions.} \\
-Calibration choices & $M\in\{2,3,4\}$, $B\in\{3,4,6\}$. The threshold adds a margin of 0.02 beyond the largest score in the development comparison records. \\
-IAAFT surrogates & 2 reordered records per window, 100 iterations. Trimming to match the beginning and end can remove up to 15\% of the window. \\
-Entropy features & Permutation order 5, delay 1, stable tie sorting, \cx{normalization by $\log(5!)$}. Sample-entropy template length 2, delay 1, Chebyshev distance, tolerance 0.2 window SDs, no self-matches. \\
-CUSUM calibration & Estimate the initial mean and scale on windows ending at updates 2,000--3,500. Use a minimum scale $\max(0.01|\mu_0|,10^{-10})$. Test drift parameters $\{0.25,0.5,1\}$ with threshold margin 0.5. \\
-Loss of active channels & Increase the learning rate by a factor of 20, 30, 50, or 100 for one update, 15 for three updates, or 20 for two. Measure inactivity on 500 images \cx{every 250 updates. Require the median inactive fraction in updates 5,000--9,000 to exceed that in $[2{,}000,4{,}000)$ by at least 0.05. Training accuracy below 20\% denotes network-wide failure.} \\
-\cx{Training-loss comparison} & \cx{Use the median minibatch loss in each window. With $M=2$ and $B=3$, alarm if $D_j>-0.0590403$.} \\
+\multicolumn{2}{@{}l}{\textbf{Detector settings and evaluation}} \\
+MG detector & $M=2$, $B=3$, $D_j<-0.08829884$ \\
+Block sizes tested / threshold margin & $M\in\{2,3,4\}$, $B\in\{3,4,6\}$ / $0.02$ \\
+Window ends / post-intervention horizon & $>1{,}500$ / 5,000 updates \\
+Strong interventions / comparisons per repeat & 7 / 4 \\
+Excluded from the strong set & Learning rate divided by 3, first two convolutions frozen \\
+CUSUM baseline window ends & Updates 2,000--3,500 \\
+CUSUM scale floor / drift grid / margin & $\max(0.01|\mu_0|,10^{-10})$ / $\{0.25,0.5,1\}$ / $0.5$ \\
+\addlinespace
+\multicolumn{2}{@{}l}{\textbf{Comparison features}} \\
+IAAFT records per window / iterations / trim limit & 2 / 100 / 15\% \\
+Permutation entropy & Order 5, delay 1, stable tie sorting, divide by $\log(5!)$ \\
+Sample entropy & Length 2, delay 1, Chebyshev distance, tolerance $0.2$ window SDs, no self-matches \\
+\addlinespace
+\multicolumn{2}{@{}l}{\textbf{Channel inactivity test}} \\
+Learning-rate multipliers by duration & 1 update: $\times20$, $\times30$, $\times50$, $\times100$ \\
+ & 2 updates: $\times20$ \qquad 3 updates: $\times15$ \\
+Images per check / check interval & 500 / 250 updates \\
+Earlier / later measurement windows & $[2{,}000,4{,}000)$ / updates 5,000--9,000 \\
+Channel loss / network-wide failure & Median inactive fraction rises $\ge0.05$ / training accuracy $<20\%$ \\
+Training-loss detector & Median minibatch loss per window. $M=2$, $B=3$, $D_j>-0.0590403$ \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Transfer to ResNet-18}} \\
-ResNet data and SGD & Full CIFAR-10. Random initialization uses $32\times32$ inputs. ImageNet initialization uses $64\times64$ with ImageNet normalization. Batch 128 without augmentation, learning rate 0.02, momentum 0.9, weight decay $5\cdot10^{-4}$. \\
-ResNet update covariance & 3 repeats per initialization type. Each update is compressed to 1,024 coordinates before computing covariance PR. \\
+Data / batch size & Full CIFAR-10 without augmentation / 128 \\
+Inputs for random / ImageNet initialization & $32\times32$ / $64\times64$ with ImageNet normalization \\
+SGD rate / momentum / weight decay & $0.02$ / $0.9$ / $5\cdot10^{-4}$ \\
+Repeats per initialization / compressed update size & 3 / 1,024 coordinates for covariance PR \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -56,25 +75,45 @@ ResNet update covariance & 3 repeats per initialization type. Each update is com
 \centering\small
 \caption{Text VAE penalty comparisons and check scheduling.}
 \label{tab:vae-protocol}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.28\linewidth}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{.47\linewidth}@{}}
 \toprule
-Component & Setting \\
+Parameter & Setting \\
 \midrule
-Data & 6,000 training and 256 evaluation sentences, 8--24 words before the end-of-sentence marker. Vocabulary of 2,000 tokens. \\
-Training & The decoder receives the actual preceding words. Adam learning rate $10^{-3}$, 32 sentences per batch, gradient norm limited to 5, zero dropout. \\
+\multicolumn{2}{@{}l}{\textbf{Shared setup}} \\
+Training / evaluation sentences & 6,000 / 256 \\
+Words before end marker / vocabulary tokens & 8--24 / 2,000 \\
+Adam rate / sentences per batch & $10^{-3}$ / 32 \\
+Gradient norm limit / dropout & 5 / 0 \\
+Decoder context & Actual preceding words \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Penalty comparison}} \\
-Penalty conditions & Train to update 1,024 at $\beta=0.01$. Continue from this training state to update 3,072 for each setting. Use $\beta=0.01$, $\beta=1$, or $\beta=1$ with free bits (0.5 nats per coordinate). \\
-Recorded reconstruction loss & 16 fixed evaluation sentences per update. Early windows end at updates 512--1,024 and late windows at 2,048--3,072. \\
-Code-use measurements & Every 128 updates. For MI, draw 4 codes per sentence from its encoder distribution. For the code-swap test, average the divergence of token predictions in both directions. \\
-Comparing code use within a repeat & Loss of code use requires both measurements to fall below half of their low-penalty values. Preservation requires each to retain at least half its early value and double its value under suppression. \\
+Shared training / continuation ends & 1,024 at $\beta=0.01$ / 3,072 updates \\
+KL weights $\beta$ & $0.01$, $1$, $1$ with free bits \\
+Free-bits threshold $\lambda$ (nats / coordinate) & 0.5 \\
+Loss log / code-use measurements & 16 fixed sentences per update / every 128 updates \\
+Initial / final evaluation intervals (updates) & 512--1,024 / 2,048--3,072 \\
+MI draws per evaluation sentence & 4 \\
+Code loss (both measurements) & $<50\%$ of low-penalty values \\
+Code preservation (both measurements) & $\ge0.5\times$ early and $\ge2\times$ suppressed values \\
+Bootstrap (matched repeats / resamples) & 9 / 20,000 \\
 \addlinespace
-\multicolumn{2}{@{}l}{\textbf{Scheduling information checks}} \\
-Repeated penalty schedule & After 1,024 initial updates \cx{at $\beta=0.01$}, repeat a 2,048-update schedule three times. Raise the penalty weight $\beta$ from 0 to 1 \cx{over the first 1,024 updates}, then hold it at 1. \\
-Loss and recovery labels & Measure MI and code-swap divergence every 64 updates. Divide each by its median from checks 128 updates apart between 512 and 1,024. Loss requires both ratios $\le0.50$ and recovery both $\ge0.65$ for two consecutive checks. \cx{The second check sets the event time. Score events with a full 512 updates left for detection.} \\
-\cx{Eligible starting state} & \cx{The early MI and code-swap medians must exceed $0.1$ and $10^{-4}$ nats, respectively. At update 1,024 both ratios must be at least $0.65$.} \\
-Check schedules & One initial check; extra budgets 6, 12, 24 \cx{with 12 primary}; at least 128 updates between triggered checks; 1 development and 9 evaluation repeats \\
-\cx{Threshold grid} & \cx{$0.025,0.05,0.075,0.1,0.15,0.2,0.3,0.4,0.5,0.7,1,1.5,2,3$. Maximize detections for each method and budget. Break ties by fewer unproductive checks, shorter mean delay, fewer total checks, and a larger threshold, in that order.} \\
+\multicolumn{2}{@{}l}{\textbf{Penalty schedule and event labels}} \\
+Initial training & 1,024 updates at $\beta=0.01$ \\
+Schedules and duration & 3 repetitions of 2,048 updates \\
+KL weight within each repetition & $0\to1$ over 1,024 updates, then fixed at $1$ \\
+Early checks / subsequent check interval & 512--1,024 every 128 updates / every 64 updates \\
+Minimum early MI / code-swap median (nats) & $>0.1$ / $>10^{-4}$ \\
+Starting values at update 1,024 & Both $\ge0.65\times$ their early medians \\
+Loss / recovery ratios to early medians & Both $\le0.50$ / both $\ge0.65$ \\
+Event time / minimum time left & Second consecutive qualifying check / 512 updates \\
+\addlinespace
+\multicolumn{2}{@{}l}{\textbf{Rules for scheduling checks}} \\
+Training KL divergence & Mean over the latest 64 updates \\
+Scheduled KL weight & $\max\{\beta_t,0.01\}$ at update $t$ \\
+Initial checks / extra checks allowed & 1 / 6, 12 (primary), 24 \\
+Minimum time between triggered checks & 128 updates \\
+Development / evaluation repeats & 1 / 9 \\
+Threshold grid & 0.025, 0.05, 0.075, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.7, 1, 1.5, 2, 3 \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -83,43 +122,72 @@ Check schedules & One initial check; extra budgets 6, 12, 24 \cx{with 12 primary
 \centering\small
 \caption{Walker2d training and evaluation settings.}
 \label{tab:walker-protocol}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.27\linewidth}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{.46\linewidth}@{}}
 \toprule
-Component & Setting \\
+Parameter & Setting \\
 \midrule
-\multicolumn{2}{@{}l}{\textbf{Policy training}} \\
-Proximal policy optimization (PPO) & Collect 512 steps in each of 8 environments per training round. Minibatch 256, 5 optimization epochs. \\
-Optimizer & Learning rate decreases from $3\cdot10^{-5}$ to $3\cdot10^{-6}$. PPO clipping parameter 0.1, KL stopping parameter 0.01, gradient norm limit 0.5. \\
-Training objective & Reward discount 0.99, generalized advantage estimation parameter 0.95, entropy weight 0, value-loss weight 0.5. The normalization statistics are fixed. \\
-Continued training (fine-tuning) & For each penalty strength, start from the policy saved at 655,360 simulator steps and continue for 1,048,576 steps, summed across environments. \\
+\multicolumn{2}{@{}l}{\textbf{Policy training (PPO)}} \\
+Environments / steps per environment per round & 8 / 512 \\
+Minibatch size / epochs per round & 256 / 5 \\
+Learning rate schedule & $3\cdot10^{-5}\to3\cdot10^{-6}$ \\
+Clipping / KL stopping / gradient norm limit & 0.1 / 0.01 / 0.5 \\
+Reward discount / advantage estimation factor & 0.99 / 0.95 \\
+Entropy / value-loss weights & 0 / 0.5 \\
+Normalization statistics & Fixed \\
+Steps before / during continued training, summed across environments & 655,360 / 1,048,576 \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Command smoothing and state repeatability}} \\
-Fixed-policy motion records & Discard 512 initial steps and record 4,096. The reference gait uses 152 samples. Its prescribed stride lasts about 152.215 simulator steps. \\
-\cx{Reference-gait penalty} & \cx{Compare $\lambda=0$ with $\lambda=3$ at $\sigma^2=38.4774$. The reference advances by $(1+\sqrt{2}/1000)^{-1}$ samples per simulator step. Both policies resume from the same training state.} \\
-State and performance criteria & In the reference-gait test, require return error and phase-matched variation ratios $\le0.75$ against training without the reference reward. Require at least eight common complete simulations, at least 90\% of the comparison reward, and at most one extra fall. Baseline return error and variation must be at least 0.02 and 0.001. \\
+Initial steps discarded / steps recorded at fixed policy & 512 / 4,096 \\
+Reference gait (samples / simulator steps per stride) & $152$ / $\approx 152.215$ \\
+Reference advance (samples per simulator step) & $(1+\sqrt{2}/1000)^{-1}$ \\
+Matched reference-gait penalties and scale & $\lambda=0$ vs.\ $3$ at $\sigma^2=38.4774$ \\
+\cx{State distance / velocity scale} & \cx{Omit horizontal position / divide velocities by 5} \\
+\cx{Return-error lags / phase for state variance} & \cx{20--250 steps / phase zero} \\
+\cx{Minimum phase crossings per retained episode} & \cx{8} \\
+Return error and phase-matched variation ratios & Both $\le0.75$ vs.\ no reference reward \\
+Minimum baseline return error / phase-matched variation & 0.02 / 0.001 \\
+Common completed simulations / reward ratio / extra falls & $\ge 8$ / $\ge90\%$ / $\le1$ \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Policy choice under actuator shifts}} \\
-Candidate policies & Use penalty strengths $\lambda\in\{0,0.25,1,4\}$ and save after 262,144, 524,288, 786,432, and 1,048,576 further steps. Four evaluation repeats. \\
-Choice in unperturbed trials & Three episodes per candidate. Discard 256 steps and measure 2,048. Require at least two completed episodes and at least 90\% of the best mean reward in these trials. \\
-Fixed policy choice & Use the final policy with $\lambda=0.25$, chosen on a preliminary run, if eligible. Otherwise select the highest unperturbed reward. \\
-Perturbed trials & Mix in the previous filtered value with weight $\alpha\in\{0.05,0.1,0.2\}$. Use Gaussian noise of standard deviation $\sigma\in\{0,0.02\}$, with five episodes per condition. \\
+Candidate penalties / evaluation repeats & $\lambda\in\{0,0.25,1,4\}$ / 4 \\
+Additional training steps when policies are saved & 262,144, 524,288, 786,432, 1,048,576 \\
+Unperturbed episodes per candidate & 3 \\
+Unperturbed steps discarded / recorded & 256 / 2,048 \\
+Eligibility (completed episodes / relative reward) & $\ge2$ / $\ge90\%$ of best unperturbed reward \\
+Fixed policy choice, if eligible & Final policy at $\lambda=0.25$ \\
+Perturbations (mixing weight $\alpha$ / noise SD $\sigma$) & $\{0.05,0.1,0.2\}$ / $\{0,0.02\}$ \\
+Perturbed episodes per condition & 5 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \begin{table}[htbp]
 \centering\small
-\caption{Grokking runs and the matched-window analysis.}
+\caption{Grokking training and matched windows.}
 \label{tab:grokking-protocol}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.26\linewidth}X@{}}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xll@{}}
 \toprule
-Component & Setting \\
+Transformer setting & Modular addition & Permutation composition \\
 \midrule
-Modular addition & Modulus 113; training fraction 0.30; weight decay 1.0; 20,000 optimizer updates; 3 regularized runs \\
-Permutation composition & $S_5$; training fraction 0.50; weight decay 0.2; 30,000 optimizer updates \cx{over 15,000 loop iterations with two updates per iteration}; 1 regularized run \\
-Transformer optimization & AdamW at $10^{-3}$, \cx{$(\beta_1,\beta_2)=(0.9,0.98)$}, batch 256, float64 \\
-Comparison runs & One run with zero weight decay per task. The perceptron uses half the modulo-97 addition pairs and full-batch gradient descent on squared error. \\
-Matched windows & 60 log samples centered on each covariance estimate. $E\in\{4,6,10\}$, $\tau\in\{1,2,4\}$, $k\in\{5,20\}$. Exclusion uses the span or autocorrelation time. \\
+Task domain & Modulo 113 & $S_5$ \\
+Training fraction & 0.30 & 0.50 \\
+Weight decay & 1.0 & 0.2 \\
+Optimizer updates & 20,000 & 30,000 in 15,000 iterations \\
+Runs with / without weight decay & 3 / 1 & 1 / 1 \\
+\bottomrule
+\end{tabularx}\par\smallskip
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.31\linewidth}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Shared settings and comparisons & Value \\
+\midrule
+AdamW rate / $(\beta_1,\beta_2)$ & $10^{-3}$ / $(0.9,0.98)$ \\
+Batch size / precision & 256 / float64 \\
+Perceptron comparison & Half the modulo-97 pairs, full-batch gradient descent, squared error \\
+Window length / center & 60 log samples / time of covariance estimate \\
+\cx{Training accuracy marking fit} & \cx{$\ge95\%$} \\
+\cx{Rise boundaries / minimum windows per interval} & \cx{First of 5 consecutive readings at or above each cutoff / 3} \\
+MG setting grid & $E\in\{4,6,10\}$, $\tau\in\{1,2,4\}$, $k\in\{5,20\}$ \\
+Time exclusion & Delay span or autocorrelation rule \\
 \bottomrule
 \end{tabularx}
 \end{table}

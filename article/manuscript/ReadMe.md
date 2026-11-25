@@ -56,7 +56,7 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 
 <a id="section-32--learned-generators-distinguish-phases-from-harmonics"></a>
 
-### Section 3.1 · Learned generators distinguish phases from harmonics
+### Section 3.1 · Separating independent oscillations from harmonics
 
 - [Four-tone RNN learning](../../code/synthetic/poster_examples/four_tone_rnn/ReadMe.md)
 - [Roughness and phase controls](../../code/synthetic/signal_controls_and_sketches/phase_count_and_roughness/ReadMe.md)
