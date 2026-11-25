@@ -3,7 +3,7 @@
 \section[Dimension recovery and periodic motion]{Dimension recovery and periodic motion}\label{sec:controlled}
 A diagonal matrix with oscillating entries provides an exact comparison. Its dimension is the number of independent oscillations, and MG tracks that number (\appref{app:controlled}). We then vary the loss weights of a digit classifier to induce oscillations in its trainable parameters. The loss weights set the frequencies, and covariance across training steps shows which weight directions vary.
 
-For the classifier we compare MG with the participation ratio (PR) of the weight covariance. PR is $(\sum_i v_i)^2/\sum_i v_i^2$ for covariance eigenvalues $v_i$ and equals $r$ when $r$ directions have equal nonzero variance. We keep the estimator settings fixed across evaluation runs. Parameter logs and loss on fixed examples give more accurate estimates than gradient norm (Table~\ref{tab:synthetic-errors}).
+For the classifier we compare MG with the participation ratio (PR) of the weight covariance. PR is $(\sum_i v_i)^2/\sum_i v_i^2$ for covariance eigenvalues $v_i$. \cx{PR equals $r$ when exactly $r$ covariance eigenvalues are nonzero and equal.} We keep the estimator settings fixed across evaluation runs. Parameter logs and loss on fixed examples give more accurate estimates than gradient norm (Table~\ref{tab:synthetic-errors}).
 
 \begin{table}[htbp]
 \centering\small
@@ -22,12 +22,12 @@ Gradient norm & \cx{1.70} \\
 \end{tabular}
 \end{table}
 
-In linear regression, a mode is an oscillating component of the weight error along a Hessian eigenvector. Damping selected modes lowers MG@loss while all weights remain trainable (Figure~\ref{fig:components}).
+In linear regression, a mode is an oscillating component of the weight error along a Hessian eigenvector. \cx{Loss-based MG increases with the number of excited modes (Figure~\ref{fig:components}, left) and falls after selected modes are damped (Table~\ref{tab:regression_variation}). All weights remain trainable.}
 
 \subsection{Learned generators distinguish phases from harmonics}\label{sec:generator}
-Several spectral peaks can arise from harmonics of one oscillation or from independent oscillations. We train recurrent networks to produce both kinds of signal using first-order reduced and controlled error (FORCE) learning \citep{sussillo2009generating}. FORCE adjusts the output weights to reproduce a prescribed signal and feeds each output back into the state. We then fix the weights and compute MG from one neuron's activation recorded at each simulated step. MG separates \cx{generators whose summed outputs have the same number of peaks and whose full-state covariance PRs are similar} (Figure~\ref{fig:components}). At higher dimension, MG overestimates the number of independent oscillations and the estimates overlap (Table~\ref{tab:generator_phases}).
+Several spectral peaks can arise from harmonics of one oscillation or from independent oscillations. We train recurrent networks to produce both kinds of signal using first-order reduced and controlled error (FORCE) learning \citep{sussillo2009generating}. FORCE adjusts the output weights to reproduce a prescribed signal and feeds each output back into the state. We then fix the weights and compute MG from one neuron's activation recorded at each simulated step.
 
-\cx{The numeral in each task label counts output frequencies. In T2, the two frequencies have independent phases. In H2, one frequency is twice the other, so one phase determines both. M4 combines two independent frequencies and their second harmonics.}
+\cx{The numeral in each task label counts output frequencies. H4 uses one fundamental frequency and three harmonics. M4 uses two independent fundamental frequencies and their second harmonics. T4 uses four independent frequencies. Each target has four spectral peaks.} MG separates these generators despite their similar full-state covariance PRs (Figure~\ref{fig:components}). At higher dimension, MG overestimates the number of independent oscillations and the estimates overlap (Table~\ref{tab:generator_phases}).
 
 \begin{figure*}[htbp]
 \centering
