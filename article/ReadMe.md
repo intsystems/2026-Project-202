@@ -2,16 +2,17 @@
 
 ## What Can a Scalar Log of Loss, Weight Norm, or Neuron Activation Reveal About a Neural Network?
 
-The PDF editions use one [editable manuscript](manuscript/ReadMe.md) based on AISTATS v3.
+[Read the current NeurIPS Artifacts camera-ready paper](artifacts_camera_ready.pdf) or open the [editable manuscript](manuscript/ReadMe.md).
 
-| Style | PDF | LaTeX entry point |
+## Other PDF editions
+
+| Edition | Revision | Saved PDF |
 | --- | --- | --- |
-| AISTATS 2027 | [PDF](aistats2027.pdf) | [aistats2027.tex](manuscript/aistats2027.tex) |
-| ICOMP 2026 | [PDF](icomp2026.pdf) | [icomp2026.tex](manuscript/icomp2026.tex) |
-| NeurIPS Artifacts workshop, anonymous | [PDF](icomp_artifacts.pdf) | [main.tex](manuscript/main.tex) |
-| NeurIPS Artifacts workshop, camera-ready (clean) | [PDF](artifacts_camera_ready.pdf) | [artifacts_camera_ready.tex](manuscript/artifacts_camera_ready.tex) |
-| NeurIPS Artifacts workshop, camera-ready (highlighted) | [PDF](artifacts_camera_ready_codex.pdf) | [artifacts_camera_ready_codex.tex](manuscript/artifacts_camera_ready_codex.tex) |
-| NeurIPS NewInML workshop, anonymous | [PDF](newinml.pdf) | [newinml.tex](manuscript/newinml.tex) |
+| NeurIPS Artifacts camera-ready with edits highlighted | Current | [PDF](artifacts_camera_ready_codex.pdf) |
+| ICOMP 2026 | Venue edition | [PDF](icomp2026.pdf) |
+| NeurIPS Artifacts workshop, anonymous draft | Earlier | [PDF](icomp_artifacts.pdf) |
+| NeurIPS NewInML workshop, anonymous draft | Earlier | [PDF](newinml.pdf) |
+| AISTATS 2027 | Earlier | [PDF](aistats2027.pdf) |
 
 ## ICOMP poster
 

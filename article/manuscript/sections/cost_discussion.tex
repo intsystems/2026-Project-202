@@ -1,6 +1,8 @@
 \claude{
 \section{Discussion and conclusion}\label{sec:cost}
-\cx{A scalar log can reveal when a neural network's behavior becomes simpler. When a network learned a repeating cycle, we could see the change in the activity of just one neuron. We treated each short sequence of its readings as a point. The points traced a loop with an estimated dimension close to one. Many neurons were still active, yet one variable, the phase of the cycle, described their joint motion.}
+A scalar log can reveal when \cx{the dynamics of a neural network become simpler. When the recurrent generator learned a repeating cycle, one phase was enough to describe the joint activity of its neurons. Accordingly, the MG of one hidden neuron's activation fell to nearly one.}
 
-\cx{This gives a reason to keep the history of loss or weight norm during training. Even when mean loss barely changes, the pattern of fluctuations can mark a period worth revisiting. Measurements of the weights or activations can then help explain what changed inside the network. We hope future work will show how broadly this approach applies to other kinds of scalar logs.}
+\cx{In the ResNet-18 classifier, we froze the feature extractor and continued training only the final layer. The weight updates then concentrated in fewer directions, and the MG of the weight norm fell. In the text autoencoder, the MG of reconstruction loss was lower under settings where replacing the sentence code had less effect on the predicted words. A scalar training log can thus retain evidence of how a network's weights change during training or how strongly its predictions depend on a particular source of information.}
+
+We hope that estimating the local dimension of delay vectors with MG will help reveal changes in the dynamics underlying other scalar time series from machine learning, neuroscience, and robotics.
 }

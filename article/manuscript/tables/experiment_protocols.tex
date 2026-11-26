@@ -10,7 +10,7 @@ Digit classifier & Fixed tanh MLP (64--64), linear classifier in a fixed paramet
 Synthetic generators and forecasting & FORCE recurrent networks (1,000 neurons for phase recovery, 256 for the periodic-signal and forecast tasks) \\
 CIFAR-10 interventions & $3\times3$ ReLU convolutions (16, 32, 32 channels), max pooling after the first two, adaptive average pooling, linear classifier \\
 ResNet transfer & ResNet-18, 10 classes. Input convolution: random init.\ $3\times3$, stride 1, no max pooling. ImageNet init.\ $7\times7$, stride 2, max pooling. \\
-Text VAE & 48-dimensional shared embeddings, GRU encoder and decoder with hidden size 64, \cx{16-dimensional Gaussian latent variable} \\
+Text VAE & 48-dimensional shared embeddings, GRU encoder and decoder with hidden size 64, 16-dimensional Gaussian latent variable \\
 Grokking & One-layer transformer, width 128, four 32-dimensional heads, MLP width 512, no layer normalization; full-batch comparison uses a width-500 quadratic perceptron \\
 MNIST representation selection & 784--256--256 encoder with batch normalization and ReLU; 256--256--64 projector (one variant outputs 16 coordinates); predictor width 64 in the standard SimSiam/BYOL settings \\
 MNIST intervention rules & 196--128--128--10 ReLU MLP; pruning narrows both hidden layers \\
@@ -38,13 +38,13 @@ Freezing choices & First two convolutions, all layers before the classifier, or 
 Pruned weight fractions & 50\%, 80\%, 95\% \\
 Comparison training runs & Unchanged training or batch size $\times4$ \\
 Comparison logs from unchanged training & Later samples $\times10$ or a mean over the latest 16 samples \\
-\cx{Repeats by purpose} & \cx{4 to choose detector settings, 4 to test them, 10 to test new intervention times} \\
+Repeats by purpose & 4 to choose detector settings, 4 to test them, 10 to test new intervention times \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Detector settings and evaluation}} \\
 MG detector & $M=2$, $B=3$, $D_j<-0.08829884$ \\
-\cx{Number of recent windows ($M$)} & \cx{2, 3 or 4} \\
-\cx{Number of preceding windows ($B$)} & \cx{3, 4 or 6} \\
-\cx{Margin above the largest control drop} & \cx{2 percentage points} \\
+Number of recent windows ($M$) & 2, 3 or 4 \\
+Number of preceding windows ($B$) & 3, 4 or 6 \\
+Margin above the largest control drop & 2 percentage points \\
 Window ends / post-intervention horizon & $>1{,}500$ / 5,000 updates \\
 Strong interventions / comparisons per repeat & 7 / 4 \\
 Excluded from the strong set & Learning rate divided by 3, first two convolutions frozen \\
@@ -92,12 +92,12 @@ Decoder context & Actual preceding words \\
 Shared training / continuation ends & 1,024 at $\beta=0.01$ / 3,072 updates \\
 KL weights $\beta$ & $0.01$, $1$, $1$ with free bits \\
 Free-bits threshold $\lambda$ (nats / coordinate) & 0.5 \\
-\cx{Reconstruction loss} & \cx{16 fixed sentences per update} \\
-\cx{Mutual information and decoder sensitivity} & \cx{Every 128 updates} \\
+Reconstruction loss & 16 fixed sentences per update \\
+Mutual information and decoder sensitivity & Every 128 updates \\
 Initial / final evaluation intervals (updates) & 512--1,024 / 2,048--3,072 \\
 MI draws per evaluation sentence & 4 \\
-\cx{Loss of sentence information (both measures)} & $<50\%$ of low-penalty values \\
-\cx{Retention of sentence information (both measures)} & $\ge0.5\times$ early and $\ge2\times$ suppressed values \\
+Loss of sentence information (both measures) & $<50\%$ of low-penalty values \\
+Retention of sentence information (both measures) & $\ge0.5\times$ early and $\ge2\times$ suppressed values \\
 Bootstrap (matched repeats / resamples) & 9 / 20,000 \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Penalty schedule and event labels}} \\
@@ -105,20 +105,20 @@ Initial training & 1,024 updates at $\beta=0.01$ \\
 Schedules and duration & 3 repetitions of 2,048 updates \\
 KL weight within each repetition & $0\to1$ over 1,024 updates, then fixed at $1$ \\
 Early checks / subsequent check interval & 512--1,024 every 128 updates / every 64 updates \\
-\cx{Minimum early medians (MI / decoder sensitivity, nats)} & $>0.1$ / $>10^{-4}$ \\
+Minimum early medians (MI / decoder sensitivity, nats) & $>0.1$ / $>10^{-4}$ \\
 Starting values at update 1,024 & Both $\ge0.65\times$ their early medians \\
 Loss / recovery ratios to early medians & Both $\le0.50$ / both $\ge0.65$ \\
 Event time & Second consecutive qualifying check \\
-\cx{Minimum time left at onset / maximum detection delay} & \cx{512 updates each} \\
+Minimum time left at onset / maximum detection delay & 512 updates each \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Rules for scheduling checks}} \\
 Training KL divergence & Mean over the latest 64 updates \\
 Scheduled KL weight & $\max\{\beta_t,0.01\}$ at update $t$ \\
 Initial checks / extra checks allowed & 1 / 6, 12 (primary), 24 \\
 Minimum time between triggered checks & 128 updates \\
-\cx{Repeats by purpose} & \cx{1 to choose the threshold, 9 to test it} \\
-Threshold grid \cx{(primary MG threshold in bold)} & 0.025, 0.05, 0.075, 0.1, 0.15, \cx{\textbf{0.20}}, 0.3, 0.4, 0.5, 0.7, 1, 1.5, 2, 3 \\
-\cx{Threshold tie-breakers, in order} & \cx{Fewer unproductive checks, shorter delay, fewer total checks, then larger threshold} \\
+Repeats by purpose & 1 to choose the threshold, 9 to test it \\
+Threshold grid (primary MG threshold in bold) & 0.025, 0.05, 0.075, 0.1, 0.15, \textbf{0.20}, 0.3, 0.4, 0.5, 0.7, 1, 1.5, 2, 3 \\
+Threshold tie-breakers, in order & Fewer unproductive checks, shorter delay, fewer total checks, then larger threshold \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -192,7 +192,7 @@ Batch size / precision & 256 / float64 \\
 Perceptron comparison & Half the modulo-97 pairs, full-batch gradient descent, squared error \\
 Window length / center & 60 log samples / time of covariance estimate \\
 Training accuracy marking fit & $\ge95\%$ \\
-Rise boundaries / minimum windows per interval & \cx{First of 5 consecutive logged steps with validation accuracy at or above the cutoff} / 3 \\
+Rise boundaries / minimum windows per interval & First of 5 consecutive logged steps with validation accuracy at or above the cutoff / 3 \\
 MG setting grid & $E\in\{4,6,10\}$, $\tau\in\{1,2,4\}$, $k\in\{5,20\}$ \\
 Time exclusion before capping & $(E-1)\tau$ steps or the autocorrelation rule \\
 \bottomrule

@@ -1,6 +1,7 @@
 """Frozen selectors and paired evaluation, with all failures retained."""
+import argparse
 from pathlib import Path
-import json,itertools,hashlib
+import itertools
 import numpy as np,pandas as pd
 H=Path(__file__).resolve().parent
 METRICS=['MG','entropy','increments','recurrence','J1']
@@ -37,9 +38,9 @@ def evaluate(d,seed,keys,fixed):
                      complete=float(target.loc[e.index].complete.mean()),regret=float(target.loc[e.index].reward.max()-target.loc[e.index].reward.mean())))
     return rows,q,e
 
-def summarize(rows,name):
-    df=pd.DataFrame(rows);df.to_csv(H/f'{name}_selections.csv',index=False)
-    test=df[df.seed> (230 if name=='delay' else 231)]
+def summarize(rows, output):
+    df=pd.DataFrame(rows);df.to_csv(output/'checkpoint_selections.csv',index=False)
+    test=df[df.seed > 231]
     summary=test.groupby('method').agg(reward=('reward','mean'),survival=('complete','mean'),regret=('regret','mean')).reset_index()
     base=test[test.method=='MG'].set_index('seed')
     comparisons=[]
@@ -49,35 +50,29 @@ def summarize(rows,name):
         signs=np.array(list(itertools.product([-1,1],repeat=len(diff))))
         p=float(np.mean(np.abs((signs*diff).mean(1))>=abs(diff.mean())-1e-12))
         comparisons.append(dict(method=metric,MG_minus_baseline=float(diff.mean()),wins=int((diff>1e-9).sum()),ties=int((abs(diff)<=1e-9).sum()),n=len(diff),two_sided_signflip_p=p))
-    summary.to_csv(H/f'{name}_summary.csv',index=False)
-    pd.DataFrame(comparisons).to_csv(H/f'{name}_comparisons.csv',index=False)
-    print(name,summary.round(4).to_string(index=False))
+    summary.to_csv(output/'checkpoint_summary.csv',index=False)
+    pd.DataFrame(comparisons).to_csv(output/'checkpoint_comparisons.csv',index=False)
+    print(summary.round(4).to_string(index=False))
 
 def main():
-    pilot=pd.DataFrame(json.loads((H/'seed230.json').read_text())['rows'])
-    _,eligible=candidates(pilot,['coef'])
-    fixed=pilot[(pilot.split=='target')&(pilot.delay>0)].groupby('coef').reward.mean().loc[eligible.index].idxmax()
-    delay_fixed=float(fixed)
-    rows=[];raw=[]
-    for seed in range(230,236):
-        d=pd.DataFrame(json.loads((H/f'seed{seed}.json').read_text())['rows']);raw.append(d)
-        r,_,_=evaluate(d,seed,['coef'],fixed);rows+=r
-    pd.concat(raw).to_csv(H/'delay_records.csv',index=False);summarize(rows,'delay')
-    file=H/'checkpoint_selection_s231.csv'
-    if not file.exists():return
-    d=pd.read_csv(file);_,e=candidates(d,['coef','step'])
-    fixed=d[d.split=='target'].groupby(['coef','step']).reward.mean().loc[e.index].idxmax()
-    rows=[];raw=[]
-    for seed in range(231,236):
-        f=H/f'checkpoint_selection_s{seed}.csv'
-        if not f.exists():return
-        d=pd.read_csv(f);raw.append(d)
-        r,q,e=evaluate(d,seed,['coef','step'],fixed);rows+=r
-        q.to_csv(H/f'candidates_s{seed}.csv')
-    pd.concat(raw).to_csv(H/'checkpoint_records.csv',index=False)
-    summarize(rows,'checkpoint')
-    (H/'selection_manifest.json').write_text(json.dumps(dict(fixed_delay=delay_fixed,fixed_checkpoint=[float(fixed[0]),int(fixed[1])],
-        protocol_sha256=hashlib.sha256((H/'CHECKPOINT_PROTOCOL.md').read_bytes()).hexdigest(),
-        interpretation='New deployment evaluation of historical checkpoints, not causal curriculum or new training.'),indent=2))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, default=H / "logs")
+    parser.add_argument("--output", type=Path, default=H.parents[2] / "runs" / H.name / "scored")
+    args = parser.parse_args()
+    episodes = {
+        seed: pd.read_csv(args.input / f"checkpoint_selection_s{seed}.csv", float_precision="round_trip")
+        for seed in range(231, 236)
+    }
+    keys = ["coef", "step"]
+    pilot = episodes[231]
+    _, eligible = candidates(pilot, keys)
+    pilot_reward = pilot[pilot.split == "target"].groupby(keys).reward.mean()
+    fixed = pilot_reward.loc[eligible.index].idxmax()
+    rows = []
+    for seed, data in episodes.items():
+        scored, _, _ = evaluate(data, seed, keys, fixed)
+        rows.extend(scored)
+    args.output.mkdir(parents=True, exist_ok=True)
+    summarize(rows, args.output)
 
 if __name__=='__main__':main()

@@ -1,13 +1,13 @@
 """Offline checkpoint selection under hidden actuator smoothing/noise."""
+import argparse
 from pathlib import Path
-import json,pickle,time,hashlib,sys
-import numpy as np,pandas as pd,torch,gymnasium as gym
-from stable_baselines3 import PPO
+import pickle, time, sys
+import numpy as np, pandas as pd
 from threadpoolctl import threadpool_limits
-H=Path(__file__).resolve().parent;R=H.parent
+CODE = Path(__file__).resolve().parents[3]
 CFG={"E":20,"tau":8,"k":20,"theiler":312,"window":2048}
 STEPS=[262144,524288,786432,1048576];COEFS=[0,.25,1,4];BURN=256;N=2048
-sys.path.insert(0,str(R/'code'))
+sys.path.insert(0, str(CODE))
 from actdim.estimator.config import EstimatorConfig
 from actdim.estimator.mle import estimate
 MGCFG=EstimatorConfig(max_E=20,tau=8,k_neighbors=20,theiler=312,theiler_cap=312)
@@ -21,6 +21,9 @@ def features(a):
  r=estimate(x,MGCFG,seed=123)
  return dict(MG=float(r.MG) if not r.degenerate else np.nan,degenerate=bool(r.degenerate),entropy=entropy(x),increments=float(np.mean(np.diff(x)**2)/(2*v)),recurrence=rec,J1=float(np.mean(np.diff(a,axis=0)**2)))
 def eval_policy(model,norm,resets,alpha,noise,features_on=False):
+ import gymnasium as gym
+ import torch
+
  rows=[];envs=[gym.make('Walker2d-v5').unwrapped for _ in resets];obs=np.array([e.reset(seed=r)[0] for e,r in zip(envs,resets)])
  active=np.ones(len(envs),bool);rew=np.zeros(len(envs));acts=[[] for _ in resets];last=np.zeros((len(resets),6))
  started=time.perf_counter()
@@ -45,27 +48,24 @@ def eval_policy(model,norm,resets,alpha,noise,features_on=False):
    tic=time.perf_counter();row.update(features(np.asarray(a)));row['feature_seconds']=time.perf_counter()-tic
   rows.append(row)
  return rows
-def main():
- seed=int(sys.argv[1]) if len(sys.argv)>1 else 231
- rows=[];tim=[]
+def collect(seed, checkpoint_root, output):
+ from stable_baselines3 import PPO
+
+ rows=[]
  for coef in COEFS:
   for step in STEPS:
-   root=R/'research_walker_smooth_lambda'/f'seed{seed}_lambda{coef:g}'/f'step{step:07d}'
-   cache=H/f'checkpoint_s{seed}_l{coef:g}_t{step}.json'
-   if cache.exists():rows.extend(json.loads(cache.read_text()));continue
-   first=len(rows)
+   root=checkpoint_root/f'seed{seed}_lambda{coef:g}'/f'step{step:07d}'
    model=PPO.load(root/'policy.zip',device='cpu');model.policy.set_training_mode(False)
    with (root/'normalize.pkl').open('rb') as f:norm=pickle.load(f)
    norm.training=False;norm.norm_reward=False
-   st=time.perf_counter();nom=eval_policy(model,norm,range(83001,83004),0,0,True);tim.append(time.perf_counter()-st)
+   nom=eval_policy(model,norm,range(83001,83004),0,0,True)
    for n in nom:rows.append(dict(seed=seed,coef=coef,step=step,split='nominal',**n))
    for alpha in [.05,.1,.2]:
     for noise in [0,.02]:
      tar=eval_policy(model,norm,range(84001,84006),alpha,noise,False)
      for n in tar:rows.append(dict(seed=seed,coef=coef,step=step,split='target',**n))
-   cache.write_text(json.dumps(rows[first:],indent=2))
    print('checkpoint',seed,coef,step,flush=True)
- df=pd.DataFrame(rows);df.to_csv(H/f'checkpoint_selection_s{seed}.csv',index=False)
+ df=pd.DataFrame(rows);df.to_csv(output/f'checkpoint_selection_s{seed}.csv',index=False)
  # Each selector chooses on nominal rows, then is scored on every hidden target condition.
  nom=df[df.split=='nominal'];target=df[df.split=='target']
  methods={'reward':('reward',False),'MG':('MG',True),'entropy':('entropy',True),'increments':('increments',True),'recurrence':('recurrence',True),'J1':('J1',True)}
@@ -85,8 +85,29 @@ def main():
    else: best=feature.idxmin()
   chosen=target[(target.coef==best[0])&(target.step==best[1])]
   for (alpha,noise),g in chosen.groupby(['alpha','noise']):out.append(dict(seed=seed,method=method,coef=best[0],step=best[1],alpha=alpha,noise=noise,reward=g.reward.mean(),complete=g.complete.mean()))
- pd.DataFrame(out).to_csv(H/f'checkpoint_selection_summary_s{seed}.csv',index=False)
+ pd.DataFrame(out).to_csv(output/f'checkpoint_selection_summary_s{seed}.csv',index=False)
  print(pd.DataFrame(out).to_string(index=False))
-if __name__=='__main__':
- torch.set_num_threads(1);torch.set_num_interop_threads(1)
- with threadpool_limits(limits=1):main()
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("seed", type=int)
+    parser.add_argument("--checkpoint-root", type=Path, required=True)
+    parser.add_argument("--output", type=Path, default=CODE / "runs" / "walker2d_policy_selection")
+    args = parser.parse_args()
+    for coef in COEFS:
+        for step in STEPS:
+            checkpoint = args.checkpoint_root / f"seed{args.seed}_lambda{coef:g}" / f"step{step:07d}"
+            for name in ("policy.zip", "normalize.pkl"):
+                if not (checkpoint / name).is_file():
+                    parser.error(f"Missing checkpoint file {checkpoint / name}.")
+
+    import torch
+
+    args.output.mkdir(parents=True, exist_ok=True)
+    torch.set_num_threads(1)
+    torch.set_num_interop_threads(1)
+    with threadpool_limits(limits=1):
+        collect(args.seed, args.checkpoint_root, args.output)
+
+
+if __name__ == "__main__":
+    main()

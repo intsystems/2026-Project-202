@@ -10,3 +10,5 @@ Penn Treebank runs with baseline training, latent-code suppression (`regularized
 | `vae_*_mg.csv` (3 files, [example](vae_base_mg.csv)) | MG and companion statistics computed over windows of the probe loss. |
 | `vae_*_mi.csv` (3 files, [example](vae_base_mi.csv)) | Independent mutual-information estimate by training step. |
 | [`all_seeds.csv`](all_seeds.csv) | Per-seed summary of retention and MG across the three branches. |
+
+The paper's summary tables use confirmation seeds 1–9. Seed 0 was a pilot. For the two paired MG ratios, take the median of `q_regularized` and `R` across the confirmation seeds.

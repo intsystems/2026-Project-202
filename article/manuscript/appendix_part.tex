@@ -14,16 +14,16 @@
 }
 \begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}X@{}}
 \toprule[.5pt]
-\appendixguideentry{app:theory}{Interpreting MG}{When the dimension of a log reflects the dimension of the motion.}
+\appendixguideentry{app:theory}{Interpreting MG}{When a dimension estimate from a scalar log reflects the dimension of the motion.}
 \appendixguideentry{app:settings}{Reproducibility}{Which signals were recorded and how each experiment was run.}
 \addlinespace[.45em]
 \appendixguideentry{app:controlled}{Dimension recovery}{Known oscillations in matrices, classifiers, regression and generators.}
-\appendixguideentry{app:applied}{Detecting training changes}{How changes in a scalar log compare with weight updates and \cx{sentence information in a text VAE}.}
-\appendixguideentry{app:grokking}{Grokking}{\cx{How does weight-norm MG change around the rise in validation accuracy?}}
+\appendixguideentry{app:applied}{Detecting training changes}{How changes in a scalar log compare with weight updates and sentence information in a text VAE.}
+\appendixguideentry{app:grokking}{Grokking}{How does the estimate from the weight-norm log change as validation accuracy rises?}
 \appendixguideentry{app:walker2d}{Walker2d}{Command smoothing, gait repeatability, and policy selection under actuator lag and noise.}
 \appendixguideentry{app:cost}{Computational cost}{Required inputs, computation time, and storage for each diagnostic.}
 \addlinespace[.45em]
-\appendixguideentry{app:forecast_utility}{Forecasting}{Choosing a forecaster from one neuron's activation and estimating MG with fewer neighbor searches.}
+\appendixguideentry{app:forecast_utility}{Forecasting}{\cx{Choosing a forecaster from the activation of a single neuron} and estimating MG with fewer neighbor searches.}
 \appendixguideentry{app:intervention_utility}{Interventions on MNIST}{Accuracy and computation when stopping training, freezing layers, or pruning neurons.}
 \appendixguideentry{app:campaign}{Selection and warnings}{Image representations, transformer loss spikes and transfer to new tasks.}
 \bottomrule[.5pt]
@@ -33,4 +33,8 @@
 \input{sections/practical_appendix}
 \input{sections/campaign_appendix}
 \clearpage
-\input{sections/checklist}
+\ifdefined\artifactscameraready
+  \input{sections/neuralartifacts_checklist}
+\else
+  \input{sections/checklist}
+\fi

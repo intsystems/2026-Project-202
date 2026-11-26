@@ -1,0 +1,11 @@
+stat,hits,n,false_alarms,delay
+MG,19,30,11,1898.0
+abs_diff,30,30,0,984.0
+crossings,26,30,4,904.0
+det_std,30,30,7,410.0
+lag1,1,30,0,993.0
+level,0,30,0,
+norm_diff,29,30,2,1884.0
+perm_entropy,27,30,12,1493.0
+sample_entropy,26,30,7,1884.0
+spectral_entropy,9,30,1,2516.0

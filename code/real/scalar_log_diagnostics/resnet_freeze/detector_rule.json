@@ -1,0 +1,42 @@
+{
+ "MG": {
+  "stat": "MG",
+  "M": 2,
+  "B": 3,
+  "delta": 0.08829884007532394,
+  "sign": 1,
+  "cal_hit": 1.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 1500.0
+ },
+ "crossings": {
+  "stat": "crossings",
+  "M": 2,
+  "B": 4,
+  "delta": 0.6628571428571428,
+  "sign": 1,
+  "cal_hit": 0.9166666666666666,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 1000.0
+ },
+ "lag1": {
+  "stat": "lag1",
+  "M": 2,
+  "B": 3,
+  "delta": 0.023881403876642154,
+  "sign": 1,
+  "cal_hit": 0.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": null
+ },
+ "det_std": {
+  "stat": "det_std",
+  "M": 2,
+  "B": 3,
+  "delta": 0.30543947702237273,
+  "sign": -1,
+  "cal_hit": 1.0,
+  "cal_false_alarm_event_runs": 0.0,
+  "cal_median_delay": 500.0
+ }
+}

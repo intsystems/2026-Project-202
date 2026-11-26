@@ -1,6 +1,6 @@
 # Shared article source
 
-The manuscript for *What Can a Scalar Log of Loss, Weight Norm, or Neuron Activation Reveal About a Neural Network?* is based on the AISTATS v3 revision. Edit the [sections](sections/ReadMe.md), [table inputs](tables/ReadMe.md), [figure files](figures/ReadMe.md), or bibliography here. [main_part.tex](main_part.tex) sets the order of the main paper and bibliography. [appendix_part.tex](appendix_part.tex) includes the appendices. All style entry points use both files.
+This directory contains the sources for *What Can a Scalar Log of Loss, Weight Norm, or Neuron Activation Reveal About a Neural Network?* Edit the [sections](sections/ReadMe.md), [table inputs](tables/ReadMe.md), [figure files](figures/ReadMe.md), or bibliography here. All style entry points build the current shared text through [main_part.tex](main_part.tex) and [appendix_part.tex](appendix_part.tex).
 
 ## Build
 
@@ -10,15 +10,15 @@ Run from this directory with TeX Live and `latexmk`.
 latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error aistats2027.tex icomp2026.tex main.tex artifacts_camera_ready.tex artifacts_camera_ready_codex.tex newinml.tex
 ```
 
-The PDFs appear in `.build/` under their entry point names. [The article index](../ReadMe.md) lists the filenames used for the checked-in copies.
+The PDFs appear in `.build/` under their entry point names. The [article index](../ReadMe.md) identifies the current paper and the saved PDFs from earlier revisions.
 
-With no targets, `latexmk` builds both camera-ready copies. The [clean copy](../artifacts_camera_ready.pdf) and the [Codex review copy](../artifacts_camera_ready_codex.pdf) use the same text, figures and layout. Only the review copy highlights edits in teal.
+Build both Artifacts camera-ready copies to update the current paper. The [clean copy](../artifacts_camera_ready.pdf) and the [highlighted copy](../artifacts_camera_ready_codex.pdf) use the same text, figures and layout.
 
 ```bash
-latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error
+latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error artifacts_camera_ready.tex artifacts_camera_ready_codex.tex
 ```
 
-When updating the checked-in camera-ready PDFs, copy both output files from `.build/` to `article/` together.
+When updating the checked-in Artifacts camera-ready PDFs, copy both output files from `.build/` to `article/` together.
 
 For an editorial copy with blue text, set the flag at build time. For example:
 
@@ -32,11 +32,12 @@ latexmk -pdf '-outdir=.build' '-jobname=aistats2027_blue' '-usepretex=\def\claud
 - For the phase comparison, compute the mean and sample standard deviation of `MG_n0` and `PR` over repeats within each task. The experiment page gives the commands to redraw the plots and to train a new generator. [Generator measurements](../../code/synthetic/poster_examples/four_tone_rnn/logs/runs.csv), [Generator code and commands](../../code/synthetic/poster_examples/four_tone_rnn/ReadMe.md)
 - For forecasting, average errors across tasks within a repeat, then compute the mean and sample standard deviation across repeats. For times, take medians across repetitions within each input and method, then across inputs. The saved choices also reproduce exact agreement between full MG and 128-query MG. [Forecast scores and timing repetitions](../../code/real/model_selection_and_stopping/rnn_forecast_selection/logs/ReadMe.md)
 
-Full-precision detector parameters and scoring records are in `aistats_article_v3/new_results/` at commit `f6b579b1`. The selected warning scores and calibration records are under `research_mg_wins/spikes/` at the same commit.
+- For the text VAE, use the nine confirmation runs (seeds 1–9) in the [per-seed records](../../code/real/scalar_log_diagnostics/text_vae_latent_code/logs/ReadMe.md).
+- The [table data](tables/data/ReadMe.md) include full-precision CNN detector parameters and scored runs, the SSL configuration scores, and the transformer warning calibration and evaluation results.
 
 ## Article sections and experiment folders
 
-Section numbers and titles apply to every style. The experiment READMEs describe any differences between the bundled runs and the article's reported protocols.
+Section numbers and titles follow the current paper. The experiment READMEs describe the bundled runs and how to reproduce the reported protocols.
 
 <a id="section-22--delay-reconstruction-and-dynamical-systems-theory"></a>
 
@@ -90,10 +91,15 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 
 - [Sentence information in the text VAE](../../code/real/scalar_log_diagnostics/text_vae_latent_code/ReadMe.md)
 
-<a id="section-48--forecast-model-selection-from-single-neuron-recordings"></a>
+### Section 4.3 · Warning of transformer loss spikes
 
-### Section 4.4 · Selection from scalar logs
+- [Warning calibration and evaluation](tables/data/ReadMe.md#transformer-loss-spikes)
 
+<a id="section-44--selection-from-scalar-logs"></a>
+
+### Section 4.4 · Model selection from scalar logs
+
+- [Self-supervised encoder selection](tables/data/ReadMe.md#self-supervised-encoder-selection)
 - [RNN forecast selection](../../code/real/model_selection_and_stopping/rnn_forecast_selection/ReadMe.md)
 
 ### Appendix A.2 · Recurrent, transient, and stochastic regimes
@@ -155,6 +161,8 @@ Section numbers and titles apply to every style. The experiment READMEs describe
 ### Appendix F.2 · Selecting policies for actuator shifts
 
 - [Walker2d policy selection](../../code/real/model_selection_and_stopping/walker2d_policy_selection/ReadMe.md)
+
+<a id="section-48--forecast-model-selection-from-single-neuron-recordings"></a>
 
 ### Appendix H · Forecast selection and sampled-query estimation
 

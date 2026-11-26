@@ -12,11 +12,18 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
+from matplotlib.ticker import MultipleLocator
+
+from figure_style import figure_style
 
 
 FIGURES = Path(__file__).resolve().parent
 EXPERIMENTS = FIGURES.parents[2] / "code" / "real"
 GROKKING_LOGS = EXPERIMENTS / "grokking_and_stability/transformer_grokking/logs"
+RESNET_SIZE = (6.25, 2.6)
+MNIST_SIZE = (6.5, 4.75)
+GROKKING_SIZE = (6.1, 3.5)
+GROKKING_REPEATS_SIZE = (6.1, 2.9)
 BLUE = "#0072B2"
 GRAY = "#707B87"
 ORANGE = "#B65117"
@@ -29,8 +36,8 @@ def read(logs, file):
 
 def plot_resnet():
     logs = EXPERIMENTS / "scalar_log_diagnostics/resnet_freeze/logs"
-    figure, axes = plt.subplots(2, 3, sharex=True, sharey="col", figsize=(6.25, 2.6))
-    figure.subplots_adjust(left=.18, right=.99, top=.72, bottom=.19, hspace=.28, wspace=.34)
+    figure, axes = plt.subplots(2, 3, sharex=True, sharey="col", figsize=RESNET_SIZE)
+    figure.subplots_adjust(left=.21, right=.985, top=.72, bottom=.19, hspace=.28, wspace=.34)
     freeze = 4000
     repeat = 20
     conditions = (("base", GRAY), ("freeze_head", BLUE))
@@ -57,7 +64,7 @@ def plot_resnet():
             axis.axvline(freeze, ls="--", lw=.95, color=ORANGE)
             axis.grid(axis="y", alpha=.17)
     axes[0, 0].set(xlim=(0, 10000), xticks=[0, 4000, 8000])
-    for axis, title in zip(axes[0], ("Weight norm", "MG@weight norm", "Effective number of\nupdate directions (PR)")):
+    for axis, title in zip(axes[0], ("Weight norm", "MG@weight norm", "Effective update\nrank (PR)")):
         axis.set_title(title)
     axes[-1, 1].set_xlabel("Optimization step")
     figure.legend(handles=[
@@ -76,7 +83,7 @@ def plot_mnist():
     # Show the first held-out repeat in which the probe-loss rule stops earlier.
     repeat = steps.index[steps.level < steps.MG][0]
     sample = stops[stops.seed == repeat].set_index("method")
-    signal = read(logs, f"seed{repeat}_logs.csv")
+    signal = read(logs, f"seed{repeat}_logs.csv").set_index("step")
     features = read(logs, f"seed{repeat}_features.csv")
     scores = features.query("obs == 'norm'").sort_values("step")
     metrics = read(logs, f"seed{repeat}_metrics.csv").set_index("step")
@@ -88,7 +95,8 @@ def plot_mnist():
     assert rules.loc["level", "obs"] == "probe" and rules.loc["level", "sign"] == 1
     assert probe.loc[probe.level <= rules.loc["level", "threshold"], "step"].iloc[0] == sample.loc["level", "step"]
 
-    figure = plt.figure(figsize=(6.5, 4.6), layout="constrained")
+    figure = plt.figure(figsize=MNIST_SIZE, layout="constrained")
+    figure.get_layout_engine().set(rect=(0, 0, 1, .865), hspace=.10)
     grid = figure.add_gridspec(4, 2, width_ratios=(1.75, 1), height_ratios=(.65, 1, 1, 1.2))
     norm = figure.add_subplot(grid[0, 0])
     mg = figure.add_subplot(grid[1, 0], sharex=norm)
@@ -97,16 +105,17 @@ def plot_mnist():
     outcomes = figure.add_subplot(grid[:2, 1])
     timing = figure.add_subplot(grid[2:, 1], sharex=outcomes)
 
-    norm.plot(signal.step, signal.norm, color=GRAY, lw=1)
+    norm.plot(signal.index, signal.norm, color=GRAY, lw=1)
     norm.set(title="One held-out repeat", ylabel="Weight norm")
     mg.plot(scores.step, scores.MG, color=BLUE, lw=1, marker="o", ms=3)
     mg.axhline(threshold, color=BLUE, lw=.9, ls=":")
-    mg.set_ylabel("MG@weight norm")
-    loss.plot(signal.step, signal.probe, color=PURPLE, alpha=.3, lw=.65)
+    mg.set_ylabel("MG@weight\nnorm")
+    loss.plot(signal.index, signal.probe, color=PURPLE, alpha=.4, lw=.65, label="Per-step loss")
     loss.plot(probe.step, probe.level, color=PURPLE, lw=1, marker="s", ms=2.8, label="Window mean")
     loss.axhline(rules.loc["level", "threshold"], color=PURPLE, lw=.9, ls=":")
     loss.set_ylabel("Fixed-set loss")
-    loss.legend(loc="upper right", frameon=False)
+    loss.legend(loc="upper right", frameon=False, ncol=2, handlelength=1.5,
+                handletextpad=.45, columnspacing=1.1, borderpad=.1, borderaxespad=.3)
 
     accuracy.plot(metrics.index, metrics.test_acc * 100, color=GRAY, lw=1.2,
                   marker=".", label="Test")
@@ -122,6 +131,7 @@ def plot_mnist():
         assert np.isclose(test_acc, sample.loc[method, "test_acc"])
         for axis in (norm, mg, loss, accuracy):
             axis.axvline(step, color=color, lw=.75, ls="--", alpha=.7)
+        norm.scatter(step, signal.at[step, "norm"], marker=marker, color=color, s=24, zorder=5)
         score_axis, values = decision_scores[method]
         score_axis.scatter(step, values.loc[step], s=30, marker=marker, color=color, zorder=5)
         accuracy.scatter(step, test_acc * 100, s=27, marker=marker, color=color, zorder=5)
@@ -136,9 +146,9 @@ def plot_mnist():
     test_results = 100 * stops.pivot(index="seed", columns="method", values="test_acc")[method_keys]
     for values in test_results.to_numpy():
         outcomes.plot(range(len(methods)), values, lw=.65, color=GRAY, alpha=.38)
-    for position, (method, _, color, marker) in enumerate(methods):
+    for position, (method, label, color, marker) in enumerate(methods):
         outcomes.scatter(np.full(len(test_results), position), test_results[method],
-                         color=color, marker=marker, s=19, zorder=3)
+                         color=color, marker=marker, s=19, zorder=3, label=label)
         frequencies = method_steps[method].value_counts()
         timing.scatter(np.full(len(frequencies), position), frequencies.index,
                        s=24, color=color, marker=marker)
@@ -146,11 +156,16 @@ def plot_mnist():
             timing.annotate(str(count), (position, step), xytext=(5, 0),
                             textcoords="offset points", va="center", color=color)
     outcomes.set(title="All held-out repeats", ylabel="Test accuracy at stop (%)")
+    outcomes.yaxis.set_major_locator(MultipleLocator(1))
     timing.set(ylabel="Stopping step", yticks=sorted(np.unique(method_steps)),
                ylim=(200, 570), xlim=(-.24, len(methods) - .76),
                xticks=range(len(methods)), xticklabels=[label for _, label, _, _ in methods])
     for axis in (norm, mg, loss, accuracy, outcomes, timing):
         axis.grid(axis="y", alpha=.17)
+    handles, labels = outcomes.get_legend_handles_labels()
+    figure.legend(handles, labels, title="Stopping rule", loc="upper center",
+                  ncol=len(methods), frameon=False, handlelength=1, handletextpad=.5,
+                  columnspacing=1.8, labelspacing=.25)
     return figure
 
 
@@ -186,7 +201,7 @@ def plot_grokking():
     rise_start, rise_end = accuracy_rise(example)
     assert event == example.loc[example.val_acc >= 0.95, "step"].iloc[0]
     assert rise_start < rise_end < event
-    figure, axes = plt.subplots(2, 2, sharex=True, figsize=(6.1, 3.5))
+    figure, axes = plt.subplots(2, 2, sharex=True, figsize=GROKKING_SIZE)
     figure.subplots_adjust(left=.12, right=.965, top=.80, bottom=.15, hspace=.35, wspace=.29)
     norm, mg, rank, accuracy = axes.flat
     cases = (("mod_wd1", example, BLUE),
@@ -207,14 +222,15 @@ def plot_grokking():
     mg.set(ylim=(0, 6), yticks=[0, 2, 4, 6])
     accuracy.legend(handles=[Line2D([], [], color="black", label="Validation"),
                              Line2D([], [], color="black", ls="--", label="Train")],
-                    loc="center left", bbox_to_anchor=(.20, .60), frameon=False, fontsize=7)
+                    loc="center left", bbox_to_anchor=(.20, .60))
     label_grokking_steps(axes[-1])
     figure.legend(handles=[
         Line2D([], [], color=BLUE, label="Run 1 (weight decay)"),
         Line2D([], [], color=GRAY, label="Zero decay"),
         Patch(facecolor=BLUE, alpha=.10, edgecolor="none", label="Validation 10–90%"),
         Line2D([], [], color=ORANGE, ls=":", label="First 95% validation"),
-    ], ncol=4, frameon=False, loc="upper center", columnspacing=1.25, handletextpad=.55)
+    ], ncol=4, frameon=False, loc="upper center", columnspacing=1.0,
+                  handlelength=1.45, handletextpad=.45)
     return figure
 
 
@@ -225,8 +241,8 @@ def plot_grokking_repeats():
         weight_norm_mg,
     )
 
-    figure, axes = plt.subplots(2, 2, sharex=True, sharey="row", figsize=(6.1, 2.75))
-    figure.subplots_adjust(left=.105, right=.965, top=.78, bottom=.19, hspace=.23, wspace=.16)
+    figure, axes = plt.subplots(2, 2, sharex=True, sharey="row", figsize=GROKKING_REPEATS_SIZE)
+    figure.subplots_adjust(left=.105, right=.965, top=.78, bottom=.18, hspace=.34, wspace=.16)
     cases = ((2, "sketched__mod_wd1_s43_train.csv"),
              (3, "sketched__mod_wd1_s44_train.csv"))
     for (mg, accuracy), (run, filename) in zip(axes.T, cases):
@@ -239,7 +255,7 @@ def plot_grokking_repeats():
         mg.set(title=f"Run {run}", ylim=(0, 6), yticks=[0, 2, 4, 6])
         plot_grokking_accuracy(accuracy, training, BLUE)
         mark_validation_rise((mg, accuracy), rise_start, rise_end, event)
-    axes[0, 0].set_ylabel("MG@weight norm")
+    axes[0, 0].set_ylabel("MG@weight\nnorm")
     axes[1, 0].set_ylabel("Accuracy (%)")
     label_grokking_steps(axes[-1])
     figure.legend(handles=[
@@ -256,16 +272,16 @@ def main():
     parser.add_argument("--output", type=Path, default=FIGURES)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
-    plt.rcParams.update({"font.size": 8, "axes.titlesize": 8.7, "pdf.fonttype": 42,
-                         "axes.spines.top": False, "axes.spines.right": False,
-                         "axes.linewidth": .6, "axes.axisbelow": True})
-    for filename, plot in (("resnet_freeze_trace.pdf", plot_resnet),
-                           ("mnist_stop_trace.pdf", plot_mnist),
-                           ("grokking_matched_traces.pdf", plot_grokking),
-                           ("grokking_other_runs.pdf", plot_grokking_repeats)):
-        figure = plot()
-        figure.savefig(args.output / filename)
-        plt.close(figure)
+    for filename, plot, size, fraction in (
+        ("resnet_freeze_trace.pdf", plot_resnet, RESNET_SIZE, .98),
+        ("mnist_stop_trace.pdf", plot_mnist, MNIST_SIZE, .96),
+        ("grokking_matched_traces.pdf", plot_grokking, GROKKING_SIZE, .96),
+        ("grokking_other_runs.pdf", plot_grokking_repeats, GROKKING_REPEATS_SIZE, .96),
+    ):
+        with figure_style(size[0], fraction):
+            figure = plot()
+            figure.savefig(args.output / filename)
+            plt.close(figure)
 
 
 if __name__ == "__main__":

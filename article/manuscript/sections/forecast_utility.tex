@@ -1,18 +1,8 @@
-\subsection[Forecast model choice]{Forecast model choice}\label{sec:forecast_utility}
-\cx{Which model best forecasts the continuation of a neuron's activity? We first fit a regression tree to recordings with known continuations. For each range of MG in the observed segments, the tree selects the forecaster with the lowest mean error on those continuations. For a new recording, the tree selects a forecaster from the MG of the observed segment. For validation, each candidate predicts the end of the observed segment a few samples at a time. After each forecast, we add the actual observations to its history. We choose the candidate with the lowest mean error across these forecasts. Both rules fit the selected model to the full observed segment before forecasting its continuation (Figure~\ref{fig:single-neuron-forecasts}).}
-
-\cx{The rules gave similar mean forecast errors on new recordings (Tables~\ref{tab:decisions} and~\ref{tab:forecast_all}). Computing MG on a subset of query points gave the same model choices as the full calculation and took less time than validation (Table~\ref{tab:forecast_utility}).}
-
-\begin{figure*}[!htb]
-\centering
-\includegraphics[width=\linewidth]{figures/single_neuron_forecasts.pdf}
-\caption{\cx{Forecasts selected by MG (blue dashes) and validation (orange dots). The solid line shows the recorded activity. Test NMSE is the normalized mean squared error over the shaded forecast interval. On the left both forecasts rise while the recording stays nearly flat, but the model chosen by validation rises less. On the right the recorded activity declines, and the model chosen by MG has the lower test NMSE.}}
-\label{fig:single-neuron-forecasts}
-\end{figure*}
+Forecasters selected by MG or by validation gave similar mean errors when predicting \cx{the activation of a hidden neuron in networks} with new initializations (Table~\ref{tab:decisions}). Selecting and fitting a forecaster took a median of 12.2~ms with MG estimated from 128 query points and 45.3~ms with validation (\appref{app:forecast_utility}).
 
 \begin{table*}[!htbp]
 \centering\small
-\caption{\cx{Decisions on held-out runs. Classifier detections count interventions with a first alarm in the scoring interval after onset. Spike detections count spikes with a warning in the interval before onset. Forecast errors are means and standard deviations across repeats.}}
+\caption{Decisions on held-out runs. A classifier intervention is detected when the first alarm falls in the scoring interval after onset. A loss spike is detected in advance when a warning falls in the interval before onset. Forecast NMSE is normalized mean squared error (mean $\pm$ SD across 20 repeats).}
 \label{tab:decisions}
 \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xrrl@{}}
 \toprule

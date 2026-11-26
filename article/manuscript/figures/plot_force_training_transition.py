@@ -1,4 +1,4 @@
-"""Plot activity, delay geometry, and MG across FORCE training checkpoints."""
+"""Plot one neuron's activation, delay geometry, and MG across FORCE training checkpoints."""
 
 import argparse
 import json
@@ -11,9 +11,11 @@ from matplotlib.ticker import NullLocator
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from figure_style import figure_style
 from plot_force_log_geometry import FIGURES, LOGS, MG_CONFIG, load_trace, windowed_mg
 
 
+FIGSIZE = (6.0, 4.15)
 BUNDLE = LOGS / "force_training_traces.npz"
 DISPLAY_STEPS = (0, 150, 500, 40000)
 DISPLAY_COLORS = ("#BD520E", "#9056A0", "#257770", "#0072B2")
@@ -56,10 +58,7 @@ def plot_progress(ax, steps, summary, phase_indices, horizon, scale):
 def plot_transition(steps, time, activity, summary):
     index_by_step = {step: index for index, step in enumerate(steps)}
     phase_indices = [index_by_step[step] for step in DISPLAY_STEPS]
-    plt.rcParams.update({"font.size": 8, "axes.titlesize": 8.6, "pdf.fonttype": 42,
-                         "axes.spines.top": False, "axes.spines.right": False,
-                         "axes.linewidth": 0.6, "axes.axisbelow": True})
-    fig = plt.figure(figsize=(6.0, 4.15), layout="constrained")
+    fig = plt.figure(figsize=FIGSIZE, layout="constrained")
     grid = fig.add_gridspec(3, 4, height_ratios=[1, 1.22, 1.42], hspace=0.13)
 
     span = (MG_CONFIG.max_E - 1) * MG_CONFIG.tau
@@ -83,8 +82,8 @@ def plot_transition(steps, time, activity, summary):
                   xticks=[-3, 0, 3], yticks=[-3, 0, 3], xlabel=r"$z_t$")
         delay.grid(alpha=0.16)
         if col == 0:
-            trace.set_ylabel("Neuron activation")
-            trace.set_xlabel("Simulation step", loc="left", labelpad=0.3)
+            trace.set_ylabel("Neuron\nactivation")
+            trace.set_xlabel("Simulation step", loc="left")
             delay.set_ylabel(r"$z_{t+(E-1)\tau}$")
         else:
             trace.tick_params(labelleft=False)
@@ -98,8 +97,8 @@ def plot_transition(steps, time, activity, summary):
         ax.set_title(title)
         ax.grid(axis="y", alpha=0.22)
     early.set(xticks=[0, 250, 500, 750, 1000], xlabel="Training iteration",
-              ylabel="MG@neuron activation", yscale="log")
-    early.set_yticks([0.5, 1, 3, 10, 30, 100], labels=["0.5", "1", "3", "10", "30", "100"])
+              ylabel="MG@neuron\nactivation", yscale="log")
+    early.set_yticks([1, 3, 10, 30, 100], labels=["1", "3", "10", "30", "100"])
     early.yaxis.set_minor_locator(NullLocator())
     full.set(xticks=[0, 10, 20, 30, 40], xlabel="Training iteration (thousands)")
     full.tick_params(labelleft=False)
@@ -117,9 +116,10 @@ def main():
     scores = np.stack([windowed_mg(trace, reject_degenerate=True)[1] for trace in activity])
     summary = checkpoint_summary(scores)
     args.output.mkdir(parents=True, exist_ok=True)
-    fig = plot_transition(steps, time, activity, summary)
-    fig.savefig(args.output / "force_training_transition.pdf")
-    plt.close(fig)
+    with figure_style(FIGSIZE[0]):
+        fig = plot_transition(steps, time, activity, summary)
+        fig.savefig(args.output / "force_training_transition.pdf")
+        plt.close(fig)
     if args.summary is not None:
         np.savetxt(args.summary, np.column_stack((steps, summary)), delimiter=",",
                    header="training_iteration,mg_min,mg_median,mg_max",

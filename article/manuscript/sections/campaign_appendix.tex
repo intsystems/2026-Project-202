@@ -2,7 +2,7 @@
 \FloatBarrier
 \section{Further tests of practical decisions}\label{app:campaign}
 \subsection{Self-supervised representation selection}
-We compare MNIST encoders trained with SimSiam, BYOL, VICReg and SimCLR \citep{chen2021simsiam,grill2020byol,bardes2022vicreg,chen2020simclr}. \cx{We divide the encoder training repeats by random seed. For each statistic, we use the first group to choose the log and ranking direction with the highest mean Spearman correlation with linear-classifier accuracy.} For MG this selects gradient norm, ranked from high to low. \cx{We evaluate the chosen rule on the remaining seeds using the same test images} (Table~\ref{tab:ssl-protocol}).
+We compare MNIST encoders trained with SimSiam, BYOL, VICReg and SimCLR \citep{chen2021simsiam,grill2020byol,bardes2022vicreg,chen2020simclr}. We divide the encoder training repeats by random seed. For each statistic, we use the first group to choose the log and ranking direction with the highest mean Spearman correlation with linear-classifier accuracy. For MG, this procedure selects the gradient-norm log and ranks encoders by the estimate from the final 1,000 of the 3,000 training updates, highest first. We evaluate the chosen rule on the remaining seeds using the same test images (Table~\ref{tab:ssl-protocol}).
 
 \begin{table}[!htbp]
 \centering\small
@@ -17,8 +17,8 @@ Stage & Parameter & Setting \\
 Training & SGD updates / batch / momentum & 3,000 / 128 / 0.9 \\
  & Linear rate warm-up & 100 updates, then fixed \\
  & Default rate / decay / augmentation & $0.05$ / $10^{-4}$ / medium \\
- & \cx{Encoder configurations} & \cx{29} \\
- & \cx{Repeats per configuration} & \cx{2 to choose the rule, 5 to test it} \\
+ & Encoder configurations & 29 \\
+ & Repeats per configuration & 2 to choose the rule, 5 to test it \\
 \addlinespace
 Linear classifier & Input / train and test images & Standardized encoder features / 5,000 each \\
  & Logistic regression $C$ / iteration limit & 0.1 / 300 \\
@@ -62,14 +62,14 @@ Strong & 6 & 30 & 0.25 & 0.8 & 0.7 & 0.25 & 0.30 \\
 \end{table}
 
 
-Each SimSiam, BYOL or VICReg variant changes one default. For random erasing, each half-side is uniform on $[2,2+14b]$ pixels. We fit the linear classifier on labeled training images and evaluate it on held-out test images. All scalar methods have access to the same logs, and undefined scores rank last. Covariance PR uses MG's delay settings (Appendix~\ref{app:forecast_utility}).
+Each SimSiam, BYOL or VICReg variant changes one default. For random erasing, each half-side is uniform on $[2,2+14b]$ pixels. We fit the linear classifier on labeled training images and evaluate it on held-out test images. All scalar methods have access to the same logs, and undefined scores rank last. For covariance PR we use the same delay settings as for MG (Appendix~\ref{app:forecast_utility}).
 
 Other comparisons use features from multiple images \citep{garrido2023rankme,agrawal2022alphareq,thilak2024lidar}. In Table~\ref{tab:ssl_campaign}, $h$ is the encoder output and $z$ its projection by the network used during training. For scaled mean coordinate SD, we normalize each $z$ to unit length, average coordinate standard deviations across the dimensions, and multiply by the square root of their number. Each standard deviation is taken across images.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=.86\linewidth]{figures/ssl_probe_scatter.pdf}
-\caption{MG@gradient norm and test accuracy of a linear classifier fitted to frozen features. Each point averages the evaluation repeats for one configuration.}
+\caption{The MG estimate from the gradient-norm log (MG@gradient norm) and the test accuracy of a linear classifier fitted to frozen features. Each point averages the evaluation repeats for one configuration.}
 \label{fig:ssl-probe-scatter}
 \end{figure}
 
@@ -121,29 +121,29 @@ Onset labels & Past / future windows (updates) & 200 / 10 \\
  & First nonfinite loss & Marks an onset \\
 \addlinespace
 Input statistics & Loss, gradient norm and update norm & $\log_{10}$ after flooring at $10^{-12}$ \\
- & \cx{Roughness of log loss $x_t$} & \cx{$\mathrm{SD}(x_t-x_{t-1})/\mathrm{SD}(x_t)$} \\
+ & Roughness of log loss $x_t$ & $\mathrm{SD}(x_t-x_{t-1})/\mathrm{SD}(x_t)$ \\
  & Older scores in a median / minimum gap & 4 or 10 / one full window \\
  & Lags for recurrence error & 20--250 samples \\
- & Recurrence radius & \cx{0.1 times the median distance over pairs with $|\ell-i|>19$} \\
+ & Recurrence radius & 0.1 times the median distance over pairs with $|\ell-i|>19$ \\
  & Distance quantiles for correlation dimension & 8 from 0.01 to 0.10 \\
 \addlinespace
 Warning scoring & First scored update & 1,500 \\
  & Advance-warning interval & 500 updates before onset \\
  & Excluded interval & Onset and next 500 updates \\
- & Minimum interval between counted false alarms (updates) & 500 \\
+ & Minimum spacing of scored false alarms (updates) & 500 \\
 \addlinespace
-Rule selection & \cx{Runs per configuration} & \cx{4 to choose rules, 4 to test them} \\
- & \cx{False-alarm limit per 10,000 scored updates during rule selection} & 2 \\
- & \cx{Warn when MG of log loss is at or below} & \cx{6.3144 (rounded)} \\
+Rule selection & Runs per configuration & 4 to choose rules, 4 to test them \\
+ & False-alarm limit per 10,000 scored updates during rule selection & 2 \\
+ & Warn when the MG estimate from the log-loss series is at or below & 6.3144 (rounded) \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-\cx{We use the runs reserved for choosing the warning rule to find the lowest threshold within each candidate's false-alarm limit. We then select the input and rule that detect the most spikes in those runs.} Ties favor fewer false alarms, then longer median warning time. We keep these choices fixed for evaluation.
+\cx{For each candidate rule, we use the runs reserved for rule selection to find the lowest threshold that meets the false-alarm limit.} We then select the input and rule that detect the most spikes in those runs. Ties favor fewer false alarms, then longer median warning time. We keep these choices fixed for evaluation.
 
 Warnings use only past samples. We test rises and falls in levels and in deviations from an earlier median. Direct monitoring uses the mean, minimum or maximum since the previous scoring time (Table~\ref{tab:spike-protocol}). We compute correlation between successive residuals as in Appendix~\ref{app:baselines}.
 
-Recurrence error is the smallest mean squared difference from a shifted copy, divided by twice the window variance. Spectral entropy describes nonzero-frequency power in the centered series. Recurrence rate, correlation dimension, TwoNN and covariance PR use MG's delay coordinates. For recurrence rate we compare vectors whose starting times differ by more than 19 steps. The rate is the fraction of these pairs closer than a fixed radius. Correlation dimension measures how this fraction grows with radius on logarithmic axes~\citep{grassberger1983measuring}.
+Recurrence error is the smallest mean squared difference from a shifted copy, divided by twice the window variance. Spectral entropy describes nonzero-frequency power in the centered series. We use the same delay coordinates for recurrence rate, correlation dimension, TwoNN, covariance PR and MG. For recurrence rate we compare vectors whose starting times differ by more than 19 steps. The rate is the fraction of these pairs closer than a fixed radius. Correlation dimension measures how this fraction grows with radius on logarithmic axes~\citep{grassberger1983measuring}.
 
 We maximize attention logits over examples, positions, heads and layers. We average attention entropy over examples and query positions before minimizing over heads and layers. For class scores $o_c$, the output log-partition is $\log\sum_c\exp(o_c)$ averaged over output positions and examples.
 
@@ -158,7 +158,7 @@ For the area under the receiver operating characteristic curve (AUROC), a scored
 
 \Needspace{6\baselineskip}
 \subsection{Reset rules, schedules, and transfer}
-At each MNIST task boundary we decide whether to reset the weights and optimizer state for the next task. We select the scalar log, window and threshold rule \cx{by mean online accuracy on validation sequences}, breaking ties in favor of fewer resets. Both selected rules use weight-norm MG measured within each task. With reordered pixels, a reset occurs when the median of the last two task scores exceeds 4.70. With added noise, a reset occurs when the latest score exceeds 4.69 (rounded). We also test resets based on the fraction of neurons with low mean absolute activation relative to their layer \citep{sokar2023dormant}. Table~\ref{tab:reset-rules} reports accuracy measured before each batch update on new sequences.
+At each MNIST task boundary we decide whether to reset the weights and optimizer state for the next task. We select the scalar log, window and threshold rule by mean online accuracy on validation sequences, breaking ties in favor of fewer resets. Both selected rules use the MG estimate from the weight-norm log recorded during each task. With reordered pixels, a reset occurs when the median of the last two task scores exceeds 4.70. With added noise, a reset occurs when the latest score exceeds 4.69 (rounded). We also test resets based on the fraction of neurons with low mean absolute activation relative to their layer \citep{sokar2023dormant}. Table~\ref{tab:reset-rules} reports accuracy measured before each batch update on new sequences.
 
 \begin{table}[!htbp]
 \centering\small
@@ -174,7 +174,7 @@ Reordered pixels and noise & 0.834 & 0.843 & 0.776 \\
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:campaign_scope} reports three further decisions. \cx{For CIFAR-10, we compare timing rules on one set of runs and test the rule with the highest mean final accuracy on new runs.} \cx{Once at least half the training budget has elapsed, the rule reduces the learning rate if the median MG of minibatch loss in the latest four windows differs by less than 2\% from the median in the preceding four.} For games we fit two cutoffs \cx{using games with known numbers of oscillations, then apply them to new games.} Each cutoff exceeded by MG of the first player's payoff raises the predicted class by one, from one oscillation to two to three or more (cutoffs 2.81 and 3.90, rounded). For MNIST transfer we fit a detector on one source network and apply it unchanged. It alarms when median weight-norm MG in the latest three windows exceeds that of the preceding six by more than 27.8\%. A hit requires the first alarm to fall within 5,000 updates after the intervention. The false-positive count in the table is the number of comparison runs that alarm.
+Table~\ref{tab:campaign_scope} reports three further decisions. For CIFAR-10, we compare timing rules on one set of runs and test the rule with the highest mean final accuracy on new runs. We compute MG estimates from the minibatch-loss series. Once at least half the training budget has elapsed, the rule reduces the learning rate if the median estimate in the latest four windows differs by less than 2\% from the median in the preceding four. For games we fit two cutoffs using games with known numbers of oscillations, then apply them to new games. We compute an MG estimate from \cx{the sequence of payoffs to the first player}. We predict one oscillation if the estimate exceeds neither cutoff, two if it exceeds one, and three or more if it exceeds both (cutoffs 2.81 and 3.90, rounded). For MNIST transfer we fit a detector on one source network and apply it unchanged. It uses the MG estimates from the weight-norm log and raises an alarm when their median in the latest three windows exceeds the median in the preceding six by more than 27.8\%. A hit requires the first alarm to fall within 5,000 updates after the intervention. A comparison run with any alarms contributes one false positive.
 
 \begin{table}[!htbp]
 \centering\small

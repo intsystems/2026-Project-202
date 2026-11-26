@@ -12,6 +12,7 @@ from matplotlib.ticker import MaxNLocator
 import numpy as np
 import pandas as pd
 
+from figure_style import INK, figure_style
 from plot_application_traces import BLUE, EXPERIMENTS, FIGURES, GRAY, ORANGE
 
 sys.path.insert(0, str(EXPERIMENTS.parent))
@@ -21,7 +22,7 @@ from actdim.estimator.embedding import reconstruct
 
 VAE_CONFIG = EstimatorConfig(window=512, max_E=20, tau=1, k_neighbors=20,
                              theiler=39, theiler_cap=39)
-INK = "#20262B"
+FIGSIZE = (6.4, 3.0)
 BACKGROUND = "#BAC5CC"
 
 
@@ -41,13 +42,13 @@ def draw_example(fig, grid, column, title, index, signal, xlabel, ylabel):
     trace.axvspan(blocked[0], blocked[-1], color="#E8ECEF", lw=0, zorder=0)
     trace.plot(index, signal, color=GRAY, lw=.85)
     query_samples = query + np.arange(cfg.max_E) * rec.tau
-    trace.plot(index[query_samples], signal[query_samples], color=ORANGE, lw=1.65)
+    trace.scatter(index[query_samples], signal[query_samples], s=4, color=ORANGE,
+                  linewidths=0, zorder=3)
     trace.scatter(index[neighbors], signal[neighbors], s=12, color=BLUE, linewidths=0, zorder=3)
-    trace.scatter(index[query], signal[query], s=32, facecolor="white", edgecolor=INK, lw=1, zorder=4)
-    trace.annotate(rf"$y_i$ starts at {index[query]:,}", (index[query], signal[query]),
+    trace.annotate(r"First sample $x_i$", (index[query], signal[query]),
                    xytext=(index[query], .98), textcoords=trace.get_xaxis_transform(),
                    ha="center", va="top", color=INK,
-                   arrowprops=dict(arrowstyle="-", color=INK, lw=.65, shrinkB=3.8))
+                   arrowprops=dict(arrowstyle="->", color=INK, lw=.65, shrinkB=1.5))
     trace.set(title=title, xlabel=xlabel, ylabel=ylabel)
     amplitude = np.ptp(signal)
     trace.set_ylim(signal.min() - .12 * amplitude, signal.max() + .48 * amplitude)
@@ -62,7 +63,7 @@ def draw_example(fig, grid, column, title, index, signal, xlabel, ylabel):
     geometry.scatter(*projection[neighbors].T, s=16, color=BLUE,
                      edgecolor="white", linewidth=.22, zorder=3)
     geometry.scatter(*projection[query], s=28, facecolor="white",
-                     edgecolor=INK, linewidth=.95, zorder=4)
+                     edgecolor=ORANGE, linewidth=1.1, zorder=4)
     low, high = projection.min(), projection.max()
     pad = .06 * (high - low)
     geometry.set(title="Projected delay vectors", xlabel=r"$z_t$", ylabel=r"$z_{t+(E-1)\tau}$",
@@ -87,35 +88,40 @@ def draw_example(fig, grid, column, title, index, signal, xlabel, ylabel):
         ax.grid(axis="y", alpha=.16)
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, default=FIGURES)
-    args = parser.parse_args()
-    args.output.mkdir(parents=True, exist_ok=True)
-
+def plot_method():
     logs = EXPERIMENTS / "scalar_log_diagnostics/text_vae_latent_code/logs"
     log = pd.read_csv(logs / "vae_base_log.csv", float_precision="round_trip")
     window = log[log.step.between(2048, 2559)]
     np.testing.assert_array_equal(window.step, np.arange(2048, 2560))
     sample = np.arange(VAE_CONFIG.window)
     periodic = np.sin(2 * np.pi * sample / (70 * np.sqrt(2)) + .2)
-    plt.rcParams.update({"font.size": 8, "axes.titlesize": 8.5, "pdf.fonttype": 42,
-                         "axes.spines.top": False, "axes.spines.right": False,
-                         "axes.linewidth": .6, "axes.axisbelow": True})
-    fig = plt.figure(figsize=(6.4, 3.0), layout="constrained")
+    fig = plt.figure(figsize=FIGSIZE, layout="constrained")
+    # The layout engine reserves space below an x label, but not at its sides.
+    fig.get_layout_engine().set(rect=(.01, 0, .965, .982))
     grid = fig.add_gridspec(2, 4, height_ratios=(.78, 1.12), width_ratios=(1.1, .85, 1.1, .85))
     draw_example(fig, grid, 0, "Periodic signal", sample, periodic, "Sample index", "Signal")
     draw_example(fig, grid, 2, "Word prediction on fixed sentences", window.step.to_numpy(),
-                 window.probe_nll.to_numpy(), "Training step", "Log loss per token")
+                 window.probe_nll.to_numpy(), "Training step", "Log loss\nper token")
     fig.legend(handles=[
-        Line2D([], [], marker="o", color=INK, markerfacecolor="white", ls="none", ms=4.5,
-               label=r"Query $y_i$"),
+        Line2D([], [], marker="o", color=ORANGE, markerfacecolor="white", ls="none", ms=4.5,
+               label=r"Query point $y_i$"),
         Line2D([], [], marker="x", color=GRAY, ls="none", ms=4.5,
                label=r"Excluded ($|\ell-i|\leq T$)"),
         Line2D([], [], marker="o", color=BLUE, ls="none", ms=4.5,
                label=rf"{VAE_CONFIG.k_neighbors} nearest eligible neighbors of $y_i$"),
     ], loc="outside lower center", ncol=3, frameon=False, handletextpad=.3, columnspacing=1.2)
-    fig.savefig(args.output / "icomp_method.pdf")
+    return fig
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=FIGURES)
+    args = parser.parse_args()
+    args.output.mkdir(parents=True, exist_ok=True)
+    with figure_style(FIGSIZE[0]):
+        fig = plot_method()
+        fig.savefig(args.output / "icomp_method.pdf")
+        plt.close(fig)
 
 
 if __name__ == "__main__":

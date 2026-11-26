@@ -3,9 +3,9 @@
 | File | Article content |
 | --- | --- |
 | [icomp_method.pdf](icomp_method.pdf) | Delay reconstruction and neighbor distances for a periodic signal and a text VAE loss record. |
-| [components.pdf](components.pdf) | MG of the linear model's training loss (half the mean squared prediction error) and the phase comparison in trained recurrent generators. |
+| [components.pdf](components.pdf) | MG estimates from the linear model's training-loss curve (half the mean squared prediction error) and the phase comparison in trained recurrent generators. |
 | [force_training_transition.pdf](force_training_transition.pdf) | Fixed-weight FORCE simulations, delay reconstruction, and windowed MG at selected training steps. |
-| [vae_real_log.pdf](../../poster/figures/vae_real_log.pdf) | Reconstruction loss on fixed evaluation sentences, MG, and sentence-code mutual information. |
+| [vae_real_log.pdf](vae_real_log.pdf) | Reconstruction loss on fixed evaluation sentences, MG, and sentence-code mutual information. |
 | [resnet_freeze_trace.pdf](resnet_freeze_trace.pdf) | Weight-norm log, MG alarm, and independent update rank after freezing the ResNet backbone. |
 | [grokking_matched_traces.pdf](grokking_matched_traces.pdf) | Weight norm, MG@weight norm, detrended logit PR, and accuracy during the rise in validation accuracy on modular addition. |
 | [grokking_other_runs.pdf](grokking_other_runs.pdf) | MG@weight norm and train and validation accuracy for the other two modular-addition runs with the same weight decay. |
@@ -17,7 +17,7 @@
 
 [Manuscript index](../ReadMe.md)
 
-Figure labels use `MG@series` for MG calculated from the named input. The summary PDFs `components.pdf`, `applications.pdf`, and `icomp_regimes.pdf` use the existing vector plots with updated labels.
+In figure labels, `MG@series` denotes the MG estimate computed from delay vectors of the named time series. The manuscript plotters share [figure_style.py](figure_style.py). It accounts for each figure's LaTeX inclusion width so that axis labels and panel titles print at 7.5 PDF points, and tick labels, legends, and annotations at 6.5 points, in the 5.5-inch NeurIPS text block. If you change an inclusion width, update the matching fraction in the plotter. The poster keeps its own display sizes.
 
 ## Rebuild the method figure
 
@@ -27,7 +27,14 @@ python article/manuscript/figures/plot_method_geometry.py --output article/manus
 
 Both panels use the text VAE estimator settings. The recorded example uses steps 2,048 through 2,559 of the [baseline probe loss](../../../code/real/scalar_log_diagnostics/text_vae_latent_code/logs/vae_base_log.csv). The middle delay vector is the query. The plots show the first and last coordinates, and the neighbor search uses the full vectors.
 
-The appendix diagram `icomp_shapes.pdf` is `fig_shapes.pdf` produced by the [delay reconstruction plotter](../../../code/synthetic/delay_embedding_and_limits/delay_embedding/analyze_logs.py). Run that script with `--output article/manuscript/.build/reproduced` from the repository root. Its inputs store the first two forward-delay coordinates.
+## Rebuild the components and appendix diagrams
+
+```bash
+python article/manuscript/figures/plot_components.py --output article/manuscript/.build/reproduced
+python article/manuscript/figures/plot_shapes.py --output article/manuscript/.build/reproduced
+```
+
+The components figure uses the [linear-regression summary](../../../code/synthetic/poster_examples/known_linear_modes/logs/stationary_summary.csv) and [four-tone RNN runs](../../../code/synthetic/poster_examples/four_tone_rnn/logs/runs.csv). The appendix diagram uses the [delay reconstruction plotter](../../../code/synthetic/delay_embedding_and_limits/delay_embedding/analyze_logs.py) and its first two forward-delay coordinates.
 
 ## Rebuild the FORCE and VAE figures
 
@@ -35,7 +42,7 @@ Run from the repository root after installing the [code dependencies](../../../c
 
 ```bash
 python article/manuscript/figures/plot_force_training_transition.py --output article/manuscript/.build/reproduced
-python code/real/scalar_log_diagnostics/text_vae_latent_code/analyze_logs.py --output article/manuscript/.build/reproduced
+python article/manuscript/figures/plot_vae.py --output article/manuscript/.build/reproduced
 ```
 
 Both scripts recompute MG from the scalar samples committed under the respective experiment's `logs/`. The VAE script reads mutual information from the bundled CSVs. Those values were estimated from the encoder's posterior distributions.
@@ -50,7 +57,7 @@ python code/real/scalar_log_diagnostics/force_rnn_cycle/run.py --n 256 --gain 1.
   --scalar-rollouts --out article/manuscript/.build/force-replay
 python article/manuscript/figures/plot_force_training_transition.py --rollout-dir article/manuscript/.build/force-replay/seed_7 --output article/manuscript/.build/replayed
 python code/real/scalar_log_diagnostics/text_vae_latent_code/collect_logs.py --seed 1
-python code/real/scalar_log_diagnostics/text_vae_latent_code/analyze_logs.py --run-dir code/real/scalar_log_diagnostics/text_vae_latent_code/generated/seed1 --output article/manuscript/.build/replayed
+python article/manuscript/figures/plot_vae.py --run-dir code/real/scalar_log_diagnostics/text_vae_latent_code/generated/seed1 --output article/manuscript/.build/replayed
 ```
 
 ## Rebuild the application traces
@@ -68,6 +75,6 @@ python article/manuscript/figures/plot_selection_and_warning.py --output article
 ```
 
 - The [standalone Walker2d comparison](walker2d_selection.pdf) uses the four evaluation repeats in [checkpoint_selections.csv](../../../code/real/model_selection_and_stopping/walker2d_policy_selection/logs/checkpoint_selections.csv). It compares reward in the perturbed trials with the reward from choosing by performance in the unperturbed trials.
-- The SSL points average the five evaluation repeats in [ssl_probe_scores.csv](data/ssl_probe_scores.csv). The columns come from `results_main/test_final.csv` and `results_confirm/confirm_final.csv` under `aistats_article_v3/evidence/oct07_campaign/ssl` at commit `f6b579b1`.
-- The slingshot plot uses [logged window statistics](data/slingshot_windows.csv) and [frozen thresholds and onsets](data/slingshot_example.json) from `research_mg_wins/spikes` at commit `f6b579b1`. Each point on the loss curve gives the mean log loss over the preceding 50 training updates. The gray band shows the minimum and maximum over those updates. The example is the first eligible held-out event with different warning times and a rise of over one log unit in the recorded loss envelope.
+- The SSL points average the five evaluation repeats in [ssl_probe_scores.csv](data/ssl_probe_scores.csv). The scores come from the [bundled evaluation tables](../tables/data/ReadMe.md#self-supervised-encoder-selection).
+- The slingshot plot uses [logged window statistics](data/slingshot_windows.csv) and [frozen thresholds and onsets](data/slingshot_example.json). Each point on the loss curve gives the mean log loss over the preceding 50 training updates. The gray band shows the minimum and maximum over those updates. The example is the first eligible held-out event with different warning times and a rise of over one log unit in the recorded loss envelope. See the [complete warning results](../tables/data/ReadMe.md#transformer-loss-spikes) for the other runs.
 - The forecast panels use the M4 and T4 recordings from evaluation repeat 681 and the corresponding [saved model choices](../../../code/real/model_selection_and_stopping/rnn_forecast_selection/logs/query_fresh_comparisons.csv). The script refits each chosen model on the full prefix and checks that its error matches the saved outcome.

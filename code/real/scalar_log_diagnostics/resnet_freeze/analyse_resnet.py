@@ -83,9 +83,24 @@ def detect(w, rules, event):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default="results_resnet/scratch")
+    ap.add_argument("--windows", type=Path, help="Score an existing window-level CSV.")
+    ap.add_argument("--output", type=Path, help="Directory for derived tables.")
     ap.add_argument("--event", type=int, default=4000)
     args = ap.parse_args()
     root = Path(args.root)
+    if args.windows:
+        default_output = HERE.parents[2] / "runs" / "resnet_freeze" / args.windows.stem
+        output = args.output or default_output
+        w = pd.read_csv(args.windows)
+    else:
+        output = args.output or root
+        w = load_windows(root, args.event)
+
+    output.mkdir(parents=True, exist_ok=True)
+    summarize(w, output, args.event)
+
+
+def load_windows(root, event):
     logs = sorted(root.glob("logs_*_s*.npz"))
     print(f"{root}: {len(logs)} finished runs", flush=True)
     if not logs:
@@ -103,29 +118,33 @@ def main():
         if want <= have:
             w = c
     if w is None:
-        w = windows(root, args.event)
+        w = windows(root, event)
         w.to_csv(cache, index=False)
-    ev = args.event
+    return w
+
+
+def summarize(w, output, ev):
     pre = w[(w.start >= ev - 2000) & (w.end <= ev)].groupby(["arm", "seed"])
     post = w[(w.start >= ev + 1000) & (w.start <= ev + 5000)].groupby(["arm", "seed"])
     cols = ["MG", "update_PR", "update_size", "crossings", "lag1", "det_std"]
     r = (post[cols].median() / pre[cols].median()).reset_index()
-    r.to_csv(root / "per_run.csv", index=False)
+    r.to_csv(output / "per_run.csv", index=False)
     g = r.groupby("arm")
     tab = pd.DataFrame({"MG change %": 100 * (g.MG.median() - 1),
                         "min %": 100 * (g.MG.min() - 1), "max %": 100 * (g.MG.max() - 1),
                         "update PR change %": 100 * (g.update_PR.median() - 1),
                         "update size change %": 100 * (g.update_size.median() - 1), "n": g.MG.count()})
-    rules = json.load(open(HERE / "detector_rule.json"))
+    rules = json.loads((HERE / "detector_rule.json").read_text(encoding="utf-8"))
     det = detect(w, rules, ev)
-    det.to_csv(root / "detector_per_run.csv", index=False)
+    det.to_csv(output / "detector_per_run.csv", index=False)
     summ = det.groupby(["stat", "arm"]).agg(hit=("hit", "mean"), false_alarm=("false_alarm", "mean"),
                                             delay=("delay", "median")).reset_index()
-    summ.to_csv(root / "detector_summary.csv", index=False)
+    summ.to_csv(output / "detector_summary.csv", index=False)
     pd.set_option("display.width", 200)
     print(tab.round(2).to_string())
     print(summ.pivot(index="arm", columns="stat", values=["hit", "false_alarm"]).round(2).to_string())
-    json.dump({"table": tab.round(3).reset_index().to_dict("records")}, open(root / "summary.json", "w"), indent=1)
+    summary = {"table": tab.round(3).reset_index().to_dict("records")}
+    (output / "summary.json").write_text(json.dumps(summary, indent=1) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

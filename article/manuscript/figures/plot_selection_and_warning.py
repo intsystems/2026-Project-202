@@ -15,10 +15,14 @@ import numpy as np
 import pandas as pd
 from threadpoolctl import threadpool_limits
 
+from figure_style import figure_style
 from plot_application_traces import BLUE, GRAY, ORANGE, PURPLE, EXPERIMENTS
 
 FIGURES = Path(__file__).resolve().parent
 DATA = FIGURES / "data"
+SSL_SIZE = (5.9, 2.85)
+SLINGSHOT_SIZE = (6.2, 3.05)
+FORECAST_SIZE = (6.3, 2.9)
 sys.path.insert(0, str(EXPERIMENTS.parent))
 from real.model_selection_and_stopping.rnn_forecast_selection.forecast import forecast
 
@@ -61,7 +65,7 @@ def plot_ssl():
     by_config = runs.groupby(["family", "configuration"])[["gradient_norm_mg", "probe_accuracy"]].mean()
     families = [("ss", "SimSiam", BLUE, "o"), ("byol", "BYOL", PURPLE, "s"),
                 ("vic", "VICReg", ORANGE, "^"), ("clr", "SimCLR", "#257770", "D")]
-    fig, full = plt.subplots(figsize=(5.9, 2.85), layout="constrained")
+    fig, full = plt.subplots(figsize=SSL_SIZE, layout="constrained")
     detail = full.inset_axes([.40, .12, .56, .56])
     for ax in (full, detail):
         for key, label, color, marker in families:
@@ -76,7 +80,7 @@ def plot_ssl():
     left, right = 11.35, 15.4
     bottom, top = 84.8, 98.2
     detail.set(xlim=(left, right), ylim=(bottom, top), xticks=[12, 13, 14, 15], yticks=[85, 90, 95])
-    detail.tick_params(labelsize=7, length=2, pad=2)
+    detail.tick_params(length=2, pad=2)
     for spine in detail.spines.values():
         spine.set(visible=True, color="#8496A1", linewidth=.65)
     frame = "#8496A1"
@@ -95,42 +99,60 @@ def plot_slingshot():
     event = json.loads((DATA / "slingshot_example.json").read_text(encoding="utf-8"))
     onset = event["onset"]
     relative = windows.step - onset
+    shown = relative.between(-650, 350)
+    visible_steps = relative[shown]
+    left, right = visible_steps.iloc[[0, -1]]
     scored = windows.step >= event["first_scored_step"]
-    for time in event["onsets"]:
-        scored &= ~windows.step.between(time, time + event["horizon"])
-
-    fig, (loss, mg, roughness) = plt.subplots(
-        3, 1, sharex=True, figsize=(6.2, 3.15), layout="constrained",
-        height_ratios=[1.12, 1, 1],
+    fig, (loss, scores) = plt.subplots(
+        2, 1, sharex=True, figsize=SLINGSHOT_SIZE, layout="constrained",
+        height_ratios=[1, 1.12],
     )
-    loss.fill_between(relative, windows.min_log10_loss, windows.max_log10_loss, color=GRAY, alpha=.18)
-    loss.plot(relative, windows.mean_log10_loss, color=GRAY, lw=1.1)
-    loss.set_ylabel(r"$\log_{10}$ training loss")
-    loss.annotate("Spike onset", (0, .9), xycoords=loss.get_xaxis_transform(),
-                  xytext=(5, 0), textcoords="offset points", va="center")
-    for ax, signal, method, label, color in [
-        (mg, windows.mg, "MG", "MG@log loss", BLUE),
-        (roughness, windows.roughness, "roughness", "Roughness", PURPLE),
-    ]:
+    fig.get_layout_engine().set(hspace=.1, w_pad=.07)
+    for spike in event["onsets"]:
+        recovery_end = spike + event["horizon"]
+        scored &= ~windows.step.between(spike, recovery_end)
+        start, end = max(left, spike - onset), min(right, recovery_end - onset)
+        if start < end:
+            scores.axvspan(start, end, color="#EDF0F2", lw=0, zorder=0)
+            scores.text((start + end) / 2, .04, "Recovery", transform=scores.get_xaxis_transform(),
+                        ha="center", va="bottom", color="#58646E")
+    eligible = scored & relative.between(-event["horizon"], -1)
+
+    loss.vlines(visible_steps, windows.min_log10_loss[shown], windows.max_log10_loss[shown],
+                color="#9EABB4", lw=.85)
+    loss.plot(visible_steps, windows.mean_log10_loss[shown], color="#566572", lw=1.1,
+              marker="o", markersize=2.5)
+    loss.set_ylabel(r"$\log_{10}$ loss")
+    loss.yaxis.set_major_locator(MultipleLocator(1))
+    loss.annotate("Spike onset", (0, 1), xycoords=loss.get_xaxis_transform(),
+                  xytext=(0, 3), textcoords="offset points", ha="center", va="bottom")
+
+    scores.axhline(1, color="#69747C", ls="--", lw=.8)
+    for method, signal, label, color, marker, offset, valign in (
+        ("MG", windows.mg, "MG", BLUE, "o", (12, 13), "bottom"),
+        ("roughness", windows.roughness, "Roughness", ORANGE, "D", (-20, -13), "top"),
+    ):
         threshold = event["thresholds"][method]
-        eligible = scored & relative.between(-event["horizon"], -1)
-        first = relative[eligible & (signal <= threshold)].iloc[0]
+        first_index = windows.index[eligible & (signal <= threshold)][0]
+        first = relative.at[first_index]
         assert -first == event["leads"][method]
-        ax.plot(relative, signal, color=color, alpha=.24, lw=1)
-        ax.plot(relative, signal.where(scored), color=color, lw=1.2)
-        ax.axhline(threshold, color=color, ls=":", lw=.9)
-        value = signal.loc[relative == first].item()
-        ax.scatter(first, value, color=color, s=21, zorder=5)
-        ax.axvline(first, color=color, ls="--", lw=.7, alpha=.75)
-        ax.annotate(f"{-first} steps before", (first, .89), xycoords=ax.get_xaxis_transform(),
-                    xytext=(5, 0), textcoords="offset points", va="center", color=color, fontsize=7.5)
-        ax.set_ylabel(label)
-    for ax in (loss, mg, roughness):
-        ax.axvspan(-event["horizon"], 0, color="#DCE5EE", alpha=.45, zorder=0)
-        ax.axvline(0, color="#303941", lw=.8)
-        ax.grid(axis="y", alpha=.14)
-    roughness.set(xlabel="Optimization step relative to spike onset", xlim=(-650, 350),
-                  xticks=[-600, -400, -200, 0, 200])
+        ratio = signal / threshold
+        scores.plot(visible_steps, ratio[shown], color=color, lw=1.15)
+        value = ratio.at[first_index]
+        scores.scatter(first, value, s=25, marker=marker, color=color,
+                       edgecolors="white", linewidths=.55, zorder=4)
+        scores.annotate(f"{label}\n{-first} steps before onset", (first, value),
+                        xytext=offset, textcoords="offset points", ha="center",
+                        va=valign, color=color,
+                        arrowprops=dict(arrowstyle="-", color=color, lw=.65, shrinkB=3))
+
+    for ax in (loss, scores):
+        ax.axvline(0, color="#39444D", lw=.85)
+        ax.grid(axis="y", color="#C9D0D5", lw=.5, alpha=.55)
+    scores.set(xlabel="Training steps relative to spike onset", ylabel="Score / threshold",
+               yticks=[.5, 1, 1.5], xticks=[-600, -400, -200, 0, 200],
+               xlim=(left, right))
+    fig.align_ylabels()
     return fig
 
 
@@ -147,9 +169,23 @@ def plot_forecast():
     origin = 6144
     history_steps = 16
     actual_color = "#253039"
-    fig, (axes, keys) = plt.subplots(2, 2, figsize=(6.3, 2.6), height_ratios=[3, 1])
-    fig.subplots_adjust(left=.087, right=.987, top=.89, bottom=.035, wspace=.22, hspace=.55)
-    for ax, key, (arm, title) in zip(axes, keys, signals):
+    fig = plt.figure(figsize=FORECAST_SIZE, layout="constrained")
+    fig.get_layout_engine().set(w_pad=.07)
+    grid = fig.add_gridspec(2, 2, height_ratios=(2.15, 1), wspace=.07)
+    axes = [fig.add_subplot(grid[0, col]) for col in range(2)]
+    key = fig.add_subplot(grid[1, :])
+    key.set(xlim=(0, 1), ylim=(0, 1))
+    key.set_axis_off()
+    key_color = "#485660"
+    key.text(.072, .64, "Select by", va="center", color=key_color)
+    key.axhline(.51, color="#AEB9BF", lw=.6)
+    for row, (_, criterion, color, style) in enumerate(rules):
+        y = .34 - row * .24
+        key.plot([0, .055], [y, y], color=color, ls=style, lw=1.55)
+        key.text(.072, y, criterion, va="center")
+
+    key_columns = [(.355, .61, "Mixed (M4)"), (.69, 1, "Independent (T4)")]
+    for ax, (arm, title), (model_col, nmse_col, heading) in zip(axes, signals, key_columns):
         signal = pd.read_csv(logs / f"fresh_seed{repeat}__{arm}.csv", float_precision="round_trip")
         prefix = signal.loc[signal["sample"] < origin, "neuron_2"].to_numpy()
         target = signal.loc[signal["sample"] >= origin, "neuron_2"].to_numpy()
@@ -165,7 +201,7 @@ def plot_forecast():
                 color=actual_color, lw=1.6)
         ax.text(1.1, .96, "Forecast", transform=ax.get_xaxis_transform(), va="top", color="#485660")
         ax.annotate("Recorded", (horizon, target[-1]), xytext=(-2, -4), textcoords="offset points",
-                    ha="right", va="top", fontsize=7.5, color=actual_color)
+                    ha="right", va="top", color=actual_color)
         ax.set(title=title, xlabel="Steps from last observation", xlim=(-history_steps, horizon),
                xticks=[-history_steps, 0, 16, horizon])
         ax.margins(y=.22)
@@ -173,25 +209,19 @@ def plot_forecast():
         ax.tick_params(length=3, pad=2)
         ax.grid(axis="y", color="#D6DCE0", lw=.55)
 
-        key.set(xlim=(0, 1), ylim=(0, 1))
-        key.set_axis_off()
-        model_column = .54
-        for x, heading, align in [(0, "Select by", "left"), (model_column, "Model", "left"),
-                                  (1, "Test NMSE", "right")]:
-            key.text(x, .92, heading, va="center", ha=align, fontsize=7.6, color="#485660")
-        key.plot([0, 1], [.72, .72], color="#AEB9BF", lw=.6)
-        for row, (method, criterion, color, style) in enumerate(rules):
+        key.text(.5 * (model_col + nmse_col), .90, heading, ha="center", va="center", color=key_color)
+        key.text(model_col, .64, "Model", va="center", color=key_color)
+        key.text(nmse_col, .64, "Test NMSE", ha="right", va="center", color=key_color)
+        for row, (method, _, color, style) in enumerate(rules):
             model = selected.loc[method, "model"]
             prediction = forecast(prefix, horizon, model)
             error = np.mean((prediction - target)**2) / prefix.var()
             np.testing.assert_allclose(error, selected.loc[method, "error"], rtol=1e-9)
             ax.plot(np.arange(horizon + 1), np.r_[prefix[-1], prediction], color=color, ls=style, lw=1.55)
 
-            y = .46 - row * .4
-            key.plot([0, .09], [y, y], color=color, ls=style, lw=1.55)
-            key.text(.115, y, criterion, va="center", fontsize=7.6)
-            key.text(model_column, y, model_names[model], va="center", fontsize=7.6)
-            key.text(1, y, f"{error:.3f}", ha="right", va="center", fontsize=7.6,
+            y = .34 - row * .24
+            key.text(model_col, y, model_names[model], va="center")
+            key.text(nmse_col, y, f"{error:.3f}", ha="right", va="center",
                      fontweight="bold" if method == best_rule else "normal")
     axes[0].set_ylabel("Neuron activation")
     return fig
@@ -202,19 +232,25 @@ def main():
     parser.add_argument("--output", type=Path, default=FIGURES)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
-    plt.rcParams.update({"font.size": 8, "axes.titlesize": 9, "pdf.fonttype": 42,
-                         "axes.spines.top": False, "axes.spines.right": False,
-                         "axes.linewidth": .6, "axes.axisbelow": True})
     with threadpool_limits(limits=1):
-        for name, plot in [
-            ("walker2d_selection", plot_walker_selection),
-            ("ssl_probe_scatter", plot_ssl),
-            ("slingshot_warning", plot_slingshot),
-            ("single_neuron_forecasts", plot_forecast),
-        ]:
-            fig = plot()
-            fig.savefig(args.output / f"{name}.pdf")
+        # Walker2d is a standalone plot, not placed in the article.
+        with matplotlib.rc_context({
+            "font.size": 8, "axes.titlesize": 9, "pdf.fonttype": 42,
+            "axes.spines.top": False, "axes.spines.right": False,
+            "axes.linewidth": .6, "axes.axisbelow": True,
+        }):
+            fig = plot_walker_selection()
+            fig.savefig(args.output / "walker2d_selection.pdf")
             plt.close(fig)
+        for name, plot, size, fraction in [
+            ("ssl_probe_scatter", plot_ssl, SSL_SIZE, .86),
+            ("slingshot_warning", plot_slingshot, SLINGSHOT_SIZE, .92),
+            ("single_neuron_forecasts", plot_forecast, FORECAST_SIZE, 1),
+        ]:
+            with figure_style(size[0], fraction):
+                fig = plot()
+                fig.savefig(args.output / f"{name}.pdf")
+                plt.close(fig)
 
 
 if __name__ == "__main__":

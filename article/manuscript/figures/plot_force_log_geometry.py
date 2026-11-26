@@ -94,9 +94,9 @@ def main():
             panel.set_axisbelow(True)
             panel.grid(alpha=0.17)
 
-    axes[0, 0].set_ylabel("Neuron activity")
+    axes[0, 0].set_ylabel("Neuron activation")
     axes[1, 0].set_ylabel(r"$z_{t+(E-1)\tau}$")
-    axes[2, 0].set_ylabel("MG@neuron activity")
+    axes[2, 0].set_ylabel("MG@neuron activation")
     fig.savefig(args.output / "force_log_geometry.pdf")
     plt.close(fig)
 

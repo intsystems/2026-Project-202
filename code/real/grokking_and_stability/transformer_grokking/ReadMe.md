@@ -34,6 +34,6 @@ python recompute_metrics.py --device cpu
 
 The PDF exports ship in figures/. Redrawn figures go to code/runs/redrawn/ and leave the released PDFs in place.
 
-The accuracy-rise comparison writes one row per run and pair of thresholds to [grokking_accuracy_rise.csv](../../../runs/redrawn/grokking_accuracy_rise.csv) on execution. An accuracy threshold is reached at the first of five consecutive logged readings at or above it. The comparison uses complete windows within the rise and equally long adjacent intervals, restricted to the available log after training accuracy first reaches 95%. Each interval must contain at least three valid windows. The script also reports runs with too few windows, overlapping training fit, or an incomplete rise.
+The accuracy-rise comparison writes one row per run and pair of thresholds to `code/runs/redrawn/grokking_accuracy_rise.csv`. An accuracy threshold is reached at the first of five consecutive logged readings at or above it. The comparison uses complete windows within the rise and equally long adjacent intervals, restricted to the available log after training accuracy first reaches 95%. Each interval must contain at least three valid windows. The script also reports runs with too few windows, overlapping training fit, or an incomplete rise.
 
 The article's scalar estimates fail its dimension checks. The four-run trajectory result is based on detrended participation ratio. Fresh trajectory analyses require new training and may differ from the archived article outputs.

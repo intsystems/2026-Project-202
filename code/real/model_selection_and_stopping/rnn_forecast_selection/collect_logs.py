@@ -1,18 +1,7 @@
-from pathlib import Path
-import os
-import subprocess
-import sys
+"""Train generators and save the scalar windows used by the forecast benchmark."""
 
-HERE = Path(__file__).resolve().parent
-CODE = HERE.parents[2]
-ARCHIVE_EXPERIMENT = CODE.parent / "archive" / 'research_mg_real_forecast'
+from fresh_generators import main
 
 
 if __name__ == "__main__":
-    if not (ARCHIVE_EXPERIMENT / 'fresh_generators.py').is_file():
-        raise SystemExit("The local archive is required for this historical collection pipeline.")
-    env = os.environ.copy()
-    earlier = env.get("PYTHONPATH")
-    env["PYTHONPATH"] = os.pathsep.join([str(CODE)] + ([earlier] if earlier else []))
-    subprocess.run([sys.executable, 'fresh_generators.py', *sys.argv[1:]],
-                   cwd=ARCHIVE_EXPERIMENT, env=env, check=True)
+    main()
