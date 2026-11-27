@@ -1,4 +1,7 @@
 /archive/
+/outdated/
+/article/aistats_reviews.json
+texput.log
 /code/runs/
 /code/data/
 **/generated/

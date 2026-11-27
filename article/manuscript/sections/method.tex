@@ -1,7 +1,26 @@
 \claude{
 \section[Measuring simplification from a scalar log]{Measuring simplification from a scalar log}\label{sec:method}
 \subsection{Delay reconstruction}
-Suppose we have access only to a scalar log $x_1,\ldots,x_N$. At step $t$ we observe $x_t=\phi(s_t)$, where $s_t$ is the system state and $\phi$ is a scalar measurement function. For example, in minibatch stochastic gradient descent (SGD) with fixed learning rate $\eta$, the state is the parameter vector $s_t=\theta_t$. Given a randomly sampled minibatch $B_t$, the next state is $\theta_{t+1}=\theta_t-\eta\nabla_\theta L_{B_t}(\theta_t)$, where $L_{B_t}$ is the mean loss on that batch. A weight-norm log records $x_t=\|\theta_t\|_2$. With momentum, the state also includes the velocity vector. In our recurrent generators with fixed weights and no external input, the hidden state $s_t=\boldsymbol h_t$ evolves as $\boldsymbol h_{t+1}=F(\boldsymbol h_t)$. For neuron $j$ we record its activation $x_t=\tanh(h_{t,j})$, the value it passes to the rest of the network at step $t$.
+\newcommand{\sgdstateexample}{%
+In plain minibatch stochastic gradient descent (SGD), the optimizer state between updates is the parameter vector, $s_t=\theta_t$.
+\ifdefined\newinmlcameraready
+Given a sampled minibatch $B_t$ and a fixed learning rate $\eta$, the next iterate is $\theta_{t+1}=\theta_t-\eta\nabla_\theta L_{B_t}(\theta_t)$, where $L_{B_t}$ is the mean loss on that batch.
+\fi
+With momentum, $s_t=(\theta_t,m_t)$, where $m_t$ is an exponentially weighted sum of past minibatch gradients.
+In either case, a weight-norm log records $x_t=\phi(s_t)=\|\theta_t\|_2$.}
+\ifdefined\icompfinalcopy
+We log a scalar $x_t=\phi(s_t)$ from state $s_t$.
+\sgdstateexample{}
+With fixed weights and no input, our recurrent generators have hidden state $s_t=\boldsymbol h_t$, dynamics $\boldsymbol h_{t+1}=F(\boldsymbol h_t)$, and activation $x_t=\tanh(h_{t,j})$ for neuron $j$.
+\else
+Suppose we have access only to a scalar log $x_1,\ldots,x_N$. At step $t$ we observe $x_t=\phi(s_t)$, where $s_t$ is the system state and $\phi$ is a scalar measurement function.
+\ifdefined\newinmlcameraready
+\sgdstateexample{}
+\else
+For example, in minibatch stochastic gradient descent (SGD) with fixed learning rate $\eta$, the state is the parameter vector $s_t=\theta_t$. Given a randomly sampled minibatch $B_t$, the next state is $\theta_{t+1}=\theta_t-\eta\nabla_\theta L_{B_t}(\theta_t)$, where $L_{B_t}$ is the mean loss on that batch. A weight-norm log records $x_t=\|\theta_t\|_2$. With momentum, the state also includes the velocity vector.
+\fi
+In our recurrent generators with fixed weights and no external input, the hidden state $s_t=\boldsymbol h_t$ evolves as $\boldsymbol h_{t+1}=F(\boldsymbol h_t)$. For neuron $j$ we record its activation $x_t=\tanh(h_{t,j})$, the value it passes to the rest of the network at step $t$.
+\fi
 
 \citet{takens1981detecting} gave conditions under which delay coordinates from a single scalar time series reconstruct \cx{the state space and dynamics of an autonomous system} up to a smooth change of coordinates. Related embedding theorems apply to systems with deterministic or stochastic forcing \citep{stark1999delay,stark2003delay}.
 
@@ -35,35 +54,7 @@ Consider the long-run fraction of time a trajectory spends within distance $r$ o
 
 A training trajectory may pass through a region only once. We therefore ask whether a drop in MG coincides with a change we can measure independently, such as weight updates concentrating in fewer directions or a text encoder retaining less information about its input (Table~\ref{tab:experiment-questions}). For loss-spike warnings, we compare MG with log-loss roughness. Roughness is the standard deviation of successive log-loss differences divided by the standard deviation of log loss. We evaluate encoder selection by the resulting classification accuracy and forecaster selection by prediction error (Table~\ref{tab:decisions}).
 
-\begin{table*}[!htbp]
-\centering\small
-\caption{What MG revealed from a single scalar log in selected experiments.}
-\label{tab:experiment-questions}
-\setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.215\linewidth}>{\raggedright\arraybackslash}p{.19\linewidth}>{\raggedright\arraybackslash}X@{}}
-\toprule
-Experiment & Scalar log & Result \\
-\midrule
-\multicolumn{3}{@{}l}{\textbf{Can MG recover the number of independent phases?} (Section~\ref{sec:controlled} and \appref{app:controlled-observables})} \\
-Sum of tones & Waveform amplitude & MG was close to one for four harmonics of a single frequency and close to four for four independent frequencies. \\
-Diagonal matrix & Frobenius norm or one diagonal entry & As more entries oscillated independently, MG rose for the norm and stayed near one for a single oscillating entry. \\
-Linear regression & Training loss & MG rose as more weight directions oscillated independently. \\
-Recurrent tone generator & \cx{Single-neuron activation} & Among generators with four output peaks, MG increased with the number of independent phases. \\
-Figure-eight generator & \cx{Single-neuron activation} & After training, MG was close to one and the full hidden state returned to nearly the same point each period. \\
-\addlinespace
-\multicolumn{3}{@{}l}{\textbf{How does MG compare with measurements of the weights or latent code?}} \\
-Digit classifier (\appref{app:controlled-observables}) & Weight norm or gradient norm & On average, MG from the weight norm was closer to the effective dimension measured from weight covariance than MG from the gradient norm. \\
-Small CIFAR-10 classifier (Section~\ref{sec:cnn}) & Weight norm & Training only the final layer reduced MG and concentrated updates in fewer directions. Keeping half the weights at zero reduced MG even as updates spread over more directions. \\
-Text variational autoencoder (Section~\ref{sec:vae}) & Reconstruction loss on fixed sentences & Lower MG coincided with less mutual information between input sentences and their latent codes. \\
-\addlinespace
-\multicolumn{3}{@{}l}{\textbf{Can MG detect a training intervention or warn of a loss spike?} (Sections~\ref{sec:cnn} and \ref{sec:spike-warning})} \\
-ResNet-18 & Weight norm & The rule fitted on the small classifier detected every run with a frozen feature extractor. It missed pruning and learning-rate reductions within the evaluation interval. \\
-Transformer loss spikes & Logarithm of training loss & The MG rule detected 22 of 23 spikes in advance. The roughness rule detected all 23. Each produced 2.44 false alarms per 10,000 evaluated updates. \\
-\addlinespace
-\multicolumn{3}{@{}l}{\textbf{How well does MG select encoders or forecasters?} (Section~\ref{sec:ssl} and \appref{app:forecast_utility})} \\
-Self-supervised MNIST encoders & Gradient norm & Linear classification accuracy for the encoder with the highest MG averaged 0.41 percentage points below the best in each repeat. \\
-Activation forecasts & \cx{Single-neuron activation} & On held-out networks, choosing by MG or by validation gave similar mean forecast errors. \\
-\bottomrule
-\end{tabularx}
-\end{table*}
+\ifdefined\newinmlcameraready\else
+\input{tables/experiment_questions}
+\fi
 }

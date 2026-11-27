@@ -1,10 +1,15 @@
 \documentclass{article}
-\usepackage[dblblindworkshop,nonatbib]{neurips_2026}
+\ifdefined\newinmlcameraready
+  \usepackage[final,dblblindworkshop,nonatbib]{neurips_2026}
+  \input{authors}
+\else
+  \usepackage[dblblindworkshop,nonatbib]{neurips_2026}
+  \author{Anonymous Author(s)}
+\fi
 \workshoptitle{NewInML}
 \input{preamble}
 \input{title}
 \title{\papertitle}
-\author{Anonymous Author(s)}
 
 \begin{document}
 \maketitle

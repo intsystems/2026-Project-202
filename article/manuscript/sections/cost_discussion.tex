@@ -1,8 +1,12 @@
 \claude{
 \section{Discussion and conclusion}\label{sec:cost}
+\ifdefined\shortconclusion
+A scalar log can reveal a change in network dynamics. After the recurrent generator learned a periodic orbit, the activation of one neuron gave an MG near one. Freezing the ResNet backbone lowered both weight-norm MG and the effective rank of the updates. Pruning also lowered MG in the small classifier, even as update rank rose. In the text VAE, lower reconstruction-loss MG accompanied lower decoder sensitivity to the latent code. Across these systems, an independent measurement helps identify what changed.
+\else
 A scalar log can reveal when \cx{the dynamics of a neural network become simpler. When the recurrent generator learned a repeating cycle, one phase was enough to describe the joint activity of its neurons. Accordingly, the MG of one hidden neuron's activation fell to nearly one.}
 
 \cx{In the ResNet-18 classifier, we froze the feature extractor and continued training only the final layer. The weight updates then concentrated in fewer directions, and the MG of the weight norm fell. In the text autoencoder, the MG of reconstruction loss was lower under settings where replacing the sentence code had less effect on the predicted words. A scalar training log can thus retain evidence of how a network's weights change during training or how strongly its predictions depend on a particular source of information.}
 
 We hope that estimating the local dimension of delay vectors with MG will help reveal changes in the dynamics underlying other scalar time series from machine learning, neuroscience, and robotics.
+\fi
 }

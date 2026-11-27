@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "actdim"
 version = "2.0.0"
-description = "Counting the active degrees of freedom of a training run"
+description = "Delay-coordinate analysis of scalar logs from neural networks"
 readme = "ReadMe.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }

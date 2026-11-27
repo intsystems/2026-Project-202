@@ -7,12 +7,20 @@ This directory contains the sources for *What Can a Scalar Log of Loss, Weight N
 Run from this directory with TeX Live and `latexmk`.
 
 ```bash
-latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error aistats2027.tex icomp2026.tex main.tex artifacts_camera_ready.tex artifacts_camera_ready_codex.tex newinml.tex
+latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error aistats2027.tex icomp2026.tex main.tex artifacts_camera_ready.tex artifacts_camera_ready_codex.tex newinml.tex newinml_camera_ready.tex
 ```
 
-The PDFs appear in `.build/` under their entry point names. The [article index](../ReadMe.md) identifies the current paper and the saved PDFs from earlier revisions.
+The PDFs appear in `.build/` under their entry point names. The [article index](../ReadMe.md) lists the saved editions.
 
-Build both Artifacts camera-ready copies to update the current paper. The [clean copy](../artifacts_camera_ready.pdf) and the [highlighted copy](../artifacts_camera_ready_codex.pdf) use the same text, figures and layout.
+To update the clean NewInML and ICOMP camera-ready papers, run the command below and copy `newinml_camera_ready.pdf` and `icomp2026.pdf` from `.build/` to `article/`.
+
+```bash
+latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error newinml_camera_ready.tex icomp2026.tex
+```
+
+Both editions use the shorter conclusion. The experiment overview table appears in the NewInML appendix and in the ICOMP main text. ICOMP also uses the shorter SGD example and the conference bibliography style.
+
+The [current NeuralArtifacts source archive](../artifacts_time_series_source.tar.gz) builds from `main.tex`. The following command builds the earlier [clean copy](../artifacts_camera_ready.pdf) and [highlighted copy](../artifacts_camera_ready_codex.pdf) from the shared source.
 
 ```bash
 latexmk -pdf '-outdir=.build' -interaction=nonstopmode -halt-on-error artifacts_camera_ready.tex artifacts_camera_ready_codex.tex

@@ -1,6 +1,6 @@
-# What Can a Scalar Log of Loss, Weight Norm, or Neuron Activation Reveal About a Neural Network?
+# What Can a Time Series of Loss, Weight Norm, or Neuron Activation Reveal About a Neural Network?
 
-What can a record of loss, weight norm, or one neuron's activation reveal about a network's dynamics? The [camera-ready article](article/artifacts_camera_ready.pdf) tests this question in recurrent generators, image classifiers, and a text variational autoencoder. It also evaluates whether scalar logs help select models or warn of training changes.
+What can a record of loss, weight norm, or one neuron's activation reveal about a network's dynamics? The [camera-ready article](article/artifacts_time_series.pdf) tests this question in recurrent generators, image classifiers, and a text variational autoencoder. It also evaluates whether scalar logs help select models or warn of training changes.
 
 | Folder | What you will find |
 | --- | --- |

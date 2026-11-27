@@ -1,5 +1,6 @@
 \clearpage
-\bibliographystyle{plainnat}
+\providecommand{\paperbibstyle}{plainnat}
+\bibliographystyle{\paperbibstyle}
 \claude{\bibliography{references,campaign_references}}
 \clearpage
 \appendix
@@ -29,12 +30,12 @@
 \bottomrule[.5pt]
 \end{tabularx}
 \endgroup
+\ifdefined\newinmlcameraready
+  \input{tables/experiment_questions}
+\fi
 \input{sections/appendix}
 \input{sections/practical_appendix}
 \input{sections/campaign_appendix}
 \clearpage
-\ifdefined\artifactscameraready
-  \input{sections/neuralartifacts_checklist}
-\else
-  \input{sections/checklist}
-\fi
+\providecommand{\paperchecklist}{\input{sections/checklist}}
+\paperchecklist
